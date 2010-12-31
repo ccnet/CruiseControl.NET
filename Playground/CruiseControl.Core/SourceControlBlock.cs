@@ -13,7 +13,8 @@
         /// <summary>
         /// Validates this block.
         /// </summary>
-        public virtual void Validate()
+        /// <param name="validationLog">The validation log.</param>
+        public virtual void Validate(IValidationLog validationLog)
         { }
         #endregion
 

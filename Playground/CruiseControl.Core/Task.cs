@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using CruiseControl.Core.Interfaces;
     using NLog;
 
     /// <summary>
@@ -84,10 +85,21 @@
         /// <summary>
         /// Validates this task after it has been loaded.
         /// </summary>
-        public void Validate()
+        public void Validate(IValidationLog validationLog)
         {
             logger.Debug("Validating task '{0}'", this.NameOrType);
-            this.OnValidate();
+            this.OnValidate(validationLog);
+
+            foreach (var condition in this.Conditions ?? new TaskCondition[0])
+            {
+                condition.Validate(validationLog);
+            }
+
+            foreach (var failureAction in this.FailureActions ?? new TaskFailureAction[0])
+            {
+                failureAction.Validate(validationLog);
+            }
+
             this.State = TaskState.Validated;
         }
         #endregion
@@ -184,7 +196,8 @@
         /// <summary>
         /// Called when this task is validated.
         /// </summary>
-        protected virtual void OnValidate()
+        /// <param name="validationLog">The validation log.</param>
+        protected virtual void OnValidate(IValidationLog validationLog)
         {
         }
         #endregion

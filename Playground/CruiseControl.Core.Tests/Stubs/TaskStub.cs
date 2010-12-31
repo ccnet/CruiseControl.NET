@@ -2,17 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using CruiseControl.Core.Interfaces;
 
     public class TaskStub
         : Task
     {
-        public Action OnValidateAction { get; set; }
-        protected override void OnValidate()
+        public Action<IValidationLog> OnValidateAction { get; set; }
+        protected override void OnValidate(IValidationLog validationLog)
         {
-            base.OnValidate();
+            base.OnValidate(validationLog);
             if (this.OnValidateAction != null)
             {
-                this.OnValidateAction();
+                this.OnValidateAction(validationLog);
             }
         }
 

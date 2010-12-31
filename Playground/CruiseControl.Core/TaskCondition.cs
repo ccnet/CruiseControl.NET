@@ -1,5 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
+    using CruiseControl.Core.Interfaces;
+
     /// <summary>
     /// A condition for a task.
     /// </summary>
@@ -21,7 +23,8 @@
         /// <summary>
         /// Validates this condition.
         /// </summary>
-        public virtual void Validate()
+        /// <param name="validationLog">The validation log.</param>
+        public virtual void Validate(IValidationLog validationLog)
         {
         }
         #endregion

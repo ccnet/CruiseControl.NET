@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Tests.Stubs;
     using Moq;
     using NUnit.Framework;
@@ -24,9 +25,10 @@
             var validated = false;
             var task = new TaskStub
                            {
-                               OnValidateAction = () => validated = true
+                               OnValidateAction = vl => validated = true
                            };
-            task.Validate();
+            var validationMock = new Mock<IValidationLog>();
+            task.Validate(validationMock.Object);
             Assert.AreEqual(TaskState.Validated, task.State);
             Assert.IsTrue(validated);
         }
@@ -168,6 +170,36 @@
             Assert.Throws<Exception>(() => result.Count());
             task.CleanUp();
             Assert.AreEqual(TaskState.Terminated, task.State);
+        }
+
+        [Test]
+        public void ValidateValidatesConditions()
+        {
+            var validated = false;
+            var conditionStub = new TaskConditionStub
+                                    {
+                                        OnValidate = vl => validated = true
+                                    };
+            var task = new TaskStub();
+            task.Conditions.Add(conditionStub);
+            var validationMock = new Mock<IValidationLog>();
+            task.Validate(validationMock.Object);
+            Assert.IsTrue(validated);
+        }
+
+        [Test]
+        public void ValidateValidatesFailureActions()
+        {
+            var validated = false;
+            var failureActionStub = new TaskFailureActionStub
+                                    {
+                                        OnValidate = vl => validated = true
+                                    };
+            var task = new TaskStub();
+            task.FailureActions.Add(failureActionStub);
+            var validationMock = new Mock<IValidationLog>();
+            task.Validate(validationMock.Object);
+            Assert.IsTrue(validated);
         }
         #endregion
     }

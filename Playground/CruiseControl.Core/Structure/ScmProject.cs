@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core.Structure
 {
     using System.Collections.Generic;
+    using CruiseControl.Core.Interfaces;
 
     /// <summary>
     /// A project that runs a number of predefined sections based around working with code
@@ -50,17 +51,18 @@
         /// <summary>
         /// Validates this project after it has been loaded.
         /// </summary>
-        public override void Validate()
+        /// <param name="validationLog"></param>
+        public override void Validate(IValidationLog validationLog)
         {
-            base.Validate();
+            base.Validate(validationLog);
             foreach (var task in this.PreBuild)
             {
-                task.Validate();
+                task.Validate(validationLog);
             }
 
             foreach (var task in this.Publishers)
             {
-                task.Validate();
+                task.Validate(validationLog);
             }
         }
         #endregion

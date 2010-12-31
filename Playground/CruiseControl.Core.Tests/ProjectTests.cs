@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Tests.Stubs;
     using Moq;
@@ -86,9 +87,10 @@
             var project = new Project("Test",
                                       new TaskStub
                                           {
-                                              OnValidateAction = () => validateCalled = true
+                                              OnValidateAction = vl => validateCalled = true
                                           });
-            project.Validate();
+            var validationMock = new Mock<IValidationLog>();
+            project.Validate(validationMock.Object);
             Assert.IsTrue(validateCalled);
         }
 
@@ -161,6 +163,34 @@
             project.AskToIntegrate(context);
             Assert.IsTrue(context.Wait(TimeSpan.FromMilliseconds(1)));
             Assert.IsTrue(wasCalled);
+        }
+
+        [Test]
+        public void ProjectNameIsCheckedInValidation()
+        {
+            var project = new Project();
+            var verified = false;
+            var validationStub = new ValidationLogStub
+                                     {
+                                         OnAddErrorMessage = (m, a) =>
+                                                                 {
+                                                                     Assert.AreEqual("The {0} has no name specified.", m);
+                                                                     Assert.AreEqual("Project", a[0]);
+                                                                     verified = true;
+                                                                 }
+                                     };
+            project.Validate(validationStub);
+            Assert.IsTrue(verified);
+        }
+
+        [Test]
+        public void RemovingAChildResetsProjectOnItem()
+        {
+            var task = new Comment();
+            var project = new Project("TestProject", task);
+
+            project.Tasks.Remove(task);
+            Assert.IsNull(task.Project);
         }
         #endregion
     }

@@ -1,5 +1,0 @@
-﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server" xmlns:tasks="urn:cruisecontrol:server:tasks">
-    <Project >
-        <tasks:Comment Name="TestComment">A Test Comment</tasks:Comment>
-    </Project>
-</Server>

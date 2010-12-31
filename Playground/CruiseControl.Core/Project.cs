@@ -7,6 +7,7 @@
     using System.ComponentModel;
     using System.Threading;
     using System.Windows.Markup;
+    using CruiseControl.Core.Interfaces;
     using NLog;
 
     /// <summary>
@@ -174,12 +175,12 @@
         /// <summary>
         /// Validates this project after it has been loaded.
         /// </summary>
-        public override void Validate()
+        public override void Validate(IValidationLog validationLog)
         {
-            base.Validate();
+            base.Validate(validationLog);
             foreach (var task in this.Tasks)
             {
-                task.Validate();
+                task.Validate(validationLog);
             }
         }
         #endregion

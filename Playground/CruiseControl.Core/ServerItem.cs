@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
     using System.ComponentModel;
+    using CruiseControl.Core.Interfaces;
 
     /// <summary>
     /// An item of server configuration - this is typically a structure item.
@@ -73,15 +74,14 @@
         /// <summary>
         /// Validates the this item after it has been loaded.
         /// </summary>
-        /// <param name="host">The host.</param>
-        public virtual void Validate()
+        /// <param name="validationLog">The validation log.</param>
+        public virtual void Validate(IValidationLog validationLog)
         {
-            ///everything must have a name
+            // Everything must have a name
             if (string.IsNullOrEmpty(this.Name))
             {
-                throw new Exceptions.ConfigurationException("The {0} has no name specified.",this.ItemType);
+                validationLog.AddError("The {0} has no name specified.", this.ItemType);
             }
-
         }
         #endregion
         #endregion

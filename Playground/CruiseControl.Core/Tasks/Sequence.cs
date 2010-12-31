@@ -4,6 +4,9 @@
     using System.Windows.Markup;
     using NLog;
 
+    /// <summary>
+    /// A sequence of tasks.
+    /// </summary>
     [ContentProperty("Tasks")]
     public class Sequence
         : Task

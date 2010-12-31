@@ -53,6 +53,7 @@
     <Compile Include="IntegrationStatus.cs" />
     <Compile Include="Interfaces\GetModificationsParameters.cs" />
     <Compile Include="Interfaces\IFileSystem.cs" />
+    <Compile Include="Interfaces\IValidationLog.cs" />
     <Compile Include="Interfaces\LabelParameters.cs" />
     <Compile Include="ProjectItem.cs" />
     <Compile Include="Project.cs" />

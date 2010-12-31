@@ -6,9 +6,11 @@
     using System.Linq;
     using System.Xaml;
     using CruiseControl.Core;
+    using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Xaml;
+    using Moq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -35,34 +37,6 @@
                 new Comment("TestComment", "A Test Comment"));
             PerformSerialisationTest(configuration, "SingleProject");
         }
-
-        [Test]
-        public void ProjectWithNoNameMustThrowConfigarationException()
-        {
-            bool errorThrown=false;
-
-            var configuration = LoadConfiguration(
-                RetrieveExampleFile("ProjectWithNoName"));
-
-            try
-            {
-                configuration.Children[0].Validate();
-            }
-            catch (Core.Exceptions.ConfigurationException ce)
-            {
-                errorThrown = true;
-                Console.WriteLine(ce.ConfigurationProblem);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Expected a Core.Exceptions.ConfigurationException, but got : " + e.ToString());
-            }
-
-            Assert.IsTrue(errorThrown,"Expected a Core.Exceptions.ConfigurationException, but got nothing");
-        }
-
-
-
 
         [Test]
         public void ReadSimpleSourceControlExample()

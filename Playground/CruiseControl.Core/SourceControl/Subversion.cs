@@ -23,7 +23,8 @@
         /// <summary>
         /// Validates this block.
         /// </summary>
-        public override void Validate()
+        /// <param name="validationLog">The validation log.</param>
+        public override void Validate(IValidationLog validationLog)
         {
             throw new NotImplementedException();
         }

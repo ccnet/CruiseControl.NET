@@ -6,7 +6,7 @@
     public class SourceControlBlockStub
         : SourceControlBlock
     {
-        public override void Validate()
+        public override void Validate(IValidationLog validationLog)
         {
             throw new NotImplementedException();
         }
