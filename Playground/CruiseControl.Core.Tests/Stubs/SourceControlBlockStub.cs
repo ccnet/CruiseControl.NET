@@ -6,14 +6,24 @@
     public class SourceControlBlockStub
         : SourceControlBlock
     {
+        public Action<IValidationLog> OnValidate { get; set; }
         public override void Validate(IValidationLog validationLog)
         {
-            throw new NotImplementedException();
+            base.Validate(validationLog);
+            if (this.OnValidate != null)
+            {
+                this.OnValidate(validationLog);
+            }
         }
 
+        public Action OnInitialise { get; set; }
         public override void Initialise()
         {
-            throw new NotImplementedException();
+            base.Initialise();
+            if (this.OnInitialise != null)
+            {
+                this.OnInitialise();
+            }
         }
 
         public override void GetModifications(GetModificationsParameters parameters)
@@ -39,9 +49,14 @@
             }
         }
 
+        public Action OnCleanUp { get; set; }
         public override void CleanUp()
         {
-            throw new NotImplementedException();
+            base.CleanUp();
+            if (this.OnCleanUp != null)
+            {
+                this.OnCleanUp();
+            }
         }
     }
 }

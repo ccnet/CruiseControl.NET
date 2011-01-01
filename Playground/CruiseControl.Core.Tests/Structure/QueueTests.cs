@@ -3,8 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tests.Stubs;
+    using Moq;
     using NUnit.Framework;
 
     public class QueueTests
@@ -171,6 +173,89 @@
                                    "Project5"
                                };
             CollectionAssert.AreEqual(expected, integrations);
+        }
+
+        [Test]
+        public void ValidateValidatesChildren()
+        {
+            var validated = false;
+            var projectStub = new ProjectStub
+                                  {
+                                      OnValidate = vl => validated = true
+                                  };
+            var validationMock = new Mock<IValidationLog>();
+            var queue = new Queue("Test", projectStub);
+            queue.Validate(validationMock.Object);
+            Assert.IsTrue(validated);
+        }
+
+        [Test]
+        public void RemovingAChildResetsItsParent()
+        {
+            var project = new Project();
+            var queue = new Queue("Test", project);
+            queue.Children.Remove(project);
+            Assert.IsNull(project.Host);
+        }
+
+        [Test]
+        public void UniversalNameHandlesTopLevel()
+        {
+            var queue = new Queue("TestQueue");
+            new Server(queue)
+                {
+                    Name = "ServerName"
+                };
+            var actual = queue.UniversalName;
+            Assert.AreEqual("urn:ccnet:ServerName:TestQueue", actual);
+        }
+
+        [Test]
+        public void UniversalNameHandlesChildItem()
+        {
+            var child = new Queue("ChildQueue");
+            var parent = new Queue("ParentQueue", child);
+            new Server(parent)
+                {
+                    Name = "ServerName"
+                };
+            var actual = child.UniversalName;
+            Assert.AreEqual("urn:ccnet:ServerName:ParentQueue:ChildQueue", actual);
+        }
+
+        [Test]
+        public void ValidateDetectsDuplicateChildItems()
+        {
+            var errorAdded = false;
+            var project1 = new Project("Project");
+            var project2 = new Project("Project");
+            var project3 = new Project("OtherProject");
+            var queue = new Queue("QueueName", project1, project2, project3);
+            var validationStub = new ValidationLogStub
+                                     {
+                                         OnAddErrorMessage = (m, a) =>
+                                                                 {
+                                                                     Assert.AreEqual(
+                                                                         "Duplicate {1} name detected: '{0}'", m);
+                                                                     CollectionAssert.AreEqual(
+                                                                         new[] {"Project", "child" }, 
+                                                                         a);
+                                                                     errorAdded = true;
+                                                                 }
+                                     };
+            queue.Validate(validationStub);
+            Assert.IsTrue(errorAdded);
+        }
+
+        [Test]
+        public void ListProjectsReturnsOnlyTheProjects()
+        {
+            var project = new Project();
+            var childQueue = new Queue();
+            var parentQueue = new Queue("Test", project, childQueue);
+            var projects = parentQueue.ListProjects();
+            var expected = new[] { project };
+            CollectionAssert.AreEqual(expected, projects);
         }
         #endregion
     }

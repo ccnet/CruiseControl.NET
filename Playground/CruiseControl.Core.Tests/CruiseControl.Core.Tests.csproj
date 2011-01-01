@@ -55,6 +55,7 @@
     <Compile Include="IntegrationContextTests.cs" />
     <Compile Include="ProjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerTests.cs" />
     <Compile Include="Structure\QueueTests.cs" />
     <Compile Include="Stubs\ProjectStub.cs" />
     <Compile Include="Stubs\SourceControlBlockStub.cs" />

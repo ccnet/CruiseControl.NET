@@ -66,6 +66,27 @@
             project.SourceControl.Add(new SourceControlBlockStub());
             Assert.Throws<NotSupportedException>(() => task.RunGetSourceControlBlock());
         }
+
+        [Test]
+        public void UniversalNameUsesType()
+        {
+            var task = new SourceControlTaskStub();
+            new Project("ProjectName", task);
+            var actual = task.UniversalName;
+            Assert.AreEqual("urn:ccnet::ProjectName:SourceControlTaskStub", actual);
+        }
+
+        [Test]
+        public void UniversalNameUsesName()
+        {
+            var task = new SourceControlTaskStub
+                           {
+                               Name = "TaskName"
+                           };
+            new Project("ProjectName", task);
+            var actual = task.UniversalName;
+            Assert.AreEqual("urn:ccnet::ProjectName:TaskName", actual);
+        }
         #endregion
 
         #region Stub class

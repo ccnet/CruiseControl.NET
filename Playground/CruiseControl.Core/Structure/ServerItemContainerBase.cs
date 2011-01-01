@@ -3,7 +3,10 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Windows.Markup;
+    using CruiseControl.Core.Interfaces;
+    using CruiseControl.Core.Utilities;
 
     /// <summary>
     /// A base implementation of a server item that has children.
@@ -43,6 +46,49 @@
         #endregion
         #endregion
 
+        #region Public methods
+        #region Validate()
+        /// <summary>
+        /// Validates the this item after it has been loaded.
+        /// </summary>
+        /// <param name="validationLog">The validation log.</param>
+        public override void Validate(IValidationLog validationLog)
+        {
+            base.Validate(validationLog);
+            ValidationHelpers.CheckForDuplicateItems(this.Children, validationLog, "child");
+        }
+        #endregion
+
+        #region ListProjects()
+        /// <summary>
+        /// Lists the projects within this item.
+        /// </summary>
+        /// <returns>The projects within this item.</returns>
+        public override IEnumerable<Project> ListProjects()
+        {
+            var projects = this.Children
+                .SelectMany(c => c.ListProjects());
+            return projects;
+        }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region OnServerChanged()
+        /// <summary>
+        /// Called when the server has been changed.
+        /// </summary>
+        protected override void OnServerChanged()
+        {
+            base.OnServerChanged();
+            foreach (var item in this.Children)
+            {
+                item.Server = this.Server;
+            }
+        }
+        #endregion
+        #endregion
+
         #region Private methods
         #region InitialiseChildren()
         /// <summary>
@@ -55,6 +101,7 @@
             foreach (var child in children)
             {
                 child.Host = this;
+                child.Server = this.Server;
             }
 
             collection.CollectionChanged += this.UpdateChildren;
@@ -73,11 +120,13 @@
             foreach (ServerItem child in e.OldItems ?? new ServerItem[0])
             {
                 child.Host = null;
+                child.Server = null;
             }
 
             foreach (ServerItem child in e.NewItems ?? new ServerItem[0])
             {
                 child.Host = this;
+                child.Server = this.Server;
             }
         }
         #endregion

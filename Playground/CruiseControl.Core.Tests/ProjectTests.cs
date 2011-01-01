@@ -3,6 +3,7 @@
     using System;
     using System.Threading;
     using CruiseControl.Core.Interfaces;
+    using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Tests.Stubs;
     using Moq;
@@ -95,6 +96,21 @@
         }
 
         [Test]
+        public void ValidateValidatesSourceControlBlocks()
+        {
+            var validateCalled = false;
+            var sourceControl = new SourceControlBlockStub
+                                    {
+                                        OnValidate = vl => validateCalled = true
+                                    };
+            var project = new Project("Test");
+            project.SourceControl.Add(sourceControl);
+            var validationMock = new Mock<IValidationLog>();
+            project.Validate(validationMock.Object);
+            Assert.IsTrue(validateCalled);
+        }
+
+        [Test]
         public void IntegrateInitialisesRunsAndCleansUp()
         {
             var initialised = false;
@@ -110,6 +126,23 @@
             project.Integrate();
             Assert.IsTrue(initialised);
             Assert.IsTrue(ran);
+            Assert.IsTrue(cleanedUp);
+        }
+
+        [Test]
+        public void IntegrateInitialisesAndCleansUpSourceControl()
+        {
+            var initialised = false;
+            var cleanedUp = false;
+            var dummy = new SourceControlBlockStub
+                {
+                    OnInitialise = () => initialised = true,
+                    OnCleanUp = () => cleanedUp = true
+                };
+            var project = new Project("test");
+            project.SourceControl.Add(dummy);
+            project.Integrate();
+            Assert.IsTrue(initialised);
             Assert.IsTrue(cleanedUp);
         }
 
@@ -191,6 +224,40 @@
 
             project.Tasks.Remove(task);
             Assert.IsNull(task.Project);
+        }
+
+        [Test]
+        public void UniversalNameHandlesProjectAsRoot()
+        {
+            var project = new Project("ProjectName");
+            new Server(project)
+                {
+                    Name = "ServerName"
+                };
+            var actual = project.UniversalName;
+            Assert.AreEqual("urn:ccnet:ServerName:ProjectName", actual);
+        }
+
+        [Test]
+        public void UniversalNameHandlesProjectAsChild()
+        {
+            var project = new Project("ProjectName");
+            var queue = new Queue("QueueName", project);
+            new Server(queue)
+                {
+                    Name = "ServerName"
+                };
+            var actual = project.UniversalName;
+            Assert.AreEqual("urn:ccnet:ServerName:ProjectName", actual);
+        }
+
+        [Test]
+        public void ListProjectsReturnsOnlyItself()
+        {
+            var project = new Project();
+            var projects = project.ListProjects();
+            var expected = new[] { project };
+            CollectionAssert.AreEqual(expected, projects);
         }
         #endregion
     }

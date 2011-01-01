@@ -74,6 +74,26 @@
         /// </summary>
         public IList<Trigger> Triggers { get; private set; }
         #endregion
+
+        #region UniversalName
+        /// <summary>
+        /// Gets the universal name of this item.
+        /// </summary>
+        /// <value>
+        /// The universal name.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string UniversalName
+        {
+            get
+            {
+                var name = (this.Server == null ? "urn:ccnet:" : this.Server.UniversalName) +
+                           ":" + this.Name ?? string.Empty;
+                return name;
+            }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -182,6 +202,23 @@
             {
                 task.Validate(validationLog);
             }
+
+            foreach (var sourceControl in this.SourceControl)
+            {
+                sourceControl.Validate(validationLog);
+            }
+        }
+        #endregion
+
+        #region ListProjects()
+        /// <summary>
+        /// Lists the projects within this item.
+        /// </summary>
+        /// <returns>The projects within this item.</returns>
+        public override IEnumerable<Project> ListProjects()
+        {
+            var projects = new[] { this };
+            return projects;
         }
         #endregion
         #endregion
@@ -213,11 +250,6 @@
         /// <param name="tasks">The tasks.</param>
         protected virtual void RunTasks(TaskExecutionContext context, IEnumerable<Task> tasks)
         {
-            if (tasks == null)
-            {
-                return;
-            }
-
             foreach (var task in tasks)
             {
                 if (task.CanRun(context))
@@ -238,6 +270,11 @@
         /// </summary>
         protected virtual void InitialiseForIntegration()
         {
+            foreach (var sourceControl in this.SourceControl)
+            {
+                sourceControl.Initialise();
+            }
+
             foreach (var task in this.Tasks)
             {
                 task.Initialise();
@@ -254,6 +291,11 @@
             foreach (var task in this.Tasks)
             {
                 task.CleanUp();
+            }
+
+            foreach (var sourceControl in this.SourceControl)
+            {
+                sourceControl.CleanUp();
             }
         }
         #endregion

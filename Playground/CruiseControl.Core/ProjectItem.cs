@@ -22,6 +22,26 @@
         public string Name { get; set; }
         #endregion
 
+        #region UniversalName
+        /// <summary>
+        /// Gets the universal name of this item.
+        /// </summary>
+        /// <value>
+        /// The universal name.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual string UniversalName
+        {
+            get
+            {
+                var name = (this.Project == null ? "urn:ccnet:" : this.Project.UniversalName) +
+                           ":" + this.NameOrType;
+                return name;
+            }
+        }
+        #endregion
+
         #region Project
         /// <summary>
         /// Gets or sets the project.
