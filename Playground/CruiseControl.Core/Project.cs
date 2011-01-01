@@ -97,16 +97,6 @@
         #endregion
 
         #region Public methods
-        #region Trigger()
-        /// <summary>
-        /// Triggers an integration.
-        /// </summary>
-        public virtual void Trigger()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #region AskToIntegrate()
         /// <summary>
         /// Asks if an item can integrate.
@@ -201,6 +191,11 @@
             foreach (var task in this.Tasks)
             {
                 task.Validate(validationLog);
+            }
+
+            foreach (var trigger in this.Triggers)
+            {
+                trigger.Validate(validationLog);
             }
 
             foreach (var sourceControl in this.SourceControl)
@@ -309,6 +304,11 @@
         private void Main()
         {
             this.State = ProjectState.Running;
+            foreach (var trigger in this.Triggers)
+            {
+                trigger.Initialise();
+            }
+
             this.OnStarted();
             logger.Debug("Project '{0}' has started", this.Name);
             try
@@ -322,6 +322,11 @@
                     // TODO: Check for any requests
 
                     // TODO: Integrate
+                }
+
+                foreach (var trigger in this.Triggers)
+                {
+                    trigger.CleanUp();
                 }
 
                 this.OnStopped();

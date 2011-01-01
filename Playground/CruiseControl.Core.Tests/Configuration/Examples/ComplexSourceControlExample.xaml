@@ -25,7 +25,7 @@
       <scm:Subversion Name="trunk" TrunkUrl="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk" />
     </Project.SourceControl>
     <Project.Triggers>
-      <triggers:SourceControlChange Use="vNext" />
+      <triggers:Interval Period="0:0:5" />
     </Project.Triggers>
   </Project>
 </Server>

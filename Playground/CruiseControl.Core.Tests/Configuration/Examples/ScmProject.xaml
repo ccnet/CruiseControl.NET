@@ -14,7 +14,7 @@
       <scm:Subversion TrunkUrl="https://ccnet.svn.sourceforge.net/svnroot/ccnet/vnext" />
     </ScmProject.SourceControl>
     <ScmProject.Triggers>
-      <triggers:SourceControlChange />
+      <triggers:Interval />
     </ScmProject.Triggers>
   </ScmProject>
 </Server>

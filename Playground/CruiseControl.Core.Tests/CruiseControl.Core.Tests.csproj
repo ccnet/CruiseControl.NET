@@ -62,13 +62,16 @@
     <Compile Include="Stubs\TaskConditionStub.cs" />
     <Compile Include="Stubs\TaskFailureActionStub.cs" />
     <Compile Include="Stubs\TaskStub.cs" />
+    <Compile Include="Stubs\TriggerStub.cs" />
     <Compile Include="Stubs\ValidationLogStub.cs" />
     <Compile Include="Tasks\CommentTests.cs" />
     <Compile Include="Tasks\GetSourceTests.cs" />
     <Compile Include="Tasks\SequenceTests.cs" />
     <Compile Include="Tasks\SourceControlTaskTests.cs" />
     <Compile Include="TaskTests.cs" />
+    <Compile Include="Triggers\IntervalTests.cs" />
     <Compile Include="Utilities\FileSystemTests.cs" />
+    <Compile Include="Utilities\SystemClockTests.cs" />
     <Compile Include="VersionTypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>

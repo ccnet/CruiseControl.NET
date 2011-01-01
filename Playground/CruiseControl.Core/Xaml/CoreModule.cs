@@ -23,6 +23,7 @@
         public override void Load()
         {
             logger.Debug("Initialising IoC mappings");
+            this.Bind<IClock>().To<SystemClock>().InSingletonScope();
             this.Bind<IFileSystem>().To<FileSystem>().InSingletonScope();
         }
         #endregion

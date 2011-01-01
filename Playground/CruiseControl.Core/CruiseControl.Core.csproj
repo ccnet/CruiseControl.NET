@@ -50,8 +50,10 @@
     <Compile Include="Exceptions\CruiseControlException.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="IntegrationContext.cs" />
+    <Compile Include="IntegrationRequest.cs" />
     <Compile Include="IntegrationStatus.cs" />
     <Compile Include="Interfaces\GetModificationsParameters.cs" />
+    <Compile Include="Interfaces\IClock.cs" />
     <Compile Include="Interfaces\IFileSystem.cs" />
     <Compile Include="Interfaces\IValidationLog.cs" />
     <Compile Include="Interfaces\LabelParameters.cs" />
@@ -83,8 +85,9 @@
     <Compile Include="Tasks\Sequence.cs" />
     <Compile Include="Tasks\SourceControlTask.cs" />
     <Compile Include="Trigger.cs" />
-    <Compile Include="Triggers\SourceControlChange.cs" />
+    <Compile Include="Triggers\Interval.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
+    <Compile Include="Utilities\SystemClock.cs" />
     <Compile Include="Utilities\ValidationHelpers.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

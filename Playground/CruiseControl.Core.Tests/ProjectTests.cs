@@ -53,6 +53,23 @@
         }
 
         [Test]
+        public void StartInitialisesTriggers()
+        {
+            var initialised = false;
+            var trigger = new TriggerStub
+                              {
+                                  OnInitialise = () => initialised = true
+                              };
+            var project = new Project("Test");
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            Assert.IsTrue(initialised);
+        }
+
+        [Test]
         public void ProjectCannotStartWithoutAName()
         {
             var project = new Project();
@@ -82,6 +99,27 @@
         }
 
         [Test]
+        public void StopCleansUpTriggers()
+        {
+            var cleaned = false;
+            var trigger = new TriggerStub
+                              {
+                                  OnCleanUp = () => cleaned = true
+                              };
+            var project = new Project("Test");
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            project.Stop();
+
+            // Give the project time to stop
+            Thread.Sleep(1000);
+            Assert.IsTrue(cleaned);
+        }
+
+        [Test]
         public void ValidateValidatesTasks()
         {
             var validateCalled = false;
@@ -105,6 +143,21 @@
                                     };
             var project = new Project("Test");
             project.SourceControl.Add(sourceControl);
+            var validationMock = new Mock<IValidationLog>();
+            project.Validate(validationMock.Object);
+            Assert.IsTrue(validateCalled);
+        }
+
+        [Test]
+        public void ValidateValidatesTriggers()
+        {
+            var validateCalled = false;
+            var trigger = new TriggerStub
+                              {
+                                  OnValidate = vl => validateCalled = true
+                              };
+            var project = new Project("Test");
+            project.Triggers.Add(trigger);
             var validationMock = new Mock<IValidationLog>();
             project.Validate(validationMock.Object);
             Assert.IsTrue(validateCalled);
