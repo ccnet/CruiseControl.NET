@@ -96,6 +96,7 @@
             // Give the project time to stop
             Thread.Sleep(1000);
             Assert.AreEqual(ProjectState.Stopped, project.State);
+            Assert.IsNull(project.MainThreadException);
         }
 
         [Test]
@@ -104,7 +105,8 @@
             var cleaned = false;
             var trigger = new TriggerStub
                               {
-                                  OnCleanUp = () => cleaned = true
+                                  OnCleanUp = () => cleaned = true,
+                                  OnCheckAction = () => null
                               };
             var project = new Project("Test");
             project.Triggers.Add(trigger);
@@ -117,6 +119,7 @@
             // Give the project time to stop
             Thread.Sleep(1000);
             Assert.IsTrue(cleaned);
+            Assert.IsNull(project.MainThreadException);
         }
 
         [Test]
@@ -176,7 +179,8 @@
                                 OnCleanUpAction = () => cleanedUp = true
                             };
             var project = new Project("test", dummy);
-            project.Integrate();
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
             Assert.IsTrue(initialised);
             Assert.IsTrue(ran);
             Assert.IsTrue(cleanedUp);
@@ -194,9 +198,25 @@
                 };
             var project = new Project("test");
             project.SourceControl.Add(dummy);
-            project.Integrate();
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
             Assert.IsTrue(initialised);
             Assert.IsTrue(cleanedUp);
+        }
+
+        [Test]
+        public void IntegrateResetsTriggers()
+        {
+            var reset = false;
+            var dummy = new TriggerStub
+                            {
+                                OnResetAction = () => reset = true
+                            };
+            var project = new Project("test");
+            project.Triggers.Add(dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
+            Assert.IsTrue(reset);
         }
 
         [Test]
@@ -220,7 +240,8 @@
                             };
             dummy.Conditions.Add(conditionMock.Object);
             var project = new Project("test", dummy);
-            project.Integrate();
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
             Assert.IsTrue(initialised);
             Assert.IsFalse(ran);
             Assert.IsTrue(cleanedUp);
@@ -311,6 +332,120 @@
             var projects = project.ListProjects();
             var expected = new[] { project };
             CollectionAssert.AreEqual(expected, projects);
+        }
+
+        [Test]
+        public void IntegrationStartsFromTrigger()
+        {
+            var triggered = false;
+            var trigger = GenerateRunOnceTrigger(() => triggered = true);
+            var ran = false;
+            var task = new TaskStub
+                           {
+                               OnRunAction = tc =>
+                                                 {
+                                                     ran = true;
+                                                     return null;
+                                                 }
+                           };
+            var project = new Project("Test", task);
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            project.Stop();
+
+            // Give the project time to stop
+            Thread.Sleep(1000);
+            Assert.IsTrue(triggered);
+            Assert.IsTrue(ran);
+            Assert.IsNull(project.MainThreadException);
+        }
+
+        [Test]
+        public void IntegrationAsksHostAndContinuesOnAllowed()
+        {
+            var triggered = false;
+            var trigger = GenerateRunOnceTrigger(() => triggered = true);
+            var ran = false;
+            var task = new TaskStub
+                           {
+                               OnRunAction = tc =>
+                                                 {
+                                                     ran = true;
+                                                     return null;
+                                                 }
+                           };
+            var hostMock = new Mock<ServerItem>(MockBehavior.Strict);
+            hostMock.Setup(h => h.AskToIntegrate(It.IsAny<IntegrationContext>()));
+            var project = new Project("Test", task) { Host = hostMock.Object };
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            project.Stop();
+
+            // Give the project time to stop
+            Thread.Sleep(1000);
+            Assert.IsTrue(triggered);
+            Assert.IsTrue(ran);
+            Assert.IsNull(project.MainThreadException);
+        }
+
+        [Test]
+        public void IntegrationAsksHostAndStopsOnDenied()
+        {
+            var triggered = false;
+            var trigger = GenerateRunOnceTrigger(() => triggered = true);
+            var ran = false;
+            var task = new TaskStub
+                           {
+                               OnRunAction = tc =>
+                                                 {
+                                                     ran = true;
+                                                     return null;
+                                                 }
+                           };
+            var hostMock = new Mock<ServerItem>(MockBehavior.Strict);
+            hostMock.Setup(h => h.AskToIntegrate(It.IsAny<IntegrationContext>()))
+                .Callback((IntegrationContext c) => c.Cancel());
+            var project = new Project("Test", task) { Host = hostMock.Object };
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            project.Stop();
+
+            // Give the project time to stop
+            Thread.Sleep(1000);
+            Assert.IsTrue(triggered);
+            Assert.IsFalse(ran);
+            Assert.IsNull(project.MainThreadException);
+        }
+        #endregion
+
+        #region Private methods
+        private static Trigger GenerateRunOnceTrigger(Action onRun)
+        {
+            var triggered = false;
+            var trigger = new TriggerStub
+                              {
+                                  OnCheckAction = () =>
+                                                      {
+                                                          if (!triggered)
+                                                          {
+                                                              triggered = true;
+                                                              onRun();
+                                                              return new IntegrationRequest("Dummy");
+                                                          }
+
+                                                          return null;
+                                                      }
+                              };
+            return trigger;
         }
         #endregion
     }

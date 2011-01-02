@@ -9,6 +9,10 @@
     public abstract class Trigger
         : ProjectItem
     {
+        #region Private fields
+        private IntegrationRequest current;
+        #endregion
+
         #region Public properties
         #region NextTime
         /// <summary>
@@ -38,6 +42,7 @@
         /// </summary>
         public virtual void Initialise()
         {
+            this.Reset();
         }
         #endregion
 
@@ -48,14 +53,21 @@
         /// <returns>
         /// An <see cref="IntegrationRequest"/> if tripped; <c>null</c> otherwise.
         /// </returns>
-        public abstract IntegrationRequest Check();
+        public IntegrationRequest Check()
+        {
+            return this.current ?? (this.current = this.OnCheck());
+        }
         #endregion
 
         #region Reset()
         /// <summary>
         /// Resets this trigger after an integration.
         /// </summary>
-        public abstract void Reset();
+        public void Reset()
+        {
+            this.current = null;
+            this.OnReset();
+        }
         #endregion
 
         #region CleanUp()
@@ -63,6 +75,27 @@
         /// Cleans up when the project stops.
         /// </summary>
         public virtual void CleanUp()
+        {
+        }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region OnCheck()
+        /// <summary>
+        /// Called when the trigger needs to be checked.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IntegrationRequest"/> if tripped; <c>null</c> otherwise.
+        /// </returns>
+        protected abstract IntegrationRequest OnCheck();
+        #endregion
+
+        #region OnReset()
+        /// <summary>
+        /// Called when a reset needs to be performed.
+        /// </summary>
+        protected virtual void OnReset()
         {
         }
         #endregion

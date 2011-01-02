@@ -67,26 +67,15 @@
         #endregion
         #endregion
 
-        #region Public methods
-        #region Initialise()
+        #region Protected methods
+        #region OnCheck()
         /// <summary>
-        /// Initialises this when the project starts.
-        /// </summary>
-        public override void Initialise()
-        {
-            base.Initialise();
-            this.Reset();
-        }
-        #endregion
-
-        #region Check()
-        /// <summary>
-        /// Checks if this trigger has been tripped.
+        /// Called when the trigger needs to be checked.
         /// </summary>
         /// <returns>
         /// An <see cref="IntegrationRequest"/> if tripped; <c>null</c> otherwise.
         /// </returns>
-        public override IntegrationRequest Check()
+        protected override IntegrationRequest OnCheck()
         {
             var hasPassed = this.Clock.Now >= this.nextTime;
             return hasPassed ?
@@ -95,12 +84,13 @@
         }
         #endregion
 
-        #region Reset()
+        #region OnReset()
         /// <summary>
-        /// Resets this trigger after an integration.
+        /// Called when a reset needs to be performed.
         /// </summary>
-        public override void Reset()
+        protected override void OnReset()
         {
+            base.OnReset();
             this.nextTime = this.Clock.Now.Add(this.Period);
         }
         #endregion

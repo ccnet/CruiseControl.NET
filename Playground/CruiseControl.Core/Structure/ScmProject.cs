@@ -55,11 +55,14 @@
         public override void Validate(IValidationLog validationLog)
         {
             base.Validate(validationLog);
+
+            // Check all the pre-build tasks
             foreach (var task in this.PreBuild)
             {
                 task.Validate(validationLog);
             }
 
+            // Check all the publisher tasks
             foreach (var task in this.Publishers)
             {
                 task.Validate(validationLog);

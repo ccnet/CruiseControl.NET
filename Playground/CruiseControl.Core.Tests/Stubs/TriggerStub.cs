@@ -6,6 +6,15 @@
     public class TriggerStub
         : Trigger
     {
+        public DateTime? NextTimeValue { get; set; }
+        public override DateTime? NextTime
+        {
+            get
+            {
+                return this.NextTimeValue ?? base.NextTime;
+            }
+        }
+
         public Action<IValidationLog> OnValidate { get; set; }
         public override void Validate(IValidationLog validationLog)
         {
@@ -26,14 +35,25 @@
             }
         }
 
-        public override IntegrationRequest Check()
+        public Func<IntegrationRequest> OnCheckAction { get; set; }
+        protected override IntegrationRequest OnCheck()
         {
+            if (this.OnCheckAction != null)
+            {
+                return this.OnCheckAction();
+            }
+
             throw new NotImplementedException();
         }
 
-        public override void Reset()
+        public Action OnResetAction { get; set; }
+        protected override void OnReset()
         {
-            throw new NotImplementedException();
+            base.OnReset();
+            if (this.OnResetAction != null)
+            {
+                this.OnResetAction();
+            }
         }
 
         public Action OnCleanUp { get; set; }

@@ -117,12 +117,14 @@
         /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         private void UpdateChildren(object sender, NotifyCollectionChangedEventArgs e)
         {
+            // Remove the old children
             foreach (ServerItem child in e.OldItems ?? new ServerItem[0])
             {
                 child.Host = null;
                 child.Server = null;
             }
 
+            // Add the new children
             foreach (ServerItem child in e.NewItems ?? new ServerItem[0])
             {
                 child.Host = this;

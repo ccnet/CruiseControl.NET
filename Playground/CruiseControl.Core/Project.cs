@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using System.Windows.Markup;
     using CruiseControl.Core.Interfaces;
@@ -94,6 +95,15 @@
             }
         }
         #endregion
+
+        #region MainThreadException
+        /// <summary>
+        /// Gets any breaking exception on the main thread.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Exception MainThreadException { get; private set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -172,11 +182,17 @@
         /// <summary>
         /// Performs an integration.
         /// </summary>
-        public virtual void Integrate()
+        /// <param name="request">The request.</param>
+        public virtual void Integrate(IntegrationRequest request)
         {
+            logger.Debug("Initialising integration for '{0}'", this.Name);
             this.InitialiseForIntegration();
+
+            logger.Debug("Running tasks for '{0}'", this.Name);
             var context = new TaskExecutionContext();
             this.RunTasks(context, this.Tasks);
+
+            logger.Debug("Cleaning up after integration for '{0}'", this.Name);
             this.CleanUpAfterIntegration();
         }
         #endregion
@@ -292,6 +308,11 @@
             {
                 sourceControl.CleanUp();
             }
+
+            foreach (var trigger in this.Triggers)
+            {
+                trigger.Reset();
+            }
         }
         #endregion
         #endregion
@@ -303,6 +324,8 @@
         /// </summary>
         private void Main()
         {
+            // Initialise
+            this.MainThreadException = null;
             this.State = ProjectState.Running;
             foreach (var trigger in this.Triggers)
             {
@@ -316,14 +339,12 @@
                 while (this.State == ProjectState.Running)
                 {
                     // Sleep a while so we don't overwork the server - assuming our minimum accuracy
-                    // is one second
+                    // is one second hence firing at 2Hz
                     Thread.Sleep(500);
-
-                    // TODO: Check for any requests
-
-                    // TODO: Integrate
+                    CheckForIntegration();
                 }
 
+                // Clean up
                 foreach (var trigger in this.Triggers)
                 {
                     trigger.CleanUp();
@@ -331,11 +352,51 @@
 
                 this.OnStopped();
             }
+            catch (Exception error)
+            {
+                this.MainThreadException = error;
+            }
             finally
             {
                 // Make sure this project is marked as stopped no matter how it is stopped
                 this.State = ProjectState.Stopped;
                 logger.Debug("Project '{0}' has stopped", this.Name);
+            }
+        }
+        #endregion
+
+        #region CheckForIntegration()
+        /// <summary>
+        /// Checks if an integration can proceed.
+        /// </summary>
+        private void CheckForIntegration()
+        {
+            // Get the first trigger that has been tripped
+            var request = this.Triggers
+                .Select(t => t.Check())
+                .FirstOrDefault(r => r != null);
+            if (request != null)
+            {
+                logger.Info(
+                    "Received integration request from '{0}' for '{1}'",
+                    request.SourceTrigger,
+                    this.Name);
+
+                // Check if we can integrate
+                var context = new IntegrationContext(this);
+                this.AskToIntegrate(context);
+                // TODO: make the time out configurable
+                if (context.Wait(TimeSpan.FromDays(7)))
+                {
+                    // Perform the actual integration
+                    logger.Info("Starting integration for '{0}'", this.Name);
+                    this.Integrate(request);
+                    logger.Info("Completed integration for '{0}'", this.Name);
+                }
+                else
+                {
+                    logger.Info("Cancelling integration for '{0}'", this.Name);
+                }
             }
         }
         #endregion

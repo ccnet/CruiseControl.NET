@@ -85,7 +85,9 @@
     <Compile Include="Tasks\Sequence.cs" />
     <Compile Include="Tasks\SourceControlTask.cs" />
     <Compile Include="Trigger.cs" />
+    <Compile Include="Triggers\CombinationOperator.cs" />
     <Compile Include="Triggers\Interval.cs" />
+    <Compile Include="Triggers\Multiple.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
     <Compile Include="Utilities\SystemClock.cs" />
     <Compile Include="Utilities\ValidationHelpers.cs" />
