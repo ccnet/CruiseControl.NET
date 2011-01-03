@@ -187,6 +187,77 @@
         }
 
         [Test]
+        public void IntegrateHandlesErrorDuringInitialisation()
+        {
+            var ran = false;
+            var cleanedUp = false;
+            var dummy = new TaskStub
+                            {
+                                OnInitialiseAction = () =>
+                                                         {
+                                                             throw new Exception("Oops!");
+                                                         },
+                                OnRunAction = c =>
+                                                  {
+                                                      ran = true;
+                                                      return null;
+                                                  },
+                                OnCleanUpAction = () => cleanedUp = true
+                            };
+            var project = new Project("test", dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
+            Assert.IsFalse(ran);
+            Assert.IsTrue(cleanedUp);
+        }
+
+        [Test]
+        public void IntegrateHandlesErrorDuringRun()
+        {
+            var initialised = false;
+            var cleanedUp = false;
+            var dummy = new TaskStub
+                            {
+                                OnInitialiseAction = () => initialised = true,
+                                OnRunAction = c =>
+                                                  {
+                                                      throw new Exception("Oops!");
+                                                  },
+                                OnCleanUpAction = () => cleanedUp = true
+                            };
+            var project = new Project("test", dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
+            Assert.IsTrue(initialised);
+            Assert.IsTrue(cleanedUp);
+        }
+
+        [Test]
+        public void IntegrateHandlesErrorDuringTaskCleanUp()
+        {
+            var initialised = false;
+            var ran = false;
+            var dummy = new TaskStub
+                            {
+                                OnInitialiseAction = () => initialised = true,
+                                OnRunAction = c =>
+                                                  {
+                                                      ran = true;
+                                                      return null;
+                                                  },
+                                OnCleanUpAction = () =>
+                                                      {
+                                                          throw new Exception("Oops");
+                                                      }
+                            };
+            var project = new Project("test", dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
+            Assert.IsTrue(initialised);
+            Assert.IsTrue(ran);
+        }
+
+        [Test]
         public void IntegrateInitialisesAndCleansUpSourceControl()
         {
             var initialised = false;
@@ -205,6 +276,25 @@
         }
 
         [Test]
+        public void IntegrateHandlesErrorDuringSourceControlCleanUp()
+        {
+            var initialised = false;
+            var dummy = new SourceControlBlockStub
+            {
+                OnInitialise = () => initialised = true,
+                OnCleanUp = () =>
+                                {
+                                    throw new Exception("Oops");
+                                }
+            };
+            var project = new Project("test");
+            project.SourceControl.Add(dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
+            Assert.IsTrue(initialised);
+        }
+
+        [Test]
         public void IntegrateResetsTriggers()
         {
             var reset = false;
@@ -217,6 +307,22 @@
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
             Assert.IsTrue(reset);
+        }
+
+        [Test]
+        public void IntegrateHandlesErrorDuringTriggerReset()
+        {
+            var dummy = new TriggerStub
+                            {
+                                OnResetAction = () =>
+                                                    {
+                                                        throw new Exception("Oops");
+                                                    }
+                            };
+            var project = new Project("test");
+            project.Triggers.Add(dummy);
+            var request = new IntegrationRequest("Dummy");
+            project.Integrate(request);
         }
 
         [Test]

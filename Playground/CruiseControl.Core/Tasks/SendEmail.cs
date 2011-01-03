@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
+    using System;
     using System.Collections.Generic;
 
     public class SendEmail
@@ -16,8 +17,7 @@
         /// </returns>
         protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
-            // TODO: Implement this task
-            return null;
+            throw new NotImplementedException();
         }
         #endregion
         #endregion

@@ -15,5 +15,25 @@
                 this.OnValidate(validationLog);
             }
         }
+
+        public Action OnStart { get; set; }
+        protected override void OnStarted()
+        {
+            base.OnStarted();
+            if (this.OnStart != null)
+            {
+                this.OnStart();
+            }
+        }
+
+        public Action OnStop { get; set; }
+        protected override void OnStopped()
+        {
+            base.OnStopped();
+            if (this.OnStop != null)
+            {
+                this.OnStop();
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:triggers="urn:cruisecontrol:server:triggers">
   <ScmProject Name="OldStyle">
     <ScmProject.Tasks>
-      <tasks:Nant BuildFile="ccnet.build" TimeOut="0:0:10" />
+      <tasks:BuildNAnt BuildFile="ccnet.build" TimeOut="0:0:10" />
     </ScmProject.Tasks>
     <ScmProject.Publishers>
       <tasks:SendEmail />

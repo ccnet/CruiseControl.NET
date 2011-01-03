@@ -10,6 +10,7 @@
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Utilities;
     using Ninject;
+    using NLog;
 
     /// <summary>
     /// The root configuration node.
@@ -18,6 +19,10 @@
     public class Server
         : IServerItemContainer
     {
+        #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Server"/> class.
@@ -105,6 +110,8 @@
         /// <param name="validationLog">The validation log.</param>
         public virtual void Validate(IValidationLog validationLog)
         {
+            logger.Debug("Validating server '{0}'", this.Name ?? string.Empty);
+            
             // Everything must have a name
             if (string.IsNullOrEmpty(this.Name))
             {

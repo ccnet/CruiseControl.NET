@@ -67,10 +67,9 @@
         [Test]
         public void SettingProjectSetsChildrenProjects()
         {
-            var project = new Project();
+            var project = new Core.Project();
             var child = new TriggerStub();
-            var trigger = new Multiple(child);
-            trigger.Project = project;
+            new Multiple(child) { Project = project };
             Assert.AreSame(project, child.Project);
         }
 

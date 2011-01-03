@@ -2,6 +2,7 @@
 {
     using System;
     using CruiseControl.Core.Interfaces;
+    using CruiseControl.Core.Tests.Stubs;
     using CruiseControl.Core.Triggers;
     using Moq;
     using NUnit.Framework;
@@ -76,6 +77,28 @@
             Assert.IsNotNull(actual);
             Assert.AreEqual("Interval", actual.SourceTrigger);
             Assert.IsTrue(actual.Time >= now && actual.Time <= DateTime.Now);
+        }
+
+        [Test]
+        public void ValidateDetectsMissingPeriod()
+        {
+            var errorAdded = false;
+            var trigger = new Interval();
+            var validation = new ValidationLogStub
+                                 {
+                                     OnAddErrorMessage = (m, a) =>
+                                                             {
+                                                                 Assert.AreEqual(
+                                                                     "No period set - trigger will not fire",
+                                                                     m);
+                                                                 CollectionAssert.AreEqual(
+                                                                     new object[0],
+                                                                     a);
+                                                                 errorAdded = true;
+                                                             }
+                                 };
+            trigger.Validate(validation);
+            Assert.IsTrue(errorAdded);
         }
         #endregion
     }

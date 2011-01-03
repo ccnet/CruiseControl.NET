@@ -40,6 +40,33 @@
             var result = fileSystem.CheckIfFileExists(fileName);
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void OpenFileForReadOpensStream()
+        {
+            var fileSystem = new FileSystem();
+            var fileName = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllText(fileName, "Test");
+                using (var result = fileSystem.OpenFileForRead(fileName))
+                {
+                    Assert.IsNotNull(result);
+                    using (var reader = new StreamReader(result))
+                    {
+                        var data = reader.ReadToEnd();
+                        Assert.AreEqual("Test", data);
+                    }
+                }
+            }
+            finally
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+            }
+        }
         #endregion
     }
 }

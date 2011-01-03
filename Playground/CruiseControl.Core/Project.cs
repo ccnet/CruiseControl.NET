@@ -107,6 +107,35 @@
         #endregion
 
         #region Public methods
+        #region CanStart()
+        /// <summary>
+        /// Determines whether this instance can start.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can start; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool CanStart()
+        {
+            // TODO: Add the logic for checking if the project should be started
+            return this.State != ProjectState.Running &&
+                this.State != ProjectState.Starting;
+        }
+        #endregion
+
+        #region CanStop()
+        /// <summary>
+        /// Determines whether this instance can stop.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can stop; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool CanStop()
+        {
+            return this.State != ProjectState.Stopped &&
+                   this.State != ProjectState.Stopping;
+        }
+        #endregion
+
         #region AskToIntegrate()
         /// <summary>
         /// Asks if an item can integrate.
@@ -186,11 +215,12 @@
         public virtual void Integrate(IntegrationRequest request)
         {
             logger.Debug("Initialising integration for '{0}'", this.Name);
-            this.InitialiseForIntegration();
-
-            logger.Debug("Running tasks for '{0}'", this.Name);
-            var context = new TaskExecutionContext();
-            this.RunTasks(context, this.Tasks);
+            if (this.InitialiseForIntegration())
+            {
+                logger.Debug("Running tasks for '{0}'", this.Name);
+                var context = new TaskExecutionContext();
+                this.RunTasks(context, this.Tasks);
+            }
 
             logger.Debug("Cleaning up after integration for '{0}'", this.Name);
             this.CleanUpAfterIntegration();
@@ -203,6 +233,7 @@
         /// </summary>
         public override void Validate(IValidationLog validationLog)
         {
+            logger.Debug("Validating project '{0}'", this.Name ?? string.Empty);
             base.Validate(validationLog);
             foreach (var task in this.Tasks)
             {
@@ -261,8 +292,24 @@
         /// <param name="tasks">The tasks.</param>
         protected virtual void RunTasks(TaskExecutionContext context, IEnumerable<Task> tasks)
         {
-            foreach (var task in tasks)
+            var enumerator = tasks.GetEnumerator();
+            while (true)
             {
+                try
+                {
+                    var hasTask = enumerator.MoveNext();
+                    if (!hasTask)
+                    {
+                        break;
+                    }
+                }
+                catch (Exception error)
+                {
+                    logger.WarnException("Unhandled exception caught in task", error);
+                    break;
+                }
+
+                var task = enumerator.Current;
                 if (task.CanRun(context))
                 {
                     this.RunTasks(context, task.Run(context));
@@ -279,16 +326,26 @@
         /// <summary>
         /// Initialises this project for an integration.
         /// </summary>
-        protected virtual void InitialiseForIntegration()
+        protected virtual bool InitialiseForIntegration()
         {
-            foreach (var sourceControl in this.SourceControl)
+            try
             {
-                sourceControl.Initialise();
-            }
+                foreach (var sourceControl in this.SourceControl)
+                {
+                    sourceControl.Initialise();
+                }
 
-            foreach (var task in this.Tasks)
+                foreach (var task in this.Tasks)
+                {
+                    task.Initialise();
+                }
+
+                return true;
+            }
+            catch (Exception error)
             {
-                task.Initialise();
+                logger.Error("An unhandled error occurred during initialisation", error);
+                return false;
             }
         }
         #endregion
@@ -301,17 +358,38 @@
         {
             foreach (var task in this.Tasks)
             {
-                task.CleanUp();
+                try
+                {
+                    task.CleanUp();
+                }
+                catch (Exception error)
+                {
+                    logger.ErrorException("Unhandled error during task clean up", error);
+                }
             }
 
             foreach (var sourceControl in this.SourceControl)
             {
-                sourceControl.CleanUp();
+                try
+                {
+                    sourceControl.CleanUp();
+                }
+                catch (Exception error)
+                {
+                    logger.ErrorException("Unhandled error during source control clean up", error);
+                }
             }
 
             foreach (var trigger in this.Triggers)
             {
-                trigger.Reset();
+                try
+                {
+                    trigger.Reset();
+                }
+                catch (Exception error)
+                {
+                    logger.ErrorException("Unhandled error during trigger clean up", error);
+                }
             }
         }
         #endregion
@@ -336,12 +414,20 @@
             logger.Debug("Project '{0}' has started", this.Name);
             try
             {
-                while (this.State == ProjectState.Running)
+                try
                 {
-                    // Sleep a while so we don't overwork the server - assuming our minimum accuracy
-                    // is one second hence firing at 2Hz
-                    Thread.Sleep(500);
-                    CheckForIntegration();
+                    while (this.State == ProjectState.Running)
+                    {
+                        // Sleep a while so we don't overwork the server - assuming our minimum accuracy
+                        // is one second hence firing at 2Hz
+                        Thread.Sleep(500);
+                        CheckForIntegration();
+                    }
+                }
+                catch (Exception error)
+                {
+                    logger.ErrorException("An error has occurred in project '" + this.Name + "'", error);
+                    this.MainThreadException = error;
                 }
 
                 // Clean up
@@ -351,10 +437,6 @@
                 }
 
                 this.OnStopped();
-            }
-            catch (Exception error)
-            {
-                this.MainThreadException = error;
             }
             finally
             {

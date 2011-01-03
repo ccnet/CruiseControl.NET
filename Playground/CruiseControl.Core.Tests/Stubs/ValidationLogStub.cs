@@ -6,6 +6,16 @@
     public class ValidationLogStub
         : IValidationLog
     {
+        public int NumberOfErrors
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public int NumberOfWarnings
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public Action<string, object[]> OnAddErrorMessage { get; set; }
         public void AddError(string message, params object[] args)
         {
@@ -28,6 +38,11 @@
         }
 
         public void AddWarning(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
         {
             throw new NotImplementedException();
         }

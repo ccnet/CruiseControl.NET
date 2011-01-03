@@ -56,6 +56,10 @@
         {
             base.Validate(validationLog);
             ValidationHelpers.CheckForDuplicateItems(this.Children, validationLog, "child");
+            foreach (var child in this.Children)
+            {
+                child.Validate(validationLog);
+            }
         }
         #endregion
 

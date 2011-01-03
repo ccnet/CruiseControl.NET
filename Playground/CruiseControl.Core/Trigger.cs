@@ -2,6 +2,7 @@
 {
     using System;
     using CruiseControl.Core.Interfaces;
+    using NLog;
 
     /// <summary>
     /// Defines a trigger for an integration.
@@ -10,6 +11,7 @@
         : ProjectItem
     {
         #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IntegrationRequest current;
         #endregion
 
@@ -33,6 +35,7 @@
         /// <param name="validationLog">The validation log.</param>
         public virtual void Validate(IValidationLog validationLog)
         {
+            logger.Debug("Validating trigger '{0}'", this.NameOrType);
         }
         #endregion
 
@@ -42,6 +45,7 @@
         /// </summary>
         public virtual void Initialise()
         {
+            logger.Debug("Initialising trigger '{0}'", this.NameOrType);
             this.Reset();
         }
         #endregion
@@ -55,6 +59,7 @@
         /// </returns>
         public IntegrationRequest Check()
         {
+            logger.Trace("Checking trigger '{0}'", this.NameOrType);
             return this.current ?? (this.current = this.OnCheck());
         }
         #endregion
@@ -65,6 +70,7 @@
         /// </summary>
         public void Reset()
         {
+            logger.Trace("Resetting trigger '{0}'", this.NameOrType);
             this.current = null;
             this.OnReset();
         }
@@ -76,6 +82,7 @@
         /// </summary>
         public virtual void CleanUp()
         {
+            logger.Debug("Cleaning up trigger '{0}'", this.NameOrType);
         }
         #endregion
         #endregion

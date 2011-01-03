@@ -14,6 +14,7 @@
         #region Private fields
         private DateTime? nextTime;
         #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Interval"/> class.
@@ -40,7 +41,7 @@
         /// <value>
         /// The period.
         /// </value>
-        public TimeSpan Period { get; set; }
+        public TimeSpan? Period { get; set; }
         #endregion
 
         #region NextTime
@@ -64,6 +65,23 @@
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Inject]
         public IClock Clock { get; set; }
+        #endregion
+        #endregion
+
+        #region Public methods
+        #region Validate()
+        /// <summary>
+        /// Validates this trigger.
+        /// </summary>
+        /// <param name="validationLog">The validation log.</param>
+        public override void Validate(IValidationLog validationLog)
+        {
+            base.Validate(validationLog);
+            if (!this.Period.HasValue)
+            {
+                validationLog.AddError("No period set - trigger will not fire");
+            }
+        }
         #endregion
         #endregion
 
@@ -91,7 +109,7 @@
         protected override void OnReset()
         {
             base.OnReset();
-            this.nextTime = this.Clock.Now.Add(this.Period);
+            this.nextTime = this.Clock.Now.Add(this.Period.Value);
         }
         #endregion
         #endregion

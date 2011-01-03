@@ -12,7 +12,7 @@
           <conditions:HasModifications />
         </tasks:Sequence.Conditions>
         <tasks:GetSource Use="trunk" />
-        <tasks:Nant BuildFile="ccnet.build" TimeOut="0:0:10" />
+        <tasks:BuildNAnt BuildFile="ccnet.build" TimeOut="0:0:10" />
         <tasks:ApplyLastChangeLabel Prefix="2.0." Use="vNext">
           <tasks:ApplyLastChangeLabel.Conditions>
             <conditions:Status>Success</conditions:Status>

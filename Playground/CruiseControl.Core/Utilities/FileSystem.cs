@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Utilities
 {
+    using System;
     using System.IO;
     using CruiseControl.Core.Interfaces;
     using NLog;
@@ -28,6 +29,20 @@
             logger.Trace("Checking if file '" + (filename ?? string.Empty) + "' exists");
             var exists = File.Exists(filename);
             return exists;
+        }
+        #endregion
+
+        #region OpenFileForRead()
+        /// <summary>
+        /// Opens the file for read.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        /// The <see cref="Stream"/> containing the file data.
+        /// </returns>
+        public Stream OpenFileForRead(string filePath)
+        {
+            return File.Open(filePath, FileMode.Open);
         }
         #endregion
         #endregion

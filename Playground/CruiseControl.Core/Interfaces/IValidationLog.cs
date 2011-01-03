@@ -7,6 +7,22 @@
     /// </summary>
     public interface IValidationLog
     {
+        #region Public properties
+        #region NumberOfErrors
+        /// <summary>
+        /// Gets the number of errors.
+        /// </summary>
+        int NumberOfErrors { get; }
+        #endregion
+
+        #region NumberOfWarnings
+        /// <summary>
+        /// Gets the number of warnings.
+        /// </summary>
+        int NumberOfWarnings { get; }
+        #endregion
+        #endregion
+
         #region Public methods
         #region AddError()
         /// <summary>
@@ -36,6 +52,13 @@
         /// </summary>
         /// <param name="error">The error.</param>
         void AddWarning(Exception error);
+        #endregion
+
+        #region Reset()
+        /// <summary>
+        /// Resets the log.
+        /// </summary>
+        void Reset();
         #endregion
         #endregion
     }

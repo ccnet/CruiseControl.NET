@@ -2,10 +2,15 @@
 {
     using System.IO;
     using System.Xaml;
+    using CruiseControl.Core.Interfaces;
     using Ninject;
     using NLog;
 
-    public class ConfigurationService
+    /// <summary>
+    /// A configuration service that uses XAML.
+    /// </summary>
+    public class ConfigurationService 
+        : IConfigurationService
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();

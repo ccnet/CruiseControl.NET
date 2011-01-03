@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationTests.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Triggers\IntervalTests.cs" />
     <Compile Include="Triggers\MultipleTests.cs" />
     <Compile Include="Utilities\FileSystemTests.cs" />
+    <Compile Include="Utilities\LoggingValidationLogTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />
     <Compile Include="VersionTypeConverterTests.cs" />
   </ItemGroup>

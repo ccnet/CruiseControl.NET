@@ -25,7 +25,6 @@
             var childNames = new Dictionary<string, int>();
             foreach (var child in children ?? new ServerItem[0])
             {
-                child.Validate(validationLog);
                 UpdateCount(child, childNames);
             }
 
