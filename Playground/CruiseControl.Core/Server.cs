@@ -103,6 +103,58 @@
         #endregion
 
         #region Public methods
+        #region Locate()
+        /// <summary>
+        /// Locates an item by its universal name.
+        /// </summary>
+        /// <param name="name">The universal name of the item.</param>
+        /// <returns>
+        /// The item if found; <c>null</c> otherwise.
+        /// </returns>
+        public virtual object Locate(string name)
+        {
+            // Get the name for this server
+            var thisName = this.UniversalName;
+
+            // If the server part does not match then this is for a different server
+            if (!name.StartsWith(thisName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            // If the lengths are the same then matching the server itself
+            if (name.Length == thisName.Length)
+            {
+                return this;
+            }
+
+            // Otherwise check all the projects and children
+            object item = null;
+            foreach (var project in this.Children.SelectMany(c => c.ListProjects()))
+            {
+                item = project.Locate(name);
+                if (item != null)
+                {
+                    break;
+                }
+            }
+
+            if (item == null)
+            {
+                foreach (var child in this.Children)
+                {
+                    item = child.Locate(name);
+                    if (item != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return item;
+        }
+        #endregion
+
         #region Validate()
         /// <summary>
         /// Validates this server after it has been loaded.
@@ -111,7 +163,7 @@
         public virtual void Validate(IValidationLog validationLog)
         {
             logger.Debug("Validating server '{0}'", this.Name ?? string.Empty);
-            
+
             // Everything must have a name
             if (string.IsNullOrEmpty(this.Name))
             {

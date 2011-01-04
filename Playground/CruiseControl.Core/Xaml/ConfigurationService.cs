@@ -24,7 +24,11 @@
         /// </summary>
         public ConfigurationService()
         {
-            this.kernel = new StandardKernel(new CoreModule());
+            var settings = new NinjectSettings
+                               {
+                                   LoadExtensions = false
+                               };
+            this.kernel = new StandardKernel(settings, new CoreModule());
             this.context = new CoreXamlSchemaContext(this.kernel);
         }
         #endregion

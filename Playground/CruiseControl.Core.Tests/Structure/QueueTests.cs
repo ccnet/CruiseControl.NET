@@ -238,7 +238,7 @@
                                                                      Assert.AreEqual(
                                                                          "Duplicate {1} name detected: '{0}'", m);
                                                                      CollectionAssert.AreEqual(
-                                                                         new[] {"Project", "child" }, 
+                                                                         new[] { "Project", "child" },
                                                                          a);
                                                                      errorAdded = true;
                                                                  }
@@ -256,6 +256,26 @@
             var projects = parentQueue.ListProjects();
             var expected = new[] { project };
             CollectionAssert.AreEqual(expected, projects);
+        }
+
+        [Test]
+        public void LocateMatchesSelf()
+        {
+            var childQueue = new Queue("ChildQueue");
+            var queue = new Queue("RootQueue", childQueue);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:rootQueue");
+            Assert.AreSame(queue, actual);
+        }
+
+        [Test]
+        public void LocateMatchesChild()
+        {
+            var childQueue = new Queue("ChildQueue");
+            var queue = new Queue("RootQueue", childQueue);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:rootQueue:childQueue");
+            Assert.AreSame(childQueue, actual);
         }
         #endregion
     }

@@ -61,6 +61,7 @@
     <Compile Include="ProjectItem.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectState.cs" />
+    <Compile Include="RemoteActionAttribute.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerItem.cs" />
     <Compile Include="IServerItemContainer.cs" />
@@ -143,7 +144,12 @@
     <Compile Include="Xaml\CoreXamlTypeInvoker.cs" />
     <Compile Include="Interfaces\IConfigurationService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">
+      <Project>{166D519E-854D-4405-9FAE-C6825CF7BBE6}</Project>
+      <Name>CruiseControl.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

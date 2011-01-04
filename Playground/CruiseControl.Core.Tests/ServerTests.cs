@@ -131,6 +131,32 @@
             server.Validate(validationStub);
             Assert.IsTrue(errorAdded);
         }
+
+        [Test]
+        public void LocateMatchesServer()
+        {
+            var server = new Server("Local");
+            var actual = server.Locate("urn:ccnet:local");
+            Assert.AreSame(server, actual);
+        }
+
+        [Test]
+        public void LocateReturnsNullIfServerDoesNotMatch()
+        {
+            var server = new Server("Local");
+            var actual = server.Locate("urn:ccnet:remote");
+            Assert.IsNull(actual);
+        }
+
+        [Test]
+        public void LocateReturnsNullIfItemIsNotProjectOrRootStructure()
+        {
+            var project = new Project("TestProject");
+            var queue = new Queue("RootQueue", project);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:somethingElse");
+            Assert.IsNull(actual);
+        }
         #endregion
     }
 }

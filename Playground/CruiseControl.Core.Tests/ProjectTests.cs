@@ -531,6 +531,39 @@
             Assert.IsFalse(ran);
             Assert.IsNull(project.MainThreadException);
         }
+
+        [Test]
+        public void LocateMatchesSelf()
+        {
+            var task = new Comment();
+            var project = new Project("TestProject", task);
+            var queue = new Queue("RootQueue", project);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:testProject");
+            Assert.AreSame(project, actual);
+        }
+
+        [Test]
+        public void LocateMatchesSelfByFullName()
+        {
+            var task = new Comment();
+            var project = new Project("TestProject", task);
+            var queue = new Queue("RootQueue", project);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:rootQueue:testProject");
+            Assert.AreSame(project, actual);
+        }
+
+        [Test]
+        public void LocateMatchesTask()
+        {
+            var task = new Comment();
+            var project = new Project("TestProject", task);
+            var queue = new Queue("RootQueue", project);
+            var server = new Server("Local", queue);
+            var actual = server.Locate("urn:ccnet:local:testProject:comment");
+            Assert.AreSame(task, actual);
+        }
         #endregion
 
         #region Private methods

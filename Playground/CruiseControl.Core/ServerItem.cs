@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using CruiseControl.Core.Interfaces;
@@ -112,6 +113,24 @@
         #endregion
 
         #region Public methods
+        #region Locate()
+        /// <summary>
+        /// Locates an item by its universal name.
+        /// </summary>
+        /// <param name="name">The universal name of the item.</param>
+        /// <returns>
+        /// The item if found; <c>null</c> otherwise.
+        /// </returns>
+        public virtual object Locate(string name)
+        {
+            // Get the name for this item
+            var thisName = this.UniversalName;
+            return string.Equals(name, thisName, StringComparison.CurrentCultureIgnoreCase) ?
+                this :
+                null;
+        }
+        #endregion
+
         #region AskToIntegrate()
         /// <summary>
         /// Asks if an item can integrate.

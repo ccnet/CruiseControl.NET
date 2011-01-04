@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Threading;
     using System.Windows.Markup;
+    using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
     using NLog;
 
@@ -107,6 +108,45 @@
         #endregion
 
         #region Public methods
+        #region Locate()
+        /// <summary>
+        /// Locates an item by its universal name.
+        /// </summary>
+        /// <param name="name">The universal name of the item.</param>
+        /// <returns>
+        /// The item if found; <c>null</c> otherwise.
+        /// </returns>
+        public override object Locate(string name)
+        {
+            // To complicate things there are two valid universal names for a project - the project as 
+            // root item name and project within a structure path name - therefore we need to check 
+            // both of them
+            var thisName = this.UniversalName;
+            var fullName = this.Host == null
+                               ? string.Empty
+                               : this.Host.UniversalName + ":" + this.Name ?? string.Empty;
+
+            // If the server part does not match then this is for a different server
+            if (!name.StartsWith(thisName, StringComparison.CurrentCultureIgnoreCase) &&
+                !name.StartsWith(fullName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            // If the lengths are the same then matching the server itself
+            if ((name.Length == thisName.Length) || (name.Length == fullName.Length))
+            {
+                return this;
+            }
+
+            // Check all the children
+            var item = LocateWithinCollection(null, this.Tasks, name);
+            item = LocateWithinCollection(item, this.SourceControl, name);
+            item = LocateWithinCollection(item, this.Triggers, name);
+            return item;
+        }
+        #endregion
+
         #region CanStart()
         /// <summary>
         /// Determines whether this instance can start.
@@ -265,6 +305,21 @@
         #endregion
         #endregion
 
+        #region Actions
+        #region ForceBuild()
+        /// <summary>
+        /// Adds a new build request for a forced build.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A response containing the details of the build.</returns>
+        [RemoteAction]
+        public BuildMessage ForceBuild(ProjectMessage request)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+        #endregion
+
         #region Protected methods
         #region OnStarted()
         /// <summary>
@@ -396,6 +451,39 @@
         #endregion
 
         #region Private methods
+        #region LocateWithinCollection()
+        /// <summary>
+        /// Locates the within collection.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="collection">The collection.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// The item if found; <c>null</c> otherwise.
+        /// </returns>
+        private static object LocateWithinCollection(
+            object item,
+            IEnumerable<ProjectItem> collection,
+            string name)
+        {
+            if (item != null)
+            {
+                return item;
+            }
+
+            foreach (var child in collection)
+            {
+                item = child.Locate(name);
+                if (item != null)
+                {
+                    break;
+                }
+            }
+
+            return item;
+        }
+        #endregion
+
         #region Main()
         /// <summary>
         /// The main loop for the project.

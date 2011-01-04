@@ -78,6 +78,10 @@
     <Compile Include="VersionTypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">
+      <Project>{166D519E-854D-4405-9FAE-C6825CF7BBE6}</Project>
+      <Name>CruiseControl.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CruiseControl.Core\CruiseControl.Core.csproj">
       <Project>{74405CD5-BD3D-4912-A465-F929FA20220B}</Project>
       <Name>CruiseControl.Core</Name>
