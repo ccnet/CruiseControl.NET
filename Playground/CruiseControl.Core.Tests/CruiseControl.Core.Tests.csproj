@@ -47,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionInvokerTests.cs" />
     <Compile Include="ApplicationTests.cs" />
     <Compile Include="AttachablePropertyStoreTests.cs" />
+    <Compile Include="Channels\WcfTests.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
@@ -140,6 +142,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Examples\CommonTaskProperties.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\WcfChannel.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

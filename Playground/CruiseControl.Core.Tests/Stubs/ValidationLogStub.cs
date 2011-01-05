@@ -32,9 +32,15 @@
             throw new NotImplementedException();
         }
 
+        public Action<string, object[]> OnAddWarningMessage { get; set; }
         public void AddWarning(string message, params object[] args)
         {
-            throw new NotImplementedException();
+            if (this.OnAddWarningMessage == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            this.OnAddWarningMessage(message, args);
         }
 
         public void AddWarning(Exception error)

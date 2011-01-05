@@ -33,7 +33,8 @@
         [Inject]
         public Server()
         {
-            this.InitialiseCollection(new ServerItem[0]);
+            this.InitialiseChildCollection(new ServerItem[0]);
+            this.InitialiseChannelCollection(new ClientChannel[0]);
         }
 
         /// <summary>
@@ -42,7 +43,8 @@
         /// <param name="children">The children.</param>
         public Server(params ServerItem[] children)
         {
-            this.InitialiseCollection(children);
+            this.InitialiseChildCollection(children);
+            this.InitialiseChannelCollection(new ClientChannel[0]);
         }
 
         /// <summary>
@@ -53,7 +55,20 @@
         public Server(string name, params ServerItem[] children)
         {
             this.Name = name;
-            this.InitialiseCollection(children);
+            this.InitialiseChildCollection(children);
+            this.InitialiseChannelCollection(new ClientChannel[0]);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Server"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="channels">The channels.</param>
+        public Server(string name, IEnumerable<ClientChannel> channels)
+        {
+            this.Name = name;
+            this.InitialiseChildCollection(new ServerItem[0]);
+            this.InitialiseChannelCollection(channels);
         }
         #endregion
 
@@ -99,6 +114,13 @@
         /// </summary>
         /// <value>The children.</value>
         public IList<ServerItem> Children { get; private set; }
+        #endregion
+
+        #region ClientChannels
+        /// <summary>
+        /// Gets the client channels.
+        /// </summary>
+        public IList<ClientChannel> ClientChannels { get; private set; }
         #endregion
         #endregion
 
@@ -206,12 +228,12 @@
         }
         #endregion
 
-        #region InitialiseCollection()
+        #region InitialiseChildCollection()
         /// <summary>
         /// Initialises the collection.
         /// </summary>
         /// <param name="children">The children.</param>
-        private void InitialiseCollection(IEnumerable<ServerItem> children)
+        private void InitialiseChildCollection(IEnumerable<ServerItem> children)
         {
             var collection = new ObservableCollection<ServerItem>(children);
             foreach (var child in collection)
@@ -221,6 +243,17 @@
 
             collection.CollectionChanged += UpdateChildren;
             this.Children = collection;
+        }
+        #endregion
+
+        #region InitialiseChannelCollection()
+        /// <summary>
+        /// Initialises the channel collection.
+        /// </summary>
+        /// <param name="channels">The channels.</param>
+        private void InitialiseChannelCollection(IEnumerable<ClientChannel> channels)
+        {
+            this.ClientChannels = new List<ClientChannel>(channels);
         }
         #endregion
         #endregion

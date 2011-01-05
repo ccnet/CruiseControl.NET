@@ -47,8 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionInvoker.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="AttachablePropertyStore.cs" />
+    <Compile Include="Channels\Wcf.cs" />
+    <Compile Include="ClientChannel.cs" />
     <Compile Include="Exceptions\CruiseControlException.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="IntegrationContext.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="ProjectState.cs" />
     <Compile Include="RemoteActionAttribute.cs" />
+    <Compile Include="RemoteActionDefinition.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerItem.cs" />
     <Compile Include="IServerItemContainer.cs" />

@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Xaml;
     using CruiseControl.Core;
+    using CruiseControl.Core.Channels;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Xaml;
@@ -238,6 +239,25 @@
             PerformSerialisationTest(configuration, "RoundRobinOfQueues");
         }
 
+        [Test]
+        public void ReadWcfChannel()
+        {
+            var configuration = LoadConfiguration(
+                RetrieveExampleFile("WcfChannel"));
+            Assert.IsNotNull(configuration);
+            Assert.AreEqual(1, configuration.ClientChannels.Count);
+            Assert.IsInstanceOf<Wcf>(configuration.ClientChannels[0]);
+            var channel = configuration.ClientChannels[0] as Wcf;
+            Assert.AreEqual("TestChannel", channel.Name);
+        }
+
+        [Test]
+        public void WriteWcfChannel()
+        {
+            var channel = new Wcf("TestChannel");
+            PerformSerialisationTest(channel, "WcfChannel");
+        }
+
         private static Stream RetrieveExampleFile(string exampleName)
         {
             var assembly = typeof(ExampleTests).Assembly;
@@ -272,6 +292,24 @@
                                  Version = new Version(2, 0)
                              };
             server.Children.Add(configuration);
+            var xaml = XamlServices.Save(server);
+            using (var stream = RetrieveExampleFile(example))
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    var expected = reader.ReadToEnd();
+                    Assert.AreEqual(expected, xaml);
+                }
+            }
+        }
+
+        private static void PerformSerialisationTest(ClientChannel configuration, string example)
+        {
+            var server = new Server
+                             {
+                                 Version = new Version(2, 0)
+                             };
+            server.ClientChannels.Add(configuration);
             var xaml = XamlServices.Save(server);
             using (var stream = RetrieveExampleFile(example))
             {

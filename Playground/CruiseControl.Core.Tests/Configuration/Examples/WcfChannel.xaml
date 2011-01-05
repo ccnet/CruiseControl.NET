@@ -1,0 +1,5 @@
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server" xmlns:channels="urn:cruisecontrol:server:channels">
+  <Server.ClientChannels>
+    <channels:Wcf Name="TestChannel" />
+  </Server.ClientChannels>
+</Server>

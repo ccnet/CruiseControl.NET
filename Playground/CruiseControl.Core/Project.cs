@@ -313,6 +313,7 @@
         /// <param name="request">The request containing the details.</param>
         /// <returns>A response containing the details of the build.</returns>
         [RemoteAction]
+        [Description("Trigger a build remotely.")]
         public BuildMessage ForceBuild(ProjectMessage request)
         {
             throw new NotImplementedException();
