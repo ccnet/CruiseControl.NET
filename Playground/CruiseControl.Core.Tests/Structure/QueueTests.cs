@@ -277,6 +277,33 @@
             var actual = server.Locate("urn:ccnet:local:rootQueue:childQueue");
             Assert.AreSame(childQueue, actual);
         }
+
+        [Test]
+        public void GetPriorityReturnsNullIfNoPrioritySet()
+        {
+            var project = new Project();
+            var actual = Queue.GetPriority(project);
+            Assert.IsNull(actual);
+        }
+
+        [Test]
+        public void SetPrioritySetsPriority()
+        {
+            var project = new Project();
+            Queue.SetPriority(project, 1);
+            var actual = Queue.GetPriority(project);
+            Assert.AreEqual(1, actual);
+        }
+
+        [Test]
+        public void SetPriorityClearsPriority()
+        {
+            var project = new Project();
+            Queue.SetPriority(project, 1);
+            Queue.SetPriority(project, null);
+            var actual = Queue.GetPriority(project);
+            Assert.IsNull(actual);
+        }
         #endregion
     }
 }

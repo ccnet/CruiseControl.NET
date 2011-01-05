@@ -6,11 +6,9 @@
     using System.Linq;
     using System.Xaml;
     using CruiseControl.Core;
-    using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Xaml;
-    using Moq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -101,14 +99,18 @@
             this.VerifyChildren(
                 configuration.Children,
                 new Queue("Queue1", new Project("Project1"), new Project("Project2")));
+            var queue = configuration.Children[0] as Queue;
+            Assert.AreEqual(3, Queue.GetPriority(queue.Children[0]));
         }
 
         [Test]
         public void WriteSimpleQueue()
         {
+            var project = new Project("Project1");
+            Queue.SetPriority(project, 3);
             var configuration = new Queue(
                 "Queue1",
-                new Project("Project1"),
+                project,
                 new Project("Project2"));
             PerformSerialisationTest(configuration, "SimpleQueue");
         }

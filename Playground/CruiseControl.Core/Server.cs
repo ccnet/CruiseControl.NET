@@ -17,7 +17,7 @@
     /// </summary>
     [ContentProperty("Children")]
     public class Server
-        : IServerItemContainer
+        : AttachablePropertyStore, IServerItemContainer
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();

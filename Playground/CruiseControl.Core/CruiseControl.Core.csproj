@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="AttachablePropertyStore.cs" />
     <Compile Include="Exceptions\CruiseControlException.cs" />
     <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="IntegrationContext.cs" />

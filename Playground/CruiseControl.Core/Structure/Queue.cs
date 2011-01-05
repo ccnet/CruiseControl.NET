@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading;
+    using System.Xaml;
     using NLog;
 
     /// <summary>
@@ -52,6 +53,49 @@
         #endregion
 
         #region Public methods
+        #region SetPriority()
+        /// <summary>
+        /// Sets the priority on an item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="priority">The priority.</param>
+        public static void SetPriority(ServerItem item, int? priority)
+        {
+            var memberIdentifier = new AttachableMemberIdentifier(typeof(Queue), "Priority");
+            if (priority.HasValue)
+            {
+                AttachablePropertyServices.SetProperty(
+                    item,
+                    memberIdentifier,
+                    priority);
+            }
+            else
+            {
+                AttachablePropertyServices.RemoveProperty(
+                    item,
+                    memberIdentifier);
+            }
+        }
+        #endregion
+
+        #region GetPriority()
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        /// The priority if the item has one; <c>null</c> otherwise.
+        /// </returns>
+        public static int? GetPriority(ServerItem item)
+        {
+            int? priority;
+            return AttachablePropertyServices.TryGetProperty(
+                item,
+                new AttachableMemberIdentifier(typeof(Queue), "Priority"),
+                out priority) ? priority : null;
+        }
+        #endregion
+
         #region AskToIntegrate()
         /// <summary>
         /// Asks if an item can integrate.

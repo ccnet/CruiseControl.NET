@@ -7,6 +7,7 @@
     /// Signifies that an item is within a project.
     /// </summary>
     public abstract class ProjectItem
+        : AttachablePropertyStore
     {
         #region Private fields
         private Project project;

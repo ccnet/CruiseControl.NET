@@ -9,6 +9,7 @@
     /// An item of server configuration - this is typically a structure item.
     /// </summary>
     public abstract class ServerItem
+        : AttachablePropertyStore
     {
         #region Private fields
         private Server server;

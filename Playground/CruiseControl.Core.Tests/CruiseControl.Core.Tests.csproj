@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationTests.cs" />
+    <Compile Include="AttachablePropertyStoreTests.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
