@@ -39,14 +39,22 @@
         [Test]
         public void RunAddsComment()
         {
-            var text = "commentText";
-            var contextMock = new Mock<TaskExecutionContext>();
-            contextMock.Setup(c => c.AddEntryToBuildLog(text)).Verifiable();
-            var name = "commentName";
-            var task = new Comment(name, text);
-            var result = task.Run(contextMock.Object);
-            result.Count();     // This is needed to actually run the task
-            contextMock.Verify();
+            using (var interceptor = LogHelper.InterceptLogging(typeof(Comment)))
+            {
+                var text = "commentText";
+                var contextMock = new Mock<TaskExecutionContext>();
+                contextMock.Setup(c => c.AddEntryToBuildLog(text)).Verifiable();
+                var name = "commentName";
+                var task = new Comment(name, text);
+                var result = task.Run(contextMock.Object);
+                result.Count(); // This is needed to actually run the task
+                contextMock.Verify();
+                var expected = new[]
+                                   {
+                                       "Info|CruiseControl.Core.Tasks.Comment|Adding comment to the build log"
+                                   };
+                CollectionAssert.AreEqual(expected, interceptor.Messages);
+            }
         }
         #endregion
     }

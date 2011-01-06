@@ -8,20 +8,21 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class IntervalTests
+    public class ScheduleTests
     {
         #region Tests
         [Test]
         public void InitialiseSetsTheNextTime()
         {
-            var clockMock = new Mock<IClock>();
-            clockMock.Setup(c => c.Now).Returns(() => DateTime.Now);
-            var trigger = new Interval(TimeSpan.FromMinutes(5))
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Today).Returns(DateTime.Today);
+            clockMock.Setup(c => c.Now).Returns(DateTime.Today.AddHours(9));
+            var trigger = new Schedule(TimeSpan.Parse("17:00"))
                               {
                                   Clock = clockMock.Object
                               };
             trigger.Initialise();
-            var expected = DateTime.Now.AddMinutes(5);
+            var expected = DateTime.Today.AddHours(17);
             var actual = trigger.NextTime.Value;
             DateTimeAssert.AreEqual(expected, actual, DateTimeCompare.IgnoreSeconds);
         }
@@ -29,14 +30,15 @@
         [Test]
         public void ResetSetsTheNextTime()
         {
-            var clockMock = new Mock<IClock>();
-            clockMock.Setup(c => c.Now).Returns(() => DateTime.Now);
-            var trigger = new Interval(TimeSpan.FromMinutes(5))
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Today).Returns(DateTime.Today);
+            clockMock.Setup(c => c.Now).Returns(DateTime.Today.AddHours(20));
+            var trigger = new Schedule(TimeSpan.Parse("17:00"))
                               {
                                   Clock = clockMock.Object
                               };
             trigger.Reset();
-            var expected = DateTime.Now.AddMinutes(5);
+            var expected = DateTime.Today.AddDays(1).AddHours(17);
             var actual = trigger.NextTime.Value;
             DateTimeAssert.AreEqual(expected, actual, DateTimeCompare.IgnoreSeconds);
         }
@@ -44,12 +46,13 @@
         [Test]
         public void CheckReturnsNullIfWithinPeriod()
         {
-            var clockMock = new Mock<IClock>();
-            clockMock.Setup(c => c.Now).Returns(() => DateTime.Now);
-            var trigger = new Interval(TimeSpan.FromMinutes(5))
-            {
-                Clock = clockMock.Object
-            };
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Today).Returns(DateTime.Today);
+            clockMock.Setup(c => c.Now).Returns(DateTime.Today.AddHours(9));
+            var trigger = new Schedule(TimeSpan.Parse("17:00"))
+                              {
+                                  Clock = clockMock.Object
+                              };
             trigger.Reset();
             var actual = trigger.Check();
             Assert.IsNull(actual);
@@ -58,36 +61,37 @@
         [Test]
         public void CheckReturnsIntegrationRequestIfBeyondPeriod()
         {
-            var clockMock = new Mock<IClock>();
-            var time = DateTime.Now;
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            var time = DateTime.Today.AddHours(15).AddMinutes(30);
+            clockMock.Setup(c => c.Today).Returns(DateTime.Today);
             clockMock.Setup(c => c.Now).Returns(() =>
                                                     {
-                                                        time = time.AddMinutes(6);
+                                                        time = time.AddHours(1);
                                                         return time;
                                                     });
-            var trigger = new Interval(TimeSpan.FromMinutes(5))
+            var trigger = new Schedule(TimeSpan.Parse("17:00"))
                               {
                                   Clock = clockMock.Object
                               };
-            trigger.Reset();
             var now = DateTime.Now;
+            trigger.Reset();
             var actual = trigger.Check();
             Assert.IsNotNull(actual);
-            Assert.AreEqual("Interval", actual.SourceTrigger);
+            Assert.AreEqual("Schedule", actual.SourceTrigger);
             Assert.IsTrue(actual.Time >= now && actual.Time <= DateTime.Now);
         }
 
         [Test]
-        public void ValidateDetectsMissingPeriod()
+        public void ValidateDetectsMissingTime()
         {
             var errorAdded = false;
-            var trigger = new Interval();
+            var trigger = new Schedule();
             var validation = new ValidationLogStub
                                  {
                                      OnAddErrorMessage = (m, a) =>
                                                              {
                                                                  Assert.AreEqual(
-                                                                     "No period set - trigger will not fire",
+                                                                     "No time set - trigger will not fire",
                                                                      m);
                                                                  CollectionAssert.IsEmpty(a);
                                                                  errorAdded = true;

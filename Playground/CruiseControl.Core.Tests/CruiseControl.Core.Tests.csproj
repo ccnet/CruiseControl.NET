@@ -34,6 +34,9 @@
     <Reference Include="Moq">
       <HintPath>..\Lib\Testing\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\Lib\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\Lib\Testing\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +54,8 @@
     <Compile Include="ApplicationTests.cs" />
     <Compile Include="AttachablePropertyStoreTests.cs" />
     <Compile Include="Channels\WcfTests.cs" />
+    <Compile Include="DateTimeAssert.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
@@ -70,11 +75,13 @@
     <Compile Include="Stubs\ValidationLogStub.cs" />
     <Compile Include="Tasks\CommentTests.cs" />
     <Compile Include="Tasks\GetSourceTests.cs" />
+    <Compile Include="Tasks\NullTests.cs" />
     <Compile Include="Tasks\SequenceTests.cs" />
     <Compile Include="Tasks\SourceControlTaskTests.cs" />
     <Compile Include="TaskTests.cs" />
     <Compile Include="Triggers\IntervalTests.cs" />
     <Compile Include="Triggers\MultipleTests.cs" />
+    <Compile Include="Triggers\ScheduleTests.cs" />
     <Compile Include="Utilities\FileSystemTests.cs" />
     <Compile Include="Utilities\LoggingValidationLogTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />

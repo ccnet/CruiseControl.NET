@@ -1,11 +1,18 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
-    using System;
     using System.Collections.Generic;
+    using NLog;
 
+    /// <summary>
+    /// A task that does nothing.
+    /// </summary>
     public class Null
         : Task
     {
+        #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Public methods
         #region OnRun()
         /// <summary>
@@ -17,7 +24,8 @@
         /// </returns>
         protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
-            throw new NotImplementedException();
+            logger.Info("Doing nothing");
+            return null;
         }
         #endregion
         #endregion
