@@ -14,10 +14,11 @@
         /// </summary>
         /// <param name="logFile">The path to the log file.</param>
         /// <param name="project">The project.</param>
+        /// <param name="request">The request.</param>
         /// <returns>
         /// The new <see cref="TaskExecutionContext"/>.
         /// </returns>
-        TaskExecutionContext StartNew(string logFile, Project project);
+        TaskExecutionContext StartNew(string logFile, Project project, IntegrationRequest request);
         #endregion
 
         #region GenerateLogName()

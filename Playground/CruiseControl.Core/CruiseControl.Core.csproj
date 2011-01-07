@@ -63,6 +63,8 @@
     <Compile Include="Interfaces\ITaskExecutionFactory.cs" />
     <Compile Include="Interfaces\IValidationLog.cs" />
     <Compile Include="LabelParameters.cs" />
+    <Compile Include="Modification.cs" />
+    <Compile Include="ModificationSet.cs" />
     <Compile Include="ProjectItem.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectState.cs" />
@@ -86,7 +88,10 @@
     <Compile Include="Tasks\BuildVisualStudio.cs" />
     <Compile Include="Tasks\CheckHttpStatus.cs" />
     <Compile Include="Tasks\CleanUpArtifacts.cs" />
+    <Compile Include="Tasks\Conditions\And.cs" />
+    <Compile Include="Tasks\Conditions\FileExists.cs" />
     <Compile Include="Tasks\Conditions\HasModifications.cs" />
+    <Compile Include="Tasks\Conditions\Or.cs" />
     <Compile Include="Tasks\Conditions\Status.cs" />
     <Compile Include="TaskExecutionContext.cs" />
     <Compile Include="TaskState.cs" />

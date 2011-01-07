@@ -47,10 +47,11 @@
         /// </summary>
         /// <param name="logFile">The path to the log file.</param>
         /// <param name="project">The project.</param>
+        /// <param name="request">The request.</param>
         /// <returns>
         /// The new <see cref="TaskExecutionContext"/>.
         /// </returns>
-        public TaskExecutionContext StartNew(string logFile, Project project)
+        public TaskExecutionContext StartNew(string logFile, Project project, IntegrationRequest request)
         {
             logger.Debug("Starting execution context for project '{0}", project.Name);
             this.FileSystem.EnsureFolderExists(Path.GetDirectoryName(logFile));
@@ -58,7 +59,7 @@
             writer.WriteStartElement("project");
             writer.WriteAttributeString("name", project.Name);
             writer.WriteElementString("start", this.Clock.Now.ToString("s"));
-            var context = new TaskExecutionContext(writer, this.FileSystem, this.Clock);
+            var context = new TaskExecutionContext(writer, this.FileSystem, this.Clock, request);
             return context;
         }
         #endregion

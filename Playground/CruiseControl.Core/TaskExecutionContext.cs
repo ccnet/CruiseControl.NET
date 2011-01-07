@@ -1,5 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Xml;
     using CruiseControl.Core.Interfaces;
@@ -14,8 +16,10 @@
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly XmlWriter writer;
         private readonly int threadId;
+        private readonly IntegrationRequest request;
         private readonly IFileSystem fileSystem;
         private readonly IClock clock;
+        private IList<ModificationSet> modificationsSets = new List<ModificationSet>();
         #endregion
 
         #region Constructors
@@ -25,12 +29,14 @@
         /// <param name="writer">The writer.</param>
         /// <param name="fileSystem">The file system.</param>
         /// <param name="clock">The clock.</param>
-        public TaskExecutionContext(XmlWriter writer, IFileSystem fileSystem, IClock clock)
+        /// <param name="request">The request.</param>
+        public TaskExecutionContext(XmlWriter writer, IFileSystem fileSystem, IClock clock, IntegrationRequest request)
         {
             this.writer = writer;
             this.threadId = Thread.CurrentThread.ManagedThreadId;
             this.fileSystem = fileSystem;
             this.clock = clock;
+            this.request = request;
         }
         #endregion
 
@@ -61,6 +67,26 @@
         /// </summary>
         public TaskExecutionContext Parent { get; private set; }
         #endregion
+
+        #region Request
+        /// <summary>
+        /// Gets the request.
+        /// </summary>
+        public IntegrationRequest Request
+        {
+            get { return this.request; }
+        }
+        #endregion
+
+        #region ModificationSets
+        /// <summary>
+        /// Gets the modification sets.
+        /// </summary>
+        public virtual IEnumerable<ModificationSet> ModificationSets
+        {
+            get { return this.modificationsSets; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -74,9 +100,11 @@
         /// </returns>
         public virtual TaskExecutionContext StartChild(Task task)
         {
-            var child = new TaskExecutionContext(this.writer, this.fileSystem, this.clock)
+            logger.Debug("Starting new task execution context for '{0}'", task.NameOrType);
+            var child = new TaskExecutionContext(this.writer, this.fileSystem, this.clock, this.request)
                             {
-                                Parent = this
+                                Parent = this,
+                                modificationsSets = this.modificationsSets
                             };
             this.writer.WriteStartElement("task");
             if (!string.IsNullOrEmpty(task.Name))
@@ -97,6 +125,7 @@
         /// <param name="message">The message of the entry.</param>
         public virtual void AddEntryToBuildLog(string message)
         {
+            logger.Trace("Adding trace entry to log: {0}", message);
             this.writer.WriteStartElement("entry");
             this.writer.WriteAttributeString("time", this.clock.Now.ToString("s"));
             this.writer.WriteString(message);
@@ -113,14 +142,22 @@
             if (!this.IsCompleted)
             {
                 this.IsCompleted = true;
+                if (this.CurrentStatus == IntegrationStatus.Unknown)
+                {
+                    this.CurrentStatus = IntegrationStatus.Success;
+                }
+
                 writer.WriteElementString("finish", this.clock.Now.ToString("s"));
+                writer.WriteElementString("status", this.CurrentStatus.ToString());
                 if (this.Parent == null)
                 {
+                    logger.Debug("Completing task execution context");
                     this.writer.WriteEndDocument();
                     this.writer.Close();
                 }
                 else
                 {
+                    logger.Debug("Completing child task execution context");
                     this.writer.WriteEndElement();
                 }
             }

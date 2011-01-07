@@ -36,7 +36,7 @@
         [Test]
         public void CanExecuteReturnsTrueWithNoConditions()
         {
-            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var contextMock = GenerateContextMock();
             var task = new TaskStub();
             var expected = task.CanRun(contextMock.Object);
             Assert.IsTrue(expected);
@@ -45,7 +45,7 @@
         [Test]
         public void CanExecuteReturnsTrueWhenAllConditionsPass()
         {
-            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var contextMock = GenerateContextMock();
             var condition1Mock = new Mock<TaskCondition>();
             var condition2Mock = new Mock<TaskCondition>();
             condition1Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(true);
@@ -60,7 +60,7 @@
         [Test]
         public void CanExecuteReturnsFalseWhenAnyConditionIsFalse()
         {
-            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var contextMock = GenerateContextMock();
             var condition1Mock = new Mock<TaskCondition>();
             var condition2Mock = new Mock<TaskCondition>();
             condition1Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(true);
@@ -89,7 +89,9 @@
         public void SkipSetsStateToSkipped()
         {
             var task = new TaskStub();
-            task.Skip(null);
+            var contextMock = GenerateContextMock();
+            contextMock.Setup(ec => ec.AddEntryToBuildLog("Task 'TaskStub' has been skipped"));
+            task.Skip(contextMock.Object);
             Assert.AreEqual(TaskState.Skipped, task.State);
         }
 
@@ -109,7 +111,7 @@
                            {
                                OnRunAction = action
                            };
-            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var contextMock = GenerateContextMock();
             var result = task.Run(contextMock.Object);
             Assert.AreEqual(result.Count(), 0); // This line is needed to actually trigger the method
             Assert.AreEqual(TaskState.Completed, task.State);
@@ -135,7 +137,7 @@
                            {
                                OnRunAction = c => new[] { childTask }
                            };
-            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var contextMock = GenerateContextMock();
             var result = task.Run(contextMock.Object);
             Assert.AreEqual(result.Count(), 1); // This line is needed to actually trigger the method
             Assert.IsFalse(ran);
@@ -202,6 +204,13 @@
             var validationMock = new Mock<IValidationLog>();
             task.Validate(validationMock.Object);
             Assert.IsTrue(validated);
+        }
+        #endregion
+
+        #region Helpers
+        private static Mock<TaskExecutionContext> GenerateContextMock()
+        {
+            return new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null, null);
         }
         #endregion
     }

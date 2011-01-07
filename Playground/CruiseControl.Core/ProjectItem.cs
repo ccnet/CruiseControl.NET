@@ -63,6 +63,19 @@
             }
         }
         #endregion
+
+        #region NameOrType
+        /// <summary>
+        /// Gets the name or type.
+        /// </summary>
+        /// <value>
+        /// The name or type of this task.
+        /// </value>
+        public string NameOrType
+        {
+            get { return this.Name ?? this.GetType().Name; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -81,21 +94,6 @@
             return string.Equals(name, thisName, StringComparison.CurrentCultureIgnoreCase) ?
                 this :
                 null;
-        }
-        #endregion
-        #endregion
-
-        #region Protected properties
-        #region NameOrType
-        /// <summary>
-        /// Gets the name or type.
-        /// </summary>
-        /// <value>
-        /// The name or type of this task.
-        /// </value>
-        protected string NameOrType
-        {
-            get { return this.Name ?? this.GetType().Name; }
         }
         #endregion
         #endregion

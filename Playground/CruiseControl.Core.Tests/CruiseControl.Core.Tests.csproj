@@ -56,7 +56,12 @@
     <Compile Include="Channels\WcfTests.cs" />
     <Compile Include="DateTimeAssert.cs" />
     <Compile Include="LogHelper.cs" />
+    <Compile Include="ModificationSetTests.cs" />
     <Compile Include="TaskExecutionContextTests.cs" />
+    <Compile Include="Tasks\Conditions\AndTests.cs" />
+    <Compile Include="Tasks\Conditions\FileExistsTests.cs" />
+    <Compile Include="Tasks\Conditions\HasModificationsTests.cs" />
+    <Compile Include="Tasks\Conditions\OrTests.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />

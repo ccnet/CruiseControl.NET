@@ -1,8 +1,10 @@
 ﻿namespace CruiseControl.Core.Tasks.Conditions
 {
-    using System;
     using System.Windows.Markup;
 
+    /// <summary>
+    /// Checks the current status of the build.
+    /// </summary>
     [ContentProperty("Value")]
     public class Status
         : TaskCondition

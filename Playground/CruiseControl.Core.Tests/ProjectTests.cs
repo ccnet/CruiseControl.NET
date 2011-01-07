@@ -386,7 +386,8 @@
                             };
             dummy.Conditions.Add(conditionMock.Object);
             var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
-            InitialiseExecutionContext(executionFactoryMock);
+            var contextMock = InitialiseExecutionContext(executionFactoryMock);
+            contextMock.Setup(ec => ec.AddEntryToBuildLog("Task 'TaskStub' has been skipped"));
             var project = new Project("test", dummy)
                               {
                                   TaskExecutionFactory = executionFactoryMock.Object
@@ -648,11 +649,11 @@
         {
             executionFactoryMock.Setup(ef => ef.GenerateLogName(It.IsAny<Project>()))
                 .Returns(DefaultLogFilePath);
-            var childContextMock = new Mock<TaskExecutionContext>(MockBehavior.Loose, null, null, null);
-            var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null);
+            var childContextMock = new Mock<TaskExecutionContext>(MockBehavior.Loose, null, null, null, null);
+            var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null, null);
             contextMock.Setup(ec => ec.StartChild(It.IsAny<Task>())).Returns(childContextMock.Object);
             contextMock.Setup(ec => ec.Complete());
-            executionFactoryMock.Setup(ef => ef.StartNew(DefaultLogFilePath, It.IsAny<Project>()))
+            executionFactoryMock.Setup(ef => ef.StartNew(DefaultLogFilePath, It.IsAny<Project>(), It.IsAny<IntegrationRequest>()))
                 .Returns(contextMock.Object);
             return contextMock;
         }

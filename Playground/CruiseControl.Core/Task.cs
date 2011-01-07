@@ -161,7 +161,9 @@
         /// <param name="context">The context.</param>
         public virtual void Skip(TaskExecutionContext context)
         {
-            logger.Debug("Task '{0}' has been skipped", this.NameOrType);
+            var message = "Task '" + this.NameOrType + "' has been skipped";
+            context.AddEntryToBuildLog(message);
+            logger.Debug(message);
             this.State = TaskState.Skipped;
             this.OnSkip(context);
         }

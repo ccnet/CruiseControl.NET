@@ -286,7 +286,7 @@
             {
                 logger.Debug("Running tasks for '{0}'", this.Name);
                 var logFilePath = this.TaskExecutionFactory.GenerateLogName(this);
-                var context = this.TaskExecutionFactory.StartNew(logFilePath, this);
+                var context = this.TaskExecutionFactory.StartNew(logFilePath, this, request);
                 try
                 {
                     this.RunTasks(context, this.Tasks);

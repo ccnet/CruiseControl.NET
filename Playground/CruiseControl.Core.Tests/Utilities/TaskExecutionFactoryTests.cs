@@ -51,7 +51,7 @@
                                   FileSystem = fileSystemMock.Object
                               };
             var project = new Project("Test");
-            var actual = factory.StartNew(path, project);
+            var actual = factory.StartNew(path, project, null);
             Assert.IsNotNull(actual);
             writerMock.Verify();
         }

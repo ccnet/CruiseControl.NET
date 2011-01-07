@@ -15,7 +15,7 @@
             using (var intercept = LogHelper.InterceptLogging(typeof(Null)))
             {
                 var task = new Null();
-                var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+                var contextMock = new Mock<TaskExecutionContext>(null, null, null, null);
                 var tasks = task.Run(contextMock.Object);
                 tasks.Count();
                 var expected = new[]
