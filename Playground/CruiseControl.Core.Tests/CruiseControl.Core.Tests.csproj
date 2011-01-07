@@ -56,6 +56,7 @@
     <Compile Include="Channels\WcfTests.cs" />
     <Compile Include="DateTimeAssert.cs" />
     <Compile Include="LogHelper.cs" />
+    <Compile Include="TaskExecutionContextTests.cs" />
     <Compile Include="Tasks\Conditions\StatusTests.cs" />
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
@@ -85,7 +86,9 @@
     <Compile Include="Utilities\FileSystemTests.cs" />
     <Compile Include="Utilities\LoggingValidationLogTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />
+    <Compile Include="Utilities\TaskExecutionFactoryTests.cs" />
     <Compile Include="VersionTypeConverterTests.cs" />
+    <Compile Include="XmlWriterHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">

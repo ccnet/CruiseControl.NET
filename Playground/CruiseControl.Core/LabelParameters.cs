@@ -1,4 +1,4 @@
-﻿namespace CruiseControl.Core.Interfaces
+﻿namespace CruiseControl.Core
 {
     public class LabelParameters
     {

@@ -67,6 +67,27 @@
                 }
             }
         }
+
+        [Test]
+        public void CreateXmlWriterCreatesTheWriter()
+        {
+            var fileSystem = new FileSystem();
+            var fileName = Path.GetTempFileName();
+            try
+            {
+                using (var writer = fileSystem.CreateXmlWriter(fileName))
+                {
+                    Assert.IsNotNull(writer);
+                }
+            }
+            finally
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+            }
+        }
         #endregion
     }
 }

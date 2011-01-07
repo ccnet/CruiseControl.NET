@@ -10,6 +10,7 @@
     using System.Windows.Markup;
     using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
+    using Ninject;
     using NLog;
 
     /// <summary>
@@ -104,6 +105,32 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Exception MainThreadException { get; private set; }
+        #endregion
+
+        #region TaskExecutionFactory
+        /// <summary>
+        /// Gets or sets the task context factory.
+        /// </summary>
+        /// <value>
+        /// The task context factory.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Inject]
+        public ITaskExecutionFactory TaskExecutionFactory { get; set; }
+        #endregion
+
+        #region FileSystem
+        /// <summary>
+        /// Gets or sets the file system.
+        /// </summary>
+        /// <value>
+        /// The file system.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Inject]
+        public IFileSystem FileSystem { get; set; }
         #endregion
         #endregion
 
@@ -258,8 +285,16 @@
             if (this.InitialiseForIntegration())
             {
                 logger.Debug("Running tasks for '{0}'", this.Name);
-                var context = new TaskExecutionContext();
-                this.RunTasks(context, this.Tasks);
+                var logFilePath = this.TaskExecutionFactory.GenerateLogName(this);
+                var context = this.TaskExecutionFactory.StartNew(logFilePath, this);
+                try
+                {
+                    this.RunTasks(context, this.Tasks);
+                }
+                finally
+                {
+                    context.Complete();
+                }
             }
 
             logger.Debug("Cleaning up after integration for '{0}'", this.Name);

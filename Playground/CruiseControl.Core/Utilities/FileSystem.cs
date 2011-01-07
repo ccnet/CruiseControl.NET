@@ -2,6 +2,8 @@
 {
     using System;
     using System.IO;
+    using System.Text;
+    using System.Xml;
     using CruiseControl.Core.Interfaces;
     using NLog;
 
@@ -43,6 +45,28 @@
         public Stream OpenFileForRead(string filePath)
         {
             return File.Open(filePath, FileMode.Open);
+        }
+        #endregion
+
+        #region CreateXmlWriter()
+        /// <summary>
+        /// Creates a new XML writer.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>
+        /// The new <see cref="XmlWriter"/>.
+        /// </returns>
+        public XmlWriter CreateXmlWriter(string filename)
+        {
+            var settings = new XmlWriterSettings
+                               {
+                                   Encoding = Encoding.UTF8,
+                                   CloseOutput = true,
+                                   Indent = true,
+                                   NewLineOnAttributes = false,
+                                   OmitXmlDeclaration = false
+                               };
+            return XmlWriter.Create(filename, settings);
         }
         #endregion
         #endregion

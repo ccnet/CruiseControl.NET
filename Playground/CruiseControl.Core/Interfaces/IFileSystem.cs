@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core.Interfaces
 {
     using System.IO;
+    using System.Xml;
 
     /// <summary>
     /// Exposes functionality for working with the file system.
@@ -28,6 +29,17 @@
         /// The <see cref="Stream"/> containing the file data.
         /// </returns>
         Stream OpenFileForRead(string filePath);
+        #endregion
+
+        #region CreateXmlWriter()
+        /// <summary>
+        /// Creates a new XML writer.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>
+        /// The new <see cref="XmlWriter"/>.
+        /// </returns>
+        XmlWriter CreateXmlWriter(string filename);
         #endregion
         #endregion
     }

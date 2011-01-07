@@ -36,39 +36,39 @@
         [Test]
         public void CanExecuteReturnsTrueWithNoConditions()
         {
-            var context = new TaskExecutionContext();
+            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
             var task = new TaskStub();
-            var expected = task.CanRun(context);
+            var expected = task.CanRun(contextMock.Object);
             Assert.IsTrue(expected);
         }
 
         [Test]
         public void CanExecuteReturnsTrueWhenAllConditionsPass()
         {
-            var context = new TaskExecutionContext();
+            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
             var condition1Mock = new Mock<TaskCondition>();
             var condition2Mock = new Mock<TaskCondition>();
-            condition1Mock.Setup(c => c.Evaluate(context)).Returns(true);
-            condition2Mock.Setup(c => c.Evaluate(context)).Returns(true);
+            condition1Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(true);
+            condition2Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(true);
             var task = new TaskStub();
             task.Conditions.Add(condition1Mock.Object);
             task.Conditions.Add(condition2Mock.Object);
-            var expected = task.CanRun(context);
+            var expected = task.CanRun(contextMock.Object);
             Assert.IsTrue(expected);
         }
 
         [Test]
         public void CanExecuteReturnsFalseWhenAnyConditionIsFalse()
         {
-            var context = new TaskExecutionContext();
+            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
             var condition1Mock = new Mock<TaskCondition>();
             var condition2Mock = new Mock<TaskCondition>();
-            condition1Mock.Setup(c => c.Evaluate(context)).Returns(true);
-            condition2Mock.Setup(c => c.Evaluate(context)).Returns(false);
+            condition1Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(true);
+            condition2Mock.Setup(c => c.Evaluate(contextMock.Object)).Returns(false);
             var task = new TaskStub();
             task.Conditions.Add(condition1Mock.Object);
             task.Conditions.Add(condition2Mock.Object);
-            var expected = task.CanRun(context);
+            var expected = task.CanRun(contextMock.Object);
             Assert.IsFalse(expected);
         }
 
@@ -109,7 +109,8 @@
                            {
                                OnRunAction = action
                            };
-            var result = task.Run(new TaskExecutionContext());
+            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var result = task.Run(contextMock.Object);
             Assert.AreEqual(result.Count(), 0); // This line is needed to actually trigger the method
             Assert.AreEqual(TaskState.Completed, task.State);
             Assert.AreEqual(TaskState.Executing, intermediateState);
@@ -134,7 +135,8 @@
                            {
                                OnRunAction = c => new[] { childTask }
                            };
-            var result = task.Run(new TaskExecutionContext());
+            var contextMock = new Mock<TaskExecutionContext>(null, null, null);
+            var result = task.Run(contextMock.Object);
             Assert.AreEqual(result.Count(), 1); // This line is needed to actually trigger the method
             Assert.IsFalse(ran);
         }

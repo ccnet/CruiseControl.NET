@@ -42,7 +42,7 @@
             using (var interceptor = LogHelper.InterceptLogging(typeof(Comment)))
             {
                 var text = "commentText";
-                var contextMock = new Mock<TaskExecutionContext>();
+                var contextMock = new Mock<TaskExecutionContext>(null, null, null);
                 contextMock.Setup(c => c.AddEntryToBuildLog(text)).Verifiable();
                 var name = "commentName";
                 var task = new Comment(name, text);

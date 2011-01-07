@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using System.Xml;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
@@ -11,6 +12,10 @@
 
     public class ProjectTests
     {
+        #region Constants
+        private const string DefaultLogFilePath = "logFilePath";
+        #endregion
+
         #region Tests
         [Test]
         public void ConstructorSetsNameAndTasks()
@@ -178,7 +183,12 @@
                                 OnRunAction = c => { ran = true; return null; },
                                 OnCleanUpAction = () => cleanedUp = true
                             };
-            var project = new Project("test", dummy);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test", dummy)
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
             Assert.IsTrue(initialised);
@@ -225,7 +235,12 @@
                                                   },
                                 OnCleanUpAction = () => cleanedUp = true
                             };
-            var project = new Project("test", dummy);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test", dummy)
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
             Assert.IsTrue(initialised);
@@ -250,7 +265,12 @@
                                                           throw new Exception("Oops");
                                                       }
                             };
-            var project = new Project("test", dummy);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock); 
+            var project = new Project("test", dummy)
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
             Assert.IsTrue(initialised);
@@ -267,7 +287,12 @@
                     OnInitialise = () => initialised = true,
                     OnCleanUp = () => cleanedUp = true
                 };
-            var project = new Project("test");
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test")
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.SourceControl.Add(dummy);
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
@@ -287,7 +312,12 @@
                                     throw new Exception("Oops");
                                 }
             };
-            var project = new Project("test");
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test")
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.SourceControl.Add(dummy);
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
@@ -302,7 +332,12 @@
                             {
                                 OnResetAction = () => reset = true
                             };
-            var project = new Project("test");
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test")
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.Triggers.Add(dummy);
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
@@ -319,7 +354,12 @@
                                                         throw new Exception("Oops");
                                                     }
                             };
-            var project = new Project("test");
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test")
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.Triggers.Add(dummy);
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
@@ -345,7 +385,12 @@
                                 OnCleanUpAction = () => cleanedUp = true
                             };
             dummy.Conditions.Add(conditionMock.Object);
-            var project = new Project("test", dummy);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("test", dummy)
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             var request = new IntegrationRequest("Dummy");
             project.Integrate(request);
             Assert.IsTrue(initialised);
@@ -454,7 +499,12 @@
                                                      return null;
                                                  }
                            };
-            var project = new Project("Test", task);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("Test", task)
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.Triggers.Add(trigger);
             project.Start();
 
@@ -485,7 +535,13 @@
                            };
             var hostMock = new Mock<ServerItem>(MockBehavior.Strict);
             hostMock.Setup(h => h.AskToIntegrate(It.IsAny<IntegrationContext>()));
-            var project = new Project("Test", task) { Host = hostMock.Object };
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new Project("Test", task)
+                              {
+                                  Host = hostMock.Object,
+                                  TaskExecutionFactory = executionFactoryMock.Object
+                              };
             project.Triggers.Add(trigger);
             project.Start();
 
@@ -585,6 +641,18 @@
                                                       }
                               };
             return trigger;
+        }
+
+        private static Mock<TaskExecutionContext> InitialiseExecutionContext(
+            Mock<ITaskExecutionFactory> executionFactoryMock)
+        {
+            executionFactoryMock.Setup(ef => ef.GenerateLogName(It.IsAny<Project>()))
+                .Returns(DefaultLogFilePath);
+            var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null);
+            contextMock.Setup(ec => ec.Complete());
+            executionFactoryMock.Setup(ef => ef.StartNew(DefaultLogFilePath, It.IsAny<Project>()))
+                .Returns(contextMock.Object);
+            return contextMock;
         }
         #endregion
     }
