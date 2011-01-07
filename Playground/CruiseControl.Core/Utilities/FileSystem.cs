@@ -1,6 +1,5 @@
 ﻿namespace CruiseControl.Core.Utilities
 {
-    using System;
     using System.IO;
     using System.Text;
     using System.Xml;
@@ -67,6 +66,20 @@
                                    OmitXmlDeclaration = false
                                };
             return XmlWriter.Create(filename, settings);
+        }
+        #endregion
+
+        #region EnsureFolderExists()
+        /// <summary>
+        /// Ensures that the folder exists.
+        /// </summary>
+        /// <param name="folder">The path to the folder.</param>
+        public void EnsureFolderExists(string folder)
+        {
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
         }
         #endregion
         #endregion

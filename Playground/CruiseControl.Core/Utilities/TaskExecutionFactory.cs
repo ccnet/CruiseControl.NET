@@ -53,6 +53,7 @@
         public TaskExecutionContext StartNew(string logFile, Project project)
         {
             logger.Debug("Starting execution context for project '{0}", project.Name);
+            this.FileSystem.EnsureFolderExists(Path.GetDirectoryName(logFile));
             var writer = this.FileSystem.CreateXmlWriter(logFile);
             writer.WriteStartElement("project");
             writer.WriteAttributeString("name", project.Name);
@@ -75,6 +76,7 @@
             var baseDir = Environment.CurrentDirectory;
             var logName = Path.Combine(
                 baseDir,
+                project.Name,
                 this.Clock.Now.ToString("yyyyMMddHHmmss"),
                 "build.log");
             return logName;

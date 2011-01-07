@@ -22,10 +22,11 @@
                               {
                                   Clock = clockMock.Object
                               };
-            var project = new Project();
+            var project = new Project("Test");
             var actual = factory.GenerateLogName(project);
             var expected = Path.Combine(
                 Environment.CurrentDirectory,
+                "Test",
                 dateTime.ToString("yyyyMMddHHmmss"),
                 "build.log");
             Assert.AreEqual(expected, actual);

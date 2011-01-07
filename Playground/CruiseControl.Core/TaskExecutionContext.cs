@@ -1,6 +1,5 @@
 ﻿namespace CruiseControl.Core
 {
-    using System;
     using System.Threading;
     using System.Xml;
     using CruiseControl.Core.Interfaces;
@@ -55,6 +54,13 @@
         /// </value>
         public bool IsCompleted { get; private set; }
         #endregion
+
+        #region Parent
+        /// <summary>
+        /// Gets the parent context.
+        /// </summary>
+        public TaskExecutionContext Parent { get; private set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -66,9 +72,12 @@
         /// <returns>
         /// The new child <see cref="TaskExecutionContext"/>.
         /// </returns>
-        public TaskExecutionContext StartChild(Task task)
+        public virtual TaskExecutionContext StartChild(Task task)
         {
-            var child = new TaskExecutionContext(this.writer, this.fileSystem, this.clock);
+            var child = new TaskExecutionContext(this.writer, this.fileSystem, this.clock)
+                            {
+                                Parent = this
+                            };
             this.writer.WriteStartElement("task");
             if (!string.IsNullOrEmpty(task.Name))
             {
@@ -88,8 +97,10 @@
         /// <param name="message">The message of the entry.</param>
         public virtual void AddEntryToBuildLog(string message)
         {
-            // TODO: Implement this method
-            throw new NotImplementedException();
+            this.writer.WriteStartElement("entry");
+            this.writer.WriteAttributeString("time", this.clock.Now.ToString("s"));
+            this.writer.WriteString(message);
+            this.writer.WriteEndElement();
         }
         #endregion
 
@@ -102,8 +113,16 @@
             if (!this.IsCompleted)
             {
                 this.IsCompleted = true;
-                this.writer.WriteEndDocument();
-                this.writer.Close();
+                writer.WriteElementString("finish", this.clock.Now.ToString("s"));
+                if (this.Parent == null)
+                {
+                    this.writer.WriteEndDocument();
+                    this.writer.Close();
+                }
+                else
+                {
+                    this.writer.WriteEndElement();
+                }
             }
         }
         #endregion

@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Tests.Utilities
 {
+    using System;
     using System.IO;
     using CruiseControl.Core.Utilities;
     using NUnit.Framework;
@@ -85,6 +86,25 @@
                 if (File.Exists(fileName))
                 {
                     File.Delete(fileName);
+                }
+            }
+        }
+
+        [Test]
+        public void EnsureFolderExistsCreatesFolderIfItDoesNotExist()
+        {
+            var fileSystem = new FileSystem();
+            var folder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            try
+            {
+                fileSystem.EnsureFolderExists(folder);
+                Assert.IsTrue(Directory.Exists(folder));
+            }
+            finally
+            {
+                if (Directory.Exists(folder))
+                {
+                    Directory.Delete(folder, true);
                 }
             }
         }

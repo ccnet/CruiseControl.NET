@@ -41,6 +41,14 @@
         /// </returns>
         XmlWriter CreateXmlWriter(string filename);
         #endregion
+
+        #region EnsureFolderExists()
+        /// <summary>
+        /// Ensures that the folder exists.
+        /// </summary>
+        /// <param name="folder">The path to the folder.</param>
+        void EnsureFolderExists(string folder);
+        #endregion
         #endregion
     }
 }

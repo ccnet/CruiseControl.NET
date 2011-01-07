@@ -403,7 +403,15 @@
                 var task = enumerator.Current;
                 if (task.CanRun(context))
                 {
-                    this.RunTasks(context, task.Run(context));
+                    var taskContext = context.StartChild(task);
+                    try
+                    {
+                        this.RunTasks(context, task.Run(taskContext));
+                    }
+                    finally
+                    {
+                        taskContext.Complete();
+                    }
                 }
                 else
                 {
