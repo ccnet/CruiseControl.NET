@@ -1,0 +1,8 @@
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server" xmlns:tasks="urn:cruisecontrol:server:tasks">
+  <Project>
+    <tasks:MergeFiles>
+      <tasks:MergeFile Delete="True">TempFile.txt</tasks:MergeFile>
+      <tasks:MergeFile>PermanentFile.txt</tasks:MergeFile>
+    </tasks:MergeFiles>
+  </Project>
+</Server>

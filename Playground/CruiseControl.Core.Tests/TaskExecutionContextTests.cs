@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core.Tests
 {
     using System;
+    using System.IO;
     using System.Xml;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Tasks;
@@ -15,8 +16,14 @@
         public void ConstructorSetsProperties()
         {
             var request = new IntegrationRequest("Test");
-            var context = new TaskExecutionContext(null, null, null, request);
+            var project = new Project();
+            var context = new TaskExecutionContext(new TaskExecutionParameters
+                                                       {
+                                                           IntegrationRequest = request,
+                                                           Project = project
+                                                       });
             Assert.AreSame(request, context.Request);
+            Assert.AreSame(project, context.Project);
             Assert.IsNotNull(context.ModificationSets);
         }
 
@@ -30,7 +37,12 @@
             writerMock.MockWriteElementString("status", "Success");
             var clockMock = new Mock<IClock>(MockBehavior.Strict);
             clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
-            var context = new TaskExecutionContext(writerMock.Object, null, clockMock.Object, null);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        Clock = clockMock.Object
+                    });
             Assert.IsFalse(context.IsCompleted);
             context.Complete();
             writerMock.Verify();
@@ -48,7 +60,12 @@
             writerMock.MockWriteElementString("status", "Success");
             var clockMock = new Mock<IClock>(MockBehavior.Strict);
             clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
-            var context = new TaskExecutionContext(writerMock.Object, null, clockMock.Object, null);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        Clock = clockMock.Object
+                    });
             context.Complete();
             context.Complete();
             Assert.AreEqual(2, action);
@@ -62,7 +79,12 @@
             writerMock.Setup(w => w.WriteEndDocument()).Throws(new AssertionException("WriteEndDocument called"));
             var clockMock = new Mock<IClock>(MockBehavior.Strict);
             clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
-            var context = new TaskExecutionContext(writerMock.Object, null, clockMock.Object, null);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        Clock = clockMock.Object
+                    });
             var child = context.StartChild(new Comment());
             child.Complete();
             writerMock.Verify();
@@ -79,7 +101,12 @@
             var clockMock = new Mock<IClock>(MockBehavior.Strict);
             clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
             var task = new Comment("TestComment");
-            var context = new TaskExecutionContext(writerMock.Object, null, clockMock.Object, null);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        Clock = clockMock.Object
+                    });
             var child = context.StartChild(task);
             Assert.IsNotNull(child);
             Assert.AreSame(context, child.Parent);
@@ -97,9 +124,87 @@
             writerMock.Setup(w => w.WriteEndElement()).Verifiable();
             var clockMock = new Mock<IClock>(MockBehavior.Strict);
             clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
-            var context = new TaskExecutionContext(writerMock.Object, null, clockMock.Object, null);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        Clock = clockMock.Object
+                    });
             context.AddEntryToBuildLog("This is a test");
             writerMock.Verify();
+        }
+
+        [Test]
+        public void ImportFileCopiesFile()
+        {
+            var source = "C:\\data.tst";
+            var destination = Path.Combine(
+                Environment.CurrentDirectory,
+                "Test",
+                "20100101120101",
+                Path.GetFileName(source));
+            var writerMock = new Mock<XmlWriter>(MockBehavior.Strict);
+            writerMock.Setup(w => w.WriteStartElement(null, "file", null)).Verifiable();
+            writerMock.MockWriteAttributeString("time", "2010-01-01T12:01:01");
+            writerMock.Setup(w => w.WriteString(Path.GetFileName(destination))).Verifiable();
+            writerMock.Setup(w => w.WriteEndElement()).Verifiable();
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CopyFile(source, destination)).Verifiable();
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        FileSystem = fileSystemMock.Object,
+                        Clock = clockMock.Object,
+                        Project = new Project("Test"),
+                        BuildName = "20100101120101"
+                    });
+            context.ImportFile(source, false);
+            writerMock.Verify();
+            fileSystemMock.Verify();
+        }
+
+        [Test]
+        public void ImportFileMovesFile()
+        {
+            var source = "C:\\data.tst";
+            var destination = Path.Combine(
+                Environment.CurrentDirectory,
+                "Test",
+                "20100101120101",
+                Path.GetFileName(source));
+            var writerMock = new Mock<XmlWriter>(MockBehavior.Strict);
+            writerMock.Setup(w => w.WriteStartElement(null, "file", null)).Verifiable();
+            writerMock.MockWriteAttributeString("time", "2010-01-01T12:01:01");
+            writerMock.Setup(w => w.WriteString(Path.GetFileName(destination))).Verifiable();
+            writerMock.Setup(w => w.WriteEndElement()).Verifiable();
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.MoveFile(source, destination)).Verifiable();
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        FileSystem = fileSystemMock.Object,
+                        Clock = clockMock.Object,
+                        Project = new Project("Test"),
+                        BuildName = "20100101120101"
+                    });
+            context.ImportFile(source, true);
+            writerMock.Verify();
+            fileSystemMock.Verify();
+        }
+
+        [Test]
+        public void AddModificationsAddsANewModificationSet()
+        {
+            var context = new TaskExecutionContext(new TaskExecutionParameters());
+            var modificationSet = new ModificationSet();
+            context.AddModifications(modificationSet);
+            CollectionAssert.AreEqual(new[] {modificationSet}, context.ModificationSets);
         }
         #endregion
     }

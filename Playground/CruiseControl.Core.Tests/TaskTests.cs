@@ -210,7 +210,7 @@
         #region Helpers
         private static Mock<TaskExecutionContext> GenerateContextMock()
         {
-            return new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null, null);
+            return new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
         }
         #endregion
     }

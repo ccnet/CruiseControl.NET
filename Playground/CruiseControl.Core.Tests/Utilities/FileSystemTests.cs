@@ -22,10 +22,7 @@
             }
             finally
             {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
+                CleanUpFile(fileName);
             }
         }
 
@@ -34,10 +31,7 @@
         {
             var fileSystem = new FileSystem();
             var fileName = Path.GetTempFileName();
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
+            CleanUpFile(fileName);
             var result = fileSystem.CheckIfFileExists(fileName);
             Assert.IsFalse(result);
         }
@@ -62,10 +56,7 @@
             }
             finally
             {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
+                CleanUpFile(fileName);
             }
         }
 
@@ -83,10 +74,7 @@
             }
             finally
             {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
+                CleanUpFile(fileName);
             }
         }
 
@@ -106,6 +94,77 @@
                 {
                     Directory.Delete(folder, true);
                 }
+            }
+        }
+
+        [Test]
+        public void CopyFileCopiesFile()
+        {
+            var fileSystem = new FileSystem();
+            var file1Name = Path.GetTempFileName() + "1";
+            var file2Name = Path.GetTempFileName() + "2";
+            try
+            {
+                File.WriteAllText(file1Name, "Test");
+                fileSystem.CopyFile(file1Name, file2Name);
+                Assert.IsTrue(File.Exists(file1Name));
+                Assert.IsTrue(File.Exists(file2Name));
+                var text = File.ReadAllText(file2Name);
+                Assert.AreEqual("Test", text);
+            }
+            finally
+            {
+                CleanUpFile(file1Name);
+                CleanUpFile(file2Name);
+            }
+        }
+
+        [Test]
+        public void MoveFileMovesFile()
+        {
+            var fileSystem = new FileSystem();
+            var file1Name = Path.GetTempFileName() + "1";
+            var file2Name = Path.GetTempFileName() + "2";
+            try
+            {
+                File.WriteAllText(file1Name, "Test");
+                fileSystem.MoveFile(file1Name, file2Name);
+                Assert.IsFalse(File.Exists(file1Name));
+                Assert.IsTrue(File.Exists(file2Name));
+                var text = File.ReadAllText(file2Name);
+                Assert.AreEqual("Test", text);
+            }
+            finally
+            {
+                CleanUpFile(file1Name);
+                CleanUpFile(file2Name);
+            }
+        }
+
+        [Test]
+        public void DeleteFileDeletesFile()
+        {
+            var fileSystem = new FileSystem();
+            var fileName = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllText(fileName, "Test");
+                fileSystem.DeleteFile(fileName);
+                Assert.IsFalse(File.Exists(fileName));
+            }
+            finally
+            {
+                CleanUpFile(fileName);
+            }
+        }
+        #endregion
+
+        #region Helper methods
+        private static void CleanUpFile(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
             }
         }
         #endregion

@@ -647,13 +647,11 @@
         private static Mock<TaskExecutionContext> InitialiseExecutionContext(
             Mock<ITaskExecutionFactory> executionFactoryMock)
         {
-            executionFactoryMock.Setup(ef => ef.GenerateLogName(It.IsAny<Project>()))
-                .Returns(DefaultLogFilePath);
-            var childContextMock = new Mock<TaskExecutionContext>(MockBehavior.Loose, null, null, null, null);
-            var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, null, null, null, null);
+            var childContextMock = new Mock<TaskExecutionContext>(MockBehavior.Loose, new TaskExecutionParameters());
+            var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
             contextMock.Setup(ec => ec.StartChild(It.IsAny<Task>())).Returns(childContextMock.Object);
             contextMock.Setup(ec => ec.Complete());
-            executionFactoryMock.Setup(ef => ef.StartNew(DefaultLogFilePath, It.IsAny<Project>(), It.IsAny<IntegrationRequest>()))
+            executionFactoryMock.Setup(ef => ef.StartNew(It.IsAny<Project>(), It.IsAny<IntegrationRequest>()))
                 .Returns(contextMock.Object);
             return contextMock;
         }

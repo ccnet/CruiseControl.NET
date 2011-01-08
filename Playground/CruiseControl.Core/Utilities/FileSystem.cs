@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Utilities
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Xml;
@@ -80,6 +81,41 @@
             {
                 Directory.CreateDirectory(folder);
             }
+        }
+        #endregion
+
+        #region CopyFile()
+        /// <summary>
+        /// Copies a file.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        public void CopyFile(string source, string destination)
+        {
+            File.Copy(source, destination);
+        }
+        #endregion
+
+        #region MoveFile()
+        /// <summary>
+        /// Moves a file.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        public void MoveFile(string source, string destination)
+        {
+            File.Move(source, destination);
+        }
+        #endregion
+
+        #region DeleteFile()
+        /// <summary>
+        /// Deletes a file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        public void DeleteFile(string file)
+        {
+            File.Delete(file);
         }
         #endregion
         #endregion

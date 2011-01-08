@@ -45,42 +45,32 @@
         /// <summary>
         /// Starts a new <see cref="TaskExecutionContext"/>.
         /// </summary>
-        /// <param name="logFile">The path to the log file.</param>
         /// <param name="project">The project.</param>
         /// <param name="request">The request.</param>
         /// <returns>
         /// The new <see cref="TaskExecutionContext"/>.
         /// </returns>
-        public TaskExecutionContext StartNew(string logFile, Project project, IntegrationRequest request)
+        public TaskExecutionContext StartNew(Project project, IntegrationRequest request)
         {
             logger.Debug("Starting execution context for project '{0}", project.Name);
+            var buildName = this.Clock.Now.ToString("yyyyMMddHHmmss");
+            var logFile = TaskExecutionContext.GenerateArtifactFileName(project, buildName, "build.log");
             this.FileSystem.EnsureFolderExists(Path.GetDirectoryName(logFile));
             var writer = this.FileSystem.CreateXmlWriter(logFile);
             writer.WriteStartElement("project");
             writer.WriteAttributeString("name", project.Name);
             writer.WriteElementString("start", this.Clock.Now.ToString("s"));
-            var context = new TaskExecutionContext(writer, this.FileSystem, this.Clock, request);
+            var parameters = new TaskExecutionParameters
+                                 {
+                                     XmlWriter = writer,
+                                     FileSystem = this.FileSystem,
+                                     Clock = this.Clock,
+                                     IntegrationRequest = request,
+                                     Project = project,
+                                     BuildName = buildName
+                                 };
+            var context = new TaskExecutionContext(parameters);
             return context;
-        }
-        #endregion
-
-        #region GenerateLogName()
-        /// <summary>
-        /// Generates a new log name for a project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <returns>
-        /// The name of the new log for the project.
-        /// </returns>
-        public string GenerateLogName(Project project)
-        {
-            var baseDir = Environment.CurrentDirectory;
-            var logName = Path.Combine(
-                baseDir,
-                project.Name,
-                this.Clock.Now.ToString("yyyyMMddHHmmss"),
-                "build.log");
-            return logName;
         }
         #endregion
         #endregion

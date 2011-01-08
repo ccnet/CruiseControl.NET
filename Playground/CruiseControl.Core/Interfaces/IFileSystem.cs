@@ -49,6 +49,32 @@
         /// <param name="folder">The path to the folder.</param>
         void EnsureFolderExists(string folder);
         #endregion
+
+        #region CopyFile()
+        /// <summary>
+        /// Copies a file.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        void CopyFile(string source, string destination);
+        #endregion
+
+        #region MoveFile()
+        /// <summary>
+        /// Moves a file.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        void MoveFile(string source, string destination);
+        #endregion
+
+        #region DeleteFile()
+        /// <summary>
+        /// Deletes a file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        void DeleteFile(string file);
+        #endregion
         #endregion
     }
 }

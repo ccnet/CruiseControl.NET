@@ -242,8 +242,7 @@
         [Test]
         public void ReadWcfChannel()
         {
-            var configuration = LoadConfiguration(
-                RetrieveExampleFile("WcfChannel"));
+            var configuration = LoadConfiguration(RetrieveExampleFile("WcfChannel"));
             Assert.IsNotNull(configuration);
             Assert.AreEqual(1, configuration.ClientChannels.Count);
             Assert.IsInstanceOf<Wcf>(configuration.ClientChannels[0]);
@@ -256,6 +255,20 @@
         {
             var channel = new Wcf("TestChannel");
             PerformSerialisationTest(channel, "WcfChannel");
+        }
+
+        [Test]
+        public void ReadMergeFiles()
+        {
+            var configuration = LoadConfiguration(RetrieveExampleFile("MergeFiles"));
+            var project = configuration.Children[0] as Project;
+            Assert.IsNotNull(project);
+            Assert.IsInstanceOf<MergeFiles>(project.Tasks[0]);
+            var task = project.Tasks[0] as MergeFiles;
+            Assert.AreEqual("TempFile.txt", task.Files[0].File);
+            Assert.IsTrue(task.Files[0].Delete);
+            Assert.AreEqual("PermanentFile.txt", task.Files[1].File);
+            Assert.IsFalse(task.Files[1].Delete);
         }
 
         private static Stream RetrieveExampleFile(string exampleName)

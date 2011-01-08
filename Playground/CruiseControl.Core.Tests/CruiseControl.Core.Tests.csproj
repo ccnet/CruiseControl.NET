@@ -81,6 +81,7 @@
     <Compile Include="Stubs\ValidationLogStub.cs" />
     <Compile Include="Tasks\CommentTests.cs" />
     <Compile Include="Tasks\GetSourceTests.cs" />
+    <Compile Include="Tasks\MergeFilesTests.cs" />
     <Compile Include="Tasks\NullTests.cs" />
     <Compile Include="Tasks\SequenceTests.cs" />
     <Compile Include="Tasks\SourceControlTaskTests.cs" />
@@ -162,6 +163,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Examples\WcfChannel.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\MergeFiles.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

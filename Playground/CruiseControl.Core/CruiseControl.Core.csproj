@@ -80,6 +80,7 @@
     <Compile Include="Structure\ScmProject.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskCondition.cs" />
+    <Compile Include="TaskExecutionParameters.cs" />
     <Compile Include="TaskFailureAction.cs" />
     <Compile Include="Tasks\BuildFake.cs" />
     <Compile Include="Tasks\BuildFinalBuilder.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Tasks\Ftp.cs" />
     <Compile Include="Tasks\GetSource.cs" />
     <Compile Include="Tasks\ApplyLastChangeLabel.cs" />
+    <Compile Include="Tasks\MergeFile.cs" />
     <Compile Include="Tasks\MergeFiles.cs" />
     <Compile Include="Tasks\BuildNAnt.cs" />
     <Compile Include="Tasks\Null.cs" />
