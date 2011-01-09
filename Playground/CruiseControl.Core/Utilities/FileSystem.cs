@@ -48,6 +48,21 @@
         }
         #endregion
 
+        #region OpenFileForWrite()
+        /// <summary>
+        /// Opens the file for writing.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        /// The <see cref="Stream"/> to write to.
+        /// </returns>
+        public Stream OpenFileForWrite(string filePath)
+        {
+            var stream = File.Open(filePath, FileMode.Create);
+            return stream;
+        }
+        #endregion
+
         #region CreateXmlWriter()
         /// <summary>
         /// Creates a new XML writer.

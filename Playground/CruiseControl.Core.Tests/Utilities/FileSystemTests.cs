@@ -157,6 +157,57 @@
                 CleanUpFile(fileName);
             }
         }
+
+        [Test]
+        public void OpenFileForWriteOpensANewStream()
+        {
+            var fileSystem = new FileSystem();
+            var fileName = Path.GetTempFileName();
+            try
+            {
+                using (var stream = fileSystem.OpenFileForWrite(fileName))
+                {
+                    Assert.IsNotNull(stream);
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        writer.Write("This is some test data");
+                    }
+                }
+
+                Assert.IsTrue(File.Exists(fileName));
+                Assert.AreEqual("This is some test data", File.ReadAllText(fileName));
+            }
+            finally
+            {
+                CleanUpFile(fileName);
+            }
+        }
+
+        [Test]
+        public void OpenFileForWriteOverwritesExistingFile()
+        {
+            var fileSystem = new FileSystem();
+            var fileName = Path.GetTempFileName();
+            try
+            {
+                File.WriteAllText(fileName, "Some previous text");
+                using (var stream = fileSystem.OpenFileForWrite(fileName))
+                {
+                    Assert.IsNotNull(stream);
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        writer.Write("This is some test data");
+                    }
+                }
+
+                Assert.IsTrue(File.Exists(fileName));
+                Assert.AreEqual("This is some test data", File.ReadAllText(fileName));
+            }
+            finally
+            {
+                CleanUpFile(fileName);
+            }
+        }
         #endregion
 
         #region Helper methods

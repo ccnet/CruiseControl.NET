@@ -2,6 +2,7 @@
 {
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tests.Stubs;
+    using CruiseControl.Core.Utilities;
     using NUnit.Framework;
 
     [TestFixture]
@@ -156,6 +157,36 @@
             var server = new Server("Local", queue);
             var actual = server.Locate("urn:ccnet:local:somethingElse");
             Assert.IsNull(actual);
+        }
+
+        [Test]
+        public void OpenCommunicationsInitialisesEachChannel()
+        {
+            var initialised = false;
+            var channel = new ChannelStub
+                              {
+                                  OnInitialiseAction = () => initialised = true
+                              };
+            var server = new Server("Test", new[] { channel })
+                             {
+                                 ActionInvoker = new ActionInvoker()
+                             };
+            server.OpenCommunications();
+            Assert.IsTrue(initialised);
+            Assert.AreSame(server.ActionInvoker, channel.Invoker);
+        }
+
+        [Test]
+        public void CloseCommunicationsCleansUpEachChannel()
+        {
+            var cleaned = false;
+            var channel = new ChannelStub
+                              {
+                                  OnCleanUpAction = () => cleaned = true
+                              };
+            var server = new Server("Test", new[] { channel });
+            server.CloseCommunications();
+            Assert.IsTrue(cleaned);
         }
         #endregion
     }

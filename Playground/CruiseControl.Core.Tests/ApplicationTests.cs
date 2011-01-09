@@ -157,7 +157,8 @@
             var project = new ProjectStub
                               {
                                   Name = "Test",
-                                  OnStart = () => started = true
+                                  OnStart = () => started = true,
+                                  OnLoadState = () => { }
                               };
             var server = new Server(project);
             var application = new Application
@@ -169,6 +170,23 @@
             // Give the projects time to start
             Thread.Sleep(TimeSpan.FromSeconds(1));
             Assert.IsTrue(started);
+        }
+
+        [Test]
+        public void StartOpensCommunications()
+        {
+            var initialised = false;
+            var channel = new ChannelStub
+                              {
+                                  OnInitialiseAction = () => initialised = true
+                              };
+            var server = new Server("Test", new[] { channel });
+            var application = new Application
+                                  {
+                                      Configuration = server
+                                  };
+            application.Start();
+            Assert.IsTrue(initialised);
         }
 
         [Test]
@@ -191,7 +209,8 @@
             var project = new ProjectStub
                               {
                                   Name = "Test",
-                                  OnStop = () => stopped = true
+                                  OnStop = () => stopped = true,
+                                  OnLoadState = () => { }
                               };
             var server = new Server(project);
             var application = new Application
@@ -207,6 +226,23 @@
             // Give the projects time to stop
             Thread.Sleep(TimeSpan.FromSeconds(1));
             Assert.IsTrue(stopped);
+        }
+
+        [Test]
+        public void StopClosesCommunications()
+        {
+            var cleaned = false;
+            var channel = new ChannelStub
+                              {
+                                  OnCleanUpAction = () => cleaned = true
+                              };
+            var server = new Server("Test", new[] { channel });
+            var application = new Application
+                                  {
+                                      Configuration = server
+                                  };
+            application.Stop();
+            Assert.IsTrue(cleaned);
         }
         #endregion
     }

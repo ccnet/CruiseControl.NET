@@ -5,9 +5,11 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Windows.Markup;
+    using System.Xaml;
     using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
     using Ninject;
@@ -132,6 +134,29 @@
         [Inject]
         public IFileSystem FileSystem { get; set; }
         #endregion
+
+        #region Clock
+        /// <summary>
+        /// Gets or sets the clock.
+        /// </summary>
+        /// <value>
+        /// The clock.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Inject]
+        public IClock Clock { get; set; }
+        #endregion
+
+        #region PersistedState
+        /// <summary>
+        /// Gets the state that is persisted after every integration.
+        /// </summary>
+        /// <value>
+        /// The persisted state.
+        /// </value>
+        public PersistedProjectState PersistedState { get; private set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -242,6 +267,12 @@
                 throw new InvalidOperationException(message);
             }
 
+            // Make sure the state has been loaded
+            if (this.PersistedState == null)
+            {
+                this.LoadPersistedState();
+            }
+
             // Start up the project thread
             logger.Info("Starting project '{0}'", this.Name);
             this.State = ProjectState.Starting;
@@ -279,8 +310,9 @@
         /// Performs an integration.
         /// </summary>
         /// <param name="request">The request.</param>
-        public virtual void Integrate(IntegrationRequest request)
+        public virtual IntegrationStatus Integrate(IntegrationRequest request)
         {
+            var status = IntegrationStatus.Unknown;
             logger.Debug("Initialising integration for '{0}'", this.Name);
             if (this.InitialiseForIntegration())
             {
@@ -293,11 +325,13 @@
                 finally
                 {
                     context.Complete();
+                    status = context.CurrentStatus;
                 }
             }
 
             logger.Debug("Cleaning up after integration for '{0}'", this.Name);
             this.CleanUpAfterIntegration();
+            return status;
         }
         #endregion
 
@@ -337,6 +371,48 @@
             return projects;
         }
         #endregion
+
+        #region LoadPersistedState()
+        /// <summary>
+        /// Loads the persisted state for this project.
+        /// </summary>
+        public virtual void LoadPersistedState()
+        {
+            var configFile = this.GenerateProjectPath("project.state");
+            if (this.FileSystem.CheckIfFileExists(configFile))
+            {
+                logger.Debug("Loading project state for '{0}'", this.Name);
+                using (var stream = this.FileSystem.OpenFileForRead(configFile))
+                {
+                    this.PersistedState = XamlServices.Load(stream) as PersistedProjectState;
+                }
+            }
+
+            if (this.PersistedState == null)
+            {
+                logger.Debug("Starting new project state for '{0}'", this.Name);
+                this.PersistedState = new PersistedProjectState();
+            }
+        }
+        #endregion
+
+        #region SavePersistedState()
+        /// <summary>
+        /// Saves the persisted state for this project.
+        /// </summary>
+        public virtual void SavePersistedState()
+        {
+            if (this.PersistedState != null)
+            {
+                logger.Debug("Saving project state for '{0}'", this.Name);
+                var configFile = this.GenerateProjectPath("project.state");
+                using (var stream = this.FileSystem.OpenFileForWrite(configFile))
+                {
+                    this.PersistedState.Save(stream);
+                }
+            }
+        }
+        #endregion
         #endregion
 
         #region Actions
@@ -348,7 +424,7 @@
         /// <returns>A response containing the details of the build.</returns>
         [RemoteAction]
         [Description("Trigger a build remotely.")]
-        public BuildMessage ForceBuild(ProjectMessage request)
+        public virtual BuildMessage ForceBuild(ProjectMessage request)
         {
             throw new NotImplementedException();
         }
@@ -601,9 +677,35 @@
                 // TODO: make the time out configurable
                 if (context.Wait(TimeSpan.FromDays(7)))
                 {
+                    // Make sure there is always a state object
+                    if (this.PersistedState == null)
+                    {
+                        this.PersistedState = new PersistedProjectState();
+                    }
+
                     // Perform the actual integration
                     logger.Info("Starting integration for '{0}'", this.Name);
-                    this.Integrate(request);
+                    var startTime = this.Clock.Now;
+                    var status = IntegrationStatus.Unknown;
+                    try
+                    {
+                        status = this.Integrate(request);
+                    }
+                    catch (Exception error)
+                    {
+                        logger.ErrorException("An unexpected error crashed the integration", error);
+                        status = IntegrationStatus.Error;
+                    }
+                    finally
+                    {
+                        this.PersistedState.LastIntegration = new IntegrationSummary
+                                                                  {
+                                                                      StartTime = startTime,
+                                                                      FinishTime = this.Clock.Now,
+                                                                      Status = status
+                                                                  };
+                        this.SavePersistedState();
+                    }
                     logger.Info("Completed integration for '{0}'", this.Name);
                 }
                 else
@@ -667,6 +769,24 @@
             {
                 child.Project = this;
             }
+        }
+        #endregion
+
+        #region GenerateProjectPath()
+        /// <summary>
+        /// Generates a path to a relative file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// The path for the file.
+        /// </returns>
+        private string GenerateProjectPath(string file)
+        {
+            var path = Path.Combine(
+                Environment.CurrentDirectory,
+                this.Name,
+                file);
+            return path;
         }
         #endregion
         #endregion

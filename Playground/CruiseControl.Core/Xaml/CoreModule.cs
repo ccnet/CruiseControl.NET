@@ -23,6 +23,7 @@
         public override void Load()
         {
             logger.Debug("Initialising IoC mappings");
+            this.Bind<IActionInvoker>().To<ActionInvoker>().InSingletonScope();
             this.Bind<IClock>().To<SystemClock>().InSingletonScope();
             this.Bind<IFileSystem>().To<FileSystem>().InSingletonScope();
             this.Bind<ITaskExecutionFactory>().To<TaskExecutionFactory>().InSingletonScope();

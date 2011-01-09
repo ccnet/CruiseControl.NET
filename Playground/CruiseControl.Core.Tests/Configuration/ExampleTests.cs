@@ -19,7 +19,7 @@
         public void ReadSingleProject()
         {
             var configuration = LoadConfiguration(
-                RetrieveExampleFile("SingleProject"));
+                AssemblyHelper.RetrieveExampleFile("SingleProject"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -41,7 +41,7 @@
         public void ReadSimpleSourceControlExample()
         {
             var configuration = LoadConfiguration(
-                RetrieveExampleFile("SimpleSourceControlExample"));
+                AssemblyHelper.RetrieveExampleFile("SimpleSourceControlExample"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -54,7 +54,7 @@
         public void ReadScmProject()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("ScmProject"));
+                            AssemblyHelper.RetrieveExampleFile("ScmProject"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -67,7 +67,7 @@
         public void ReadComplexSourceControlExample()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("ComplexSourceControlExample"));
+                            AssemblyHelper.RetrieveExampleFile("ComplexSourceControlExample"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -80,7 +80,7 @@
         public void ReadCommonTaskProperties()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("CommonTaskProperties"));
+                            AssemblyHelper.RetrieveExampleFile("CommonTaskProperties"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -93,7 +93,7 @@
         public void ReadSimpleQueue()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("SimpleQueue"));
+                            AssemblyHelper.RetrieveExampleFile("SimpleQueue"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -120,7 +120,7 @@
         public void ReadSimpleGate()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("SimpleGate"));
+                            AssemblyHelper.RetrieveExampleFile("SimpleGate"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -143,7 +143,7 @@
         public void ReadSimplePipeline()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("SimplePipeline"));
+                            AssemblyHelper.RetrieveExampleFile("SimplePipeline"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -166,7 +166,7 @@
         public void ReadPipelineWithGates()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("PipelineWithGates"));
+                            AssemblyHelper.RetrieveExampleFile("PipelineWithGates"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -192,7 +192,7 @@
         public void ReadQueueOfQueues()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("QueueOfQueues"));
+                            AssemblyHelper.RetrieveExampleFile("QueueOfQueues"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -219,7 +219,7 @@
         public void ReadRoundRobinOfQueues()
         {
             var configuration = LoadConfiguration(
-                            RetrieveExampleFile("RoundRobinOfQueues"));
+                            AssemblyHelper.RetrieveExampleFile("RoundRobinOfQueues"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -242,7 +242,7 @@
         [Test]
         public void ReadWcfChannel()
         {
-            var configuration = LoadConfiguration(RetrieveExampleFile("WcfChannel"));
+            var configuration = LoadConfiguration(AssemblyHelper.RetrieveExampleFile("WcfChannel"));
             Assert.IsNotNull(configuration);
             Assert.AreEqual(1, configuration.ClientChannels.Count);
             Assert.IsInstanceOf<Wcf>(configuration.ClientChannels[0]);
@@ -260,7 +260,7 @@
         [Test]
         public void ReadMergeFiles()
         {
-            var configuration = LoadConfiguration(RetrieveExampleFile("MergeFiles"));
+            var configuration = LoadConfiguration(AssemblyHelper.RetrieveExampleFile("MergeFiles"));
             var project = configuration.Children[0] as Project;
             Assert.IsNotNull(project);
             Assert.IsInstanceOf<MergeFiles>(project.Tasks[0]);
@@ -269,16 +269,6 @@
             Assert.IsTrue(task.Files[0].Delete);
             Assert.AreEqual("PermanentFile.txt", task.Files[1].File);
             Assert.IsFalse(task.Files[1].Delete);
-        }
-
-        private static Stream RetrieveExampleFile(string exampleName)
-        {
-            var assembly = typeof(ExampleTests).Assembly;
-            var streamName = "CruiseControl.Core.Tests.Configuration.Examples." +
-                exampleName +
-                ".xaml";
-            var stream = assembly.GetManifestResourceStream(streamName);
-            return stream;
         }
 
         private void VerifyChildren(IList<ServerItem> actual, params ServerItem[] expected)
@@ -306,7 +296,7 @@
                              };
             server.Children.Add(configuration);
             var xaml = XamlServices.Save(server);
-            using (var stream = RetrieveExampleFile(example))
+            using (var stream = AssemblyHelper.RetrieveExampleFile(example))
             {
                 using (var reader = new StreamReader(stream))
                 {
@@ -324,7 +314,7 @@
                              };
             server.ClientChannels.Add(configuration);
             var xaml = XamlServices.Save(server);
-            using (var stream = RetrieveExampleFile(example))
+            using (var stream = AssemblyHelper.RetrieveExampleFile(example))
             {
                 using (var reader = new StreamReader(stream))
                 {

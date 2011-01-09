@@ -91,6 +91,7 @@
             logger.Info("Starting application");
             try
             {
+                logger.Debug("Starting projects");
                 this.projects = this.Configuration
                     .Children
                     .SelectMany(c => c.ListProjects());
@@ -99,6 +100,9 @@
                 {
                     project.Start();
                 }
+
+                logger.Debug("Starting communications");
+                this.Configuration.OpenCommunications();
             }
             catch (Exception error)
             {
@@ -116,6 +120,9 @@
         public void Stop()
         {
             ValidateField(this.Configuration, "Configuration");
+
+            logger.Debug("Stopping communications");
+            this.Configuration.CloseCommunications();
             logger.Info("Stopping application");
             if (this.projects != null)
             {

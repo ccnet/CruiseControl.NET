@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
     using CruiseControl.Core.Interfaces;
+    using CruiseControl.Core.Utilities;
 
     /// <summary>
     /// A communications channel for clients to use when communicating with the server.
@@ -13,7 +14,7 @@
         /// <summary>
         /// Gets the invoker.
         /// </summary>
-        public ActionInvoker Invoker { get; private set; }
+        public IActionInvoker Invoker { get; private set; }
         #endregion
         #endregion
 
@@ -32,7 +33,7 @@
         /// Initialises this client.
         /// </summary>
         /// <param name="invoker">The invoker.</param>
-        public void Initialise(ActionInvoker invoker)
+        public void Initialise(IActionInvoker invoker)
         {
             this.Invoker = invoker;
             this.OnInitialise();

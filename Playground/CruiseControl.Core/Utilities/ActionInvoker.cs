@@ -1,4 +1,4 @@
-﻿namespace CruiseControl.Core
+﻿namespace CruiseControl.Core.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -6,41 +6,47 @@
     using System.Linq;
     using System.Reflection;
     using CruiseControl.Common.Messages;
+    using CruiseControl.Core.Interfaces;
+    using Ninject;
 
     /// <summary>
     /// Invokes actions on the various configuration elements using universal names.
     /// </summary>
     public class ActionInvoker
+        : IActionInvoker
     {
-        #region Private fields
-        private Server serverConfiguration;
-        #endregion
-
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActionInvoker"/> class.
+        /// </summary>
+        [Inject]
+        public ActionInvoker()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionInvoker"/> class.
         /// </summary>
         /// <param name="server">The server.</param>
         public ActionInvoker(Server server)
         {
-            this.serverConfiguration = server;
+            this.Server = server;
         }
+        #endregion
+
+        #region Public properties
+        #region Server
+        /// <summary>
+        /// Gets or sets the server.
+        /// </summary>
+        /// <value>
+        /// The server.
+        /// </value>
+        public Server Server { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
-        #region Initialise()
-        /// <summary>
-        /// Initialises this instance.
-        /// </summary>
-        public void Initialise()
-        {
-            foreach (var channel in this.serverConfiguration.ClientChannels)
-            {
-                channel.Initialise(this);
-            }
-        }
-        #endregion
-
         #region Invoke()
         /// <summary>
         /// Invokes an action on an item.
@@ -62,7 +68,7 @@
                 throw new InvalidOperationException("Invalid input message");
             }
 
-            var output = method.Invoke(item, new[] {message}) as BaseMessage;
+            var output = method.Invoke(item, new[] { message }) as BaseMessage;
             return output;
         }
         #endregion
@@ -120,19 +126,6 @@
             return definition;
         }
         #endregion
-
-        #region CleanUp()
-        /// <summary>
-        /// Cleans up.
-        /// </summary>
-        public void CleanUp()
-        {
-            foreach (var channel in this.serverConfiguration.ClientChannels)
-            {
-                channel.CleanUp();
-            }
-        }
-        #endregion
         #endregion
 
         #region Private methods
@@ -146,7 +139,7 @@
         /// </returns>
         private object LocateItem(string name)
         {
-            var item = this.serverConfiguration.Locate(name);
+            var item = this.Server.Locate(name);
             if (item == null)
             {
                 throw new InvalidOperationException("Unable to find item with name '" + name + "'");

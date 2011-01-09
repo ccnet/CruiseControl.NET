@@ -21,6 +21,7 @@
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private IActionInvoker actionInvoker;
         #endregion
 
         #region Constructors
@@ -122,9 +123,56 @@
         /// </summary>
         public IList<ClientChannel> ClientChannels { get; private set; }
         #endregion
+
+        #region ActionInvoker
+        /// <summary>
+        /// Gets or sets the action invoker.
+        /// </summary>
+        /// <value>
+        /// The action invoker.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Inject]
+        public IActionInvoker ActionInvoker
+        {
+            get { return this.actionInvoker; }
+            set
+            {
+                this.actionInvoker = value;
+                this.actionInvoker.Server = this;
+            }
+        }
+        #endregion
         #endregion
 
         #region Public methods
+        #region OpenCommunications()
+        /// <summary>
+        /// Opens the communications channels.
+        /// </summary>
+        public void OpenCommunications()
+        {
+            foreach (var channel in this.ClientChannels)
+            {
+                channel.Initialise(this.actionInvoker);
+            }
+        }
+        #endregion
+
+        #region CloseCommunications()
+        /// <summary>
+        /// Closes the communications channels.
+        /// </summary>
+        public void CloseCommunications()
+        {
+            foreach (var channel in this.ClientChannels)
+            {
+                channel.CleanUp();
+            }
+        }
+        #endregion
+
         #region Locate()
         /// <summary>
         /// Locates an item by its universal name.
@@ -151,28 +199,8 @@
             }
 
             // Otherwise check all the projects and children
-            object item = null;
-            foreach (var project in this.Children.SelectMany(c => c.ListProjects()))
-            {
-                item = project.Locate(name);
-                if (item != null)
-                {
-                    break;
-                }
-            }
-
-            if (item == null)
-            {
-                foreach (var child in this.Children)
-                {
-                    item = child.Locate(name);
-                    if (item != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
+            var item = LocateInChildren(name, this.Children.SelectMany(c => c.ListProjects())) ??
+                       LocateInChildren(name, this.Children);
             return item;
         }
         #endregion
@@ -208,6 +236,31 @@
         #endregion
 
         #region Private methods
+        #region LocateInChildren()
+        /// <summary>
+        /// Attempts to locate an item with a list of children.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="children">The children.</param>
+        /// <returns>
+        /// The item if found; <c>null</c> otherwise.
+        /// </returns>
+        private static object LocateInChildren(string name, IEnumerable<ServerItem> children)
+        {
+            object item = null;
+            foreach (var child in children)
+            {
+                item = child.Locate(name);
+                if (item != null)
+                {
+                    break;
+                }
+            }
+
+            return item;
+        }
+        #endregion
+
         #region UpdateChildren()
         /// <summary>
         /// Updates the children.

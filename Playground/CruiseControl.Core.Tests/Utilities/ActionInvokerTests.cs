@@ -1,8 +1,9 @@
-﻿namespace CruiseControl.Core.Tests
+﻿namespace CruiseControl.Core.Tests.Utilities
 {
     using System;
     using System.Collections.Generic;
     using CruiseControl.Common.Messages;
+    using CruiseControl.Core.Utilities;
     using NUnit.Framework;
 
     [TestFixture]
@@ -103,35 +104,6 @@
             Assert.AreEqual("CruiseControl.Common.Messages.ProjectMessage", action.InputMessage);
             Assert.AreEqual("CruiseControl.Common.Messages.ServerMessage", action.OutputMessage);
         }
-
-        [Test]
-        public void InitialiseInitialisesChannels()
-        {
-            var initialised = false;
-            var channel = new TestChannel
-                              {
-                                  OnInitialiseAction = () => initialised = true
-                              };
-            var server = new Server("Test", new[] { channel });
-            var invoker = new ActionInvoker(server);
-            invoker.Initialise();
-            Assert.IsTrue(initialised);
-            Assert.AreSame(invoker, channel.Invoker);
-        }
-
-        [Test]
-        public void CleanUpCleansUpChannels()
-        {
-            var cleaned = false;
-            var channel = new TestChannel
-                              {
-                                  OnCleanUpAction = () => cleaned = true
-                              };
-            var server = new Server("Test", new[] { channel });
-            var invoker = new ActionInvoker(server);
-            invoker.CleanUp();
-            Assert.IsTrue(cleaned);
-        }
         #endregion
 
         #region Private classes
@@ -164,36 +136,6 @@
                            {
                                ServerName = "SetAfterCalled"
                            };
-            }
-        }
-
-        private class TestChannel
-            : ClientChannel
-        {
-            public Action OnInitialiseAction { get; set; }
-            protected override void OnInitialise()
-            {
-                if (this.OnInitialiseAction == null)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    this.OnInitialiseAction();
-                }
-            }
-
-            public Action OnCleanUpAction { get; set; }
-            protected override void OnCleanUp()
-            {
-                if (this.OnCleanUpAction == null)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    this.OnCleanUpAction();
-                }
             }
         }
         #endregion

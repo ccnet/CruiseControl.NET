@@ -31,6 +31,17 @@
         Stream OpenFileForRead(string filePath);
         #endregion
 
+        #region OpenFileForWrite()
+        /// <summary>
+        /// Opens the file for writing.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        /// The <see cref="Stream"/> to write to.
+        /// </returns>
+        Stream OpenFileForWrite(string filePath);
+        #endregion
+
         #region CreateXmlWriter()
         /// <summary>
         /// Creates a new XML writer.

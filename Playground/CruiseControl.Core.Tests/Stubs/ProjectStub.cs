@@ -6,6 +6,15 @@
     public class ProjectStub
         : Project
     {
+        public ProjectStub()
+        {
+        }
+
+        public ProjectStub(string name, params Task[] tasks)
+            : base(name, tasks)
+        {
+        }
+
         public Action<IValidationLog> OnValidate { get; set; }
         public override void Validate(IValidationLog validationLog)
         {
@@ -34,6 +43,40 @@
             {
                 this.OnStop();
             }
+        }
+
+        public Action OnLoadState { get; set; }
+        public override void LoadPersistedState()
+        {
+            if (this.OnLoadState != null)
+            {
+                this.OnLoadState();
+            }
+            else
+            {
+                base.LoadPersistedState();
+            }
+        }
+
+        public Action OnSaveState { get; set; }
+        public override void SavePersistedState()
+        {
+            if (this.OnSaveState != null)
+            {
+                this.OnSaveState();
+            }
+            else
+            {
+                base.SavePersistedState();
+            }
+        }
+
+        public Func<IntegrationRequest, IntegrationStatus> OnIntegrate { get; set; }
+        public override IntegrationStatus Integrate(IntegrationRequest request)
+        {
+            return this.OnIntegrate == null ? 
+                base.Integrate(request) : 
+                this.OnIntegrate(request);
         }
     }
 }

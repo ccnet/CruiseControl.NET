@@ -1,21 +1,18 @@
 ﻿namespace CruiseControl.Core.Tests
 {
     using System;
+    using System.IO;
     using System.Threading;
-    using System.Xml;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Tests.Stubs;
+    using CruiseControl.Core.Utilities;
     using Moq;
     using NUnit.Framework;
 
     public class ProjectTests
     {
-        #region Constants
-        private const string DefaultLogFilePath = "logFilePath";
-        #endregion
-
         #region Tests
         [Test]
         public void ConstructorSetsNameAndTasks()
@@ -38,18 +35,26 @@
         [Test]
         public void StartStartsTheProject()
         {
-            var project = new Project("Test");
+            var stateLoaded = false;
+            var project = new ProjectStub("Test")
+                              {
+                                  OnLoadState = () => stateLoaded = true
+                              };
             project.Start();
 
             // Give the project time to start
             Thread.Sleep(100);
             Assert.AreEqual(ProjectState.Running, project.State);
+            Assert.IsTrue(stateLoaded);
         }
 
         [Test]
         public void StartFailsIfAlreadyStarted()
         {
-            var project = new Project("Test");
+            var project = new ProjectStub("Test")
+                              {
+                                  OnLoadState = () => { }
+                              };
             project.Start();
 
             // Give the project time to start
@@ -65,7 +70,10 @@
                               {
                                   OnInitialise = () => initialised = true
                               };
-            var project = new Project("Test");
+            var project = new ProjectStub("Test")
+                              {
+                                  OnLoadState = () => { }
+                              };
             project.Triggers.Add(trigger);
             project.Start();
 
@@ -91,7 +99,10 @@
         [Test]
         public void StopStopsAStartedProject()
         {
-            var project = new Project("Test");
+            var project = new ProjectStub("Test")
+                              {
+                                  OnLoadState = () => { }
+                              };
             project.Start();
 
             // Give the project time to start
@@ -113,7 +124,10 @@
                                   OnCleanUp = () => cleaned = true,
                                   OnCheckAction = () => null
                               };
-            var project = new Project("Test");
+            var project = new ProjectStub("Test")
+                              {
+                                  OnLoadState = () => { }
+                              };
             project.Triggers.Add(trigger);
             project.Start();
 
@@ -266,7 +280,7 @@
                                                       }
                             };
             var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
-            InitialiseExecutionContext(executionFactoryMock); 
+            InitialiseExecutionContext(executionFactoryMock);
             var project = new Project("test", dummy)
                               {
                                   TaskExecutionFactory = executionFactoryMock.Object
@@ -334,7 +348,7 @@
                             };
             var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
             InitialiseExecutionContext(executionFactoryMock);
-            var project = new Project("test")
+            var project = new ProjectStub("test")
                               {
                                   TaskExecutionFactory = executionFactoryMock.Object
                               };
@@ -502,9 +516,12 @@
                            };
             var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
             InitialiseExecutionContext(executionFactoryMock);
-            var project = new Project("Test", task)
+            var project = new ProjectStub("Test", task)
                               {
-                                  TaskExecutionFactory = executionFactoryMock.Object
+                                  TaskExecutionFactory = executionFactoryMock.Object,
+                                  OnLoadState = () => { },
+                                  OnSaveState = () => { },
+                                  Clock = new SystemClock()
                               };
             project.Triggers.Add(trigger);
             project.Start();
@@ -518,6 +535,38 @@
             Assert.IsTrue(triggered);
             Assert.IsTrue(ran);
             Assert.IsNull(project.MainThreadException);
+        }
+
+        [Test]
+        public void IntegrationHandlesExceptionDuringIntegration()
+        {
+            var triggered = false;
+            var trigger = GenerateRunOnceTrigger(() => triggered = true);
+            var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
+            InitialiseExecutionContext(executionFactoryMock);
+            var project = new ProjectStub("Test")
+                              {
+                                  TaskExecutionFactory = executionFactoryMock.Object,
+                                  OnLoadState = () => { },
+                                  OnSaveState = () => { },
+                                  Clock = new SystemClock(),
+                                  OnIntegrate = ir =>
+                                                    {
+                                                        throw new Exception();
+                                                    }
+                              };
+            project.Triggers.Add(trigger);
+            project.Start();
+
+            // Give the project time to start
+            Thread.Sleep(100);
+            project.Stop();
+
+            // Give the project time to stop
+            Thread.Sleep(1000);
+            Assert.IsTrue(triggered);
+            Assert.IsNull(project.MainThreadException);
+            Assert.AreEqual(IntegrationStatus.Error, project.PersistedState.LastIntegration.Status);
         }
 
         [Test]
@@ -538,10 +587,13 @@
             hostMock.Setup(h => h.AskToIntegrate(It.IsAny<IntegrationContext>()));
             var executionFactoryMock = new Mock<ITaskExecutionFactory>(MockBehavior.Strict);
             InitialiseExecutionContext(executionFactoryMock);
-            var project = new Project("Test", task)
+            var project = new ProjectStub("Test", task)
                               {
                                   Host = hostMock.Object,
-                                  TaskExecutionFactory = executionFactoryMock.Object
+                                  TaskExecutionFactory = executionFactoryMock.Object,
+                                  OnLoadState = () => { },
+                                  OnSaveState = () => { },
+                                  Clock = new SystemClock()
                               };
             project.Triggers.Add(trigger);
             project.Start();
@@ -574,7 +626,13 @@
             var hostMock = new Mock<ServerItem>(MockBehavior.Strict);
             hostMock.Setup(h => h.AskToIntegrate(It.IsAny<IntegrationContext>()))
                 .Callback((IntegrationContext c) => c.Cancel());
-            var project = new Project("Test", task) { Host = hostMock.Object };
+            var project = new ProjectStub("Test", task)
+                              {
+                                  Host = hostMock.Object,
+                                  OnLoadState = () => { },
+                                  OnSaveState = () => { },
+                                  Clock = new SystemClock()
+                              };
             project.Triggers.Add(trigger);
             project.Start();
 
@@ -621,6 +679,81 @@
             var actual = server.Locate("urn:ccnet:local:testProject:comment");
             Assert.AreSame(task, actual);
         }
+
+        [Test]
+        public void LoadPersistedStateLoadsAStateFile()
+        {
+            var configFile = Path.Combine(
+                Environment.CurrentDirectory,
+                "Name",
+                "project.state");
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(configFile))
+                .Returns(true)
+                .Verifiable();
+            using (var stream = AssemblyHelper.RetrieveExampleFile("ExampleProjectState"))
+            {
+                fileSystemMock.Setup(fs => fs.OpenFileForRead(configFile))
+                    .Returns(stream)
+                    .Verifiable();
+                var project = new Project("Name")
+                                  {
+                                      FileSystem = fileSystemMock.Object
+                                  };
+                project.LoadPersistedState();
+                Assert.IsNotNull(project.PersistedState);
+                Assert.IsNotNull(project.PersistedState.LastIntegration);
+                Assert.AreEqual(new DateTime(2010, 1, 1, 12, 1, 1), project.PersistedState.LastIntegration.StartTime);
+                fileSystemMock.Verify();
+            }
+        }
+
+        [Test]
+        public void LoadPersistedStateStartsANewState()
+        {
+            var configFile = Path.Combine(
+                Environment.CurrentDirectory,
+                "Name",
+                "project.state");
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(configFile))
+                .Returns(false)
+                .Verifiable();
+            var project = new Project("Name")
+                              {
+                                  FileSystem = fileSystemMock.Object
+                              };
+            project.LoadPersistedState();
+            Assert.IsNotNull(project.PersistedState);
+            Assert.IsNull(project.PersistedState.LastIntegration);
+            fileSystemMock.Verify();
+        }
+
+        [Test]
+        public void SavePersistedStateSavesTheCurrentState()
+        {
+            var configFile = Path.Combine(
+                Environment.CurrentDirectory,
+                "Name",
+                "project.state");
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(configFile))
+                .Returns(false)
+                .Verifiable();
+            using (var stream = new MemoryStream())
+            {
+                fileSystemMock.Setup(fs => fs.OpenFileForWrite(configFile))
+                    .Returns(stream)
+                    .Verifiable();
+                var project = new Project("Name")
+                                  {
+                                      FileSystem = fileSystemMock.Object
+                                  };
+                project.LoadPersistedState();
+                project.SavePersistedState();
+                fileSystemMock.Verify();
+            }
+        }
         #endregion
 
         #region Private methods
@@ -651,6 +784,7 @@
             var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
             contextMock.Setup(ec => ec.StartChild(It.IsAny<Task>())).Returns(childContextMock.Object);
             contextMock.Setup(ec => ec.Complete());
+            contextMock.Setup(ec => ec.CurrentStatus).Returns(IntegrationStatus.Success);
             executionFactoryMock.Setup(ef => ef.StartNew(It.IsAny<Project>(), It.IsAny<IntegrationRequest>()))
                 .Returns(contextMock.Object);
             return contextMock;

@@ -18,6 +18,11 @@
         /// <summary>
         /// The integration has failed.
         /// </summary>
-        Failure
+        Failure,
+
+        /// <summary>
+        /// There was an error during the integration.
+        /// </summary>
+        Error
     }
 }

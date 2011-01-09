@@ -50,7 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionInvokerTests.cs" />
+    <Compile Include="AssemblyHelper.cs" />
+    <Compile Include="PersistedProjectStateTests.cs" />
+    <Compile Include="Stubs\ChannelStub.cs" />
+    <Compile Include="Tasks\ForceBuildTests.cs" />
+    <Compile Include="Triggers\RollUpTests.cs" />
+    <Compile Include="Utilities\ActionInvokerTests.cs" />
     <Compile Include="ApplicationTests.cs" />
     <Compile Include="AttachablePropertyStoreTests.cs" />
     <Compile Include="Channels\WcfTests.cs" />
@@ -107,67 +112,72 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\SingleProject.xaml">
+    <EmbeddedResource Include="Configuration\SingleProject.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\SimpleQueue.xaml">
+    <EmbeddedResource Include="Configuration\SimpleQueue.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\QueueOfQueues.xaml">
+    <EmbeddedResource Include="Configuration\QueueOfQueues.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\RoundRobinOfQueues.xaml">
+    <EmbeddedResource Include="Configuration\RoundRobinOfQueues.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\SimplePipeline.xaml">
+    <EmbeddedResource Include="Configuration\SimplePipeline.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\SimpleGate.xaml">
+    <EmbeddedResource Include="Configuration\SimpleGate.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\PipelineWithGates.xaml">
+    <EmbeddedResource Include="Configuration\PipelineWithGates.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\SimpleSourceControlExample.xaml">
+    <EmbeddedResource Include="Configuration\SimpleSourceControlExample.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\ComplexSourceControlExample.xaml">
+    <EmbeddedResource Include="Configuration\ComplexSourceControlExample.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\ScmProject.xaml">
+    <EmbeddedResource Include="Configuration\ScmProject.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\CommonTaskProperties.xaml">
+    <EmbeddedResource Include="Configuration\CommonTaskProperties.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\WcfChannel.xaml">
+    <EmbeddedResource Include="Configuration\WcfChannel.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Examples\MergeFiles.xaml">
+    <EmbeddedResource Include="Configuration\MergeFiles.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExampleProjectState.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
