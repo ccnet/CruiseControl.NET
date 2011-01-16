@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using CruiseControl.Core.Interfaces;
     using NLog;
 
@@ -141,6 +142,8 @@
         /// <returns>The child tasks to run.</returns>
         public virtual IEnumerable<Task> Run(TaskExecutionContext context)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             logger.Debug("Running task '{0}'", this.NameOrType);
             this.State = TaskState.Executing;
 
@@ -149,7 +152,10 @@
                 yield return task;
             }
 
-            logger.Debug("Task '{0}' has completed", this.NameOrType);
+            stopwatch.Stop();
+            logger.Debug("Task '{0}' has completed in {1:#,##0.000}s",
+                this.NameOrType,
+                (double)stopwatch.ElapsedMilliseconds / 1000);
             this.State = TaskState.Completed;
         }
         #endregion

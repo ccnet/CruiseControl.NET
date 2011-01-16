@@ -20,7 +20,16 @@
             host = domain.CreateInstanceAndUnwrap(
                 Assembly.GetExecutingAssembly().FullName,
                 typeof(ApplicationHost).FullName) as ApplicationHost;
-            host.Run();
+            try
+            {
+                host.Run();
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Oops - something has gone badly wrong!");
+                Console.WriteLine(error.Message);
+                Console.ReadKey(true);
+            }
         }
         #endregion
 

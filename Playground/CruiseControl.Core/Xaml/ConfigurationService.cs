@@ -9,7 +9,7 @@
     /// <summary>
     /// A configuration service that uses XAML.
     /// </summary>
-    public class ConfigurationService 
+    public class ConfigurationService
         : IConfigurationService
     {
         #region Private fields
@@ -33,18 +33,35 @@
         }
         #endregion
 
+        #region Public properties
+        #region Writer
+        /// <summary>
+        /// Gets or sets the writer.
+        /// </summary>
+        /// <value>
+        /// The writer.
+        /// </value>
+        public XamlObjectWriter Writer { get; set; }
+        #endregion
+        #endregion
+
         #region Public methods
         #region Load()
         /// <summary>
         /// Loads the specified stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// The loaded <see cref="Server"/> instance if the configuration is valid;
+        /// <c>null</c> otherwise.
+        /// </returns>
         public Server Load(Stream stream)
         {
             logger.Debug("Loading configuration from stream");
             var reader = new XamlXmlReader(stream, this.context);
-            var server = XamlServices.Load(reader) as Server;
+            var writer = this.Writer ?? new XamlObjectWriter(this.context);
+            XamlServices.Transform(reader, writer);
+            var server = writer.Result as Server;
             return server;
         }
         #endregion

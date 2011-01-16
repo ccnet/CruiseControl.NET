@@ -28,6 +28,7 @@
         {
         }
         #endregion
+
         #region Initialise()
         /// <summary>
         /// Initialises this client.

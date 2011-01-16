@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -300,7 +301,7 @@
                 throw new InvalidOperationException(message);
             }
 
-            logger.Info("Stopped project '{0}'", this.Name);
+            logger.Info("Stopping project '{0}'", this.Name);
             this.State = ProjectState.Stopping;
         }
         #endregion
@@ -312,6 +313,8 @@
         /// <param name="request">The request.</param>
         public virtual IntegrationStatus Integrate(IntegrationRequest request)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var status = IntegrationStatus.Unknown;
             logger.Debug("Initialising integration for '{0}'", this.Name);
             if (this.InitialiseForIntegration())
@@ -331,6 +334,11 @@
 
             logger.Debug("Cleaning up after integration for '{0}'", this.Name);
             this.CleanUpAfterIntegration();
+
+            stopwatch.Stop();
+            logger.Debug("Total duration for integration for '{0}' was {1:#,##0.000}s",
+                this.Name,
+                (double)stopwatch.ElapsedMilliseconds / 1000);
             return status;
         }
         #endregion
@@ -416,17 +424,41 @@
         #endregion
 
         #region Actions
-        #region ForceBuild()
+        #region Start()
         /// <summary>
-        /// Adds a new build request for a forced build.
+        /// Starts the project if it is no already started.
         /// </summary>
         /// <param name="request">The request containing the details.</param>
-        /// <returns>A response containing the details of the build.</returns>
+        /// <returns>A message containing the response details.</returns>
         [RemoteAction]
-        [Description("Trigger a build remotely.")]
-        public virtual BuildMessage ForceBuild(ProjectMessage request)
+        [Description("Starts a project if it is not already started.")]
+        public virtual ProjectMessage Start(ProjectMessage request)
         {
-            throw new NotImplementedException();
+            this.Start();
+            var response = new ProjectMessage
+            {
+                ProjectName = this.Name
+            };
+            return response;
+        }
+        #endregion
+
+        #region Stop()
+        /// <summary>
+        /// Stops the project if it is not already stopped.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A message containing the response details.</returns>
+        [RemoteAction]
+        [Description("Stops a project if it is not already stopped.")]
+        public virtual ProjectMessage Stop(ProjectMessage request)
+        {
+            this.Stop();
+            var response = new ProjectMessage
+                               {
+                                   ProjectName = this.Name
+                               };
+            return response;
         }
         #endregion
         #endregion

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tests.Stubs;
@@ -28,6 +29,16 @@
         }
 
         [Test]
+        public void AskToIntegrateFailsIfUnableToLock()
+        {
+            var project = new ProjectStub();
+            var queue = new TestQueue();
+            var context = new IntegrationContext(project);
+            queue.Lock();
+            Assert.Throws<Exception>(() => queue.AskToIntegrate(context));
+        }
+
+        [Test]
         public void CompletingAnIntegrationRemovesItFromActiveRequests()
         {
             var project = new ProjectStub();
@@ -37,6 +48,17 @@
             context.Complete();
             Assert.AreEqual(0, queue.GetActiveRequests().Count());
             Assert.AreEqual(0, queue.GetPendingRequests().Count());
+        }
+
+        [Test]
+        public void CompletingAnIntegrationFailsIfUnableToLock()
+        {
+            var project = new ProjectStub();
+            var queue = new TestQueue();
+            var context = new IntegrationContext(project);
+            queue.AskToIntegrate(context);
+            queue.Lock();
+            Assert.Throws<Exception>(context.Complete);
         }
 
         [Test]
@@ -72,6 +94,22 @@
             Assert.AreEqual(1, active.Count());
             Assert.AreEqual(0, queue.GetPendingRequests().Count());
             Assert.AreSame(context2, active.First());
+        }
+
+        [Test]
+        public void GetPendingRequestsFailsIfUnableToLock()
+        {
+            var queue = new TestQueue();
+            queue.Lock();
+            Assert.Throws<Exception>(() => queue.GetPendingRequests());
+        }
+
+        [Test]
+        public void GetActiveRequestsFailsIfUnableToLock()
+        {
+            var queue = new TestQueue();
+            queue.Lock();
+            Assert.Throws<Exception>(() => queue.GetActiveRequests());
         }
 
         [Test]
@@ -303,6 +341,24 @@
             Queue.SetPriority(project, null);
             var actual = Queue.GetPriority(project);
             Assert.IsNull(actual);
+        }
+        #endregion
+
+        #region Classes
+        public class TestQueue
+            : Queue
+        {
+            public void Lock()
+            {
+                var handle = new ManualResetEvent(false);
+                var thread = new Thread(() =>
+                                            {
+                                                this.Interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
+                                                handle.Set();
+                                            });
+                thread.Start();
+                handle.WaitOne();
+            }
         }
         #endregion
     }

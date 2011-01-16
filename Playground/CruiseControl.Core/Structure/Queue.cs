@@ -107,7 +107,7 @@
             try
             {
                 logger.Debug("Adding integration request for '{0}' to '{1}'", context.Item.Name, this.Name);
-                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
+                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(1));
                 if (locked)
                 {
                     if ((this.activeRequests.Count < this.AllowedActive.GetValueOrDefault(1)) &&
@@ -155,7 +155,7 @@
             try
             {
                 logger.Debug("Getting pending requests for '{0}'", this.Name);
-                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
+                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(1));
                 if (locked)
                 {
                     return this.pendingRequests.ToArray();
@@ -191,7 +191,7 @@
             try
             {
                 logger.Debug("Getting active requests for '{0}'", this.Name);
-                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
+                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(1));
                 if (locked)
                 {
                     return this.activeRequests.ToArray();
@@ -217,6 +217,21 @@
         #endregion
         #endregion
 
+        #region Protected methods
+        #region Interleave
+        /// <summary>
+        /// Gets the interleave.
+        /// </summary>
+        /// <remarks>
+        /// This is exposed primarily for testing.
+        /// </remarks>
+        protected ReaderWriterLockSlim Interleave
+        {
+            get { return this.interleave; }
+        }
+        #endregion
+        #endregion
+
         #region Private methods
         #region OnIntegrationCompleted()
         /// <summary>
@@ -238,7 +253,7 @@
             var locked = false;
             try
             {
-                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
+                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(1));
                 if (locked)
                 {
                     logger.Debug("Removing '{0}' from '{1}'", context.Item.Name, this.Name);
@@ -293,7 +308,7 @@
             IntegrationContext nextRequest = null;
             try
             {
-                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
+                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(1));
                 if (locked)
                 {
                     if (this.pendingRequests.Count > 0)

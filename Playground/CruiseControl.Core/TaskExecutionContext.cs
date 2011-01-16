@@ -287,6 +287,30 @@
             }
         }
         #endregion
+
+        #region StartOutputStream()
+        /// <summary>
+        /// Starts an output stream.
+        /// </summary>
+        /// <param name="outputName">Name of the output stream.</param>
+        /// <returns>
+        /// The <see cref="Stream"/> to retrieve the output.
+        /// </returns>
+        public Stream StartOutputStream(string outputName)
+        {
+            logger.Trace("Starting output stream: {0}", outputName);
+            this.writer.WriteStartElement("file");
+            this.writer.WriteAttributeString("time", this.clock.Now.ToString("s"));
+            this.writer.WriteString(outputName);
+            this.writer.WriteEndElement();
+
+            var destinationPath = GenerateArtifactFileName(this.project,
+                                                           this.buildName,
+                                                           outputName);
+            var stream = this.fileSystem.OpenFileForWrite(destinationPath);
+            return stream;
+        }
+        #endregion
         #endregion
     }
 }

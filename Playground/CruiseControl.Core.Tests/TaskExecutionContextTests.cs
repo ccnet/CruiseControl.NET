@@ -204,7 +204,41 @@
             var context = new TaskExecutionContext(new TaskExecutionParameters());
             var modificationSet = new ModificationSet();
             context.AddModifications(modificationSet);
-            CollectionAssert.AreEqual(new[] {modificationSet}, context.ModificationSets);
+            CollectionAssert.AreEqual(new[] { modificationSet }, context.ModificationSets);
+        }
+
+        [Test]
+        public void StartOutputStreamStartsANewStream()
+        {
+            var source = "data.tst";
+            var destination = Path.Combine(
+                Environment.CurrentDirectory,
+                "Test",
+                "20100101120101",
+                source);
+            var writerMock = new Mock<XmlWriter>(MockBehavior.Strict);
+            writerMock.Setup(w => w.WriteStartElement(null, "file", null)).Verifiable();
+            writerMock.MockWriteAttributeString("time", "2010-01-01T12:01:01");
+            writerMock.Setup(w => w.WriteString(source)).Verifiable();
+            writerMock.Setup(w => w.WriteEndElement()).Verifiable();
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            var expected = new MemoryStream();
+            fileSystemMock.Setup(fs => fs.OpenFileForWrite(destination)).Returns(expected).Verifiable();
+            var clockMock = new Mock<IClock>(MockBehavior.Strict);
+            clockMock.Setup(c => c.Now).Returns(new DateTime(2010, 1, 1, 12, 1, 1));
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        XmlWriter = writerMock.Object,
+                        FileSystem = fileSystemMock.Object,
+                        Clock = clockMock.Object,
+                        Project = new Project("Test"),
+                        BuildName = "20100101120101"
+                    });
+            var actual = context.StartOutputStream(source);
+            writerMock.Verify();
+            fileSystemMock.Verify();
+            Assert.AreSame(expected, actual);
         }
         #endregion
     }

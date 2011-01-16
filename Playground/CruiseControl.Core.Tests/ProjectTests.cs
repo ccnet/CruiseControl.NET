@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Threading;
+    using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
@@ -753,6 +754,42 @@
                 project.SavePersistedState();
                 fileSystemMock.Verify();
             }
+        }
+
+        [Test]
+        public void StartMessageStartsProject()
+        {
+            var started = false;
+            var project = new ProjectStub
+                              {
+                                  Name = "Test",
+                                  OnLoadState = () => { },
+                                  OnStart = () => started = true
+                              };
+            var request = new ProjectMessage();
+            var response = project.Start(request);
+            Assert.AreEqual(project.Name, response.ProjectName);
+            Thread.Sleep(100);
+            Assert.IsTrue(started);
+        }
+
+        [Test]
+        public void StopMessageStopsProject()
+        {
+            var stopped = false;
+            var project = new ProjectStub
+                              {
+                                  Name = "Test",
+                                  OnLoadState = () => { },
+                                  OnStop = () => stopped = true
+                              };
+            var request = new ProjectMessage();
+            project.Start();
+            Thread.Sleep(100);
+            var response = project.Stop(request);
+            Thread.Sleep(500);
+            Assert.AreEqual(project.Name, response.ProjectName);
+            Assert.IsTrue(stopped);
         }
         #endregion
 
