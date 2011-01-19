@@ -1,412 +1,490 @@
-using System;
-using System.IO;
-using System.Text;
-using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Collections.Generic;
-
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 {
-    [TestFixture]
-    public class MercurialTest : ProcessExecutorTestFixtureBase
-    {
-        private class StubFileSystem : IFileSystem
-        {
-            public void Copy(string sourcePath, string destPath) { }
+	using Exortech.NetReflector;
+	using NMock;
+	using NMock.Constraints;
+	using NUnit.Framework;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Text;
+	using ThoughtWorks.CruiseControl.Core;
+	using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+	using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial;
+	using ThoughtWorks.CruiseControl.Core.Util;
 
-            public void Save(string file, string content) { }
+	/// <summary>
+	/// Test fixture for the <see cref="Mercurial"/> source control implementation.
+	/// </summary>
+	[TestFixture]
+	public class MercurialTest : ProcessExecutorTestFixtureBase
+	{
+		#region Constants
 
-            public void AtomicSave(string file, string content) { }
-
-            public void AtomicSave(string file, string content, Encoding encoding) { }
-
-            public TextReader Load(string file) { return null; }
-
-            public bool FileExists(string file) { return true; }
-
-            public bool DirectoryExists(string folder) { return true; }
-
-            public void EnsureFolderExists(string fileName) { }
-
-            /// <summary>
-            /// Ensures that the specified file exists.
-            /// </summary>
-            /// <param name="fileName">The name of the file.</param>
-            public void EnsureFileExists(string fileName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public long GetFreeDiskSpace(string driveName) { return int.MaxValue; }
-
-            public string[] GetFilesInDirectory(string directory) { return new string[0]; }
-            public string[] GetFilesInDirectory(string directory, bool includeSubDirectories) { return new string[0]; }
-
-            public DateTime GetLastWriteTime(string fileName) { return DateTime.MinValue; }
-
-            public ITaskResult GenerateTaskResultFromFile(string fileName) { return null; }
-            public ITaskResult GenerateTaskResultFromFile(string fileName, bool deleteAfterMerge) { return null; }
-
-            public Stream OpenOutputStream(string fileName) { return null;}
-
-            public Stream OpenInputStream(string fileName) { return null; }
-
-            #region CreateDirectory()
-            /// <summary>
-            /// Creates a directory.
-            /// </summary>
-            /// <param name="folder">The name of the folder to create.</param>
-            public void CreateDirectory(string folder)
-            {
-            }
-            #endregion
-
-            public void DeleteFile(string filePath)
-            {
-            }
-
-            #region DeleteDirectory()
-            /// <summary>
-            /// Deletes a directory.
-            /// </summary>
-            /// <param name="folder">The name of the folder to delete.</param>
-            public void DeleteDirectory(string folder)
-            {
-            }
-
-            /// <summary>
-            /// Deletes a directory, optionally deleting all sub-directories.
-            /// </summary>
-            /// <param name="folder">The name of the folder to delete.</param>
-            /// <param name="recursive">If set to <c>true</c> recursively delete folders.</param>
-            public void DeleteDirectory(string folder, bool recursive)
-            {
-            }
-            #endregion
-
-            public long GetFileLength(string fullName)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Gets the files in directory.
-            /// </summary>
-            /// <param name="path">The path.</param>
-            /// <param name="pattern">The pattern.</param>
-            /// <param name="searchOption">The search option.</param>
-            /// <returns>The files in the directory that match the pattern.</returns>
-            public IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Version GetFileVersion(string filePath)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        [Test]
-        public void StubFileSystemCoverage()
-        {
-            StubFileSystem sf = new StubFileSystem();
-            sf.Copy("asdf", "asdf");
-            sf.Save("asdf", "Asdf");
-            sf.Load("asdf");
-            sf.FileExists("asdf");
-            sf.DirectoryExists("asdf");
-            sf.EnsureFolderExists("asdf");
-            sf.GetFreeDiskSpace("asdf");
-        }
-
-        private CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial hg;
-        private IMock mockHistoryParser;
-        private DateTime from;
-        private DateTime to;
-        private IMock mockFileSystem;
-
-        [SetUp]
-        protected void CreateHg()
-        {
-            mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-            mockFileSystem = new DynamicMock(typeof (IFileSystem));
-            CreateProcessExecutorMock(CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial.DefaultExecutable);
-            from = new DateTime(2001, 1, 21, 20, 0, 0);
-            to = from.AddDays(1);
-            setupHg(new StubFileSystem());
-        }
-
-        [TearDown]
-        protected void VerifyAll()
-        {
-            Verify();
-            mockHistoryParser.Verify();
-            mockFileSystem.Verify();
-        }
-
-        /// <summary>
-        /// Hg should be the default executable
-        /// (hg.bat in python scripts dir or simply hg in python scripts dir in a mono environment).
-        /// </summary>
-        [Test]
-        public void HgShouldBeDefaultExecutable() { Assert.AreEqual("hg", hg.Executable); }
-
-        [Test]
-        public void PopulateFromFullySpecifiedXml()
-        {
-            const string xml = @"
+		private const string ConfigMin = "<hg/>";
+		private const string ConfigFull = @"
 <hg>
-	<executable>c:\Python25\Scripts\hg.bat</executable>
-	<repo>c:\hg\ccnet\myhgrepo</repo>
-	<timeout>5</timeout>
-	<workingDirectory>c:\hg\working</workingDirectory>
-	<tagOnSuccess>true</tagOnSuccess>
-	<autoGetSource>true</autoGetSource>
-    <branch>trunk</branch>
+<autoGetSource>true</autoGetSource>
+<branch>trunk</branch>
+<commitModifications>true</commitModifications>
+<committerName>CCNet</committerName>
+<commitUntracked>true</commitUntracked>
+<executable>c:\Python25\Scripts\hg.bat</executable>
+<modificationsCommitMessage>Modifications for build {0}</modificationsCommitMessage>
+<multipleHeadsFail>false</multipleHeadsFail>
+<purgeModifications>true</purgeModifications>
+<pushModifications>true</pushModifications>
+<repo>c:\hg\ccnet\myhgrepo</repo>
+<tagCommitMessage>Tag for build {0}</tagCommitMessage>
+<tagNameFormat>tag_{0}</tagNameFormat>
+<tagOnSuccess>true</tagOnSuccess>
 </hg>";
 
-            hg = (CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial) NetReflector.Read(xml);
-            Assert.AreEqual(@"c:\Python25\Scripts\hg.bat", hg.Executable);
-            Assert.AreEqual(@"c:\hg\ccnet\myhgrepo", hg.Repo);
-            Assert.AreEqual(new Timeout(5), hg.Timeout);
-            Assert.AreEqual(@"c:\hg\working", hg.WorkingDirectory);
-            Assert.AreEqual(true, hg.TagOnSuccess);
-            Assert.AreEqual(true, hg.AutoGetSource);
-            Assert.AreEqual("trunk", hg.Branch);
-        }
+		#endregion
 
-        [Test]
-        public void PopulateFromMinimallySpecifiedXml()
-        {
-            const string xml = @"<hg/>";
-            hg = (CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial) NetReflector.Read(xml);
-        }
+		#region Private Members
 
-        [Test]
-        public void ShouldApplyLabelIfTagOnSuccessTrue()
-        {
-            hg.TagOnSuccess = true;
+		private Mercurial hg;
+		private DateTime from;
+		private DateTime to;
+		private IMock mockFileSystem;
+		private IMock mockFileDirectoryDeleter;
+		private IMock mockHistoryParser;
+		private string tempWorkDir;
+		private string tempHgDir;
+		private string outputTemplate;
 
-            ExpectToExecuteArguments(@"tag -m ""Tagging successful build foo"" --noninteractive foo", @"c:\source\");
-            ExpectToExecuteArguments(@"push --noninteractive", @"c:\source\");
+		#endregion
 
-            hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
-        }
+		#region SetUp Method
 
-        [Test]
-        public void ShouldApplyLabelWithCustomMessageIfTagOnSuccessTrueAndACustomMessageIsSpecified()
-        {
-            hg.TagOnSuccess = true;
-            hg.TagCommitMessage = "a---- {0} ----a";
+		[SetUp]
+		protected void SetUp()
+		{
+			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
+			mockFileSystem = new DynamicMock(typeof (IFileSystem));
+			mockFileDirectoryDeleter = new DynamicMock(typeof (IFileDirectoryDeleter));
+			CreateProcessExecutorMock(Mercurial.DefaultExecutable);
+			from = new DateTime(2001, 1, 21, 20, 0, 0);
+			to = from.AddDays(1);
 
-            ExpectToExecuteArguments(@"tag -m ""a---- foo ----a"" --noninteractive foo", @"c:\source\");
-            ExpectToExecuteArguments(@"push --noninteractive", @"c:\source\");
+			tempWorkDir = TempFileUtil.CreateTempDir("ccnet-hg-test");
+			tempHgDir = Path.Combine(TempFileUtil.CreateTempDir("ccnet-hg-test"), ".hg");
+			Directory.CreateDirectory(tempHgDir);
+			outputTemplate = Path.Combine(tempHgDir, "ccnet.template");
 
-            hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
-        }
+			hg = new Mercurial((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, new StubFileSystem(), new StubFileDirectoryDeleter());
+			hg.WorkingDirectory = tempWorkDir;
+		}
 
-        [Test]
-        public void ShouldBuildUrlIfUrlBuilderSpecified()
-        {
-            IMock mockUrlBuilder = new DynamicMock(typeof (IModificationUrlBuilder));
-            Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
-            hg.UrlBuilder = (IModificationUrlBuilder) mockUrlBuilder.MockInstance;
+		#endregion
 
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), new IsAnything());
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), new IsAnything());
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("3", "", 0, false), new IsAnything());
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("4", "", 0, false), new IsAnything());
-            mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
-            mockUrlBuilder.ExpectAndReturn("SetupModification", modifications, new object[] {modifications});
+		#region TearDown Method
 
-            Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-            Assert.AreEqual(modifications, result);
-            mockUrlBuilder.Verify();
-        }
+		[TearDown]
+		protected void TearDown()
+		{
+			Verify();
+			mockHistoryParser.Verify();
+			mockFileSystem.Verify();
+			mockFileDirectoryDeleter.Verify();
+			TempFileUtil.DeleteTempDir(tempWorkDir);
+			TempFileUtil.DeleteTempDir(tempHgDir);
+		}
 
-        [Test]
-        public void ShouldCheckForMultipleHeadsAndGetSourceModificationsFound()
-        {
-            hg.AutoGetSource = true;
-            hg.MultipleHeadsFail = true;
-            Modification[] singleHead = new Modification[1];
+		#endregion
 
-            ExpectToExecuteArguments("heads --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive", @"c:\source\");
-            mockHistoryParser.ExpectAndReturn("Parse", singleHead, new IsAnything(), new IsAnything(), new IsAnything());
-            ExpectToExecuteArguments("update --noninteractive", @"c:\source\");
+		#region Configuration Tests
 
-            hg.GetSource(IntegrationResult());
-        }
+		[Test]
+		public void DefaultConfigurationTest()
+		{
+			Assert.That(hg.AutoGetSource, Is.True);
+			Assert.That(hg.Branch, Is.Null.Or.Empty);
+			Assert.That(hg.CommitModifications, Is.False);
+			Assert.That(hg.CommitterName, Is.EqualTo("CruiseControl.NET"));
+			Assert.That(hg.CommitUntracked, Is.False);
+			Assert.That(hg.Executable, Is.EqualTo("hg"));
+			Assert.That(hg.MultipleHeadsFail, Is.False);
+			Assert.That(hg.ModificationsCommitMessage, Is.EqualTo("Modifications of CC.NET build {0}"));
+			Assert.That(hg.PurgeModifications, Is.False);
+			Assert.That(hg.PushModifications, Is.False);
+			Assert.That(hg.Repository, Is.Null.Or.Empty);
+			Assert.That(hg.TagCommitMessage, Is.EqualTo("Tagging CC.NET build {0}"));
+			Assert.That(hg.TagNameFormat, Is.EqualTo("ccnet_build_{0}"));
+			Assert.That(hg.TagOnSuccess, Is.False);
+		}
 
-        [Test]
-        public void ShouldCreateWorkingDirectoryIfItDoesntExist()
-        {
-            setupHg((IFileSystem) mockFileSystem.MockInstance);
+		[Test]
+		public void PopulateFromFullySpecifiedXml()
+		{
+			hg = (CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial) NetReflector.Read(ConfigFull);
 
-            mockFileSystem.Expect("EnsureFolderExists", @"c:\source\");
+			Assert.That(hg.AutoGetSource, Is.True);
+			Assert.That(hg.Branch, Is.EqualTo("trunk"));
+			Assert.That(hg.CommitModifications, Is.True);
+			Assert.That(hg.CommitterName, Is.EqualTo("CCNet"));
+			Assert.That(hg.CommitUntracked, Is.True);
+			Assert.That(hg.Executable, Is.EqualTo(@"c:\Python25\Scripts\hg.bat"));
+			Assert.That(hg.MultipleHeadsFail, Is.False);
+			Assert.That(hg.ModificationsCommitMessage, Is.EqualTo("Modifications for build {0}"));
+			Assert.That(hg.PurgeModifications, Is.True);
+			Assert.That(hg.PushModifications, Is.True);
+			Assert.That(hg.Repository, Is.EqualTo(@"c:\hg\ccnet\myhgrepo"));
+			Assert.That(hg.TagCommitMessage, Is.EqualTo("Tag for build {0}"));
+			Assert.That(hg.TagNameFormat, Is.EqualTo("tag_{0}"));
+			Assert.That(hg.TagOnSuccess, Is.True);
+		}
 
-            mockFileSystem.ExpectAndReturn("DirectoryExists", false, @"c:\source\.hg");
-            ExpectToExecuteArguments("init --noninteractive", @"c:\source\");
+		[Test]
+		public void PopulateFromMinimallySpecifiedXml()
+		{
+			hg = (CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial) NetReflector.Read(ConfigMin);
 
-            ExpectToExecuteArguments("pull --noninteractive", @"c:\source\");
-            ExpectToExecuteWithArgumentsAndReturn("parents --template {rev} --noninteractive", new ProcessResult("", "", 0, false));
-            ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev} --noninteractive", new ProcessResult("4", "", 0, false));
-            ExpectToExecuteArguments("log -r 0:4 --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive", @"c:\source\");
+			Assert.That(hg.AutoGetSource, Is.True);
+			Assert.That(hg.Branch, Is.Null.Or.Empty);
+			Assert.That(hg.CommitModifications, Is.False);
+			Assert.That(hg.CommitterName, Is.EqualTo("CruiseControl.NET"));
+			Assert.That(hg.CommitUntracked, Is.False);
+			Assert.That(hg.Executable, Is.EqualTo("hg"));
+			Assert.That(hg.MultipleHeadsFail, Is.False);
+			Assert.That(hg.ModificationsCommitMessage, Is.EqualTo("Modifications of CC.NET build {0}"));
+			Assert.That(hg.PurgeModifications, Is.False);
+			Assert.That(hg.PushModifications, Is.False);
+			Assert.That(hg.Repository, Is.Null.Or.Empty);
+			Assert.That(hg.TagCommitMessage, Is.EqualTo("Tagging CC.NET build {0}"));
+			Assert.That(hg.TagNameFormat, Is.EqualTo("ccnet_build_{0}"));
+			Assert.That(hg.TagOnSuccess, Is.False);
+		}
 
-            hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-        }
+		#endregion
 
-        [Test]
-        public void ShouldGetModificationsWithBranchNameIfSpecified()
-        {
-            hg.Branch = "branch";
+		#region GetModifications() Workflow Tests
 
-            ExpectToExecuteArguments("pull -r branch --noninteractive");
-            ExpectToExecuteWithArgumentsAndReturn("parents --template {rev} --noninteractive", new ProcessResult("3", "", 0, false));
-            ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev} --noninteractive", new ProcessResult("4", "", 0, false));
-            ExpectToExecuteArguments("log -r 4:4 --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
+		[Test]
+		public void ShouldBuildUrlIfUrlBuilderSpecified()
+		{
+			IMock mockUrlBuilder = new DynamicMock(typeof (IModificationUrlBuilder));
+			Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
+			hg.UrlBuilder = (IModificationUrlBuilder) mockUrlBuilder.MockInstance;
 
-            hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-        }
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("3", "", 0, false), new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("4", "", 0, false), new IsAnything());
+			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
+			mockUrlBuilder.ExpectAndReturn("SetupModification", modifications, new object[] {modifications});
 
-        private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue) { mockProcessExecutor.ExpectAndReturn("Execute", returnValue, NewProcessInfo(args, @"c:\source\")); }
-        private new void ExpectToExecuteArguments(string args) { ExpectToExecuteArguments(args, @"c:\source\"); }
+			Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+			Assert.That(result, Is.EqualTo(modifications));
+			mockUrlBuilder.Verify();
+		}
 
-        [Test]
-        public void ShouldGetModificationsWithRepoNameIfSpecified()
-        {
-            hg.Repo = @"c:\myrepo\";
-            Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
+		[Test]
+		public void ShouldCreateWorkingDirectoryIfItDoesntExistOrIsNotARepository()
+		{
+			hg = new Mercurial((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance,
+			                   (IFileSystem) mockFileSystem.MockInstance, (IFileDirectoryDeleter) mockFileDirectoryDeleter.MockInstance);
+			hg.WorkingDirectory = tempWorkDir;
+			hg.Repository = @"C:\foo";
 
-            ExpectToExecuteArguments(@"pull --noninteractive c:\myrepo\");
-            ExpectToExecuteWithArgumentsAndReturn("parents --template {rev} --noninteractive", new ProcessResult("3", "", 0, false));
-            ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev} --noninteractive", new ProcessResult("4", "", 0, false));
-            ExpectToExecuteArguments("log -r 4:4 --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
-            mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
+			mockFileSystem.Expect("EnsureFolderExists", tempWorkDir);
+			mockFileSystem.Expect("EnsureFolderExists", tempHgDir);
+			mockFileSystem.ExpectAndReturn("DirectoryExists", true, tempWorkDir);
+			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempHgDir);
+			mockFileDirectoryDeleter.Expect("DeleteIncludingReadOnlyObjects", new object[] { tempWorkDir });
+			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempWorkDir);
+			ExpectToExecuteArguments(@"init " + tempWorkDir, Directory.GetParent(Path.GetFullPath(tempWorkDir)).FullName);
+			ExpectToExecuteArguments(@"pull C:\foo", tempWorkDir);
 
-            Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-            Assert.AreEqual(modifications, result);
-        }
+			hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
 
-        [Test]
-        public void ShouldGetSourceIfModificationsFound()
-        {
-            hg.AutoGetSource = true;
-            hg.MultipleHeadsFail = false;
+		[Test]
+		public void ShouldGetModificationsWithBranchNameIfSpecified()
+		{
+			hg.Branch = "branch";
 
-            ExpectToExecuteArguments("update --noninteractive");
+			ExpectToExecuteWithArgumentsAndReturn("parents --template {rev}:", new ProcessResult("1:", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn("log -b branch -r branch --template {rev}", new ProcessResult("3", "", 0, false));
+			ExpectToExecuteArguments("log -b branch -r 2:3 --style xml -v");
 
-            hg.GetSource(IntegrationResult());
-        }
+			hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
 
-        [Test]
-        public void ShouldNotApplyLabelIfIntegrationFailed()
-        {
-            hg.TagOnSuccess = true;
+		[Test]
+		public void ShouldGetModificationsWithRepoNameIfSpecified()
+		{
+			hg.Repository = @"c:\myrepo\";
+			Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
 
-            ExpectThatExecuteWillNotBeCalled();
+			ExpectToExecuteArguments(@"pull c:\myrepo\");
+			ExpectToExecuteWithArgumentsAndReturn("parents --template {rev}:", new ProcessResult("2:3:", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev}", new ProcessResult("5", "", 0, false));
+			ExpectToExecuteArguments("log -r 3:5 --style xml -v");
+			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
 
-            hg.LabelSourceControl(IntegrationResultMother.CreateFailed());
-        }
+			Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+			Assert.That(result, Is.EqualTo(modifications));
+		}
 
-        [Test]
-        public void ShouldNotApplyLabelIfTagOnSuccessFalse()
-        {
-            hg.TagOnSuccess = false;
+		[Test]
+		public void ShouldOnlyParseLogWhenNoPropertiesAreSet()
+		{
+			ExpectToExecuteWithArgumentsAndReturn("parents --template {rev}:", new ProcessResult("1:", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev}", new ProcessResult("3", "", 0, false));
+			ExpectToExecuteArguments("log -r 2:3 --style xml -v");
 
-            ExpectThatExecuteWillNotBeCalled();
+			hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
 
-            hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
-        }
+		[Test]
+		public void ShouldPullFromRemoteRepoIfSpecified()
+		{
+			hg.Repository = "http://somehost.org/repo.hg";
 
-        [Test]
-        public void ShouldNotGetSourceIfAutoGetSourceFalse()
-        {
-            hg.AutoGetSource = false;
+			ExpectToExecuteArguments(@"pull http://somehost.org/repo.hg");
+			ExpectToExecuteWithArgumentsAndReturn(@"parents --template {rev}:", new ProcessResult("", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn(@"log -r tip --template {rev}", new ProcessResult("1", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn(@"log -r 0:1 --style xml -v", new ProcessResult("1", "", 0, false));
 
-            ExpectThatExecuteWillNotBeCalled();
+			hg.GetModifications(IntegrationResult(), IntegrationResult());
+		}
 
-            hg.GetSource(IntegrationResult());
-        }
+		[Test]
+		public void ShouldPullBranchFromRemoteRepoIfSpecified()
+		{
+			hg.Repository = "http://somehost.org/repo.hg";
+			hg.Branch = "trunk";
 
-        [Test]
-        public void ShouldPullAndLogWhenNoPropertiesAreSet()
-        {
-            ExpectToExecuteArguments("pull --noninteractive");
-            ExpectToExecuteWithArgumentsAndReturn("parents --template {rev} --noninteractive", new ProcessResult("3", "", 0, false));
-            ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev} --noninteractive", new ProcessResult("4", "", 0, false));
-            ExpectToExecuteArguments("log -r 4:4 --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
+			ExpectToExecuteArguments(@"pull -b trunk http://somehost.org/repo.hg");
+			ExpectToExecuteWithArgumentsAndReturn(@"parents --template {rev}:", new ProcessResult("", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn(@"log -b trunk -r trunk --template {rev}", new ProcessResult("1", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn(@"log -b trunk -r 0:1 --style xml -v", new ProcessResult("1", "", 0, false));
 
-            hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-        }
+			hg.GetModifications(IntegrationResult(), IntegrationResult());
+		}
 
-        [Test]
-        public void ShouldPushTagCommitToRepoIfSpecified()
-        {
-            hg.TagOnSuccess = true;
-            hg.Repo = @"c:\myrepo\";
+		[Test]
+		public void ShouldNotReturnModificationsWhenParentIsEqualToTip()
+		{
+			ExpectToExecuteWithArgumentsAndReturn("parents --template {rev}:", new ProcessResult("1:", "", 0, false));
+			ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev}", new ProcessResult("1", "", 0, false));
 
-            ExpectToExecuteArguments(@"tag -m ""Tagging successful build foo"" --noninteractive foo");
-            ExpectToExecuteArguments(@"push --noninteractive c:\myrepo\");
+			Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
+			Assert.That(result, Is.EqualTo(new Modification[0]));
+		}
 
-            hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
-        }
+		#endregion
 
-        [Test]
-        public void ShouldReturnModifications()
-        {
-            Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
+		#region GetSource() Workflow Tests
 
-            ExpectToExecuteArguments("pull --noninteractive");
-            ExpectToExecuteWithArgumentsAndReturn("parents --template {rev} --noninteractive", new ProcessResult("3", "", 0, false));
-            ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev} --noninteractive", new ProcessResult("4", "", 0, false));
-            ExpectToExecuteArguments("log -r 4:4 --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
-            mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), from, new IsAnything());
+		[Test]
+		public void ShouldCheckForMultipleHeadsAndGetSource()
+		{
+			hg.MultipleHeadsFail = true;
 
-            Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
-            Assert.AreEqual(modifications, result);
-        }
+			ExpectToExecuteWithArgumentsAndReturn("heads --template {rev}:", new ProcessResult("1:", "", 0, false));
+			ExpectToExecuteArguments("update", tempWorkDir);
 
-        [Test]
-        public void ShouldThrowMultipleHeadsExceptionWhenMultipleHeadsAreFound()
-        {
-            hg.AutoGetSource = true;
-            hg.MultipleHeadsFail = true;
-            Modification[] heads = new Modification[2];
+			hg.GetSource(IntegrationResult());
+		}
 
-            ExpectToExecuteArguments("heads --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
-            mockHistoryParser.ExpectAndReturn("Parse", heads, new IsAnything(), new IsAnything(), new IsAnything());
+		[Test]
+		public void ShouldNotGetSourceIfSpecified()
+		{
+			hg.AutoGetSource = false;
 
-            Assert.That(delegate { hg.GetSource(IntegrationResult()); },
-                        Throws.TypeOf<MultipleHeadsFoundException>());
-        }
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 
-        [Test]
-        public void ShouldUseBranchNameWhenGettingSourceIfSpecified()
-        {
-            hg.AutoGetSource = true;
-            hg.MultipleHeadsFail = true;
-            hg.Branch = "branch";
-            Modification[] singleHead = new Modification[1];
+			hg.GetSource(IntegrationResult());
+		}
 
-            ExpectToExecuteArguments("heads -r branch --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
-            mockHistoryParser.ExpectAndReturn("Parse", singleHead, new IsAnything(), new IsAnything(), new IsAnything());
-            ExpectToExecuteArguments("update -r branch --noninteractive");
+		[Test]
+		public void ShouldGetSourceIfModificationsFound()
+		{
+			ExpectToExecuteArguments("update");
 
-            hg.GetSource(IntegrationResult());
-        }
+			hg.GetSource(IntegrationResult());
+		}
 
-        private void setupHg(IFileSystem filesystem)
-        {
-            hg = new CruiseControl.Core.Sourcecontrol.Mercurial.Mercurial((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, filesystem);
-            hg.WorkingDirectory = @"c:\source\";
-        }
-    }
+		[Test]
+		public void ShouldPurgeModificationsIfSpecified()
+		{
+			hg.PurgeModifications = true;
+
+			ExpectToExecuteArguments(@"update");
+			ExpectToExecuteArguments(@"purge --all");
+
+			hg.GetSource(IntegrationResult());
+		}
+
+		[Test]
+		public void ShouldRevertModificationsIfSpecified()
+		{
+			hg.RevertModifications = true;
+
+			ExpectToExecuteArguments(@"update");
+			ExpectToExecuteArguments(@"revert --all --no-backup");
+
+			hg.GetSource(IntegrationResult());
+		}
+
+		[Test]
+		public void ShouldThrowMultipleHeadsExceptionWhenMultipleHeadsAreFound()
+		{
+			hg.MultipleHeadsFail = true;
+			Modification[] heads = new Modification[2];
+
+			ExpectToExecuteWithArgumentsAndReturn("heads --template {rev}:", new ProcessResult("1:2:", "", 0, false));
+
+			Assert.That(delegate { hg.GetSource(IntegrationResult()); },
+			            Throws.TypeOf<MultipleHeadsFoundException>());
+		}
+
+		[Test]
+		public void ShouldUseBranchNameWhenGettingSourceIfSpecified()
+		{
+			hg.Branch = "branch";
+
+			ExpectToExecuteArguments("update branch");
+
+			hg.GetSource(IntegrationResult());
+		}
+
+		#endregion
+
+		#region LabelSourceControl() Workflow Tests
+
+		[Test]
+		public void ShouldApplyLabelIfTagOnSuccessTrue()
+		{
+			hg.TagOnSuccess = true;
+
+			ExpectToExecuteArguments(@"tag -m ""Tagging CC.NET build foo"" -u CruiseControl.NET -f ccnet_build_foo", tempWorkDir);
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldCommitModificationsIfSpecified()
+		{
+			hg.CommitModifications = true;
+
+			ExpectToExecuteArguments(@"commit -u CruiseControl.NET -m ""Modifications of CC.NET build foo""", tempWorkDir);
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldCommitModificationsAnduntrackedFilesIfSpecified()
+		{
+			hg.CommitModifications = true;
+			hg.CommitUntracked = true;
+
+			ExpectToExecuteArguments(@"commit -A -u CruiseControl.NET -m ""Modifications of CC.NET build foo""", tempWorkDir);
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldApplyLabelWithCustomMessageIfTagOnSuccessTrueAndACustomMessageIsSpecified()
+		{
+			hg.TagOnSuccess = true;
+			hg.TagCommitMessage = "a---- {0} ----a";
+
+			ExpectToExecuteArguments(@"tag -m ""a---- foo ----a"" -u CruiseControl.NET -f ccnet_build_foo", tempWorkDir);
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldNotApplyLabelIfIntegrationFailed()
+		{
+			hg.TagOnSuccess = true;
+
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateFailed());
+		}
+
+		[Test]
+		public void ShouldNotApplyLabelIfTagOnSuccessFalse()
+		{
+			hg.TagOnSuccess = false;
+
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+		}
+
+		[Test]
+		public void ShouldPushTagCommitToRepoIfSpecified()
+		{
+			hg.TagOnSuccess = true;
+			hg.PushModifications = true;
+			hg.Repository = @"c:\myrepo\";
+
+			ExpectToExecuteArguments(@"tag -m ""Tagging CC.NET build foo"" -u CruiseControl.NET -f ccnet_build_foo");
+			ExpectToExecuteArguments(@"push -f c:\myrepo\");
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldPushModificationsToRemoteRepoIfSpecified()
+		{
+			hg.CommitModifications = true;
+			hg.PushModifications = true;
+			hg.Repository = @"c:\myrepo\";
+
+			ExpectToExecuteArguments(@"commit -u CruiseControl.NET -m ""Modifications of CC.NET build foo""", tempWorkDir);
+			ExpectToExecuteArguments(@"push -f c:\myrepo\");
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldPushModificationsInBranchToRemoteRepoIfSpecified()
+		{
+			hg.CommitModifications = true;
+			hg.PushModifications = true;
+			hg.Repository = @"c:\myrepo\";
+			hg.Branch = "trunk";
+
+			ExpectToExecuteArguments(@"commit -u CruiseControl.NET -m ""Modifications of CC.NET build foo""", tempWorkDir);
+			ExpectToExecuteArguments(@"push -b trunk -f c:\myrepo\");
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldPushModificationsIncludingUntrackedToRemoteRepoIfSpecified()
+		{
+			hg.CommitModifications = true;
+			hg.CommitUntracked = true;
+			hg.PushModifications = true;
+			hg.Repository = @"c:\myrepo\";
+
+			ExpectToExecuteArguments(@"commit -A -u CruiseControl.NET -m ""Modifications of CC.NET build foo""", tempWorkDir);
+			ExpectToExecuteArguments(@"push -f c:\myrepo\");
+
+			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		#endregion
+
+		#region Helper Methods
+
+		private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue)
+		{
+			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, NewProcessInfo(args, tempWorkDir));
+		}
+
+		private new void ExpectToExecuteArguments(string args)
+		{
+			ExpectToExecuteArguments(args, tempWorkDir);
+		}
+
+		#endregion
+	}
 }

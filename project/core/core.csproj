@@ -662,8 +662,8 @@
     <Compile Include="sourcecontrol\Mercurial\Mercurial.cs" />
     <Compile Include="sourcecontrol\Mercurial\MercurialHistoryParser.cs" />
     <Compile Include="sourcecontrol\Mercurial\MercurialModification.cs" />
-    <Compile Include="sourcecontrol\Mercurial\MercurialModificationCollection.cs" />
     <Compile Include="sourcecontrol\Mercurial\MultipleHeadsFoundException.cs" />
+    <Compile Include="sourcecontrol\Mercurial\RepositoryStatus.cs" />
     <Compile Include="sourcecontrol\Mks.cs" />
     <Compile Include="sourcecontrol\MksHistoryParser.cs" />
     <Compile Include="sourcecontrol\Modification.cs">

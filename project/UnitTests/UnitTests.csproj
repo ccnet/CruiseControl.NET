@@ -435,6 +435,10 @@
     <Compile Include="Core\SourceControl\Mercurial\MercurialHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\Mercurial\MercurialModificationTest.cs" />
     <Compile Include="Core\SourceControl\Mercurial\MercurialTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileSystem.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileSystemTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileDirectoryDeleter.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileDirectoryDeleterTest.cs" />
     <Compile Include="Core\SourceControl\RobocopyHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\VstsHistoryParserTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
