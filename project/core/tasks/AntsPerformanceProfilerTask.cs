@@ -356,7 +356,7 @@
         /// </summary>
         /// <version>1.6</version>
         /// <default>none</default>
-        [ReflectorProperty("summaryScv", Required = false)]
+        [ReflectorProperty("summaryCsv", Required = false)]
         public string SummaryCsvFile { get; set; }
         #endregion
 
