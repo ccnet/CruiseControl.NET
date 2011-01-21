@@ -23,10 +23,12 @@ namespace Validator
             bool nogui = false;
             string logfile = null;
             List<string> extra = new List<string>();
+            var format = "t";
             
             OptionSet opts = new OptionSet();            
             opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; })
-            	.Add("l|logfile=", "the log file to use", delegate(string v) { logfile = v; })
+                .Add("l|logfile=", "the log file to use", delegate(string v) { logfile = v; })
+                .Add("f|format=", "the format to use for logging (t[ext], x[ml])", delegate(string v) { format = v.Substring(0, 1); })
             	.Add("n|nogui", "do not open a graphical user interface", delegate(string v) { nogui = v != null; });
           
             try
@@ -49,9 +51,36 @@ namespace Validator
             using (var main = new MainForm())
             {
                 var isValid = true;
-                if (!string.IsNullOrEmpty(logfile)) main.LogFile = logfile;
+                if (!string.IsNullOrEmpty(logfile))
+                {
+                    main.LogFile = logfile;
+                    switch (format.ToLowerInvariant())
+                    {
+                        case "x":
+                            main.LogFileFormat = LogFileFormat.Xml;
+                            break;
+
+                        default:
+                            main.LogFileFormat = LogFileFormat.Text;
+                            break;
+                    }
+
+                    var dir = Path.GetDirectoryName(logfile);
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                }
+
                 if (extra.Count == 1) isValid = main.ValidateConfig(extra[0]);                
-                if (!nogui) Application.Run(main);
+                if (!nogui)
+                {
+                    Application.Run(main);
+                }else
+                {
+                    main.CleanUpLog();
+                }
+
                 return isValid ? 0 : 1;
             }
         }

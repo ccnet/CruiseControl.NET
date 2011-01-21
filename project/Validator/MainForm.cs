@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using Exortech.NetReflector;
-using Manoli.Utils.CSharpFormat;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Security;
@@ -18,6 +14,8 @@ using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
 namespace Validator
 {
+    using System.Globalization;
+
     public partial class MainForm
         : Form, INetReflectorConfigurationReader
     {
@@ -31,6 +29,7 @@ namespace Validator
         private List<string> myFileHistory = new List<string>();
         private bool isConfigValid = true;
         private VersionInformationForm versionInformation;
+        private XmlWriter logWriter;
 
         public MainForm()
         {
@@ -92,6 +91,7 @@ namespace Validator
         /// The log file to use.
         /// </summary>
         public string LogFile { get; set; }
+        public LogFileFormat LogFileFormat { get; set; }
 
         private void InitialiseConfigReader()
         {
@@ -119,9 +119,9 @@ namespace Validator
             catch (Exception error)
             {
                 MessageBox.Show(
-                    "Unable to load one or more plug-ins: " + error.Message, 
-                    "Plug-in Load Error", 
-                    MessageBoxButtons.OK, 
+                    "Unable to load one or more plug-ins: " + error.Message,
+                    "Plug-in Load Error",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
 
@@ -178,7 +178,7 @@ namespace Validator
             int position = 0;
             foreach (string file in myFileHistory)
             {
-                ToolStripItem item = new ToolStripButton(string.Format(System.Globalization.CultureInfo.CurrentCulture,"&{0} {1}", myFileHistory.Count - position++, file));
+                ToolStripItem item = new ToolStripButton(string.Format(System.Globalization.CultureInfo.CurrentCulture, "&{0} {1}", myFileHistory.Count - position++, file));
                 item.ToolTipText = file;
                 item.Click += delegate(object sender, EventArgs e)
                 {
@@ -251,7 +251,7 @@ namespace Validator
             // Initialise the display
             DisplayConfig();
             ClearProcessed();
-            
+
             try
             {
                 // Attempt to load the configuration
@@ -320,7 +320,7 @@ namespace Validator
                 GenerateElement("b", "Configuration file: "),
                 myFileName);
             myBodyEl.AppendChild(nameEl);
-            LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Validating {0}", myFileName));
+            LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Validating {0}", myFileName));
         }
 
         private HtmlElement GenerateElement(string tagName, params object[] contents)
@@ -481,7 +481,7 @@ namespace Validator
                             GenerateElement("td", project.Name),
                             GenerateElement("td", "Project"),
                             GenerateElement("td", "Yes")));
-                    LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Loaded project '{0}'", project.Name));
+                    LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Loaded project '{0}'", project.Name));
                 }
                 else if (loadedItem is IQueueConfiguration)
                 {
@@ -493,7 +493,7 @@ namespace Validator
                             GenerateElement("td", queueConfig.Name),
                             GenerateElement("td", "Queue"),
                             GenerateElement("td", "Yes")));
-                    LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Loaded queue '{0}'", queueConfig.Name));
+                    LogMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Loaded queue '{0}'", queueConfig.Name));
                 }
                 else if (loadedItem is ISecurityManager)
                 {
@@ -562,7 +562,7 @@ namespace Validator
             // The following line is needed to make the browser display the styles correctly!
             myBodyEl.InnerHtml = myBodyEl.InnerHtml;
             myStopwatch.Stop();
-            var message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Configuration loaded ({0:0.00}s)",
+            var message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "Configuration loaded ({0:0.00}s)",
                 Convert.ToDouble(myStopwatch.ElapsedMilliseconds) / 1000);
             DisplayProgressMessage(message, 100);
             LogMessage(message);
@@ -644,7 +644,7 @@ namespace Validator
             {
                 if (project is IConfigurationValidation)
                 {
-                    errorProcesser.ItemName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"project '{0}'", project.Name);
+                    errorProcesser.ItemName = string.Format(System.Globalization.CultureInfo.CurrentCulture, "project '{0}'", project.Name);
                     isValid &= RunValidationCheck(configuration, project as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
                 }
             }
@@ -653,7 +653,7 @@ namespace Validator
             {
                 if (queue is IConfigurationValidation)
                 {
-                    errorProcesser.ItemName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"queue '{0}'", queue.Name);
+                    errorProcesser.ItemName = string.Format(System.Globalization.CultureInfo.CurrentCulture, "queue '{0}'", queue.Name);
                     isValid &= RunValidationCheck(configuration, queue as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
                 }
             }
@@ -685,7 +685,7 @@ namespace Validator
             }
             catch (Exception error)
             {
-                var message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Internal validation failed for {0}: {1}",
+                var message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "Internal validation failed for {0}: {1}",
                             name,
                             error.Message);
                 HtmlAttribute rowClass = new HtmlAttribute("class", (row % 2) == 1 ? "even" : "odd");
@@ -719,10 +719,35 @@ namespace Validator
 
         public void LogMessage(string message)
         {
-            if (!string.IsNullOrEmpty(LogFile))
+            if (string.IsNullOrEmpty(LogFile)) return;
+
+            switch (this.LogFileFormat)
             {
-                File.AppendAllText(LogFile,
-                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:o} {1}", DateTime.Now, message) + Environment.NewLine);
+                case LogFileFormat.Text:
+                    File.AppendAllText(
+                        LogFile,
+                        string.Format(CultureInfo.CurrentCulture, "{0:o} {1}", DateTime.Now, message) + Environment.NewLine);
+                    break;
+
+                case LogFileFormat.Xml:
+                    if (this.logWriter == null)
+                    {
+                        var settings = new XmlWriterSettings
+                                           {
+                                               Encoding = Encoding.UTF8,
+                                               OmitXmlDeclaration = true,
+                                               Indent = true,
+                                               NewLineOnAttributes = false
+                                           };
+                        this.logWriter = XmlWriter.Create(this.LogFile, settings);
+                        this.logWriter.WriteStartElement("validationLog");
+                    }
+
+                    this.logWriter.WriteStartElement("event");
+                    this.logWriter.WriteAttributeString("time", DateTime.Now.ToString("o"));
+                    this.logWriter.WriteValue(message);
+                    this.logWriter.WriteEndElement();
+                    break;
             }
         }
 
@@ -742,6 +767,21 @@ namespace Validator
             {
                 this.versionInformation.BringToFront();
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            this.CleanUpLog();
+        }
+
+        public void CleanUpLog()
+        {
+            if (this.logWriter == null) return;
+
+            this.logWriter.WriteEndDocument();
+            this.logWriter.Close();
+            this.logWriter = null;
         }
     }
 }

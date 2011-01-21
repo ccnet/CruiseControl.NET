@@ -88,6 +88,7 @@
     <Compile Include="ConfigurationTypeDescriptor.cs" />
     <Compile Include="ConfigViewMode.cs" />
     <Compile Include="HtmlAttribute.cs" />
+    <Compile Include="LogFileFormat.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
