@@ -41,6 +41,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             Path.Combine("CruiseControl.NET", "Server"));
 
         /// <summary>
+        /// Gets or sets the location of the config file.
+        /// </summary>
+        /// <value>
+        /// The config file location.
+        /// </value>
+        public static string ConfigFileLocation { get; set; }
+
+        /// <summary>
         /// Tests wheter or not a string matches against a pattern. The
         /// pattern can contain two special characters: <br/>
         /// '*' means zero or more of any characters<br/>

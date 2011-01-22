@@ -29,10 +29,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
             IProjectStateManager stateManager = new XmlProjectStateManager();
             // Load the extensions configuration
-            ServerConfiguration configuration = ConfigurationManager.GetSection("cruiseServer") as ServerConfiguration;
+            var configuration = ConfigurationManager.GetSection("cruiseServer") as ServerConfiguration;
             List<ExtensionConfiguration> extensionList = null;
             if (configuration != null) extensionList = configuration.Extensions;
 
+		    PathUtils.ConfigFileLocation = Path.IsPathRooted(configFile)
+		                                       ? configFile
+		                                       : Path.Combine(Environment.CurrentDirectory, configFile);
 			var server = new CruiseServer(
 				NewConfigurationService(configFile),
 				new ProjectIntegratorListFactory(),
