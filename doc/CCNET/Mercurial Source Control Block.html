@@ -16,12 +16,12 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 06, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+					    This page last changed on Jan 20, 2011 by <font color="#0050B2">ccnet-doc-gen</font>.
 				    </div>
 
 				    <h1><a name="MercurialSourceControlBlock-MercurialSourceControlBlock"></a>Mercurial Source Control Block </h1>
 
-<p>Provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.  </p>
+<p>Provides support for Mercurial repositories. Checking for changes, checking out or updating sources, committing build modifications and untracked files, tagging, pushing to the remote repository, reverting modifications and purging untracked and ignored files are supported.  </p>
 
 <h2><a name="MercurialSourceControlBlock-Version"></a>Version</h2>
 
@@ -31,8 +31,20 @@
 
 <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"hg"</span>&gt;</span>
-  <span class="code-tag">&lt;repo&gt;</span>http://hg.mycompany.com/hgwebdir.cgi/myproject/<span class="code-tag">&lt;/repo&gt;</span>
   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet\myproject<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;timeout&gt;</span>60000<span class="code-tag">&lt;/timeout&gt;</span>
+  <span class="code-tag">&lt;repo&gt;</span>http://hg.mycompany.com/hgwebdir.cgi/myproject/<span class="code-tag">&lt;/repo&gt;</span>
+  <span class="code-tag">&lt;branch&gt;</span>trunk<span class="code-tag">&lt;/branch&gt;</span>
+  <span class="code-tag">&lt;multipleHeadsFail&gt;</span>true<span class="code-tag">&lt;/multipleHeadsFail&gt;</span>
+  <span class="code-tag">&lt;tagOnSuccess&gt;</span>true<span class="code-tag">&lt;/tagOnSuccess&gt;</span>
+  <span class="code-tag">&lt;commitModifications&gt;</span>true<span class="code-tag">&lt;/commitModifications&gt;</span>
+  <span class="code-tag">&lt;commitUntracked&gt;</span>true<span class="code-tag">&lt;/commitUntracked&gt;</span>
+  <span class="code-tag">&lt;purgeModifications&gt;</span>true<span class="code-tag">&lt;/purgeModifications&gt;</span>
+  <span class="code-tag">&lt;revertModifications&gt;</span>true<span class="code-tag">&lt;/revertModifications&gt;</span>
+  <span class="code-tag">&lt;tagCommitMessage&gt;</span>Tagging CC.NET build {0}<span class="code-tag">&lt;/tagCommitMessage&gt;</span>
+  <span class="code-tag">&lt;modificationsCommitMessage&gt;</span>Modifications of CC.NET build {0}<span class="code-tag">&lt;/modificationsCommitMessage&gt;</span>
+  <span class="code-tag">&lt;tagNameFormat&gt;</span>ccnet_build_{0}<span class="code-tag">&lt;/tagNameFormat&gt;</span>
+  <span class="code-tag">&lt;committerName&gt;</span>CruiseControl.NET<span class="code-tag">&lt;/committerName&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
@@ -73,6 +85,30 @@
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> commitModifications </td>
+<td class='confluenceTd'> Whether to commit build modifications.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> committerName </td>
+<td class='confluenceTd'> User name used for commits.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> CruiseControl.NET </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> commitUntracked </td>
+<td class='confluenceTd'> Whether to commit untracked and removed files along with build modifications.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> dynamicValues </td>
 <td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
 <td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
@@ -97,28 +133,68 @@
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> modificationsCommitMessage </td>
+<td class='confluenceTd'> Log message used when committing build modifications.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Modifications of CC.NET build {0} </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> multipleHeadsFail </td>
-<td class='confluenceTd'> Should the build fail if the local repository has multiple heads?   </td>
+<td class='confluenceTd'> Whether the source control operation should fail if multiple heads exist in the repository.   </td>
 <td class='confluenceTd'> Boolean </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> purgeModifications </td>
+<td class='confluenceTd'> Whether to purge untracked and ignored files before building.  <br clear="all" />The hg purge extension is activated and used for this feature. </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> pushModifications </td>
+<td class='confluenceTd'> Whether to push modifications to the remote repository.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> repo </td>
-<td class='confluenceTd'> The url for your repository (e.g., <a href="http://hgserver/myproject/">http://hgserver/myproject/</a>).  <br clear="all" />This is required if autoGetSource is true.   </td>
+<td class='confluenceTd'> The url for your repository (e.g., <a href="http://hgserver/myproject/">http://hgserver/myproject/</a>).  <br clear="all" />This ReflectorProperty should really be named repository but is currently kept as repo for backwards compatibility </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> revertModifications </td>
+<td class='confluenceTd'> Whether to revert modifications in tracked files before building.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> tagCommitMessage </td>
+<td class='confluenceTd'> Log message format to be used for the tag commits.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Tagging CC.NET build {0} </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagNameFormat </td>
 <td class='confluenceTd'> String format for tags in your repository.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> Tagging successful build {0} </td>
-<td class='confluenceTd'> 1.5 </td>
+<td class='confluenceTd'> ccnet&#95;build&#95;{0} </td>
+<td class='confluenceTd'> 1.6 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> tagOnSuccess </td>
@@ -158,12 +234,12 @@
 
 <p>You need to make sure your hg client settings are such that all authentication is automated. Typically you can do this by using anonymous access or appropriate SSH setups if using hg over SSH.  <br/>
 You can link the modifications detected by CruiseControl.NET to the appropriate hgweb page by adding the following additional configuration information to the Mercurial source control section by using the <a href="Mercurial Issue Tracker URL Builder.html" title="Mercurial Issue Tracker URL Builder">Mercurial Issue Tracker URL Builder</a>.  <br/>
-External contributors: Kent Johnson  </p>
+External contributors: Bill Barry (initial version), Aaron Jensen (new history parser)  </p>
 
 
 <div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
-<p>Documentation generated on Tuesday, 6 Apr 2010 at 9:32:02 PM<br/>
-Using assembly version 1.6.7109.1</p></td></tr></table></div>
+<p>Documentation generated on Thursday, 20 Jan 2011 at 12:11:08 AM<br/>
+Using assembly version 1.6.7963.1</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -174,7 +250,7 @@ Using assembly version 1.6.7109.1</p></td></tr></table></div>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2010 21:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
 		    </tr>
 	    </table>
     </body>
