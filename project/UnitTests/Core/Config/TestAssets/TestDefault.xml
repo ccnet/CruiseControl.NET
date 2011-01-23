@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pp:config-template xmlns:pp="urn:XmlPreprocessor">
+  <pp:define foo="foo_val" />
+  <pp:default foo="default_foo_val" bar="default_bar_value" />
+  <root>
+    <foo>$(foo)</foo>
+    <bar>$(bar)</bar>
+  </root>
+</pp:config-template>

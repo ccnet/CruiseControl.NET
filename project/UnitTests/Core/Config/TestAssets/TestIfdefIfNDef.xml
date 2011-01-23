@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    
+    <!-- foo is not defined, content should be skipped-->
+    <cb:ifdef name="foo">
+      <ifdef_foo_failed />
+    </cb:ifdef>
+
+    <!-- foo is not defined, content should be processed-->
+    <cb:ifndef name="foo">
+      <ifndef_foo_succeeded />
+    </cb:ifndef>
+
+    <cb:define name="foo">hi</cb:define>
+
+    <!-- foo is defined, content should be processed-->
+    <cb:ifdef name="foo">
+      <ifdef_foo_succeeded />
+    </cb:ifdef>
+
+    <!-- foo is defined, content should be skipped -->
+    <cb:ifndef name="foo">
+      <ifndef_foo_failed />
+    </cb:ifndef>
+
+    <!-- not_defined is not defined, else directive should be executed -->
+    <cb:ifdef name="not_defined">
+      <ifdef_else_failed />
+    </cb:ifdef>
+    <cb:else>
+      <ifdef_else_succeeded />
+    </cb:else>
+
+
+    <!-- foo is not defined, else directive should be executed -->
+    <cb:ifndef name="foo">
+      <ifndef_else_failed />
+    </cb:ifndef>
+    <cb:else>
+      <ifndef_else_succeeded />
+    </cb:else>
+
+
+  </root>
+</cb:config-template>

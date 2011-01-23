@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.5 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.5 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 02, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.5ReleaseNotes-HighlightsoftheCCNet1.5release"></a>Highlights of the CCNet 1.5 release</h2>
+
+<p>It has taken a lot of time, but here it finally is : the final release of 1.5 <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/><br/>
+This release fixes bugs reported on the RC.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Keep in mind ...</b><br />
+<ul>
+	<li>The email publisher config is NOT compatible with 1.4.4 if you used the group element, check the new configuration in the documentation.</li>
+	<li>Some internal interfaces are changed, so 3rd party plugins <b>could</b> be broken</li>
+</ul>
+</td></tr></table></div>
+<p>At the bottom are the items fixed in this release.</p>
+
+<p>For people coming from the 1.4.4, and not following up on the CTP and RC, here's a small list of the new items :</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-Security"></a>Security</h4>
+
+<p>It is now possible to secure parts of CruiseControl.NET. Security is all based on the server-side, and is set in ccnet.config.</p>
+
+<p>Currently it is possible to lock down the following items:</p>
+<ul>
+	<li>Viewing projects</li>
+	<li>Forcing/aborting builds</li>
+	<li>Starting/stopping projects</li>
+	<li>Viewing security settings</li>
+	<li>Modifying security settings</li>
+	<li>Viewing configuration</li>
+	<li>Changing configuration</li>
+</ul>
+
+
+<h4><a name="CCNet1.5ReleaseNotes-Clientsidetablesforthedashboard"></a>Client-side tables for the dashboard</h4>
+
+<p>The projects list in the web dashboard is now interactive - you can now sort on any column, even multi column sorting is possible.</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-Afewnewsourcecontrolsystems"></a>A few new source control systems</h4>
+
+<p>RoboCopy, VSTS, <a href="FTP Source control.html" title="FTP Source control">Ftp</a>, <a href="Git Source Control Block.html" title="Git Source Control Block">Git</a> and <a href="Mercurial Source Control Block.html" title="Mercurial Source Control Block">Mercurial</a>. The last 2 are DVCS, so an entire new kind of source control&#33;</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-NewTasks%2FPublishers"></a>New Tasks/Publishers</h4>
+
+<p>A number of new tasks have been added:</p>
+<ul>
+	<li><a href="Parallel Task.html" title="Parallel Task">Parallel Task</a> and <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a> &#45; allow running tasks in parallel or in sequence, or any combination of the two. While this can speed things up, be careful of using too much parallelism as each parallel task uses its own thread and there is only a limited thread pool.</li>
+	<li>NCover tasks - perform NCover analysis and reporting within CC.NET itself (no need to run it in a build script).</li>
+	<li><a href="PowerShell Task.html" title="PowerShell Task">PowerShell Task</a> &#45; run a PowerShell script.</li>
+	<li><a href="Conditional Publisher.html" title="Conditional Publisher">Conditional Publisher</a> &#45; this provides a standard way of only running publishers for certain build states.</li>
+	<li><a href="CruiseServer Control Task.html" title="CruiseServer Control Task">CruiseServer Control Task</a> &#45; send control commands to a local or remote instance of CruiseControl.NET.</li>
+	<li><a href="Ftp task - Publisher.html" title="Ftp task - Publisher">Ftp task - Publisher</a>&#45; upload / download files from a server</li>
+</ul>
+
+
+<h4><a name="CCNet1.5ReleaseNotes-DynamicParameters"></a>Dynamic Parameters</h4>
+
+<p>This allows to ask the user for input on forcing a build, so reducing the amount of CCNet projects.<br/>
+eg.: ask which branch to build<br/>
+See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> for details.</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-TimeLinechart"></a>Time Line chart</h4>
+
+<p>This shows the a build overview as a chart.</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-TranslationofthewebDashboard"></a>Translation of the webDashboard</h4>
+
+<p>Current translation involve French, German and Polish.</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-Aduplicatefinder"></a>A duplicate finder</h4>
+
+<p>This task scans files for duplicates, just a task, no merging needed.<br/>
+<a href="Duplicate Finder Task.html" title="Duplicate Finder Task">Duplicate Finder Task</a></p>
+
+<h3><a name="CCNet1.5ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.5"></a>Release Notes - CruiseControl .NET - Version 1.5</h3>
+<p>Be sure to also read the release notes of the <a href="http://confluence.public.thoughtworks.org//display/CCNET/2010/01/30/CruiseControl.NET+1.5+RC1+Released" title="CruiseControl.NET 1.5 RC1 Released">1.5 RC1 </a> and the <a href="http://confluence.public.thoughtworks.org//display/CCNET/2009/09/29/CruiseControl.NET+1.5.0+CTP+Released" title="CruiseControl.NET 1.5.0 CTP Released">1.5 CTP</a> to see the full list of items affected since the 1.4.4 release which was on 2009/06/05, almost 1 year ago.</p>
+
+<h4><a name="CCNet1.5ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li>CCNET\-1714 &#45; LdapHelper should recursivly search directory</li>
+	<li>CCNET\-1813 &#45; Preprocessor: xml node in scope</li>
+	<li>CCNET\-1815 &#45; error in vsts ssc : System.Exception: TF30076: The server name {0} <a href="http://lowapp7:8080">http://lowapp7:8080</a> provided does not correspond to a server URI that can be found.</li>
+	<li>CCNET\-1825 &#45; Reporting failed task in CruiseControl.NET -</li>
+	<li>CCNET\-1836 &#45; Build Parameter Dialog does not call ParameterBase.Convert()</li>
+	<li>CCNET\-1838 &#45; Synergy integrates tasks even when build failes</li>
+	<li>CCNET\-1843 &#45; VSTS Source Control Provider</li>
+	<li>CCNET\-1854 &#45; Git Source Control does not detect merge commits</li>
+	<li>CCNET\-1855 &#45; Refresh Status button on web dashboard - ViewProjectReport.aspx puts build into loop after forcing build</li>
+	<li>CCNET\-1856 &#45; Cannot open CVS/Entries for reading</li>
+	<li>CCNET\-1865 &#45; preprocessor broken : cb:include does not work anymore</li>
+	<li>CCNET\-1870 &#45; How to remove the following message "<span class="error">&#91;CCNet Server:WARN&#93;</span> Configuration does not have any version information - assuming the configuration is for version 1.5"</li>
+</ul>
+
+
+<h4><a name="CCNet1.5ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET\-1351 &#45; Allow to enable "--force" to be passed to svn.exe to avoid errors like "object of the same name already exists" when updating</li>
+	<li>CCNET\-1472 &#45; create scenario tests</li>
+	<li>CCNET\-1861 &#45; IOService do not support deleting paths longer then 260 chars</li>
+	<li>CCNET\-1862 &#45; Breakers list is no longer shown in CCTray</li>
+	<li>CCNET\-1866 &#45; Remove Debug.Assert statements</li>
+	<li>CCNET\-1878 &#45; Added VS2010 to the allowed IDEs for DevenvTask.</li>
+</ul>
+
+
+<h4><a name="CCNet1.5ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET\-1620 &#45; cctray run application on build status change</li>
+</ul>
+
+
+<h4><a name="CCNet1.5ReleaseNotes-Task"></a>Task</h4>
+
+<ul>
+	<li>CCNET\-1826 &#45; replace default password for admin page with empty one, and check on empty password</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

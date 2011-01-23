@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define name="msbuild">
+    <buildArgs>$(build-args)</buildArgs>
+  </cb:define>
+
+  <cb:define name="build-phoenix-task">
+    <!-- some task -->
+  </cb:define>
+
+  <cb:define name="build-phoenix-tools-task">
+    <!-- some task -->
+  </cb:define>
+
+  <cb:define name="project">
+    <cb:define
+      project-workspace-dir="$(workspace-root)\$(workspace-name)\$(project-config)"
+      phoenix-dir="$(project-workspace-dir)\lqmi\ues\server\cs.net\phoenix" />
+    <project queue="$(queue)">
+      <name>$(project-name) $(project-config)</name>
+      <webURL>$(localserver)/?_action_ViewProjectReport=true&amp;server=local&amp;project=$(project-name)%20$(project-config)</webURL>      
+      <workingDirectory>$(project-workspace-dir)</workingDirectory>      
+      <modificationDelaySeconds>2</modificationDelaySeconds>      
+      <cb:tasks/>      
+    </project>
+  </cb:define>
+
+  <cb:define name="release-project">
+    <cb:project workspace-name="$(project-name)" project-config="Release">
+      <cb:define
+        workspace-dir="$(workspace-root)\$(project-name)\$(project-config)"
+        buildout="$(workspace-root)\$(project-name)\$(project-config)\buildout2"
+        project-zip="$(workspace-root)\$(project-name)\$(project-name)-release.zip" />
+      <cb:define name="triggers">
+        <!--<triggers>
+          <scheduleTrigger time="02:30" buildCondition="IfModificationExists">
+            <name>NightlyBuildTrigger</name>
+          </scheduleTrigger>
+        </triggers>-->
+      </cb:define>
+      <cb:define name="tasks">
+        <tasks>
+          <cb:build-phoenix-task/>
+          <cb:build-phoenix-tools-task/>
+          <cb:msbuild project-file="$(phoenix-dir)\zipbuilddir.msbuild"
+                      build-args="/noconsolelogger /p:output-path=$(project-zip)"/>
+          <cb:msbuild project-file="$(phoenix-dir)\zipbuilddir.msbuild"
+                      build-args="/noconsolelogger /t:MoveFiles /p:input-files=&quot;$(project-zip)&quot; /p:output-path=&quot;$(buildout)\setup\release&quot;"/>
+        </tasks>
+      </cb:define>     
+    </cb:project>
+  </cb:define>
+
+  <cb:release-project queue="myqueue" project-name="myproject" localserver="localhost" workspace-root="C:\workspace"/>
+  
+</cb:config-template>

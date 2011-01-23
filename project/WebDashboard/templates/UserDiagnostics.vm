@@ -1,0 +1,50 @@
+<!-- UserDignostics.vm: Start -->
+<div>
+  <table class="userList-table">
+    <tr class="odd">
+      <td>$translations.Translate("User Name"):</td>
+      <td>$userName</td>
+    </tr>
+    #if ($projectName.Length > 0)
+    <tr class="even">
+      <td>$translations.Translate("Location"):</td>
+      <td>Project '$projectName'</td>
+    </tr>
+    #else
+    <tr class="even">
+      <td>$translations.Translate("Location"):</td>
+      <td>$translations.Translate("Server")</td>
+    </tr>
+    #end
+    #foreach ($diagnosis in $diagnostics)
+    #odd
+    <tr class="odd">
+      <td>$translations.Translate($diagnosis.Permission):</td>
+      <td>
+        #if ($diagnosis.IsAllowed)
+        $translations.Translate("Allowed")
+        #else
+        $translations.Translate("Denied");
+        #end
+      </td>
+    </tr>
+    #even
+    <tr class="even">
+      <td>$diagnosis.Permission:</td>
+      <td>
+        #if ($diagnosis.IsAllowed)
+        $translations.Translate("Allowed")
+        #else
+        $translations.Translate("Denied")
+        #end
+      </td>
+    </tr>
+    #end
+  </table>
+  <form method="post" style="margin-top:10px;">
+    <input type="hidden" name="user" value="$userName"/>
+    <input id="dialog_link" class="ui-state-default ui-corner-all" style="padding:5px;"
+           type="Submit" name="action" value="$translations.Translate("Reset password")"/>
+  </form>
+</div>
+<!-- UserDignostics.vm: End -->

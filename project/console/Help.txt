@@ -1,0 +1,6 @@
+﻿CruiseControl.Net Server Console Runner
+Provides functionality to run a CruiseControl.NET server in a console
+
+ccnet [options]
+
+options:

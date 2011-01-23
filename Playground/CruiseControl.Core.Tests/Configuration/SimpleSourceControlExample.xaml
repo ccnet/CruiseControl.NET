@@ -1,0 +1,24 @@
+﻿<Server Version="2.0" 
+        xmlns="urn:cruisecontrol:server" 
+        xmlns:triggers="urn:cruisecontrol:server:triggers"
+        xmlns:tasks="urn:cruisecontrol:server:tasks"
+        xmlns:conditions="urn:cruisecontrol:server:tasks:conditions"
+        xmlns:scm="urn:cruisecontrol:server:sourcecontrol">
+  <Project Name="CCNetvNext">
+    <Project.Tasks>
+      <tasks:GetSource />
+      <tasks:BuildNAnt BuildFile="ccnet.build" TimeOut="0:0:10" />
+      <tasks:ApplyLastChangeLabel Prefix="2.0.">
+        <tasks:ApplyLastChangeLabel.Conditions>
+          <conditions:Status>Success</conditions:Status>
+        </tasks:ApplyLastChangeLabel.Conditions>
+      </tasks:ApplyLastChangeLabel>
+    </Project.Tasks>
+    <Project.SourceControl>
+      <scm:Subversion TrunkUrl="https://ccnet.svn.sourceforge.net/svnroot/ccnet/vnext" />
+    </Project.SourceControl>
+    <Project.Triggers>
+      <triggers:Interval />
+    </Project.Triggers>
+  </Project>
+</Server>

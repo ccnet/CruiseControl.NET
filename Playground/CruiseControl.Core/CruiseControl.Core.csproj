@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{74405CD5-BD3D-4912-A465-F929FA20220B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CruiseControl.Core</RootNamespace>
+    <AssemblyName>CruiseControl.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\Lib\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\Lib\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IntegrationSummary.cs" />
+    <Compile Include="PersistedProjectState.cs" />
+    <Compile Include="ProjectValue.cs" />
+    <Compile Include="Utilities\ActionInvoker.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="AttachablePropertyStore.cs" />
+    <Compile Include="Channels\Wcf.cs" />
+    <Compile Include="ClientChannel.cs" />
+    <Compile Include="Exceptions\CruiseControlException.cs" />
+    <Compile Include="Exceptions\ConfigurationException.cs" />
+    <Compile Include="Interfaces\IActionInvoker.cs" />
+    <Compile Include="IntegrationContext.cs" />
+    <Compile Include="IntegrationRequest.cs" />
+    <Compile Include="IntegrationStatus.cs" />
+    <Compile Include="GetModificationsParameters.cs" />
+    <Compile Include="Interfaces\IClock.cs" />
+    <Compile Include="Interfaces\IFileSystem.cs" />
+    <Compile Include="Interfaces\ITaskExecutionFactory.cs" />
+    <Compile Include="Interfaces\IValidationLog.cs" />
+    <Compile Include="LabelParameters.cs" />
+    <Compile Include="Modification.cs" />
+    <Compile Include="ModificationSet.cs" />
+    <Compile Include="ProjectItem.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="ProjectState.cs" />
+    <Compile Include="RemoteActionAttribute.cs" />
+    <Compile Include="RemoteActionDefinition.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerItem.cs" />
+    <Compile Include="IServerItemContainer.cs" />
+    <Compile Include="SourceControlBlock.cs" />
+    <Compile Include="GetSourceParameters.cs" />
+    <Compile Include="SourceControl\Subversion.cs" />
+    <Compile Include="Structure\Gate.cs" />
+    <Compile Include="Structure\ScmProject.cs" />
+    <Compile Include="Task.cs" />
+    <Compile Include="TaskCondition.cs" />
+    <Compile Include="TaskExecutionParameters.cs" />
+    <Compile Include="TaskFailureAction.cs" />
+    <Compile Include="Tasks\BuildFake.cs" />
+    <Compile Include="Tasks\BuildFinalBuilder.cs" />
+    <Compile Include="Tasks\BuildMSBuild.cs" />
+    <Compile Include="Tasks\BuildRake.cs" />
+    <Compile Include="Tasks\BuildVisualStudio.cs" />
+    <Compile Include="Tasks\CheckHttpStatus.cs" />
+    <Compile Include="Tasks\CleanUpArtifacts.cs" />
+    <Compile Include="Tasks\Conditions\And.cs" />
+    <Compile Include="Tasks\Conditions\FileExists.cs" />
+    <Compile Include="Tasks\Conditions\HasModifications.cs" />
+    <Compile Include="Tasks\Conditions\Or.cs" />
+    <Compile Include="Tasks\Conditions\Status.cs" />
+    <Compile Include="TaskExecutionContext.cs" />
+    <Compile Include="TaskState.cs" />
+    <Compile Include="Tasks\ControlServer.cs" />
+    <Compile Include="Tasks\FailureActions\FailIntegration.cs" />
+    <Compile Include="Tasks\FailureActions\IgnoreFailure.cs" />
+    <Compile Include="Tasks\FailureActions\RetryTask.cs" />
+    <Compile Include="Tasks\ForceBuild.cs" />
+    <Compile Include="Tasks\Ftp.cs" />
+    <Compile Include="Tasks\GetSource.cs" />
+    <Compile Include="Tasks\ApplyLastChangeLabel.cs" />
+    <Compile Include="Tasks\MergeFile.cs" />
+    <Compile Include="Tasks\MergeFiles.cs" />
+    <Compile Include="Tasks\BuildNAnt.cs" />
+    <Compile Include="Tasks\Null.cs" />
+    <Compile Include="Tasks\Parallel.cs" />
+    <Compile Include="Tasks\PublishFiles.cs" />
+    <Compile Include="Tasks\PublishModifications.cs" />
+    <Compile Include="Tasks\PublishPackage.cs" />
+    <Compile Include="Tasks\PublishRss.cs" />
+    <Compile Include="Tasks\ReadModifications.cs" />
+    <Compile Include="Tasks\RunAntsPerformance.cs" />
+    <Compile Include="Tasks\RunCodeItRight.cs" />
+    <Compile Include="Tasks\RunDupFinder.cs" />
+    <Compile Include="Tasks\RunExternal.cs" />
+    <Compile Include="Tasks\RunGendarme.cs" />
+    <Compile Include="Tasks\RunNCoverProfile.cs" />
+    <Compile Include="Tasks\RunNCoverReport.cs" />
+    <Compile Include="Tasks\RunNDepend.cs" />
+    <Compile Include="Tasks\RunNUnit.cs" />
+    <Compile Include="Tasks\RunPowershell.cs" />
+    <Compile Include="Tasks\SendEmail.cs" />
+    <Compile Include="Tasks\Sequence.cs" />
+    <Compile Include="Tasks\SourceControlTask.cs" />
+    <Compile Include="Tasks\Synchronise.cs" />
+    <Compile Include="Tasks\WriteModifications.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="Triggers\CombinationOperator.cs" />
+    <Compile Include="Triggers\Cron.cs" />
+    <Compile Include="Triggers\Filter.cs" />
+    <Compile Include="Triggers\Interval.cs" />
+    <Compile Include="Triggers\Multiple.cs" />
+    <Compile Include="Triggers\Project.cs" />
+    <Compile Include="Triggers\RollUp.cs" />
+    <Compile Include="Triggers\Schedule.cs" />
+    <Compile Include="Triggers\Url.cs" />
+    <Compile Include="Utilities\FileSystem.cs" />
+    <Compile Include="Utilities\LoggingValidationLog.cs" />
+    <Compile Include="Utilities\SystemClock.cs" />
+    <Compile Include="Utilities\TaskExecutionFactory.cs" />
+    <Compile Include="Utilities\ValidationHelpers.cs" />
+    <Compile Include="VersionTypeConverter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structure\Pipeline.cs" />
+    <Compile Include="Structure\Queue.cs" />
+    <Compile Include="Structure\RoundRobin.cs" />
+    <Compile Include="Structure\ServerItemContainerBase.cs" />
+    <Compile Include="Tasks\Comment.cs" />
+    <Compile Include="Xaml\ConfigurationService.cs" />
+    <Compile Include="Xaml\CoreModule.cs" />
+    <Compile Include="Xaml\CoreXamlSchemaContext.cs" />
+    <Compile Include="Xaml\CoreXamlType.cs" />
+    <Compile Include="Xaml\CoreXamlTypeInvoker.cs" />
+    <Compile Include="Interfaces\IConfigurationService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">
+      <Project>{166D519E-854D-4405-9FAE-C6825CF7BBE6}</Project>
+      <Name>CruiseControl.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

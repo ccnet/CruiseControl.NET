@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Security</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Security
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jul 25, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h3><a name="Security-Security"></a>Security</h3>
+
+<p>Starting with CruiseControl.NET 1.5.0, it is possible to add security to a CruiseControl.NET instance. </p>
+
+<p>This page provides an overview of security for CruiseControl.Net on the server side. It includes how security works and why it might be needed. This includes defining the different parts of security and how they interact. </p>
+
+<h4><a name="Security-Whatissecurity%3F"></a>What is security?</h4>
+
+<p>The goal of security is to protect the system from unauthorised (and potentially malicious) users while still allowing authorised users the freedom to do their tasks.</p>
+
+<p>As such this includes a number of different areas. In general security can be broken down into the following areas:</p>
+<ul>
+	<li>Authorisation: validating that a user is who they say they are</li>
+	<li>Authentication: ensuring the user only has access to what they are allowed to use</li>
+	<li>Auditing: logging what a person does, including the results of any attempted actions that failed (e.g. due to insufficient authentication or authorisation)</li>
+</ul>
+
+
+<p>The first two items can be thought of as active or preventive security. They stop the user from doing things they shouldn't. The third area is more of a passive area, but it is critical for preventing future attacks and diagnosing what has happened.</p>
+
+<p>While there are other areas of security, these are the three areas that have been implemented for CruiseControl.Net.</p>
+
+<h4><a name="Security-HowdoessecurityworkforCruiseControl.Net%3F"></a>How does security work for CruiseControl.Net?</h4>
+
+<p>Security for CruiseControl.Net has been implemented for the three areas listed above. All of these security areas has been implemented at the server level (for both console and service modes).</p>
+
+<p>The security framework is designed to be configured in ccnet.config - otherwise the system will be treated as an open system (e.g. no security).</p>
+
+<p>Additionally the framework is extensible - should the current components be insuf-ficient for the security needs they can be replaced with custom components.</p>
+
+<h5><a name="Security-Authentication"></a>Authentication</h5>
+
+<p>Authentication is defined at the server-level. The administrator needs to define one or more users for the system.<br/>
+These users can be validated by user name, user name/password or against an active directory domain.</p>
+
+<h5><a name="Security-Authorisation"></a>Authorisation</h5>
+
+<p>Authorisation is defined initially at the project-level. This is because each project can have a separate set of permissions. </p>
+
+<p>However, permission sets can also be defined at the server-level, and the project merely references these permission sets. This allows a common set of permissions to be defined for the entire server, with the projects then opting in as desired.</p>
+
+<h5><a name="Security-Auditing"></a>Auditing</h5>
+
+<p>Auditing is also defined at the server-level. This is to enforce consistent auditing across the entire server.</p>
+
+<p>Auditing consists of two parts: one or more writers and a reader. </p>
+
+<p>Each writer is responsible for writing audit information to a log somewhere. It is possible to configure multiple writers to allow writing information to different places.</p>
+
+<p>A reader is responsible for reading an existing audit log so the information can be used in other places within CruiseControl.NET (e.g. the dashboard, etc.) Unlike the writers, there can only be one reader - otherwise CruiseControl.NET would get confused. The audit log that the reader reads from is referred to as the primary audit log.</p>
+
+<h4><a name="Security-DefaultSettings"></a>Default Settings</h4>
+
+<p>The default server security manager is <a href="Null Server Security.html" title="Null Server Security">Null Server Security</a> - this turns off security at the server level.</p>
+
+<p>The default project security is <a href="Inherited Project Security.html" title="Inherited Project Security">Inherited Project Security</a> - this will inherit all security settings from the server level.</p>
+
+<h4><a name="Security-Extensions"></a>Extensions</h4>
+
+<p>Security has been designed with extenability in mind. It has a large number of extension points to (hopefully) all possible scenarios.</p>
+
+<p>Extending security is converted in <a href="Security Extension Points.html" title="Security Extension Points">Security Extension Points</a></p>
+
+<h4><a name="Security-RelatedDocumentation"></a>Related Documentation</h4>
+
+<ul><li><a href="Security Configuration.html" title="Security Configuration">Security Configuration</a><ul><li><a href="General Security.html" title="General Security">General Security</a><ul><li><a href="General Security Permissions.html" title="General Security Permissions">General Security Permissions</a></li><li><a href="Security Permissions.html" title="Security Permissions">Security Permissions</a><ul><li><a href="Role Permission.html" title="Role Permission">Role Permission</a></li><li><a href="User Permission.html" title="User Permission">User Permission</a></li></ul></li><li><a href="Wildcards in User Names.html" title="Wildcards in User Names">Wildcards in User Names</a></li></ul></li><li><a href="Project Level Security.html" title="Project Level Security">Project Level Security</a><ul><li><a href="Default Project Security.html" title="Default Project Security">Default Project Security</a></li><li><a href="Inherited Project Security.html" title="Inherited Project Security">Inherited Project Security</a></li><li><a href="Null Project Security.html" title="Null Project Security">Null Project Security</a></li></ul></li><li><a href="Server Level Security.html" title="Server Level Security">Server Level Security</a><ul><li><a href="Channel Security.html" title="Channel Security">Channel Security</a><ul><li><a href="Encrypted Messages Channel.html" title="Encrypted Messages Channel">Encrypted Messages Channel</a></li></ul></li><li><a href="External File Server Security.html" title="External File Server Security">External File Server Security</a></li><li><a href="Internal Server Security.html" title="Internal Server Security">Internal Server Security</a></li><li><a href="Null Server Security.html" title="Null Server Security">Null Server Security</a></li><li><a href="Security Audit Loggers.html" title="Security Audit Loggers">Security Audit Loggers</a><ul><li><a href="XML File Audit Logger.html" title="XML File Audit Logger">XML File Audit Logger</a></li></ul></li><li><a href="Security Audit Readers.html" title="Security Audit Readers">Security Audit Readers</a><ul><li><a href="XML File Audit Reader.html" title="XML File Audit Reader">XML File Audit Reader</a></li></ul></li><li><a href="Security Caches.html" title="Security Caches">Security Caches</a><ul><li><a href="File Based Security Cache.html" title="File Based Security Cache">File Based Security Cache</a></li><li><a href="In Memory Security Cache.html" title="In Memory Security Cache">In Memory Security Cache</a></li></ul></li><li><a href="Security Users.html" title="Security Users">Security Users</a><ul><li><a href="LDAP User Authentication.html" title="LDAP User Authentication">LDAP User Authentication</a></li><li><a href="User Name Authentication.html" title="User Name Authentication">User Name Authentication</a></li><li><a href="User Password Authentication.html" title="User Password Authentication">User Password Authentication</a></li></ul></li></ul></li></ul></li><li><a href="Security Extension Points.html" title="Security Extension Points">Security Extension Points</a></li><li><a href="Security Scenarios.html" title="Security Scenarios">Security Scenarios</a><ul><li><a href="Scenario 1.html" title="Scenario 1">Scenario 1</a><ul><li><a href="Scenario 1 - Full Example.html" title="Scenario 1 - Full Example">Scenario 1 - Full Example</a></li></ul></li><li><a href="Scenario 2.html" title="Scenario 2">Scenario 2</a><ul><li><a href="Scenario 2 - Full Example.html" title="Scenario 2 - Full Example">Scenario 2 - Full Example</a></li></ul></li><li><a href="Scenario 3.html" title="Scenario 3">Scenario 3</a><ul><li><a href="Scenario 3 - Full Example.html" title="Scenario 3 - Full Example">Scenario 3 - Full Example</a></li></ul></li></ul></li></ul>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

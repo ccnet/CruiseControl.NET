@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : StarTeam Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : StarTeam Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 17, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="StarTeamSourceControlBlock-StarTeamSourceControlBlock"></a>StarTeam Source Control Block</h1>
+
+<p>Source Controller for StarTeam SCM.  </p>
+
+
+<h2><a name="StarTeamSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="StarTeamSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"starteam"</span>&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\starteam\stcmd.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>ccnet<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;username&gt;</span>buildguy<span class="code-tag">&lt;/username&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>buildguypw<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;host&gt;</span>thebuildmachine<span class="code-tag">&lt;/host&gt;</span>
+  <span class="code-tag">&lt;port&gt;</span>49201<span class="code-tag">&lt;/port&gt;</span>
+  <span class="code-tag">&lt;path&gt;</span>release2.0<span class="code-tag">&lt;/path&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;folderRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/folderRegEx&gt;</span>
+  <span class="code-tag">&lt;fileRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/fileRegEx&gt;</span>
+  <span class="code-tag">&lt;fileHistoryRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/fileHistoryRegEx&gt;</span>
+  <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="StarTeamSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be starteam </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The local path for the StarTeam command&#45;line client (eg. c:\starteam\stcmd.exe).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fileHistoryRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's file history.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fileRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's file output.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> folderRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's folder output.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> host </td>
+<td class='confluenceTd'> The IP address or machine name of the StarTeam server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 127.0.0.1 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> overrideFolderWorkingDir </td>
+<td class='confluenceTd'> If set, use the &#45;rp option to use a different View Working Directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> overrideViewWorkingDir </td>
+<td class='confluenceTd'> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> Password for the StarTeam user ID.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> The path to monitor.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> port </td>
+<td class='confluenceTd'> The port on the StarTeam server to connect to.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 49201 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The StarTeam project (and view) to monitor (eg. project/view).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> StarTeam ID that CCNet should use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="StarTeamSourceControlBlock-Notes"></a>Notes</h2>
+
+<h4><a name="StarTeamSourceControlBlock-RegExConfiguration"></a>RegEx Configuration</h4>
+<p>CruiseControl.NET uses StarTeam's command line interface to find changes submitted to Source Control. 3 regular expressions are used in doing this, as specified above. You have the option of changing these regular expressions to choose how your instance of CruiseControl.NET parses StarTeam output. It is recommended if you do this that you download the source version of CruiseControl.NET to see the default RegEx's and how they are used.  <br/>
+One suggested alternative RegEx so far is for the fileHistoryRegEx, as follows:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">^Revision: (?&lt;file_revision&gt;\S+) View: (?&lt;view_name&gt;.+) Branch Revision: (?&lt;branch_revision&gt;\S+).\nAuthor: (?&lt;author_name&gt;.*) Date: (?&lt;date_string&gt;.*) \w+\r\n(?&lt;change_comment&gt;.*)</pre>
+</div></div>
+<p>(Note that this is all one line)  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 17 Dec 2009 at 2:26:43 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

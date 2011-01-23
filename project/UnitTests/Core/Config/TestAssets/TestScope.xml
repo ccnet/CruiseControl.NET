@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define prop1="val1" />
+  <root>
+    <cb:scope prop2="val2">
+      <!-- val1 -->
+      <test>$(prop1)</test>
+      <!-- val2 -->
+      <test>$(prop2)</test>
+      <cb:scope prop2="val2_redef">
+        <inner>
+          <!-- val1 -->
+          <test>$(prop1)</test>
+          <!-- val2_redef -->
+          <test>$(prop2)</test>
+        </inner>
+      </cb:scope>
+    </cb:scope>
+  </root>
+</cb:config-template>

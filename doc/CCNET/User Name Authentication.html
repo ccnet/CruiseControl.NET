@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : User Name Authentication</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : User Name Authentication
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 10, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="UserNameAuthentication-UserNameAuthentication"></a>User Name Authentication</h1>
+
+<p>User name authentication checks that the user name is valid.  </p>
+
+
+<h2><a name="UserNameAuthentication-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="UserNameAuthentication-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Simple example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;simpleUser name=<span class="code-quote">"johndoe"</span> display=<span class="code-quote">"John Doe"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Wildcard example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;simpleUser name=<span class="code-quote">"*"</span> /&gt;</span></pre>
+</div></div>
+<p>The following example shows how this user definition can be used with an internal security definition.  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in Context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag">&lt;simpleUser name=<span class="code-quote">"johndoe"</span> display=<span class="code-quote">"John Doe"</span> /&gt;</span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="UserNameAuthentication-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> display </td>
+<td class='confluenceTd'> The display name for this user.  <br clear="all" />If this element is not set, the name will be used for the display name.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The login name for this user.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="UserNameAuthentication-Notes"></a>Notes</h2>
+
+<p>This element simply stores a user name &#45; authentication is that the user name is a valid name.  <br/>
+It is possible to use wildcards in this element &#45; see <a href="Wildcards in User Names.html" title="Wildcards in User Names">Wildcards in User Names</a>.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 10 Dec 2009 at 7:51:17 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

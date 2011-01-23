@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define a="$(b)" />
+  <cb:define b="$(c)" />
+  <cb:define c="$(a)" />
+  <hello>$(a)</hello>
+</cb:config-template>

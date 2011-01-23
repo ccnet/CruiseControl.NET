@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with FxCop</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with FxCop
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <h2><a name="UsingCruiseControl.NETwithFxCop-RunFxCopaspartofyourintegration"></a>Run FxCop as part of your integration</h2>
+
+<h4><a name="UsingCruiseControl.NETwithFxCop-RunFxCopaspartofyourNAntbuild"></a>Run FxCop as part of your NAnt build</h4>
+
+<p>In order to get the results of FxCop included in the CruiseControl.NET build results, you will need to include a call to FxCopCmd.exe in your NAnt build file.  We recommend you use a target like this:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"reporting"</span> depends=<span class="code-quote">"compile"</span>&gt;</span>
+	&lt;exec program=<span class="code-quote">"tools\fxcop\fxcopcmd.exe"</span> 
+		commandline=<span class="code-quote">"/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml"</span> failonerror=<span class="code-quote">"false"</span>/&gt;
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<p>Run "FxCopCmd /?" in order to see what command-line options are supported.  We recommend setting up an FxCop project for analysing your assemblies.  You should use the "/o" argument in order to output the FxCop report to an Xml file.  It is also a good idea to set "failonerror" to false for the task.  FxCop may fail depending on the rule violations, but you probably don't want this to break your build.</p>
+
+<p>For a thorough example, look at the CruiseControl.NET source distribution and look at how we use FxCop ourselves.</p>
+
+<h4><a name="UsingCruiseControl.NETwithFxCop-RunFxCopasaCruiseControl.NETTask"></a>Run FxCop as a CruiseControl.NET Task</h4>
+
+<p>We don't currently support running FxCop directly from CruiseControl.NET, but we plan on enabling this in a later release.</p>
+
+<h2><a name="UsingCruiseControl.NETwithFxCop-MergeFxCopresultsintoyourCruiseControl.NETresults"></a>Merge FxCop results into your CruiseControl.NET results</h2>
+
+<p>The next step is to merge the FxCop report file into the integration result using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>. Your <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> config file will have something in it like :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;merge&gt;</span>
+        <span class="code-tag">&lt;files&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\fxcop\*.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag"><span class="code-comment">&lt;!-- Other files to merge for your build would also be included here --&gt;</span></span>
+      	<span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/merge&gt;</span>
+<span class="code-tag">&lt;/tasks&gt;</span></pre>
+</div></div>
+
+<h2><a name="UsingCruiseControl.NETwithFxCop-ConfiguringyourReportingApplicationtodisplayFxCopresults"></a>Configuring your Reporting Application to display FxCop results</h2>
+
+<p>For displaying the results, CruiseControl.NET <b>currently supports FxCop 1.312</b>.</p>
+
+<p>If you are using the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>, edit your <tt>web.config</tt> file and include the <tt>fxcop-summary.xsl</tt> file under the <tt>&lt;CCNET&gt;/&lt;xslFiles&gt;</tt> section, and the <tt>ThoughtWorks.CruiseControl.WebDashboard.Plugins.FxCop.FxCopReportBuildPlugin</tt> Build Plugin.</p>
+
+<p>If you are using Project Report Web Application, edit your <tt>web.config</tt> file and include the <tt>fxcop-summary.xsl</tt> file under the <tt>&lt;CCNET&gt;/&lt;xslFiles&gt;</tt>, and the <tt>FxCop.aspx</tt> Build Plugin.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

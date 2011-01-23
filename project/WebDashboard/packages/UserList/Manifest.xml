@@ -1,0 +1,24 @@
+﻿<package>
+  <name>User List</name>
+  <description>Display the users defined on a server.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>UserList.vm</file>
+        <file>UserDiagnostics.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>serverUserListServerPlugin</name>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>serverUserListProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

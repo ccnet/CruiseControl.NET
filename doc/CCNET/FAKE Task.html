@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : FAKE Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : FAKE Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="FAKETask-FAKEF%23MakeTask"></a>FAKE - F# Make Task</h1>
+
+<p>Runs a FAKE &#45; F# Make script.<br/>
+"FAKE &#45; F# Make" is a build automation system. Due to its integration in F#, all benets of the .NET Framework and functional programming can be used, including the extensive class library, powerful debuggers and integrated development environments like Visual Studio 2008 or SharpDevelop, which provide syntax highlighting and code completion.  </p>
+
+<ul>
+	<li>The Google group can be found at: <a href="http://groups.google.com/group/fsharpMake">http://groups.google.com/group/fsharpMake</a></li>
+	<li>More information on: <a href="http://bitbucket.org/forki/fake/wiki/Home">http://bitbucket.org/forki/fake/wiki/Home</a></li>
+</ul>
+
+
+
+<h2><a name="FAKETask-Version"></a>Version</h2>
+
+<p>Available from version 1.6</p>
+
+<h2><a name="FAKETask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;fake&gt;</span>
+  <span class="code-tag">&lt;buildFile&gt;</span>build.fsx<span class="code-tag">&lt;/buildFile&gt;</span>
+<span class="code-tag">&lt;/fake&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;fake&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>Tools\FAKE.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>C:\Build\Project1\<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;buildFile&gt;</span>build.fsx<span class="code-tag">&lt;/buildFile&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>1200<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="code-tag">&lt;/fake&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="FAKETask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> buildFile </td>
+<td class='confluenceTd'> The name of the build file to run, relative to the baseDirectory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Default build field in the working directory </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildTimeoutSeconds </td>
+<td class='confluenceTd'> The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed. Specify this value as zero to disable process timeouts.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run FAKE in.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the FAKE executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> FAKE.exe </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> priority </td>
+<td class='confluenceTd'> The priority class of the spawned process.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Normal</li>
+	<li>Idle</li>
+	<li>High</li>
+	<li>RealTime</li>
+	<li>BelowNormal</li>
+	<li>AboveNormal</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Normal </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:50 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

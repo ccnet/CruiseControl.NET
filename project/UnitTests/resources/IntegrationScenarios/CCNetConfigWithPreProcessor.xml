@@ -1,0 +1,49 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <cb:include href="Definitions.xml"
+              xmlns:cb="urn:ccnet.config.builder"/>
+
+  <cb:define Q_Name="Q1"/>
+  <cb:define Web_URL="http://confluence.public.thoughtworks.org"/>
+
+  <cb:define name="Tasks">
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+  </cb:define>
+
+<!-- CCNET-1813 : Preprocessor: xml node in scope -->
+
+  <cb:define name="innerPublishersValue">
+    <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                     cleanUpValue="10" />
+    <xmllogger />
+    <statistics />
+    <modificationHistory  onlyLogWhenChangesFound="true" />
+    <rss/>
+  </cb:define>
+
+  <!-- / CCNET-1813 : Preprocessor: xml node in scope -->
+
+
+  <project name="Test01"
+           queue="$(Q_Name)"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/test01</workingDirectory>
+    <artifactDirectory>scenarioTests/test01</artifactDirectory>
+    <webURL>$(Web_URL)</webURL>
+
+
+    <cb:Tasks/>
+
+    <cb:scope innerPublishers="$(innerPublishersValue)">
+      <cb:CommonPublishers/>
+    </cb:scope>
+
+  </project>
+  
+</cruisecontrol>

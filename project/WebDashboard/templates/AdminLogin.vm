@@ -1,0 +1,22 @@
+<!-- AdminLogin.vm: Start -->
+<h3>$translations.Translate("Dashboard Administration")</h3>
+#if ($Error != "")
+<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all"> 
+		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+		<strong>$translations.Translate("Error"):</strong> $Error</p>
+	</div>
+</div>
+#end
+<div style="margin:5px;">
+    <form method="post">
+        <div>
+            $translations.Translate("The administration console is password protected, please enter your password"):
+        </div>
+        <div>
+            <input type="password" name="password" />
+            <input type="submit" value="$translations.Translate("Enter")" />
+        </div>
+    </form>
+</div>
+<!-- AdminLogin.vm: End -->

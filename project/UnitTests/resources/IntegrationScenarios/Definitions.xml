@@ -1,0 +1,12 @@
+﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  
+
+  
+<cb:define name="CommonPublishers">
+    <publishers>
+        <cb:innerPublishers/>
+    </publishers>
+</cb:define>
+
+
+</cb:config-template>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Default Labeller</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Default Labeller
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 28, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="DefaultLabeller-DefaultLabeller"></a>Default Labeller</h1>
+
+<p>By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. <a href="Perforce Source Control Block.html" title="Perforce Source Control Block">Perforce Source Control Block</a>) require you to use a different naming scheme if you want CCNet to apply labels to source control on successful builds.  <br/>
+You can do this by specifying your own configuration of the default labeller in your project.  </p>
+
+
+<h2><a name="DefaultLabeller-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="DefaultLabeller-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;labeller type=<span class="code-quote">"defaultlabeller"</span>&gt;</span>
+  <span class="code-tag">&lt;initialBuildLabel&gt;</span>1<span class="code-tag">&lt;/initialBuildLabel&gt;</span>
+  <span class="code-tag">&lt;prefix&gt;</span>Foo-1-<span class="code-tag">&lt;/prefix&gt;</span>
+  <span class="code-tag">&lt;incrementOnFailure&gt;</span>true<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
+  <span class="code-tag">&lt;labelFormat&gt;</span>00000<span class="code-tag">&lt;/labelFormat&gt;</span>
+<span class="code-tag">&lt;/labeller&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="DefaultLabeller-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the labeller.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> incrementOnFailure </td>
+<td class='confluenceTd'> If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> initialBuildLabel </td>
+<td class='confluenceTd'> Allows you to set the initial build number.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelFormat </td>
+<td class='confluenceTd'> A format applied to the buildnumber.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> postfix </td>
+<td class='confluenceTd'> Any string to be put at the end of all labels.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> prefix </td>
+<td class='confluenceTd'> Any string to be put in front of all labels.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 28 Mar 2010 at 8:03:15 PM<br/>
+Using assembly version 1.6.7027.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

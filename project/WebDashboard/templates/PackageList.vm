@@ -1,0 +1,34 @@
+﻿<!-- PackageList.vm: Start -->
+<script type="text/javascript">
+    function downloadPackage(packageName) {
+        location.assign('RetrieveFile.aspx?file=' + packageName);
+    }
+</script>
+<h2>$translations.Translate("Available Packages for {0}", $projectName)</h2>
+<div>
+<table class="userList-table">
+  <tr>
+    <th>$translations.Translate("Package Name")</th>
+    <th>$translations.Translate("Build Label")</th>
+    <th>$translations.Translate("Number of Files")</th>
+    <th>$translations.Translate("Package Size")</th>
+  </tr>
+  #foreach ($package in $packages)
+  #odd
+  <tr onclick="downloadPackage('$package.FileName')" class="odd">
+    <td>$package.Name</td>
+    <td>$package.BuildLabel</td>
+    <td>$package.NumberOfFiles</td>
+    <td>$package.Size</td>
+  </tr>
+  #even
+  <tr onclick="downloadPackage('$package.FileName')" class="even">
+    <td>$package.Name</td>
+    <td>$package.BuildLabel</td>
+    <td>$package.NumberOfFiles</td>
+    <td>$package.Size</td>
+  </tr>
+  #end
+</table>
+</div>
+<!-- PackageList.vm: End -->

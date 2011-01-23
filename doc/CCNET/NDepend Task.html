@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : NDepend Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : NDepend Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="NDependTask-NDependTask"></a>NDepend Task</h1>
+
+<p>Runs an NDepend analysis.  <br/>
+NDepend is a tool that simplifies managing a complex .NET code base. Architects and developers can analyze code structure, specify design rules, plan massive refactoring, do effective code reviews and master evolution by comparing different versions of the code.  <br/>
+This application is available from www.ndepend.com. There is both an open source/academic/evaluation version and a professional version.  </p>
+
+
+<h2><a name="NDependTask-Version"></a>Version</h2>
+
+<p>Available from version 1.4.4</p>
+
+<h2><a name="NDependTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ndepend&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>NDepend-Project.xml<span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/ndepend&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ndepend&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>NDepend-Project.xml<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>tools\NDepend.Console.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Run the NDepend analysis.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;emitXml&gt;</span>true<span class="code-tag">&lt;/emitXml&gt;</span>
+  <span class="code-tag">&lt;outputDir&gt;</span>NDepend-Reports<span class="code-tag">&lt;/outputDir&gt;</span>
+  <span class="code-tag">&lt;inputDirs&gt;</span>
+    <span class="code-tag">&lt;inputDir&gt;</span>bin\<span class="code-tag">&lt;/inputDir&gt;</span>
+    <span class="code-tag">&lt;inputDir&gt;</span>deploy\<span class="code-tag">&lt;/inputDir&gt;</span>
+  <span class="code-tag">&lt;/inputDirs&gt;</span>
+  <span class="code-tag">&lt;silent&gt;</span>false<span class="code-tag">&lt;/silent&gt;</span>
+  <span class="code-tag">&lt;reportXslt&gt;</span>custom-report.xsl<span class="code-tag">&lt;/reportXslt&gt;</span>
+  <span class="code-tag">&lt;timeout&gt;</span>120<span class="code-tag">&lt;/timeout&gt;</span>
+  <span class="code-tag">&lt;baseDir&gt;</span>project\<span class="code-tag">&lt;/baseDir&gt;</span>
+  <span class="code-tag">&lt;publish&gt;</span>true<span class="code-tag">&lt;/publish&gt;</span>
+<span class="code-tag">&lt;/ndepend&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="NDependTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDir </td>
+<td class='confluenceTd'> The base directory to use. If omitted this will default to the working directory of the project.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> emitXml </td>
+<td class='confluenceTd'> Whether to emit the XML report data or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The executable to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> NDepend.Console </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> inputDirs </td>
+<td class='confluenceTd'> The input directories to use.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> outputDir </td>
+<td class='confluenceTd'> The output directory to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> NDependResults </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> priority </td>
+<td class='confluenceTd'> The priority class of the spawned process.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Normal</li>
+	<li>Idle</li>
+	<li>High</li>
+	<li>RealTime</li>
+	<li>BelowNormal</li>
+	<li>AboveNormal</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Normal </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The NDepend project file. This is generated from VisualNDepend.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> publish </td>
+<td class='confluenceTd'> Whether to publish the output files or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> reportXslt </td>
+<td class='confluenceTd'> The location of a custom report XSL&#45;T.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> silent </td>
+<td class='confluenceTd'> Whether to hide any output or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The time&#45;out period in seconds.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="NDependTask-Notes"></a>Notes</h2>
+
+<p>This task works in two stages:  <br/>
+1. Run the NDepend executable  <br/>
+2. Publish the results  <br/>
+Running the NDepend executable is what generates the actual analysis, and as such cannot be skipped (otherwise there is no point to this task.) The results of the analysis will be saved in the folder specified by outputDir. If this parameter is omitted, then the results will be stored in a folder called NDependResults under the baseDir.  <br/>
+In order for these results to be displayed in the dashboard they must be stored in a folder in the artefacts directory. To achieve this, this task will publish the results. This involves copying all the results files from the output directory to a folder in the artefacts directory. This folder will have the same name as the build label. Additionally any XML files will be merged with the build log (this makes them available for the dashboard plugins).  <br/>
+If the publishing behaviour is not required it can be turned off by setting the publish property to false. By default this is set to true so the results can be displayed in the dashboard.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:52 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

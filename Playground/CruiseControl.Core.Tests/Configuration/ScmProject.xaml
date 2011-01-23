@@ -1,0 +1,20 @@
+﻿<Server Version="2.0" 
+        xmlns="urn:cruisecontrol:server" 
+        xmlns:scm="urn:cruisecontrol:server:sourcecontrol"
+        xmlns:tasks="urn:cruisecontrol:server:tasks"
+        xmlns:triggers="urn:cruisecontrol:server:triggers">
+  <ScmProject Name="OldStyle">
+    <ScmProject.Tasks>
+      <tasks:BuildNAnt BuildFile="ccnet.build" TimeOut="0:0:10" />
+    </ScmProject.Tasks>
+    <ScmProject.Publishers>
+      <tasks:SendEmail />
+    </ScmProject.Publishers>
+    <ScmProject.SourceControl>
+      <scm:Subversion TrunkUrl="https://ccnet.svn.sourceforge.net/svnroot/ccnet/vnext" />
+    </ScmProject.SourceControl>
+    <ScmProject.Triggers>
+      <triggers:Interval />
+    </ScmProject.Triggers>
+  </ScmProject>
+</Server>

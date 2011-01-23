@@ -1,0 +1,14 @@
+<!-- ServerSideBar.vm: Start -->
+<table width="100%">
+	#foreach ($link in $links)
+	<tr><td><a href="$link.Url" class="$link.LinkClass">$translations.Translate($link.Text)</a></td></tr>
+	#end
+	#if ($showCategories)
+		<tr><td>&nbsp;</td></tr>
+		<tr><td><b>$translations.Translate("Categories")</b> (<a href="$serverlink.Url">$translations.Translate("All")</a>)</td></tr>
+		#foreach ($categorylink in $categorylinks)
+			<tr><td><a href="$categorylink.Url">$categorylink.Text</a></td></tr>
+		#end
+	#end
+</table>
+<!-- ServerSideBar.vm: End -->

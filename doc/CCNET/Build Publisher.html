@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Build Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Build Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="BuildPublisher-BuildPublisher"></a>Build Publisher</h1>
+
+<p>The Build Publisher lets you copy any arbitrary files on a  <b>successful</b> build.  <br/>
+You can set alwaysPublish to true, if you want the copy always to happen.  </p>
+
+
+<h2><a name="BuildPublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="BuildPublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;buildpublisher /&gt;</span></pre>
+</div></div>
+<p>This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (i.e. &lt;artifact&#95;dir&gt;\&lt;label&#95;dir&gt;)  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;buildpublisher&gt;</span>
+  <span class="code-tag">&lt;sourceDir&gt;</span>C:\myprojects\project1<span class="code-tag">&lt;/sourceDir&gt;</span>
+  <span class="code-tag">&lt;publishDir&gt;</span>\\myfileserver\project1<span class="code-tag">&lt;/publishDir&gt;</span>
+  <span class="code-tag">&lt;useLabelSubDirectory&gt;</span>false<span class="code-tag">&lt;/useLabelSubDirectory&gt;</span>
+  <span class="code-tag">&lt;alwaysPublish&gt;</span>false<span class="code-tag">&lt;/alwaysPublish&gt;</span>
+<span class="code-tag">&lt;/buildpublisher&gt;</span></pre>
+</div></div>
+<p>This will copy the contents of  <b>C:\myprojects\project1</b> to the network share   <b>\\myfileserver\project1</b>.  </p>
+
+
+<h2><a name="BuildPublisher-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> alwaysPublish </td>
+<td class='confluenceTd'> Always copies the files, regardless of the state of the build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanPublishDirPriorToCopy </td>
+<td class='confluenceTd'> Cleans the publishDir if it exists, so that you will always have an exact copy of the sourceDir.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpMethod </td>
+<td class='confluenceTd'> Defines a way to clean up published builds.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>NoCleaning</li>
+	<li>KeepLastXBuilds</li>
+	<li>DeleteBuildsOlderThanXDays</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> NoClean </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpValue </td>
+<td class='confluenceTd'> The value used for the cleaning method.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> publishDir </td>
+<td class='confluenceTd'> The directory to copy the files to. This path can be absolute or can be relative to the project's artifact directory. If  <b>useLabelSubDirectory</b> is true (default) a subdirectory with the current build's label will be created, and the contents of sourceDir will be copied to it. If unspecified, the project's artifact directory will be used as the publish directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceDir </td>
+<td class='confluenceTd'> The source directory to copy files from. This path can be absolute or can be relative to the project's working directory. If unspecified, the project's working directory will be used as the source directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useLabelSubDirectory </td>
+<td class='confluenceTd'> If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:41 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

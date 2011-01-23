@@ -1,0 +1,8 @@
+﻿<!-- HtmlReport.vm: Start -->
+<div style="text-align:right; margin:5px; width:100%;">
+    <a href="$url" target="_blank">$translations.Translate("View this report in its own window")</a>
+</div>
+<div>
+    <iframe src="$url" border="1" width="100%" height="600"></iframe>
+</div>
+<!-- HtmlReport.vm: End -->

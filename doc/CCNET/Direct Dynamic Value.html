@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Direct Dynamic Value</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Direct Dynamic Value
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 28, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="DirectDynamicValue-DirectDynamicValue"></a>Direct Dynamic Value</h1>
+
+<p>This will replace the value of a property with the value from a parameter. If the user does not enter a parameter value, then the default will be used (when set).  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>This dynamic value does not perform any formatting, it just directly puts the value into the property.  </p></td></tr></table></div>
+
+
+<h2><a name="DirectDynamicValue-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="DirectDynamicValue-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Basic example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;dynamicValues&gt;</span>
+    <span class="code-tag">&lt;buildArgs&gt;</span>Help<span class="code-tag">&lt;/buildArgs&gt;</span>
+    <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span> /&gt;</span>
+  <span class="code-tag">&lt;/dynamicValues&gt;</span>
+<span class="code-tag">&lt;/nant&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Shorthand example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;dynamicValues&gt;</span>
+    <span class="code-tag">&lt;buildArgs&gt;</span>$[CommandToRun|Help]<span class="code-tag">&lt;/buildArgs&gt;</span>
+  <span class="code-tag">&lt;/dynamicValues&gt;</span>
+<span class="code-tag">&lt;/nant&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
+  <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/sourcecontrol&gt;</span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;intervalTrigger /&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;nant&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+      <span class="code-tag">&lt;buildArgs&gt;</span>Help<span class="code-tag">&lt;/buildArgs&gt;</span>
+      <span class="code-tag">&lt;dynamicValues&gt;</span>
+        <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span> /&gt;</span>
+      <span class="code-tag">&lt;/dynamicValues&gt;</span>
+    <span class="code-tag">&lt;/nant&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;parameters&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/parameters&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="DirectDynamicValue-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> default </td>
+<td class='confluenceTd'> The default value to use if nothing is set in the parameters.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> parameter </td>
+<td class='confluenceTd'> The name of the parameter to use. This must be the same name as what is in the parameters configuration.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> property </td>
+<td class='confluenceTd'> The name of the property to set. This must be the same name as what is in the task/publisher/trigger configuration.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 28 Mar 2010 at 8:03:18 PM<br/>
+Using assembly version 1.6.7027.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

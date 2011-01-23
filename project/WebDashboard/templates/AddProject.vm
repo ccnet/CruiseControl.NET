@@ -1,0 +1,105 @@
+<!-- Start of AddProject.vm -->
+<script language="javascript" type="text/javascript">
+<!--
+	function submitWithAction(action) {
+		form = document.Form1;
+		form.action = action;
+		alert("Bobbbb");
+		alert(action);
+		frm.submit();
+	}
+// -->
+</script>
+
+<form ID="Form1">
+<table>
+	<tr>
+		<td></td>
+		<td>$model.Status</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<table>
+				<tr>
+					<td>Project Name *</td>
+					#if ($model.IsAdd)
+					<td><input name="Project.Name" type="text" value="$model.Project.Name" id="Project.Name" /></td>
+					#else
+					<td>$model.Project.Name</td>
+					#end
+				</tr>
+				<tr>
+					<td>Source Control</td>
+					<td>
+						<select name="Project.SourceControl" id="Project.SourceControl" onChange="submitWithAction('default.aspx')">
+							#foreach ($SourceControlType in $SourceControlTypes)
+							<option 
+								value="$SourceControlType.Name" 
+								#if ($SourceControlType.Selected) selected="selected" #end
+							>
+								$SourceControlType.Name
+							</option>
+							#end
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						$SourceControlDetails
+					</td>
+				</tr>
+				<tr>
+					<td>Builder</td>
+					<td>
+						<select name="Project.Builder" id="Project.Builder" onChange="submit()">
+							#foreach ($BuilderType in $BuilderTypes)
+							<option 
+								value="$BuilderType.Name" 
+								#if ($BuilderType.Selected) selected="selected" #end
+							>
+								$BuilderType.Name
+							</option>
+							#end
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						$BuilderDetails
+					</td>
+				</tr>
+				<tr>
+					<td>Files To Merge</td>
+					<td><textarea name="Project.Tasks.0.MergeFilesForPresentation" value="$MergeFiles" id="Project.Tasks.0.MergeFilesForPresentation"></textarea></td>
+				</tr>
+				<tr>
+					<td>Working Directory</td>
+					<td><input name="Project.ConfiguredWorkingDirectory" value="$model.Project.ConfiguredWorkingDirectory"  type="text" id="Project.ConfiguredWorkingDirectory" /></td>
+				</tr>
+
+				<tr>
+					<td>Reporting URL</td>
+					<td><input name="Project.WebURL" value="$model.Project.WebURL" type="text" id="Project.WebURL" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>* denotes currently mandatory fields</td>
+	</tr>
+	#if ($model.SaveActionName.Length > 0)
+	<tr>
+		<td>
+			<input type="submit" name="$model.SaveActionName" value="Save" />
+		</td>
+		<td></td>
+	</tr>
+	#end
+</table>
+</form>
+
+<!-- End of AddProject.vm -->

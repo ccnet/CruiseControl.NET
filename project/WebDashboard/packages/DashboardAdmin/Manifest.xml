@@ -1,0 +1,20 @@
+﻿<package>
+  <name>Web Dashboard Administration</name>
+  <description>An administration console for the web dashboard.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>AdministerDashboard.vm</file>
+        <file>AdminLogin.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/farmPlugins</path>
+      <name>administrationPlugin</name>
+    </setting>
+  </configuration>
+</package>

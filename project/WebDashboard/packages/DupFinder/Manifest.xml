@@ -1,0 +1,32 @@
+﻿<package>
+  <name>Duplicate Finder Results</name>
+  <description>Display the results of a duplicate finder analysis.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>dupfinder.xsl</file>
+        <file>dupfinder-summary.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\dupfinder-summary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\dupfinder-summary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\dupfinder.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Duplicate Finder Report"/>
+        <attribute name="actionName" value="DupFinderReport"/>
+        <attribute name="xslFileName" value="xsl\dupfinder.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

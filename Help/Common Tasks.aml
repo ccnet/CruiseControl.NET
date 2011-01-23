@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3bb52c4c-9288-4acf-8203-ed520b87e967" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>These are some common tasks that can be performed with the Common Communications
+Client library.</para>
+    </introduction>
+    <section>
+      <content>
+		<list class="bullet">
+  			<listItem>
+  				<link xlink:href="628bb73f-cac4-4b94-9f59-8b2271bb728c" />
+  			</listItem>
+  			<listItem>
+  				<link xlink:href="055533b6-7958-4895-9218-315b06efa1d4" />
+  			</listItem>
+  		</list>
+  	  </content>
+  	</section>
+    <relatedTopics>
+    	<link xlink:href="91b8f208-3603-4298-8021-6ea66c88ee14" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

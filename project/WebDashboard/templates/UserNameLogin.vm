@@ -1,0 +1,35 @@
+﻿<!-- UserNameLogin.vm: Start -->
+<form method="post">
+  #if ($errorMessage.length > 0)
+<div class="ui-widget">
+  <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
+      $translations.Translate($errorMessage)
+    </p>
+  </div>
+</div>
+  #end
+  <table>
+    <tr>
+      <td>$translations.Translate("User name"):</td>
+      <td>
+        <input type="text" name="userName"/>
+      </td>
+    </tr>
+    #if (!$hidePassword)
+    <tr>
+      <td>$translations.Translate("Password"):</td>
+      <td>
+        <input type="password" name="password"/>
+      </td>
+    </tr>
+    #end
+    <tr>
+        <td colspan="2" align="right">
+            <input type="submit" value="$translations.Translate("Login")"/>
+        </td>
+    </tr>
+  </table>
+</form>
+<!-- UserNameLogin.vm: End -->

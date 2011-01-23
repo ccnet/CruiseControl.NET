@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<includer xmlns:cb="urn:ccnet.config.builder">
+  <cb:define href-val="Subfolder/TestIncluded.xml" />
+  <cb:include href="$(href-val)" />
+</includer>

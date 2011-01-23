@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.1 Final Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.1 Final Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 30, 2006 by <font color="#0050B2">gfeldman</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.1FinalReleaseNotes-HighlightsoftheCCNet1.1release"></a>Highlights of the CCNet 1.1 release</h2>
+
+<ul>
+	<li>Log4Net is used with a rolling logfile appender for logging CCNet build server output.</li>
+	<li>Users can use CCTray to volunteer to fix a broken build.</li>
+	<li>&lt;prebuild&gt; section allows custom tasks to run prior to build.  This allows clean up operations to run before the build starts.</li>
+	<li>Caching is used in WebDashboard to reducing loading time of build reports.</li>
+	<li>Build statistics are available through the CCWebDashboard.</li>
+	<li>WebDashboard provides an interface for stopping and starting CCNet projects.</li>
+	<li>Alienbrain source control provider is now supported.</li>
+</ul>
+
+
+<h2><a name="CCNet1.1FinalReleaseNotes-UpgradingfromCCNet1.0"></a>Upgrading from CCNet 1.0</h2>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Breaking Changes</b><br />
+<ul>
+	<li>The remoting interface for the CCNet 1.1 server is not backwards compatible with the 1.0 versions of CCTray or the CCWebdashboard.  Upgrading to CCNet 1.1 will require redeploying these clients in addition to the CCNet server.</li>
+	<li>The 'PublishExceptions' attribute on the Project configuration element has been removed.  You will get an unused node error if you have this entry in your ccnet.config file.  The &lt;build&gt; element has also been removed.  You should remove these items in order for CCNet 1.1 to accept your configuration file.</li>
+</ul>
+</td></tr></table></div>
+
+<h2><a name="CCNet1.1FinalReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.1"></a>Release Notes - CruiseControl .NET - Version 1.1</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;pid=10000&amp;fixfor=10182">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.1FinalReleaseNotes-Bugs"></a>Bugs</h4>
+
+<ul>
+	<li>[CCNET-49] - Show better error messages on failed 'Force Build' from CCTray</li>
+	<li>[CCNET-312] - Threading Unit tests failing in some environments</li>
+	<li>[CCNET-543] - Interval trigger may prevent schedule trigger from ever executing</li>
+	<li>[CCNET-599] - WebDashboard cache should be cleared if stylesheets change</li>
+	<li>[CCNET-613] - With new labelling code, Vault sourcecontrol block doesn't handle a failure to label correctly.</li>
+	<li>[CCNET-614] - New Vault labelling code doesn't work when useWorkingFolder is true</li>
+	<li>[CCNET-615] - VaultHistoryParser doesn't correctly parse adds or deletes in history.</li>
+	<li>[CCNET-630] - Dashboard URL broken for project names containing spaces</li>
+	<li>[CCNET-643] - UrlTrigger hammers web server</li>
+	<li>[CCNET-652] - Vault obliterate triggers build</li>
+	<li>[CCNET-657] - [Surround] Source is retrieved from mainline instead of specified branch</li>
+	<li>[CCNET-659] - CCNet adds virtual directory to default web site &#45;&#45; this may not be what users want</li>
+	<li>[CCNET-660] - CCNet dashboard url has trouble with project names containing spaces</li>
+	<li>[CCNET-663] - BUG found in Perforce "user" command</li>
+	<li>[CCNET-665] - CCTray Exception Setting unable to handle multiple selections</li>
+	<li>[CCNET-666] - ArgumentOutOfRangeException: Ticks must be between DateTime.MinValue.Ticks and DateTime.MaxValue.Ticks. Parameter name: ticks</li>
+	<li>[CCNET-667] - The perforce sync should not be sensitive to time zone. It probably should use the changelist number</li>
+	<li>[CCNET-669] - Incorrored CaseSensitivity Of XSL FileNames In Configurations</li>
+	<li>[CCNET-676] - Dashboard should handle incorrect casing for server in url</li>
+	<li>[CCNET-686] - statistics.csv not updated if already exist</li>
+	<li>[CCNET-693] - CCTray icon lost when shell restarts (explorer killed)</li>
+	<li>[CCNET-696] - dateLabeller result in error message</li>
+	<li>[CCNET-714] - Alienbrain provider cannot handle unspecified working directory parameter</li>
+	<li>[CCNET-716] - Alienbrain provider fails detecting modifications if no modifications are present</li>
+	<li>[CCNET-718] - Svn provider does not handle spaces in TrunkUrl</li>
+	<li>[CCNET-719] - BitKeeper 4.0 Verbose changesets don't parse for users east of GMT (e.g. GMT+02:00)</li>
+	<li>[CCNET-726] - ExpandableObjectConverter cannot convert from System.String</li>
+	<li>[CCNET-734] - Support JUnit output in unit test report on main build report page when both JUnit and NUnit results are present</li>
+	<li>[CCNET-739] - Filtered SVN Block not working</li>
+	<li>[CCNET-740] - CleanCopy for Vault can fail if subdirectories are not empty</li>
+	<li>[CCNET-746] - Simian summary report should only appear if simian output is included in build</li>
+</ul>
+
+
+<h4><a name="CCNet1.1FinalReleaseNotes-NewFeatures"></a>New Features</h4>
+
+<ul>
+	<li>[CCNET-142] - Allow projects to be paused from the webapp</li>
+	<li>[CCNET-199] - Improve logging subsystem</li>
+	<li>[CCNET-385] - alienbrain source control block</li>
+	<li>[CCNET-510] - Pause a project so that it will still show status; however, it won't respond to build requests.</li>
+	<li>[CCNET-551] - Add &lt;prebuild&gt; task section to Project</li>
+	<li>[CCNET-617] - Allow specifying the time to be used for retrieved files from Vault</li>
+	<li>[CCNET-618] - No way to clean source folder before get with Vault</li>
+	<li>[CCNET-638] - Support HTTP proxies in Vault</li>
+	<li>[CCNET-644] - Implement XML Force Build Action in Dashboard</li>
+	<li>[CCNET-682] - CCTray should allow users to volunteer to fix a build</li>
+	<li>[CCNET-702] - Add 1x1 transparent GIF to images folder (for custom stylesheets</li>
+	<li>[CCNET-738] - Allow projects to have a category defined in the config</li>
+</ul>
+
+
+<h4><a name="CCNet1.1FinalReleaseNotes-Tasks"></a>Tasks</h4>
+
+<ul>
+	<li>[CCNET-426] - Remove build element from Project</li>
+</ul>
+
+
+<h4><a name="CCNet1.1FinalReleaseNotes-Improvements"></a>Improvements</h4>
+
+<ul>
+	<li>[CCNET-90] - Pass through Build number as well as label to NAnt</li>
+	<li>[CCNET-406] - Create a relation between triggers and tasks (Discussion : Controlling the build process)</li>
+	<li>[CCNET-607] - CCTray should support configuring the location of the cctray-settings.xml file</li>
+	<li>[CCNET-616] - Vault logging is confusing if you're using it in a multiple source control block.</li>
+	<li>[CCNET-619] - NAntTimings stylesheet enhancements - show full path for targets and show duration in hh:mm:ss instead of just seconds.</li>
+	<li>[CCNET-633] - CCTray: should remember screen location and list box widths between sessions</li>
+	<li>[CCNET-646] - Support an And-relationship between multiple FilteredTriggers</li>
+	<li>[CCNET-647] - IterationLabeller should support incrementing label on failure</li>
+	<li>[CCNET-661] - Add Subversion Modification Type</li>
+	<li>[CCNET-662] - MSBuild task: executable should default to final Net v2 release location</li>
+	<li>[CCNET-677] - Detection of Added/Deleted/ChangeSet for BitKeeper</li>
+	<li>[CCNET-680] - CCTray main window should not show by default</li>
+	<li>[CCNET-683] - Cannot run CCService under Mono</li>
+	<li>[CCNET-717] - Add support for BitKeeper 4.0 Verbose changesets</li>
+	<li>[CCNET-721] - Farm Report should show servers next to project and have a server list</li>
+	<li>[CCNET-724] - Only increment build label after a new build has been started</li>
+	<li>[CCNET-728] - Allow user to specify password in Perforce configuration</li>
+	<li>[CCNET-747] - Improve exception reporting for CCNet server</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

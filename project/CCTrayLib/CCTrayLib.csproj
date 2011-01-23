@@ -1,0 +1,702 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.CCTrayLib</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.CCTrayLib</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\Build\CCTray\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DISABLE_COM) == true">
+    <DefineConstants>DISABLE_COM</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Growl.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Growl.CoreLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=13e59d82e007b064, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Growl.CoreLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Speech">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Audio.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BuildOccurredEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BuildTransition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTimeFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLibException.cs" />
+    <Compile Include="Configuration\AudioFiles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BalloonMessages.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildServerTransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildTransitionNotification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CaptionAndMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CCTrayMultiConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CCTrayProject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ExecCommands.cs" />
+    <Compile Include="Configuration\ExtensionAttribute.cs" />
+    <Compile Include="Configuration\GrowlConfiguration.cs" />
+    <Compile Include="Configuration\ICCTrayMultiConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\Icons.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\PersistentConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\SpeechConfiguration.cs" />
+    <Compile Include="Configuration\TrayIconDoubleClickAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\X10Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DateTimeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DefaultProjectIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultProjectIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultQueueIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultQueueIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorLevel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Growl\GrowlController.cs" />
+    <Compile Include="Growl\GrowlMessages.cs" />
+    <Compile Include="IconNotFoundException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\AggregatingProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\AggregatingServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\BuildDurationTracker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\CachingCruiseServerManager.cs" />
+    <Compile Include="Monitoring\ClientStartUpSettingsExtensions.cs" />
+    <Compile Include="Monitoring\CruiseProjectManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\CruiseServerManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\DashboardXmlParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ExtensionHelpers.cs" />
+    <Compile Include="Monitoring\ExtensionTransportProjectListRetriever.cs" />
+    <Compile Include="Monitoring\HttpCruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\HttpCruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IAuthenticationMode.cs" />
+    <Compile Include="Monitoring\ICache.cs" />
+    <Compile Include="Monitoring\ICruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseProjectManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseServerManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IDashboardXmlParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IntegrationQueueNodeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IPollable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IProjectStatusRetriever.cs" />
+    <Compile Include="Monitoring\IServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ISingleProjectDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ISingleServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ITransportExtension.cs" />
+    <Compile Include="Monitoring\IWebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorBuildOccurredEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorPolledEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorServerPolledEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorServerQueueChangedEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\Poller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\PollIntervalReporter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ProjectState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\RemotingCruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\RemotingCruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ServerSnapshotChangedEvent.cs" />
+    <Compile Include="Monitoring\WebDashboardUrl.cs" />
+    <Compile Include="Monitoring\WebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NotifyInfoFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\AddBuildServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\AddProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\AddProjects.Designer.cs">
+      <DependentUpon>AddProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\AudioPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\AudioSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\AudioSettingsControl.Designer.cs">
+      <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\BuildParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildParameters.Designer.cs">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\BuildProjectsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildProjectsControl.Designer.cs">
+      <DependentUpon>BuildProjectsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\BuildTransitionExecRunner.cs" />
+    <Compile Include="Presentation\BuildTransitionSoundPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\CCTrayMultiSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\CCTrayMultiSettingsForm.Designer.cs">
+      <DependentUpon>CCTrayMultiSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\ConfigurableBalloonMessageProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigurableProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigureServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigureServer.Designer.cs">
+      <DependentUpon>ConfigureServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.Designer.cs">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\DisplayChangedProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\DisplayChangedProjects.Designer.cs">
+      <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\ExecSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\ExecSettingsControl.Designer.cs">
+      <DependentUpon>ExecSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Func.cs" />
+    <Compile Include="Presentation\GrowlSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\GrowlSettingsControl.Designer.cs">
+      <DependentUpon>GrowlSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\KeyUtils.cs" />
+    <Compile Include="Presentation\PackagesListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\PackagesListForm.Designer.cs">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\SpeechSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\SpeechSettingsControl.Designer.cs">
+      <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\StatusItemDisplay.cs" />
+    <Compile Include="Presentation\StubProjectMonitor.cs" />
+    <Compile Include="Presentation\X10SettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\X10SettingsControl.Designer.cs">
+      <DependentUpon>X10SettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\SelectIconController.cs" />
+    <Compile Include="Presentation\DetailStringProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\GeneralSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\GeneralSettingsControl.Designer.cs">
+      <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\IAudioPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IBalloonMessageProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IconSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\IconSettingsControl.Designer.cs">
+      <DependentUpon>IconSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\IDetailStringProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IIntegrationQueueIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IntegrationQueueTreeNodeAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IntegrationQueueTreeNodeTag.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\MainFormController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\NativeMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\PersistWindowState.cs">
+    </Compile>
+    <Compile Include="Presentation\ProjectConfigurationListViewItemAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ProjectStateIconAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ProjectStatusListViewItemAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\QueueTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Presentation\ResourceIntegrationQueueIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ResourceProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SelectAudioFileController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SynchronizedProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SynchronizedServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\TrayIconFacade.cs">
+    </Compile>
+    <Compile Include="Presentation\WindowStateEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\ConfigureUserName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Security\ConfigureUserName.Designer.cs">
+      <DependentUpon>ConfigureUserName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Security\ConfigureUserPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Security\ConfigureUserPassword.Designer.cs">
+      <DependentUpon>ConfigureUserPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Security\WinLoginAuthentication.cs" />
+    <Compile Include="Security\UserPasswordAuthentication.cs" />
+    <Compile Include="Security\UserNameAuthentication.cs" />
+    <Compile Include="Speech\SpeakingProjectMonitor.cs" />
+    <Compile Include="Speech\SpeechUtil.cs" />
+    <Compile Include="StatusIcon.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\Cm11Message.cs" />
+    <Compile Include="X10\Cm11LowLevelDriver.cs" />
+    <Compile Include="X10\Cm11LowLevelDriverError.cs" />
+    <Compile Include="X10\Cm11LowLevelDriverWorker.cs" />
+    <Compile Include="X10\Cm17LowLevelDriver.cs" />
+    <Compile Include="X10\ILampController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\IX10LowLevelDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\LampController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\LowLevelDriverFactory.cs" />
+    <Compile Include="X10\X10Controller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\X10Definitions.cs" />
+    <None Include="ResourceIcons\Gray.ico" />
+    <None Include="ResourceIcons\Green.ico" />
+    <None Include="ResourceIcons\Orange.ico" />
+    <EmbeddedResource Include="Presentation\AddBuildServer.resx">
+      <DependentUpon>AddBuildServer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\AddProjects.resx">
+      <DependentUpon>AddProjects.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\CCTrayMultiSettingsForm.resx">
+      <DependentUpon>CCTrayMultiSettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\PersistWindowState.resx">
+      <DependentUpon>PersistWindowState.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\SpeechSettingsControl.resx">
+      <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\TrayIconFacade.resx">
+      <DependentUpon>TrayIconFacade.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="ResourceIcons\Red.ico" />
+    <None Include="ResourceIcons\ServerHttp.ico" />
+    <None Include="ResourceIcons\ServerRemoting.ico" />
+    <None Include="ResourceIcons\Yellow.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceIcons\BuildPending.ico" />
+    <None Include="ResourceIcons\QueueEmpty.ico" />
+    <None Include="ResourceIcons\QueuePopulated.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceIcons\BuildCheckingModifications.ico" />
+    <EmbeddedResource Include="Presentation\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultProjectIcons.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultProjectIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultQueueIcons.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultQueueIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\AudioSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\BuildParameters.resx">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\BuildProjectsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BuildProjectsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\ConfigureServer.resx">
+      <DependentUpon>ConfigureServer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\CurrentStatusWindow.resx">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\DisplayChangedProjects.resx">
+      <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\ExecSettingsControl.resx">
+      <DependentUpon>ExecSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\GrowlSettingsControl.resx">
+      <DependentUpon>GrowlSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\PackagesListForm.resx">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\x10SettingsControl.resx">
+      <DependentUpon>X10SettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\GeneralSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\IconSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>IconSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Security\ConfigureUserName.resx">
+      <DependentUpon>ConfigureUserName.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Security\ConfigureUserPassword.resx">
+      <DependentUpon>ConfigureUserPassword.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Name>Remote</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

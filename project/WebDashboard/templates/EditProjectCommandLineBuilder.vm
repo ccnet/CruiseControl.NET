@@ -1,0 +1,20 @@
+<!-- Start of EditProjectCommandLineBuilder.vm -->
+<table>
+	<tr>
+		<td>Base Directory *</td>
+		<td><input name="Project.Builder.ConfiguredBaseDirectory" id="Project.Builder.ConfiguredBaseDirectory" value="$model.ConfiguredBaseDirectory" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Executable *</td>
+		<td><input name="Project.Builder.Executable" id="Project.Builder.Executable" value="$model.Executable" type="text" /></td>
+	</tr>
+	<tr>
+		<td>BuildArgs</td>
+		<td><input name="Project.Builder.BuildArgs" id="Project.Builder.BuildArgs" value="$model.BuildArgs" type="text" /></td>
+	</tr>
+	<tr>
+		<td>BuildTimeoutSeconds *</td>
+		<td><input name="Project.Builder.BuildTimeoutSeconds" id="Project.Builder.BuildTimeoutSeconds" value="$model.BuildTimeoutSeconds" type="text" /></td>
+	</tr>
+</table>
+<!-- End of EditProjectCommandLineBuilder.vm -->

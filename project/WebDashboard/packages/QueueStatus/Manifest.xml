@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Queue Status Display</name>
+  <description>Display the status of the queues.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>ServerQueueStatus.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>queueStatusServerPlugin</name>
+    </setting>
+  </configuration>
+</package>

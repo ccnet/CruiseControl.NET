@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Package Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Package Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 07, 2010 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="PackagePublisher-PackagePublisher"></a>Package Publisher</h1>
+
+<p>Generates a ZIP file package containing the specified files.  <br/>
+This will generate a "package" of files in a compressed format. The files must be specified, plus an optional manifest can be included.  <br/>
+This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the package, both at a general level and at a file level.  </p>
+
+
+<h2><a name="PackagePublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.4.4</p>
+
+<h2><a name="PackagePublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Example<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>Results.txt<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Example<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;compression&gt;</span>9<span class="code-tag">&lt;/compression&gt;</span>
+  <span class="code-tag">&lt;always&gt;</span>true<span class="code-tag">&lt;/always&gt;</span>
+  <span class="code-tag">&lt;flatten&gt;</span>true<span class="code-tag">&lt;/flatten&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>C:\Builds\CC.Net<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;manifest type=<span class="code-quote">"defaultManifestGenerator"</span> /&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>Results.txt<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="PackagePublisher-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> always </td>
+<td class='confluenceTd'> Whether the package should always be generated or not.  <br clear="all" />By default a package will only be generated for a successful build. Setting this property to true, and including it in the publishers section means the package will always be generated, irrespective of the outcome of the build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to base all the file locations from.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project working directory </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> compression </td>
+<td class='confluenceTd'> The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> files </td>
+<td class='confluenceTd'> The files to include in the package.  <br clear="all" />All relative files will be relative to the baseDirectory.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> flatten </td>
+<td class='confluenceTd'> Should the file structure be flattened or not.  <br clear="all" />By default, the folder structure will also be included in the package. Setting this property to true will flatten (omit) the folder information.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> manifest </td>
+<td class='confluenceTd'> The manifest generator to be used.  <br clear="all" />If this property is not set no manifest will be generated.   </td>
+<td class='confluenceTd'> <a href="Manifest Generators.html" title="Manifest Generators">Manifest Generators</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> outputDir </td>
+<td class='confluenceTd'> The location to output the package to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Artifact Directory </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the package file.  <br clear="all" />This will be the filename of the package. If the extension zip is omitted, it will be added automatically.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="PackagePublisher-Notes"></a>Notes</h2>
+
+<h4><a name="PackagePublisher-Sub%5Cfolders"></a>Sub&#45;folders</h4>
+<p>Sub&#45;folders can be added using a combination of relative paths in the filename and a base directory. When a file is added, the publisher checks if the filename is relative to the base directory and strips the base directory from the file name.  <br/>
+For example, the following configuration will add two files, logo.gif in the root and AdminIcon.gif in a sub&#45;folder.  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>temp<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>logo.gif<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>images\AdminIcon.gif<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>output<span class="code-tag">&lt;/name&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 7 Jan 2010 at 10:07:16 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

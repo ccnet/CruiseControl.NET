@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <cb:define foo="foo_val" />
+    
+    <!-- if-equal-to positive test -->
+    <cb:if expr="'$(foo)'=='foo_val'">
+      <ifeq_succeeded />
+    </cb:if>
+    <cb:else>
+      <ifeq_failed />
+    </cb:else>
+
+    <!-- if-equal-to negative test -->
+    <cb:if expr="'$(foo)'=='gobbeldygook'">
+      <ifeq_negative_failed />
+    </cb:if>
+    <cb:else>
+      <ifeq_negative_succeeded />
+    </cb:else>
+
+    <!-- if-not-equal-to positive test -->
+    <cb:if expr="'$(foo)'!='gobbeldygook'">
+      <ifneq_succeeded />
+    </cb:if>
+    <cb:else>
+      <ifneq_failed />
+    </cb:else>
+
+  </root>
+</cb:config-template>

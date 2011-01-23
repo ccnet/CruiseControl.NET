@@ -1,0 +1,365 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : FAQ</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : FAQ
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 16, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
+
+<p>This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done.</p>
+
+<p>If you want to add questions, answers, or both, please use the <b>ccnet-user</b> <a href="Mailing Lists.html" title="Mailing Lists">mailing list </a></p>
+
+<h1><a name="FAQ-CruiseControl.NETServer"></a>CruiseControl.NET Server</h1>
+
+
+<h2><a name="FAQ-Installation"></a>Installation</h2>
+
+
+<h4><a name="FAQ-WhenIruntheinstallers%2CMcAfeeVirusScan8.0ispoppingupadialogreportingproblemswith%27nsScm.dll%27."></a><em>When I run the installers, McAfee VirusScan 8.0 is popping up a dialog reporting problems with 'nsScm.dll'.</em></h4>
+
+<p>The 'nsScm.dll' is a library supplied by the <a href="http://nsis.sourceforge.net/Service_Control_Manager_plugin_(install_services_and_drivers_on_NT/2K/XP)">NullSoft installer for installing services</a>. There is no virus in this dll. The easiest way to proceed with the installation is to uncheck the "Install CCService" checkbox and install <a href="The Server Service Application.html" title="The Server Service Application">CCService manually</a> once the installer has completed.</p>
+
+<h2><a name="FAQ-ConnectionIssues"></a>Connection Issues</h2>
+
+
+<h4><a name="FAQ-CCtraycannotconnecttothebuildserverusingremoting"></a>CCtray can not connect to the buildserver using remoting</h4>
+
+<ul>
+	<li>First check that the used port is correct, standard it is 21234. If you never changed this, or it's the first time you see this number, this setting will probably be correct.<br/>
+You can find the value in the exe.config files (CCNet.exe.config, CCService.exe.config) in the system.runtime.remoting/application/channels part.</li>
+	<li>Next, check the firewall on the server. You can do this by running the following command in a prompt : <b>netsh firewall show portopening</b><br/>
+If you get an empty list, no firewall is on, if you see a list, check that there is a line containing the correct port : standard it is 21234<br/>
+To open the port, run the following command : <b>netsh firewall add portopening TCP 21234 CCNET</b></li>
+</ul>
+
+
+<h4><a name="FAQ-Dashboardworksontheserveritself%2Cbutnotfromanothermachine"></a>Dashboard works on the server itself, but not from another machine</h4>
+
+<ul>
+	<li>check that you can ping the server</li>
+	<li>use the telnet client to check if the webserver service/daemon works :
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">telnet &lt;servername&gt; &lt;port&gt;
+    get
+
+    Example
+     telnet buildserver 80
+     get
+
+     Result :
+
+         &lt;!DOCTYPE HTML PUBLIC <span class="code-quote">"-<span class="code-comment">//IETF//DTD HTML 2.0//EN"</span>&gt;
+</span>         &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Method Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;
+         &lt;H1&gt;Method Not Implemented&lt;/H1&gt;
+         get to /index.html not supported.&lt;P&gt;
+         Invalid method in request get&lt;P&gt;
+         &lt;/BODY&gt;&lt;/HTML&gt;
+
+         Connection to host lost.
+
+         The above error is normal, the webservice shows it to you</pre>
+</div></div></li>
+</ul>
+
+
+<h2><a name="FAQ-Resultfiles"></a>Result files</h2>
+
+
+<h4><a name="FAQ-Whyaremytestresultsshowingupwhenthebuildsucceeds%2Cbutnotwhenthebuildfails%3F"></a><em>Why are my test results showing up when the build succeeds, but not when the build fails?</em></h4>
+
+<p>In the <b>ccnet.config</b> file, you need to move your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> section from the <a href="Task And Publisher Blocks.html" title="Task And Publisher Blocks">Tasks Block</a> to the Publishers Block. The reason is that the first task to fail in the tasks section will prevent any further tasks from being run. If this task is your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> then your test result files will not be included in the build. All tasks in the publishers section will run regardless of whether previous tasks succeed or fail.</p>
+
+<h4><a name="FAQ-CCNetsometimesthrowsanexceptionduringatask%2Cbutthere%27snoinformationinthelogaboutwherethetasktriggeredtheexception%3F"></a><em>CCNet sometimes throws an exception during a task, but there's no information in the log about where the task triggered the exception?</em></h4>
+
+<p>This can happen, for example, if a task times out. A good practice that helps in these situations is to specify an explicit task-level log file for each task, different for each task. If CCNet fails to merge in that log file, then at least you can check the actual log file before it's been merged. (Also, see the preceding FAQ about merging output from failed tasks.)</p>
+
+<p>For example, with a NAnt task you could use:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;nant&gt;
+&lt;buildFile&gt;ProjectA.build&lt;/buildFile&gt;
+&lt;targetList&gt;TargetX&lt;/buildFile&gt;
+&lt;buildargs&gt;-l:projecta.targetx.log.xml ...&lt;/buildargs&gt;
+...
+&lt;/nant&gt;</pre>
+</div></div>
+<p>Then if the task crashes and CCNet doesn't merge in the NAnt log file, you can go to <b>projecta.targetx.log.xml</b> in the working directory, to see the original output from NAnt.</p>
+
+<h2><a name="FAQ-Debuggingtheserver"></a>Debugging the server</h2>
+
+
+<h4><a name="FAQ-Mybuildisfailing%2CandI%27mnotsurewhy"></a><em>My build is failing, and I'm not sure why</em></h4>
+
+<p>CCNet integrates with external applications via the command-line, hence it is essential that the command executed by CCNet is correct for everything to work:</p>
+<ol>
+	<li>As a first step, verify that you <em>can</em> run your build script or connect to your sourcecontrol system from the command-line.</li>
+	<li>If this works or if you're not too sure what command to execute, you can get CCNet to tell you what command it is using. To do this, go into your <b>ccnet.exe.config</b> file (or <b>ccservice.exe.config</b> file if you are running ccservice) and increase the trace level of the CruiseControlSwitch to the debug level of 4. When you restart the CCNet server, it will write out the commands the it is using to the console window (and to the <b>ccnet.log</b> file). Try copying and pasting this command into a new console window and running it directly.</li>
+	<li>If you are still unsure of what the problem is or if you think that the command that CCNet is creating is incorrect, please send an email to the CCNet user mailing list above including 1) a copy of the command you are executing, 2) the output it produces and 3) a copy of your ccnet.config file.</li>
+</ol>
+
+
+<h4><a name="FAQ-I%27mtryingtoaccesssomeinformationsuppliedbytheserver%2CbutIcan%27t.What%27sgoingwrong%3F"></a><em>I'm trying to access some information supplied by the server, but I can't. What's going wrong?</em></h4>
+
+<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
+
+<h4><a name="FAQ-Accordingtothedocumentation%2CIneedfilexxxxxxxx.yyy.Thatfileisn%27tinthedistribution%2CwheredoIfindit%3F"></a><em>According to the documentation, I need file xxxxxxxx.yyy. That file isn't in the distribution, where do I find it?</em></h4>
+
+<p>It's likely that you have fallen into the classic mistake of overlooking that the documentation on the web site relates to the most recently <b>built</b> version, not the most recently <b>released</b> one. If the file in question is referenced in the <b>/doc</b> folder of your CCNet installation then ask on the CCNet user mailing list - you have probably found a documentation problem. If the file is not referenced in that folder, but is referenced in the online documentation you may want to try a more recent build from <a href="http://ccnetlive.thoughtworks.com/">http://ccnetlive.thoughtworks.com/</a>. If you choose to do so, please be aware that builds from CCNetLive may contain more bugs than officially released versions of CCNet.</p>
+
+<h4><a name="FAQ-CruiseControl.NETisreportingthatthebuildsucceededwhenitfailed.Why%3F"></a><em>CruiseControl.NET is reporting that the build succeeded when it failed. Why?</em></h4>
+
+<p>When triggering external tools like NAnt, MSBuild and even Devenv CruiseControl.Net uses the "ErrorLevel" exit value returned by the tool to determine if the process was successful. In most such tools, zero is returned if the task succeeded. A non-zero value is typically used to indicate a failure, and when it sees a non-zero value CCNet will report that the task failed.</p>
+
+<p>If the tool you are using does not respect these conventions (like, for example, Microsoft's FXCop utility), then CruiseControl may report failure (or success) incorrectly.</p>
+
+<p>The easiest way to find out what ErrorLevel is returned by the tool is to use a small batch file like this:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;"><b>VerifyToolReturn.bat</b></div><div class="codeContent panelContent">
+<pre class="code-java">C:\Path\To\Your\Tool.exe -Command -Line -Parameters <span class="code-quote">"As triggered by CruiseControl.Net"</span>
+Echo %ErrorLevel%</pre>
+</div></div>
+<p>Run the batch file from a command prompt and check the response. This should confirm if the problem is that the tool is returning the wrong value (most likely) or you have found a bug in CruiseControl.Net.</p>
+
+<p>Some users have reported that occasionally even though the return value can be confirmed as non-zero using the command prompt it is not recognised as a failure by CruiseControl.Net. It may be possible to work-around this is as follows:</p>
+<ol>
+	<li>Create a batch file which simply executes the command, then does a exit %errorlevel%</li>
+	<li>Change the CC.Net project to invoke the batch file as "CMD /C batch-file".</li>
+</ol>
+
+
+<h4><a name="FAQ-Newconfigurationinccnet.configisnotused"></a>New configuration in ccnet.config is not used</h4>
+
+<p>If you have introduced errors to your config file CruiseControl.NET will fail to load, and keep using the already loaded old configuration. So check the log, or stop the service and run the commandline tool to fix the configuration problem.<br/>
+From version 1.4.3 onwards there is a visual validator program, that parses the config file like CCNet does, so this makes it easy to spot configuration issues.</p>
+
+<h2><a name="FAQ-OperationflowofCCNet"></a>Operation flow of CCNet</h2>
+
+<p>The exact sequence of operations is:</p>
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp;1) Wait for the triggers to awaken.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp;2) Ask the source control system for a list of the modifications since the last build.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp;3) If any modifications were found or if the triggers said "force the build":<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.1) Generate a label for the build.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.2) Run the prebuild tasks in the order specified, failing the build in case of error.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.3) Get the source code from the source control system.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.4) Run the build tasks in the order specified, failing the build in case of error.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.5) If the repository should be labeled:<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.5.1) Let the source control system apply the label.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.6) Run the publisher tasks.<br/>
+&nbsp; &nbsp; &nbsp; &nbsp;4) Go to 1.</p>
+
+<h2><a name="FAQ-Theccnet.configfile"></a>The ccnet.config file</h2>
+
+
+<h4><a name="FAQ-WhydoIgetan%7B%7DUnusednodedetected%7B%7DerrorwhenIstartuptheCCNetserver%3F"></a><em>Why do I get an</em> <b><em>Unused node detected</em></b> <em>error when I start up the CCNet server?</em></h4>
+
+<p>You will get these warnings if your <b>ccnet.config</b> file contains invalid elements or attributes. Please double check the documentation that came with your installation (in the <b>/doc</b> folder). Please be aware that the documentation on the web site may reflect a more recent version of ccnet than what you have installed. If you are attempting to use a task or a property that has not been implemented in your server's version of ccnet then you will get this error.</p>
+
+<h4><a name="FAQ-Igettheerror%22INTERNALERROR%3AExpandableObjectConvertercannotconvertfromSystem.String.%22whenusing%3Csourcecontroltype%3D%22multi%22%3E"></a><em>I get the error "INTERNAL ERROR: ExpandableObjectConverter cannot convert from System.String." when using &lt;sourcecontrol type="multi"&gt;</em></h4>
+
+<p>This error occurs if you try and use a &lt;sourcecontrol&gt; block inside a Multi Source Control Block. The name of the element should instead be the same as you would put in the "type" attribute when using a &lt;sourcecontrol&gt; element. For more information and an example, see <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>.</p>
+
+<p><a name="FAQ-Service"></a></p>
+
+<h4><a name="FAQ-Arethereprojectpropertiesavailabletoreduceduplicationintheconfiguration%3F"></a>Are there project properties available to reduce duplication in the configuration ?</h4>
+
+<p>Properties as in Nant or MSBuild (<em>e.g.</em>, "$(workingDirectory)") are supported from CCNet version 1.4RC1 and upwards. See the <a href="Configuration Preprocessor.html" title="Configuration Preprocessor">Configuration Preprocessor</a> documentation for more details.<br/>
+Previous versions can reduce some duplication in the configuration with the use of XML DTD entities (<em>e.g.</em>, "&amp;workingDirectory;").</p>
+
+<h2><a name="FAQ-UsingtheCCNetService"></a>Using the CCNet Service</h2>
+
+
+<h4><a name="FAQ-Mybuildcan%27tfindenvironmentvariableswhenrunfromtheservice%2Cbutitworksfinemanuallyorfromtheccnetcommandlineserver"></a><em>My build can't find environment variables when run from the service, but it works fine manually or from the ccnet command line server</em></h4>
+
+<p>You may be running the CCNet Service under the <tt>SYSTEM</tt> account, or some different account other than your own. Many environment variables under MS Windows are set on a per-user basis, which means that the <tt>SYSTEM</tt> account won't have the same variables as you. Depending on the circumstances, you might want to move those environment variable definitions to be system-wide. Another alternative is to run the service under your account, or create a separate <tt>build</tt> account for use by CC.Net. Finally, some tasks such as NAnt can explictly create environment variables for themselves (but these won't be passed on to other CruiseControl.Net tasks).</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>It turns out the path (and all environment variables) are read only once, at system start-up. So if the path is changed while the system is running the services will not detect any changes to it (at least in Win2003 see <a href="http://support.microsoft.com/kb/887693">http://support.microsoft.com/kb/887693</a>).</p></td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Sometimes you may get errors even if you do not use the system account. For example : if you use 'DevEnv.exe' via the exec task, you <b><em>CAN</em></b> get '<em>the application data folder for visual studio could not be created</em>'.<br/>
+It is always advisable to not use IDE's on a build server. The above problem is easily solved by using msbuild. just point to to the sln file.<br/>
+so iso of&nbsp;&nbsp;&nbsp;&nbsp; <b><em>devenv c:\source\myFunkyStuff.sln</em></b>&nbsp;&nbsp;&nbsp; use&nbsp;&nbsp;&nbsp; <b><em>msbuild c:\source\myFunkyStuff.sln</em></b></p></td></tr></table></div>
+
+<h4><a name="FAQ-MybuildisfailingandI%27mnotsurewhy"></a><em>My build is failing and I'm not sure why</em></h4>
+
+<ol>
+	<li>If you are having trouble running your build through CCService, start by making sure that everything works via the CCNet console application. The console application is typically easier to configure and debug.</li>
+	<li>If the console build works but fails when running through the service, please consult the <a href="The Server Service Application.html" title="The Server Service Application">CCService</a> page for a suggestions on solving the common problems that users face.</li>
+</ol>
+
+
+<h4><a name="FAQ-Theccnet.execommandlineworksbutccservice.exedoesn%27t"></a><em>The ccnet.exe command line works but ccservice.exe doesn't</em></h4>
+
+<p>Problems with <b>ccservice.exe</b> that don't happen with <b>ccnet.exe</b> almost always come back to one of two things:</p>
+<ol>
+	<li>First is the fact that they each use a different app.config file, <b>ccservice.exe.config</b> and <b>ccnet.exe.config</b> respectively, and you should usually make changes to them in tandem.  This isn't often the problem, but it's always worth investigating.</li>
+</ol>
+
+
+<ol>
+	<li>Second, and most common, is that <b>ccnet.exe</b> runs under the account of the logged in Windows user, and <b>ccservice.exe</b> runs under the local system account.  This often shows up as the cause of problems with source control systems misbehaving, especially if it maintains user credentials someplace (<em>e.g.</em>, under <b>%USERPROFILE%</b>).</li>
+</ol>
+
+
+<h2><a name="FAQ-SourceControlIntegration"></a>Source Control Integration</h2>
+
+
+<h3><a name="FAQ-VisualSourceSafe"></a>Visual Source Safe</h3>
+
+
+<h4><a name="FAQ-WhyisthevsssourcecontrolblockthrowingerrorswhenCCNetisrunningasaservicebutworkswhenrunningCCNetfromthecommandline%3F"></a><em>Why is the vss source control block throwing errors when CCNet is running as a service but works when running CCNet from the command line?</em></h4>
+
+<p>In order to access VSS, you must be able to access the shared folder on your VSS server from your CCNet server. The CCNet service is set to use a local system user account by default which doesn't have access to other machines. In order for CCNet to access VSS, you must change the log account for the service to a user that has network access to the VSS machine. More details can be found in the <a href="#FAQ-Service">Service</a> and <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> sections.</p>
+
+<h3><a name="FAQ-AllSourceControlPackages"></a>All Source Control Packages</h3>
+
+
+<h4><a name="FAQ-Mybuildprocessupdatesoneormorefilesundersourcecodecontrol.CruiseControl.NETthenthinksmycodehaschangedandrebuildsagain.HowdoIstopthiscycle%3F"></a><em>My build process updates one or more files under source code control. CruiseControl.NET then thinks my code has changed and rebuilds again. How do I stop this cycle?</em></h4>
+
+<p>This problem is most commonly associated with updating AssemblyInfo.cs (or similar) files containing build-specific information.</p>
+
+<p>The simplest solution is to ensure that these files are not placed under source control, but are always generated at build time. Unfortunately, this may not always be an appropriate way to resolve the problem. In such circumstances, you may want to use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to exclude the files modified during the build process.</p>
+
+<h2><a name="FAQ-Triggers"></a>Triggers</h2>
+
+
+<h4><a name="FAQ-HowdoIhaveitsothataprojectisonlybuiltwhenforcedmanually%3F"></a><em>How do I have it so that a project is only built when forced manually?</em></h4>
+
+<p>Use an empty <tt>&lt;triggers /&gt;</tt> tag in your config file. Read more at <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a>.</p>
+
+<h2><a name="FAQ-Tasks"></a>Tasks</h2>
+
+
+<h4><a name="FAQ-HowcanIgetCruiseControl.Nettorunallmytesttasks%2Cevenifsomefail%3F"></a><em>How can I get CruiseControl.Net to run all my test tasks, even if some fail?</em></h4>
+
+<p>One of the principles of Continuous Integration is that build failures are reported as quickly as possible. This means that if any item in the <tt>&lt;tasks&gt;</tt> section of the <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> reports a failure CruiseControl.Net will skip the remaining tasks and continue to the entries in the <tt>&lt;publishers&gt;</tt> section. If you need to do something more complex, we recommend using a tool like NAnt or MSBuild to handle the build tasks. An example showing how to use NAnt and NUnit to execute multiple test fixtures can be found on the <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> page.</p>
+
+<h2><a name="FAQ-MultipleProjects"></a>Multiple Projects</h2>
+
+
+<h4><a name="FAQ-HowcanIforceCruiseControl.Nettoonlybuildoneprojectatatime%3F"></a><em>How can I force CruiseControl.Net to only build one project at a time?</em></h4>
+
+<p>You can use the <a href="Integration Queues.html" title="Integration Queues">Integration Queues</a> support. If you place more than one project in the same queue, CruiseControl.Net will ensure that only one of them runs at a time.</p>
+
+<p><a name="FAQ-Dashboard"></a></p>
+
+<h1><a name="FAQ-WebDashboard"></a>Web Dashboard</h1>
+
+
+<h4><a name="FAQ-T%7B%7D%7B%7DheWebDashboardfailstorender%2Cwhatcouldbetheproblem%3F"></a><em>T</em><em>he Web Dashboard fails to render, what could be the problem?</em></h4>
+
+<p>If you installed IIS <em>after</em> the .Net framework was installed, you need to register ASP.Net with IIS. You can do this by running the aspnet_regiis.exe tool found under \Windows\Microsoft.NET\Framework\v2.0.50727\</p>
+
+<h4><a name="FAQ-HowdoIchangethelookandfeeloftheWebDashboard%3F"></a><em>How do I change the look and feel of the Web Dashboard?</em></h4>
+
+<p>The look and feel of the Dashboard is defined by the velocity templates and xsl files in the <tt>templates</tt> and <tt>xsl</tt> sub-folders of your Web Dashboard folder (which by default is at <tt>C:\Windows\Program Files\CruiseControl.NET\webdashboard</tt> .)<br/>
+From version 1.4.3 and onwards CCNet supports theming take a look at <a href="Plugins Configuration Block.html" title="Plugins Configuration Block">Dashboard Plugins</a>for more information.</p>
+
+<h4><a name="FAQ-HowdoIusemyownXSLstylesheetsforreports%3F"></a><em>How do I use my own XSL stylesheets for reports?</em></h4>
+
+<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> instance if you want a totally new page for the report.
+<br clear="all" /></p>
+
+<h4><a name="FAQ-HowcanIgettheoutputofToolX%2Fmycustomprograminthedashboard%3F"></a>How can I get the output of Tool X / my custom program in the dashboard ?</h4>
+
+<p>If the tool creates an result file, use the <a href="File Merge Task.html" title="File Merge Task">merge file</a>task to get it into the build result. (mostly done in the publisher section). If the result file is XML, the handling goes a lot easier.<br/>
+Next you must create a xsl file that will parse the resultfile that is now part of the buildlog to visualise the outcome. See the section above.
+<br clear="all" /></p>
+
+<h4><a name="FAQ-HowdoIpreventalltheseunwantedmessagesfromshowingupinthewarning%2FerrorsectionsoftheWebDashboard%3F"></a><em>How do I prevent all these unwanted messages from showing up in the warning/error sections of the WebDashboard?</em></h4>
+
+<p>When executing external processes, CCNet will identify any output written to the standard error stream in the error or warnings section of the WebDashboard. To supress these messages, you can redirect the stderr stream to stdout as shown in the example below. '2' refers to stderr and '&gt;&amp;1' redirects it to stdout ('&amp;1').</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">dir /f 2&gt;&amp;1</pre>
+</div></div>
+
+<h4><a name="FAQ-Igetthefollowingerrorinthewebdashboard%3A%22TicksmustbebetweenDateTime.MinValue.TicksandDateTime.MaxValue.Ticks.Parametername%3Aticks%22"></a><em>I get the following error in the web dashboard: "Ticks must be between DateTime.MinValue.Ticks and DateTime.MaxValue.Ticks. Parameter name: ticks"</em></h4>
+
+<p>You will get this error if your CCNet server is running under the .NET 2.0 framework, whereas the webdashboard or CCTray is running under version 1.x. This is a problem using .NET remoting across different versions of the .NET framework. You can fix this by ensuring that you are using the same version of the .NET framework for the CCNet components (<a href="CCTray.html" title="CCTray">CCTray</a>, the <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a>, and the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>) on all machines.</p>
+
+<p>If you have multiple versions of the .NET framework installed, you can select the version of the framework used by the web dashboard as follows:</p>
+<ol>
+	<li>Open IIS</li>
+	<li>Right click the CCnet Virtual Directory (typically ccnet)</li>
+	<li>Select Properties</li>
+	<li>Select ASP.Net</li>
+	<li>Select The desired version of the .NET runtime from the drop down</li>
+</ol>
+
+
+<h4><a name="FAQ-Handler%22CCNetHttpHandler%22hasabadmodule%22ManagedPipelineHandler%22initsmodulelist"></a>Handler "CCNetHttpHandler" has a bad module "ManagedPipelineHandler" in its module list</h4>
+
+<p>add the following element to the httpHandlers in web.config<br/>
+preCondition="integratedMode" </p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;httpHandlers&gt;
+	&lt;!-- Yes, we are overriding .aspx - don't delete <span class="code-keyword">this</span>! We are using .aspx since we know it is already bound to ASP.NET. In <span class="code-keyword">future</span> we might use a 
+		different extension so that people can add their own ASP.NET pages <span class="code-keyword">if</span> they want to, but we should make sure in that <span class="code-keyword">case</span> to change how 
+		URLs are created --&gt;
+	&lt;add verb=<span class="code-quote">"*"</span> path=<span class="code-quote">"*.aspx"</span> type=<span class="code-quote">"ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET.HttpHandler,ThoughtWorks.CruiseControl.WebDashboard"</span> preCondition=<span class="code-quote">"integratedMode"</span>/&gt;
+	&lt;add verb=<span class="code-quote">"*"</span> path=<span class="code-quote">"*.xml"</span> type=<span class="code-quote">"ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET.HttpHandler,ThoughtWorks.CruiseControl.WebDashboard"</span> preCondition=<span class="code-quote">"integratedMode"</span> /&gt;
+&lt;/httpHandlers&gt;</pre>
+</div></div>
+
+<h4><a name="FAQ-DisplayingbuildprogressintheDashboard"></a>Displaying build progress in the Dashboard</h4>
+
+<p>Standard CCNet will show basic information in which stage of the build it is :</p>
+
+<p>getting Source<br/>
+Executing task X</p>
+
+<p>This can be extendended, for Nant and MSBuild look at <a href="http://confluence.public.thoughtworks.org//display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild" title="Viewing build progress with Nant and MSBuild">Viewing build progress with Nant and MSBuild</a> in the Contribution section.</p>
+
+<h1><a name="FAQ-CCTray"></a>CCTray</h1>
+
+
+<h4><a name="FAQ-DisplayingbuildprogressinCCTray"></a>Displaying build progress in CCTray</h4>
+
+<p>Standard CCNet will show basic information in which stage of the build it is :</p>
+
+<p>getting Source<br/>
+Executing task X</p>
+
+<p>This can be extendended, for Nant and MSBuild look at <a href="http://confluence.public.thoughtworks.org//display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild" title="Viewing build progress with Nant and MSBuild">Viewing build progress with Nant and MSBuild</a>in the Contribution section.</p>
+
+<h4><a name="FAQ-ErrorThoughtWorks.CruiseControl.CCTrayLib.Speech.SpeakingProjectMonitor..ctor"></a>Error ThoughtWorks.CruiseControl.CCTrayLib.Speech.SpeakingProjectMonitor..ctor</h4>
+
+<p>You need to install the Speech software SDK from Microsoft<br/>
+<a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=5e86ec97-40a7-453f-b0ee-6583171b4530&amp;displaylang=en">http://www.microsoft.com/downloads/details.aspx?FamilyID=5e86ec97-40a7-453f-b0ee-6583171b4530&amp;displaylang=en</a></p>
+
+<p>WinXP SP1 has it by default, earlier windows versions must install it separately</p>
+
+<h4><a name="FAQ-"></a></h4>
+
+<p><br clear="all" />
+<br clear="all" /></p>
+
+<h1><a name="FAQ-Developingyourownplugins"></a>Developing your own plugins</h1>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

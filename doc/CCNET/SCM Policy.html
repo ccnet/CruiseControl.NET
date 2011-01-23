@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : SCM Policy</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : SCM Policy
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 17, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <p>This page describes Source Control, Build Management and Issue Tracking policy for the CruiseControl.NET project.</p>
+
+<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This is how CruiseControl.NET manages itself as a project in development. If you are just <b>using</b> CruiseControl.NET you of course do not need to follow these same guidelines, but you might find them useful as a example.</p>
+
+<h2><a name="SCMPolicy-SourceControl"></a>Source Control</h2>
+
+<p>CruiseControl.NET uses the Subversion Source Control server offered by SourceForge.net. Subversion access details for the project can be seen <a href="http://sourceforge.net/svn/?group_id=71179">here</a> .</p>
+
+<p>The main CruiseControl.NET project can be found at <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
+
+<p>CruiseControl.NET is tagged on every successful build by its own Continuous Integration process. These tags have a name related to the build number so look like (for example) <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201</a>.</p>
+
+<p>CruiseControl.NET uses branches only to allow stable releases to be maintained while at the same time offer mainline iterative development. We use the release branching method, as described very well by the book <em><a href="http://www.pragmaticprogrammer.com/titles/svn/index.html">Pragmatic Source Control Using Subversion</a></em> . This means that if we have a release branch active we may decide to fix bugs on that branch, and then merge changes to the trunk. Apart from in extreme circumstances (and occasionally at the start of a branch) we <b>never</b> merge from the trunk to the branch.</p>
+
+<h3><a name="SCMPolicy-WorkingontheTrunk"></a>Working on the Trunk</h3>
+
+<p>Most work should be performed on the trunk. For this scenario, just check out <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
+
+<h3><a name="SCMPolicy-WorkingontheBranch"></a>Working on the Branch</h3>
+
+<p>A release branch should <b>only</b> be used when both of the following cases are true:</p>
+<ul>
+	<li>A release branch is currently <em>active</em> for changes</li>
+	<li>The change is absolutely required as part of a new release off the branch</li>
+</ul>
+
+
+<p>Working on the release branch is slightly more complicated that working on the trunk. The following examples are using the cvs command line and the first CruiseControl.NET release branch called <b><tt>RB_1_0</tt></b> :</p>
+<ol>
+	<li>Check out the branch to a <b>separate</b> working directory : <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></li>
+	<li><b>OR</b> if you have already checked out the branch, make sure it is <b>clean</b> and <b>up to date</b>. Please try <b>not</b> to checkin more than one <em>logical change</em> to the branch at once since it makes tracking merges back to the trunk a nightmare</li>
+	<li>Make your changes in this directory</li>
+	<li>Commit as normal</li>
+</ol>
+
+
+<p>Once your change has passed in CCNetLive, you need to <b>merge your changes back to the trunk</b> .</p>
+
+<p>To do this, do the following:</p>
+<ol>
+	<li>Make sure you have a <em>clean</em> working directory of the trunk which is up-to-date and as no pending changes (if necessary check out a new working directory somewhere else on your machine)</li>
+	<li>Perform a merge in the root of your CCNet Trunk working directory. Apply the changes from the repository revision number that relates to your checkin to the branch and the revision before.
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br />If your changes appeared in revision 2396, you would use the following merge recipe: <br clear="all" /> <tt>svn merge -r2395:2396 <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></tt> </td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br />If you use TortoiseSVN, click merge on the top level directory of trunk. In the "From" box select the branch url, then click the topmost Show log button. Pick the revision number you want to merge in.  Tortoise automatically fills in the rest of the dialog - so then click OK.</td></tr></table></div></li>
+	<li><b>Run a local build!</b> You need to make sure that your merge has worked on the trunk so don't go blindly committing. <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
+	<li>Commit, mentioning in your commit message that you have done a merge, and what versions you merged
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br /> CCNET-570 - cctray displays "Project is not automatically triggered" if the no next build date is set <br clear="all" /> (merged from 1.0, revision 2396) </td></tr></table></div></li>
+	<li>Check CCNetLive that your build has passed and that the files that have been committed are exactly those included in the change to the branch</li>
+</ol>
+
+
+<h3><a name="SCMPolicy-BranchingHistory"></a>Branching History</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Branch </th>
+<th class='confluenceTh'> Active? </th>
+<th class='confluenceTh'> Date Created </th>
+<th class='confluenceTh'> Label Immediately Before Branch </th>
+<th class='confluenceTh'> Comment </th>
+<th class='confluenceTh'> Date Retired </th>
+</tr>
+<tr>
+<td class='confluenceTd'> RB_1_0 </td>
+<td class='confluenceTd'> <img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> </td>
+<td class='confluenceTd'> 2005-09-29 </td>
+<td class='confluenceTd'> ver-1_0_0_1171 </td>
+<td class='confluenceTd'> Version 1.0 Release Branch </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+</tbody></table>
+
+<h3><a name="SCMPolicy-Creatinganewbranch"></a>Creating a new branch</h3>
+
+<p>First make sure that the all changes to the trunk have built successfully. Then, using the svn command line, issue the following command in a trunk working directory:</p>
+<ul>
+	<li><tt>svn</tt> <tt>copy</tt> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/BranchName">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/BranchName</a></li>
+</ul>
+
+
+<p>Finally, update the Branching History table above, making note of the label created by the last CCNetLive build.</p>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

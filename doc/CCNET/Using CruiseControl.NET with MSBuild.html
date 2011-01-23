@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with MSBuild</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with MSBuild
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 15, 2007 by <font color="#0050B2">christian</font>.
+				    </div>
+
+				    <p>CruiseControl.NET includes an MSBuild Task to integrate MSBuild (.NET 2.0) projects. The <a href="MsBuild Task.html" title="MsBuild Task">MsBuild Task</a> page is the reference for the task, so that will always contain the most up-to-date documentation, but this page acts as a tutorial.</p>
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-Decidewhattobuild"></a>Decide what to build</h2>
+
+<p>Normally, you'll want to build your project's solution file, but you may want to build a specific project file instead. You'll also need to choose whether you want to build a specific target or not. By default, building your solution with no specific target is the best way to start.</p>
+
+<p>In any case, before trying to get CruiseControl.NET to work, make sure you can run MSBuild manually on the command line on your build server for your desired file/target combination. Once you've done this, move on to the next step.</p>
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-GettheXMLLogger"></a>Get the XML Logger</h2>
+
+<p>CruiseControl.NET uses the XML files produces by various tools in order to produce styled results. Unfortunately, MSBuild does not come with a XML Logger by default, so you need to use an external logger to get this functionality. Luckily, Szymon Kobalczyk was good enough to write one, and donated it to the CruiseControl.NET project. If ThoughtWorks.CruiseControl.MSBuild.dll is not installed in your server folder, you can download it <a href="http://ccnetlive.thoughtworks.com/MSBuildXmlLogger%2DBuilds/">here</a>.</p>
+
+<p>Place this dll in your working directory, which will usually be the one where your target file is located. Alternatively, you can specify the full path to the logger assembly in the &lt;logger&gt; node of the &lt;msbuild&gt; task.</p>
+
+<p>If you want to use an alternative logger (e.g. the <a href="http://confluence.public.thoughtworks.org//display/CCNETCOMM/Improved+MSBuild+Integration" title="Improved MSBuild Integration">improved MSBuild Logger</a>), or use the provided logger in a different way, make sure to read up about the <tt>logger</tt> property of the <a href="MsBuild Task.html" title="MsBuild Task">MsBuild Task</a>.</p>
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-SetupyourCruiseControl.NETconfigfile"></a>Setup your CruiseControl.NET config file</h2>
+
+<p>With all this in place, you can add an <tt>&lt;msbuild /&gt;</tt> <a href="MsBuild Task.html" title="MsBuild Task">task</a> section to your project's config file. There are quite a few properties you can set, but making sure the working directory is correct should be the first thing you look at (and normally that will be the directory your target file is in.)</p>
+
+<p>By default, the <tt>&lt;msbuild&gt;</tt> task will instruct the logger to output to a file called <tt>msbuild-output.xml</tt> in your artifact directory. The <tt>msbuild</tt> task will automatically include the contents of this file in your build results (you don't need to use the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>). You might want to consider setting the <tt>buildArgs</tt> property to include the <tt>/noconsolelogger</tt> argument to suppress console (non XML) log output.</p>
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-SetuptheDashboard"></a>Setup the Dashboard</h2>
+
+<p>With the build server all setup, make sure to configure your Dashboard to show MSBuild results. You will need to make the following modifications to the <a href="Configuring the Web Dashboard.html" title="Configuring the Web Dashboard">dashboard.config</a> file:</p>
+<ul>
+	<li>Make sure your <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> includes the <tt>compile-msbuild.xsl</tt> file</li>
+	<li>You'll probably also want to setup an MSBuild Output <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> using the <tt>msbuild.xsl</tt> file, e.g. :
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;xslReportBuildPlugin description=<span class="code-quote">"MSBuild Output"</span> actionName=<span class="code-quote">"MSBuildOutputBuildPlugin"</span> xslFileName=<span class="code-quote">"xsl\msbuild.xsl"</span> /&gt;</span></pre>
+</div></div></li>
+</ul>
+
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-Alternatives"></a>Alternatives</h2>
+
+<p>You can also use NAnt as your primary build tool, and call MSBuild from a NAnt script. Just make sure you use the MSBuild XMLLogger and include its output in your build log.</p>
+
+<h2><a name="UsingCruiseControl.NETwithMSBuild-References"></a>References</h2>
+
+<ul>
+	<li><a href="http://weblogs.asp.net/jdanforth/pages/How-to-Hook-Up-a-VS.NET-2005-Solution-With-CruiseControl.NET-in-a-Few-Minutes.aspx">How to Hook Up a VS.NET 2005 Solution With CruiseControl.NET in a Few Minutes</a> by Johan Danforth</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

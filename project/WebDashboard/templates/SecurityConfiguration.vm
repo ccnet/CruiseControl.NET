@@ -1,0 +1,13 @@
+<!-- SecurityConfiguration.vm: Start -->
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>$translations.Translate("Security Configuration for Project: {0}", $currentProject)</h2>
+#else
+<h2>$translations.Translate("Server Security Configuration")</h2>
+#end
+<pre class="log">$log</pre>
+<!-- SecurityConfiguration.vm: End -->

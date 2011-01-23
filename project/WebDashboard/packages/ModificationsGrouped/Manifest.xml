@@ -1,0 +1,21 @@
+﻿<package>
+  <name>Modifications of a build grouped by changednumber</name>
+  <description>Display the modifications done in the build, grouped by the changenumber of your source control</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>modificationsByChangeNumber.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\modificationsByChangeNumber.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\modificationsByChangeNumber.xsl</value>
+    </setting>  
+  </configuration>
+</package>

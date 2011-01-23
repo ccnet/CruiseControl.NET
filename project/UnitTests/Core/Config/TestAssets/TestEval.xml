@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <eval1>
+      <cb:eval expr="9*6" />
+    </eval1>
+    <cb:define a="3" b="18" />
+    <eval2>
+      <cb:eval expr="$(b)/$(a)" />
+    </eval2>
+    <eval3>
+      <cb:eval expr="new Date()" />
+    </eval3>
+    <eval3>
+      <cb:eval expr="'$(b)'.Substring(1)" />
+    </eval3>
+    <evalliteral>
+      <cb:define str="a string with 'things' which may need to be &quot;escaped&quot;" />
+      <cb:eval expr="'$(str:js)'.ToUpper()" />
+    </evalliteral>
+    <cb:define two="{1+1}" />
+    <two>$(two)</two>
+    <cb:define name="three">
+      <three>
+        <cb:threeval />
+      </three>
+    </cb:define>
+    <cb:three>
+      <cb:define name="threeval">
+        <inner />
+      </cb:define>
+    </cb:three>
+  </root>
+</cb:config-template>

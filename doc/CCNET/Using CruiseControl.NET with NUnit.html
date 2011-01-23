@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with NUnit</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with NUnit
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 15, 2005 by <font color="#0050B2">richardjfoster</font>.
+				    </div>
+
+				    <h3><a name="UsingCruiseControl.NETwithNUnit-IntegratingNUnitintoyourbuildintheCruiseControl.NETServer"></a>Integrating NUnit into your build in the <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a></h3>
+
+<p>The typical way to integrate the <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> with NUnit is to run NUnit as part of your Build Process. This is the recommended mechanism since it means developers are using a build process closer to the integration process.</p>
+
+<p>If you're using NAnt, you'll either be using an <tt>&lt;exec&gt;</tt> task or <tt>&lt;nunit&gt;</tt> task to do this (we recommend using <tt>&lt;exec&gt;</tt> - its more stable across changing versions of NUnit.) Make sure to use <b>xml output</b>.</p>
+
+<p>A line out of CruiseControl.NET's own build file is below, as an example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;exec program=<span class="code-quote">"${nunit-console.exe}"</span> workingdir=<span class="code-quote">"${build.dir}\core"</span> commandline=<span class="code-quote">"${core.dll} /xml:../${core.dll}-results.xml /nologo"</span>/&gt;</span></pre>
+</div></div>
+
+<p>If you are not using a scripted build, you can also use the <a href="NUnit Task.html" title="NUnit Task">NUnit Task</a>. We don't recommend this, but its up to you.</p>
+
+<p>Once you've got NUnit running, use a <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> to include the NUnit results into your build results file - you'll need to make sure you're including all the NUnit xml files.</p>
+
+<p>Finally, make sure you're using an <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a>.</p>
+
+<h3><a name="UsingCruiseControl.NETwithNUnit-IntegratingNUnitresultsintotheBuildReport"></a>Integrating NUnit results into the Build Report</h3>
+
+<p>CruiseControl.NET, by default, attempts to style the NUnit output into useful results in the reporting applications. If the results aren't showing up look at the help on the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> page.</p>
+
+<h3><a name="UsingCruiseControl.NETwithNUnit-AllowingmultipleNUnittestassembliestorun%2Ceveniftherearesometestfailures."></a>Allowing multiple NUnit test assemblies to run, even if there are some test failures.</h3>
+
+<p>The typical operation of CruiseControl, NAnt (or MSBuild) and NUnit means that if there is a failure in the tests performed by the first assembly, the build process will terminate. This operation is by design.</p>
+
+<p>One of the principles of Continuous Integration is that build failures are reported as quickly as possible. Since CruiseControl already knows that the build has failed, there is no point running the other tests!</p>
+
+<p>If you are using a build tool like NAnt, you can change this operation by modifying the build script so you control when the failure is reported. The example below describes how to create a NAnt target which will run both sets of tests, even if the first one fails.</p>
+
+<p>Assume you have two NUnit test assemblies, let' s call them UnitTestAssembly.dll and AcceptanceTestAssembly.dll. Your initial NAnt script would probably contain something like this:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"test"</span> description=<span class="code-quote">"runs the unit and acceptance tests"</span>&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Unit Test Assembly --&gt;</span></span>
+    <span class="code-tag">&lt;exec program=<span class="code-quote">"${nunit-console.exe}"</span>&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"UnitTestAssembly.dll"</span> /&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"/xml=UnitTestAssembly-Results.xml"</span> /&gt;</span>
+    <span class="code-tag">&lt;/exec&gt;</span>
+
+    <span class="code-tag"><span class="code-comment">&lt;!-- Acceptance Test Assembly --&gt;</span></span>
+    <span class="code-tag">&lt;exec program=<span class="code-quote">"${nunit-console.exe}"</span>&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"AcceptanceTestAssembly.dll"</span> /&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"/xml=AcceptanceTestAssembly-Results.xml"</span> /&gt;</span>
+    <span class="code-tag">&lt;/exec&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<p>The first thing you might be tempted to try is to add the <tt>failonerror</tt> attribute to the <tt>&lt;exec&gt;</tt> task, however while this allows both sets of tests to run, it also means that NAnt no longer reports the failure back to CruiseControl (although the failure does still appear in the build log). To solve this problem, modify the NAnt script as shown below:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"test"</span> description=<span class="code-quote">"runs the unit tests"</span>&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Unit Test Assembly --&gt;</span></span>
+    <span class="code-tag">&lt;exec program=<span class="code-quote">"nunit-console.exe"</span> failonerror=<span class="code-quote">"false"</span> resultproperty=<span class="code-quote">"testresult.unittestassembly"</span>&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"UnitTestAssembly.dll"</span> /&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"/xml=UnitTestAssembly-Results.xml"</span> /&gt;</span>
+    <span class="code-tag">&lt;/exec&gt;</span>
+
+    <span class="code-tag"><span class="code-comment">&lt;!-- Acceptance Test Assembly --&gt;</span></span>
+    <span class="code-tag">&lt;exec program=<span class="code-quote">"nunit-console.exe"</span> failonerror=<span class="code-quote">"false"</span> resultproperty=<span class="code-quote">"testresult.acceptancetestassembly"</span>&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"AcceptanceTestAssembly.dll"</span> /&gt;</span>
+        <span class="code-tag">&lt;arg value=<span class="code-quote">"/xml=AcceptanceTestAssembly-Results.xml"</span> /&gt;</span>
+    <span class="code-tag">&lt;/exec&gt;</span>
+
+    <span class="code-tag"><span class="code-comment">&lt;!-- Check the results and fail if necessary --&gt;</span></span>
+    <span class="code-tag">&lt;fail message=<span class="code-quote">"Failures reported in unit tests."</span> unless=<span class="code-quote">"${int::parse(testresult.unittestassembly)==0}"</span> /&gt;</span>
+    <span class="code-tag">&lt;fail message=<span class="code-quote">"Failures reported in acceptance tests."</span> unless=<span class="code-quote">"${int::parse(testresult.acceptancetestassembly)==0}"</span> /&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Packaging a Release</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Packaging a Release
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 02, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Some points for saving time :</p>
+<ul>
+	<li>Create the release notes a few days before the actual release, giving other devs also the chance to complete it, read it over, ...</li>
+	<li>Prepare the mail to be sent to the dev and user list in advance, and save it as a draft. So you do not have to do a quick write on the release day itself</li>
+	<li>When the release is a RC, state in the mail that an RC means it has to be tested with as much users as possible, include the points below :
+	<ul>
+		<li>use your existing config on a spare / virtual PC</li>
+		<li>test it with a couple of CCNet projects, one of every kind you have (CI, deploy, ...)</li>
+		<li>remove the labelling part of the scm so you do not interfere with the life/ production system&nbsp;</li>
+		<li>use the null task to simulate different build results (succeed, failed), eg.: for new publishers</li>
+		<li>use the null source control to simulate errors on source control operations, eg.: for new publishers</li>
+	</ul>
+	</li>
+</ul>
+</td></tr></table></div>
+<p>The process of producing a new stable release of CruiseControl.NET is as follows (note that some steps require non-default permissions):</p>
+<ol>
+	<li>Choose the release number "<em>x.y</em>". In most cases, <em>x</em> will remain the same and <em>y</em> will increase by 1 from the previous release.</li>
+	<li>Rename the release in Jira to be a valid release name (requires ccnet_administrator group membership on Jira)
+	<ol>
+		<li>"Administer Project"</li>
+		<li>"Manage Versions"</li>
+		<li>"Edit Details" on "Next"</li>
+		<li>Set the version number to "<em>x</em>.<em>y</em>".</li>
+		<li>Set the description to "CCNet <em>x</em>.<em>y</em> Release"</li>
+		<li>Set the release date to today's date.</li>
+	</ol>
+	</li>
+	<li>Add a new release "Next"
+	<ol>
+		<li>"Add Version"
+		<ol>
+			<li>Name = "Next"</li>
+			<li>Description = "Issues that will be resolved in the next release"</li>
+			<li>Schedule = "<em>x</em>.<em>y</em>" (read the note in JIRA to see why this works)</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Move the open Jira issues from the new version number to "Next":
+	<ol>
+		<li>"Browse Project"</li>
+		<li>"Road Map"</li>
+		<li>"All Versions"</li>
+		<li>"<em>x</em>.<em>y</em>"</li>
+		<li>Use the filters in the left bar to select issues with "Open", "In Progress" or "Reopened" status</li>
+		<li>Select "Bulk change all n issues"</li>
+		<li>Select the checkbox in the table header</li>
+		<li>Press the "Next &#45;&gt;" button</li>
+		<li>Select "Edit issues"</li>
+		<li>Press the "Next &#45;&gt;" button</li>
+		<li>Check "Change Fix Version/s:" and choose release "Next".</li>
+		<li>Press the "Next &#45;&gt;" button.</li>
+		<li>Press the "Confirm" button.</li>
+	</ol>
+	</li>
+	<li>Move any resolved Jira issues from non-release and non-"Next" releases (<em>e.g.</em>, "Soon", "Medium Term") to the new version number:
+	<ol>
+		<li>"Browse Project"</li>
+		<li>"Road Map"</li>
+		<li>"All Versions"</li>
+		<li>Find any release names that have non-"UNRESOLVED" entries and click on those release names (one at a time, of course):
+		<ol>
+			<li>Select "Bulk change all n issues"</li>
+			<li>Select the checkbox in the table header</li>
+			<li>Press the "Next &#45;&gt;" button</li>
+			<li>Select "Edit issues"</li>
+			<li>Press the "Next &#45;&gt;" button</li>
+			<li>Check "Change Fix Version/s:" and choose release "<em>x</em>.<em>y</em>".</li>
+			<li>Press the "Next &#45;&gt;" button.</li>
+			<li>Press the "Confirm" button.</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Create new release notes using the <a href="http://jira.public.thoughtworks.org/ConfigureReleaseNote.jspa?projectId=10000">CCNet Jira Release Notes generator</a> and the new version number.</li>
+	<li>Add a new page to Confluence (child of <a href="Download.html" title="Download">Download</a>) to contain generated release notes.
+	<ol>
+		<li>Go to <a href="http://confluence.public.thoughtworks.org/display/CCNET/Download">http://confluence.public.thoughtworks.org/display/CCNET/Download</a></li>
+		<li>Click on "Add Child Page"</li>
+		<li>Set the name to "CCNet x.y Release Notes"</li>
+		<li>Paste in the text-version of the release notes.</li>
+		<li>Massage it into shape:
+		<ol>
+			<li>Wikify the headings: "*&#42; <em>X</em>" &#45;&gt; "h4. <em>X</em>"</li>
+			<li>Fix up the Jira-entry names: " * [<em>X</em>] <em>Y</em>" &#45;&gt; "&#42; <em>X</em> <em>Y</em>"</li>
+			<li>Add to the top:
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>h2. Highlights of the CCNet x.y release
+
+h4. ...title...
+
+...description...
+
+h4. ...title...
+
+...description...
+
+...
+
+h2. Upgrading to CCNet x.y
+
+{warning:title=...synopsis...}
+...whatever breaking changes there are in release x.y...
+{warning}
+{note:title=Upgrading from a version before x.y-1?}
+See the release notes for the [CCNet x.y-1 release|CCNet x.y-1 Release Notes].
+{note}
+
+h2. Release Notes - CruiseControl .NET - Version x.y
+
+This is a list of [Jira Issues resolved by this release|_the Release Notes URL from ???_] :
+</pre>
+</div></div></li>
+			<li>Add some highlights.</li>
+			<li>Note any breaking changes.</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li><del>Update version number in the nsi files(ccnet.nsi, cctray.nsi, ccvalidator.nsi) installer files</del>. (automated)
+	<ol>
+		<li><del>&#33;define PRODUCT_VERSION "</del><em><del>x</del></em><del>.</del><em><del>y</del></em><del>"</del></li>
+	</ol>
+	</li>
+	<li><del>Update the copyright year:</del>&#35;# <del>Update the "AssemblyCopyrightAttribute" value in the /ccnet.build file's "createAssemblyInfo" task:</del>&#35;## <del>&lt;attribute type="AssemblyCopyrightAttribute" value="Copyright ©</del> <em><del>yyyy</del></em> <del>ThoughtWorks Inc." /&gt;</del>
+	<ol>
+		<li><del>Update the "AssemblyCopyrightAttribute" value in the /project/CommonAssemblyInfo.cs</del> <del><a href="file:-###">file:-###</a></del> <del>&#45;[assembly: AssemblyCopyrightAttribute("Copyright ©</del> <em><del>yyyy</del></em> <del>ThoughtWorks Inc.")]&nbsp;</del> (automated)</li>
+	</ol>
+	</li>
+	<li>Update the CruiseControl.NET Live version number for CCNet by editting the ccnet.config file.
+	<ol>
+		<li>"svn checkout <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/environments">https://ccnet.svn.sourceforge.net/svnroot/ccnet/environments</a>"</li>
+		<li>Change the &lt;prefix&gt; value in the &lt;labeller&gt; element to "<em>x</em>.<em>y</em>.0".</li>
+		<li>Change the &lt;artifactDirectory&gt; value to "e:\download-area\CCNet-Builds_x_.<em>y</em>"</li>
+		<li>Copy the history files from the previous release to the new release's folder.</li>
+	</ol>
+	</li>
+	<li><a href="http://confluence.public.thoughtworks.org/spaces/exportspace.action?key=CCNET">Export</a> Confluence space as Html. Extract the exported zip into your local ccnet\docs folder, and then check the modified Html files into SVN. This way the next CCNetLive build will package the latest documentation from Confluence.
+	<ol>
+		<li>Choose "HTML Output"</li>
+		<li>De-select "Include comments".</li>
+		<li>Make sure all pages are selected.</li>
+		<li>Press the "Export" button (at the bottom of the page) and wait for the file to download.</li>
+		<li>Save the resulting "CCNET&#45;<em>yyyymmdd</em>&#45;<em>hh</em>_<em>mm</em>_<em>ss</em>.zip" file.</li>
+		<li>Delete all files (but not folders) in your "/doc" folder. (the nant build file has a target '<em>ClearDocFolders</em>' that takes care of the deleting)</li>
+		<li>Unzip the export ZIP file into your "/doc" folder.</li>
+		<li>Ensure than all the line-end sequences in the text (.css, .html, and .xsl) files are CRLF if you're using a Windows system, or LF if Unix. Confluence runs on a Unix system, so they are likely to be LF in the export file. Consider using a tool like ToFroWin CR/LF converter (from <a href="http://sysd.org/stas/node/34">http://sysd.org/stas/node/34</a>) or the unix2dos and dos2unix commands to do so.</li>
+		<li>Add any new files to the Subversion repository:
+		<ol>
+			<li>svn add <em>filename</em></li>
+			<li>If the file is a text file:
+			<ol>
+				<li>svn propset svn:eol native</li>
+				<li>svn propset svn:keywords "Author Date Id Revision"</li>
+			</ol>
+			</li>
+		</ol>
+		</li>
+		<li>Delete any obsolete files and folders:
+		<ol>
+			<li>svn status /doc</li>
+			<li>Find all items marked with a "&#33;" (<em>i.e.</em>, missing items)</li>
+			<li>svn delete /doc/item1 /doc/item2 ... /doc/itemn</li>
+		</ol>
+		</li>
+		<li>svn commit</li>
+	</ol>
+	</li>
+	<li>Force a build on CCNet Live and wait till it is done (for the new number)</li>
+	<li>Tag all source with the new version number under url <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags</a>:
+	<ol>
+		<li>svn copy <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ccnet_x_y_final">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ccnet_x_y_final</a> &#45;m "Tag source for CCNet x.y"</li>
+	</ol>
+	</li>
+	<li>Create a release branch with the new version number under url <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches</a>:
+	<ol>
+		<li>svn copy <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y</a> &#45;m "Build release branch for CCNet x.y"</li>
+	</ol>
+	</li>
+	<li>Download the five source and binary distribution files from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive</a> that contain the newly packaged documentation.</li>
+	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming">SourceForge</a> and go through the SourceForge release process.
+	<ol>
+		<li><del>See the</del> <del><a href="http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download">http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download</a></del><del><a href="http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download"><del>SourceForge "Offering Files for Download" page</del></a></del> <del>for a list of options and instructions. For this example, we will use the</del> <b><del>SFTP</del></b> <del>option using</del> <del><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty">http://www.chiark.greenend.org.uk/~sgtatham/putty</a></del><del><a href="http://www.chiark.greenend.org.uk/~sgtatham/putty"><del>Putty's</del></a></del> <b><del>psftp</del></b><del>:</del></li>
+		<li><del>If you're doing a RC (Release Candidate), rename all the exe's to&nbsp; ...-RCX-Setup.exe, where X is the number of the release candidate. (to prevent duplicate names in sourceforge releases)</del></li>
+		<li><del>Upload the files:</del>
+		<ol>
+			<li><del>Open psftp.</del></li>
+			<li><del>"open frs.sourceforge.net"</del></li>
+			<li><del>"cd uploads"</del></li>
+			<li><del>"lcd</del> <em><del>local files directory</del></em><del>"</del></li>
+			<li><del>"mput CruiseControl.NET</del>&#42;"&#45;</li>
+			<li><del>"quit"</del></li>
+		</ol>
+		</li>
+		<li><del>Create the release and associate the files with it:</del>
+		<ol>
+			<li><del>Login to the</del> <del><a href="http://sourceforge.net">http://sourceforge.net</a></del><del><a href="http://sourceforge.net"><del>SourceForge.net website</del></a></del><del>.</del></li>
+			<li><del>Select the project to administer from the</del> <b><del>My Projects</del></b> <del>listing on the</del> <b><del>My Page</del></b><del>.</del></li>
+			<li><del>Select</del> <b><del>Downloads</del></b> <del>from the Admin pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</del></li>
+			<li><del>Click on the</del> <b><del>Add Release</del></b> <del>link next to the "</del><b><del>CruiseControl.NET Releases</del></b><del>" Package Name.</del></li>
+			<li><del>Enter the release name for the release into the</del> <b><del>New release name:</del></b> <del>field (</del><em><del>i.e.</del></em><del>, "CruiseControl.NET</del> <em><del>x.y</del></em><del>") and click the</del> <b><del>Create This Release</del></b> <del>button.</del></li>
+			<li><del>Paste the Change Log and Release notes for the release, in plain text format, from the Release Notes page you created above.</del></li>
+			<li><del>Check the checkbox next to the filename of each file to be added to the release in</del> <b><del>Section 2</del></b> <del>of the form, and click on the</del> <b><del>Add Files and/or Refresh View</del></b> <del>button</del></li>
+			<li><del>Go to Step 3 of the form, modifying the value in each field for each file, as necessary. Click on the 'Update/Refresh' button after each change to a file.</del></li>
+			<li><del>Click on the</del> <b><del>Create / Edit Download Page</del></b><del>&nbsp; on the top left of the screen</del></li>
+			<li><del>Delete any files that may exists in the primary download file / secondary file&nbsp; sections</del></li>
+			<li><del>Add</del> <b><del>CruiseControl X.Y Setup.exe</del></b> <del>as the primary download file</del></li>
+			<li><del>Add the other files as secondary download files</del></li>
+			<li><del>Press</del> <b><del>Save</del></b></li>
+		</ol>
+		</li>
+		<li>Login to the <a href="http://sourceforge.net">SourceForge.net website</a>.
+		<ol>
+			<li>Click on <b>Account</b> on <em>middle-top</em> of the page.</li>
+			<li>Click on <b>Projects</b></li>
+			<li>Select <b>CruiseControl.Net</b> (you should arrive at the <a href="https://sourceforge.net/projects/ccnet/">SourceForge CCNet Project site</a>)</li>
+			<li>Select <b>Project Admin</b>&nbsp; &#45;-&gt; &nbsp; <b>File Manager</b></li>
+			<li>You'll see a folder structure with 3 sub folders :
+			<ol>
+				<li>CruiseControl.NET Examples</li>
+				<li>CruiseControl.NET Releases</li>
+				<li>OldFiles</li>
+			</ol>
+			</li>
+			<li>Create a new folder named according to the release (see other folders), by clicking on the cog wheel next to CruiseControl.NET Releases</li>
+			<li>Upload the files 1 by 1 by clicking on the cog wheel next to the newly created folder and select upload.</li>
+			<li>Make the setup exe te primary download for windows : click on the cog wheel next to the setup exe, and select properties.</li>
+			<li>On the window on the right side, check Windows, and press Save.</li>
+		</ol>
+		</li>
+		<li>Go back to the main page of CCNet on Sourfeforge (<a href="https://sourceforge.net/projects/ccnet/">SourceForge CCNet Project site</a>)</li>
+		<li>edit the project settings , the second edit link you see.</li>
+		<li>Change the line Latest release to the correct number and mention the build number.</li>
+	</ol>
+	</li>
+	<li>Add news of the release on <a href="http://www.sourceforge.net/projects/ccnet">SourceForge</a> and the <a href="News.html" title="News">Confluence news blog</a>.
+	<ol>
+		<li>SourceForge:
+		<ol>
+			<li>Login to the <a href="http://sourceforge.net">SourceForge.net website</a>.</li>
+			<li>Select the project to administer from the <b>My Projects</b> listing on the <b>My Page</b>.</li>
+			<li>Select <b>Develop - News</b> from the pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
+			<li>Click on the <b>Submit</b> link near the top of the list.</li>
+			<li>Fill in the fields and submit the news item.<br/>
+Summary : CruiseControl.NET <em>x.y released</em><br/>
+Details : paste the release Notes</li>
+		</ol>
+		</li>
+		<li>Confluence:
+		<ol>
+			<li>Login to Confluence</li>
+			<li>Click on one of the date lines from the previous release announcements. You should arrive at a "News form &lt;some date&gt;" page.</li>
+			<li>There is a row of tabs near the top of this page. To the right of that row is an "Add News" button. Click on the button.</li>
+			<li>Enter "CruiseControl.NET <em>x</em>.<em>y</em> Released" as the headline.</li>
+			<li>Enter wiki markup similar to the following for the body:
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">* Please see the [release notes|CCNet 1.4.1 Release Notes].
+* Download it now from [SourceForge|http:<span class="code-comment">//sourceforge.net/project/showfiles.php?group_id=71179&amp;package_id=83198&amp;release_id=641041].
+</span>
+CCNet 1.4.1 is the equivalent to build 1.4.1.3795 from [ccnetlive|http:<span class="code-comment">//ccnetlive.thoughtworks.com/].</span></pre>
+</div></div></li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Email the <a href="mailto:ccnet-user@googlegroups.com">CCNet users list</a> to notify the users that the new release is ready.</li>
+	<li>Set the currently released version to <a href="http://jira.public.thoughtworks.org/secure/project/ViewProject.jspa?pid=10000">"Released"</a> on the Jira. (requires ccnet_administrator group membership on Jira)
+	<ol>
+		<li>"Administer Project"</li>
+		<li>"Manage Versions"</li>
+		<li>"Release" on "<em>x</em>.<em>y</em>"</li>
+		<li>Set the release date to today's date.</li>
+	</ol>
+	</li>
+	<li>Upgrade the version that ccnetlive is running.</li>
+</ol>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Server Application Config File</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Server Application Config File
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 18, 2010 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <p>Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server:</p>
+<ul>
+	<li>If you are running the Console Application, the application config file is called <b><tt>ccnet.exe.config</tt></b>.</li>
+	<li>If you are running the Windows Service Application, the application config file is called <b><tt>ccservice.exe.config</tt></b></li>
+</ul>
+
+
+<p><b>For most installations the default settings in this file will be appropriate</b>.</p>
+
+<p>This file is a standard .NET application config file. Parts of it that are specific to CruiseControl.NET are as follows:</p>
+
+<p><a name="ServerApplicationConfigFile-xslFiles"></a></p>
+<h4><a name="ServerApplicationConfigFile-XSLFileconfiguration"></a>XSL File configuration</h4>
+
+<p>The <tt>&lt;xslFiles&gt;</tt> section defines what xsl files are included for transforming the build file for reporting behaviour within the server. If you want to include extra xsl files (for example if you have your own build behaviours), then add them here.</p>
+
+<p><a name="ServerApplicationConfigFile-remoting"></a></p>
+<h4><a name="ServerApplicationConfigFile-RemotingConfiguration"></a>Remoting Configuration</h4>
+
+<p>The CruiseControl.NET Server can open a remoting server port so that other applications in the CCNet suite can communicate with it (<a href="CCTray.html" title="CCTray">CCTray</a>, <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>). By default CCNet listens on port 21234, but this can be changed under the <tt>&lt;system.runtime.remoting&gt;</tt> section.</p>
+
+<p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> <b>You'll need to change this value if you want to run multiple CruiseControl.NET servers on 1 machine</b></p>
+
+<p><a name="ServerApplicationConfigFile-logging"></a></p>
+<h4><a name="ServerApplicationConfigFile-LoggingConfiguration"></a>Logging Configuration</h4>
+
+<p>Logging of the Server activities (not the build logs themselves) is implemented using .NET Tracing, and this is configurable in the <tt>&lt;system.diagnostics&gt;</tt> section of the application config file. In this section you can change log level (the <tt>&lt;switches&gt;</tt> section), and where log data is sent to (the <tt>&lt;trace&gt;</tt> section).</p>
+
+<p>If you are using a <tt>LogFileTraceListener</tt> in the <tt>&lt;trace&gt;</tt> section, then you can configure the server log file name there. This same file name should be set as the value for the <tt>ServerLogFilePath</tt> key in the <tt>&lt;appSettings&gt;</tt> section. This value is used when remote applications request to see the server log file. The number of lines returned from the end of the server log file to the remote application is specified by the <tt>ServerLogFileLines</tt> value.</p>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note that with some log levels certain potentially sensitive details may be logged, including source control passwords. Make sure you check your log file and set the log level appropriately.</p></td></tr></table></div>
+
+<p><a name="ServerApplicationConfigFile-service"></a></p>
+<h4><a name="ServerApplicationConfigFile-ServiceSpecificSettings"></a>Service Specific Settings</h4>
+
+<p>If you are running the console application, you have the option of passing in various arguments on the command line. If however you are using the Service application you can't do this, but there are extra options you can set in the <tt>&lt;appSettings&gt;</tt> section of the config file, as follows:</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Key </th>
+<th class='confluenceTh'> Equivalent startup parameter in <a href="The Server Console Application.html" title="The Server Console Application">The Server Console Application</a> </th>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>ccnet.config</tt> </td>
+<td class='confluenceTd'> <tt>config</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>remoting</tt> </td>
+<td class='confluenceTd'> <tt>remoting</tt> </td>
+</tr>
+</tbody></table>
+
+<h4><a name="ServerApplicationConfigFile-GeneralConfigurationSettings"></a>General Configuration Settings</h4>
+
+<p>The table below describes general configuration settings that are in the <b>appSettings</b> section of the application configuration file.</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Key </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Default Value </th>
+</tr>
+<tr>
+<td class='confluenceTd'>WatchConfigFile</td>
+<td class='confluenceTd'>Turns on/off monitoring of the <b>ccnet.config</b> file for changes.  By default, the CCNet server will monitor this file and will automatically restart the server and reload the updated configuration settings.  Setting this value to false will disable this feature.</td>
+<td class='confluenceTd'>True</td>
+</tr>
+<tr>
+<td class='confluenceTd'> PluginLocation </td>
+<td class='confluenceTd'> An optional location to search for plugins. The server applications will always look in the application folder for any plugin definitions. This settings allows an extra folder to be specified for plugins. </td>
+<td class='confluenceTd'> <em>None</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> DataDrive </td>
+<td class='confluenceTd'> The main data drive used by CruiseControl.NET. This is used for checking the amount of free disk space. </td>
+<td class='confluenceTd'> C: </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ShadowCopy </td>
+<td class='confluenceTd'> Whether shadow copying should be enabled or not. Shadow-copying is required for hot-swapping, but does have a performance hit (i.e. when the files are copied.) Additionally some older OSs do not allow this option. </td>
+<td class='confluenceTd'> On </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cacheTime </td>
+<td class='confluenceTd'> The amount of time (in seconds) a build log will be cached for before it is expired. The minimum allowed value is 10 seconds. </td>
+<td class='confluenceTd'> 5 minutes </td>
+</tr>
+</tbody></table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

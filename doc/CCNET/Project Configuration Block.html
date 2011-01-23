@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Project Configuration Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Project Configuration Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Feb 08, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h1><a name="ProjectConfigurationBlock-ProjectConfigurationBlock"></a>Project Configuration Block</h1>
+
+<p>A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.  </p>
+
+<h2><a name="ProjectConfigurationBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ProjectConfigurationBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;artifactDirectory&gt;</span>yourArtifactDirectory<span class="code-tag">&lt;/artifactDirectory&gt;</span>
+  <span class="code-tag">&lt;category&gt;</span>Category 1<span class="code-tag">&lt;/category&gt;</span>
+  <span class="code-tag">&lt;webURL&gt;</span>http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
+  <span class="code-tag">&lt;modificationDelaySeconds&gt;</span>2<span class="code-tag">&lt;/modificationDelaySeconds&gt;</span>
+  <span class="code-tag">&lt;maxSourceControlRetries&gt;</span>5<span class="code-tag">&lt;/maxSourceControlRetries&gt;</span>
+  <span class="code-tag">&lt;initialState&gt;</span>Stopped<span class="code-tag">&lt;/initialState&gt;</span>
+  <span class="code-tag">&lt;startupMode&gt;</span>UseInitialState<span class="code-tag">&lt;/startupMode&gt;</span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!--yourFirstTriggerType .. --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!--yourOtherTriggerType .. --&gt;</span></span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- state type=<span class="code-quote">"yourStateManagerType"</span> .. --&gt;</span></span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- sourcecontrol type=<span class="code-quote">"yourSourceControlType"</span> .. --&gt;</span></span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- labeller type=<span class="code-quote">"yourLabellerType"</span> .. --&gt;</span></span>
+  <span class="code-tag">&lt;prebuild&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourFirstPrebuildTask .. --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourOtherPrebuildTask .. --&gt;</span></span>
+  <span class="code-tag">&lt;/prebuild&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourFirstTask .. --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourOtherTask .. --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourFirstPublisherTask .. --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- yourOtherPublisherTask .. --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;externalLinks&gt;</span>
+    <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My First Link"</span> url=<span class="code-quote">"http://somewhere/"</span> /&gt;</span>
+    <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My Other Link"</span> url=<span class="code-quote">"http://somewhere.else/"</span> /&gt;</span>
+  <span class="code-tag">&lt;/externalLinks&gt;</span>
+  <span class="code-tag">&lt;parameters&gt;</span>
+    <span class="code-tag">&lt;textParameter name=<span class="code-quote">"Build Name"</span> default=<span class="code-quote">"Unknown"</span> /&gt;</span>
+  <span class="code-tag">&lt;/parameters&gt;</span>
+  <span class="code-tag">&lt;linkedSites&gt;</span>
+    <span class="code-tag">&lt;namedValue name=<span class="code-quote">"ohloh"</span> value=<span class="code-quote">"5623"</span> /&gt;</span>
+  <span class="code-tag">&lt;/linkedSites&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ProjectConfigurationBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> askForForceBuildReason </td>
+<td class='confluenceTd'> Should a reason be requested when a force build is triggered.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>None</li>
+	<li>Optional</li>
+	<li>Required</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> category </td>
+<td class='confluenceTd'> A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> artifactDirectory </td>
+<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Artifacts </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> WorkingDirectory </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> An optional description of the project.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> externalLinks </td>
+<td class='confluenceTd'> Each of these are used to display project related links on the project report page of the Web Dashboard, and are meant as a convenient shortcut to project&#45;related web sites outside of CruiseControl.NET.   </td>
+<td class='confluenceTd'> <a href="External Links.html" title="External Links">External Links</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> impersonation </td>
+<td class='confluenceTd'> An optional impersonation account.  <br clear="all" />This is only available on Windows OSs.   </td>
+<td class='confluenceTd'> <a href="Impersonation.html" title="Impersonation">Impersonation</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> initialState </td>
+<td class='confluenceTd'> Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. This value is only used when startupMode is set to UseInitialState.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Started</li>
+	<li>Stopped</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Started </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labeller </td>
+<td class='confluenceTd'> Labellers are used to generate the label that CCNet uses to identify the specific build. The label generated by CCNet can be used to version your assemblies or label your version control system with each build.   </td>
+<td class='confluenceTd'> <a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="Default Labeller.html" title="Default Labeller">Default Labeller</a> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> linkedSites </td>
+<td class='confluenceTd'> Links for this project to other sites.  Example for the Ohloh Project plugin&lt;linkedSites&gt;&lt;namedValue name="ohloh" value="5623"/&gt;&lt;/linkedSites&gt;   </td>
+<td class='confluenceTd'> <a href="Named Value.html" title="Named Value">Named Value</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> maxSourceControlRetries </td>
+<td class='confluenceTd'> The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when stopProjectOnReachingMaxSourceControlRetries is set to true).   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> modificationDelaySeconds </td>
+<td class='confluenceTd'> The minimum number of seconds allowed between the last check in and the start of a valid build.  <br clear="all" />If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window. This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of your project &#45; this must be unique for any given CruiseControl.NET server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> parameters </td>
+<td class='confluenceTd'> Dynamic build parameters &#45; these are parameters that are set at build time instead of being hard&#45;coded within the configuration file   </td>
+<td class='confluenceTd'> <a href="Parameters.html" title="Parameters">Parameters</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> prebuild </td>
+<td class='confluenceTd'> A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.   </td>
+<td class='confluenceTd'> Task Blocks array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> publishers </td>
+<td class='confluenceTd'> The list of build&#45;completed publishers used by this project.   </td>
+<td class='confluenceTd'> Task Blocks array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> queue </td>
+<td class='confluenceTd'> The name of the integration queue that this project will use. By default, each project runs in its own queue.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project name </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> queuePriority </td>
+<td class='confluenceTd'> The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non&#45;zero priorities in the same queue.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> security </td>
+<td class='confluenceTd'> Any security for the project.   </td>
+<td class='confluenceTd'> <a href="Project Level Security.html" title="Project Level Security">Project Level Security</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="Inherited Project Security.html" title="Inherited Project Security">Inherited Project Security</a> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourcecontrol </td>
+<td class='confluenceTd'> The source control block to use.   </td>
+<td class='confluenceTd'> <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="Null Source Control Block.html" title="Null Source Control Block">Null Source Control Block</a> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceControlErrorHandling </td>
+<td class='confluenceTd'> What action to take when a source control error occurs (during GetModifications).  <br clear="all" />These are the possible values :  
+<ul>
+	<li>ReportEveryFailure : runs the publisher section whenever there is an error.</li>
+	<li>ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, the publisher section will only be run once.</li>
+	<li>ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. When maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.</li>
+</ul>
+</td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>ReportEveryFailure</li>
+	<li>ReportOnRetryAmount</li>
+	<li>ReportOnEveryRetryAmount</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> ReportEveryFailure </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> startupMode </td>
+<td class='confluenceTd'> The start&#45;up mode for this project.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>UseLastState</li>
+	<li>UseInitialState</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> UseLastState </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> state </td>
+<td class='confluenceTd'> A state manager for the project.   </td>
+<td class='confluenceTd'> <a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="File State Manager.html" title="File State Manager">File State Manager</a> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> stopProjectOnReachingMaxSourceControlRetries </td>
+<td class='confluenceTd'> Stops the project on reaching maxSourceControlRetries or not. When set to true, the project will be stopped when the amount of consecutive source control errors is equal to maxSourceControlRetries.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tasks </td>
+<td class='confluenceTd'> A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.   </td>
+<td class='confluenceTd'> Task Blocks array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> triggers </td>
+<td class='confluenceTd'> Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.  <br clear="all" />Specifying an empty element (&lt;triggers /&gt;) means integrations are only ever forced manually (for example using CCTray or the Web Dashboard.) Not including a &lt;triggers&gt; element at all means the project will behave like a &lt;triggers /&gt; element (before 1.4.3 the default when not including a &lt;triggers&gt; was a single <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> with default configuration).   </td>
+<td class='confluenceTd'> <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> webURL </td>
+<td class='confluenceTd'> A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.  <br clear="all" />The default URL contains the machine name of the server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="http://machineName/ccnet">http://machineName/ccnet</a> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="ProjectConfigurationBlock-Notes"></a>Notes</h2>
+
+<h4><a name="ProjectConfigurationBlock-SettingtheWebURL"></a>Setting the WebURL</h4>
+<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">http://{dashboardserver}/{vdir}/server/{ccnetserver}/project/{projectname}/ViewLatestBuildReport.aspx</pre>
+</div></div>
+<p>For example, if the dashboard was deployed on the server  <b>webserver</b> to virtual directory   <b>ccnet</b>, and if the project to monitor is called  <b>test</b> on server cruise, the URL would be:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">http://webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</pre>
+</div></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Monday, 8 Feb 2010 at 8:33:14 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

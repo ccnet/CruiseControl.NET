@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define name="outer">
+    <outer-content>
+      <cb:inner />
+    </outer-content>
+  </cb:define>
+  <cb:define name="nodeset">
+    <nodeset-content />
+  </cb:define>
+  <root>
+    <test-one>
+      <cb:outer inner="textcontent" />
+    </test-one>
+    <test-two>
+      <cb:outer inner="$(nodeset)" />
+    </test-two>
+  </root>
+</cb:config-template>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Queue Configuration</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Queue Configuration
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 25, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="QueueConfiguration-QueuesinCruiseControl.NET"></a>Queues in CruiseControl.NET</h1>
+
+<p>Queues can be defined in one of two ways:</p>
+
+<ol>
+	<li>Implicitly: When a queue is defined in a project element, a queue will be automatically created. This will have the default settings for a queue.</li>
+	<li>Explicitly: This is when a queue element is added to the configuration. <em>Note: projects still need to have the queue element, otherwise they will not be associated with the queue.</em></li>
+</ol>
+
+
+<p>By default, projects belong to a queue with the same name as the project, so if no queue name is defined in the project, a queue will be implicitly defined with the same name as the project.</p>
+
+<h1><a name="QueueConfiguration-QueueConfigurationElement"></a>Queue Configuration Element</h1>
+
+<p>Configure the behaviour of the build queues.</p>
+
+<h2><a name="QueueConfiguration-Version"></a>Version</h2>
+
+<p>Available from version 1.4.2</p>
+
+<h2><a name="QueueConfiguration-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"UseFirst"</span> lockqueues=<span class="code-quote">"Q2,Q3"</span> /&gt;</span></pre>
+</div></div>
+<p>See the notes for additional examples.</p>
+
+<h2><a name="QueueConfiguration-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> duplicates </td>
+<td class='confluenceTd'> Defines how duplicates should be handled. </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>UseFirst</li>
+	<li>ApplyForceBuildsReAdd</li>
+	<li>ApplyForceBuildsReplace</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> UseFirst </td>
+<td class='confluenceTd'> 1.4.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> lockqueues </td>
+<td class='confluenceTd'> A comma sperated list of queue names that the queue should acquire a lock against. </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.4.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the queue. </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.2 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="QueueConfiguration-Notes"></a>Notes</h2>
+
+<h4><a name="QueueConfiguration-DuplicateHandling"></a>Duplicate Handling</h4>
+
+<p>There are three different settings that can be used to specify how force build requests should be handled.<br/>
+The default behaviour is to not allow force build requests to update the queue and use the first request that was added.<br/>
+The following example shows how to explicitly configure the default behavior.</p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"UseFirst"</span> /&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+                ...
+              <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+<p>The following example shows how to configure a queue so that force build requests will replace existing requests of the interval trigger without changing the position of the request in the queue.</p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"ApplyForceBuildsReplace"</span> /&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+                ...
+              <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+<p>The following example shows how to configure a queue so that force build requests will remove existing requests of the interval trigger and re-add a force build request. This is changing the position of the request in the queue.</p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"ApplyForceBuildsReAdd"</span> /&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+                ...
+              <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+<h4><a name="QueueConfiguration-Locking"></a>Locking</h4>
+
+<p>The following example shows how to configure two queues, Q1 and Q2, that acquire a lock against each other. That means that while the queue Q1 is building a project the queue Q2 is locked. While Q2 is building Q1 is locked. To specify more than one queue that should be locked use commas to separate the queue names within the lockqueues attribute. Of course the lockqueues attribute can be used together with the duplicates attribute explained above.</p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> lockqueues=<span class="code-quote">"Q2"</span> /&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q2"</span> lockqueues=<span class="code-quote">"Q1"</span> /&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+                ...
+              <span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MySecondProject"</span> queue=<span class="code-quote">"Q2"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+                ...
+              <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 25 Nov 2009 at 4:41:55 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

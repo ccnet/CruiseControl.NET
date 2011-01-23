@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Email Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Email Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="EmailPublisher-EmailPublisher"></a>Email Publisher</h1>
+
+<p>Publishes results of integrations via email.  This implementation supports plain&#45;text, and Html email formats. Rules regarding who receives email are configurable.  <br/>
+The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.  </p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the &lt;email&gt; publisher, or else you won't be able to include output from the build in the email. A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section. If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section. So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.  </p></td></tr></table></div>
+
+
+<h2><a name="EmailPublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="EmailPublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;email mailport=<span class="code-quote">"25"</span> includeDetails=<span class="code-quote">"TRUE"</span> mailhostUsername=<span class="code-quote">"smtpuser"</span> mailhostPassword=<span class="code-quote">"smtppassword"</span> useSSL=<span class="code-quote">"FALSE"</span>&gt;</span>
+  <span class="code-tag">&lt;from&gt;</span>buildmaster@mycompany.com<span class="code-tag">&lt;/from&gt;</span>
+  <span class="code-tag">&lt;mailhost&gt;</span>smtp.mycompany.com<span class="code-tag">&lt;/mailhost&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag">&lt;user name=<span class="code-quote">"BuildGuru"</span> group=<span class="code-quote">"buildmaster"</span> address=<span class="code-quote">"buildguru@mycompany.com"</span> /&gt;</span>
+    <span class="code-tag">&lt;user name=<span class="code-quote">"JoeDeveloper"</span> group=<span class="code-quote">"developers"</span> address=<span class="code-quote">"joedeveloper@thoughtworks.com"</span> /&gt;</span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;groups&gt;</span>
+    <span class="code-tag">&lt;group name=<span class="code-quote">"developers"</span>&gt;</span>
+      <span class="code-tag">&lt;notifications&gt;</span>
+        <span class="code-tag">&lt;notificationType&gt;</span>Failed<span class="code-tag">&lt;/notificationType&gt;</span>
+        <span class="code-tag">&lt;notificationType&gt;</span>Fixed<span class="code-tag">&lt;/notificationType&gt;</span>
+      <span class="code-tag">&lt;/notifications&gt;</span>
+    <span class="code-tag">&lt;/group&gt;</span>
+    <span class="code-tag">&lt;group name=<span class="code-quote">"buildmaster"</span>&gt;</span>
+      <span class="code-tag">&lt;notifications&gt;</span>
+        <span class="code-tag">&lt;notificationType&gt;</span>Always<span class="code-tag">&lt;/notificationType&gt;</span>
+      <span class="code-tag">&lt;/notifications&gt;</span>
+    <span class="code-tag">&lt;/group&gt;</span>
+  <span class="code-tag">&lt;/groups&gt;</span>
+  <span class="code-tag">&lt;converters&gt;</span>
+    <span class="code-tag">&lt;regexConverter find=<span class="code-quote">"$"</span> replace=<span class="code-quote">"@TheCompany.com"</span> /&gt;</span>
+  <span class="code-tag">&lt;/converters&gt;</span>
+  <span class="code-tag">&lt;modifierNotificationTypes&gt;</span>
+    <span class="code-tag">&lt;NotificationType&gt;</span>Failed<span class="code-tag">&lt;/NotificationType&gt;</span>
+    <span class="code-tag">&lt;NotificationType&gt;</span>Fixed<span class="code-tag">&lt;/NotificationType&gt;</span>
+  <span class="code-tag">&lt;/modifierNotificationTypes&gt;</span>
+  <span class="code-tag">&lt;subjectSettings&gt;</span>
+    <span class="code-tag">&lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value=<span class="code-quote">"Build is still broken for {CCNetProject}"</span> /&gt;</span>
+  <span class="code-tag">&lt;/subjectSettings&gt;</span>
+  <span class="code-tag">&lt;xslFiles&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>xsl\header.xsl<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>xsl\compile.xsl<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>xsl\unittests.xsl<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>xsl\modifications.xsl<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/xslFiles&gt;</span>
+  <span class="code-tag">&lt;attachments&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>C:\Data\AFile.txt<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>Relative.txt<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/attachments&gt;</span>
+<span class="code-tag">&lt;/email&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="EmailPublisher-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> attachments </td>
+<td class='confluenceTd'> A list of files to attach to the e&#45;mail. If the full path is not specified, then it will be relative to the project working directory.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> converters </td>
+<td class='confluenceTd'> A set of elements containing rules for creating email adresses based on the modifiers name. The converters will be used when the name of the modifier is not set in the users section.   </td>
+<td class='confluenceTd'> <a href="Email Converter.html" title="Email Converter">Email Converter</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> groups </td>
+<td class='confluenceTd'> A set of &lt;group&gt; elements that identify which the notification policy for a set of users.   </td>
+<td class='confluenceTd'> <a href="Email Group.html" title="Email Group">Email Group</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> users </td>
+<td class='confluenceTd'> A set of &lt;user&gt; elements that define who to send emails to.   </td>
+<td class='confluenceTd'> <a href="Email User.html" title="Email User">Email User</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> from </td>
+<td class='confluenceTd'> The e&#45;mail address that email will be marked as coming from.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includeDetails </td>
+<td class='confluenceTd'> Whether to send a full report or not. If not, just sends a simple status message with a link to the build report.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailhost </td>
+<td class='confluenceTd'> The SMTP server that CruiseControl.NET will connect to to send email.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailhostPassword </td>
+<td class='confluenceTd'> The password to provide to the SMTP server.   </td>
+<td class='confluenceTd'> PrivateString </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailhostUsername </td>
+<td class='confluenceTd'> The user name to provide to the SMTP server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailport </td>
+<td class='confluenceTd'> The SMTP server port number.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 25 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> modifierNotificationTypes </td>
+<td class='confluenceTd'> A set of &lt;NotificationType&gt; elements, specifying build states for which CruiseControl.Net should send an email to the comitters of the build.   </td>
+<td class='confluenceTd'> String array<br clear="all" />The following values are valid:
+<ul>
+	<li>Always</li>
+	<li>Change</li>
+	<li>Failed</li>
+	<li>Success</li>
+	<li>Fixed</li>
+	<li>Exception</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Always </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> replyto </td>
+<td class='confluenceTd'> The e&#45;mail address to use for replies.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> subjectPrefix </td>
+<td class='confluenceTd'> A string that will be the first string of the subject.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> subjectSettings </td>
+<td class='confluenceTd'> A set of &lt;subject&gt; elements that define the subject of the email, according to the state of the build (broken, fixed, ...)   </td>
+<td class='confluenceTd'> <a href="Email Subject.html" title="Email Subject">Email Subject</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useSSL </td>
+<td class='confluenceTd'> Whether to use SSL or not for sending the e&#45;mail.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> xslFiles </td>
+<td class='confluenceTd'> A list of xsl files that will be used to fill up the message body, if left blank the list will be taken from ccnet.exe.config or ccservice.exe.config.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="EmailPublisher-Notes"></a>Notes</h2>
+
+<h4><a name="EmailPublisher-HTMLE%5Cmails"></a>HTML E&#45;mails</h4>
+<p>When includedDetails = True, the message body will contain more information. This detailed information is constructed from xsl transformations on the build log. If the xslFiles section is filled these files will be used, if not defined the xls files are defined in the ccnet.exe.config in the xslFiles section. (see also: <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). When adjusting one of these, restart the console/service.  <br/>
+The benefits of defining the xsl files in the email publisher:  </p>
+<ul>
+	<li>the xsl files are automatically the same for the console as for the service (no more keeping these 2 in sync)</li>
+	<li>it is possible to give projects different xsl transformations
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>The groups node may be empty, but the group section must exist.  </p></td></tr></table></div>
+<h4><a name="EmailPublisher-GMail"></a>GMail</h4>
+<p>For sending mail via gmail :  </p></li>
+	<li>mailhost="smtp.gmail.com"</li>
+	<li>mailport="587"</li>
+	<li>mailhostUsername="xxx.yyy@gmail.com"</li>
+	<li>mailhostPassword="yourpassword"</li>
+	<li>useSSL="TRUE"</li>
+</ul>
+
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:41 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

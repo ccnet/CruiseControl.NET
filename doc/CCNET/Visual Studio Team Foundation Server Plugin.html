@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Visual Studio Team Foundation Server Plugin</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Visual Studio Team Foundation Server Plugin
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 22, 2009 by <font color="#0050B2">dna</font>.
+				    </div>
+
+				    <p>Because of dependencies on Team Foundation assemblies which cannot be shipped with the Cruise Control source, this plugin is available as a standalone plugin from the <a href="http://www.codeplex.com/TFSCCNetPlugin/">TFS CCNET Plugin</a> project on CodePlex. The plug-in works with Team Foundation Server 2005 and against Team Foundation Server 2008 so long as the Team Explorer client assemblies are available.&nbsp; To download the latest version of the Microsoft Visual Studio Team Explorer client which will install the client assemblies on your machine then visit the <a href="http://www.microsoft.com/downloads/details.aspx?familyid=0ed12659-3d41-4420-bbb0-a46e51bfca86&amp;displaylang=en">Microsoft Download Site</a>.&nbsp; Note that the TFS2008 client assemblies work just fine against a TFS2005 server.</p>
+
+<h3><a name="VisualStudioTeamFoundationServerPlugin-VisualStudioTeamFoundationServer%28VSTS%29ConfigurationExamples"></a>Visual Studio Team Foundation Server (VSTS) Configuration Examples</h3>
+
+<p>Minimal example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span>&gt;</span>
+  <span class="code-tag">&lt;server&gt;</span>my_team_foundation_server<span class="code-tag">&lt;/server&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>$/Foobar<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\projects\Foobar<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><br clear="all" />
+<br clear="all" />
+Full example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"true"</span>&gt;</span>
+  <span class="code-tag">&lt;server&gt;</span>http://my_team_foundation_server:8080<span class="code-tag">&lt;/server&gt;</span>
+  <span class="code-tag">&lt;username&gt;</span>my_user<span class="code-tag">&lt;/username&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>my_password<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;domain&gt;</span>my_domain<span class="code-tag">&lt;/domain&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>$/Foobar<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\projects\Foobar<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;cleanCopy&gt;</span>false<span class="code-tag">&lt;/cleanCopy&gt;</span>
+  <span class="code-tag">&lt;workspace&gt;</span>my_workspace_name<span class="code-tag">&lt;/workspace&gt;</span>
+  <span class="code-tag">&lt;deleteWorkspace&gt;</span>false<span class="code-tag">&lt;/deleteWorkspace&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><br clear="all" />
+<br clear="all" />
+<br clear="all" /></p>
+<h3><a name="VisualStudioTeamFoundationServerPlugin-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> server </td>
+<td class='confluenceTd'> The name or URL of the team foundation server.  For example <br clear="all" />
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>http://tfsserver:8080
+</pre>
+</div></div><br clear="all" />  <br clear="all" />  <br clear="all" />
+or <br clear="all" />
+<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>tfsserver
+</pre>
+</div></div><br clear="all" />  <br clear="all" />
+if it has already been registered on the machine. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> Username that CCNet should use to authenticate with Team Foundation Server </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
+<td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> Password for the Team Foundation user </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
+<td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> domain </td>
+<td class='confluenceTd'> Domain for the Team Foundation user </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
+<td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies if CCNet should automatically retrieve the latest version of the source from the repository </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> applyLabel </td>
+<td class='confluenceTd'> Specifies if CCNet should apply the build label to the repository </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The root folder where the latest source will retrieved the Team Foundation Server. This path can either be absolute or it can be relative to the CCNet project working directory. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> CCNet project working directory </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanCopy </td>
+<td class='confluenceTd'> Determines is the working directory and all its contents should be deleted before the latest version of the source is downloaded </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workspace </td>
+<td class='confluenceTd'> The name of the Workspace under which the source should be retrieved.  This workspace is created at the start of a download, and deleted at the end.  You can normally omit the property unless you want to name a workspace to avoid conflicts on the server (i.e. when you have multiple projects on one server talking to a Team Foundation Server) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "CCNET" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> deleteWorkspace </td>
+<td class='confluenceTd'> Determines if the workspace should be deleted after source is downloaded using the autoGetSource flag. It is much more efficient to leave the workspace because that way the TFS server can remember the state of the files on the CruiseControl.NET server and only send files that have changed or inform the server of deleted / renamed files. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</tbody></table>
+<p><a name="VisualStudioTeamFoundationServerPlugin-credential"></a>&#42;: If no credential is supplied in the config, then the credential of the user that the CruiseControl service runs as will be used automatically.  This user must have permission to read and label the Team Foundation Server Source Control repository.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Unlike most source control blocks, this one does not support the <b>timeout</b> configuration element.</td></tr></table></div>
+
+<h3><a name="VisualStudioTeamFoundationServerPlugin-InstallingthePlugin"></a>Installing the Plugin</h3>
+
+<p>To install the plugin you will need a copy of the ccnet.vsts.plugin.dll assembly.&nbsp; The latest release can be downloaded from the <a href="http://www.codeplex.com/TFSCCNetPlugin/Release/ProjectReleases.aspx">TFS CCNET Plugin project</a>.&nbsp; The assembly should then be copied into the CruiseControl.NET server directory and the configuration file edited appropriately.</p>
+
+<h3><a name="VisualStudioTeamFoundationServerPlugin-TalkingtoCodePlex"></a>Talking to CodePlex</h3>
+
+<p>Microsoft have recently launched <a href="http://www.codeplex.com">CodePlex</a>, a developer community site that uses Team Foundation Server for version control and work item tracking.  The following example demonstrates how to configure the source control block to talk to CodePlex.  Please note that your username should be suffixed with "_cp".</p>
+
+<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"false"</span>&gt;</span>
+  <span class="code-tag">&lt;server&gt;</span>https://tfs04.codeplex.com<span class="code-tag">&lt;/server&gt;</span>
+  <span class="code-tag">&lt;username&gt;</span>USERNAME_cp<span class="code-tag">&lt;/username&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>PASSWORD<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;domain&gt;</span>SND.RNO.GBL<span class="code-tag">&lt;/domain&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>$/Foobar<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\source\Foobar<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><br clear="all" /></p>
+<h3><a name="VisualStudioTeamFoundationServerPlugin-"></a></h3>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

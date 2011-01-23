@@ -1,0 +1,23 @@
+*.pass{
+	background-color: #AAFFAA;
+}
+*.fail{	
+	background-color: #FFAAAA;
+}
+*.fit_label{	
+	color: #AAAAAA;
+}
+*.fiterror{
+	background-color: #FFFFAA;	
+}
+*.fitignore{
+	background-color: #CCCCCC;	
+}
+*.fitheader{	
+	border: solid 1px black;
+	margin: 1px;
+	padding: 2px;
+}
+*.line{	
+	margin: 5px;
+}

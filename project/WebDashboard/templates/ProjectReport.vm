@@ -1,0 +1,221 @@
+<!-- ProjectReport.vm: Start -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#parameterCheck').dialog({
+        autoOpen:false,
+        modal:true,
+        title:'$translations.TranslateJson("Project Parameters")',
+        width:400,
+        height:300,
+        overlay:{
+            opacity:0.5,
+            background:'black'
+          }
+        });
+      $('#StatusGrid').tablesorter({
+          #if ($wholeFarm)
+          sortList:[[0,0],[1,0]]
+          #else
+          sortList:[[0,0]]
+          #end
+        });
+      #set ($RowId = 0)
+      #foreach ($projectGridRow in $projectGrid)
+      #set ($RowId = $RowId + 1)
+      #if ($projectGridRow.BuildStage.Length > 0)
+      $('#projectData$RowId').tipsy();
+      #end
+      #end
+    });
+</script>
+<div id="parameterCheck">
+  <div id="parameterEditor">$translations.Translate("Loading parameters, please wait...")</div>
+</div>
+<form ID="RefreshForm" method="post">
+  <table width="100%">
+    <tr>
+      <td align="right">
+        <input type="submit" align="right" name="Refresh" value="$translations.Translate("Refresh status")" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+<style type="text/css">
+#projectStatus tr th
+{
+	text-align:left;
+}
+</style>
+
+<h2>
+  $translations.Translate("Project Report for {0}", $projectName)
+  #if ($rssDataPresent)
+  <A HREF="$rss.url">
+    <IMG SRC="$applicationPath/images/rss.png" WIDTH="16" HEIGHT="16" BORDER="0" ALT="$rss.text">
+    </A>
+  #end
+    <span style="padding-left:5px;">
+    #if ($ohloh != "")
+        <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_thin_badge.js"></script>
+    #end
+    </span>
+</h2>
+
+
+<table width="100%">
+<tr><td VALIGN="top" width="50%">
+		<table id="projectStatus">
+		  <tr>
+		     <th colspan="2">$translations.Translate("Project Status for {0}", $projectName)</th>
+		  </tr>
+		  </tr>
+		  #if ($status.Description.length > 0)
+		  <tr>
+			<th>$translations.Translate("Description")</th>
+			<td>$status.Description</td>
+		  </tr>
+		  #end
+		  <tr>
+			<th>$translations.Translate("Last Build Status")</th>
+			<td>$translations.Translate($status.BuildStatus.ToString())</td>
+		  </tr>
+		  <tr>
+			<th>$translations.Translate("Last Build Label")</th>
+			<td>$translations.Translate($status.LastBuildLabel)</td>
+		  </tr>
+		  <tr>
+			<th>$translations.Translate("CCNet Status")</th>
+			<td>$translations.Translate($status.Status.ToString())</td>
+		  </tr>
+		  <tr>
+			<th>$translations.Translate("Activity")</th>
+			<td>$translations.Translate($status.Activity.ToString())</td>
+		  </tr>
+		  #if ($status.BuildStage.Length > 0)
+		  <tr>
+		    <td colspan="2">
+		        $translations.FormatBuildStage($status.BuildStage)
+		    </td>
+		  </tr>
+		  #end
+		  <tr>
+		    <td colspan="2">
+		          <form method="POST">
+		            <span>
+    #if ($AllowForceBuild)
+    #if($ForceAbortBuildButtonValue == "Force")
+    <input type="button" name="$ForceAbortBuildButtonName" value="$translations.Translate($ForceAbortBuildButtonValue)" onclick="checkForParams(this, '$ParametersUrl')"/>
+    #else
+    <input type="submit" name="$ForceAbortBuildButtonName" value="$translations.Translate($ForceAbortBuildButtonValue)"/>
+    #end
+    #end
+    #if ($AllowStartStopBuild)
+    <input type="submit" name="$StartStopButtonName" value="$translations.Translate($StartStopButtonValue)"/>
+    #end
+    </span>
+  </form>
+
+		    </td>
+		  </tr>
+			#if ($StatusMessage.Length > 0)			 
+		  <tr>
+			<td colspan="2">
+<div class="ui-widget">
+	<div class="ui-state-highlight ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+		<p>
+			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+			$translations.Translate($StatusMessage)
+		</p>
+	</div>
+</div>			
+			</td>
+		  </tr>
+			#end
+		</table>
+	</td>
+	<td VALIGN="top" width="50%">
+		#if ($externalLinks.Length > 0)
+		<table class="ExternalLinks">
+		  <tr>
+			<th>$translations.Translate("External Links")</th>
+		  </tr>
+		  #foreach ($externalLink in $externalLinks)
+		  <tr bgcolor="Ivory">
+			<td align="Left">
+			  <a href="$externalLink.Url">$externalLink.Name</a>
+			</td>
+		  </tr>
+		  #end
+		</table>
+		#end
+	</td>	
+</table>
+
+<p>
+  #if ($noLogsAvailable)
+  $translations.Translate("There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions")
+  #else
+  #if ($pluginInfo)
+  <h3>$translations.Translate("Most Recent Build Results")</h3>
+  $pluginInfo
+
+  <a href="$mostRecentBuildUrl">$translations.Translate("Click here for the full build report.")</a>
+  #else
+  <a href="$mostRecentBuildUrl">$translations.Translate("Click here for the most recent build report.")</a>
+  #end
+  #end
+</p>
+
+
+#if ($highestAmountPerDay > 0) 
+ #set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
+
+<table border="0" align="center" cellspacing="0" cellpadding="2">
+  <tr><th colspan=2>$translations.Translate("Build Overview")</th></tr>
+  <tr><td colspan=2  align=center> $OKPercent% </td></tr>
+    <tr height=5> 
+       <td width=$OKPercent bgcolor="#33CC00"> </td>
+       <td width=$NOKPercent bgcolor="#FF0000"> </td>
+  </tr>
+  <tr><td colspan=2> </td></tr>
+</table>
+<table border="2" align="center"  >
+  <tr>
+    <td>
+      <table border="0" cellspacing="0" cellpadding="2" bgcolor="#eeeedd">
+        #foreach ($dayBuildCounter in [1..$highestViewPerDay])
+         <tr align="center">
+           <td></td>
+            #foreach ($currentDayInfo in $graphDayInfo)
+              #foreach ($multi in [1..$dateMultiPlier])
+                #set ($cellIndex =  (($highestViewPerDay - $dayBuildCounter) *  $dateMultiPlier) + $multi)
+                #if ( $cellIndex <= $currentDayInfo.AmountOfBuilds)
+                  #set ($buildIndex =  $cellIndex - 1 )
+                  #if ($currentDayInfo.Build($buildIndex).IsSuccesFull) 
+		     #set($color = "#99FF00")
+                  #else 
+		     #set($color ="#FF9900")
+                  #end
+                 <TD bgcolor="$color"><A HREF="$currentDayInfo.Build($buildIndex).LinkTobuild" title="$currentDayInfo.Build($buildIndex).Description">$cellIndex</A></TD>
+                #else <td></td>
+                #end
+              #end
+              <td></td>
+            #end
+          </tr>
+        #end
+        <tr><td></td></tr>
+        <tr align="center">
+          <td></td>
+          #foreach ($currentDayInfo in $graphDayInfo)
+              <TD bgcolor="#99CC66" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
+              <td></td>
+          #end
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+#end
+<!-- ProjectReport.vm: End -->

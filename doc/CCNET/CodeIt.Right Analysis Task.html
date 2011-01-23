@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CodeIt.Right Analysis Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CodeIt.Right Analysis Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="CodeIt.RightAnalysisTask-CodeItRightAnalysisTask"></a>CodeItRight Analysis Task</h1>
+
+<p>Perform a code analysis using SubMain.CodeItRight.  </p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>SubMain.CodeItRight is a commerical application that will analyse the code for any standards violations. The tool is available from <a href="http://submain.com/products/codeit.right.aspx">http://submain.com/products/codeit.right.aspx</a>.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Supported Versions</b><br />
+<p>CruiseControl.NET only supports CodeItRight 1.9 currently.  </p></td></tr></table></div>
+
+
+<h2><a name="CodeIt.RightAnalysisTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="CodeIt.RightAnalysisTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;codeItRight&gt;</span>
+  <span class="code-tag">&lt;solution&gt;</span>myproject.*.sln<span class="code-tag">&lt;/solution&gt;</span>
+<span class="code-tag">&lt;/codeItRight&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="CodeIt.RightAnalysisTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> crData </td>
+<td class='confluenceTd'> The name of the CodeIt.Right .crdata file. When specified, CodeItRight.Cmd will use the exclusion list (violations, rules and files) saved using the Visual Studio version of CodeIt.Right.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The executable to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> SubMain.CodeItRight.Cmd </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> failureThreshold </td>
+<td class='confluenceTd'> Severity value to fail the build on. When omitted, the the lowest Severity is used &#45; None.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>None</li>
+	<li>Information</li>
+	<li>Warning</li>
+	<li>CriticalWarning</li>
+	<li>Error</li>
+	<li>CriticalError</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> priority </td>
+<td class='confluenceTd'> The priority class of the spawned process.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Normal</li>
+	<li>Idle</li>
+	<li>High</li>
+	<li>RealTime</li>
+	<li>BelowNormal</li>
+	<li>AboveNormal</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Normal </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> profile </td>
+<td class='confluenceTd'> The name of the User Profile that defines active rule set for the analysis. When omitted, the built&#45;in profile is used.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The project to analyse.  <br clear="all" />Either the solution or the project must be specified.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> reportingThreshold </td>
+<td class='confluenceTd'> Severity Threshold value to limit the output violation set. When omitted, the the lowest Severity is used &#45; None.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>None</li>
+	<li>Information</li>
+	<li>Warning</li>
+	<li>CriticalWarning</li>
+	<li>Error</li>
+	<li>CriticalError</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> solution </td>
+<td class='confluenceTd'> The solution to analyse.  <br clear="all" />Either the solution or the project must be specified.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The time&#45;out period in seconds. If the task does no finish running in this time it will be terminated.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> xsl </td>
+<td class='confluenceTd'> The name of the XSL file to override the default XSL.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="CodeIt.RightAnalysisTask-Notes"></a>Notes</h2>
+
+<p>This task calls CodeItRight.Cmd to perform the analysis. Full details on this tool is available at http://community.submain.com/blogs/tutorials/archive/2008/03/23/codeitright\-cmd\-exe\-command\-line\-parameters.aspx. Additional details on the mapped arguments can be found there.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:49 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

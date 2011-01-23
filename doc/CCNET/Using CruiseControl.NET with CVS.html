@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with CVS</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with CVS
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 29, 2007 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p>CruiseControl.NET has the following integration with CVS:</p>
+
+<p><img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Modification Checking via polling<br/>
+<img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic Source Updates<br/>
+<img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic Source Checkout<br/>
+<img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic labelling on success<br/>
+<img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Web Integration with ViewCVS</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-SettingupaCVSprojectforusewithCruiseControl.NET"></a>Setting up a CVS project for use with CruiseControl.NET</h3>
+
+<p>Make a note of the full path of your working directory (the uppermost directory that got checked out) since you're going to need that data for configuring your CruiseControl.NET server.</p>
+
+<p>You'll also need a command line client installed on the integration server. We recommend using the latest stable Windows client from <a href="http://ximbiot.com/cvs/cvshome/">Ximbiot</a>.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-ConfiguringCruiseControl.NET"></a>Configuring CruiseControl.NET</h3>
+
+<p>You need to make sure you use the <tt>cvs</tt> Source Control block within your project. Read up on this configuration block here : <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a>.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceUpdates"></a>Automatic Source Updates</h3>
+
+<p>To have CCNet automatically retrieve the latest version of the source from CVS prior to running a build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-autoGetSource">autoGetSource</a></tt> attribute to <b><tt>true</tt></b>.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceCheckout"></a>Automatic Source Checkout</h3>
+
+<p>As of the CCNet 1.2 release, the CVS provider is able to automatically checkout source from a CVS repository.  Source will be checked out into the specified working directory.  If a branch is specified, CCNet will checkout source from the branch. CCNet will automatically try to checkout the source any time it finds that the working directory does not contain a CVS folder.  If a CVS folder is present then CCNet will do an update on the working directory instead of a check out.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticLabeling%28Tagging%29"></a>Automatic Labeling (Tagging)</h3>
+
+<p>To have CCNet automatically tag your source tree after a successful build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-labelOnSuccess">labelOnSuccess</a></tt> attribute to <b><tt>true</tt></b>. By default, the name of the tag is <tt>ver-</tt><em><tt>buildLabel</tt></em>, but you can change the <tt>ver-</tt> prefix using the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-tagPrefix">tagPrefix</a></tt> property of the CVS provider.</p>
+
+<p>The contents of the tag will be the currently checked-out files in the build server's local working copy. </p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-WebIntegrationwithViewCVS"></a>Web Integration with ViewCVS</h3>
+
+<p>If you have ViewCVS set up, you can link the modifications detected by CruiseControl.NET to the appropriate ViewCVS page by adding the following additional configuration information to the CVS source control section:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"viewcvs"</span>&gt;</span>
+  <span class="code-tag">&lt;url&gt;</span>http://myviewcvsserver:7899/viewcvs/ccnet/NUnitDemo/<span class="code-tag">&lt;/url&gt;</span>
+<span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
+</div></div>
+
+<p>Simply change the <b><tt>&lt;url&gt;</tt></b> element to point to the root url for your module in ViewCVS.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-UsingCruiseControl.NETwithCVSoverSSH"></a>Using CruiseControl.NET with CVS over SSH</h3>
+
+<p>Very often when using CVS it is best to use SSH as the authentication/transport protocol. This occurs (for example) if you are using a 'SourceForge' or 'GForge' instance for your source control. If you are setting up such a scenario, you may want to follow the steps below to help get you going:</p>
+
+<ol>
+	<li>First you need to decide whether you are going to use password or key based authentication. Using keys is more secure, but using passwords is easier to setup initially. If you are going to use keys, you'll need to upload your public key to the server - we don't discuss that here but if you are using SourceForge, see <a href="http://sourceforge.net/docman/display_doc.php?docid=766&amp;group_id=1">here </a> for some help.</li>
+	<li>We are going to use 'putty' and 'plink' as our SSH client - download them <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html">here </a>. In what follows, we're going to assume that putty and plink are both available in c:\putty.</li>
+	<li>Start-up putty and create a session with the following details
+	<ul class="alternate" type="square">
+		<li>a name that we will use later (e.g. 'mysourcecontrol')</li>
+		<li>SSH protocol</li>
+		<li>hostname set to the host of your source control server</li>
+		<li>Set your username in the 'auto-login username' box of the 'connection' tab</li>
+		<li>If you are using key-based authentication, setup your key details<br/>
+Once you've set all these up, save the session, then make sure you can connect (<b>this is important since we need to allow the remote server's SSH key</b>) </li>
+	</ul>
+	</li>
+	<li>We're going to assume in these steps that you are using the CVS command-line client in the 'tools' sub-directory of the CruiseControl home directory, but feel free to use another one of your choice</li>
+	<li>CVS uses SSH as its transport when the 'ext' authentication type is specified in the CVSROOT (we'll see that later) and the CVS_RSH environment variable points to a SSH cilent. To set the environment variable, you can:
+	<ul class="alternate" type="square">
+		<li>Set it as a system environment variable in Windows</li>
+		<li>Wrap the cvs.exe file with a batch script, e.g. use the 'cvswithplinkrsh.bat' batch file in the tools sub-directory.<br/>
+If you are using key-based authentication, set the CVS_RSH variable to be the full path of the 'plink.exe' executable. If you are using password-based authentication you'll need to use another batch file to wrap plink so that you can set the password. An example file is 'plinkwithpw.bat' in the tools sub-directory. <b>Note that you'll be setting your CVS password in plain-text so you'll want to keep this file secure.</b></li>
+	</ul>
+	</li>
+	<li>Decide where you want your working copy of your source-control project to be located, e.g. 'c:\fromcvs\myproject'</li>
+	<li>Check the project out from source control using the cvs client you are going to use with Cruise Control, e.g. as follows:
+	<ul class="alternate" type="square">
+		<li>cd \fromcvs\myproject</li>
+		<li>c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh -d:ext:<b>mysourcecontrol:/cvsroot/myproject</b> co <b>mymodule</b><br/>
+(here 'mysourcecontrol' corresponds to the putty session you setup in step 3, and the other items in bold are the CVS details for your project.</li>
+	</ul>
+	</li>
+	<li>Now we can setup the CruiseControl.NET config file itself by completing the &lt;sourcecontrol&gt; tag. Here's an example:
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
+      <span class="code-tag">&lt;executable&gt;</span>c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
+      <span class="code-tag">&lt;workingDirectory&gt;</span>C:\fromcvs\myproject\mymodule<span class="code-tag">&lt;/workingDirectory&gt;</span>
+      <span class="code-tag">&lt;cvsroot&gt;</span>:ext:mysourcecontrol:/cvsroot/myproject<span class="code-tag">&lt;/cvsroot&gt;</span>
+    <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div></li>
+</ol>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

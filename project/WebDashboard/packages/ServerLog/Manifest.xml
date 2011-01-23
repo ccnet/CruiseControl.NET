@@ -1,0 +1,23 @@
+﻿<package>
+  <name>Server Log Display</name>
+  <description>Display the server log.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>ServerLog.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>serverLogServerPlugin</name>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>serverLogProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

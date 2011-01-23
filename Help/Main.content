@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics defaultTopic="8004ce1e-424a-4ce2-9e33-bbe34a05d5d7">
+  <Topic id="8004ce1e-424a-4ce2-9e33-bbe34a05d5d7" visible="True" title="Welcome" />
+  <Topic id="c3ca1106-907f-4cd2-ad3c-bad763b9c3c6" visible="True" title="Getting Started" />
+  <Topic id="3bb52c4c-9288-4acf-8203-ed520b87e967" visible="True" title="Common Tasks">
+    <Topic id="055533b6-7958-4895-9218-315b06efa1d4" visible="True" title="Connect to a Server via HTTP" />
+    <Topic id="628bb73f-cac4-4b94-9f59-8b2271bb728c" visible="True" title="Connect to a Server via Remoting" />
+  </Topic>
+  <Topic id="91b8f208-3603-4298-8021-6ea66c88ee14" visible="True" title="Advanced Tasks">
+    <Topic id="4996a7ea-d46e-4a28-bb9c-41850bd4424b" visible="True" title="Add a New Transport Protocol" />
+  </Topic>
+</Topics>

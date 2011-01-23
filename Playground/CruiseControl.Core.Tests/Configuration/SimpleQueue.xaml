@@ -1,0 +1,6 @@
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server">
+  <Queue Name="Queue1">
+    <Project Name="Project1" Queue.Priority="3" />
+    <Project Name="Project2" />
+  </Queue>
+</Server>

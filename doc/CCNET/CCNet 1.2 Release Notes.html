@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.2 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.2 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 11, 2007 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.2ReleaseNotes-HighlightsoftheCCNet1.2release"></a>Highlights of the CCNet 1.2 release</h2>
+
+<ul>
+	<li>Subversion provider can now automatically checkout source</li>
+	<li>CVS provider can now automatically checkout source (there are configuration changes required for this)</li>
+	<li>CCNet server does a better job of killing child processes when it stops or shuts down.</li>
+	<li>Server log reporting in WebDashboard is improved.  Server logs can now be viewed per project.</li>
+	<li>Improved Mono support.</li>
+	<li>Can view project configuration through the WebDashboard</li>
+</ul>
+
+
+<h2><a name="CCNet1.2ReleaseNotes-UpgradingfromCCNet1.1"></a>Upgrading from CCNet 1.1</h2>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Breaking Changes</b><br />
+<ul>
+	<li>The <tt>cvsroot</tt> and <tt>module</tt> elements are now required for the CVS provider.  This is to support automatic source checkout and to improve the performance of polling the repository for modifications.  See the <a href="CVS Source Control Block.html" title="CVS Source Control Block">Cvs source control block</a> for details.</li>
+</ul>
+</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Other Configuration Changes</b><br />
+<ul>
+	<li>The <tt>autoGetSource</tt> attribute is now true for all source control providers and need not be set explicitly in the <tt>ccnet.config</tt> file.</li>
+</ul>
+</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Upgrading from a version before 1.1?</b><br />
+<ul>
+	<li>You might be interested in the changes listed in <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNet+1.1+Final+Release+Notes">the 1.1 release notes</a>. CruiseControl.Net 1.1 broke compatibility with earlier versions of CCTray and the Web Dashboard.</li>
+</ul>
+</td></tr></table></div>
+
+
+<h2><a name="CCNet1.2ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.2"></a>Release Notes - CruiseControl .NET - Version 1.2</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;pid=10000&amp;fixfor=10220">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.2ReleaseNotes-Bugs"></a>Bugs</h4>
+
+<ul>
+	<li>CCNET-399 - Svn is not correctly converting dates to and from UTC</li>
+	<li>CCNET-576 - CVS: adds on a branch are treated as deletes on the trunk &#8211; this causes modifications to be detected when they really should be ignored</li>
+	<li>CCNET-621 - CCTray : On configuration screen, the server selection generate exception</li>
+	<li>CCNET-654 - Latest Builds of CCNET don't properly release child threads but older ones do</li>
+	<li>CCNET-658 - Cource control CVS, problem with Branch and CleanVersion</li>
+	<li>CCNET-723 - ThoughtWorks.CruiseControl.Core.Util.TimeoutSerializer.Write Causes Exception In Project Serialization</li>
+	<li>CCNET-767 - System.FormatException: String was not recognized as a valid DateTime</li>
+	<li>CCNET-768 - Two builds of the same project in a row cause Detail column to not be displayed in CCTray</li>
+	<li>CCNET-776 - CCTray's http transport consumes 100% of the server CPU for some users</li>
+	<li>CCNET-787 - Synergy - delimiter should be configurable</li>
+	<li>CCNET-788 - Synergy source control with Cruise Control .Net</li>
+	<li>CCNET-791 - Bug: Adding project twice results in duplicate project listing</li>
+	<li>CCNET-792 - Stopping server does not kill external processes</li>
+	<li>CCNET-793 - When viewing the server log cannot tell which project output from external process is associated</li>
+	<li>CCNET-798 - CVS source task does not use branch parameter when building, but does use it for reporting.</li>
+	<li>CCNET-799 - ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation has timed out</li>
+	<li>CCNET-800 - MKS problems with files with spaces in the path</li>
+	<li>CCNET-803 - Exception When Parsing Modification - Patch Included</li>
+	<li>CCNET-810 - Dashboard pages are cached too long</li>
+	<li>CCNET-811 - Fix error message displayed when user accesses webdashboard and asp.net is not properly configured</li>
+	<li>CCNET-820 - fxcop-summary.xsl produces img tags with an unsubstituted variable</li>
+</ul>
+
+
+<h4><a name="CCNet1.2ReleaseNotes-Improvements"></a>Improvements</h4>
+
+<ul>
+	<li>CCNET-418 - Add &#45;-no-auth-cache to Svn command line</li>
+	<li>CCNET-583 - Support Mono</li>
+	<li>CCNET-731 - EmailPublisher should support authentication</li>
+	<li>CCNET-735 - Enhance the BuildPublisher to allow single-directory distribution as well as label based directories</li>
+	<li>CCNET-789 - Persist "Volunteer to fix the build" user on server, CCTray, webdashboard</li>
+	<li>CCNET-790 - Project names may be truncated in Add Project dialog</li>
+	<li>CCNET-822 - Cvs provider should support the &#45;S option for suppressing headers with no revision history</li>
+	<li>CCNET-823 - Remove UseHistory option from Cvs provider</li>
+</ul>
+
+
+<h4><a name="CCNet1.2ReleaseNotes-NewFeatures"></a>New Features</h4>
+
+<ul>
+	<li>CCNET-376 - 'Always Get Latest' option for VSS plugin</li>
+	<li>CCNET-641 - MsTest Report stylesheet (and summary report improvements)</li>
+	<li>CCNET-795 - Show server log for a specific project</li>
+	<li>CCNET-806 - Checkout source from CVS if source is not already checked out in working directory</li>
+	<li>CCNET-821 - SVN source control provider should support checkout</li>
+	<li>CCNET-824 - View Project Configuration through the WebDashboard</li>
+</ul>
+
+
+<h4><a name="CCNet1.2ReleaseNotes-Tasks"></a>Tasks</h4>
+
+<ul>
+	<li>CCNET-427 - Set AutoGetSource="true" as default for all mature SC providers</li>
+	<li>CCNET-743 - How to display Nant csc build file error and get the CVS log revision displayed</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

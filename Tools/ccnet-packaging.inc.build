@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- properties -->
+	<property name="webdashboard.dist.dir" value="${path::combine(dist.dir, 'WebDashboard')}" />
+	
+	<!-- packaging and publishing targets -->
+	<target name="package" depends="clean, build" description="Create and copy the CruiseControl.NET distribution to the publish dictionary">
+
+		<call target="packageSource" cascade="false" />
+
+		<call target="prepackageDistribution" cascade="false" />
+
+		<call target="packageCCTray" cascade="false" if="${platform::is-windows()}" />
+
+    <call target="packageCCTools" cascade="false" if="${platform::is-windows()}" />
+
+    <call target="compressJavaScript" cascade="false" />
+		
+		<!-- FIXME: find a better solution as adding so much targets -->
+		<call target="build.packages" cascade="false" />
+
+		<call target="packageCCNET" cascade="false" if="${platform::is-windows()}" />
+
+		<call target="packageZipDistribution" cascade="false" />
+	</target>
+
+	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
+		<property name="source.zip.file" value="CruiseControl.NET-${assembly.version}.source.zip" />
+		
+		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
+			<fileset defaultexcludes="true">
+				<include name="*/**" />
+				<exclude name="nant*.log*" />
+				<exclude name="*.nsi" />
+				<exclude name="${build.dir}/**" />
+				<exclude name="${build.metrics.dir}/**" />
+				<exclude name="${publish.dir}/**" />
+				<exclude name="${dist.dir}/**" />
+				<exclude name="${tools.dir}/ncover*/**" />
+				<exclude name="${path::get-directory-name(ndepend.executable)}/**" />
+				<exclude name="${src.dir}/*/bin/**"/>
+				<exclude name="${src.dir}/*/obj/**"/>
+				<exclude name="${src.dir}/_Resharper*/**"/>
+				<exclude name="${src.dir}/**/*.user"/>
+				<exclude name="${src.dir}/**/*.suo"/>
+				<exclude name="${src.dir}/*.sln.cache"/>
+				<exclude name="${src.dir}/*.sln.proj"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="prepackageDistribution" depends="clean, build" description="Prepackage the CruiseControl.NET distribution to the dist dictionary">
+
+		<copy file="license.txt" todir="${dist.dir}" verbose="${nant.verbosity}" />
+		
+		<!-- Create CCTray distribution -->
+		<mkdir dir="${path::combine(dist.dir, 'CCTray')}" unless="${directory::exists(path::combine(dist.dir, 'CCTray'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(dist.dir, 'CCTray')}" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
+				<include name="*" />
+				<exclude name="*.pdb" />
+				<exclude name="*.mdb" />
+			</fileset>
+		</copy>
+		
+		<!-- Create CCValidator distribution -->
+		<mkdir dir="${path::combine(dist.dir, 'CCValidator')}" unless="${directory::exists(path::combine(dist.dir, 'CCValidator'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(dist.dir, 'CCValidator')}" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+				<include name="CCValidator*" />
+				<include name="*.dll" />
+				<exclude name="*.pdb" />
+				<exclude name="*.mdb" />
+			</fileset>
+		</copy>
+
+    <!-- Create CCCmd distribution -->
+    <mkdir dir="${path::combine(dist.dir, 'CCCmd')}" unless="${directory::exists(path::combine(dist.dir, 'CCCmd'))}" verbose="${nant.verbosity}" />
+    <copy todir="${path::combine(dist.dir, 'CCCmd')}" verbose="${nant.verbosity}">
+      <fileset basedir="${path::combine(build.dir, 'CCCmd')}" failonempty="true">
+        <include name="CCCmd*" />
+        <include name="*.dll" />
+        <exclude name="*.pdb" />
+        <exclude name="*.mdb" />
+      </fileset>
+    </copy>
+
+    <!-- Copy examples into distribution -->
+		<copy todir="${dist.dir}" verbose="${nant.verbosity}">
+			<fileset basedir="${src.dir}" failonempty="true">
+				<include name="examples/**" />
+			</fileset>
+		</copy>
+
+		<!-- Create Server distribution -->
+		<mkdir dir="${path::combine(dist.dir, 'Server')}" unless="${directory::exists(path::combine(dist.dir, 'Server'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(dist.dir, 'Server')}" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+				<include name="*/**" />
+				<exclude name="*.pdb" />
+				<exclude name="*.mdb" />
+			</fileset>
+		</copy>
+  <!--   <copy todir="${path::combine(dist.dir, 'Migration')}" verbose="${nant.verbosity}">
+      <fileset basedir="${path::combine(build.dir, 'Migration')}" failonempty="true">
+        <include name="*/**" />
+        <exclude name="*.pdb" />
+      </fileset>
+    </copy> -->
+    <copy todir="${path::combine(dist.dir, 'Server')}" verbose="${nant.verbosity}">
+			<fileset basedir="${src.dir}" failonempty="true">
+				<include name="xsl/**" />
+			</fileset>
+		</copy>
+		
+		<!-- Create WebDashboard distribution -->
+		<mkdir dir="${webdashboard.dist.dir}" unless="${directory::exists(webdashboard.dist.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${path::combine(webdashboard.dist.dir, 'bin')}" unless="${directory::exists(path::combine(webdashboard.dist.dir, 'bin'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(webdashboard.dist.dir, 'bin')}" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
+				<include name="*/**" />
+				<exclude name="*.pdb" />
+				<exclude name="*.mdb" />
+			</fileset>
+		</copy>
+		<copy todir="${webdashboard.dist.dir}" verbose="${nant.verbosity}">
+			<fileset basedir="${src.dir}" failonempty="true">
+				<include name="xsl/**" />
+			</fileset>
+		</copy>
+		<copy todir="${webdashboard.dist.dir}" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(src.dir, 'WebDashboard')}">
+				<include name="**/*.aspx"/>
+				<include name="**/*.ascx"/>
+				<include name="**/*.asax"/>
+        <include name="**/*.htm"/>
+        <include name="**/*.html"/>
+				<include name="**/*.config"/>
+				<include name="**/*.css"/>
+				<include name="**/*.gif"/>
+				<include name="**/*.png"/>
+				<include name="**/*.jpg"/>
+				<include name="**/*.jpeg"/>
+				<include name="**/*.js" />
+				<include name="**/*.vm" />
+				<include name="**/*.xsl"/>
+				<exclude name="bin/**/*" />
+				<exclude name="obj/**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${webdashboard.dist.dir}" verbose="${nant.verbosity}">
+			<fileset failonempty="true">
+				<include name="doc/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="packageZipDistribution" depends="prepackageDistribution" description="Creates a zip file containing the CruiseControl.NET distribution">
+		<property name="dist.zip.file" value="CruiseControl.NET-${assembly.version}.zip" />
+
+		<zip zipfile="${path::combine(publish.dir, dist.zip.file)}" verbose="${nant.verbosity}">
+			<fileset basedir="${dist.dir}" defaultexcludes="true">
+				<include name="*/**" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="packageCCTray" depends="prepackageDistribution" description="Create CCTray installer an copy to publish dictionary and WebDashboard distribution">
+		
+		<!-- Copy installer template into project root and replace installer version -->
+		<copy file="${path::combine(path::get-full-path('install'), 'cctray.nsi.template')}" tofile="cctray.nsi" overwrite="true" verbose="${nant.verbosity}">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${assembly.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<exec program="${nsis.executable}" commandline="cctray.nsi" verbose="${nant.verbosity}" />
+		
+		<!-- Copy CCTray setup into WebDashboard distribution -->
+		<mkdir dir="${path::combine(webdashboard.dist.dir, 'cctray')}" unless="${directory::exists(path::combine(webdashboard.dist.dir, 'cctray'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(webdashboard.dist.dir, 'cctray')}" verbose="${nant.verbosity}">
+			<fileset basedir="${publish.dir}" failonempty="true">
+				<include name="CruiseControl.NET-CCTray-*-Setup.exe" />
+			</fileset>
+		</copy>
+	</target>
+
+  <!-- Generate the tools distribution -->
+  <target name="packageCCTools" depends="prepackageDistribution" description="Create CCCmd installer an copy to publish dictionary">
+
+    <!-- Copy installer template into project root and replace installer version -->
+    <copy file="${path::combine(path::get-full-path('install'), 'cctools.nsi.template')}" tofile="cctools.nsi" overwrite="true" verbose="${nant.verbosity}">
+      <filterchain>
+        <replacetokens>
+          <token key="VERSION" value="${assembly.version}" />
+        </replacetokens>
+      </filterchain>
+    </copy>
+
+    <exec program="${nsis.executable}" commandline="cctools.nsi" verbose="${nant.verbosity}" />
+  </target>
+
+  <target name="packageCCNET" depends="prepackageDistribution" description="Create CruiseControl.NET installer an copy to publish dictionary">
+
+		<!-- Copy installer template into project root and replace installer version -->
+		<copy file="${path::combine(path::get-full-path('install'), 'ccnet.nsi.template')}" tofile="ccnet.nsi" overwrite="true" verbose="${nant.verbosity}">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${assembly.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<exec program="${nsis.executable}" commandline="ccnet.nsi" verbose="${nant.verbosity}" />
+	</target>
+
+	<target name="compressJavaScript" depends="prepackageDistribution" description="Compresses the JavaScript files of the WebDashboard distribution">
+		<loadtasks assembly="${ra.nant.assembly}" />
+		
+		<jsmin todir="${path::combine(webdashboard.dist.dir, 'javascript-compressed')}" verbose="${nant.verbosity}" failonerror="false">
+			<fileset basedir="${path::combine(webdashboard.dist.dir, 'javascript')}">
+				<include name="**/*.js" />
+				<exclude name="jquery.tablesorter.js" />
+			</fileset>
+		</jsmin>
+		
+		<move todir="${path::combine(webdashboard.dist.dir, 'javascript')}" overwrite="true" verbose="${nant.verbosity}">
+			<fileset basedir="${path::combine(webdashboard.dist.dir, 'javascript-compressed')}">
+				<include name="**/*.js"/>
+			</fileset>
+		</move>
+		
+		<delete dir="${path::combine(webdashboard.dist.dir, 'javascript-compressed')}" if="${directory::exists(path::combine(webdashboard.dist.dir, 'javascript-compressed'))}" verbose="${nant.verbosity}" />
+	</target>
+
+</project>

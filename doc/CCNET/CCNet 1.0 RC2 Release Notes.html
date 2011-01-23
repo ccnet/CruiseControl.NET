@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.0 RC2 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.0 RC2 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 14, 2005 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p>This is the second Release Candidate for CruiseControl.NET 1.0.  It incorporates a number of bug fixes and enhancements based on the feedback that we have received after releasing the first release candidate.  We welcome futher feedback on this candidate to improve the final distribution of 1.0.<br/>
+Release Notes - CruiseControl .NET - Version 1.0 RC2</p>
+
+<h2><a name="CCNet1.0RC2ReleaseNotes-JiraIssues"></a>Jira Issues</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;pid=10000&amp;fixfor=10170">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.0RC2ReleaseNotes-Bug"></a>Bug</h4>
+<ul>
+	<li>CCNET-279 - Settings Form becomes unaccessable</li>
+	<li>CCNET-471 - Exception in publisher will overwrite exception in build</li>
+	<li>CCNET-486 - Xml log files contain invalid xml if external applications output invalid xml to the command line</li>
+	<li>CCNET-508 - CCNet should automatically create the artifact directory, if it does not exist.</li>
+	<li>CCNET-509 - Fix null reference and tasks without id for Synergy provider</li>
+	<li>CCNET-516 - Modifiers are not getting added to the recipients email list on failed builds</li>
+	<li>CCNET-517 - MsBuild XmlLogger throws path format not supported exception</li>
+	<li>CCNET-522 - Input redirect fails in batch files launched from CCService.exe</li>
+	<li>CCNET-527 - ThoughtWorks.CruiseControl.Core.CruiseControlException: Unable to parse vss date:</li>
+	<li>CCNET-531 - ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed: File \\aditi439\tennpac$\data\b\bsxcaaaa may be corrupt Error reading from file . Process command:</li>
+	<li>CCNET-535 - MsBuildTask shows success even after a failed build</li>
+	<li>CCNET-536 - MsBuildTask should support multiple arguments in the buildArgs parameter</li>
+	<li>CCNET-537 - WebDashboard is not able to handle project names with special characters (like #)</li>
+	<li>CCNET-538 - Executing Null Task should produce a successful build</li>
+	<li>CCNET-540 - If source control labelling fails the build results will not get published</li>
+	<li>CCNET-541 - CCNet will not detect changes to the ccnet.config file if the file is copied over the original</li>
+	<li>CCNET-545 - CCNet should strip illegal characters out of external content before merging it into the build log</li>
+	<li>CCNET-546 - EmailPublisher should send an email even if there is an exception while building the message</li>
+	<li>CCNET-547 - VSS WorkingDirectory not working correctly</li>
+	<li>CCNET-557 - MSBuild task buildArgs configuration property gives problems when adding more switches</li>
+	<li>CCNET-559 - MSBuild XmlLogger Fails on non-US-English System with: "String was not recognizedas a valid DateTime"</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC2ReleaseNotes-NewFeature"></a>New Feature</h4>
+<ul>
+	<li>CCNET-512 - Use a Server/Project tree in CCTray instead of a dropdown list &#8211; better usability for lots of projects.</li>
+	<li>CCNET-530 - Allow users to set timeout in seconds, minutes, hours etc.</li>
+	<li>CCNET-533 - Allow user to specify a custom notification message on success/failure</li>
+	<li>CCNET-558 - CCTray should give an estimate of build time remaining</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC2ReleaseNotes-Task"></a>Task</h4>
+<ul>
+	<li>CCNET-506 - Polish CCTray Documentation for 1.0</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC2ReleaseNotes-Improvement"></a>Improvement</h4>
+<ul>
+	<li>CCNET-489 - CCTrayMulti: simplify addition of multiple projects from the same server</li>
+	<li>CCNET-511 - Vault task seems to always get the "full" tree &#8211; makes getting source slow and leads to large _sgbak directories</li>
+	<li>CCNET-518 - MSBuild task should automatically merge the xml logger output</li>
+	<li>CCNET-525 - CCTray should show last build time</li>
+	<li>CCNET-534 - Subversion executable should be option</li>
+	<li>CCNET-542 - NAntTiming stylesheet should not repeatedly show results if nested &lt;nant&gt; tasks are used.  Also improve precision of duration.</li>
+	<li>CCNET-544 - Allow location of dashboard.config to be itself configurable</li>
+	<li>CCNET-548 - CCTray: allow user to specify custom icons</li>
+	<li>CCNET-549 - Change modification date format so that dates are more easily sortable</li>
+	<li>CCNET-550 - Change dateformat for dashboard to ISO 8601</li>
+	<li>CCNET-554 - Subversion should rebase its working directory from the project working directory</li>
+	<li>CCNET-555 - TrunkUrl, WorkingDirectory and Executable should be optional parameters for Subversion</li>
+</ul>
+
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

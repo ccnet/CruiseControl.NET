@@ -1,0 +1,15 @@
+﻿<rss version="2.0">
+  <channel>
+    <title>CruiseControl.Net - Test project</title>
+    <description>Latest build results for 'Test project'</description>
+    <language>en</language>
+    <ttl>5</ttl>
+    <generator>CruiseControl.Net</generator>
+    <item>
+      <title>Build A Label : Unknown  No changed files found in build  </title>
+      <description>No changed files found in build</description>
+      <guid>bd6ad50e-a2dd-4b3d-821a-b2ce069649e8</guid>
+      <pubDate>Tue, 31 Mar 2009 17:08:01 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

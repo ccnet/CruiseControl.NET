@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--#
+The configuration preprocessor acts on an Xml file.  
+Preprocessor directives are specified in the xml namespace urn:ccnet.config.builde" to
+distinguish them from ordinary configuration markup.  Any markup not in the  
+preprocessor's namespace are passed through unchanged.
+-->
+<!--## Declare the pp (preprocessor) 
+prefix on the root node-->
+<root xmlns:cb="urn:ccnet.config.builder">
+
+  <!--# INCLUDING A FILE.
+        Includes are expanded in-place, and their constants are evaluated as if they had been defined in the 
+        outer file at that location.
+  -->
+  <cb:include href="SampleInclude.xml" />
+
+  <!--# *** DEFINING PREPROCESSOR CONSTANTS *** -->
+  <!--# The cb:define element is used to define a preprocessor constant.  It
+       can be used in several ways:
+       
+       1. Text constants (values are strings): 
+  -->
+  <cb:define foo="bar" />
+  <!--# Define a constant named "foo" with a value of "bar" -->
+  <!--# You can define more than one constant in the same define element: -->
+  <cb:define a="1" b="2" c="3" />
+
+  <!--# 2. Nodeset constants (values are xml fragments) 
+  -->
+  <cb:define name="baz">
+    <!--# Define a constant named "baz" with a value of an xml fragment -->
+    <some_element>
+      <some_inner_element />
+    </some_element>
+  </cb:define>
+  <!--# Any valid Xml inside the define element is considered to be the constant's
+         value.  This includes elements, attributes, text nodes, and comments.  -->
+
+  <!--# *** EXPANDING PREPROCESSOR CONSTANT VALUES ***
+       Once defined, preprocessor constants can be expanded in two ways: 
+  
+      1. References of the form "$(const_name)" which are found in attribute values
+         or text nodes will be expanded such that the text value replaces the reference.  
+         If no constant exists with the given name and there exists a windows environment variable
+         with the same name, that environment variable's value will be used.
+   -->
+  <somexml attr1="$(foo)" />
+  <!--# expands to: <somexml attr1="bar"/> -->
+  <somexml>$(foo)</somexml>
+  <!--# expands to: <somexml>bar</somexml> -->
+  <env dir="$(PATH)" />
+  <!--# expands to your PATH environment value -->
+
+  <!--# 2. When the preprocessor encounters an element in the preprocessor namespace, 
+          and the element name is not one of the predefined keywords (define,scope,config-template, etc),
+          the element will be replaced by the constant value associated with the element name:          
+  -->
+  <sample>
+    <cb:foo />
+    <!--# expands to the text node "bar" -->
+    <cb:baz />
+    <!--# expands to: <somexml><some_element><some_inner_element/></some_element></somexml> -->
+  </sample>
+
+  <!--# If a constant reference refers to a constant which has not been defined and which does not
+  exist as an OS environment variable, an error will occur.
+  -->
+
+  <!--# *** NESTED EXPANSIONS & PARAMETERS *** 
+           Constant references can be nested, i.e. the value of constant "zed" can contain a reference to
+           constant "alpha".
+  -->
+  <cb:define alpha="alphaval" />
+  <cb:define zed="zedval/$(alpha)" />
+
+  <z>$(zed)</z>
+  <!--# Expands to "<z>zedval/alphaval</z> -->
+
+  <!--# In addition, using the cb:varname call syntax outlined above, constant values can be passed
+       as part of the call element.  Consider the following definition:
+  -->
+  <cb:define name="beta">
+    <hello>
+      <cb:gamma />
+      <!--# gamma has not yet been defined-->
+      <hi attr1="$(delta)" />
+      <!--# delta has not yet been defined-->
+    </hello>
+  </cb:define>
+
+  <!--#  Since gamma and delta have not been defined, they must be passed in with the reference
+        to beta.  This is done as follows:
+  -->
+  <cb:beta delta="deltaval">
+    <!--# text value for delta -->
+    <cb:define name="gamma">
+      <!--# Xml fragment value for gamma-->
+      <gamma_element>hi</gamma_element>
+    </cb:define>
+  </cb:beta>
+
+  <!--# This will expand to: 
+      <hello>
+        <gamma_element>hi</gamma_element>
+        <hi attr1="deltaval" />
+      </hello>
+  -->
+
+  <!--# *** SCOPES ***
+       The cb:scope element can be used to control the scope of a preprocessor definition.
+       You may not define the same constant twice within the same scope, however you may
+       introduce a nested scope which redefines a particular value in an outer scope. 
+       A scope is semantically equivalent to a stack frame in traditional programming terms.
+   -->
+  <cb:scope a="a_val" b="b_val">
+    <test attr="$(a)" attr2="$(b)" />
+    <!--# outputs as <test attr="a_val" att2="b_val" -->
+    <cb:scope a="a_val_redefined">
+      <!--# outputs as <test attr="a_val_redefined" att2="b_val" -->
+      <test attr="$(a)" attr2="$(b)" />
+    </cb:scope>
+  </cb:scope>
+
+  <!--# *** IFDEF/IFNDEF/ELSE DIRECTIVE**
+        The cb:ifdef/ifndef constructs areused during evaluation to conditionally include 
+        processing of their contained elements based on the existence/absence of a defined name.
+  -->
+  <cb:define some_symbol_name="some_symbol_value" />
+
+  <cb:ifdef name="some_symbol_name">
+    <output>
+      Value of some_symbol_name is $(some_symbol_name)
+    </output>
+  </cb:ifdef>
+  <cb:else>
+    <output>
+      This will not appear because the symbol is defined
+    </output>
+  </cb:else>
+
+  <cb:ifndef name="some_symbol_name">
+    <output>
+      This will not appear in the output since some_symbol_name is defined
+    </output>
+  </cb:ifndef>
+  <cb:else>
+    <output>
+      This will appear because it is in the (optional) else clause
+    </output>
+  </cb:else>
+
+  <!--# *** IF/ELSE DIRECTIVE**
+        The cb:if/else constructs evaluate a JSCRIPT.NET boolean expression, and perform branching depending on
+        the value of the expression.
+  -->
+  <cb:define testval="gibberish" testval2="40" />
+  <cb:if expr="'$(testval)'=='gobbeldygook'">
+    This will not appear, since the expression evaluates to false
+  </cb:if>
+  <cb:else>
+    This will appear in the output.
+  </cb:else>
+
+  <cb:if expr="$(testval2) &lt; 50">
+    This will appear, since testval2 is less than 50
+  </cb:if>
+  <cb:else>
+    This will not appear in the output.
+  </cb:else>
+
+  <!--# *** EVAL directive ***
+    Evaluates the given JSCRIPT.NET expression (of any type).  The cb:eval tag is replaced with 
+    the result of the evaluation. -->
+
+  <!-- outputs 54-->
+  <cb:eval expr="9*6" />
+
+  <cb:scope a="3" b="18">
+    <!-- outputs 6.  When referencing preprocessor variables in an expression, the value of
+    the variables is substituted into the expression before it is submitted for evaluation. 
+    Therefore, the below expression is submitted to the JSCRIPT.NET runtime as "18/3"
+    -->
+    <cb:eval expr="$(b)/$(a)" />
+  </cb:scope>
+
+  <!-- outputs the current date/time -->
+  <cb:eval expr="new Date()" />
+
+  <!-- Evaluation of a JSCRIPT.NET expression as part of a definition.  Note the 
+       enclosure of the expression in curly braces, which causes the contained text to
+       be evaluated and the result to be assigned as the value.-->
+  <cb:define two="{1+1}" />
+  <!-- outputs 2 -->
+  <cb:two /> 
+  
+  <!--
+   Since the preprocessor replaces variable references with their values before submitting the expression
+   to the JSCRIPT.NET engine, it is necessary take special steps to treat variables as strings.  In the
+   example below, the preprocessor will expand the value of $(str) before submitting the expression, therefore
+   it is necessary to do two things:
+    1. Enclose the variable reference in single quotes, making it a string literal in the JSCRIPT.NET language.
+       You need to do this yourself, as in the example below.
+    2. Escape any funny characters (such as embedded single quotes) so that the string literal is properly-formed.    
+       You achieve this by adding a :js (for JSCRIPT) format specifier after the variable name. This causes
+       the preprocessor to do the proper escaping for you.
+
+  This example outputs the value of str, converted to upper case.  Literally, the JSCRIPT.NET expression
+  which is evaluated is:
+  'a string with \'things\' which may need to be "escaped"'.ToUpper()
+  Attributes: 
+    expr: A JSCRIPT.NET expression
+  -->
+  <cb:define str="a string with 'things' which may need to be &quot;escaped&quot;" />
+  <cb:eval expr="'$(str:js)'.ToUpper()" />
+
+
+  <!--# *** FOR loop ***
+  Loops over a range of values and emits the loop body on each iteration. 
+  Attributes:
+    counter-name: The name for the counter variable.  Within the body of the loop, this variable
+                  can be referenced just like any other preprocessor variable.
+    init-expr:    JSCRIPT.NET expression whose value will be assigned to the counter variable before the
+                  first iteration.
+    test-expr:    JSCRIPT.NET boolean expression which will determine whether the loop should terminate.
+                  Note in the example below that it is necessary to refer to the counter variable as $(i)
+                  rather than just i.
+    count-expr:   JSCRIPT.NET expression that is evaluated after every loop iteration.  The value is assigned
+                  to the counter variable.  In a typical counting loop, this would increment the counter by 1.
+                  Note that in the example below, it is necessary to refer to the counter variable as $(i) 
+                  rather than just i.  Note also that the value of count-expr is only the RIGHT HAND SIDE of
+                  of the assignment (i.e. it does not say $(i)=(i+1))
+  Scope:
+    An implicit scope is introduced in the body of the loop, therefore any local definitions will 
+    only exist within the loop body.
+  This example will emit:
+    <hello attr="0"/>
+    <hello attr="1"/>
+    <hello attr="2"/>
+ -->
+  <cb:for counter-name="i" init-expr="0" test-expr="$(i)&lt;3" count-expr="$(i)+1">
+    <hello attr="$(i)" />
+  </cb:for>
+
+  <!--# *** ELEMENT and ATTRIBUTE directives ***
+  These emit XML elements, with (optional) attributes.  This is just like the XSLT 
+  xsl:element/xsl:attribute mechanism.  The only reason to use it rather than literal 
+  XML markup is if you wish for your element or attribute NAMES to be calculated.
+  
+  Both cb:element and cb:attribute have two attributes:
+    name: Name of emitted element/attribute
+    namespace (optional): XML namespace of emitted element/attribute
+    
+  This example will emit:
+  <myel myattr1="myattrval1" myattr2="myattrval2">myelval</myel>
+  -->
+  <cb:define elname="myel" elval="myelval" attrname="myattr" attrval="myattrval" />
+  <cb:element name="$(elname)">
+    <cb:attribute name="$(attrname)1">$(attrval)1</cb:attribute>
+    <cb:attribute name="$(attrname)2">$(attrval)2</cb:attribute>
+    $(elval)
+  </cb:element>
+
+  <!--# *** COMMENTS ***
+       Xml Comments whose first character is '#' will not be copied to the output. 
+       All other comments will. -->
+
+  <!-- This comment will appear in the output file-->
+
+</root>

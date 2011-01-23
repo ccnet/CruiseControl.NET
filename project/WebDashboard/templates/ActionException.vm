@@ -1,0 +1,57 @@
+﻿<!-- ActionException.vm: Start -->
+<script type="text/javascript">
+$(function(){
+    var detailsDiv = $('#details');
+    var headerDiv = $('#detailsHeader')
+    headerDiv.click(function(){
+        headerDiv.toggle();
+        detailsDiv.toggle();
+    });
+    headerDiv.show();
+    detailsDiv.hide();
+});
+</script>
+#if ($exception.GetType().Name == "PermissionDeniedException")
+<div class="ui-widget">
+  <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
+		<div>
+			<b>$translations.Translate("You do not have permission for this action")</b><br/>
+			$translations.Translate("Please contact your build administrator.")
+		</div>
+    </p>
+  </div>
+</div>
+#elseif ($exception.GetType().Name == "SessionInvalidException")
+<div class="ui-widget">
+  <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
+		<div>
+			<b>$translations.Translate("Your session is invalid")</b><br/>
+			$translations.Translate("Please login again or contact your build administrator.")
+		</div>
+    </p>
+  </div>
+</div>
+#else
+<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all"> 
+		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+		$translations.Translate("There was an exception trying to carry out your request.")</p>
+	</div>
+</div>
+
+<h2>$translations.Translate("Exception Message")</h2>
+<p>$exception.Message</p>
+
+<div id="detailsHeader" style="cursor: pointer; display: none;">
+    $translations.Translate("Click here for the details")
+</div>
+<div id="details">
+    <h2>$translations.Translate("Exception Full Details")</h2>
+    <div style="white-space:pre-wrap;">$exception.ToString()</div>
+</div>
+#end
+<!-- ActionException.vm: End -->

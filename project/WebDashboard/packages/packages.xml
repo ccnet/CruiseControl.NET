@@ -1,0 +1,33 @@
+﻿<packages>
+  <package name="Server Information Display" description="Display the information on the server." type="Plugin" file="ServerInfo.zip" installed="no" />
+  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="no" />
+  <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="no" />
+  <package name="Queue Status Display" description="Display the status of the queues." type="Plugin" file="QueueStatus.zip" installed="no" />
+  <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" />
+  <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="no" />
+  <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="no" />
+  <package name="Modifications" description="Display the modifications done in the build." type="Plugin" file="Modifications.zip" installed="no" />
+  <package name="ModificationsByChangeNumber" description="Display the modifications done in the build, grouped by the changenumber of your source control." type="Plugin" file="ModificationsGrouped.zip" installed="no" />
+  <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="no" />
+  <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="no" />
+  <package name="NDepend Results" description="Display the results of a NDepend run." type="Plugin" file="NDepend.zip" installed="no" />
+  <package name="NAnt Results" description="Display the results of a NAnt build." type="Plugin" file="NAnt.zip" installed="no" />
+  <package name="MSBuild Results" description="Display the results of a MSBuild build." type="Plugin" file="MSBuild.zip" installed="no" />
+  <package name="FxCop Results" description="Display the results of a FxCop build." type="Plugin" file="FxCop.zip" installed="no" />
+  <package name="Fitnesse Results" description="Display the results of a Fitnesse report." type="Plugin" file="Fitnesse.zip" installed="no" />
+  <package name="NCover Results" description="Display the results of a NCover report." type="Plugin" file="NCover.zip" installed="no" />
+  <package name="Simian Results" description="Display the results of a Simian report." type="Plugin" file="Simian.zip" installed="no" />
+  <package name="Gendarme Results" description="Display the results of a Gendarme report." type="Plugin" file="Gendarme.zip" installed="no" />
+  <package name="Security Configuration Display" description="Display the security configuration a server." type="Plugin" file="SecurityConfig.zip" installed="no" />
+  <package name="User List" description="Display the users defined on a server." type="Plugin" file="UserList.zip" installed="no" />
+  <package name="MSTest Results" description="Display the results of a MSTest report." type="Plugin" file="MSTest.zip" installed="no" />
+  <package name="Package List" description="Display the list of packages that were generated." type="Plugin" file="PackageList.zip" installed="no" />
+  <package name="Ohloh" description="Display the statistics from Ohloh." type="Plugin" file="OhlohStats.zip" installed="no" />
+  <package name="Liquid Blue Theme" description="The liquid blue theme." type="Plugin" file="LiquidBlue.zip" installed="no" />
+  <package name="Note worthy Theme" description="The note worthy theme." type="Plugin" file="noteWorthy.zip" installed="no" />
+  <package name="Duplicate Finder Results" description="Display the results of a duplicate finder analysis." type="Plugin" file="DupFinder.zip" installed="no" />
+  <package name="Project Timeline" description="Display a timeline of project builds." type="Plugin" file="ProjectTimeline.zip" installed="no" />
+  <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" />
+  <package name="CodeIt.Right Analysis" description="Display the results of a CodeIt.Right Analysis." type="Plugin" file="CodeItRight.zip" installed="no" />
+  <package name="Final Build Status" description="Display the final status of the project at the end of a build." type="Plugin" file="FinalBuild.zip" installed="no" />
+</packages>

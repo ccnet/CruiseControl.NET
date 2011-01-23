@@ -1,0 +1,7 @@
+<!DOCTYPE cruisecontrol [
+<!ENTITY test1 SYSTEM "file:test1.xml">
+
+]>
+<cruisecontrol>
+&test1;
+</cruisecontrol>   

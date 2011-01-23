@@ -1,0 +1,15 @@
+<ul id="breadcrumbs">
+	<li><a href="$farmLink.Url">Dashboard</a></li>
+#if ($serverName != "")
+    <li><a href="$serverLink.Url">$serverLink.Text</a></li>
+#if ($categoryName != "")
+    <li><a href="$categoryLink.Url">$categoryLink.Text</a></li>
+#end
+#if ($projectName != "")
+    <li><a href="$projectLink.Url">$projectLink.Text</a></li>
+#if ($buildName != "")
+    <li><a href="$buildLink.Url">$buildLink.Text</a></li>
+#end
+#end
+#end
+</ul>

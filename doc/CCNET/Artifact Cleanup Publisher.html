@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Artifact Cleanup Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Artifact Cleanup Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="ArtifactCleanupPublisher-ArtifactCleanupPublisher"></a>Artifact Cleanup Publisher </h1>
+
+<p>The artifact CleanUp publisher allows for automatic removal of the buildlogs according to the choosen setting. It relies on the build log folder, so the XML publisher must be specified before this publisher can run. For technical reasons this publisher MUST reside in the publisher section, it will not work in the tasks section. Be sure to specify the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> before this one.  </p>
+
+<h2><a name="ArtifactCleanupPublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="ArtifactCleanupPublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;artifactcleanup cleanUpMethod=<span class="code-quote">"KeepLastXBuilds"</span> cleanUpValue=<span class="code-quote">"50"</span> /&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ArtifactCleanupPublisher-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpMethod </td>
+<td class='confluenceTd'> Defines the procedure to use for cleaning up the artifact folder.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>KeepLastXBuilds</li>
+	<li>DeleteBuildsOlderThanXDays</li>
+	<li>KeepMaximumXHistoryDataEntries</li>
+	<li>DeleteSubDirsOlderThanXDays</li>
+	<li>KeepLastXSubDirs</li>
+</ul>
+</td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpValue </td>
+<td class='confluenceTd'> Defines the value for the cleanup procedure.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+</tbody></table>
+
+<h2><a name="ArtifactCleanupPublisher-Notes"></a>Notes</h2>
+
+<p>Supported cleaning up methods :  </p>
+<ul>
+	<li>KeepLastXBuilds : keeps the last specified amount of builds</li>
+	<li>DeleteBuildsOlderThanXDays  : Deletes the builds older than the specifed amount of days</li>
+	<li>KeepMaximumXHistoryDataEntries : Clears the History Data file (for the ModificationHistory), keeping maximum the specified amount of builds.</li>
+	<li>DeleteSubDirsOlderThanXDays : Deletes subfolders of the artifact folder if they are older than the specified amount of days. (Buildlogfolder excluded)</li>
+	<li>KeepLastXSubDirs : Keeps the last specified amount of subfolders in the artifacts folder, sorting is done on creation time of the folder (Buildlogfolder excluded)  <div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p> <b>DeleteSubDirsOlderThanXDays</b> and  <b>KeepLastXSubDirs</b> are mainly meant for cleaning up published builds (done via the <a href="Build Publisher.html" title="Build Publisher">Build Publisher</a>).  </p></td></tr></table></div></li>
+</ul>
+
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:49 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

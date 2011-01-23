@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- properties -->
+	<property name="nant.verbosity"			 overwrite="false"	value="false" />
+	<property name="build.configuration"	 overwrite="false"	value="Build" />
+	<property name="build.target"			 overwrite="false"	value="Build" />
+	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
+	<property name="build.target.framework"  overwrite="false"	value="3.5"  />
+	<property name="CCNetLabel"				 overwrite="false"	value="0.0.0.0" />
+	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
+
+	<!-- common path properties -->
+	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
+	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}" />
+	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}" />
+	<property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
+	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
+	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
+	<property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
+	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
+	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
+
+	<!-- tool path properties -->
+	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
+	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" />
+	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
+	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
+	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
+	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console.exe')}" />
+	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
+
+	<!-- common assembly info properties -->
+	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
+	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
+	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
+	<property name="assembly.trademark"		readonly="true"		value="" />
+	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
+	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}" />
+
+	<!-- Framework Support
+	http://nant.sourceforge.net/faq.html#framework-support
+	-->
+	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
+
+	<!-- Includes -->
+	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-utils.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging-webdashboard-packages.inc.build')}" />	
+
+	<!-- Targets -->
+	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
+
+
+	<target name="ClearDocFolders" description="Clearing doc folder of all existing files.">
+		<echo message="Clearing doc folder of all existing files ... " />
+		<delete includeemptydirs="false" >
+            <fileset>
+                <patternset >
+                    <include name="doc/CCNET/**"  />
+                    <exclude name="**/.svn/**"  />
+					<exclude name="**/_svn/**"  />
+				</patternset>
+            </fileset>
+        </delete>
+	</target>
+
+	<target name="clean" description="Clean up">
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+		<delete verbose="${nant.verbosity}">
+			<fileset basedir="." failonempty="false">
+				<include name="*.nsi"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="init" description="Initial compilation setup">
+		<mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${dist.dir}" unless="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+	</target>
+
+	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number">
+		<asminfo language="CSharp" output="${path::combine(src.dir, 'CommonAssemblyInfo.cs')}" verbose="${nant.verbosity}">
+			<imports>
+				<import namespace="System.Reflection" />
+			</imports>
+			<attributes>
+				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
+				<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
+				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+				<attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
+				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
+			</attributes>
+		</asminfo>
+	</target>
+
+	<target name="build" depends="init, createAssemblyInfo" description="Compilation of the build project">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<echo message="Build configuration: ${build.configuration}" />
+		<echo message="Source Directory: ${src.dir}" />
+		<echo message="Build Directory: ${build.dir}" />
+
+		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
+			<property name="Configuration" value="${build.configuration}" />
+
+			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
+			<property name="DISABLE_COM" value="${platform::is-unix()}" />
+
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
+		</msbuild>
+
+		<!-- copy ccnet.config into the server dictionary -->
+		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
+	</target>
+
+	<!-- Test targets -->
+	<target name="runTests" depends="build" description="Run unit tests">
+		<call target="runNUnitTests" cascade="false" />
+	</target>
+
+	<target name="runNUnitTests" depends="build" description="Run the NUnit tests">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
+		<if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
+					<include name="nunit.framework.dll" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${tools.dir}" failonempty="true">
+					<include name="sleeper.exe" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${src.dir}" failonempty="true">
+					<include name="xsl/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
+		</if>
+
+		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="-" showLabels="true" verbose="${nant.verbosity}">
+			<assemblies>
+				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
+			</assemblies>
+
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
+		</nunitTest>
+	</target>
+
+	<!-- Code analyze metric targets -->
+	<target name="runCodeMetrics" depends="build" description="Analyze and collect code metrics of the compiled assemblies">
+
+		<call target="runGendarme" cascade="false" />
+
+		<!-- Execute Windows only code metric tools -->
+		<if test="${platform::is-windows()}">
+			<!-- Check for NDepend installation -->
+			<if test="${not file::exists(ndepend.executable)}">
+				<echo level="Warning" message="NDepend installation not found at '${ndepend.executable}'. Please install NDepend! Target canceled." />
+			</if>
+			<if test="${file::exists(ndepend.executable)}">
+				<call target="runNdepend" cascade="false" />
+			</if>
+
+			<!-- Run FxCop -->
+			<call target="runFxCop" cascade="false" />
+		</if>
+	</target>
+
+	<target name="runGendarme" depends="build" description="Analyze the compiled assemblies with Mono's Gendarme">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<if test="${codemetrics.output.type == 'LogFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.log" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'XmlFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.xml" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'HtmlFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.html" />
+		</if>
+
+		<gendarme executable="${gendarme.executable}" outputType="${codemetrics.output.type}" outputFile="${path::combine(build.metrics.dir, gendarme.output.file)}"
+              workingDirectory="${build.dir}" assemblyListFile="${gendarme.project}" />
+	</target>
+
+	<target name="runNdepend" depends="build" description="Analyze and collect code metrics of the compiled assemblies with NDepend">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<ndepend executable="${ndepend.executable}" projectFile="${ndepend.project}" />
+	</target>
+
+	<target name="runFxCop" depends="build" description="Analyze the compiled assemblies with FxCop">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<if test="${codemetrics.output.type == 'LogFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.html" />
+			<property name="fxcop.output.xsl" value="true" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'XmlFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.xml" />
+			<property name="fxcop.output.xsl" value="false" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'HtmlFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.html" />
+			<property name="fxcop.output.xsl" value="true" />
+		</if>
+
+		<fxcop executable="${fxcop.executable}" projectFile="${fxcop.project}" outputFile="${path::combine(build.metrics.dir, fxcop.output.file)}"
+					 xslFile="${path::combine(build.metrics.dir, 'fxcop-report.xsl')}" applyXsl="${fxcop.output.xsl} "/>
+	</target>
+
+</project>

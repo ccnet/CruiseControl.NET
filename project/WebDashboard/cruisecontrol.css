@@ -1,0 +1,275 @@
+body, table, form, input, td, th, p, textarea, select
+{
+	font-family: verdana, helvetica, arial;
+	font-size: 11px;
+}
+a
+{
+	color: #000000;
+}
+a:hover  
+{
+	color:#1B501B; 
+	text-decoration: none;
+}
+.main-panel  
+{
+	background-color: #2E8A2E;
+	color:#000000; 
+	font-weight: bold; 
+	padding: 6px; 
+	height: 60px;
+}
+.main-panel a { color:#FFCC00; }
+.main-panel a:hover { color:#ffffff; }
+
+.link { color:#000000;  }
+.buildresults-header { color: #000000; font-weight: bold; }
+.buildresults-data { color: #000000; }
+.buildresults-data-failed { color: #FF3300; }
+
+.stylesection { margin-left: 4px; }
+.header-title { font-size:12px; color:#000000; font-weight:bold; padding-bottom:10pt; }
+.header-label { font-weight:bold; }
+.header-data { color:#000000; }
+.header-data-error { color:#000000; white-space:pre; }
+
+.section-table { margin-top:10px; }
+.sectionheader { background-color:#2E8A2E; color:#FFFFFF; }
+.section-data { font-size:9px; color:#000000; }
+.section-oddrow { background-color:#F0F7FF; }
+.section-evenrow { background-color:#FFFFFF; }
+.section-error { font-size:9px; color:#FF3300; white-space:pre; }
+
+.warning { color:#ff8000; }
+.error { color:#ff0000; }
+
+.RecentBuildsPanel {
+	border-style: solid;
+	border-width: 1px;
+    border-color: #2E8A2E;
+	margin-bottom:5;
+}
+
+.RecentBuildsPanel th 
+{
+	background-color: #2E8A2E;
+	text-align: center;
+	font-weight: bold;
+	padding: 3px;
+	color: #ffffff;
+}
+
+.RecentBuildsPanel td {
+	padding: 3;
+    background-color: #ffffff;
+}
+
+.breadcrumbs
+{
+    color: #ffffff;
+}
+.breadcrumbs a {
+    color: #ffffff;
+    text-decoration: none;
+}
+.breadcrumbs a:hover 
+{ 
+    color: #ffffff;
+    text-decoration: underline;
+}
+.ProjectGridHeader
+{
+    color: #ffffff;
+}
+.ProjectGridHeader a {
+    color: #ffffff;
+    text-decoration: none;
+}
+.ProjectGridHeader a:hover 
+{ 
+    color:#99CC66; 
+}
+
+.SideBar a
+{
+    text-decoration: none;
+    color: #2E8A2E;
+}
+
+.SideBar .build-passed-link { color:#29CC00; text-decoration:none; }
+.SideBar .build-failed-link { color:#ff0000; text-decoration:none; }
+
+.build-passed-link { color:#2E8A2E; text-decoration:none; }
+.build-failed-link { color:#ff0000; text-decoration:none; }
+td>a.selected { background-color:#FFFFAA; }
+td>a.selected:hover { color:#2E8A2E; }
+
+.log
+{
+	overflow: visible;
+	height:auto;
+}
+
+.wholepage
+{
+	margin:0;
+	padding:1em;
+}
+
+.TopControls
+{
+	background-color: #99CC66;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.Footer
+{
+	color: #666666;
+	background-color: #ffffff;
+}
+.commands
+{
+	float:right;
+}
+.commands input
+{
+	width: 100px;
+	display:block;
+}
+.hidden
+{
+	display:none;
+}
+
+.userList-table
+{
+	width:100%;
+	border-collapse:collapse;
+}
+.userList-table th
+{
+	text-align:left;
+	border-bottom: solid 1px #000000;
+}
+.userList-table td
+{
+	padding: 2px;
+	cursor:pointer;
+}
+.userList-table .odd td
+{
+	background-color:#f0f0f0;
+}
+.userList-table .even td
+{
+	background-color:#ffffff;
+}
+/* Projects grid */
+.SortableGrid
+{
+	border-collapse: collapse;
+	width:100%;
+	border-left: solid 2px #2E8A2E;
+	border-right: solid 2px #2E8A2E;
+	background-color:#ffffff;
+}
+.SortableGrid td
+{
+	border-top: solid 2px #2E8A2E;
+	border-bottom: solid 2px #2E8A2E;
+	padding:3px;
+	text-align:center;
+}
+.SortableGrid th
+{
+	border-top: solid 2px #2E8A2E;
+	background-color: #2E8A2E;
+	padding:3px;
+	text-align:center;
+}
+.SortableGrid .left
+{
+	text-align:left;
+}
+.SortableGrid .Black
+{
+	font-weight:bold;
+	color:#000000;
+}
+.SortableGrid .Red
+{
+	font-weight:bold;
+	color:#FF0000;
+}
+.SortableGrid .Green
+{
+	font-weight:bold;
+	color:#008000;
+}
+.SortableGrid .Blue
+{
+	font-weight:bold;
+	color:#0000FF;
+}
+#BuildPercentage
+{
+	width:100%;
+	height:8px;
+	border-collapse:collapse;
+	border:none;
+}
+#BuildPercentage td
+{
+	border: none;
+}
+.BuildStage
+{
+	background-color:#E6E6FA;
+	text-align:left !important;
+}
+.BuildStage table
+{
+	border: none;
+}
+.BuildStage td
+{
+	border: none !important;
+	text-align:left !important;
+}
+.SortableGrid thead tr .header 
+{
+	padding-right:16px;
+	background-image: url(images/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+.SortableGrid thead tr .headerSortUp {
+	background-image: url(images/asc.gif);
+}
+.SortableGrid thead tr .headerSortDown {
+	background-image: url(images/desc.gif);
+}
+.SortableGrid thead tr .headerSortDown, .SortableGrid thead tr .headerSortUp {
+	background-color: #99CC66;
+}
+/* Project grid */
+.statusStopped { color: #ff1111; font-weight: bold; }
+.statusStopping { color: #ff1111; }
+.statusUnknown { color: #881111; font-style: italic; }
+.activitySleeping { color: #888888; }
+.activityCheckingModifications { color: #11aa11; font-weight: bold; }
+.activityBuilding { color: #007700; font-weight: bold; }
+.activityPending { color: #881111; font-style: italic; }
+tr.buildStatus table
+{
+	margin-left: 20px;
+}
+tr.buildStatus td
+{
+	font-style: italic;
+	border: none;
+	text-align: left;
+}

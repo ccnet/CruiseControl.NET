@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define name="macro1">
+    <hello>
+      <cb:foo />
+    </hello>
+    <hi>
+      <cb:bar />
+    </hi>
+  </cb:define>
+
+  <c>
+    <cb:scope>
+      <cb:define name="foo">
+        <a>
+          <b />
+        </a>
+      </cb:define>
+      <cb:define name="bar">
+        <c>
+          <d />
+        </c>
+      </cb:define>
+      <cb:macro1 />
+    </cb:scope>
+  </c>
+
+</cb:config-template>

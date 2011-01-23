@@ -1,0 +1,398 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : NCover Profiler Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : NCover Profiler Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="NCoverProfilerTask-NCoverProfilerTask"></a>NCover Profiler Task</h1>
+
+<p>Perform a code coverage profile using NCover.  </p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>NCover is a commerical application that will profile code while unit tests are running. The tool is available from <a href="http://www.ncover.com/">http://www.ncover.com/</a>.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Supported Versions</b><br />
+<p>CruiseControl.NET only supports NCover 3.x currently.  </p></td></tr></table></div>
+
+
+<h2><a name="NCoverProfilerTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="NCoverProfilerTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ncoverProfile&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>C:\Program Files\NCover\NCover.Console.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;program&gt;</span>tools\nunit\nunit-console.exe<span class="code-tag">&lt;/program&gt;</span>
+  <span class="code-tag">&lt;testProject&gt;</span>myproject.test.dll<span class="code-tag">&lt;/testProject&gt;</span>
+  <span class="code-tag">&lt;workingDir&gt;</span>build\unittests<span class="code-tag">&lt;/workingDir&gt;</span>
+  <span class="code-tag">&lt;includedAssemblies&gt;</span>myproject.*.dll<span class="code-tag">&lt;/includedAssemblies&gt;</span>
+<span class="code-tag">&lt;/ncoverProfile&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="NCoverProfilerTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> applicationLoadWait </td>
+<td class='confluenceTd'> The amount of time that NCover will wait for the application to start up.  <br clear="all" /> <b>Maps to //wal</b> </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDir </td>
+<td class='confluenceTd'> The base directory to use. All relative parameters will be relative to this parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildId </td>
+<td class='confluenceTd'> A custom build id to attach.  <br clear="all" /> <b>Maps to //bi</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The build label </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> coverageFile </td>
+<td class='confluenceTd'> The location to write the coverage file to. If relative, this will be relative to baseDir.  <br clear="all" /> <b>Maps to //x</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Coverage.xml </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> coverageMetric </td>
+<td class='confluenceTd'> The coverage metric to use.  <br clear="all" /> <b>Maps to //ct</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> iis </td>
+<td class='confluenceTd'> Whether to cover IIS or not.  <br clear="all" /> <b>Maps to //iis</b> </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> disableAutoexclusion </td>
+<td class='confluenceTd'> Whether to turn off autoexclusion or not.  <br clear="all" /> <b>Maps to //na</b> </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedAssemblies </td>
+<td class='confluenceTd'> The assemblies to exclude.  <br clear="all" /> <b>Maps to //eas</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedAttributes </td>
+<td class='confluenceTd'> The attributes to exclude.  <br clear="all" /> <b>Maps to //ea</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedFiles </td>
+<td class='confluenceTd'> The files to exclude.  <br clear="all" /> <b>Maps to //ef</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedMethods </td>
+<td class='confluenceTd'> The methods to exclude.  <br clear="all" /> <b>Maps to //em</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedTypes </td>
+<td class='confluenceTd'> The types to exclude.  <br clear="all" /> <b>Maps to //et</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The executable to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Ncover.Console </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includedAssemblies </td>
+<td class='confluenceTd'> The assemblies to include.  <br clear="all" /> <b>Maps to //ias</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includedAttributes </td>
+<td class='confluenceTd'> The attributes to include.  <br clear="all" /> <b>Maps to //ia</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includedFiles </td>
+<td class='confluenceTd'> The files to include.  <br clear="all" /> <b>Maps to //if</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includedTypes </td>
+<td class='confluenceTd'> The types to include.  <br clear="all" /> <b>Maps to //it</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> logFile </td>
+<td class='confluenceTd'> The location of the NCover log file. If relative, this will be relative to baseDir.  <br clear="all" /> <b>Maps to //l</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> logLevel </td>
+<td class='confluenceTd'> The profiler log level.  <br clear="all" /> <b>Maps to //ll</b> </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Default</li>
+	<li>None</li>
+	<li>Normal</li>
+	<li>Verbose</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Default </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> priority </td>
+<td class='confluenceTd'> The priority class of the spawned process.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Normal</li>
+	<li>Idle</li>
+	<li>High</li>
+	<li>RealTime</li>
+	<li>BelowNormal</li>
+	<li>AboveNormal</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Normal </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> processModule </td>
+<td class='confluenceTd'> The module to process.  <br clear="all" /> <b>Maps to //pm</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> programParameters </td>
+<td class='confluenceTd'> The parameters to pass to the program.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> program </td>
+<td class='confluenceTd'> The program to execute and collect coverage stats from.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> projectName </td>
+<td class='confluenceTd'> The name of the project (used in the HTML report).  <br clear="all" /> <b>Maps to //p</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> publish </td>
+<td class='confluenceTd'> Whether to publish the output files or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> register </td>
+<td class='confluenceTd'> Temporarily enable NCover.  <br clear="all" /> <b>Maps to //reg</b> </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serviceTimeout </td>
+<td class='confluenceTd'> The timeout period for covering a service.  <br clear="all" /> <b>Maps to //st</b> </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> settingsFile </td>
+<td class='confluenceTd'> The location to read the settings from. If relative, this will be relative to baseDir.  <br clear="all" /> <b>Maps to //cr</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> symbolSearch </td>
+<td class='confluenceTd'> The symbol search policy to use.  <br clear="all" /> <b>Maps to //ssp</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> testProject </td>
+<td class='confluenceTd'> The project that contains the tests. If relative, this will be relative to baseDir.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The time&#45;out period in seconds. If the task does no finish running in this time it will be terminated.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trendFile </td>
+<td class='confluenceTd'> The location to write the trend file to.  <br clear="all" /> <b>Maps to //at</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> windowsService </td>
+<td class='confluenceTd'> The windows service to cover.  <br clear="all" /> <b>Maps to //svc</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDir </td>
+<td class='confluenceTd'> The working directory to use. If relative, this will be relative to baseDir.  <br clear="all" /> <b>Maps to //w</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="NCoverProfilerTask-Notes"></a>Notes</h2>
+
+<p>This task calls NCover.Console to perform the profiling. Full details on this tool is available at http://docs.ncover.com/ref/3\-0/ncover\-console/. Additional details on the mapped arguments can be found there.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:51 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

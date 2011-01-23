@@ -1,0 +1,8 @@
+﻿<PersistedProjectState xmlns="urn:cruisecontrol:server">
+  <PersistedProjectState.LastIntegration>
+    <IntegrationSummary FinishTime="2010-01-01T12:01:02" StartTime="2010-01-01T12:01:01" Status="Success" />
+  </PersistedProjectState.LastIntegration>
+  <PersistedProjectState.Values>
+    <ProjectValue Name="Test" Owner="urn:ccnet::Comment" Value="Value" />
+  </PersistedProjectState.Values>
+</PersistedProjectState>

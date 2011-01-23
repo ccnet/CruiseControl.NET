@@ -1,0 +1,8 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto" runtimeFramework="any">
+    <assembly path="CruiseControl.Core.Tests\bin\Debug\CruiseControl.Core.Tests.dll" />
+    <assembly path="CruiseControl.Common.Tests\bin\Debug\CruiseControl.Common.Tests.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>

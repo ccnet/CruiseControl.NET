@@ -1,0 +1,400 @@
+<!-- AdministerDashboard.vm: Start -->
+<style type="text/css">
+#adminFrame
+{
+	width:100%;
+}
+#adminFrame td
+{
+	width:50%;
+}
+fieldset
+{
+	padding: 5px;
+}
+fieldset legend
+{
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+#adminFrame fieldset div
+{
+	cursor: pointer;
+	margin:2px 0;
+}
+.oddRow
+{
+	padding:2px;
+	background-color: White;
+}
+.evenRow
+{
+	padding:2px;
+	background-color:#F0F0F0;
+}
+form
+{
+	margin:0;
+	padding:0;
+}
+.button
+{
+	width: 100px;
+}
+.text
+{
+	width: 250px;
+}
+#serverDialog table
+{
+	width:100%;
+}
+#packageDialog table
+{
+	width:100%;
+}
+#packageDialog table tr td
+{
+	vertical-align:top;
+}
+#importPackageDialog table
+{
+	width:100%;
+}
+label
+{
+	font-weight:bold;
+}
+.Info
+{
+}
+.Verbose
+{
+    color:#888888;
+    font-style:italic;
+}
+.Error
+{
+    font-weight:bold;
+    color:Red;
+}
+.Warning
+{
+    font-weight:bold;
+}
+.hidden
+{
+	display:none;
+}
+</style>
+<script type="text/javascript">
+    jQuery(function() {
+        // Initialise the dialogs
+        var serverDialog = jQuery('#serverDialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: '$translations.TranslateJson("Server details")',
+            width: 400,
+            resizable: false
+        });
+        var packageDialog = jQuery('#packageDialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: '$translations.TranslateJson("Package details")',
+            width: 400,
+            resizable: false
+        });
+        var importPackageDialog = jQuery('#importPackageDialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: '$translations.TranslateJson("Package details")',
+            width: 400,
+            resizable: false
+        });
+        var logDialog = jQuery('#logDialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: '$translations.TranslateJson("Installation Log")',
+            width: 600,
+            height:300
+        });
+        var deleteServerDialog = jQuery('#deleteServerDialog').dialog({
+            autoOpen: false,
+            modal: true,
+            title: '$translations.TranslateJson("Delete server")',
+            width: 400,
+            resizable: false
+        });
+
+        // Initialise the buttons
+        jQuery('#cancelServer').bind('click', function() {
+            serverDialog.dialog('close');
+        });
+        jQuery('#closePackage').bind('click', function() {
+            packageDialog.dialog('close');
+        });
+        jQuery('#closeImport').bind('click', function() {
+            importPackageDialog.dialog('close');
+        });
+        jQuery('#addServerButton').bind('click', function(e) {
+            jQuery('#oldName').attr({ 'value': '' });
+            jQuery('#serverName').attr({ 'value': '' });
+            jQuery('#serverUri').attr({ 'value': '' });
+            jQuery('#serverForceBuild').attr({ 'checked': true });
+            jQuery('#serverStartStop').attr({ 'checked': true });
+            jQuery('#serverBackwardsCompatible').attr({ 'checked': false });
+            jQuery('#deleteServer').addClass('hidden');
+            serverDialog.dialog('open');
+        });
+        jQuery('#loadPackageButton').bind('click', function(e) {
+            importPackageDialog.dialog('open');
+        });
+        jQuery('#viewLogButton').bind('click', function(e) {
+            logDialog.dialog('open');
+        });
+        jQuery('#deleteServer').bind('click', function() {
+            serverDialog.dialog('close');
+            var serverName = jQuery('#oldName').attr('value');
+            jQuery('#deleteServerLabel').text(serverName);
+            jQuery('#deleteServerField').attr({ 'value': serverName });
+            deleteServerDialog.dialog('open');
+        });
+        jQuery('#cancelDeleteServer').bind('click', function(e) {
+            deleteServerDialog.dialog('close');
+        });
+
+        // Associate the click handlers
+        jQuery('#servers div').bind('click', function(e) {
+            jQuery('#oldName').attr({ 'value': jQuery(e.target).attr('name') });
+            jQuery('#serverName').attr({ 'value': jQuery(e.target).attr('name') });
+            jQuery('#serverUri').attr({ 'value': jQuery(e.target).attr('url') });
+            jQuery('#serverForceBuild').attr({ 'checked': jQuery(e.target).attr('force') == 'True' });
+            jQuery('#serverStartStop').attr({ 'checked': jQuery(e.target).attr('start') == 'True' });
+            jQuery('#serverBackwardsCompatible').attr({ 'checked': jQuery(e.target).attr('backwards') == 'True' });
+            jQuery('#deleteServer').removeClass('hidden');
+            serverDialog.dialog('open');
+        });
+        jQuery('#packages div').bind('click', function(e) {
+            jQuery('#nameOfPackage').attr({ 'value': jQuery(e.target).attr('file') });
+            jQuery('#packageName').text(jQuery(e.target).attr('name'));
+            jQuery('#packageDesc').text(jQuery(e.target).attr('desc'));
+            var action = '$translations.TranslateJson("Install")';
+            if (jQuery(e.target).attr('installed') == 'True') {
+                action = '$translations.TranslateJson("Uninstall")';
+                jQuery('#removeButton').addClass('hidden');
+            }else{
+                jQuery('#removeButton').removeClass('hidden');
+            }
+            jQuery('#installButton').attr({ 'value': action });
+            packageDialog.dialog('open');
+        });
+    });
+</script>
+<div style="display:none;">
+    <div id="serverDialog">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label for="serverName">$translations.Translate("Name"):</label>
+                    </td>
+                    <td>
+                        <input type="hidden" class="text" id="oldName" name="oldName" />
+                        <input type="text" class="text" id="serverName" name="newName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="serverUri">URI:</label>
+                    </td>
+                    <td>
+                        <input type="text" class="text" id="serverUri" name="serverUri" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="serverForceBuild" name="serverForceBuild" />
+                        <label for="serverForceBuild">$translations.Translate("Allow Force/Abort Build")</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="serverStartStop" name="serverStartStop" />
+                        <label for="serverStartStop">$translations.Translate("Allow Start/Stop Project")</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="serverBackwardsCompatible" name="serverBackwardsCompatible" />
+                        <label for="serverBackwardsCompatible">$translations.Translate("Backwards Compatible")</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="hidden" name="type" value="server" />
+                        <input type="button" class="button" id="deleteServer" name="action" value="$translations.Translate("Delete")" style="float:right;" />
+                        <input type="submit" class="button" name="action" value="$translations.Translate("Save")" />
+                        <input type="button" class="button" id="cancelServer" value="$translations.Translate("Cancel")" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="packageDialog">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label for="packageName">$translations.Translate("Name"):</label>
+                    </td>
+                    <td>
+                        <span id="packageName">$translations.Translate("Name")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="packageDesc">Description:</label>
+                    </td>
+                    <td>
+                        <span id="packageDesc">Description</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="hidden" name="type" value="package" />
+                        <input type="hidden" name="PackageName" id="nameOfPackage" />
+                        <input type="submit" class="button" id="installButton" name="action" />
+                        <input type="submit" class="button" id="removeButton" name="action" value="$translations.Translate("Remove")" />
+                        <input type="button" class="button" id="closePackage" value="$translations.Translate("Close")" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="importPackageDialog">
+        <form method="post" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>
+                        <label for="packageLocation">$translations.Translate("Package"):</label>
+                    </td>
+                    <td>
+                        <input type="file" name="package" id="packageLocation" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" class="button" name="Action" value="$translations.Translate("Import")" />
+                        <input type="button" class="button" id="closeImport" value="$translations.Translate("Close")" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="logDialog">
+        <ol>
+  #foreach ($Event in $Events)
+            <li class="$Event.Level">$Event.Message</li>
+  #end
+        </ol>
+    </div>
+    <div id="deleteServerDialog">
+        <form method="post">
+            <div>
+                Are you sure you want to delete the server '<span id="deleteServerLabel">$translations.Translate("Name")</span>'?
+            </div>
+            <div>
+                <input type="hidden" name="type" value="server" />
+                <input type="hidden" name="ServerName" id="deleteServerField" />
+                <input type="submit" name="Action" value="$translations.Translate("Delete")" />
+                <input type="button" id="cancelDeleteServer" value="$translations.Translate("Cancel")" />
+            </div>
+        </form>
+    </div>
+</div>
+<h3>$translations.Translate("Dashboard Administration")</h3>
+#if ($Result.Length > 0)
+<div class="ui-widget">
+	<div class="ui-state-highlight ui-corner-all"> 
+		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+		#if ($InstallPackage.Length > 0)
+		<form method="post" style="float:right;">
+		    <input type="hidden" name="PackageName" value="$InstallPackage" />
+		    <input type="submit" name="Action" value="$translations.Translate("Install")" />
+		</form>
+		#end
+		#if ($Events)
+		<input type="button" value="$translations.Translate("View Log")" id="viewLogButton" style="float:right;" />
+		#end
+		$Result
+		</p>
+		<div style="clear:both; margin-bottom:5px;"></div>
+	</div>
+</div>
+#end
+#if ($Error != "")
+<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all"> 
+		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+		<strong>Error:</strong> $Error</p>
+	</div>
+</div>
+#end
+<table id="adminFrame">
+    <tr valign="top">
+        <td>
+            <fieldset id="servers">
+                <legend>$translations.Translate("Remote Servers")</legend>
+                #foreach ($Server in $Servers)
+                #odd
+                <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
+                    $Server.Name [$Server.Url]
+                </div>
+                #even
+                <div class="evenRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
+                    $Server.Name [$Server.Url]
+                </div>
+                #end
+            </fieldset>
+        </td>
+        <td>
+            <fieldset id="packages">
+                <legend>$translations.Translate("Packages")</legend>
+                #foreach ($Package in $Packages)
+                #odd
+                <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName">
+                    $Package.Name 
+                    #if ($Package.IsInstalled)
+                    [Installed]
+                    #end
+                </div>
+                #even
+                <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName">
+                    $Package.Name 
+                    #if ($Package.IsInstalled)
+                    [Installed]
+                    #end
+                </div>
+                #end
+            </fieldset>
+        </td>
+    </tr>
+</table>
+<fieldset>
+    <legend>$translations.Translate("Commands")</legend>
+    <form method="post">
+        <div>
+            <input type="button" id="addServerButton" value="$translations.Translate("Add New Server")" />
+            <input type="button" id="loadPackageButton" value="$translations.Translate("Load Package")" />
+            <input type="submit" value="$translations.Translate("Reload dashboard")" name="Action" />
+            <input type="submit" value="$translations.Translate("Logout")" name="Action" />
+        </div>
+    </form>
+</fieldset>
+<!-- AdministerDashboard.vm: End -->

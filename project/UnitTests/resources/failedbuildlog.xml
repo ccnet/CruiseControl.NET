@@ -1,0 +1,647 @@
+<cruisecontrol project="CCNet">
+  <request source="intervalTrigger" buildCondition="ForceBuild">intervalTrigger triggered a build (ForceBuild)</request>
+  <modifications>
+    <modification type="unknown">
+      <filename>ccnet.log</filename>
+      <project>C:\sf\deployed\server</project>
+      <date>2006-05-06 10:52:20</date>
+      <user />
+      <comment />
+      <changeNumber>0</changeNumber>
+    </modification>
+    <modification type="unknown">
+      <filename>CCNet.state</filename>
+      <project>C:\sf\deployed\server</project>
+      <date>2006-05-06 10:52:59</date>
+      <user />
+      <comment />
+      <changeNumber>0</changeNumber>
+    </modification>
+    <modification type="unknown">
+      <filename>TestProject.state</filename>
+      <project>C:\sf\deployed\server</project>
+      <date>2006-05-06 10:52:59</date>
+      <user />
+      <comment />
+      <changeNumber>0</changeNumber>
+    </modification>
+  </modifications>
+  <build date="5/6/2006 11:00:21 AM" buildtime="00:00:34" error="true" buildcondition="ForceBuild">NAnt 0.85 (Build 0.85.2269.0; nightly; 3/19/2006)
+Copyright (C) 2001-2006 Gerry Shaw
+http://nant.sourceforge.net
+
+
+<buildresults project="ccnet">
+<message level="Info">
+<![CDATA[Buildfile: file:///c:/sf/ccnet/ccnet.build]]>
+</message>
+<message level="Info">
+<![CDATA[Target framework: Microsoft .NET Framework 1.1]]>
+</message>
+<message level="Info">
+<![CDATA[Target(s) specified: all]]>
+</message>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<task name="property">
+<duration>0</duration>
+</task>
+<target name="clean">
+<task name="delete">
+<message level="Info">
+<![CDATA[Deleting directory 'c:\sf\ccnet\build'.]]>
+</message>
+<duration>955.504</duration>
+</task>
+<task name="delete">
+<message level="Info">
+<![CDATA[Deleting directory 'c:\sf\ccnet\deployed'.]]>
+</message>
+<duration>1300.112</duration>
+</task>
+<task name="delete">
+<message level="Info">
+<![CDATA[Deleting directory 'c:\sf\ccnet\dist'.]]>
+</message>
+<duration>0</duration>
+</task>
+<duration>2271.28</duration>
+</target>
+<target name="init">
+<task name="mkdir">
+<message level="Info">
+<![CDATA[Creating directory 'c:\sf\ccnet\build'.]]>
+</message>
+<duration>0</duration>
+</task>
+<duration>15.664</duration>
+</target>
+<target name="compile">
+<task name="solution">
+<message level="Info">
+<![CDATA[Starting solution build.]]>
+</message>
+<message level="Info">
+<![CDATA[Building 'Remote' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'CCTrayLib' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>62.656</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'core' [Build] ...]]>
+</message>
+<task name="al">
+<duration>15.664</duration>
+</task>
+<task name="al">
+<duration>0</duration>
+</task>
+<task name="al">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>78.32</duration>
+</task>
+<task name="copy">
+<duration>46.992</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'service' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>62.656</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'WebDashboard' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>46.992</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'CCTray' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>281.952</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'UnitTests' [Build] ...]]>
+</message>
+<task name="attrib">
+<duration>15.664</duration>
+</task>
+<message level="Info">
+<![CDATA[UnitTests\Core\ProjectIntegratorTest.cs(248,21): warning CS0108: The keyword new is required on 'ThoughtWorks.CruiseControl.UnitTests.Core.LatchMock.methods' because it hides inherited member 'NMock.Mock.methods']]>
+</message>
+<message level="Info">
+<![CDATA[c:\sf\ccnet\lib\nmock.dll: (Location of symbol related to previous warning)]]>
+</message>
+<message level="Info">
+<![CDATA[UnitTests\Xsl\StylesheetTestFixture.cs(18,23): warning CS0618: 'System.Xml.Xsl.XslTransform.Transform(System.Xml.XPath.IXPathNavigable, System.Xml.Xsl.XsltArgumentList)' is obsolete: 'You should pass XmlResolver to Transform() method']]>
+</message>
+<message level="Info">
+<![CDATA[UnitTests\CCTrayLib\Presentation\StubProjectMonitor.cs(98,36): warning CS0067: The event 'ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation.StubProjectMonitor.MessageReceived' is never used]]>
+</message>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>46.992</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>31.328</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>93.984</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<message level="Info">
+<![CDATA[Building 'console' [Build] ...]]>
+</message>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>93.984</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="copy">
+<duration>0</duration>
+</task>
+<task name="copy">
+<duration>15.664</duration>
+</task>
+<task name="delete">
+<duration>0</duration>
+</task>
+<duration>5576.384</duration>
+</task>
+<task name="copy">
+<message level="Info">
+<![CDATA[Copying 0 files to 'c:\sf\ccnet\build\server\ccnet.exe.config'.]]>
+</message>
+<duration>0</duration>
+</task>
+<task name="copy">
+<message level="Info">
+<![CDATA[Copying 0 files to 'c:\sf\ccnet\build\service\ccservice.exe.config'.]]>
+</message>
+<duration>0</duration>
+</task>
+<task name="copy">
+<message level="Info">
+<![CDATA[Copying 1 file to 'c:\sf\ccnet\build\service\ccnet.config'.]]>
+</message>
+<message level="Info">
+<![CDATA[Copying 'c:\sf\ccnet\project\service\ccnet.config' to 'c:\sf\ccnet\build\service\ccnet.config'.]]>
+</message>
+<duration>0</duration>
+</task>
+<duration>5592.048</duration>
+</target>
+<target name="test.unit">
+<task name="exec">
+<duration>109.648</duration>
+</task>
+<task name="exec">
+<message level="Info">
+<![CDATA[NCover.Console v1.3.3 - Code Coverage Analysis for .NET - http://ncover.org]]>
+</message>
+<message level="Info">
+<![CDATA[Command: ..\..\tools\nunit\nunit-console.exe]]>
+</message>
+<message level="Info">
+<![CDATA[Command Args: ThoughtWorks.CruiseControl.UnitTests.dll /xml:../ThoughtWorks.CruiseControl.UnitTests.dll-results.xml /nologo]]>
+</message>
+<message level="Info">
+<![CDATA[Working Directory: .]]>
+</message>
+<message level="Info">
+<![CDATA[Assemblies:]]>
+</message>
+<message level="Info">
+<![CDATA[Coverage File:]]>
+</message>
+<message level="Info">
+<![CDATA[Coverage Log:]]>
+</message>
+<message level="Info">
+<![CDATA[******************* Program Output *******************]]>
+</message>
+<message level="Info">
+<![CDATA[.......................................................N.........................................................................................N...........................................................................................................................................................N...................................................................................................................................................................................................................N.................................N.F................................................................................................................................................................................................................................................................................................N..................................................................................................................................................N.................................................................N...N.N............................................................................................................................................................................................CruiseControl.NET Server 0.0.0.0 -- .NET Continuous Integration Server]]>
+</message>
+<message level="Info">
+<![CDATA[Copyright (C) 2003-2006 ThoughtWorks Inc.  All Rights Reserved.]]>
+</message>
+<message level="Info">
+<![CDATA[.NET Runtime Version: 1.1.4322.2032	Image Runtime Version: v1.1.4322]]>
+</message>
+<message level="Info">
+<![CDATA[OS Version: Microsoft Windows NT 5.1.2600.0]]>
+</message>
+<message level="Info">
+<![CDATA[CruiseControl.NET Server 0.0.0.0 -- .NET Continuous Integration Server]]>
+</message>
+<message level="Info">
+<![CDATA[Copyright (C) 2003-2006 ThoughtWorks Inc.  All Rights Reserved.]]>
+</message>
+<message level="Info">
+<![CDATA[.NET Runtime Version: 1.1.4322.2032	Image Runtime Version: v1.1.4322]]>
+</message>
+<message level="Info">
+<![CDATA[OS Version: Microsoft Windows NT 5.1.2600.0]]>
+</message>
+<message level="Info">
+<![CDATA[Tests run: 1225, Failures: 1, Not run: 10, Time: 19.047424 seconds]]>
+</message>
+<message level="Info">
+<![CDATA[Failures:]]>
+</message>
+<message level="Info">
+<![CDATA[1) ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics.StatisticsBuilderTest.ShouldPopulateNUnitSummaryFromLog : Wrong statistic for TestCount]]>
+</message>
+<message level="Info">
+<![CDATA[expected:<8>]]>
+</message>
+<message level="Info">
+<![CDATA[but was:<7>]]>
+</message>
+<message level="Info">
+<![CDATA[at ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics.StatisticsBuilderTest.AssertHasStatistic(String name, Object value) in c:\sf\ccnet\project\UnitTests\Core\Publishers\Statistics\StatisticsBuilderTest.cs:line 58]]>
+</message>
+<message level="Info">
+<![CDATA[at ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics.StatisticsBuilderTest.ShouldPopulateNUnitSummaryFromLog() in c:\sf\ccnet\project\UnitTests\Core\Publishers\Statistics\StatisticsBuilderTest.cs:line 80]]>
+</message>
+<message level="Info">
+<![CDATA[Tests not run:]]>
+</message>
+<message level="Info">
+<![CDATA[1) ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation.AddProjectsTest.ShowDialogForInteractiveTesting : Explicit selection required]]>
+</message>
+<message level="Info">
+<![CDATA[2) ThoughtWorks.CruiseControl.UnitTests.Core.Triggers.ProjectTriggerTest.HandleExceptionInProjectLocator : not implemented yet.]]>
+</message>
+<message level="Info">
+<![CDATA[3) ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.CvsHistoryParserTest.ParseExampleOfFileAddedOnBranch : implement next]]>
+</message>
+<message level="Info">
+<![CDATA[4) ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.SvnHistoryParserTest.ShouldHandleConvertingDatesToAndFromUTC : needs more work and thought to complete.]]>
+</message>
+<message level="Info">
+<![CDATA[5) ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics.StatisticsChartGeneratorTest.ShouldGenerateChart : Just if you really want to see a chart]]>
+</message>
+<message level="Info">
+<![CDATA[6) ThoughtWorks.CruiseControl.UnitTests.Core.Config.FileConfigurationServiceTest.DoesSomethingSaneWhenBadLoadThingsHappen : unimplemented]]>
+</message>
+<message level="Info">
+<![CDATA[7) ThoughtWorks.CruiseControl.UnitTests.Core.ArgumentParserTest.InstantiateWithMoreInvalidArguments : This test has initimate knowledge of the logging implementation; it should not]]>
+</message>
+<message level="Info">
+<![CDATA[8) ThoughtWorks.CruiseControl.UnitTests.Core.ConsoleRunnerTest.ShowHelp : This test has initimate knowledge of the logging implementation; it should not]]>
+</message>
+<message level="Info">
+<![CDATA[9) ThoughtWorks.CruiseControl.UnitTests.Core.RemoteCruiseServerTest.SetupAndTeardownRemotingInfrastructure : This is intermittently failing, I think due to some evil NMock static nastiness. Do we even want to Unit Test this stuff? Is it not too much of an edge case?]]>
+</message>
+<message level="Info">
+<![CDATA[10) ThoughtWorks.CruiseControl.UnitTests.Core.RemoteCruiseServerTest.ShouldOnlyDisposeOnce : This is intermittently failing, I think due to some evil NMock static nastiness.]]>
+</message>
+<message level="Info">
+<![CDATA[***************** End Program Output *****************]]>
+</message>
+<message level="Info">
+<![CDATA[Copied 'c:\sf\ccnet\tools\ncover\Coverage.xsl' to 'c:\sf\ccnet\build\unittests\Coverage.xsl']]>
+</message>
+<duration>25454</duration>
+</task>
+<duration>25563.648</duration>
+</target>
+<failure>
+<builderror>
+<type>NAnt.Core.BuildException</type>
+<message>
+<![CDATA[External Program Failed: c:\sf\ccnet\tools\ncover\NCover.Console.exe (return code was 1)]]>
+</message>
+<location>
+<filename>c:\sf\ccnet\ccnet.build</filename>
+<linenumber>84</linenumber>
+<columnnumber>4</columnnumber>
+</location>
+<stacktrace>
+<![CDATA[   at NAnt.Core.Tasks.ExternalProgramBase.ExecuteTask()
+   at NAnt.Core.Tasks.ExecTask.ExecuteTask()
+   at NAnt.Core.Task.Execute()
+   at NAnt.Core.Target.Execute()
+   at NAnt.Core.Project.Execute(String targetName, Boolean forceDependencies)
+   at NAnt.Core.Project.Execute()
+   at NAnt.Core.Project.Run()]]>
+</stacktrace>
+</builderror>
+</failure>
+<duration>33489.632</duration>
+</buildresults>
+
+A subdirectory or file c:\sf\ccnet\project\WebDashboard\\xsl already exists.
+</build>
+</cruisecontrol>

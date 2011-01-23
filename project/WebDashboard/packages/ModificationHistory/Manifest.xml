@@ -1,0 +1,12 @@
+﻿<package>
+  <name>Modification History</name>
+  <description>Modification history for a project.</description>
+  <type>Plugin</type>
+  <folders />
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>modificationHistoryProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

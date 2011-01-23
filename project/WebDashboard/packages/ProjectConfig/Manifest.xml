@@ -1,0 +1,12 @@
+﻿<package>
+  <name>Project Configuration Display</name>
+  <description>Show the project configuration.</description>
+  <type>Plugin</type>
+  <folders />
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>viewConfigurationProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

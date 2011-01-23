@@ -1,0 +1,21 @@
+﻿<!-- OhlohStats.vm: Start -->
+<h2>Ohloh Statistics for $projectName</h2>
+<table>
+    <tr>
+        <td>
+            <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_factoids.js"></script>
+        </td>
+        <td>
+            <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_languages.js"></script>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_basic_stats.js"></script>
+        </td>
+        <td>
+            <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_cocomo.js"></script>
+        </td>
+    </tr>
+</table>
+<!-- OhlohStats.vm: End -->

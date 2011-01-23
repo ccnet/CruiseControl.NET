@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.0 RC1 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.0 RC1 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Aug 15, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p>This is the first Release Candidate for CruiseControl.NET 1.0 . We gratefully welcome any feedback that can improve the final distribution of 1.0, which we hope to release within the next few weeks.</p>
+
+<p>As always, if upgrading from a previous version make sure to back up your config files, state files, and any build artifacts you care about. We recommend deleting your old install and starting from a clean slate if you can.</p>
+
+<h2><a name="CCNet1.0RC1ReleaseNotes-MajorChanges"></a>Major Changes</h2>
+
+<p>There are some big 'top level' changes in this release:</p>
+<ul>
+	<li>CCTray has been completely re-written. The version that ships with 1.0 has configuration files that are incompatible with those used by prior releases. In other words, throw away all your old CCTrays, and use the new one. CCTray now ships with its own installer which you can distribute to anyone who wants to monitor your build server.</li>
+	<li>The new CCTray has many more features than the old, and is much better for organisations or teams with multiple projects or build servers.</li>
+	<li>CruiseControl.NET now has native <a href="MsBuild Task.html" title="MsBuild Task">MSBuild</a> support for .NET 2 . Even if you call MSBuild from a NAnt script rather than CruiseControl.NET directly you'll want to look into using the CruiseControl.NET MSBuild XMLLogger and the MSBuild XSL files.</li>
+	<li>The old (single project) web application has been deleted, and CCNet now only ships with the Web Dashboard.</li>
+	<li>The main CCNet installer now ships with just the Build Server and Web Dashboard - use the separate CCTray installer for CCTray.</li>
+	<li>Integration Properties (passed to NAnt, for example) have been changed to be CamelCased rather than period.separated so you may need to update your build scripts. These properties are now also passed through the <tt>&lt;exec&gt;</tt> and <tt>&lt;msbuild&gt;</tt> tasks.</li>
+</ul>
+
+
+<h2><a name="CCNet1.0RC1ReleaseNotes-JiraIssues"></a>Jira Issues</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/ReleaseNote.jspa?projectId=10000&amp;styleName=Html&amp;version=10151">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.0RC1ReleaseNotes-Bug"></a>Bug </h4>
+
+<ul>
+	<li>CCNET-68 - CCTray freezing on network connection problems</li>
+	<li>CCNET-92 - CCTray's Popup menu doesn't respond properly when connection fails</li>
+	<li>CCNET-119 - CCTray should reload projects after server is restarted</li>
+	<li>CCNET-429 - &lt;autoGetSource&gt;true&lt;/autoGetSource&gt; for ClearCase</li>
+	<li>CCNET-436 - Cvs history command fails if modified directory has been deleted.</li>
+	<li>CCNET-450 - There should be sorting on CCTray project list</li>
+	<li>CCNET-466 - Support for Source Gear 2.0.6 has broken because it uses the command line "-excludeactions label"</li>
+	<li>CCNET-475 - Modifications aren't detected in VSS</li>
+	<li>CCNET-480 - NUnit task throws an exception if NUnit output file does not exist</li>
+	<li>CCNET-483 - Vault reports "Unable to execute file" error</li>
+	<li>CCNET-491 - ccnet.project property passed to NAnt should have meaningful example.</li>
+	<li>CCNET-499 - NSIS Install does not default install directory correctly</li>
+	<li>CCNET-501 - Create separate install for CCTray</li>
+	<li>CCNET-503 - Set app icon for CCTray</li>
+	<li>CCNET-505 - Change Integration Properties to be CamelCased rather than period.separated since MSBuild can't handle period.separated property names</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC1ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET-20 - Support for MSBuild</li>
+	<li>CCNET-35 - CCTray should support multiple servers</li>
+	<li>CCNET-83 - CCTray should provide notification of build for any monitored project</li>
+	<li>CCNET-196 - Pass through more properties to the Builder</li>
+	<li>CCNET-317 - Create Failed email notification group</li>
+	<li>CCNET-469 - Ability to substitute . for _ on CVS Tag</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC1ReleaseNotes-Task"></a>Task</h4>
+
+<ul>
+	<li>CCNET-493 - Delete Web Project (replaced by Dashboard)</li>
+	<li>CCNET-494 - Remove Web Service from binary distributions</li>
+	<li>CCNET-496 - Replace old CCTray with new CCTrayMulti code</li>
+	<li>CCNET-497 - Update CCTray documentation to reflect new CCTrayMulti</li>
+	<li>CCNET-498 - Rename IView to IResponse</li>
+</ul>
+
+
+<h4><a name="CCNet1.0RC1ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET-55 - Show Server Version in Dashboard</li>
+	<li>CCNET-62 - Refactor QuietPeriod implementation into a separate class</li>
+	<li>CCNET-97 - Changes within delay window should cause CCNET to retry again</li>
+	<li>CCNET-128 - NUnit task should have configurable timeout</li>
+	<li>CCNET-233 - Pass CCNet values to Command Line builds</li>
+	<li>CCNET-428 - CVS should convert illegal characters in labels</li>
+	<li>CCNET-464 - Publisher collection for a Project should contain the XmlLogger by default</li>
+	<li>CCNET-465 - Iteration Labeller</li>
+	<li>CCNET-470 - Several Source Control Blocks for one project</li>
+	<li>CCNET-472 - Cvs should support getting rebased from Project working directory</li>
+	<li>CCNET-476 - Support passing all IntegrationResult properties to ExecTask</li>
+	<li>CCNET-477 - Allow User to specify that a MultiSourceControl only returns modifications if all SourceControls return a non-empty list</li>
+	<li>CCNET-502 - Exceptions thrown by Dashboard Actions should appear in  templated page</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

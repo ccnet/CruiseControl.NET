@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="055533b6-7958-4895-9218-315b06efa1d4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Connecting to an HTTP server can be done in one of two ways.</para>
+      <para>First, if the URI for the server starts with http://, it can be automatically
+detected by the factory</para>
+		<code language="C#">
+var httpClient = CruiseServerClientFactory
+      .GenerateClient("http://servername/ccnet");
+		</code>
+		<para>This will detect that the protocol is HTTP and automatically initialise
+a client that uses HTTP as the transport protocol.</para>
+		<para>The second way is to explicitly create a client that uses HTTP. Again, 
+this can be done by using the factory class:</para>
+		<code language="C#">
+var httpClient = CruiseServerClientFactory
+      .GenerateHttpClient("http://servername/ccnet");
+		</code>
+		<para>This approach will ignore the protocol portion of the URI and just create
+a client that uses HTTP as the transport protocol.</para>
+		<para>Once the client is created, all the standard commands can be sent to the server.</para>
+    </introduction>
+    <relatedTopics>
+    	<link xlink:href="628bb73f-cac4-4b94-9f59-8b2271bb728c" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

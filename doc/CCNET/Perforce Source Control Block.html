@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Perforce Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Perforce Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Feb 01, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h1><a name="PerforceSourceControlBlock-PerforceSourceControlBlock"></a>Perforce Source Control Block</h1>
+
+<p>Perforce source control block.  </p>
+
+<h2><a name="PerforceSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="PerforceSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"p4"</span>&gt;</span>
+  <span class="code-tag">&lt;view&gt;</span>//projects/myproject/...<span class="code-tag">&lt;/view&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"p4"</span>&gt;</span>
+  <span class="code-tag">&lt;view&gt;</span>//projects/ccnet/...,//tools/nant/...<span class="code-tag">&lt;/view&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\perforce\p4.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;client&gt;</span>ccnet-buildhost<span class="code-tag">&lt;/client&gt;</span>
+  <span class="code-tag">&lt;user&gt;</span>public<span class="code-tag">&lt;/user&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>mypassword<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;port&gt;</span>perforce01.thoughtworks.net:1666<span class="code-tag">&lt;/port&gt;</span>
+  <span class="code-tag">&lt;timeZoneOffset&gt;</span>-5<span class="code-tag">&lt;/timeZoneOffset&gt;</span>
+  <span class="code-tag">&lt;applyLabel&gt;</span>true<span class="code-tag">&lt;/applyLabel&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;forceSync&gt;</span>true<span class="code-tag">&lt;/forceSync&gt;</span>
+  <span class="code-tag">&lt;p4WebURLFormat&gt;</span>http://perforceWebServer:8080/@md=d&amp;amp;cd=//&amp;amp;c=3IB@/{0}?ac=10<span class="code-tag">&lt;/p4WebURLFormat&gt;</span>
+  <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="PerforceSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be p4 </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> acceptableErrors </td>
+<td class='confluenceTd'> The acceptable errors.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> file&#40;s&#41; up&#45;to&#45;date\. </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> applyLabel </td>
+<td class='confluenceTd'> Whether to apply a label on a successful build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified client &#45; the view has no effect on sycning.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> client </td>
+<td class='confluenceTd'> The perforce 'client' to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Performance environment setting </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> errorPattern </td>
+<td class='confluenceTd'> The error pattern to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> ^error: .&#42; </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the Perforce command line client executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> p4 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forceSync </td>
+<td class='confluenceTd'> If autoGetSource is set to true, then whether to use the &#45;f option to sync. See <a href="http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html">http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html</a> for more details.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> p4WebURLFormat </td>
+<td class='confluenceTd'> Creates a link to the P4Web change list page for each detected modification. The specified value is transformed using String.Format where the first argument will be the substituted change list number.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The perforce password to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Performance environment setting </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> port </td>
+<td class='confluenceTd'> The perforce hostname and port to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Performance environment setting </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeZoneOffset </td>
+<td class='confluenceTd'> How many hours ahead your Perforce Server is from your build server. E.g. if your build server is in London, and your Perforce server is in New York, this value would be '&#45;5'.   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useExitCode </td>
+<td class='confluenceTd'> Whether to use exit codes.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> user </td>
+<td class='confluenceTd'> The perforce user to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Performance environment setting </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> view </td>
+<td class='confluenceTd'> The perforce 'view' to check for changes. For 'multi&#45;line' views, use a comma&#45;separated list. 'Exclusionary' view lines starting with &#45; cannot be used. Use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to achieve this behaviour. Note that this view is not used for syncing (see below.)   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The working directory to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="PerforceSourceControlBlock-Notes"></a>Notes</h2>
+
+<h4><a name="PerforceSourceControlBlock-Client%2FUser%2FPassword%2FPortusage"></a>Client / User / Password / Port usage</h4>
+<p>You may specify any of the Perforce client, user, password and port (ie 'host:port' in Perforce standards) settings to use. If you don't specify them, then Cruise Control .NET will use the defaults in your registry (use 'p4 set' to view and edit these.)  <br/>
+Note that the client specification is only used for syncing and applying labels, it is not used when checking for changes. This is significant since it means that the view in the specified client does not effect the plugin's behaviour when checking for changes.  </p>
+<h4><a name="PerforceSourceControlBlock-PerforceIssues"></a>Perforce Issues</h4>
+<p>Perforce cannot apply purely numeric labels, which is what CCNet uses by default. Therefore, if you have 'applyLabel' set to true, you must also setup a custom Labeller in your project, e.g. by using the <a href="Default Labeller.html" title="Default Labeller">Default Labeller</a>.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Monday, 1 Feb 2010 at 8:16:31 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

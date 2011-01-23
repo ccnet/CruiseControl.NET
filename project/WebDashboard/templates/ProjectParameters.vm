@@ -1,0 +1,37 @@
+<!-- ProjectParameters.vm: Start -->
+<form method="post">
+  <input type="hidden" name="projectName" value="$projectName" />
+  <input type="hidden" name="serverName" value="$serverName" />
+  <input type="hidden" name="ForceBuild" value="Force" />
+  <table>
+    #foreach ($parameter in $parameters)
+    <tr>
+      <th>$parameter.DisplayName:</th>
+      <td>
+        #if ($parameter.AllowedValues.Length > 0)
+          <select name="param_$parameter.Name">
+            #foreach ($value in $parameter.AllowedValues)
+            #if ($parameter.ClientDefaultValue == $value)
+            <option value="$value" selected>$value</option>
+            #else
+            <option value="$value">$value</option>
+            #end
+            #end
+          </select>
+        #else
+          #if ($parameter.ClientDefaultValue.Length > 0)
+          <input type="text" name="param_$parameter.Name" value="$parameter.ClientDefaultValue"/>
+          #else
+          <input type="text" name="param_$parameter.Name"/>
+          #end
+        #end
+      </td>
+    </tr>
+    #end
+  </table>
+  <div>
+    <input type="button" value="$translations.Translate("Cancel")" onclick="$('#parameterCheck').dialog('close')"/>
+    <input type="submit" value="$translations.Translate("Build")"/>
+  </div>
+</form>
+<!-- ProjectParameters.vm: End -->

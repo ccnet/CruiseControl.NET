@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Select Parameter</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Select Parameter
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 07, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="SelectParameter-SelectParameter"></a>Select Parameter</h1>
+
+<p>This will prompt the user to select a value from a list of values when a force build is requested.  <br/>
+This parameter can then be used by a dynamic value in a task.  </p>
+
+
+<h2><a name="SelectParameter-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="SelectParameter-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;selectParameter&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Target<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;allowedValues&gt;</span>
+    <span class="code-tag">&lt;value name=<span class="code-quote">"Development"</span>&gt;</span>DEV<span class="code-tag">&lt;/value&gt;</span>
+    <span class="code-tag">&lt;value name=<span class="code-quote">"Test"</span>&gt;</span>TEST<span class="code-tag">&lt;/value&gt;</span>
+    <span class="code-tag">&lt;value name=<span class="code-quote">"Production"</span>&gt;</span>PROD<span class="code-tag">&lt;/value&gt;</span>
+  <span class="code-tag">&lt;/allowedValues&gt;</span>
+<span class="code-tag">&lt;/selectParameter&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;selectParameter&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Target<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;display&gt;</span>Target to Build<span class="code-tag">&lt;/display&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Which target do you want to build?<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;default&gt;</span>DEV<span class="code-tag">&lt;/default&gt;</span>
+  <span class="code-tag">&lt;minimum&gt;</span>3<span class="code-tag">&lt;/minimum&gt;</span>
+  <span class="code-tag">&lt;maximum&gt;</span>10<span class="code-tag">&lt;/maximum&gt;</span>
+  <span class="code-tag">&lt;required&gt;</span>false<span class="code-tag">&lt;/required&gt;</span>
+  <span class="code-tag">&lt;sourceFile&gt;</span>C:\Builds\Values.txt<span class="code-tag">&lt;/sourceFile&gt;</span>
+<span class="code-tag">&lt;/selectParameter&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in Context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
+  <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/sourcecontrol&gt;</span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;intervalTrigger /&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;parameters&gt;</span>
+    <span class="code-tag">&lt;selectParameter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>Target<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;allowedValues&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"Development"</span>&gt;</span>DEV<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"Test"</span>&gt;</span>TEST<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"Production"</span>&gt;</span>PROD<span class="code-tag">&lt;/value&gt;</span>
+      <span class="code-tag">&lt;/allowedValues&gt;</span>
+    <span class="code-tag">&lt;/selectParameter&gt;</span>
+  <span class="code-tag">&lt;/parameters&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="SelectParameter-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> allowedValues </td>
+<td class='confluenceTd'> An array of allowed values.   </td>
+<td class='confluenceTd'> <a href="Named Value.html" title="Named Value">Named Value</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> default </td>
+<td class='confluenceTd'> The default value to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> The description of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> display </td>
+<td class='confluenceTd'> The display name of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> required </td>
+<td class='confluenceTd'> Is the parameter required?   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceFile </td>
+<td class='confluenceTd'> Load the values from a file.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="SelectParameter-Notes"></a>Notes</h2>
+
+<p>In order for this parameter to work, either the allowed values or a source file must be set. If both are set, the source file will be used.  </p>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Monday, 7 Dec 2009 at 3:22:47 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

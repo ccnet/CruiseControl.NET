@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Rational ClearCase Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Rational ClearCase Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 17, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="RationalClearCaseSourceControlBlock-RationalClearCaseSourceControlBlock"></a>Rational ClearCase Source Control Block</h1>
+
+<p>Rational ClearCase source control block.  </p>
+
+<h2><a name="RationalClearCaseSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="RationalClearCaseSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"clearCase"</span>&gt;</span>
+  <span class="code-tag">&lt;viewPath&gt;</span>C:\PATH\TO\SOURCE<span class="code-tag">&lt;/viewPath&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"clearCase"</span>&gt;</span>
+  <span class="code-tag">&lt;viewPath&gt;</span>C:\PATH\TO\SOURCE<span class="code-tag">&lt;/viewPath&gt;</span>
+  <span class="code-tag">&lt;branch&gt;</span>main<span class="code-tag">&lt;/branch&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>false<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;useLabel&gt;</span>true<span class="code-tag">&lt;/useLabel&gt;</span>
+  <span class="code-tag">&lt;useBaseline&gt;</span>false<span class="code-tag">&lt;/useBaseline&gt;</span>
+  <span class="code-tag">&lt;projectVobName&gt;</span>PROJECT_VOB_NAME<span class="code-tag">&lt;/projectVobName&gt;</span>
+  <span class="code-tag">&lt;viewName&gt;</span>PROJECT_VIEW_NAME<span class="code-tag">&lt;/viewName&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>cleartool.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;timeout&gt;</span>50000<span class="code-tag">&lt;/timeout&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="RationalClearCaseSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be clearCase </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from ClearCase.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> The name of the branch that CCNet will monitor for modifications. Note that the config spec of the view being built from must also be set up to reference this branch.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> Specifies the path to the ClearCase command line tool. You should only have to include this element if the tool isn't in your path. By default, the ClearCase client installation puts cleartool in your path.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> cleartool.exe </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> projectVobName </td>
+<td class='confluenceTd'> The name of the project VOB that the view path uses.  <br clear="all" />This is required if useBaseline="true".   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useBaseline </td>
+<td class='confluenceTd'> Specifies whether a baseline should be applied when the build is successful. Requires the VOB your view references to be a UCM VOB.  <br clear="all" />Requires that you specify viewName and projectVobName.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useLabel </td>
+<td class='confluenceTd'> Specifies whether a label should be applied when the build is successful.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewName </td>
+<td class='confluenceTd'> The name of the view that you're using.  <br clear="all" />This is required if useBaseline="true".   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewPath </td>
+<td class='confluenceTd'> The path that CCNet will check for modifications and use to apply the label.  <br clear="all" />Specifies a directory on your filesystem that CCNet monitors for changes. The path must be a versioned object. CCNet checks the actual VOB for changes, not the local filesystem. This doesn't have to be the root of the local ClearCase view. It may be any of the root's children or even a single object.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="RationalClearCaseSourceControlBlock-Notes"></a>Notes</h2>
+
+<h4><a name="RationalClearCaseSourceControlBlock-CommonProblems"></a>Common Problems</h4>
+<p> <b>The build is initiated when users check in on private branches</b><br/>
+By default, ClearCase returns a history for every file in every branch, even if the config spec limits to a single branch. You must specify &lt;branch&gt; in order to limit which changes CCNet can see.  <br/>
+ <b>After the build is successful I get a "Baseline not found" error message.</b><br/>
+An example of this message is:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:
+            cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-2004-16-34-15".</pre>
+</div></div>
+<p>This happens when &lt;projectVobName&gt; is not set to the project VOB. Typically this happens when the user specifies the UCM VOB instead of the project VOB.  <br/>
+To correct the problem, change the value in that element to the name of the project VOB.  </p>
+<h4><a name="RationalClearCaseSourceControlBlock-KnownBugs"></a>Known Bugs</h4>
+<p> <b>When I view my baselines, I see that they're called CruiseControl.NET[something] instead of v1.0.0.4.</b><br/>
+This is a bug in ClearCase; Rational is aware of it. It only occurs if you're using baselines.  <br/>
+CCNet creates a temporary baseline with the prefix CruiseControl.NET before renaming it to the final value, such as v1.5.2.3. Depending on how you view baselines in ClearCase, you may see the temporary or real name.  <br/>
+For example, if you use the admin console, you'll see the old, temporary value. If use use cleartool lsbl, you'll see the correct one:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">M:\gsmith_GS_Project_int\GS_UCM_VOB&gt;cleartool lsbl
+            06-May-04.16:28:27  v1.0.0.1  gsmith   "CruiseControlTemporaryBaseline_05-06-200
+            4-16-28-26"
+              stream: GS_Project_Integration@\GS_PVOB
+              component: GS_UCM_VOB@\GS_PVOB
+            06-May-04.16:34:16  v1.0.0.2  gsmith   "CruiseControl.NETTemporaryBaseline_05-06
+            -2004-16-34-15"
+              stream: GS_Project_Integration@\GS_PVOB
+              component: GS_UCM_VOB@\GS_PVOB</pre>
+</div></div>
+<p> <b>CruiseControl.NET sees checkins on all branches, not just the one specified in my config spec</b><br/>
+This is due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not just the history that can be seen by the config spec.  <br/>
+The workaround is to make sure you include a &lt;branch&gt; element in your configuration. This will force ccnet to just see changes on that branch.  <br/>
+ <b>CruiseControl.NET doesn't see my changes</b><br/>
+Make sure the clock of your build server is synchronised to the clock of your ClearCase server.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 17 Dec 2009 at 1:30:14 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

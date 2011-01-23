@@ -1,0 +1,27 @@
+<!-- TopMenu.vm: Start -->
+<table class="breadcrumbs">
+	<tr>
+		<td>
+			<div>
+				<a href="$farmLink.Url">$translations.Translate("Dashboard")</a>
+				#if ( $serverName == "" )
+					#if ($categoryName != "")
+					&gt; <a href="$categoryLink.Url">$categoryLink.Text</a>
+					#end
+				#else
+					&gt; <a href="$serverLink.Url">$serverLink.Text</a>
+					#if ($categoryName != "")
+						&gt; <a href="$categoryLink.Url">$categoryLink.Text</a>
+					#end
+					#if ( ! ( $projectName == "" ) )
+						&gt; <a href="$projectLink.Url">$projectLink.Text</a>
+						#if ( ! ( $buildName == "" ) )
+							&gt; <a href="$buildLink.Url">$buildLink.Text</a>
+						#end
+					#end
+				#end
+			</div>
+		</td>
+	</tr>
+</table>
+<!-- TopMenu.vm: End -->

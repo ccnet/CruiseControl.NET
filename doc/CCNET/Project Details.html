@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Project Details</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Project Details
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 29, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <h2><a name="ProjectDetails-OpenSource"></a>Open Source</h2>
+
+<p>CruiseControl.NET is an Open Source project. This means it is free to use, and the source code is also available and distributable under a few conditions. Our <a href="License.html" title="License">License</a> is very similar to the Apache &amp; BSD licenses.</p>
+
+<h2><a name="ProjectDetails-ProjectManagement"></a>Project Management</h2>
+
+<p>The CruiseControl.NET source trees and email lists are hosted on SourceForge under the <a href="http://www.sf.net/projects/ccnet">ccnet</a> project.</p>
+
+<p>We don't use Sourceforge for bug and feature tracking, instead look at our <a href="Issues.html" title="Issues">Issues</a> page.</p>
+
+<p>At ThoughtWorks we believe in lightweight methodologies. This fits in well with an open source project so project decisions tend to be made in an ad-hoc fashion, normally by some kind of consesus on the <em>CCNet-Devel</em> <a href="Mailing Lists.html" title="Mailing Lists">mailing list </a>.  You can search through the mailing list archives on <a href="Mailing Lists.html#MailingLists-GMane">GMane</a>.</p>
+
+<p>CruiseControl.NET is written by many volunteers - see the <a href="Project Team.html" title="Project Team">Project Team</a>.</p>
+
+<h4><a name="ProjectDetails-ReleaseVersionNumbers"></a>Release Version Numbers</h4>
+
+<p>Released versions have the following numbering:</p>
+<ul>
+	<li><b>Major</b>.<b>minor</b>.<b>revision</b>.<b>buildnumber</b>, where
+	<ul>
+		<li>We update <b>major</b> versions only on a major milestone in the project.</li>
+		<li>We update <b>minor</b> versions when there is a significant improvement in the application, or a breaking change in configuration since the previous release. When updating the <b>minor</b> version number, we reset the <b>revision</b> to zero.</li>
+		<li>We use <b>revision</b> numbers of more than 0 when we do not want to update the minor version number, but do want to make a new release. This may be due to some bugfixes, minor updates, etc. We never just increase the <b>revision</b> number if there has been a breaking change</li>
+		<li><b>buildnumber</b> is the CCNetLive build number. We never reset this. A buildnumber of <b>0</b> implies a build that was produced outside of our Continuous Integration environment</li>
+	</ul>
+	</li>
+</ul>
+
+
+<p>Our Continuous Integration process creates a build label that includes the <b>major</b>.<b>minor</b>.<b>revision</b> part. We update this as late as possible before a release, or release candidate, for a new release version.</p>
+
+<p>Unreleased versions have the following names:</p>
+<ul>
+	<li><b>Next</b> &#45; The next release, where the final release name has not yet been set</li>
+	<li><b>Soon</b> &#45; Issues that we hope to resolve soon</li>
+	<li><b>Medium Term</b> &#45; Issues that we hope to resolve somewhere between 'Soon' and 'Eventually'</li>
+	<li><b>Eventually</b> &#45;  Issues that we hope to resolve at some point in the future, but after the next major release</li>
+</ul>
+
+
+<p>All unresolved Jira issues should be assigned to one of these versions by a CruiseControl.NET administrator. Issues should only be moved to <b>Next</b> if they have been resolved since the last release, or are an unresolved blocker for the next release.</p>
+
+<h2><a name="ProjectDetails-Submittingupdates"></a>Submitting updates</h2>
+
+<p>We welcome patches and updates to the code and documentation for CruiseControl.NET. If you want to do this, the best way is to email the ccnet-devel list with your change.</p>
+
+<p>The format of your submission ideally should be a description of what you have done, along with an associated SVN patch (if you don't know how to create a SVN patch, you probably want to use TortoiseSVN client since it has a good GUI for creating them). If your patch includes files &gt; 40kb, please don't send it to the list. Instead, email the list with a description of your patch, and one of the admin team will reply off-list so that you can send the files just to one person.</p>
+
+<p>If you are really keen, please create <a href="http://jira.public.thoughtworks.org/browse/">a new issue on jira</a> describing your patch and attach the patch file as an attachment.  This saves us the work of having to do it and generally means that your patch will be processed faster.</p>
+
+<p>If you do want to make a submission, please make sure you read up about our <a href="Contributor License Agreement.html" title="Contributor License Agreement">Contributor License Agreement</a>.</p>
+
+<h2><a name="ProjectDetails-ReleaseProcess"></a>Release Process</h2>
+
+<p>We use <a href="http://ccnetlive.thoughtworks.com/ccnet">CCNetLive </a> to produce new distributions of CCNet every time a CCNet developer checks in new code.  You can download the source or binary packages from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">here </a>.</p>
+
+<p>We also periodically produce stable releases that are posted on the <a href="http://sourceforge.net/project/showfiles.php?group_id=71179&amp;package_id=83198">SourceForge download site </a>.  The process of producing a new stable release is described in gory detail on the <a href="Packaging a Release.html" title="Packaging a Release">Packaging a Release</a> page.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

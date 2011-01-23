@@ -1,0 +1,13 @@
+﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define name="macro1">
+    <m1>$(param1);$(param2)</m1>
+  </cb:define>
+
+  <root>
+    <cb:scope param1="param1val" param2="param2val">
+      <cb:macro1 />
+    </cb:scope>
+  </root>
+
+</cb:config-template>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Modification Reader Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Modification Reader Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="ModificationReaderTask-ModificationReaderTask"></a>Modification Reader Task</h1>
+
+<p>This tasks makes it possible to read back modifications made by the <a href="Modification Writer Task.html" title="Modification Writer Task">Modification Writer Task</a>.  </p>
+
+
+<h2><a name="ModificationReaderTask-Version"></a>Version</h2>
+
+<p>Available from version 1.4</p>
+
+<h2><a name="ModificationReaderTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;modificationReader /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;modificationReader&gt;</span>
+  <span class="code-tag">&lt;deleteAfterRead&gt;</span>true<span class="code-tag">&lt;/deleteAfterRead&gt;</span>
+  <span class="code-tag">&lt;filename&gt;</span>last-mods.xml<span class="code-tag">&lt;/filename&gt;</span>
+  <span class="code-tag">&lt;path&gt;</span>mods-path<span class="code-tag">&lt;/path&gt;</span>
+<span class="code-tag">&lt;/modificationReader&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ModificationReaderTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> deleteAfterRead </td>
+<td class='confluenceTd'> Delete the files after they have been read.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> The filename pattern for the file containing the modifications. CCnet with search in the path for files starting with this filename, and having the same extention. For example when filename is set to modifications.xml, ccnet will search for files like so: modifications&#42;.xml   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> modifications.xml </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> The directory to search the xml file(s) in.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Artefact Directory </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="ModificationReaderTask-Notes"></a>Notes</h2>
+
+<p>2 projects in CCNet  <br/>
+1) is a project that does the compile, test, ... stuff, and also writes the modifications using the ModificationWriterTask be sure to set the appendTimeStamp of the modificationWriter to true  <br/>
+2) is a project that deploys the result of project 1  <br/>
+&#45;&#45;&gt; copies it to other servers, updates source control (binary references like a framework), ...  <br/>
+The reason for a second project is that this can be done on releases of milestones of project 1  <br/>
+The ModificationReaderTask can now easily read the modification file(s) made by project one, into it's own integration, making it possible that these can be used by the existing tasks/publishers of ccnet for project 2  <br/>
+It is best to place the modificationreader in the prebuild section, so all the other tasks / publisers know the read modifications also.  <br/>
+It is adivisable to keep these configuration elements of the modificationWriter and the modificationReader the same.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:52 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

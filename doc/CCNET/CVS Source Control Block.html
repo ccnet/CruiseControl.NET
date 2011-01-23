@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CVS Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CVS Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 06, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="CVSSourceControlBlock-CVSSourceControlBlock"></a>CVS Source Control Block </h1>
+
+<p>Please refer to <a href="Using CruiseControl.NET with CVS.html" title="Using CruiseControl.NET with CVS">Using CruiseControl.NET with CVS</a> for an overview of this block.  <br/>
+For CVS you must define where the CVS executable (if you give a relative path, it must be relative to the ccnet.exe application) is and the working directory for checked out code.  </p>
+
+
+<h2><a name="CVSSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.2</p>
+
+<h2><a name="CVSSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>pserver authentication example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>..\tools\cvs.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;cvsroot&gt;</span>:pserver:anonymous@cvs.sourceforge.net:/cvsroot/ccnet<span class="code-tag">&lt;/cvsroot&gt;</span>
+  <span class="code-tag">&lt;module&gt;</span>ccnet<span class="code-tag">&lt;/module&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\projects\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>SSH via putty example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\putty\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;cvsroot&gt;</span>:ext:mycvsserver:/cvsroot/myrepo<span class="code-tag">&lt;/cvsroot&gt;</span>
+  <span class="code-tag">&lt;module&gt;</span>mymodule<span class="code-tag">&lt;/module&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\fromcvs\myrepo<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="CVSSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be cvs </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from CVS.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> The branch to check for modifications on.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanCopy </td>
+<td class='confluenceTd'> Specifies whether or not a clean copy should be retrieved.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cvsroot </td>
+<td class='confluenceTd'> The cvs connection string. If this is unspecified and your working directory contains a previous checkout, then the CVS client will attempt to determine the correct root based on the CVS folder in your working directory. If the working directory does not contain the source, then this element must be specfied.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the cvs.exe executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> cvs </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forceCheckout </td>
+<td class='confluenceTd'> Specifies whether the checkout command should be used instead of update.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelOnSuccess </td>
+<td class='confluenceTd'> Specifies whether or not the repository should be labelled after a successful build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> module </td>
+<td class='confluenceTd'> The cvs module to monitor. This element is used both when checking for modifications and when checking out the source into an empty working directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> restrictLogins </td>
+<td class='confluenceTd'> Only list modifications checked in by specified logins.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> suppressRevisionHeader </td>
+<td class='confluenceTd'> Suppresses headers that do not have revisions within the specified modification window. Setting this option to true will reduce the time that it takes for CCNet to poll CVS for changes. Only fairly recent versions of CVS support this option. Run cvs &#45;&#45;help log to see if the &#45;S option is listed.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagPrefix </td>
+<td class='confluenceTd'> By default the CVS tag name used when labelOnSuccess is set to true is ver&#45;BuildLabel. If you specify this property, the prefix ver&#45; will be replaced with the value you specify.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> ver&#45; </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> webUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The folder that the source has been checked out into.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.2 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 6 Apr 2010 at 9:32:02 PM<br/>
+Using assembly version 1.6.7109.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+﻿<package>
+  <name>NCover Results</name>
+  <description>Display the results of a NCover report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>NCoverSummary.xsl</file>
+        <file>NCover.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\NCoverSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\NCoverSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\NCover.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NCover Report"/>
+        <attribute name="actionName" value="NCoverBuildReport"/>
+        <attribute name="xslFileName" value="xsl\NCover.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

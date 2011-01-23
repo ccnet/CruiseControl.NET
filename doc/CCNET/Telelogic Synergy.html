@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Telelogic Synergy</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Telelogic Synergy
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="TelelogicSynergy-TelelogicSynergySourceControlBlock"></a>Telelogic Synergy  Source Control Block</h1>
+
+<p>CruiseControl.NET SCM plugin for CM Synergy.  <br/>
+Detection of modifications is entirely task based rather than object based, which may present problems for pre&#45;6.3 lifecycles. Successful integration may be published through shared manual task folders and/or baselining.  </p>
+
+
+<h2><a name="TelelogicSynergy-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="TelelogicSynergy-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example using Defaults</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"synergy"</span>&gt;</span>
+  <span class="code-tag">&lt;connection&gt;</span>
+    <span class="code-tag">&lt;host&gt;</span>myserver<span class="code-tag">&lt;/host&gt;</span>
+    <span class="code-tag">&lt;database&gt;</span>\\myserver\share\mydatabase<span class="code-tag">&lt;/database&gt;</span>
+  <span class="code-tag">&lt;/connection&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>
+    <span class="code-tag">&lt;release&gt;</span>Product/1.0<span class="code-tag">&lt;/release&gt;</span>
+    <span class="code-tag">&lt;projectSpecification&gt;</span>Product-1<span class="code-tag">&lt;/projectSpecification&gt;</span>
+    <span class="code-tag">&lt;taskFolder&gt;</span>1234<span class="code-tag">&lt;/taskFolder&gt;</span>
+  <span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;changeSynergy&gt;</span>
+    <span class="code-tag">&lt;url&gt;</span>http://myserver:8060<span class="code-tag">&lt;/url&gt;</span>
+  <span class="code-tag">&lt;/changeSynergy&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"synergy"</span>&gt;</span>
+  <span class="code-tag">&lt;connection&gt;</span>
+    <span class="code-tag">&lt;host&gt;</span>myserver<span class="code-tag">&lt;/host&gt;</span>
+    <span class="code-tag">&lt;database&gt;</span>\\myserver\share\mydatabase<span class="code-tag">&lt;/database&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- store values in an environmental variable--&gt;</span></span>
+    <span class="code-tag">&lt;username&gt;</span>%CCM_USER%<span class="code-tag">&lt;/username&gt;</span>
+    <span class="code-tag">&lt;password&gt;</span>%CCM_PWD%<span class="code-tag">&lt;/password&gt;</span>
+    <span class="code-tag">&lt;role&gt;</span>build_mgr<span class="code-tag">&lt;/role&gt;</span>
+    <span class="code-tag">&lt;homeDirectory&gt;</span>D:\cmsynergy\%CCM_USER%<span class="code-tag">&lt;/homeDirectory&gt;</span>
+    <span class="code-tag">&lt;clientDatabaseDirectory&gt;</span>D:\cmsynergy\uidb<span class="code-tag">&lt;/clientDatabaseDirectory&gt;</span>
+    <span class="code-tag">&lt;polling&gt;</span>true<span class="code-tag">&lt;/polling&gt;</span>
+    <span class="code-tag">&lt;timeout&gt;</span>3600<span class="code-tag">&lt;/timeout&gt;</span>
+  <span class="code-tag">&lt;/connection&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>
+    <span class="code-tag">&lt;release&gt;</span>Product/1.0<span class="code-tag">&lt;/release&gt;</span>
+    <span class="code-tag">&lt;projectSpecification&gt;</span>Product-1<span class="code-tag">&lt;/projectSpecification&gt;</span>
+    <span class="code-tag">&lt;taskFolder&gt;</span>1234<span class="code-tag">&lt;/taskFolder&gt;</span>
+    <span class="code-tag">&lt;baseline&gt;</span>false<span class="code-tag">&lt;/baseline&gt;</span>
+    <span class="code-tag">&lt;purpose&gt;</span>Integration Testing<span class="code-tag">&lt;/purpose&gt;</span>
+    <span class="code-tag">&lt;template&gt;</span>true<span class="code-tag">&lt;/template&gt;</span>
+  <span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;changeSynergy&gt;</span>
+    <span class="code-tag">&lt;role&gt;</span>User<span class="code-tag">&lt;/role&gt;</span>
+    <span class="code-tag">&lt;url&gt;</span>http://myserver:8060<span class="code-tag">&lt;/url&gt;</span>
+    <span class="code-tag">&lt;username&gt;</span>%CS_USER%<span class="code-tag">&lt;/username&gt;</span>
+    <span class="code-tag">&lt;password&gt;</span>%CS_PWD%<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;/changeSynergy&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="TelelogicSynergy-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be synergy </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> connection </td>
+<td class='confluenceTd'> Connection info to create a session.   </td>
+<td class='confluenceTd'> <a href="Synergy Client Session.html" title="Synergy Client Session">Synergy Client Session</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> The issue URL builder to use.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The info for the integration testing project.   </td>
+<td class='confluenceTd'> <a href="Synergy Project.html" title="Synergy Project">Synergy Project</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> changeSynergy </td>
+<td class='confluenceTd'> The Web Url builder to use.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="TelelogicSynergy-Notes"></a>Notes</h2>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled. While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.  </p></td></tr></table></div>
+<h4><a name="TelelogicSynergy-Background"></a>Background</h4>
+<p>CM Synergy Concepts (<a href="http://confluence.public.thoughtworks.org//display/CC/CMSynergyConcepts">http://confluence.public.thoughtworks.org//display/CC/CMSynergyConcepts</a>) is arguably one of the best conceptual explanations of CM Synergy. Consider it a prerequisite for implementing continuous integration with CM Synergy. Robert Smith (<a href="http://confluence.public.thoughtworks.org//display/~rjmpsmith">http://confluence.public.thoughtworks.org//display/~rjmpsmith</a>), from the CruiseControl for Java site, deserves a great deal of credit for explaining the product better than Telelogic ever has.  </p>
+<h4><a name="TelelogicSynergy-MethodologyofintegrationwithCCNET"></a>Methodology of integration with CCNET</h4>
+<p>Certain assumptions have been made about the integration of CruiseControl.NET and CM Synergy. First, it is assumed that all projects use a task based reconfigure template, rather than an object based.  </p>
+<ul>
+	<li>The reconfigure template for all projects is task based, not object status based.</li>
+	<li>Developers have there own projects with purpose "Insulated Development"</li>
+	<li>There's no real point to continuous integration for "Collaborative Development" purpose projects, since Synergy is not a label based system.</li>
+	<li>Build Managers test completed tasks in a project with purpose "Integration Testing" (or similar).</li>
+	<li>We could create a baseline in the integration project to push completed tasks to the developers; however, this is less than ideal. Baselines in Synergy are expensive and were intended for milestone events like completion of a feature, or a configuration used for a QA testing round.</li>
+	<li>The more efficient approach is to have a shared task folder that is included in each developer's reconfigure template/properties.</li>
+	<li>Successfully integrated tasks can be manually added to this folder.</li>
+	<li>This will push newly completed and integrated tasks to developers when they reconfigure (i.e., "update members").</li>
+</ul>
+
+
+<h4><a name="TelelogicSynergy-ConfigurationReuse"></a>Configuration Reuse</h4>
+<p>By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML. For more information on XML DTD entities and reusable configuration blocks, see JIRA issue CCNET&#45;239 and Nithy Palanivelu's Weblog (http://peeps.dallas.focus\-technologies.com/roller/page/nithy/20040128#using\_the\_entity\_includes\_in).  </p>
+<h4><a name="TelelogicSynergy-ThePollingFeature"></a>The Polling Feature</h4>
+<p>The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode"). Long runing builds may inadventently conflict with the routine downtime schedules. For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.  </p>
+<h4><a name="TelelogicSynergy-EnvironmentalVariables"></a>Environmental Variables</h4>
+<p>Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file. This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 8:12:07 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

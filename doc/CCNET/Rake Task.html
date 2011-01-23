@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Rake Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Rake Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 03, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="RakeTask-RakeTask"></a>Rake Task </h1>
+
+<p>Executes Rake.  </p>
+
+
+<h2><a name="RakeTask-Version"></a>Version</h2>
+
+<p>Available from version 1.4</p>
+
+<h2><a name="RakeTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;rake /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;rake&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\ruby\bin\rake.bat<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>c:\fromcvs\myrepo\myproject<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;buildArgs&gt;</span>additional-argument<span class="code-tag">&lt;/buildArgs&gt;</span>
+  <span class="code-tag">&lt;rakefile&gt;</span>Rakefile<span class="code-tag">&lt;/rakefile&gt;</span>
+  <span class="code-tag">&lt;targetList&gt;</span>
+    <span class="code-tag">&lt;target&gt;</span>build<span class="code-tag">&lt;/target&gt;</span>
+  <span class="code-tag">&lt;/targetList&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>1200<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+  <span class="code-tag">&lt;quiet&gt;</span>false<span class="code-tag">&lt;/quiet&gt;</span>
+  <span class="code-tag">&lt;silent&gt;</span>false<span class="code-tag">&lt;/silent&gt;</span>
+  <span class="code-tag">&lt;trace&gt;</span>true<span class="code-tag">&lt;/trace&gt;</span>
+<span class="code-tag">&lt;/rake&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="RakeTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run the Rake process in. If relative, is a subdirectory of the Project Working Directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildArgs </td>
+<td class='confluenceTd'> Any arguments to pass through to Rake (e.g to specify build properties).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildTimeoutSeconds </td>
+<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The path of the version of Rake you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> c:\ruby\bin\rake.bat </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> quiet </td>
+<td class='confluenceTd'> Do not log messages to standard output.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> rakefile </td>
+<td class='confluenceTd'> The name of the Rakefile to run, relative to the baseDirectory.  <br clear="all" />If no rake file is specified Rake will use the default build file in the working directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> silent </td>
+<td class='confluenceTd'> Like quiet but also suppresses the 'in directory' announcement.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> targetList </td>
+<td class='confluenceTd'> A list of targets to be called. CruiseControl.NET does not call Rake once for each target, it uses the Rake feature of being able to specify multiple targets.  <br clear="all" />If no targets are defined Rake will use the default target.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trace </td>
+<td class='confluenceTd'> Turns on invoke/execute tracing and enables full backtrace.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="RakeTask-Notes"></a>Notes</h2>
+
+<h4><a name="RakeTask-AccessingCruiseControl.NETbuildlabelsinRake"></a>Accessing CruiseControl.NET build labels in Rake</h4>
+<p>CCNet will pass the current build label to Rake via the environment variable CCNetLabel. This means that you can access this variable too. For example, archive the build results in a folder with the same name as the build label (this is what we do on CCNetLive  using NAnt. Here's some example Rakefile demonstrating how to do this:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">#!ruby
+            require 'rake'
+            
+            task :default =&gt; [:deploy]
+            
+            task :deploy do
+            	publishdir="C:/download-area/CCNet-Builds/#{ENV['CCNetLabel']}"
+            	mkdir_p publishdir
+            	FileList['dist/*'].each do |file|
+            		cp file, publishdir
+            	end
+            end</pre>
+</div></div>
+<p>See <a href="Integration Properties.html" title="Integration Properties">Integration Properties</a> for the values that are passed to the task.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 8:52:17 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

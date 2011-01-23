@@ -1,0 +1,11 @@
+<!-- ServerLog.vm: Start -->
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$translations.Translate($projectLink.Text)</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>$translations.Translate("Server Log for Project: {0}", $currentProject)</h2>
+#end
+<pre class="log">$log</pre>
+<!-- ServerLog.vm: End -->

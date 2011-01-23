@@ -1,0 +1,43 @@
+﻿<package>
+  <name>NUnit Results</name>
+  <description>Display the results of a NUnit run.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>unittests.xsl</file>
+        <file>tests.xsl</file>
+        <file>timing.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\unittests.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\unittests.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\tests.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NUnit Details"/>
+        <attribute name="actionName" value="NUnitDetailsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\tests.xsl"/>
+      </attributes>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\timing.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NUnit Timings"/>
+        <attribute name="actionName" value="NUnitTimingsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\timing.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

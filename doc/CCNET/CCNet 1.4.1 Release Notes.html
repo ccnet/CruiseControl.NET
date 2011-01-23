@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.4.1 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.4.1 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 18, 2008 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.4.1ReleaseNotes-HighlightsoftheCCNet1.4.1release"></a>Highlights of the CCNet 1.4.1 release</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>The highlights have been amended</b><br />The highlights for 1.4.1 previously said that the reporting graphs now worked in Firefox 3. That was incorrect. The work to update Dojo was not completed for the 1.4.1 release. Apologies for the confusion.</td></tr></table></div>
+
+<h5><a name="CCNet1.4.1ReleaseNotes-CategoryshownonDashboard"></a>Category shown on Dashboard</h5>
+
+<p>The category element is now used in the Dashboard. Projects are now grouped per category, if you select the view per buildserver.</p>
+
+<h5><a name="CCNet1.4.1ReleaseNotes-Historygraphatprojectlevel"></a>History graph at project level</h5>
+
+<p>There is a now also a graphical build history in the project overview.</p>
+
+<h5><a name="CCNet1.4.1ReleaseNotes-Linkstoissuetrackersincommitcomments"></a>Links to issue trackers in commit comments</h5>
+
+<p>Comments can be transformed into urls pointing to issue tracker webpages if they follow a pattern, this can be done by the using the issueUrlbuilder in a source control block.</p>
+
+<h5><a name="CCNet1.4.1ReleaseNotes-PasswordsmaskedonDashboard"></a>Passwords masked on Dashboard</h5>
+
+<p>The ProjectView configuration now masks the passwords by default.</p>
+
+<h5><a name="CCNet1.4.1ReleaseNotes-AllJIRAissuesreviewed"></a>All JIRA issues reviewed</h5>
+
+<p>Daniel Hommel reviewed all the issues recorded in JIRA. Issues which are not reproducible in the 1.4 version have been marked as fixed. This will help the team more clearly see what remains to be done. This also means many of the issues listed as fixed in this release are the results of changes made in earlier releases.</p>
+
+<h2><a name="CCNet1.4.1ReleaseNotes-UpgradingtoCCNet1.4.1"></a>Upgrading to CCNet 1.4.1</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Upgrading from a version before 1.4?</b><br />See the release notes for the <a href="CCNet 1.4 Release Notes.html" title="CCNet 1.4 Release Notes">CCNet 1.4 release</a>.</td></tr></table></div>
+
+<h2><a name="CCNet1.4.1ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.4.1"></a>Release Notes - CruiseControl .NET - Version 1.4.1</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/ReleaseNote.jspa?version=10330&amp;styleName=Html&amp;projectId=10000&amp;Create=Create">Jira Issues resolved by this release</a> :</p>
+
+<p>Release Notes - CruiseControl .NET - Version 1.4.1</p>
+
+<h4><a name="CCNet1.4.1ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-75">CCNET-75</a> &#45; Labels with spaces in them cause Vss labelling to fail</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-122">CCNET-122</a> &#45; Timed out builds repeat indefinitely</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-129">CCNET-129</a> &#45; exception during VSS doesn't show up in log</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-178">CCNET-178</a> &#45; Sorting of checkins is done by date in text</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-247">CCNET-247</a> &#45; "Illegal Characters in Path" error</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-253">CCNET-253</a> &#45; NAnt warnings showing as errors in build report</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-336">CCNET-336</a> &#45; Add posibility to gruop projects in dashboard</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-594">CCNET-594</a> &#45; XmlLogger should handle illegal characters in filename</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-639">CCNET-639</a> &#45; Multiple Subversion Sourcecontrol repositories not supported in single project</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-710">CCNET-710</a> &#45; Compile-MSBuild.xsl bug prevents warnings from being displayed.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-786">CCNET-786</a> &#45; Regression: Invalid NUnitDetailsBuildReport image URLs</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-860">CCNET-860</a> &#45; CCTray last build date is not sorted correctly</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-894">CCNET-894</a> &#45; Subversion source control block does not pick up changes in svn:externals paths</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-896">CCNET-896</a> &#45; FxCop report is incorrectly nested</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-923">CCNET-923</a> &#45; Save the build report to an xml file</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-930">CCNET-930</a> &#45; Unable to load transform: "..\CruiseControl.NET\webdashboard\xsl\msbuild.xsl" exception</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-974">CCNET-974</a> &#45; Partial formatting of FxCop report</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1027">CCNET-1027</a> &#45; CCNetArtifactDirectory cause error in MSBuild</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1029">CCNET-1029</a> &#45; A ScheduleTrigger with spaces in the name causes MSBuild Task parameters to go missing</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1073">CCNET-1073</a> &#45; Escape does not close Settings window</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1095">CCNET-1095</a> &#45; ForceBuild Publisher does not rebuild a project if it already exists in the Q.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1104">CCNET-1104</a> &#45; MSTestReport and MSTest summary do not take into account data driven tests and report incorrectly</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1105">CCNET-1105</a> &#45; MSTestReport and MSTestSummary do not work with MSTest 9 (VS2008)</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1108">CCNET-1108</a> &#45; The FxCop report in the dashboard is not working using FxCop 1.36</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1109">CCNET-1109</a> &#45; FileSourceControl should also detect new files as modifications</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1114">CCNET-1114</a> &#45; WebURL is invalid for Internet use: uses machine name instead of public hostname.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1115">CCNET-1115</a> &#45; MSBuild 3.5 refused if project name has spaces</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1142">CCNET-1142</a> &#45; Spaces in &lt;workingDirectory&gt; or &lt;artifactDirectory&gt; paths cause MSBuild failures MSB1008 and MSB1003 respectively</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1146">CCNET-1146</a> &#45; Some of the tests have localization issues</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1165">CCNET-1165</a> &#45; BuildPublisher task in publishers section is not run on failed builds</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1166">CCNET-1166</a> &#45; Raising exception when refreshing status from dashboard</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1169">CCNET-1169</a> &#45; Exception in settings if poll interval is less than 5.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1172">CCNET-1172</a> &#45; Standard MSbuild logger does not supply path name, so compiling goes wrong</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1185">CCNET-1185</a> &#45; System.Xml.Xsl.XslTransformException: Execution of the 'document()' function was prohibited</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1199">CCNET-1199</a> &#45; Silently installing ccnet server v1.4 rc1 produces a message box</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1200">CCNET-1200</a> &#45; Project Statistics works not concurrently together with Data Labels from CC.Net Version 1.3 and Version 1.4</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1205">CCNET-1205</a> &#45; SvnHistoryParser throws NullReferenceException</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1216">CCNET-1216</a> &#45; Config filenames should be case-respected in case the OS has case-sensitive filenames.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1219">CCNET-1219</a> &#45; The tests for the NAnt and MsBuild Task did not check for correct quoting of command line arguments</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1224">CCNET-1224</a> &#45; Email Publisher Documentation bug in converters example</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1233">CCNET-1233</a> &#45; when a project contains a sourcecontrol provider not distributed by CCNet itself, the dashboard crashes iso showing 'Getting source from ... '</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1241">CCNET-1241</a> &#45; A force build can be ignored</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1244">CCNET-1244</a> &#45; Config Preprocessor: System.Exception field name &#95;remoteStackTraceString is remote_stack_trace on Mono</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1247">CCNET-1247</a> &#45; CCTRAY - unresponsive when configured to use remoting with many projects</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1249">CCNET-1249</a> &#45; CCTray does not save the "Show Queues" state when hidden</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1264">CCNET-1264</a> &#45; When first modification has no comment, the rss publisher throws a null reference exception</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1270">CCNET-1270</a> &#45; IOService's DeleteFileEvenIfReadOnly will not delete symbolic links and fail</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1280">CCNET-1280</a> &#45; CCTray 1.4 crashing when executed</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.1ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-54">CCNET-54</a> &#45; CCNetLive to run as service</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-98">CCNET-98</a> &#45; Improved documentation</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-108">CCNET-108</a> &#45; Parse output returned from NAnt to output cause of failure to console</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-180">CCNET-180</a> &#45; Ensure that information on ccnet.config page is kept current</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-220">CCNET-220</a> &#45; Bring Web Service up to date with 0.7 remote interface</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-228">CCNET-228</a> &#45; Webapp (Dashboard) should act as proxy for underlying CCNet servers.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-300">CCNET-300</a> &#45; Create new FxCopReport.xsl that is compatible with FxCop 1.30 and 1.312</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-320">CCNET-320</a> &#45; Project token for configuration</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-463">CCNET-463</a> &#45; Upgrading to a new version should not delete configuration files and build artifacts</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-553">CCNET-553</a> &#45; Create 'friendly' URLs for dashboard and maintain across versions</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-593">CCNET-593</a> &#45; Successful build should contain summary of code changes since last successful build</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-681">CCNET-681</a> &#45; MSBuild: It should not be necessary to copy ThoughtWorks.CruiseControl.MSBuild.dll to the working directory</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-754">CCNET-754</a> &#45; CCTray should persist the selected view type</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-755">CCNET-755</a> &#45; Allow control over balloon notification verbosity.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-817">CCNET-817</a> &#45; Pause and Continue should be available from CCTray</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-857">CCNET-857</a> &#45; Move to use of shape-differentiated status icons (avoid confusion for color blind)</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-869">CCNET-869</a> &#45; Add "On Queue" or "Waiting" state</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1136">CCNET-1136</a> &#45; Easy browsing from one build report to next or previous build report</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1161">CCNET-1161</a> &#45; Cleanup publisher should foresee a setting for cleaning up the history data</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1167">CCNET-1167</a> &#45; Expose the messages in the XMLReportAction page</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1171">CCNET-1171</a> &#45; Including MSBuild report in the dashboard.config makes CCNet support MSBuild out of the box</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1186">CCNET-1186</a> &#45; Show the comment in the Modification history overview without having to expand the items</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1187">CCNET-1187</a> &#45; Improve the RSS publisher so it shows a summary in the reader pane</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1194">CCNET-1194</a> &#45;  Making categories a useful feature</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1206">CCNET-1206</a> &#45; Reduce margins in the dashboard arround the force button (projectgrid.vm)</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1212">CCNET-1212</a> &#45; Add option to ArtifactCleanup to delete sub dirs of the artifacts folder</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1215">CCNET-1215</a> &#45; Patch that enables Nunit task support of Nunit categories (both excluded and included ones)</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1223">CCNET-1223</a> &#45; CCnet should foresee a way to transform the comments into hyperlinks for integration with issue tracking systems</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1227">CCNET-1227</a> &#45; VSS HistoryParser in Spanish</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1235">CCNET-1235</a> &#45; make the class of DefaultIssueTrackerUrlModifier public</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1240">CCNET-1240</a> &#45; Integration Queues - ability for one queue to acquire a lock against another</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1248">CCNET-1248</a> &#45; add a postfix in the default labeler</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1259">CCNET-1259</a> &#45; Show build success rate in graph on project report page</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1262">CCNET-1262</a> &#45; Create a Regular Expression IssueTrackUrl Builder</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1263">CCNET-1263</a> &#45; Create a MultiIssueTrackUrl Builder, combining the existing IsueTrackUrl builders</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1268">CCNET-1268</a> &#45; Process Executor does not need ProcessReader</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1269">CCNET-1269</a> &#45; On new installation, the preprocessor directive should already be included in the empty ccnet.config</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1272">CCNET-1272</a> &#45; Patch adding support for making case sensitive path checking in PathFilter configurable</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1275">CCNET-1275</a> &#45; ProjectView configuration must hide passwords</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1278">CCNET-1278</a> &#45; Display the amount of ok builds on farm, buildserver and category page</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1284">CCNET-1284</a> &#45; Make CCTray "Task Bar on the top" friendly.</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.1ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-206">CCNET-206</a> &#45; Group projects by category with collapse/expand in WebDashboard</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-230">CCNET-230</a> &#45; Make build stats available through web service</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-297">CCNET-297</a> &#45; Allow more details in Failed Builds name</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-311">CCNET-311</a> &#45; Add support for VS2005 Unit Testing Framework</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-578">CCNET-578</a> &#45; Create FileTrigger</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-591">CCNET-591</a> &#45; Resurrect CCRunner and get it built on ccnetlive</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-642">CCNET-642</a> &#45; Graphical Build history in project overview</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-855">CCNET-855</a> &#45; In details show full date of "Next build check" if it isn't today.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1151">CCNET-1151</a> &#45; A task for building with "rake"</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1195">CCNET-1195</a> &#45; Create a modification reader to read back the contents of modifications made by the modificationwritertask</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1238">CCNET-1238</a> &#45; Document using PartCover with CCNET</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1252">CCNET-1252</a> &#45; Add "Copy Build Label" to clipboard context item.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1261">CCNET-1261</a> &#45; Plugin for viewing queue status on a server.</li>
+	<li><a href="http://jira.public.thoughtworks.org/browse/CCNET-1282">CCNET-1282</a> &#45; Foresee a plugin showing category and queue information per project</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

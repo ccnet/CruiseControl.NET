@@ -1,0 +1,9 @@
+<cruisecontrol xmlns:cb="urn:ccnet.config.builder"> 
+
+
+  <!-- Project files --> 
+  <cb:include href="test3.xml" xmlns:cb="urn:ccnet.config.builder"/> 
+
+
+</cruisecontrol> 
+

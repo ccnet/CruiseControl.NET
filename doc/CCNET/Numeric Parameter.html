@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Numeric Parameter</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Numeric Parameter
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 07, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="NumericParameter-NumericParameter"></a>Numeric Parameter</h1>
+
+<p>This will prompt the user to enter a numeric value when a force build is requested.  <br/>
+This parameter can then be used by a dynamic value in a task.  </p>
+
+
+<h2><a name="NumericParameter-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="NumericParameter-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;numericParameter&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>MaxAllowedErrors<span class="code-tag">&lt;/name&gt;</span>
+<span class="code-tag">&lt;/numericParameter&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;numericParameter&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>MaxAllowedErrors<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;display&gt;</span>Maximum Allowed Errors<span class="code-tag">&lt;/display&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>What is the maximum allowed number of unit test errors?<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;default&gt;</span>5<span class="code-tag">&lt;/default&gt;</span>
+  <span class="code-tag">&lt;minimum&gt;</span>0<span class="code-tag">&lt;/minimum&gt;</span>
+  <span class="code-tag">&lt;maximum&gt;</span>10<span class="code-tag">&lt;/maximum&gt;</span>
+  <span class="code-tag">&lt;required&gt;</span>false<span class="code-tag">&lt;/required&gt;</span>
+<span class="code-tag">&lt;/numericParameter&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in Context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
+  <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/sourcecontrol&gt;</span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;intervalTrigger /&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;parameters&gt;</span>
+    <span class="code-tag">&lt;numericParameter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>MaxAllowedErrors<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;display&gt;</span>Maximum Allowed Errors<span class="code-tag">&lt;/display&gt;</span>
+      <span class="code-tag">&lt;description&gt;</span>What is the maximum allowed number of unit test errors?<span class="code-tag">&lt;/description&gt;</span>
+      <span class="code-tag">&lt;default&gt;</span>5<span class="code-tag">&lt;/default&gt;</span>
+      <span class="code-tag">&lt;minimum&gt;</span>0<span class="code-tag">&lt;/minimum&gt;</span>
+      <span class="code-tag">&lt;maximum&gt;</span>10<span class="code-tag">&lt;/maximum&gt;</span>
+      <span class="code-tag">&lt;required&gt;</span>false<span class="code-tag">&lt;/required&gt;</span>
+    <span class="code-tag">&lt;/numericParameter&gt;</span>
+  <span class="code-tag">&lt;/parameters&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="NumericParameter-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> default </td>
+<td class='confluenceTd'> The default value to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> The description of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> display </td>
+<td class='confluenceTd'> The display name of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> required </td>
+<td class='confluenceTd'> Is the parameter required?   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> maximum </td>
+<td class='confluenceTd'> The maximum allowed value of the parameter.   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.79769e&#43;308 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> minimum </td>
+<td class='confluenceTd'> The mimimum allowed value of the parameter.   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> &#45;1.79769e&#43;308 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the parameter.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Monday, 7 Dec 2009 at 3:27:32 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,8 @@
+<!-- RecentBuilds.vm: Start -->
+<table class="RecentBuildsPanel" align="center" width="100%" cellspacing="0">
+	<tr><th>$translations.Translate("Recent Builds")</th></tr>
+	$buildRows
+	<tr><td/></tr>
+	<tr><td><a href="$allBuildsLink.Url">$translations.Translate("Show All")</a></td></tr>
+</table>
+<!-- RecentBuilds.vm: End -->

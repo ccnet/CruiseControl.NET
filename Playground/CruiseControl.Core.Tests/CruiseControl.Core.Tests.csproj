@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94D3A1D1-6368-4BFD-9D2B-8AA93FE6C7CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CruiseControl.Core.Tests</RootNamespace>
+    <AssemblyName>CruiseControl.Core.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\Lib\Testing\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\Lib\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\Lib\Testing\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyHelper.cs" />
+    <Compile Include="PersistedProjectStateTests.cs" />
+    <Compile Include="Stubs\ChannelStub.cs" />
+    <Compile Include="Tasks\ForceBuildTests.cs" />
+    <Compile Include="Triggers\RollUpTests.cs" />
+    <Compile Include="Utilities\ActionInvokerTests.cs" />
+    <Compile Include="ApplicationTests.cs" />
+    <Compile Include="AttachablePropertyStoreTests.cs" />
+    <Compile Include="Channels\WcfTests.cs" />
+    <Compile Include="DateTimeAssert.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="ModificationSetTests.cs" />
+    <Compile Include="TaskExecutionContextTests.cs" />
+    <Compile Include="Tasks\Conditions\AndTests.cs" />
+    <Compile Include="Tasks\Conditions\FileExistsTests.cs" />
+    <Compile Include="Tasks\Conditions\HasModificationsTests.cs" />
+    <Compile Include="Tasks\Conditions\OrTests.cs" />
+    <Compile Include="Tasks\Conditions\StatusTests.cs" />
+    <Compile Include="Configuration\ExampleTests.cs" />
+    <Compile Include="Exceptions\ConfigurationExceptionTests.cs" />
+    <Compile Include="Exceptions\CruiseControlExceptionTests.cs" />
+    <Compile Include="Exceptions\ExceptionTestHelpers.cs" />
+    <Compile Include="IntegrationContextTests.cs" />
+    <Compile Include="ProjectTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerTests.cs" />
+    <Compile Include="Structure\QueueTests.cs" />
+    <Compile Include="Stubs\ProjectStub.cs" />
+    <Compile Include="Stubs\SourceControlBlockStub.cs" />
+    <Compile Include="Stubs\TaskConditionStub.cs" />
+    <Compile Include="Stubs\TaskFailureActionStub.cs" />
+    <Compile Include="Stubs\TaskStub.cs" />
+    <Compile Include="Stubs\TriggerStub.cs" />
+    <Compile Include="Stubs\ValidationLogStub.cs" />
+    <Compile Include="Tasks\CommentTests.cs" />
+    <Compile Include="Tasks\GetSourceTests.cs" />
+    <Compile Include="Tasks\MergeFilesTests.cs" />
+    <Compile Include="Tasks\NullTests.cs" />
+    <Compile Include="Tasks\SequenceTests.cs" />
+    <Compile Include="Tasks\SourceControlTaskTests.cs" />
+    <Compile Include="TaskTests.cs" />
+    <Compile Include="Triggers\IntervalTests.cs" />
+    <Compile Include="Triggers\MultipleTests.cs" />
+    <Compile Include="Triggers\ScheduleTests.cs" />
+    <Compile Include="Utilities\FileSystemTests.cs" />
+    <Compile Include="Utilities\LoggingValidationLogTests.cs" />
+    <Compile Include="Utilities\SystemClockTests.cs" />
+    <Compile Include="Utilities\TaskExecutionFactoryTests.cs" />
+    <Compile Include="VersionTypeConverterTests.cs" />
+    <Compile Include="XmlWriterHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">
+      <Project>{166D519E-854D-4405-9FAE-C6825CF7BBE6}</Project>
+      <Name>CruiseControl.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CruiseControl.Core\CruiseControl.Core.csproj">
+      <Project>{74405CD5-BD3D-4912-A465-F929FA20220B}</Project>
+      <Name>CruiseControl.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\SingleProject.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\SimpleQueue.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\QueueOfQueues.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\RoundRobinOfQueues.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\SimplePipeline.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\SimpleGate.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\PipelineWithGates.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\SimpleSourceControlExample.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\ComplexSourceControlExample.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\ScmProject.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\CommonTaskProperties.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\WcfChannel.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\MergeFiles.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExampleProjectState.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

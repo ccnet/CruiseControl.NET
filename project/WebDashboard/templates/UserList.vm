@@ -1,0 +1,82 @@
+<!-- UserList.vm: Start -->
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#securityPopUp').dialog({
+        autoOpen:false,
+        modal:true,
+        title:'$translations.TranslateJson("Permission Diagnostics")',
+        width:400,
+        height:300,
+        overlay:{
+          opacity:0.5,
+          background:'black'
+        }
+      });
+  });
+  function displayDetails(userName){
+    $('#securityPopUpContent').replaceWith('<div id="securityPopUpContent">$translations.TranslateJson("Loading, please wait...")</div>');
+    $('#securityPopUpContent').load('$diagnosticsCall.Url',{
+#if ($currentProject.Length > 0)
+      project:'$currentProject',
+#end
+      user:userName
+    });
+    $('#securityPopUp').dialog('open');
+  }
+</script>
+#if ($message.length > 0)
+<div class="ui-widget" style="margin-bottom:10px;">
+  <div class="ui-state-highlight ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+      $translations.Translate($message)
+    </p>
+  </div>
+</div>
+#end
+#if ($error.length > 0)
+<div class="ui-widget" style="margin-bottom:10px;">
+  <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
+      $translations.Translate($error)
+    </p>
+  </div>
+</div>
+#end
+
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>$translations.Translate("Defined Users for Project: {0}", $currentProject)</h2>
+#else
+<h2>$translations.Translate("Defined Users")</h2>
+#end
+<table class="userList-table">
+  <tr>
+    <th>$translations.Translate("User Name")</th>
+    <th>$translations.Translate("Display Name")</th>
+    <th>$translations.Translate("Type")</th>
+  </tr>
+  #foreach ($userRow in $users)
+  #odd
+  <tr onclick="displayDetails('$userRow.UserName')" class="odd">
+    <td>$userRow.UserName</td>
+    <td>$userRow.DisplayName</td>
+    <td>$translations.Translate($userRow.type)</td>
+  </tr>
+  #even
+  <tr onclick="displayDetails('$userRow.UserName')" class="even">
+    <td>$userRow.UserName</td>
+    <td>$userRow.DisplayName</td>
+    <td>$translations.Translate($userRow.type)</td>
+  </tr>
+  #end
+</table>
+<div id="securityPopUp">
+  <div id="securityPopUpContent"></div>
+</div>
+<!-- UserList.vm: End -->

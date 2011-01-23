@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Filtered Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Filtered Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="FilteredSourceControlBlock-FilteredSourceControlBlock"></a>Filtered Source Control Block</h1>
+
+<p>The FilteredSourceControl allows you to filter out modifications that are used to trigger a build. If for example, you have certain files (such as web pages or document files) under source control that you don't want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.  <br/>
+The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>). It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers. Essentially, it acts as a decorator (or an example of the pipes and filters pattern ), wrapping around the specific SourceControl provider that you want to use.  <br/>
+The FilteredSourceControl includes both inclusion and exclusion filters for specifying what modifications should be included/excluded. Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified. If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set. It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).  </p>
+
+
+<h2><a name="FilteredSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="FilteredSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filtered"</span>&gt;</span>
+  <span class="code-tag">&lt;sourceControlProvider type=<span class="code-quote">"vss"</span> autoGetSource=<span class="code-quote">"true"</span>&gt;</span>
+    <span class="code-tag">&lt;project&gt;</span>$/Kunigunda/ServiceLocator<span class="code-tag">&lt;/project&gt;</span>
+    <span class="code-tag">&lt;workingDirectory&gt;</span>C:\CCNet\Kunigunda\ServiceLocator<span class="code-tag">&lt;/workingDirectory&gt;</span>
+    <span class="code-tag">&lt;username&gt;</span>urosn<span class="code-tag">&lt;/username&gt;</span>
+    <span class="code-tag">&lt;password&gt;</span><span class="code-tag">&lt;/password&gt;</span>
+    <span class="code-tag">&lt;ssdir&gt;</span>c:\localvss<span class="code-tag">&lt;/ssdir&gt;</span>
+  <span class="code-tag">&lt;/sourceControlProvider&gt;</span>
+  <span class="code-tag">&lt;inclusionFilters&gt;</span>
+    <span class="code-tag">&lt;pathFilter&gt;</span>
+      <span class="code-tag">&lt;pattern&gt;</span>$/Kunigunda/ServiceLocator/Sources/**/*.*<span class="code-tag">&lt;/pattern&gt;</span>
+    <span class="code-tag">&lt;/pathFilter&gt;</span>
+  <span class="code-tag">&lt;/inclusionFilters&gt;</span>
+  <span class="code-tag">&lt;exclusionFilters&gt;</span>
+    <span class="code-tag">&lt;pathFilter&gt;</span>
+      <span class="code-tag">&lt;pattern&gt;</span>$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs<span class="code-tag">&lt;/pattern&gt;</span>
+    <span class="code-tag">&lt;/pathFilter&gt;</span>
+    <span class="code-tag">&lt;pathFilter&gt;</span>
+      <span class="code-tag">&lt;pattern&gt;</span>$/**/*.vssscc<span class="code-tag">&lt;/pattern&gt;</span>
+    <span class="code-tag">&lt;/pathFilter&gt;</span>
+    <span class="code-tag">&lt;userFilter&gt;</span>
+      <span class="code-tag">&lt;names&gt;</span>
+        <span class="code-tag">&lt;name&gt;</span>Perry<span class="code-tag">&lt;/name&gt;</span>
+        <span class="code-tag">&lt;name&gt;</span>Joe<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;/names&gt;</span>
+    <span class="code-tag">&lt;/userFilter&gt;</span>
+    <span class="code-tag">&lt;actionFilter&gt;</span>
+      <span class="code-tag">&lt;actions&gt;</span>
+        <span class="code-tag">&lt;action&gt;</span>deleted<span class="code-tag">&lt;/action&gt;</span>
+      <span class="code-tag">&lt;/actions&gt;</span>
+    <span class="code-tag">&lt;/actionFilter&gt;</span>
+    <span class="code-tag">&lt;commentFilter&gt;</span>
+      <span class="code-tag">&lt;pattern&gt;</span>Ignore: .*<span class="code-tag">&lt;/pattern&gt;</span>
+    <span class="code-tag">&lt;/commentFilter&gt;</span>
+  <span class="code-tag">&lt;/exclusionFilters&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="FilteredSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be filtered </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> exclusionFilters </td>
+<td class='confluenceTd'> The list of filters that decide what modifications to exclude.   </td>
+<td class='confluenceTd'> <a href="Modification Filters.html" title="Modification Filters">Modification Filters</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> inclusionFilters </td>
+<td class='confluenceTd'> The list of filters that decide what modifications to include.   </td>
+<td class='confluenceTd'> <a href="Modification Filters.html" title="Modification Filters">Modification Filters</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceControlProvider </td>
+<td class='confluenceTd'> This element is used to specify the type of source control provider to retrieve modifications from. With the exception of the element name, the configuration for this element is identical to the xml configuration for the specific source control provider you intend to use.   </td>
+<td class='confluenceTd'> <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="FilteredSourceControlBlock-Notes"></a>Notes</h2>
+
+<p>Implemented and contributed by Uros Novak.  </p>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 2:40:06 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

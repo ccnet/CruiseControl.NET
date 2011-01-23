@@ -1,0 +1,38 @@
+﻿<package>
+  <name>Liquid Blue Theme</name>
+  <description>The liquid blue theme.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Themes\liquidBlue</location>
+      <files>
+        <file>cruisecontrol.css</file>
+      </files>
+    </folder>
+    <folder>
+      <location>Themes\liquidBlue\images</location>
+      <files>
+        <file>arrow.gif</file>
+        <file>header_bg.gif</file>
+        <file>menu_bg.gif</file>
+        <file>bullet_black.png</file>
+        <file>bullet_cross.png</file>
+        <file>bullet_tick.png</file>
+      </files>
+    </folder>
+    <folder>
+      <location>Themes\liquidBlue\templates</location>
+      <files>
+        <file>SiteTemplate.vm</file>
+        <file>TopMenu.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins</path>
+      <name>customTemplates</name>
+      <value>themes/liquidBlue/templates</value>
+    </setting>
+  </configuration>
+</package>

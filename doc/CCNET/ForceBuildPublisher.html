@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : ForceBuildPublisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : ForceBuildPublisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="ForceBuildPublisher-ForceBuilderPublisher"></a>Force Builder Publisher</h1>
+
+<p>The ForceBuildPublisher forces a build on a local or remote build server. It uses .NET Remoting to invoke a forced build on the CruiseControl.NET server at the specified URI.  <br/>
+The forced build runs asynchronously, i.e. the ForceBuildPublisher does not wait for the forced build to finish. The ForceBuildPublisher is a great way to help [ Splitting the build ].  <br/>
+An alternative to the ForceBuildPublisher is the <a href="Project Trigger.html" title="Project Trigger">Project Trigger</a>. The main difference is that the ForceBuildPublisher is placed in the configuration for the primary project, while the ProjectTrigger is is placed in the configuration for the dependent project.  </p>
+
+
+<h2><a name="ForceBuildPublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ForceBuildPublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Simple Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;forcebuild&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>AcceptanceTestProject<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;serverUri&gt;</span>tcp://buildserver2:21234/CruiseManager.rem<span class="code-tag">&lt;/serverUri&gt;</span>
+  <span class="code-tag">&lt;integrationStatus&gt;</span>Success<span class="code-tag">&lt;/integrationStatus&gt;</span>
+  <span class="code-tag">&lt;enforcerName&gt;</span>Forcer<span class="code-tag">&lt;/enforcerName&gt;</span>
+<span class="code-tag">&lt;/forcebuild&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example with Security</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;forcebuild&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>AcceptanceTestProject<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;serverUri&gt;</span>tcp://buildserver2:21234/CruiseManager.rem<span class="code-tag">&lt;/serverUri&gt;</span>
+  <span class="code-tag">&lt;integrationStatus&gt;</span>Success<span class="code-tag">&lt;/integrationStatus&gt;</span>
+  <span class="code-tag">&lt;security&gt;</span>
+    <span class="code-tag">&lt;namedValue name=<span class="code-quote">"username"</span> value=<span class="code-quote">"autobuild"</span> /&gt;</span>
+    <span class="code-tag">&lt;namedValue name=<span class="code-quote">"password"</span> value=<span class="code-quote">"autobuild"</span> /&gt;</span>
+  <span class="code-tag">&lt;/security&gt;</span>
+<span class="code-tag">&lt;/forcebuild&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ForceBuildPublisher-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> enforcerName </td>
+<td class='confluenceTd'> Identification of a ForceBuildPublisher. This value is passed to the CCNetRequestSource attribute of the forced  project's build.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> BuildForcer </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> integrationStatus </td>
+<td class='confluenceTd'> The condition determining whether or not the remoting call should be made. The default value is "Success" indicating that the specified build will be forced if the current build was successful   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Success</li>
+	<li>Failure</li>
+	<li>Exception</li>
+	<li>Unknown</li>
+	<li>Cancelled</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Success </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> parameters </td>
+<td class='confluenceTd'> The parameters to pass to the remote project.   </td>
+<td class='confluenceTd'> <a href="Named Value.html" title="Named Value">Named Value</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The CCNet project to force build.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> security </td>
+<td class='confluenceTd'> The security credentials to pass through to the remote server.  <br clear="all" />These are only needed if the remote project has security applied. If credentials are passed to the remote server, then the enforcerName will be ignored. Valid security tokens are: "username" and "password" (this list may be expanded in future).   </td>
+<td class='confluenceTd'> <a href="Named Value.html" title="Named Value">Named Value</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverUri </td>
+<td class='confluenceTd'> The URI for the local or remote server managing the project to build. The default value is the default URI for the local build server.  <br clear="all" />This publisher only uses .NET Remoting for connecting to the remote server. As such, it cannot use the HTTP protocol for connecting.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> tcp://localhost:21234/CruiseManager.rem </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:41 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

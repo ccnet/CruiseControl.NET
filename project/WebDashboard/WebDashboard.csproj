@@ -1,0 +1,927 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.WebDashboard</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.WebDashboard</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\ThoughtWorks.CruiseControl.WebDashboard.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\Build\WebDashboard\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>..\..\Build\WebDashboard\ThoughtWorks.CruiseControl.WebDashboard.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Commons">
+      <Name>Commons</Name>
+      <HintPath>..\..\lib\Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="CSharpFormat, Version=2.5.3274.32716, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\CSharpFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NetReflector, Version=1.1.2009.1214, Culture=neutral, PublicKeyToken=2f4dd8b32acbcd8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\NetReflector.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity">
+      <Name>NVelocity</Name>
+      <HintPath>..\..\lib\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install">
+      <Name>System.Configuration.Install</Name>
+    </Reference>
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <ProjectReference Include="..\core\core.csproj">
+      <Name>core</Name>
+      <Project>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\objection\objection.csproj">
+      <Project>{1C0B8046-FE79-4845-84B9-369A76F817A3}</Project>
+      <Name>objection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Name>Remote</Name>
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CachingDashboardConfigurationLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\DashboardConfigurationLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\IDashboardConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\IPluginConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\IRemoteServicesConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\NetReflectorPluginConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\NetReflectorRemoteServicesConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ServerLocation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\StylesheetConfiguration.cs" />
+    <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
+    <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
+    <Compile Include="Dashboard\Actions\XsltParameter.cs" />
+    <Compile Include="Dashboard\CookieSessionRetriever.cs" />
+    <Compile Include="Dashboard\CookieSessionStore.cs" />
+    <Compile Include="Dashboard\CookieSessionStorer.cs" />
+    <Compile Include="Dashboard\GenericPlugins\HtmlReportPlugin.cs" />
+    <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
+    <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
+    <Compile Include="Dashboard\ISecurityPlugin.cs" />
+    <Compile Include="Dashboard\ISessionRetriever.cs" />
+    <Compile Include="Dashboard\ISessionStore.cs" />
+    <Compile Include="Dashboard\LoginViewBuilder.cs" />
+    <Compile Include="Dashboard\ProjectParametersAction.cs" />
+    <Compile Include="Dashboard\IndicatorBarLocation.cs" />
+    <Compile Include="IO\ProgramDataFolder.cs" />
+    <Compile Include="Plugins\Administration\AdministerAction.cs" />
+    <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
+    <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
+    <Compile Include="Plugins\Administration\ConfigurationSetting.cs" />
+    <Compile Include="Plugins\Administration\FileLocation.cs" />
+    <Compile Include="Plugins\Administration\Package.cs" />
+    <Compile Include="Plugins\Administration\PackageImportEventArgs.cs" />
+    <Compile Include="Plugins\Administration\PackageManager.cs" />
+    <Compile Include="Plugins\Administration\PackageManifest.cs" />
+    <Compile Include="Plugins\Administration\PackageType.cs" />
+    <Compile Include="Dashboard\RSSLinkBuilder.cs" />
+    <Compile Include="IO\IConditionalGetFingerprintProvider.cs" />
+    <Compile Include="IO\AssemblyVersionProvider.cs" />
+    <Compile Include="IO\ConditionalGetFingerprint.cs" />
+    <Compile Include="Dashboard\ActionDecorators\SiteTemplateActionDecorator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ActionInstantiatorWithObjectSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\Actions\DefaultAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\Actions\MultipleXslReportBuildAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\Actions\XslReportBuildAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\Build.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\BuildLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\BuildRequestTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ConfigurableNamedAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\CruiseManagerBuildNameRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\CruiseObjectSourceInitializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\DefaultBuildNameFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\DefaultLinkFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\DefaultLinkListFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\DefaultPluginLinkCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\FarmLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\GeneralAbsoluteLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\GenericPlugins\ConfigurablePlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\GenericPlugins\ProjectConfigurableBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\GenericPlugins\XslMultiReportBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\GenericPlugins\XslReportBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IAbsoluteLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IActionInstantiator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IAllBuildsViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IBuildLogTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IBuildNameFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IBuildNameRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IBuildRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ICruiseRequestFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ILinkFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ILinkListFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ImmutableNamedAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\INamedAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IPluginLinkCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IProjectGrid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IProjectGridAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\IRecentBuildsViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\NameValueCruiseRequestFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\PathMappingMultiTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ProjectGrid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ProjectGridRow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ProjectGridSortColumn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ProjectLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\RecentBuildLister.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ServerLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\ServerQueryingBuildRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\SideBarViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\TopControlsViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\UnknownBuildException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dashboard\VelocityProjectGridAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\HttpPathMapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\ICruiseRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\InMemoryResponseCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\IResponseCache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\IVersionProvider.cs" />
+    <Compile Include="IO\RequestWrappingCruiseRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\UncombinableFingerprintException.cs" />
+    <Compile Include="MVC\ASPNET\CachedTypeMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\ASPNET\HttpHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\BinaryResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\FileTransferResponse.cs" />
+    <Compile Include="MVC\Cruise\BuildCheckingProxyAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\CachingActionProxy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\CruiseActionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\CruiseActionProxyAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\DefaultCruiseAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\ExceptionCatchingActionProxy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\ICruiseAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\IErrorViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\NoCacheabilityActionProxy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\ProjectCheckingProxyAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\ServerCheckingProxyAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\SimpleErrorViewBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\Cruise\UnknownActionAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\FingerprintFactory.cs" />
+    <Compile Include="MVC\HtmlFragmentResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\IAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\IActionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\IFingerprintFactory.cs" />
+    <Compile Include="MVC\IRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\IResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\JsonFragmentResponse.cs" />
+    <Compile Include="MVC\MimeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\NameValueCollectionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\NotModifiedResponse.cs" />
+    <Compile Include="MVC\RedirectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\RequestController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\View\IVelocityTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\View\IVelocityViewGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\View\LazilyInitialisingVelocityTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\View\VelocityViewGeneratorWithTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MVC\XmlFragmentResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\BuildReport\BuildLogBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\BuildReport\BuildReportBuildPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilename.cs" />
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiser.cs" />
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiserFactory.cs" />
+    <Compile Include="Plugins\BuildReport\FinalBuildStatusPlugin.cs" />
+    <Compile Include="Plugins\BuildReport\HtmlBuildLogAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\BuildReport\LatestBuildReportProjectPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\BuildReport\BuildFileDownload.cs" />
+    <Compile Include="Plugins\BuildReport\XmlBuildLogAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\CCTray\CCTrayDownloadAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\CCTray\CCTrayDownloadPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\FarmReport\CategorizedFarmReportFarmPlugin.cs" />
+    <Compile Include="Plugins\FarmReport\XmlProjectParametersReportAction.cs" />
+    <Compile Include="Plugins\FarmReport\XmlServerReportAction.cs" />
+    <Compile Include="Plugins\FarmReport\FarmReportFarmPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\FarmReport\XmlReportAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\FarmReport\XmlServerSecurityAction.cs" />
+    <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ProjectReport\OhlohProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\PackageListAction.cs" />
+    <Compile Include="Plugins\ProjectReport\PackageListPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectStatusPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectFileDownload.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ProjectReport\ProjectTimelineAction.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectTimelinePlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ServerAuditHistoryProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ServerLogProjectPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ProjectReport\ServerSecurityConfigurationProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ServerUserListProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ViewConfigurationProjectPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectStatusAction.cs" />
+    <Compile Include="Plugins\RSS\RSSFeed.cs" />
+    <Compile Include="Plugins\Security\ChangePasswordSecurityAction.cs" />
+    <Compile Include="Plugins\Security\LogoutSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\MessageHandlerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\QueueStatusServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ProjectConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerAuditHistoryServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ServerReport\ServerLogServerPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ServerReport\ServerReportServerPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ServerReport\ServerSecurityConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerUserListServerPlugin.cs" />
+    <Compile Include="Plugins\Statistics\BuildGraph.cs" />
+    <Compile Include="Plugins\Statistics\ProjectStatisticsPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\Translations.cs" />
+    <Compile Include="ServerConnection\CruiseServerSnapshotListAndExceptions.cs" />
+    <Compile Include="ServerConnection\CruiseServerSnapshotOnServer.cs" />
+    <Compile Include="ServerConnection\CruiseServerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\ICruiseManagerWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\IFarmService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\ProjectStatusListAndExceptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\ProjectStatusOnServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\ServerAggregatingCruiseManagerWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ServerConnection\UnknownServerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="..\xsl\AlternativeNUnitDetails.xsl">
+      <Link>xsl\AlternativeNUnitDetails.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\compile.xsl">
+      <Link>xsl\compile.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\fit.xsl">
+      <Link>xsl\fit.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\fitnesse.xsl">
+      <Link>xsl\fitnesse.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\gendarme-report-ccnet.xsl">
+      <Link>xsl\gendarme-report-ccnet.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\gendarme-summary-ccnet.xsl">
+      <Link>xsl\gendarme-summary-ccnet.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\header.xsl">
+      <Link>xsl\header.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\ModificationHistory.xsl">
+      <Link>xsl\ModificationHistory.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\modifications.xsl">
+      <Link>xsl\modifications.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\msbuild.xsl">
+      <Link>xsl\msbuild.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\NAntTiming.xsl">
+      <Link>xsl\NAntTiming.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\NCover.xsl">
+      <Link>xsl\NCover.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\NCoverSummary.xsl">
+      <Link>xsl\NCoverSummary.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\statistics.xsl">
+      <Link>xsl\statistics.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\StatisticsGraphs.xsl">
+      <Link>xsl\StatisticsGraphs.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\tests.xsl">
+      <Link>xsl\tests.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\timing.xsl">
+      <Link>xsl\timing.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\unittests.xsl">
+      <Link>xsl\unittests.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\vil.xsl">
+      <Link>xsl\vil.xsl</Link>
+    </Content>
+    <Content Include="AppIcon.ico" />
+    <Content Include="cruisecontrol.css" />
+    <Content Include="default.aspx" />
+    <Content Include="fitnesse.css" />
+    <Content Include="images\arrow_minus_small.gif" />
+    <Content Include="images\arrow_plus_small.gif" />
+    <Content Include="images\asc.gif" />
+    <Content Include="images\bg.gif" />
+    <Content Include="images\bg_blue_stripe.gif" />
+    <Content Include="images\ccnet_logo.gif" />
+    <Content Include="images\ccnet_logo_onwhite.gif" />
+    <Content Include="images\check.jpg" />
+    <Content Include="images\corner_blue_lr.gif" />
+    <Content Include="images\corner_blue_ur.gif" />
+    <Content Include="images\corner_white_ll.gif" />
+    <Content Include="images\corner_white_ul.gif" />
+    <Content Include="images\corner_white_ur.GIF" />
+    <Content Include="images\desc.gif" />
+    <Content Include="images\fxcop-critical-error.gif" />
+    <Content Include="images\fxcop-critical-warning.gif" />
+    <Content Include="images\fxcop-error.gif" />
+    <Content Include="images\fxcop-warning.gif" />
+    <Content Include="images\rss.png" />
+    <Content Include="images\shim.gif" />
+    <Content Include="images\tw_open_source_small.png" />
+    <Content Include="javascript\ccnet.js" />
+    <Content Include="javascript\jquery-ui.js" />
+    <Content Include="javascript\jQuery.ccnet.js" />
+    <Content Include="javascript\jquery.js" />
+    <Content Include="javascript\jquery.metadata.js" />
+    <Content Include="javascript\jquery.tablesorter.js" />
+    <Content Include="javascript\jQuery.timers.js" />
+    <Content Include="javascript\theme\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="javascript\theme\images\ui-icons_222222_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_454545_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_888888_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="javascript\theme\ui.accordion.css" />
+    <Content Include="javascript\theme\ui.all.css" />
+    <Content Include="javascript\theme\ui.base.css" />
+    <Content Include="javascript\theme\ui.core.css" />
+    <Content Include="javascript\theme\ui.dialog.css" />
+    <Content Include="javascript\theme\ui.progressbar.css" />
+    <Content Include="javascript\theme\ui.resizable.css" />
+    <Content Include="javascript\theme\ui.theme.css" />
+    <Content Include="javascript\Timeline\CHANGES.txt" />
+    <Content Include="javascript\Timeline\content\history.html" />
+    <Content Include="javascript\Timeline\images\blue-circle.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-down.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-up.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom.png" />
+    <Content Include="javascript\Timeline\images\bubble-left-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-right-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-top.png" />
+    <Content Include="javascript\Timeline\images\close-button.png" />
+    <Content Include="javascript\Timeline\images\copy.png" />
+    <Content Include="javascript\Timeline\images\copyright-vertical.png" />
+    <Content Include="javascript\Timeline\images\copyright.png" />
+    <Content Include="javascript\Timeline\images\dark-blue-circle.png" />
+    <Content Include="javascript\Timeline\images\dark-green-circle.png" />
+    <Content Include="javascript\Timeline\images\dark-red-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-blue-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-green-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-red-circle.png" />
+    <Content Include="javascript\Timeline\images\gray-circle.png" />
+    <Content Include="javascript\Timeline\images\green-circle.png" />
+    <Content Include="javascript\Timeline\images\message-bottom-left.png" />
+    <Content Include="javascript\Timeline\images\message-bottom-right.png" />
+    <Content Include="javascript\Timeline\images\message-left.png" />
+    <Content Include="javascript\Timeline\images\message-right.png" />
+    <Content Include="javascript\Timeline\images\message-top-left.png" />
+    <Content Include="javascript\Timeline\images\message-top-right.png" />
+    <Content Include="javascript\Timeline\images\progress-running.gif" />
+    <Content Include="javascript\Timeline\images\red-circle.png" />
+    <Content Include="javascript\Timeline\images\top-bubble.png" />
+    <Content Include="javascript\Timeline\LICENSE.txt" />
+    <Content Include="javascript\Timeline\README.txt" />
+    <Content Include="javascript\Timeline\scripts\l10n\cs\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\cs\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\de\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\de\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\en\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\en\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\es\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\es\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\fr\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\fr\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\it\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\it\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\nl\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\nl\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\ru\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\ru\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\se\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\se\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\tr\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\tr\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\vi\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\vi\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\zh\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\zh\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\signal.js" />
+    <Content Include="javascript\Timeline\simile-ajax-api.js" />
+    <Content Include="javascript\Timeline\simile-ajax-bundle.js" />
+    <Content Include="javascript\Timeline\styles\graphics-ie6.css" />
+    <Content Include="javascript\Timeline\styles\graphics.css" />
+    <Content Include="javascript\Timeline\timeline-api.js" />
+    <Content Include="javascript\Timeline\timeline-bundle.css" />
+    <Content Include="javascript\Timeline\timeline-bundle.js" />
+    <Content Include="packages\FinalBuildStatus\Manifest.xml" />
+    <Content Include="packages\ProjectTimeline\Manifest.xml" />
+    <Content Include="packages\DupFinder\Manifest.xml" />
+    <Content Include="packages\MSTest\Manifest.xml" />
+    <Content Include="packages\OhlohStats\Manifest.xml" />
+    <Content Include="packages\PackageList\Manifest.xml" />
+    <Content Include="packages\StyleCop\Manifest.xml" />
+    <Content Include="packages\UserList\Manifest.xml" />
+    <Content Include="packages\SecurityConfig\Manifest.xml" />
+    <Content Include="packages\NCover\Manifest.xml" />
+    <Content Include="packages\Simian\Manifest.xml" />
+    <Content Include="packages\Fitnesse\Manifest.xml" />
+    <Content Include="packages\Gendarme\Manifest.xml" />
+    <Content Include="packages\FxCop\Manifest.xml" />
+    <Content Include="packages\MSBuild\Manifest.xml" />
+    <Content Include="packages\NAnt\Manifest.xml" />
+    <Content Include="packages\NDepend\Manifest.xml" />
+    <Content Include="packages\DashboardAdmin\Manifest.xml" />
+    <Content Include="packages\ModificationHistory\Manifest.xml" />
+    <Content Include="packages\NUnit\Manifest.xml" />
+    <Content Include="packages\packages.xml" />
+    <Content Include="packages\ProjectConfig\Manifest.xml" />
+    <Content Include="packages\ProjectStatistics\Manifest.xml" />
+    <Content Include="packages\QueueStatus\Manifest.xml" />
+    <Content Include="packages\ServerConfig\Manifest.xml" />
+    <Content Include="packages\ServerInformation\Manifest.xml" />
+    <Content Include="packages\ServerLog\Manifest.xml" />
+    <Content Include="Themes\liquidBlue\cruisecontrol.css" />
+    <Content Include="Themes\liquidBlue\images\arrow.gif" />
+    <Content Include="Themes\liquidBlue\images\bullet_black.png" />
+    <Content Include="Themes\liquidBlue\images\bullet_cross.png" />
+    <Content Include="Themes\liquidBlue\images\bullet_tick.png" />
+    <Content Include="Themes\liquidBlue\images\header_bg.gif" />
+    <Content Include="Themes\liquidBlue\images\menu_bg.gif" />
+    <Content Include="Themes\liquidBlue\Manifest.xml" />
+    <Content Include="Themes\noteWorthy\cruisecontrol.css" />
+    <Content Include="Themes\noteWorthy\images\arrow.gif" />
+    <Content Include="Themes\noteWorthy\images\bg.jpg" />
+    <Content Include="Themes\noteWorthy\images\bullet_black.png" />
+    <Content Include="Themes\noteWorthy\images\bullet_cross.png" />
+    <Content Include="Themes\noteWorthy\images\bullet_tick.png" />
+    <Content Include="Themes\noteWorthy\images\header.jpg" />
+    <Content Include="Themes\noteWorthy\images\top_margin.jpg" />
+    <Content Include="Themes\noteWorthy\images\top_section.jpg" />
+    <Content Include="Themes\noteWorthy\Manifest.xml" />
+    <Content Include="Themes\Obsess\cruisecontrol.css" />
+    <Content Include="Themes\Obsess\Manifest.xml" />
+    <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
+    <None Include="dashboard.config" />
+    <EmbeddedResource Include="Resources\Languages.fr.resx">
+      <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="templates\ActionException.vm" />
+    <None Include="templates\AddProject.vm" />
+    <None Include="templates\AdministerDashboard.vm" />
+    <None Include="templates\AdminLogin.vm" />
+    <None Include="templates\AllBuilds.vm" />
+    <None Include="templates\AuditHistory.vm" />
+    <None Include="templates\BuildLog.vm" />
+    <None Include="templates\BuildRows.vm" />
+    <None Include="templates\BuildSideBar.vm" />
+    <None Include="templates\CategorizedFarmReport.vm" />
+    <None Include="templates\ChangePasswordAction.vm" />
+    <None Include="templates\EditProjectCommandLineBuilder.vm" />
+    <None Include="templates\EditProjectCVS.vm" />
+    <None Include="templates\EditProjectFileSourceControl.vm" />
+    <None Include="templates\EditProjectNantBuilder.vm" />
+    <None Include="templates\EditProjectP4.vm" />
+    <None Include="templates\FarmSideBar.vm" />
+    <None Include="templates\FinalBuildStatus.vm" />
+    <None Include="templates\HtmlReport.vm" />
+    <None Include="templates\LoggedIn.vm" />
+    <None Include="templates\LoggedOut.vm" />
+    <None Include="templates\LoginAction.vm" />
+    <None Include="templates\OhlohStats.vm" />
+    <None Include="templates\PackageList.vm" />
+    <None Include="templates\ProjectGrid.vm" />
+    <None Include="templates\ProjectParameters.vm" />
+    <None Include="templates\ProjectReport.vm" />
+    <None Include="templates\ProjectServerConfiguration.vm" />
+    <None Include="templates\ProjectSideBar.vm" />
+    <None Include="templates\ProjectStatusReport.vm" />
+    <None Include="templates\ProjectTimeline.vm" />
+    <None Include="templates\RecentBuilds.vm" />
+    <None Include="templates\SecurityConfiguration.vm" />
+    <None Include="templates\ServerInfo.vm" />
+    <None Include="templates\ServerLog.vm" />
+    <None Include="templates\ServerQueueStatus.vm" />
+    <None Include="templates\ServerSideBar.vm" />
+    <None Include="templates\SiteTemplate.vm" />
+    <None Include="templates\TopMenu.vm" />
+    <None Include="templates\UserDiagnostics.vm" />
+    <None Include="templates\UserList.vm" />
+    <None Include="templates\UserNameLogin.vm" />
+    <None Include="Themes\liquidBlue\templates\SiteTemplate.vm" />
+    <None Include="Themes\liquidBlue\templates\TopMenu.vm" />
+    <None Include="Themes\noteWorthy\templates\SiteTemplate.vm" />
+    <None Include="Themes\noteWorthy\templates\TopMenu.vm" />
+    <None Include="Themes\Obsess\templates\SiteTemplate.vm" />
+    <None Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Languages.de.resx" />
+    <EmbeddedResource Include="Resources\Languages.pl.resx" />
+    <EmbeddedResource Include="Resources\Languages.resx">
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>mkdir "$(ProjectDir)\xsl"
+xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50119</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

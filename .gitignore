@@ -1,0 +1,6 @@
+/*.nsi
+/Build
+/Dist
+/Publish
+/build.txt
+/nant-*.log*

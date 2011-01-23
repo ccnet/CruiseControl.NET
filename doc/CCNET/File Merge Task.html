@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : File Merge Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : File Merge Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 30, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="FileMergeTask-FileMergeTask"></a>File Merge Task</h1>
+
+<p>Merges external files into the build log.  <br/>
+Most build processes interact with external tools that write their output to file (e.g. NUnit, FxCop, or NCover). To make the output of these tools available to CruiseControl.NET to be used in the build process or displayed in the CruiseControl.NET web page or included in CruiseControl.NET emails, these files need to be merged into the CruiseControl.NET integration.  </p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>You should place your File Merge Tasks in the &lt;publishers /&gt; section of your <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> before your <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a>.  </p></td></tr></table></div>
+
+
+<h2><a name="FileMergeTask-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="FileMergeTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;merge&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- path to NUnit test file --&gt;</span></span>
+    <span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- path to FxCop file --&gt;</span></span>
+    <span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+<span class="code-tag">&lt;/merge&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="FileMergeTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'>   A set of environment variables set for commands that are executed.  <br clear="all" />  Each variable should be specified as <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;variable name=<span class="code-quote">"name"</span> value=<span class="code-quote">"value"</span> /&gt;</span></pre>
+</div></div><br/>
+.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> files </td>
+<td class='confluenceTd'> The files to merge.   </td>
+<td class='confluenceTd'> <a href="Merge File.html" title="Merge File">Merge File</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> target </td>
+<td class='confluenceTd'> The folder to copy the files to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Artefact Directory </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="FileMergeTask-Notes"></a>Notes</h2>
+
+<h4><a name="FileMergeTask-Mergeactions"></a>Merge actions</h4>
+<p>Prior to CruiseControl.NET 1.5.0, all files specified in this task are merged into the build log (this is the default behaviour if no action is specified.) Since the build log is XML data, all data that is merged needed to be treated as XML data. If the data was XML, it would be merged without any problems, otherwise the data would be embedded inside a CDATA block.  <br/>
+With CruiseControl.NET 1.5.0 it is now possible to control how the merge will work. There are three available actions:  </p>
+<ul>
+	<li>Merge: the default behaviour &#45; merge to the build log as XML if possible, as CDATA if not possible</li>
+	<li>CData: always merge to the build log in a CDATA block</li>
+	<li>Copy: instead of merging the data into the build log, it will copy the specified files into a "build" folder under the artefacts folder for the project  The following is an example of how to configure a "copy" action instead of merging:
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;merge&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- path to NUnit test file --&gt;</span></span>
+    <span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file action=<span class="code-quote">"Copy"</span>&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- path to NUnit images --&gt;</span></span>
+    <span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+<span class="code-tag">&lt;/merge&gt;</span></pre>
+</div></div>
+<p>The build folder will use the same name as the build label for the project. If this folder already exists, any files within this folder will be overwritten.  </p>
+<h4><a name="FileMergeTask-WhyarethemergedresultsnotshowingupintheWebDashboard%3F"></a>Why are the merged results not showing up in the Web Dashboard?  </h4>
+<p>If you have set up the configuration for the File Merge Task as described above and you are still not ending up with the appropriate results showing up within the web application, please try the following steps:  <br/>
+1. Click the original log link and check to see if the merged content is included in the xml. If it is missing then got onto step 2. If it is present and is still not showing up in the web page then try emailing the CCNet users list .  <br/>
+2. Have you put the File Merge Tasks in the &lt;publishers /&gt; section of your Project Configuration Block before your Xml Log Publisher?  <br/>
+3. Check the folder that contains the files that should be merged. If they are not there then you need to dig into your build script to find out why they aren't getting created.  <br/>
+4. If the files are there but aren't getting merged, double&#45;check your ccnet.config file. Is the configuration specified correctly as specified above? Remember that case matters in XML tag and attribute names.  <br/>
+5. Check the ccnet.log file. You should see Info&#45;level log messages stating that the files have been merged.  <br/>
+6. Does the file contain valid XML data? The File Merge Task only expects to process XML files. It will attempt to clean up non&#45;XML files and write errors to the ccnet.log file, but it isn't always successful.  </p></li>
+</ul>
+
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 30 Nov 2010 at 10:25:52 AM<br/>
+Using assembly version 1.6.7805.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

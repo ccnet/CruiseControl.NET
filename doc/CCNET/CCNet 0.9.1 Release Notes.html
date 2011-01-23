@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 0.9.1 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 0.9.1 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 19, 2005 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <h2><a name="CCNet0.9.1ReleaseNotes-Overview"></a>Overview</h2>
+
+<h4><a name="CCNet0.9.1ReleaseNotes-Configuration"></a>Configuration</h4>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Important Changes</b><br />
+<p>If a tasks included in the <b>&lt;tasks&gt;</b> section fails then none of the subsequent tasks will be executed.  This is useful if you have multiple build or test tasks that you want to execute and you want to halt the build after the first failure.  However, if you currently have tasks included in the <b>&lt;tasks&gt;</b> section that you want to run with every build (such as the Merge File Task, you should move it into the <b>&lt;publishers&gt;</b> section.  The <b>&lt;publishers&gt;</b> section can now contain any CCNet task.  All publisher tasks are guaranteed to be executed with each build, regardless of whether the build fails or succeeds.</p></td></tr></table></div>
+
+<p>(CCNET-324) When the CruiseControl.NET server starts up, it now provides warning message if the <b>ccnet.config</b> file contains invalid or unused elements.  If you receive such warning messages, please make sure that you correct your <b>ccnet.config</b> file to guarantee that everything is working properly.  Please consult the installed documentation for the correct configuration information.</p>
+
+<h4><a name="CCNet0.9.1ReleaseNotes-SourceControlProviders"></a>Source Control Providers</h4>
+
+<p>Numerous changes have been made to the PVCS (CCNET-274), CVS (CCNET-123), ClearCase (CCNET-382, CCNET-409) and Vault source control providers.  PVCS now works with v8.  CVS supports a faster way of detecting changes and updating source &#8211; try using the <b>&lt;useHistory&gt;</b> element. ClearCase now has AutoGetSource functionality.</p>
+
+<h4><a name="CCNet0.9.1ReleaseNotes-CCService"></a>CCService</h4>
+
+<p>(CCNET-33) The CruiseControl.NET service now supports installing multiple versions</p>
+
+<h4><a name="CCNet0.9.1ReleaseNotes-WebDashboard"></a>WebDashboard</h4>
+
+<p>(CCNET-420) A new report is available via the WebDashboard that shows timing information for the NAnt build.  Requires NAnt 0.85 RC3 to run.</p>
+
+<h2><a name="CCNet0.9.1ReleaseNotes-JiraIssues"></a>Jira Issues</h2>
+
+<h4><a name="CCNet0.9.1ReleaseNotes-Bug"></a>Bug</h4>
+<ul>
+	<li>CCNET-109 - Multiple version control provider doesn't work with PVCS</li>
+	<li>CCNET-274 - PVCS Scripts overwrite one another when multiple projects are configured</li>
+	<li>CCNET-371 - Modifications not detected when using VSNet french and VSS english</li>
+	<li>CCNET-382 - ClearCase: labels with spaces cause failure</li>
+	<li>CCNET-390 - NAnt output view displaying targets multiple times</li>
+	<li>CCNET-393 - NUnit task should load test results from file</li>
+	<li>CCNET-394 - Add Japanese resources for VSS plugin</li>
+	<li>CCNET-402 - Dashboard not showing nunit test results</li>
+	<li>CCNET-410 - Executable Time Out Broken</li>
+	<li>CCNET-413 - Plugins are not loaded when accessed via the webdashboard</li>
+	<li>CCNET-419 - Remove ExecutablePublisher as it is redundant with ExecutableTask</li>
+</ul>
+
+
+<h4><a name="CCNet0.9.1ReleaseNotes-NewFeature"></a>New Feature</h4>
+<ul>
+	<li>CCNET-33 - Allow service name to be configured (Bill Simser)</li>
+	<li>CCNET-123 - Allow CVS plugin to be more configurable</li>
+	<li>CCNET-239 - Allow per-project config files</li>
+	<li>CCNET-420 - Show report profiling NAnt build times</li>
+</ul>
+
+
+<h4><a name="CCNet0.9.1ReleaseNotes-Task"></a>Task</h4>
+<ul>
+	<li>CCNET-391 - Delete net send Publisher</li>
+</ul>
+
+
+<h4><a name="CCNet0.9.1ReleaseNotes-Improvement"></a>Improvement</h4>
+<ul>
+	<li>CCNET-324 - Invalid configuration elements should be notified</li>
+	<li>CCNET-360 - CVS should support timeout</li>
+	<li>CCNET-396 - Invalild/Unused nodes in ccnet.config file should be output to console</li>
+	<li>CCNET-407 - &lt;exec&gt; task should set ccnet.label as an environment variable</li>
+	<li>CCNET-409 - ClearCase provider should support AutoGetSource</li>
+	<li>CCNET-411 -  Integration status during GetSource</li>
+	<li>CCNET-416 - Create ForceBuild Trigger</li>
+	<li>CCNET-421 - Convert Publishers block into a PostBuild block</li>
+	<li>CCNET-422 - For Vault, make username, password, host, and repository optional</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

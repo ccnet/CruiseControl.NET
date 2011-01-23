@@ -1,0 +1,107 @@
+<!-- AuditHistory.vm: Start -->
+<style type="text/css">
+.auditHistory-table
+{
+  width:100%;
+  border-collapse:collapse;
+}
+.auditHistory-table th
+{
+  text-align:left;
+  border-bottom: solid 1px black;
+}
+.auditHistory-table td
+{
+  padding: 2px;
+}
+.auditHistory-table .odd td
+{
+  background-color:#f0f0f0;
+}
+.auditHistory-table .even td
+{
+  background-color:#ffffff;
+}
+.message
+{
+  margin-left: 20px;
+  font-style:italic;  
+}
+</style>
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>$translations.Translate("Audit History for Project: {0}", $currentProject)</h2>
+#else
+<h2>$translations.Translate("Server Audit History")</h2>
+#end
+<table class="auditHistory-table">
+  <tr>
+    <th>$translations.Translate("Event Date/Time")</th>
+    #if ($currentProject.Length > 0)
+    #else
+    <th>$translations.Translate("Project")</th>
+    #end
+    <th>$translations.Translate("User")</th>
+    <th>$translations.Translate("Event")</th>
+    <th>$translations.Translate("Outcome")</th>
+  </tr>
+  #foreach ($auditRecord in $auditHistory)
+  #odd
+  <tr class="odd">
+    <td>$auditRecord.TimeOfEvent</td>
+    #if ($currentProject.Length > 0)
+    #else
+    <td>
+      #if ($auditRecord.ProjectName.Length > 0)
+      $auditRecord.ProjectName
+      #end
+    </td>
+    #end
+    <td>
+      #if ($auditRecord.UserName.Length > 0)
+      $auditRecord.UserName
+      #end
+    </td>
+    <td>$auditRecord.EventType</td>
+    <td>$auditRecord.SecurityRight</td>
+  </tr>
+  #if ($auditRecord.Message.Length > 0)
+  <tr class="odd">
+    <td colspan="5">
+      <span class="message">$auditRecord.Message</span>
+    </td>
+  </tr>
+  #end
+  #even
+  <tr class="even">
+    <td>$auditRecord.TimeOfEvent</td>
+    #if ($currentProject.Length > 0)
+    #else
+    <td>
+      #if ($auditRecord.ProjectName.Length > 0)
+      $auditRecord.ProjectName
+      #end
+    </td>
+    #end
+    <td>
+      #if ($auditRecord.UserName.Length > 0)
+      $auditRecord.UserName
+      #end
+    </td>
+    <td>$translations.Translate($auditRecord.EventType)</td>
+    <td>$translations.Translate($auditRecord.SecurityRight)</td>
+  </tr>
+  #if ($auditRecord.Message.Length > 0)
+  <tr class="even">
+    <td colspan="5">
+      <span class="message">$auditRecord.Message</span>
+    </td>
+  </tr>
+  #end
+  #end
+</table>
+<!-- AuditHistory.vm: End -->

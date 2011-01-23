@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Project Trigger</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Project Trigger
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="ProjectTrigger-ProjectTrigger"></a>Project Trigger</h1>
+
+<p>The Project Trigger is used to trigger a build when the specified dependent project has completed its build. This trigger can help you split your build process across projects and servers. For example, you could have a CCNet project that will trigger the regression test suite once the main development build has completed successfully. This dependent build could be running on either a local or a remote CCNet server.  <br/>
+The Project Trigger works by using .NET remoting to poll the status of the dependent project. Whenever it detects that the dependent project has completed a build, the Project Trigger will fire. The Project Trigger can be configured to fire when the dependent project build succeeded, failed or threw an exception. In order to avoid hammering the remote project through polling, the Project Trigger is composed of an <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a>that will set a polling interval to 5 seconds. This inner trigger can be adjusted through changing the configuration.  </p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Like all triggers, the projectTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
+
+
+<h2><a name="ProjectTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ProjectTrigger-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;projectTrigger project=<span class="code-quote">"Core"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;projectTrigger serverUri=<span class="code-quote">"tcp://server:21234/CruiseManager.rem"</span> project=<span class="code-quote">"Server"</span>&gt;</span>
+  <span class="code-tag">&lt;triggerStatus&gt;</span>Success<span class="code-tag">&lt;/triggerStatus&gt;</span>
+  <span class="code-tag">&lt;innerTrigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> /&gt;</span>
+<span class="code-tag">&lt;/projectTrigger&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ProjectTrigger-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> innerTrigger </td>
+<td class='confluenceTd'> The trigger used to modulate the polling interval for the ProjectTrigger. By default, this is set to a ForceBuild IntervalTrigger that will cause the trigger to check the status of the dependent project every 5 seconds.   </td>
+<td class='confluenceTd'> ITrigger </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 second ForceBuild intervalTrigger </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The name of the dependent project to trigger a build from.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverUri </td>
+<td class='confluenceTd'> The URI for the CCNet server containing the dependent project.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> tcp://localhost:21234/CruiseManager.rem </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> triggerFirstTime </td>
+<td class='confluenceTd'> Whether to trigger on the first time or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> triggerStatus </td>
+<td class='confluenceTd'> The status of the dependent project that will be used to trigger the build. For example, if this value is set to Success then a build will be triggered when the dependent project completes a successful build.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Success</li>
+	<li>Failure</li>
+	<li>Exception</li>
+	<li>Unknown</li>
+	<li>Cancelled</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Success </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="ProjectTrigger-Notes"></a>Notes</h2>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>There is currently a limitation in the Project Trigger in that it will always trigger a build when the inner trigger fires (at the end of the first interval for an Interval Trigger). This is because the Project Trigger has no way to save its state from a previous server run. So the last time that the build was triggered is not retrievable when the server restarts.  </p></td></tr></table></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 2 Dec 2009 at 12:20:41 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

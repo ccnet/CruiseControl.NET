@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : The Server Console Application</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : The Server Console Application
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 26, 2010 by <font color="#0050B2">dhommel</font>.
+				    </div>
+
+				    <p>You can launch the CruiseControl.NET server by executing the <tt><b>ccnet.exe</b></tt> file, which is located in the <tt><b>server</b></tt> folder of the extracted distribution.</p>
+
+<p>Before doing this, make sure to setup the <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>.</p>
+
+<p>Executing the server using the <tt><b>&#45;-help</b></tt> flag (eg. <tt>ccnet.exe &#45;-help</tt>) will display a list of the command-line arguments accepted by the server.  They are:</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Command Line Long Option </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-config:<em>configfilename</em></tt> </td>
+<td class='confluenceTd'> The config file to use. This is useful if you have multiple config files, or are launching the ccnet application from a different directory to the location of the config file </td>
+<td class='confluenceTd'> <tt><em>ccnet.config</em></tt> <em>in the directory you launch CCNet from</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-remoting:[on/off]</tt> </td>
+<td class='confluenceTd'> Whether the CCNet Server should open the reporting/management port configured in the <a href="Server Application Config File.html#ServerApplicationConfigFile-remotingPort">Application Config File</a> </td>
+<td class='confluenceTd'> on </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-project:<em>projectname</em></tt> </td>
+<td class='confluenceTd'> Sometimes its useful to debug a specific project. If you use this option, CruiseControl.NET will start just the specified project, force a build on it, then shut down the server </td>
+<td class='confluenceTd'> <em>No project specified</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-validate</tt> </td>
+<td class='confluenceTd'> Verify that the configuration is valid.  Error messages will be reported to the console and to the log file. </td>
+<td class='confluenceTd'> <em>Run the console</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-errorpause:[on/off]</tt> </td>
+<td class='confluenceTd'> Do not pause the server after an error occurs. </td>
+<td class='confluenceTd'> <em>Pause on error</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-logging:[on/off]</tt> </td>
+<td class='confluenceTd'> Do not log any messages - this will override any log4net configuration in ccnet.exe.config. </td>
+<td class='confluenceTd'> <em>Log messages</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;-help</tt> </td>
+<td class='confluenceTd'> Display the list of available commands. </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+</tbody></table>
+<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> CruiseControl.NET by default opens a server port to listen for external requests. Make sure to use the <tt>&#45;-remoting:off</tt> option if you do not want this behaviour.</p>
+
+<p>For parsing the commandline arguments CruiseControl.NET uses the Mono.Options class.<br/>
+Mono.Options allows to specifiy a long and a short version for arguments and also different styles of passing them on the commandline.<br/>
+The following table shows the short option equivalent of the above long options. All of the options also work if started with a slash (<tt>/</tt>) instead of a dash (<tt>&#45;</tt>) and the colon (<tt>:</tt>) can be replaced with the equals sign (<tt>=</tt>).</p>
+
+<p>Example:<br/>
+<tt>ccnet.exe /logging:off</tt><br/>
+or<br/>
+<tt>ccnet.exe &#45;-logging=off</tt><br/>
+or just<br/>
+<tt>ccnet.exe /l:off</tt></p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Command Line Short Option </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;c:<em>configfilename</em></tt> </td>
+<td class='confluenceTd'> The config file to use. This is useful if you have multiple config files, or are launching the ccnet application from a different directory to the location of the config file </td>
+<td class='confluenceTd'> <tt><em>ccnet.config</em></tt> <em>in the directory you launch CCNet from</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;r:[on/off]</tt> </td>
+<td class='confluenceTd'> Whether the CCNet Server should open the reporting/management port configured in the <a href="Server Application Config File.html#ServerApplicationConfigFile-remotingPort">Application Config File</a> </td>
+<td class='confluenceTd'> on </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;p:<em>projectname</em></tt> </td>
+<td class='confluenceTd'> Sometimes its useful to debug a specific project. If you use this option, CruiseControl.NET will start just the specified project, force a build on it, then shut down the server </td>
+<td class='confluenceTd'> <em>No project specified</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;v</tt> </td>
+<td class='confluenceTd'> Verify that the configuration is valid.  Error messages will be reported to the console and to the log file. </td>
+<td class='confluenceTd'> <em>Run the console</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;e:[on/off]</tt> </td>
+<td class='confluenceTd'> Do not pause the server after an error occurs. </td>
+<td class='confluenceTd'> <em>Pause on error</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;l:[on/off]</tt> </td>
+<td class='confluenceTd'> Do not log any messages - this will override any log4net configuration in ccnet.exe.config. </td>
+<td class='confluenceTd'> <em>Log messages</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>&#45;h&#124;-?</tt> </td>
+<td class='confluenceTd'> Display the list of available commands. </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+</tbody></table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

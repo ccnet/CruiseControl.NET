@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+	<HEAD>
+		<title>CruiseControl.NET</title>
+		<link type="text/css" rel="stylesheet" href="$applicationPath/themes/liquidblue/cruisecontrol.css" />
+		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/theme/ui.all.css" />
+		<link rel="shortcut icon" href="$applicationPath/AppIcon.ico" />
+		<script src="$applicationPath/javascript/ccnet.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery-ui.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery.metadata.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery.tablesorter.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery.tipsy.js" type="text/javascript"></script>
+	</HEAD>
+	<body>
+	    <div id="pageWrapper">
+		    <div id="header">
+		        <div id="headerTitle">
+		            <h1>CruiseControl.NET</h1>
+		            <small>Continuous Integration System</small>
+		        </div>
+		        <ul>
+					$loginView
+		            <li><a href="$applicationPath/doc/index.html">Documentation</a></li>
+		        </ul>
+		    </div>
+		    <div id="breadCrumbs">
+			    $breadcrumbs
+		    </div>
+		    <table id="content">
+			    <tr valign="top">
+				    <td id="sidebar">
+					    $sidebar
+				    </td>
+				    <td id="mainContent">
+					    $mainContent
+				    </td>
+			    </tr>
+		    </table>
+		    <div id="footer">
+			    <div class="left">
+				    Rendered: $renderedAt
+			    </div>
+			    <div class="right">
+			        Version: $dashboardversion
+			    </div>
+			    <div>
+				    An Open Source Project sponsored by <a href="http://www.thoughtworks.com/">ThoughtWorks</a>
+			    </div>
+			    <div>
+			        Design inspired by <a href="http://www.designsbydarren.com/">DesignsByDarren.com</a>
+			    </div>
+		    </div>
+		</div>
+	</body>
+</HTML>

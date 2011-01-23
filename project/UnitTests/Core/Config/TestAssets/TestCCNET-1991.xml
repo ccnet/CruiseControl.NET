@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <project>
+    <name>Space Error Demo</name>
+
+    <cb:define Name1="Space" />
+    <cb:define Name2="Error" />
+
+    <cb:define BaseBuildDir="C:\Test\$(Name1) $(Name2)\" />
+
+    <workingDirectory>$(BaseBuildDir)Working</workingDirectory>
+    <artifactDirectory>$(BaseBuildDir)Artifacts</artifactDirectory>
+
+    <state type="state" directory="$(BaseBuildDir)State" />
+
+    <!-- Force only -->
+    <triggers />
+
+    <tasks>
+      <exec>
+        <executable>C:\Windows\System32\cmd.exe</executable>
+        <buildArgs>/c dir</buildArgs>
+      </exec>
+    </tasks>
+    <publishers>
+      <xmllogger logDir="$(BaseBuildDir)BuildLogs" />
+      <statistics />
+    </publishers>
+  </project>
+</cruisecontrol>

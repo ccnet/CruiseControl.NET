@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Server Extensions</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Server Extensions
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 27, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="ServerExtensions-ServerExtensions"></a>Server Extensions</h1>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Work in progress</b><br />
+<p>This documentation is in the process of being developed. As such it may omit details or be incomplete in areas.</p></td></tr></table></div>
+
+<h2><a name="ServerExtensions-Introduction"></a>Introduction</h2>
+
+<p>As of release 1.4.4, it is possible to build server extensions for both the console and the Windows service. </p>
+
+<p>An extension is different from a plug-in. A plug-in must be referenced by a project in ccnet.config, and as such works within the framework of the server. An extension on the other hand is added in the config file for the application (either ccnet.exe.config or ccservice.exe.config) and modifies the functionality of the entire server (i.e. it is not project specific).</p>
+
+<p>This means an extension can modify the underlying behaviour of the server, although it doesn't have to. Examples of extensions include build throttling, new transport transports, expanded logging, and pre/post build processing.</p>
+
+<p>When an extension is initialised, it is passed a reference to the main server, so it can call any server methods or subscribe to any events. Additionally the extension must implement a number of events, which allows the server to interact with the extension. </p>
+
+<h2><a name="ServerExtensions-TheBasics"></a>The Basics</h2>
+
+<p>A basic extension must implement ICruiseServerExtension. This interface has four methods:</p>
+<ul>
+	<li>Initialise(): called when the server is initially loaded, passes in an ICruiseServer reference and allows the extension to perform any custom initialisation (e.g. load config settings, etc.)</li>
+	<li>Start(): called when the server starts up - tells the extension the server is now running. This allows the extension to also start processing.</li>
+	<li>Stop(): called then the server stops - tells the extension that the server will no longer handle requests. This allows the extension to stop any processing gracefully.</li>
+	<li>Abort(): called when the server is aborting - similar to Stop(), but means all functionality must be terminated immediately.</li>
+</ul>
+
+
+<p>The Initialise() method is called with two parameters: a ICruiseServer reference and any configuration for the extension. The configuration is any sub-elements defined in the application config file. If the extension needs to interact with the server, then it must store the ICruiseServer reference.</p>
+
+<h2><a name="ServerExtensions-InteractingwiththeServer"></a>Interacting with the Server</h2>
+
+<p>There are two basic ways of interacting with the server - calling methods or listening to events.</p>
+
+<p>There is a wide range of methods available, most of them are used by the client applications for calling the server. However they can all be used by an extension.</p>
+
+<p>Method categories include:</p>
+<ul>
+	<li>Informational: retrieve information about what is happening in the server, logs or results from projects, lists of builds, etc.</li>
+	<li>Control: force or abort builds, start or stop projects (or the entire server), send messages, etc.</li>
+	<li>Configuration: add, update or delete projects.</li>
+</ul>
+
+
+<p>As work progresses on the server new methods will be added over time.</p>
+
+<h2><a name="ServerExtensions-HandlingServerEvents"></a>Handling Server Events</h2>
+
+<p>Methods provide a proactive way for extensions to work with the server, events provide a reactive way - that is they allow the extension to handle events that have been raised from somewhere else. Available events are:</p>
+<ul>
+	<li>ProjectStarting/ProjectStarted</li>
+	<li>ProjectStopping/ProjectStopped</li>
+	<li>ForceBuildReceived/ForceBuildProcessed</li>
+	<li>AbortBuildReceived/AbortBuildProcessed</li>
+	<li>SendMessageReceived/SendMessageProcessed</li>
+	<li>IntegrationStarted/IntegrationCompleted</li>
+</ul>
+
+
+<p>Each event has a start of event/end of event pair. In the start of event handler it is possible to cancel an event, while the end of event is purely informational.</p>
+
+<p>All of the events, except for IntegrationStarted/IntegrationCompleted, are fired when the relevant method on CruiseServer is called. The IntegrationStarted/IntegrationCompleted are fired when an integration is started and finished - these events are not related to any methods on CruiseServer.</p>
+
+<h2><a name="ServerExtensions-Limitations"></a>Limitations</h2>
+
+<p>Currently there are still a few limitations on server extensions.</p>
+<ul>
+	<li>An extension cannot interact with the configuration, nor can they see the list of projects. As such it only has a very limited view of what is in a project.</li>
+	<li>An extension cannot see inside a project. Currently it is only limited to the project name and the details available in a request.</li>
+	<li>The extension cannot monitor any CruiseServer methods except for Start(project), Stop(project), ForceBuild(project, enforcer), AbortBuild(project, enforcer) and SendMessage(project, message).</li>
+</ul>
+
+
+<h2><a name="ServerExtensions-ConfiguringtheExtension"></a>Configuring the Extension</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>To-do</b><br />
+<p>Show how to configure an extension so it will be registered by the server.</p></td></tr></table></div>
+
+<h2><a name="ServerExtensions-CustomConfigurationElements"></a>Custom Configuration Elements</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>To-do</b><br />
+<p>Explain how to load custom configuration information, where this happens and the underlying principals of configuration.</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

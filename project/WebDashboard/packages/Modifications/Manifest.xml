@@ -1,0 +1,21 @@
+﻿<package>
+  <name>Modifications of a build</name>
+  <description>Display the modifications done in the build.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>modifications.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\modifications.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\modifications.xsl</value>
+    </setting>  
+  </configuration>
+</package>

@@ -1,0 +1,34 @@
+<!-- ProjectServerConfiguration.vm: Start -->
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#ProjectConfig').tablesorter({
+          sortList:[[2,0]]
+        });
+    });
+</script>
+<table class="SortableGrid" id="ProjectConfig">
+  <thead>
+    <tr class="ProjectGridHeader">
+      <th>$translations.Translate("Queue")</th>
+      <th>$translations.Translate("Queue Priority")</th>
+      <th>$translations.Translate("Project")</th>
+      <th>$translations.Translate("Category")</th>
+      <th>$translations.Translate("Web Url")</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach ($project in $projects)
+    <tr>
+      <td class="left">$project.Queue</td>
+      <td>$project.QueuePriority</td>
+      <td class="left"
+          title="$project.Description">$project.Name</td>
+      <td class="left">$project.Category</td>
+      <td class="left">
+        <a href="$project.WebURL">$project.WebURL</a>
+      </td>
+    </tr>
+    #end
+  </tbody>
+</table>
+<!-- ProjectServerConfiguration.vm: End -->

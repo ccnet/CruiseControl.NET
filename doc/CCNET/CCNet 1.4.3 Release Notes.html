@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.4.3 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.4.3 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 18, 2009 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.4.3ReleaseNotes-UpgradingtoCCNet1.4.3"></a>Upgrading to CCNet 1.4.3</h2>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Default trigger behaviour removed</b><br /><br/>
+In earlier versions of CCNet, an empty trigger block was interpreted as an &lt;intervalTrigger&gt;. This is no longer the case. An empty trigger block will produce a project with no triggers that will only build if it is forced.</td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Statistics publishers file requires manual editing</b><br />
+<p>The statistics publisher is improved for speed reasons, and the result is that the existing report.xml file must be manually edited. You can find it in the artifact folder and must remove the root element by doing the following steps:</p>
+<ol>
+	<li>find &lt;statistics&gt; at the beginning of the file and remove it</li>
+	<li>find &lt;/statistics&gt; at the end of the file, or near the end of the file</li>
+</ol>
+</td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>SVN source control block can have problems with empty &lt;trunkUrl&gt;</b><br /><br/>
+The SVN source control block has a problem with an empty &lt;trunkUrl&gt; element. This error will show up as a NullReferenceException. This problem has been filed as a <a href="http://jira.public.thoughtworks.org/browse/CCNET-1407">defect</a> and will be fixed in the next release.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Upgrading from a version before 1.4.2?</b><br />See the release notes for the <a href="CCNet 1.4.2 Release Notes.html" title="CCNet 1.4.2 Release Notes">CCNet 1.4.2 release</a>.</td></tr></table></div>
+
+<h2><a name="CCNet1.4.3ReleaseNotes-HighlightsoftheCCNet1.4.3release"></a>Highlights of the CCNet 1.4.3 release</h2>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-Newccnet.configvalidationprogram"></a>New ccnet.config validation program</h4>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Not packaged as part of the release</b><br />
+<p>Dues to an oversight from the development team, CCValidator is not packaged as part of any of the release artifacts. It can be built from source manually, but there is no binary available for download. The problem in the packaging has been corrected and CCValidator will be included in the next release.</p></td></tr></table></div>
+
+<p>It is now easier to validate your config file, a separate program CCValidator has been added. CCValidator is a GUI tool that allows you to check your config file, showing how CCNet will interpret the file including any property substitutions. This provides similar functionality to the ProjectConfiguration plugin in the Web Dashboard. The installer will create a shortcut in the start menu for CCValidator.</p>
+
+<p>There is <a href="CCValidator.html" title="CCValidator">documentation for the new utility</a> included.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-SourceControlerrorsduringGetModificationswillnowfailthebuild"></a>Source Control errors during GetModifications will now fail the build</h4>
+
+<p>Previously when there was an error during the GetModification stage, there was only a log on the server level and the build was considered good. This has been changed so the build will now go into the '<b>Exception</b>' state. The project will still be running and continue to check for modifications. By default, CCNet will tolerate 5 consecutive errors but will stop the project on a 6th error. At that point someone will need to intervene to clear the error and restart the build. The number of errors recorded before stopping the build is configurable by changing the project level '<em>maxSourceControlRetries</em>' attribute in the configuration file. The email publisher can be configured to send mails for each error recorded.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-ChangestotheLastChangeLabeller"></a>Changes to the LastChangeLabeller</h4>
+
+<p>This has been improved to work better with repeated builds against the same change number. This addresses specific problems brought forward by Perforce users, but may help other source control users. Check <a href="Last Change Labeller.html" title="Last Change Labeller">LastChangeLabeller's docs</a> for new configuration options.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-EmailPublisherhasbeenimprovedagain"></a>Email Publisher has been improved again</h4>
+
+<ul>
+	<li>An LDAP lookup can be done to convert modification usernames in to email addresses.</li>
+	<li>The subject of the email can include values from integration properties.</li>
+</ul>
+
+
+<p>Look at the docs of <a href="Email Publisher.html" title="Email Publisher">Email Publisher</a> for full details.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-BreakersofabuildarelistedontheDashboardandinCCTray"></a>Breakers of a build are listed on the Dashboard and in CCTray</h4>
+
+<p>The breakers of a build are now shown on the Dashboard and CCTray. Also, this information is exposed to other programs through the xmlStatusReport.aspx dashboard page. These are collected using the same mechanism the email publisher uses to build the addressee lists for emails.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-CustomIconsnowworkinCCTray"></a>Custom Icons now work in CCTray</h4>
+
+<p>Custom icons for build states and servers can be specified for CCTray. Previous versions had resource leaks around the handling of custom icons. The leaks have been plugged in this version.</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-DashboardImprovements"></a>Dashboard Improvements</h4>
+
+<ul>
+	<li>The project categories are also available on the farm level.</li>
+	<li>Extra checks are added on loading plugins.</li>
+	<li>Project status view now includes actions for a project, plus the current status.</li>
+	<li>Can set a <a href="Custom templates.html" title="Custom templates">custom location</a> for loading templates.</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-Console%2FServiceImprovements"></a>Console/Service Improvements</h4>
+
+<ul>
+	<li>Initial <a href="Project Configuration Block.html#ProjectConfigurationBlock-startupState">project state can be defined in the configuration</a> and is persisted between restarts.</li>
+	<li>In ccnet.config, any task block can have a custom <tt>description</tt> attribute. The description will be shown in the build stage as the process name.</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-SvnandCvsupdates"></a>Svn and Cvs updates</h4>
+
+<p>Several svn and cvs changes were done, most notably improvements to cleancopy and handling multiple svn externals. The are more bugfixes and smaller improvements, see below for the full list.</p>
+
+<h2><a name="CCNet1.4.3ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.4.3"></a>Release Notes - CruiseControl .NET - Version 1.4.3</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/ReleaseNote.jspa?version=10351&amp;styleName=Text&amp;projectId=10000&amp;Create=Create">Jira Issues resolved by this release</a> :</p>
+
+<p>Release Notes - CruiseControl .NET - Version 1.4.3</p>
+
+<h4><a name="CCNet1.4.3ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li>CCNET-137 - Successful build status indicated on source control failure</li>
+	<li>CCNET-186 - NUnit xml output for fixtures containing Category attribute causes rendering problems</li>
+	<li>CCNET-708 - Perforce: when setting "User" must also set "Port"</li>
+	<li>CCNET-921 - restart of CruiseControl.NET server ccnet service causes projects in admin stop mode to go back to running mode</li>
+	<li>CCNET-1004 - Pending Projects sometimes incorrectly show "taking x minutes longer"</li>
+	<li>CCNET-1096 - CCTray does not display the correct server in the "server" column when there are two projects with the same name on two (or more?) different ccnet servers</li>
+	<li>CCNET-1176 - CCTray raises exception on Windows 2000</li>
+	<li>CCNET-1179 - Two projects having the same name on two different servers appear to be on the same server in the project list</li>
+	<li>CCNET-1202 - When adding new projects does not respect checkbox settings</li>
+	<li>CCNET-1217 - Lots of priorities in a queue can cause some of the lowers to never be checked</li>
+	<li>CCNET-1251 - Integration builds triggered by schedule trigger can cause more than one project on the same queue to start integration</li>
+	<li>CCNET-1256 - Subversion Source Control should implement clean copy</li>
+	<li>CCNET-1267 - KillUtil.cs - KillPid incorrectly identifies a Mac OSX as Unix</li>
+	<li>CCNET-1276 - Service times out on nant task, but Console server does not...</li>
+	<li>CCNET-1279 - MSBuild Task - Invalid Quoting around /L Logger Option - Error creating instance of logger, loading assembly ThoughtWorks.CruiseControl.MsBuild.XmlLogger</li>
+	<li>CCNET-1283 - Subversion fails with long paths and relative WC locations</li>
+	<li>CCNET-1289 - Icons are reloaded on every poll, ultimatly leading to an exception</li>
+	<li>CCNET-1292 - CVS alias changes are not fetched from the repository</li>
+	<li>CCNET-1304 - Nant output is not recorded in the build logs</li>
+	<li>CCNET-1305 - Exception in ProjectStateIconAdapter leaving CCTray in unusable state</li>
+	<li>CCNET-1309 - SVN module doesn't handle more than one svn:external in a folder</li>
+	<li>CCNET-1311 - message showing process command-line no longer logged</li>
+	<li>CCNET-1312 - Custom icons cause CCTray exceptions</li>
+	<li>CCNET-1321 - Dashboard throws null reference exception when a bad plugin is set in dashboard.config</li>
+	<li>CCNET-1326 - If killed (ctrl-c) while a build is running, ccnet.exe will hang. I believe the same bug affects ccservice.exe</li>
+	<li>CCNET-1330 - filenames not shown in modification history overview</li>
+	<li>CCNET-1331 - CvsHistoryParser ignores log time zone entries</li>
+	<li>CCNET-1348 - Svn clean copy only works if the working directory is set explicitly</li>
+	<li>CCNET-1354 - Filesystem source control block doesn't recognize file copy/deletes</li>
+	<li>CCNET-1357 - console does not run</li>
+	<li>CCNET-1366 - Bump project list icons up from 8 bit.</li>
+	<li>CCNET-1369 - when the lockqueues attribute of element queue contains a non existent queue name, we get a null reference exception</li>
+	<li>CCNET-1371 - A project configuration with no trigger block runs a interval trigger by default</li>
+	<li>CCNET-1390 - CCTray displays the wrong Servername if two Projects from different Servers are added with the Same name</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET-265 - Perforce.GetModifications() should use Change Set Number</li>
+	<li>CCNET-266 - Perforce.LabelSourceControl() should use Change Set Number</li>
+	<li>CCNET-362 - Server should not exit on Exception</li>
+	<li>CCNET-479 - CCTray improvement to launch WebDashboard into a new browser window, or launch specified web browser</li>
+	<li>CCNET-938 - Perforce "p4 changes" using date for the revision specifier is a performance killer; should use changelist number instead.</li>
+	<li>CCNET-1110 - Change the LastChangeLabeller to work even on Forced Builds</li>
+	<li>CCNET-1113 - Proposed changes for handling integration exceptions</li>
+	<li>CCNET-1139 - Refactoring: Core Tasks</li>
+	<li>CCNET-1273 - emailpublisher must have an LDAP converter for retrieving the email adresses</li>
+	<li>CCNET-1294 - OK / Cancel buttons should respond to Enter/ESC on "Add Server..." dialog.</li>
+	<li>CCNET-1296 - CCTray: NotifyIconEx refactoring</li>
+	<li>CCNET-1297 - Settings and AddProjects form refactorings</li>
+	<li>CCNET-1308 - projectConfigurationServerPlugin must sort on queue and queuepriority</li>
+	<li>CCNET-1313 - Show the breakers of the build in the dashboard and CCTray</li>
+	<li>CCNET-1320 - ccnet cvs source control block requires &lt;executable&gt; even when cvs.exe is in path</li>
+	<li>CCNET-1322 - foresee a customtemplates folder for the dashboard</li>
+	<li>CCNET-1329 - expose the people who made a modifaction in the integration properties</li>
+	<li>CCNET-1335 - Add Category support to the Farm view</li>
+	<li>CCNET-1336 - artifact publisher must remove readonly bit of files, before trying to delete them</li>
+	<li>CCNET-1337 - A queue's lockqueues attribute should allow a space to follow the comma between multiple queue names</li>
+	<li>CCNET-1352 - save the current integration properties in the build result</li>
+	<li>CCNET-1364 - Ommit .exe in default executables</li>
+	<li>CCNET-1367 - Add new parameter to project block for initial startup state.</li>
+	<li>CCNET-1368 - make the custom templates folder in the dashboard configurable</li>
+	<li>CCNET-1370 - ModificationWriterTask should create folder</li>
+	<li>CCNET-1374 - Modification Reader Task should have option to delete read files</li>
+	<li>CCNET-1377 - change the yellow collor of unknown status in the dashboard to another one, yellow has not enough contrast</li>
+	<li>CCNET-1383 - updated last change labeller to work on forced builds</li>
+	<li>CCNET-1386 - statistics publisher loads the entire file via xdoc in memory, making it slow</li>
+	<li>CCNET-1389 - XmlStatusReport.aspx should expose the buildserver name as it is known in the dashboard</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET-134 - Add ability to include entire NAnt log in Email Publisher</li>
+	<li>CCNET-156 - email publisher customization</li>
+	<li>CCNET-264 - Perforce.GetSource() should use Change set number</li>
+	<li>CCNET-340 - getting the changelist number in perforce that triggeres integration</li>
+	<li>CCNET-500 - Allow user to annotate a manually forced build</li>
+	<li>CCNET-678 - Perforce Labeller</li>
+	<li>CCNET-748 - Provide better trigger exception logging</li>
+	<li>CCNET-1138 - Need a "-nologging" command line switch to make &#45;validate better</li>
+	<li>CCNET-1226 - Tray notification with more detailed information when a build fails</li>
+	<li>CCNET-1332 - New configuration element for task blocks: &lt;taskDescription&gt;</li>
+	<li>CCNET-1397 - allow for credentials in the URL when using "Supply a custom HTTP URL" in CCTray</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.3ReleaseNotes-Task"></a>Task</h4>
+
+<ul>
+	<li>CCNET-939 - why the "nunit tests results " displays nothing in the dashboard?</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

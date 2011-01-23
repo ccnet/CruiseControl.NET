@@ -1,0 +1,617 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Configuration Preprocessor</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Configuration Preprocessor
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 01, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <p>The CCNet configuration preprocessor acts on the ccnet.config file.  Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup.  Any markup not in the preprocessor's namespace are passed through unchanged.</p>
+
+<h2><a name="ConfigurationPreprocessor-PreparingtoUsethePreprocessor"></a>Preparing to Use the Preprocessor</h2>
+
+<p>The configuration preprocessor is invoked by declaring an XML Namespace of "urn:ccnet.config.builder" on the root configuration element ("&lt;cruisecontrol&gt;").  The namespace abbreviation you choose must be specified on any preprocessor directives you use.  For the rest of this explanation, we will specify it as "cb", a mnemonic for "configuration builder".</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-PreprocessorElements"></a>Preprocessor Elements</h2>
+
+<p>The configuration preprocessor has several elements that control its processing of your configuration.</p>
+<ul>
+	<li>The <b>&lt;define&gt;</b> element is used to define constants to be expanded later.</li>
+	<li>The <b>&lt;include&gt;</b> element is used to include the contents of another file.</li>
+	<li>The <b>&lt;scope&gt;</b> element is used to encapsulate sections that change the value of an existing constant.</li>
+</ul>
+
+
+<h2><a name="ConfigurationPreprocessor-DefiningPreprocessorConstants"></a>Defining Preprocessor Constants</h2>
+
+<p>The <b>&lt;define&gt;</b> element is used to define a preprocessor constant.  It can be used in several ways:</p>
+
+<h3><a name="ConfigurationPreprocessor-Textconstants%28valuesarestrings%29%3A"></a>Text constants (values are strings):</h3>
+
+<p>Define a constant named "foo" with a value of "bar":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;</pre>
+</div></div>
+<p>You can define more than one constant in the same define element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define a=<span class="code-quote">"1"</span> b=<span class="code-quote">"2"</span> c=<span class="code-quote">"3"</span>/&gt;</pre>
+</div></div>
+
+<h3><a name="ConfigurationPreprocessor-Nodesetconstants%28valuesareXMLfragments%29%3A"></a>Nodeset constants (values are XML fragments):</h3>
+
+<p>Define a constant named "baz" with a value of an xml fragment:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"baz"</span>&gt;
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/cb:define&gt;</pre>
+</div></div>
+<p>Any valid XML inside the define element is considered to be the constant's value.  This includes elements, attributes, text nodes, and comments.</p>
+
+<h2><a name="ConfigurationPreprocessor-ExpandingPreprocessorConstantValues"></a>Expanding Preprocessor Constant Values</h2>
+
+<p>Once defined, preprocessor constants can be expanded in two ways: as text references or as XML references.</p>
+
+<h3><a name="ConfigurationPreprocessor-TextReferences"></a>Text References</h3>
+
+<p>References of the form "$(const_name)" which are found in attribute values or text nodes will be expanded such that the text value replaces the reference.  If no constant exists with the given name and there exists a windows environment variable with the same name, that environment variable's value will be used.</p>
+
+<h4><a name="ConfigurationPreprocessor-Examples"></a>Examples</h4>
+
+<p>Use in an attribute:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;somexml attr1=<span class="code-quote">"$(foo)"</span>/&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;somexml attr1=<span class="code-quote">"bar"</span>/&gt;</pre>
+</div></div>
+<p>Use as text of an element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;somexml&gt;$(foo)&lt;/somexml&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;somexml&gt;bar&lt;/somexml&gt;</pre>
+</div></div>
+<p>Use of Windows environment variables:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;env dir=<span class="code-quote">"$(PATH)"</span>/&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;env dir=<span class="code-quote">"... your PATH environment value ..."</span>/&gt;</pre>
+</div></div>
+
+<h3><a name="ConfigurationPreprocessor-XMLReferences"></a>XML References</h3>
+
+<p>When the preprocessor encounters an element in the preprocessor namespace, and the element name is not one of the predefined keywords (define,scope,config-template, etc), the element will be replaced by the constant value associated with the element name.</p>
+
+<h4><a name="ConfigurationPreprocessor-Examples"></a>Examples</h4>
+
+<p>Use as text of an element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;sample&gt;
+  &lt;cb:foo/&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;sample&gt;
+  bar
+&lt;/sample&gt;</pre>
+</div></div>
+<p>Uses as sub-element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"baz"</span>&gt;
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/cb:define&gt;
+&lt;sample&gt;
+  &lt;cb:baz/&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;sample&gt;
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+<p>If a constant reference refers to a constant which has not been defined and which does not exist as an OS environment variable, an error will occur.</p>
+
+<h2><a name="ConfigurationPreprocessor-NestedExpansionsandParameters"></a>Nested Expansions and Parameters</h2>
+
+<p>Constant references can be nested, <em>i.e.</em>, the value of constant "zed" can contain a reference to constant "alpha".</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define alpha=<span class="code-quote">"alphaval"</span>/&gt;
+&lt;cb:define zed=<span class="code-quote">"zedval/$(alpha)"</span>/&gt;
+
+&lt;z&gt;$(zed)&lt;/z&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;z&gt;zedval/alphaval&lt;/z&gt;</pre>
+</div></div>
+<p>In addition, using the cb:varname call syntax outlined above, constant values can be passed as part of the call element.  Consider the following definition, in which neither "gamma" nor "delta" have yet been defined:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"beta"</span>&gt;
+  &lt;hello&gt;
+    &lt;cb:gamma/&gt;
+    &lt;hi attr1=<span class="code-quote">"$(delta)"</span>/&gt;
+  &lt;/hello&gt;
+&lt;/cb:define&gt;</pre>
+</div></div>
+<p>Since gamma and delta have not been defined, they must be passed in with the reference to beta.  This is done as follows:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:beta delta=<span class="code-quote">"deltaval"</span>&gt;
+  &lt;cb:define name=<span class="code-quote">"gamma"</span>&gt;
+    &lt;gamma_element&gt;hi&lt;/gamma_element&gt;
+  &lt;/cb:define&gt;
+&lt;/cb:beta&gt;</pre>
+</div></div>
+<p>This will expand to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;hello&gt;
+  &lt;gamma_element&gt;hi&lt;/gamma_element&gt;
+  &lt;hi attr1=<span class="code-quote">"deltaval"</span> /&gt;
+&lt;/hello&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Scopes"></a>Scopes</h2>
+
+<p>The <b>&lt;scope&gt;</b> element can be used to control the scope of a preprocessor definition.  You may not define the same constant twice within the same scope, however you may introduce a nested scope which redefines a particular value in an outer scope.  A scope is semantically equivalent to a stack frame in traditional programming terms.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:scope a=<span class="code-quote">"a_val"</span> b=<span class="code-quote">"b_val"</span>&gt;
+  &lt;test attr=<span class="code-quote">"$(a)"</span> attr2=<span class="code-quote">"$(b)"</span>/&gt;
+  &lt;cb:scope a=<span class="code-quote">"a_val_redefined"</span>&gt;
+    &lt;test attr=<span class="code-quote">"$(a)"</span> attr2=<span class="code-quote">"$(b)"</span>/&gt;
+  &lt;/cb:scope&gt;
+&lt;/cb:scope&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;test attr=<span class="code-quote">"a_val"</span> att2=<span class="code-quote">"b_val"</span>/&gt;
+&lt;test attr=<span class="code-quote">"a_val_redefined"</span> att2=<span class="code-quote">"b_val"</span>/&gt;</pre>
+</div></div>
+<p>The scope can be used to set the projectname in a variable, making copy and paste of projects less error prone.<br/>
+Changing a certain folder is also more easy / safe.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+  &lt;cb:define WorkingMainDir=<span class="code-quote">"C:\Integration\"</span>/&gt;
+  &lt;cb:define WorkingDir=<span class="code-quote">"\WorkingDirectory"</span>/&gt;
+  &lt;cb:define ArtifactsDir=<span class="code-quote">"\Artifacts"</span>/&gt;
+
+  &lt;cb:scope ProjectName=<span class="code-quote">"Alpha"</span>&gt;
+    &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+  &lt;/cb:scope&gt;
+
+  &lt;cb:scope ProjectName=<span class="code-quote">"Beta"</span>&gt;
+    &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+  &lt;/cb:scope&gt;
+
+
+
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+<p>expands to :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol&gt;
+
+    &lt;project name=<span class="code-quote">"Alpha"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;C:\Integration\Alpha\WorkingDirectory&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;C:\Integration\Alpha\Artifacts&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+
+
+    &lt;project name=<span class="code-quote">"Beta"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;C:\Integration\Beta\WorkingDirectory&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;C:\Integration\Beta\Artifacts&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+<p>Or an even more advanced one (thanks to Arieh Schneier) :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+ &lt;cb:define WorkingMainDir=<span class="code-quote">"C:\Integration\"</span>/&gt;
+ &lt;cb:define WorkingDir=<span class="code-quote">"\WorkingDirectory"</span>/&gt;
+ &lt;cb:define ArtifactsDir=<span class="code-quote">"\Artifacts"</span>/&gt;
+
+ &lt;cb:define name=<span class="code-quote">"OurProject"</span>&gt;
+   &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+     &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+     &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+   &lt;/project&gt;
+ &lt;/cb:define&gt;
+
+ &lt;cb:scope ProjectName=<span class="code-quote">"Alpha"</span>&gt;
+   &lt;cb:OurProject/&gt;
+ &lt;/cb:scope&gt;
+
+ &lt;cb:scope ProjectName=<span class="code-quote">"Beta"</span>&gt;
+   &lt;cb:OurProject/&gt;
+ &lt;/cb:scope&gt;
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Comments"></a>Comments</h2>
+
+<p>XML Comments whose first character is '#' will not be copied to the output.  All other comments will.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;!-- This comment will appear in the output file--&gt;
+&lt;!--# This comment will not --&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Includingfiles"></a>Including files</h2>
+
+<p>The <b>&lt;include&gt;</b> element is used to include the contents of another file.  The element is replaced with the contents of that file, which must be a valid XML document.  The file is specified as a URL, relative to the file that contains the <b>&lt;include&gt;</b> element.</p>
+
+<p>Assuming that the CCNet configuration file "ccnet.config" includes the file "projects\project.config":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">... lines before ...
+&lt;cb:include href=<span class="code-quote">"projects/project.config"</span>/&gt;
+... lines after ...</pre>
+</div></div>
+<p>and that the "projects\project.config" file includes a file called "EmailConfig.xml" from the same directory as "ccnet.config":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;project&gt;
+  ... project definition ...
+  &lt;publishers&gt;
+    &lt;cb:include href=<span class="code-quote">"../EMailConfig.xml"</span>/&gt;
+    ... more publishers ...
+  &lt;/publishers&gt;
+&lt;/project&gt;</pre>
+</div></div>
+<p>and that the "EMailConfig.xml" file contains an <a href="Email Publisher.html" title="Email Publisher">Email Publisher</a> definition:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;email&gt;
+  ... email configuration info ...
+&lt;/email&gt;</pre>
+</div></div>
+<p>the results would be:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">... lines before ...
+&lt;project&gt;
+  ... project definition ...
+  &lt;publishers&gt;
+    &lt;email&gt;
+      ... email configuration info ...
+    &lt;/email&gt;
+    ... more publishers ...
+  &lt;/publishers&gt;
+&lt;/project&gt;
+... lines after ...</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-"></a></h4>
+
+
+<h4><a name="ConfigurationPreprocessor-Includingfileswithmultipleelements"></a>Including files with multiple elements</h4>
+
+<p>A main ccnet.config file can easily contain dozens of project definitions, and to reduce the file size and so keeping the overview, it may be easy to group certain projects in separate files.</p>
+<ul>
+	<li>the main ccnet.config file grouping all includes, and small projects</li>
+	<li>a definition file, containing the global definitions</li>
+	<li>a CI_Projects file, containing all projects for the CI process</li>
+	<li>a DeployToQA file, containing all projects that will go to the QA environment,</li>
+	<li>....
+<br clear="all" /></li>
+</ul>
+
+
+<p>Setting this up :
+<br clear="all" /></p>
+
+<p>The main ccnet.config file</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+
+  &lt;cb:include href=<span class="code-quote">"Definitions.xml"</span> xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>/&gt;
+
+  &lt;cb:include href=<span class="code-quote">"CI_Projects.xml"</span> xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>/&gt;
+
+  &lt;cb:include href=<span class="code-quote">"QA_Projects.xml"</span> xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>/&gt;
+
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+<p>The Definitions.xml file</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:config-template xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+
+  &lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"UseFirst"</span> lockqueues=<span class="code-quote">"Q2, Q4"</span> /&gt;
+
+  &lt;cb:define name=<span class="code-quote">"EmailPublisher"</span>&gt;
+    &lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span>
+		  mailhost=<span class="code-quote">"localhost"</span>
+		  mailhostUsername=<span class="code-quote">"TheMailer"</span>
+		  mailhostPassword=<span class="code-quote">"JohnWayne"</span>
+		  includeDetails=<span class="code-quote">"TRUE"</span>&gt;
+	&lt;users /&gt;
+        &lt;groups /&gt;
+
+        &lt;modifierNotificationTypes&gt;
+          &lt;NotificationType&gt;Failed&lt;/NotificationType&gt;
+          &lt;NotificationType&gt;Fixed&lt;/NotificationType&gt;
+        &lt;/modifierNotificationTypes&gt;
+
+    &lt;/email&gt;
+  &lt;/cb:define&gt;
+
+  &lt;cb:define name=<span class="code-quote">"common_publishers"</span>&gt;
+	&lt;artifactcleanup cleanUpMethod=<span class="code-quote">"KeepMaximumXHistoryDataEntries"</span> cleanUpValue=<span class="code-quote">"500"</span> /&gt;
+	&lt;xmllogger /&gt;
+	&lt;statistics /&gt;
+	&lt;modificationHistory  onlyLogWhenChangesFound=<span class="code-quote">"<span class="code-keyword">true</span>"</span> /&gt;
+	&lt;rss/&gt;
+  &lt;/cb:define&gt;
+
+  &lt;cb:define name=<span class="code-quote">"common_nant"</span>&gt;
+       &lt;executable&gt;c:\nant\nant.exe&lt;/executable&gt;
+       &lt;nologo&gt;<span class="code-keyword">true</span>&lt;/nologo&gt;
+	&lt;buildTimeoutSeconds&gt;240&lt;/buildTimeoutSeconds&gt;
+  &lt;/cb:define&gt;
+
+  &lt;cb:define name=<span class="code-quote">"nant_args_CI"</span>&gt;
+      &lt;buildArgs&gt;clean compile&lt;/buildArgs&gt;
+  &lt;/cb:define&gt;
+
+&lt;/cb:config-template&gt;</pre>
+</div></div>
+<p>The CI_Projects.xml file</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:config-template xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+
+  &lt;project name=<span class="code-quote">"Preprocesser2"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;C:\Integration\Preprocesser2\WorkingDirectory&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;C:\Integration\Preprocesser2\Artifacts&lt;/artifactDirectory&gt;
+
+      &lt;triggers&gt;
+        &lt;intervalTrigger name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"60"</span> buildCondition=<span class="code-quote">"IfModificationExists"</span> /&gt;
+      &lt;/triggers&gt;
+
+      &lt;sourcecontrol type=<span class="code-quote">"nullSourceControl"</span> /&gt;
+
+      &lt;tasks&gt;
+         &lt;cb:nant_local/&gt;
+      &lt;/tasks&gt;
+
+      &lt;publishers&gt;
+         &lt;cb:common_publishers/&gt;
+      &lt;/publishers&gt;
+  &lt;/project&gt;
+
+
+  &lt;project name=<span class="code-quote">"FtpTransfer2"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"102"</span>&gt;
+     &lt;workingDirectory&gt;C:\Integration\FtpTransfer2\WorkingDirectory&lt;/workingDirectory&gt;
+     &lt;artifactDirectory&gt;C:\Integration\FtpTransfer2\Artifacts&lt;/artifactDirectory&gt;
+
+     &lt;triggers&gt;
+	&lt;intervalTrigger name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"60"</span> buildCondition=<span class="code-quote">"IfModificationExists"</span> /&gt;
+     &lt;/triggers&gt;
+
+     &lt;sourcecontrol type=<span class="code-quote">"nullSourceControl"</span> /&gt;
+
+     &lt;tasks&gt;
+	&lt;exec&gt;
+	   &lt;executable&gt;c:\tools\consolenok&lt;/executable&gt;
+	   &lt;buildArgs&gt;all&lt;/buildArgs&gt;
+	   &lt;buildTimeoutSeconds&gt;10&lt;/buildTimeoutSeconds&gt;
+       &lt;/exec&gt;
+
+    &lt;/tasks&gt;
+
+    &lt;publishers&gt;
+       &lt;cb:common_publishers/&gt;
+    &lt;/publishers&gt;
+  &lt;/project&gt;
+
+&lt;/cb:config-template&gt;</pre>
+</div></div>
+<p>The same goes for the other included files, things to remember :</p>
+<ul>
+	<li>define a <b>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder"&gt;</b> root element in every included file</li>
+	<li>first include all definitions, and later the files containing the projects using them</li>
+</ul>
+
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Version 1.6 and higher only from now on</b><br />
+<p>The configuration options below are for CCNet 1.6 and higher only.</p></td></tr></table></div> 
+
+<h2><a name="ConfigurationPreprocessor-Conditionalstatements%3A"></a>Conditional statements :</h2>
+
+
+<h4><a name="ConfigurationPreprocessor-IFDEF%2FIFNDEFdirectives"></a>IFDEF / IFNDEF directives</h4>
+
+<p>The <b>&lt;cb:ifdef&gt;</b> / <b>&lt;cb:ifndef&gt;</b> constructs are used during evaluation to conditionally include processing of their contained elements based on the existence/absence of a defined name.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define some_symbol_name=<span class="code-quote">"some_symbol_value"</span> /&gt;
+
+
+  &lt;cb:ifdef name=<span class="code-quote">"some_symbol_name"</span>&gt;
+    &lt;output&gt;Value of some_symbol_name is $(some_symbol_name)&lt;/output&gt;
+  &lt;/cb:ifdef&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    &lt;output&gt;This will not appear because the symbol is defined&lt;/output&gt;
+  &lt;/cb:<span class="code-keyword">else</span>&gt;
+
+  &lt;cb:ifndef name=<span class="code-quote">"some_symbol_name"</span>&gt;
+    &lt;output&gt;This will not appear in the output since some_symbol_name is defined&lt;/output&gt;
+  &lt;/cb:ifndef&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    &lt;output&gt;This will appear because it is in the (optional) <span class="code-keyword">else</span> clause&lt;/output&gt;
+  &lt;/cb:<span class="code-keyword">else</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-IF%2FELSEdirectives"></a>IF / ELSE directives</h4>
+
+<p>The <b>&lt;cb:if&gt;</b> / <b>&lt;cb:else&gt;</b> constructs evaluate a JSCRIPT.NET boolean expression, and perform branching depending on the value of the expression.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define testval=<span class="code-quote">"gibberish"</span> testval2=<span class="code-quote">"40"</span>/&gt;
+
+  &lt;cb:<span class="code-keyword">if</span> expr=<span class="code-quote">"'$(testval)'=='gobbeldygook'"</span>&gt;
+    This will not appear, since the expression evaluates to <span class="code-keyword">false</span>
+  &lt;/cb:<span class="code-keyword">if</span>&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    This will appear in the output.
+  &lt;/cb:<span class="code-keyword">else</span>&gt;
+
+  &lt;cb:<span class="code-keyword">if</span> expr=<span class="code-quote">"$(testval2) &amp;lt; 50"</span>&gt;
+    This will appear, since testval2 is less than 50
+  &lt;/cb:<span class="code-keyword">if</span>&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    This will not appear in the output.
+  &lt;/cb:<span class="code-keyword">else</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-EVALdirective"></a>EVAL  directive</h4>
+
+<p>Evaluates the given JSCRIPT.NET expression (of any type). The pp:eval tag is replaced with the result of the evaluation.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;!-- outputs 54--&gt;
+  &lt;cb:eval expr=<span class="code-quote">"9*6"</span>/&gt;
+
+
+  &lt;!-- outputs 6. When referencing preprocessor variables in an expression, the value of
+  the variables is substituted into the expression before it is submitted <span class="code-keyword">for</span> evaluation.
+  Therefore, the below expression is submitted to the JSCRIPT.NET runtime as <span class="code-quote">"18/3"</span>
+  --&gt;
+  &lt;cb:define a=<span class="code-quote">"3"</span> b=<span class="code-quote">"18"</span>/&gt;
+  &lt;cb:eval expr=<span class="code-quote">"$(b)/$(a)"</span>/&gt;
+
+
+  &lt;!-- outputs the current date/time --&gt;
+  &lt;cb:eval expr=<span class="code-quote">"<span class="code-keyword">new</span> Date()"</span>/&gt;
+
+
+  &lt;!--
+   Since the preprocessor replaces variable references with their values before submitting the expression
+   to the JSCRIPT.NET engine, it is necessary take special steps to treat variables as strings. In the
+   example below, the preprocessor will expand the value of $(str) before submitting the expression, therefore
+   it is necessary to <span class="code-keyword">do</span> two things:
+    1. Enclose the variable reference in single quotes, making it a string literal in the JSCRIPT.NET language.
+       You need to <span class="code-keyword">do</span> <span class="code-keyword">this</span> yourself, as in the example below.
+    2. Escape any funny characters (such as embedded single quotes) so that the string literal is properly-formed.
+       You achieve <span class="code-keyword">this</span> by adding a :js (<span class="code-keyword">for</span> JSCRIPT) format specifier after the variable name. This causes
+       the preprocessor to <span class="code-keyword">do</span> the proper escaping <span class="code-keyword">for</span> you.
+
+   This example outputs the value of str, converted to upper <span class="code-keyword">case</span>. Literally, the JSCRIPT.NET expression
+   which is evaluated is:
+        'a string with \'things\' which may need to be <span class="code-quote">"escaped"</span>'.ToUpper()
+
+    Attributes:
+    expr: A JSCRIPT.NET expression
+  --&gt;
+
+  &lt;cb:define str=<span class="code-quote">"a string with 'things' which may need to be &amp;quot;escaped&amp;quot;"</span>/&gt;
+
+  &lt;cb:eval expr=<span class="code-quote">"'$(str:js)'.ToUpper()"</span>/&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-FORloop"></a>FOR loop</h4>
+
+<p>Loops over a range of values and emits the loop body on each iteration.</p>
+
+<p>Attributes:</p>
+
+<p><b>counter-name</b>: The name for the counter variable. Within the body of the loop, this variable can be referenced just like any other preprocessor variable.<br/>
+<b>init-expr</b>: JSCRIPT.NET expression whose value will be assigned to the counter variable before the first iteration.<br/>
+<b>test-expr</b>: JSCRIPT.NET boolean expression which will determine whether the loop should terminate.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note in the example below that it is necessary to refer to the counter variable as $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> rather than just i.</p></td></tr></table></div>
+<p><b>count-expr</b>: JSCRIPT.NET expression that is evaluated after every loop iteration. The value is assigned to the counter variable. In a typical counting loop, this would increment the counter by 1.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note that in the example below, it is necessary to refer to the counter variable as $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> rather than just i. Note also that the value of count-expr is only the RIGHT HAND SIDE of<br/>
+of the assignment (i.e. it does not say $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> =(i+1))</p></td></tr></table></div>
+<p><b>Scope</b>:An implicit scope is introduced in the body of the loop, therefore any local definitions will only exist within the loop body.</p>
+
+<p>This example will emit:<br/>
+&lt;hello attr="0"/&gt;<br/>
+&lt;hello attr="1"/&gt;<br/>
+&lt;hello attr="2"/&gt;</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:<span class="code-keyword">for</span> counter-name=<span class="code-quote">"i"</span> init-expr=<span class="code-quote">"0"</span> test-expr=<span class="code-quote">"$(i)&amp;lt;3"</span> count-expr=<span class="code-quote">"$(i)+1"</span>&gt;
+    &lt;hello attr=<span class="code-quote">"$(i)"</span>/&gt;
+  &lt;/cb:<span class="code-keyword">for</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-ELEMENTandATTRIBUTEdirectives"></a>ELEMENT and ATTRIBUTE directives</h4>
+
+<p>These emit XML elements, with (optional) attributes. This is just like the XSLT xsl:element/xsl:attribute mechanism. The only reason to use it rather than literal XML markup is if you wish for your element or attribute NAMES to be calculated.<br/>
+Both &lt;cb:element&gt; and &lt;cb:attribute&gt; have two attributes:<br/>
+<b>name</b>: Name of emitted element/attribute<br/>
+<b>namespace</b> (optional): XML namespace of emitted element/attribute</p>
+
+<p>This example will emit:<br/>
+&lt;myel myattr1="myattrval1" myattr2="myattrval2"&gt;myelval&lt;/myel&gt;</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define elname=<span class="code-quote">"myel"</span> elval=<span class="code-quote">"myelval"</span> attrname=<span class="code-quote">"myattr"</span> attrval=<span class="code-quote">"myattrval"</span>/&gt;
+
+  &lt;cb:element name=<span class="code-quote">"$(elname)"</span>&gt;
+
+    &lt;cb:attribute name=<span class="code-quote">"$(attrname)1"</span>&gt;$(attrval)1&lt;/pp:attribute&gt;
+
+    &lt;cb:attribute name=<span class="code-quote">"$(attrname)2"</span>&gt;$(attrval)2&lt;/pp:attribute&gt;
+
+    $(elval)
+
+  &lt;/cb:element&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-CommonProblems"></a>Common Problems</h2>
+
+
+<h3><a name="ConfigurationPreprocessor-XmlException%3A%22Therearemultiplerootelements%22whenincludinganotherfile"></a>XmlException: "There are multiple root elements" when including another file</h3>
+
+<p>The <b>&lt;include&gt;</b> directive requires the included file to be a valid XML document.  All XML documents must have exactly one "root element" - <em>i.e.</em>, there <b>must</b> be an outermost pair of start/end XML tags.  The XML file being included in this case has more than one of these root elements (<em>e.g.</em>, &lt;project name="A"&gt;...&lt;/project&gt; &lt;project name="B"&gt;...&lt;/project&gt;).  The file must either be split apart so that each root element is in a separate file, or the group of root elements must be enclosed in a single outer element.</p>
+
+<h3><a name="ConfigurationPreprocessor-Preprocessordirectivesdon%27tworkinanincludedfile"></a>Preprocessor directives don't work in an included file</h3>
+
+<p>XML requires that all "namespace" definitions (<em>i.e.</em>, <b>xmlns:</b><b><em>xxx</em></b> attributes) must be declared in every file where they're used.  Every included file must have an <b>xmlns:cb="urn:ccnet.config.builder"</b> attribute on its root element, even if the namespace was defined in the file that included it.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

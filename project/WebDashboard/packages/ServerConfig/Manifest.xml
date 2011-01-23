@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Server Configuration Display</name>
+  <description>Display the configuration for all the projects on a server.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>ProjectServerConfiguration.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>projectConfigurationServerPlugin</name>
+    </setting>
+  </configuration>
+</package>

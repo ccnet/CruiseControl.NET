@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Subversion Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Subversion Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 23, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="SubversionSourceControlBlock-SubversionSourceControlBlock"></a>Subversion Source Control Block</h1>
+
+<p>CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, checking out or updating sources, and tagging&#45;by&#45;copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.  </p>
+
+<h2><a name="SubversionSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="SubversionSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+  <span class="code-tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/myfirstproject/trunk<span class="code-tag">&lt;/trunkUrl&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="SubversionSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be svn </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> authCaching </td>
+<td class='confluenceTd'> Defines the auth caching mode to use.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>None</li>
+	<li>ExternalsOnly</li>
+	<li>Always</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Whether to retrieve the updates from Subversion for a particular build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> checkExternals </td>
+<td class='confluenceTd'> Whether to check the paths specified in the svn:externals property for modifications.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> checkExternalsRecursive </td>
+<td class='confluenceTd'> Whether to check for modifications of svn:externals recursively.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanCopy </td>
+<td class='confluenceTd'> Whether to delete the working copy before updating the source.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUp </td>
+<td class='confluenceTd'> Recursively clean up the working copy, removing locks resuming unfinished operations. If you ever get a "working copy locked" error, run this command to remove stale locks and get your working copy into a usable state again.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> deleteObstructions </td>
+<td class='confluenceTd'> Should any detected obstructions be deleted prior to getting modifications?   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the svn executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> svn </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forceUpdate </td>
+<td class='confluenceTd'> Forces updating, overwriting modified files. See CCNET&#45;1351. This passes &#45;&#45;force to svn.exe.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password to use for authentication when connecting to the repository.   </td>
+<td class='confluenceTd'> PrivateString </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> revert </td>
+<td class='confluenceTd'> Reverts any local changes to a file or directory and resolves any conflicted states. svn revert will not only revert the contents of an item in your working copy, but also any property changes. Finally, you can use it to undo any scheduling operations that you may have done (e.g. files scheduled for addition or deletion can be "unscheduled").   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagBaseUrl </td>
+<td class='confluenceTd'> The base url for tags in your repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagOnSuccess </td>
+<td class='confluenceTd'> Indicates that the repository should be tagged if the build succeeds.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagWorkingCopy </td>
+<td class='confluenceTd'> Indicates that the Working Copy should always be used when Cruise Control creates a tag.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trunkUrl </td>
+<td class='confluenceTd'> The url for your repository (e.g., svn://svnserver/).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> webUrlBuilder </td>
+<td class='confluenceTd'> The root url for the WebSVN site.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> revisionNumbers </td>
+<td class='confluenceTd'> Whether to use revision numbers for fetching the modifications.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> The username to use for authentication when connecting to the repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The directory containing the locally checked out workspace.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="SubversionSourceControlBlock-Notes"></a>Notes</h2>
+
+<p>The &lt;trunkUrl&gt; tag should specify the URL to use to determine if changes have occurred in your repository.  <br/>
+You need to make sure your SVN client settings are such that all authentication is automated. Typically you can do this by using anonymous access or appropriate SSH setups if using SVN over SSH.  </p>
+<h4><a name="SubversionSourceControlBlock-LinkingmodificationstoWebSVN"></a>Linking modifications to WebSVN</h4>
+<p>You can link the modifications detected by CruiseControl.NET to the appropriate WebSVN page by adding the following additional configuration information to the Subversion source control section:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"websvn"</span>&gt;</span>
+  <span class="code-tag">&lt;url&gt;</span>http://localhost:7899/websvn/diff.php?repname=MiniACE&amp;amp;path={0}&amp;amp;rev={1}&amp;amp;sc=1<span class="code-tag">&lt;/url&gt;</span>
+<span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
+</div></div>
+<p>Change the &lt;url&gt; element to point to the root url for the WebSVN site. The path and rev parameters will be filled in by CruiseControl.NET when it generates the link to the code file page.  <br/>
+The standard url for WebSVN 1.38 contains rep=3 r instead of repname=MiniACE. Adding a new repository to the SvnParentPath will change the number of the rep parameter, so you may need to make the following change to diff.php to decode the repname parameter:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">$repname = @$_REQUEST[<span class="code-quote">"repname"</span>];
+            
+            <span class="code-keyword">if</span> (isset($repname))
+            {
+            $rep = $config-&gt;findRepository($repname);
+            }</pre>
+</div></div>
+<p>The WebSVN WebUrlBuilder can also be used to connect to a ViewCV site. Here is an example used by CCNet to link to the file revision pages on SourceForge:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"websvn"</span>&gt;</span>
+  <span class="code-tag">&lt;url&gt;</span>http://svn.sourceforge.net/viewvc/ccnet/{0}?view=markup&amp;amp;pathrev={1}<span class="code-tag">&lt;/url&gt;</span>
+<span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
+</div></div>
+<h4><a name="SubversionSourceControlBlock-SVNoverSSL"></a>SVN over SSL</h4>
+<p>When connecting to a Subversion repository via SSL (https), you may be required to accept an issued server certificate. This generally requires responding to a command&#45;line prompt that the certificate should be accepted permanently. For CruiseControl.NET, all Subversion commands are executed using the &#45;&#45;non&#45;interactive switch, which will cause this prompt to be skipped and the subsequent Subversion command to fail with a message like this:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">svn: PROPFIND request failed on '/svnroot/ccnet'
+            svn: PROPFIND of '/svnroot/ccnet': Server certificate verification failed: issuer is not trusted (https://ccnet.svn.sourceforge.net)</pre>
+</div></div>
+<p>As the failure will happen on the first Subversion command to be executed, this failure will not show up as a broken build, but will instead show up in the server log.  <br/>
+One way to resolve this problem is to execute a command against the Subversion repository from the command&#45;line logged in as the user that you are using to run CCNet (certificates are cached by user account, so you must accept the certificate for the appropriate user). For example, try executing the following command (where trunk&#95;url is the svn url for your repository):  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">svn list [trunk_url]</pre>
+</div></div>
+<p>When prompted to accept the certificate, type 'P' to permanently accept it.  <br/>
+If you are running CCService under the LocalSystem account, you will need to accept the certificate for this user. Check out the CCService page for information about how to diagnose problems as the LocalSystem account.  <br/>
+External contributors: Matt Petteys  </p>
+<h4><a name="SubversionSourceControlBlock-SVNoversvn%5Cssh"></a>SVN over svn&#43;ssh</h4>
+<p>To connect to Subversion with the svn&#43;ssh protocol, here is an excerpt from the article HowTo: Configure SVN&#43;SSH with Subclipse on Windows by Martin Woodward. For more details, see the complete article (<a href="http://www.woodwardweb.com/archive/200511.html">http://www.woodwardweb.com/archive/200511.html</a>).  <br/>
+ <b>HowTo: Configure SVN&#43;SSH with Subclipse on Windows</b><br/>
+You need to create an environment variable called "SVN&#95;SSH" that points to an executable file that accepts the same command line arguments as ssh on unix. I did this by doing the following:&#45;  <br/>
+1: Set up ssh keys. Not going to cover that here as you can easily Google for that. You need to end up with your public key on the SVN server and your private key loaded into Paegent locally.  <br/>
+2: Download and installed the excellent TortoiseSVN client for Windows.  <br/>
+3: Set the following environment variable (by right&#45;clicking on My Computer, Properties, Advanced, Environment Variables, New):&#45;  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-none">Variable name: SVN_SSH
+            Variable value: C:\\Program Files\\TortoiseSVN\\bin\\TortoisePlink.exe</pre>
+</div></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>The "\ \"(double&#45;back&#45;slash) is very important, otherwise it won't work. Equally, you cannot use the plink.exe that comes with putty as that fires up a command shell window which is really annoying. The TortoisePlink.exe is a windows implementation of plink that doesn't bring up any UI.  </p></td></tr></table></div>
+<h4><a name="SubversionSourceControlBlock-KnownIssues"></a>Known Issues</h4>
+<p> *CruiseControl.NET doesn't see my changes*The Subversion interface depends on the clocks of the CruiseControl.Net and Subversion servers being set within a small difference. Due to a long&#45;standing Subversion bug (Bugzilla #1642) that appears unlikely to ever be fixed, CruiseControl.Net must filter the list of modifications returned by Subversion, looking for only those that fall within a specific time range. When the clocks of the two servers are significantly different, the filter may ignore modifications that should not be ignored. To prevent this problem, keep the clocks of the two servers set as closely together as possible.  </p>
+<h4><a name="SubversionSourceControlBlock-DashboardLocalization%28issueswithSVN%29"></a>Dashboard Localization (issues with SVN)</h4>
+<p>I've found that svn has a trouble with &#45;&#45;xml parameter. My russian Log Messages were not readable.  <br/>
+I found a quick solution for it, next items could be customized to any languges. But be sure this is not the panacea. So in all .xsl files where comments or filename in Russian local I've added following "translation"  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;xsl:value-of select="translate(comment,'??????????????????????????????????????????????????????????????????',
+            '????????????????????????????????????????????????????????????????')"/&gt;</pre>
+</div></div>
+<p>Where comment from /cruisecontrol/modifications/modification, and "??" in second parameter are symbols to delete, all others are mathed with third parameters. As I found xsl could only translate char strings , if some one know the way to translate double&#45;char symbols, please note about it. In this way you can help your self for modification for any charset.  <br/>
+I agree with everyone that it is a rude solution. But for my no time to wait untill svn or cc.net will be customized for that feature.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 23 Jun 2010 at 8:14:17 AM<br/>
+Using assembly version 1.6.7381.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

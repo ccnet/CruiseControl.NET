@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Parallel Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Parallel Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 30, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h1><a name="ParallelTask-ParallelTask"></a>Parallel Task</h1>
+
+<p>Runs a set of child tasks in parallel. Each task will run at the same time as the other tasks.  <br/>
+To run a set of tasks in sequential order within this task, use the <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a>.  </p>
+
+
+<h2><a name="ParallelTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="ParallelTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;parallel&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/parallel&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="ParallelTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tasks </td>
+<td class='confluenceTd'> The tasks to run in parallel.   </td>
+<td class='confluenceTd'> <a href="Task And Publisher Blocks.html" title="Task And Publisher Blocks">Task And Publisher Blocks</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="ParallelTask-Notes"></a>Notes</h2>
+
+<p>The following is an example of how to combine this task together to the <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a> to run multiple 'streams' of tasks in parallel:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;parallel&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;sequential&gt;</span>
+      <span class="code-tag">&lt;description&gt;</span>First parallel stream.<span class="code-tag">&lt;/description&gt;</span>
+      <span class="code-tag">&lt;tasks&gt;</span>
+        <span class="code-tag"><span class="code-comment">&lt;!-- First sequence of tasks--&gt;</span></span>
+      <span class="code-tag">&lt;/tasks&gt;</span>
+    <span class="code-tag">&lt;/sequential&gt;</span>
+    <span class="code-tag">&lt;sequential&gt;</span>
+      <span class="code-tag">&lt;description&gt;</span>First parallel stream.<span class="code-tag">&lt;/description&gt;</span>
+      <span class="code-tag">&lt;tasks&gt;</span>
+        <span class="code-tag"><span class="code-comment">&lt;!-- Second sequence of tasks--&gt;</span></span>
+      <span class="code-tag">&lt;/tasks&gt;</span>
+    <span class="code-tag">&lt;/sequential&gt;</span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/parallel&gt;</span></pre>
+</div></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 7:45:00 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

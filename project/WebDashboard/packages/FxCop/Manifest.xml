@@ -1,0 +1,31 @@
+﻿<package>
+  <name>FxCop Results</name>
+  <description>Display the results of a FxCop report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>fxcop-summary_1_36.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\fxcop-summary_1_36.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\fxcop-summary_1_36.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\fxcop-report_1_36.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="FxCop Report"/>
+        <attribute name="actionName" value="FxCopBuildReport"/>
+        <attribute name="xslFileName" value="xsl\fxcop-report_1_36.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

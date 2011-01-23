@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Git Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Git Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jul 12, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="GitSourceControlBlock-GitSourceControlBlock"></a>Git Source Control Block</h1>
+
+<p>Source Control Plugin for CruiseControl.NET that talks to git.  </p>
+
+<h2><a name="GitSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="GitSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"git"</span>&gt;</span>
+  <span class="code-tag">&lt;repository&gt;</span>git://github.com/rails/rails.git<span class="code-tag">&lt;/repository&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"git"</span>&gt;</span>
+  <span class="code-tag">&lt;repository&gt;</span>git://github.com/rails/rails.git<span class="code-tag">&lt;/repository&gt;</span>
+  <span class="code-tag">&lt;branch&gt;</span>master<span class="code-tag">&lt;/branch&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;fetchSubmodules&gt;</span>true<span class="code-tag">&lt;/fetchSubmodules&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>git<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;tagOnSuccess&gt;</span>false<span class="code-tag">&lt;/tagOnSuccess&gt;</span>
+  <span class="code-tag">&lt;commitBuildModifications&gt;</span>false<span class="code-tag">&lt;/commitBuildModifications&gt;</span>
+  <span class="code-tag">&lt;commitUntrackedFiles&gt;</span>false<span class="code-tag">&lt;/commitUntrackedFiles&gt;</span>
+  <span class="code-tag">&lt;tagCommitMessage&gt;</span>CCNet Build {0}<span class="code-tag">&lt;/tagCommitMessage&gt;</span>
+  <span class="code-tag">&lt;tagNameFormat&gt;</span>CCNet-Build-{0}<span class="code-tag">&lt;/tagNameFormat&gt;</span>
+  <span class="code-tag">&lt;committerName&gt;</span>Max Mustermann<span class="code-tag">&lt;/committerName&gt;</span>
+  <span class="code-tag">&lt;committerEMail&gt;</span>max.mustermann@gmx.de<span class="code-tag">&lt;/committerEMail&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\build\rails<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;timeout&gt;</span>60000<span class="code-tag">&lt;/timeout&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="GitSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be git </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Whether to fetch the updates from the repository and checkout the branch for a particular build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> Remote repository branch to monitor and checkout.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> master </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> commitBuildModifications </td>
+<td class='confluenceTd'> Indicates that all modifications during the build process should be committed before tagging. This requires 'tagOnSuccess ' to be set to 'true'.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> committerEMail </td>
+<td class='confluenceTd'> Used to set the "user.email" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> committerName </td>
+<td class='confluenceTd'> Used to set the "user.name" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> commitUntrackedFiles </td>
+<td class='confluenceTd'> Indicates that files created during the build process should be committed before tagging. This requires 'commitBuildModifications' and 'tagOnSuccess ' to be set to 'true'.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the Git executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> git </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fetchSubmodules </td>
+<td class='confluenceTd'> Indicates that CruiseControl.NET should initialize and fetch git submodules.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repository </td>
+<td class='confluenceTd'> The url to the remote repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagCommitMessage </td>
+<td class='confluenceTd'> Format string for the commit message of each tag. {0} is the placeholder for the current build label.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> CCNet Build {0} </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagNameFormat </td>
+<td class='confluenceTd'> Format string for the name of each tag. Make sure you're only using allowed characters. {0} is the placeholder for the current build label.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> CCNet&#45;Build&#45;{0} </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagOnSuccess </td>
+<td class='confluenceTd'> Indicates that the repository should be tagged if the build succeeds.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The directory containing the local git repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="GitSourceControlBlock-Notes"></a>Notes</h2>
+
+<h4><a name="GitSourceControlBlock-Howdoesthiswork%3F"></a>How does this work?</h4>
+<p> <b>Local repository initialization</b><br/>
+The Git Source Control Block will check whenever the specified working directory exist or not. If it does not exist a "git clone" command is issued to create and setup the local repository. Also the configuration settings "user.name" and "user.email" for the local repository will be set with "git config" if both are provided. If 'fetchSubmodules' is set to 'true' git submodules will be initialized.  <br/>
+If the working directory exists but is not a git repository (e.g. the .git directory is missing) it will be deleted and the "git clone" and configuration instructions described above will be issued.  <br/>
+If the working directory is already the root of an existing git repository no initialization is done.  <br/>
+ <b>Checking for modifications</b><br/>
+One the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. In the next step the sha&#45;1 hash of the specified remote branch and the local checkout is compared. If they're identical Cruise Control.NET will expect that there are no changes.  <br/>
+If the 2 sha&#45;1 hashes are different a "git log &#45;&#45;name&#45;status &#45;c &#45;&#45;before=... &#45;&#45;after=..." command is issued to get a list of the new commits and their changes.  <br/>
+ <b>Getting the source</b><br/>
+Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout &#45;f origin/$NameOfTheBranch" command is issued. Also the "git clean &#45;f &#45;d &#45;x" command to get a clean working copy to start a new build. If 'fetchSubmodules' is set to 'true' git submodules will be fetched and updated.  <br/>
+ <b>Tagging a successful build</b><br/>
+After a successful build and when the 'tagOnSuccess' property is set to 'true' the "git &#45;a &#45;m 'tagCommitMessage' tag 'build label'" command is issued and a "git push origin tag 'name of the tag'" to push the tag to the remote repository.  <br/>
+If 'commitBuildModifications' is set to 'true' then all modified files will be committed before tagging with a "git commit &#45;&#45;all &#45;&#45;allow&#45;empty &#45;m 'tagCommitMessage'". If you also set 'commitUntrackedFiles' to 'true' all untracked files that are not ignored by .gitignores will be added to the git index before committing and tagging with a "git add &#45;&#45;all" command.  </p>
+<h4><a name="GitSourceControlBlock-UsingGitonWindows"></a>Using Git on Windows</h4>
+<p>Download and install the latest version of msysgit.  </p>
+<ul>
+	<li>Point the "executable" property to the git.cmd file (e.g. C:\Program Files\Git\cmd\git.cmd)</li>
+	<li>Or set the "path" environment variable to the "bin" directory of your msysgit instalation (e.g. C:\Program Files\Git\bin), the "HOME" environment variable to "%USERPROFILE%" and the "PLINK&#95;PROTOCOL" environment variable to "ssh".</li>
+</ul>
+
+
+<p>Homepage: <a href="http://code.google.com/p/msysgit/">http://code.google.com/p/msysgit/</a>  </p>
+<h4><a name="GitSourceControlBlock-UsingGitonUnix%28CruiseControl.NETwithMono%29"></a>Using Git on Unix (CruiseControl.NET with Mono)</h4>
+<p>Make sure that you've the latest Git installed via your distributions packet manager and that git and all its required applications are in $PATH.  </p>
+<h4><a name="GitSourceControlBlock-AdditionalInformation"></a>Additional Information</h4>
+<p>The default port git uses is 9418. Git over SSH uses port 22 by default. Make sure that your firewall is set up to handle this.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Monday, 12 Jul 2010 at 4:23:19 PM<br/>
+Using assembly version 1.6.7444.2</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

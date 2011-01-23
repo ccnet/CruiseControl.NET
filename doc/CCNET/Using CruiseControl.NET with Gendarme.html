@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with Gendarme</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with Gendarme
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 11, 2009 by <font color="#0050B2">dna</font>.
+				    </div>
+
+				    <h2><a name="UsingCruiseControl.NETwithGendarme-RunMono%27sGendarmeaspartofyourintegration"></a>Run Mono's Gendarme as part of your integration</h2>
+
+<p>Gendarme is a extensible rule-based tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code, problems that compiler do not typically check or have not historically checked.</p>
+
+<p>Homepage: <a href="http://www.mono-project.com/Gendarme">http://www.mono-project.com/Gendarme</a><br/>
+Google Group: <a href="http://groups.google.com/group/gendarme">http://groups.google.com/group/gendarme</a></p>
+
+<h3><a name="UsingCruiseControl.NETwithGendarme-RunGendarmeasaCruiseControl.NETTask"></a>Run Gendarme as a CruiseControl.NET Task</h3>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>The Gendarme task will be available after the 1.4.3 release.</b><br />
+<p>You can also apply the patch from <a href="http://jira.public.thoughtworks.org/browse/CCNET-1401">http://jira.public.thoughtworks.org/browse/CCNET-1401</a></p></td></tr></table></div>
+<p>See the <a href="Gendarme Task.html" title="Gendarme Task">Gendarme Task</a> for common use.</p>
+
+<h3><a name="UsingCruiseControl.NETwithGendarme-RunGendarmeaspartofyourNAntbuild"></a>Run Gendarme as part of your NAnt build</h3>
+
+<p>An alternative to get the results of Gendarme included in the CruiseControl.NET build results, you will need to call Gendarme through NAnt and include the Gendarme XML output file with a <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
+
+<p>You can either  use the <a href="http://nant.sourceforge.net/release/latest/help/tasks/exec.html">&lt;exec&gt;</a> or <a href="http://dev.nauck-it.de/utilities/wiki/NAnt">&lt;gendarme&gt;</a> NAnt task.</p>
+
+<h4><a name="UsingCruiseControl.NETwithGendarme-ExamplefortheNAntGendarmeTask%3A"></a>Example for the NAnt Gendarme Task:</h4>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;property name=<span class="code-quote">"tools.dir"</span> value=<span class="code-quote">"${path::get-full-path('Tools')}"</span> readonly=<span class="code-quote">"true"</span> /&gt;</span>
+<span class="code-tag">&lt;property name=<span class="code-quote">"nauckit.nant.assembly"</span> value=<span class="code-quote">"${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}"</span> readonly=<span class="code-quote">"true"</span> /&gt;</span>
+
+<span class="code-tag">&lt;target name=<span class="code-quote">"runGendarme"</span>&gt;</span>
+	<span class="code-tag">&lt;loadtasks assembly=<span class="code-quote">"${nauckit.nant.assembly}"</span> /&gt;</span>
+
+	&lt;gendarme executable=<span class="code-quote">"${path::combine( path::combine('Tools', 'Gendarme'), 'gendarme.exe')}"</span>
+		outputType=<span class="code-quote">"XmlFile"</span> outputFile=<span class="code-quote">"${path::combine(build.out.dir, 'gendarme-result.xml')}"</span>&gt;
+		<span class="code-tag">&lt;assemblies&gt;</span>
+			<span class="code-tag">&lt;include name=<span class="code-quote">"${path::combine(build.out.dir, '*.dll')}"</span> /&gt;</span>
+			<span class="code-tag">&lt;include name=<span class="code-quote">"${path::combine(build.out.dir, '*.exe')}"</span> /&gt;</span>
+			<span class="code-tag">&lt;exclude name=<span class="code-quote">"${path::combine(build.out.dir, '*.config')}"</span> /&gt;</span>
+		<span class="code-tag">&lt;/assemblies&gt;</span>
+	<span class="code-tag">&lt;/gendarme&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<h5><a name="UsingCruiseControl.NETwithGendarme-MergeGendarmeresultsintoyourCruiseControl.NETresults"></a>Merge Gendarme results into your CruiseControl.NET results</h5>
+
+<p>The next step is to merge the Gendarme XML output file into the build result using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;merge&gt;</span>
+        <span class="code-tag">&lt;files&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\Gendarme\gendarme-result.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag"><span class="code-comment">&lt;!-- Other files to merge for your build would also be included here --&gt;</span></span>
+      	<span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/merge&gt;</span>
+<span class="code-tag">&lt;/tasks&gt;</span></pre>
+</div></div>
+
+<h5><a name="UsingCruiseControl.NETwithGendarme-ConfiguringyourReportingApplicationtodisplayGendarmeresults"></a>Configuring your Reporting Application to display Gendarme results</h5>
+
+<p>Add following entries to your webdashboard.config:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;buildPlugins&gt;</span>
+    <span class="code-tag">&lt;buildReportBuildPlugin&gt;</span>
+        <span class="code-tag">&lt;xslFileNames&gt;</span>
+            ...
+            <span class="code-tag">&lt;xslFile&gt;</span>xsl\gendarme-summary-ccnet.xsl<span class="code-tag">&lt;/xslFile&gt;</span>
+            ...
+        <span class="code-tag">&lt;/xslFileNames&gt;</span>
+    <span class="code-tag">&lt;/buildReportBuildPlugin&gt;</span>
+    <span class="code-tag">&lt;buildLogBuildPlugin /&gt;</span>
+    ...
+    <span class="code-tag">&lt;xslReportBuildPlugin description=<span class="code-quote">"Gendarme Report"</span> actionName=<span class="code-quote">"GendarmeBuildReport"</span> xslFileName=<span class="code-quote">"xsl\gendarme-report-ccnet.xsl"</span>/&gt;</span>
+    ...</pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 23, 2011 08:52</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

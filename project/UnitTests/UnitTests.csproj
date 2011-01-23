@@ -1,0 +1,1373 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F93AC24-DF56-469E-91C3-43A2A179C7E1}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.UnitTests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.UnitTests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\Build\UnitTests\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;BUILD</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>1591</NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DISABLE_COM) == true">
+    <DefineConstants>DISABLE_COM</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Commons">
+      <Name>Commons</Name>
+      <HintPath>..\..\lib\Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NetReflector, Version=1.1.2009.1214, Culture=neutral, PublicKeyToken=2f4dd8b32acbcd8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\NetReflector.dll</HintPath>
+    </Reference>
+    <Reference Include="nmock">
+      <Name>nmock</Name>
+      <HintPath>..\..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="NPlot">
+      <Name>NPlot</Name>
+      <HintPath>..\..\lib\NPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.0.9122, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Tools\nunit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity">
+      <Name>NVelocity</Name>
+      <HintPath>..\..\lib\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <ProjectReference Include="..\CCTrayLib\CCTrayLib.csproj">
+      <Name>CCTrayLib</Name>
+      <Project>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\core\core.csproj">
+      <Name>core</Name>
+      <Project>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\objection\objection.csproj">
+      <Name>objection</Name>
+      <Project>{1C0B8046-FE79-4845-84B9-369A76F817A3}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Name>Remote</Name>
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\WebDashboard\WebDashboard.csproj">
+      <Name>WebDashboard</Name>
+      <Project>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCnetDeploymentTests.cs" />
+    <Compile Include="CCTrayLib\CCTimeFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Configuration\BuildServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\IconFileFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\AggregatingProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\AggregatingServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\BuildDurationTrackerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\CachingCruiseServerManagerTest.cs" />
+    <Compile Include="CCTrayLib\Monitoring\CruiseProjectManagerFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\CruiseServerManagerFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\DashboardXmlParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ExtensionProtocolStub.cs" />
+    <Compile Include="CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\HttpCruiseServerManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\PollIntervalReporterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectStateTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\RemotingCruiseServerManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\StubCurrentTimeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\WebDashboardUrlTest.cs" />
+    <Compile Include="CCTrayLib\Presentation\AddBuildServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\AddProjectsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\BuildTransitionSoundPlayerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\CCTrayMultiSettingsFormTest.cs" />
+    <Compile Include="CCTrayLib\Presentation\SpeechSettingsControlTest.cs" />
+    <Compile Include="CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ConfigurableProjectStateIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\DetailStringProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\IntegrationQueueTreeNodeAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\MainFormControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ProjectStateIconAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ProjectStatusListViewItemAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ResourceIntegrationQueueIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ResourceProjectStateIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\StubServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\SynchronizedProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\SynchronizedServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\X10SettingsControlTest.cs" />
+    <Compile Include="CCTrayLib\Speech\SpeechUtilTest.cs" />
+    <Compile Include="CCTrayLib\StatusIconTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\X10\LampControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\X10\LowLevelDriverFactoryTest.cs" />
+    <Compile Include="CCTrayLib\X10\X10ControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CodeChecks\ReflectorChecks.cs" />
+    <Compile Include="Config\CCNetConfigFileValidationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\TestNodeProcessor.cs" />
+    <Compile Include="Core\ConsoleRunnerArgumentsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\CachingConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFileLoaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFileSaverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\CruiseControlConfigSectionHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\FileConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\FileWatcherConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\NetReflectorConfigurationReaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\PreprocessorTest.cs" />
+    <Compile Include="Core\Config\ServerConfigurationHandlerTest.cs" />
+    <Compile Include="Core\CruiseServerClientTests.cs" />
+    <Compile Include="Core\CruiseServerCompressionTests.cs" />
+    <Compile Include="Core\Extensions\IntegrationPerformanceCountersExtensionTests.cs" />
+    <Compile Include="Core\Extensions\DiskSpaceMonitorExtensionTests.cs" />
+    <Compile Include="Core\Extensions\IntegrationRequestThrottleExtensionTests.cs" />
+    <Compile Include="Core\Publishers\ConditionalPublisherTests.cs" />
+    <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
+    <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
+    <Compile Include="Core\Publishers\PackageFileTests.cs" />
+    <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
+    <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
+    <Compile Include="Core\SourceControl\VstsTest.cs" />
+    <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
+    <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
+    <Compile Include="Core\Tasks\CodeItRightTaskTests.cs" />
+    <Compile Include="Core\Tasks\CommentTaskTests.cs" />
+    <Compile Include="Core\Tasks\ConditionalTaskTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\AndTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\BuildConditionTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\CompareValuesTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\FileExistsTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\FolderExistsTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\StatusTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\LastBuildTimeTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\LastBuildStatusTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\MockCondition.cs" />
+    <Compile Include="Core\Tasks\Conditions\OrTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\UrlHeaderValueTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\UrlPingsTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\CoverageFilterTests.cs" />
+    <Compile Include="Core\Tasks\CoverageThresholdTests.cs" />
+    <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
+    <Compile Include="Core\Tasks\FakeTaskTest.cs" />
+    <Compile Include="Core\Tasks\MockTask.cs" />
+    <Compile Include="Core\Tasks\XmlTaskResultTests.cs" />
+    <Compile Include="Core\Triggers\CronTriggerTest.cs" />
+    <Compile Include="Core\Triggers\ParameterTriggerTests.cs" />
+    <Compile Include="Core\Triggers\RollUpTriggerTest.cs" />
+    <Compile Include="Core\Util\InstanceAssert.cs" />
+    <Compile Include="Core\Util\PrivateArgumentsTests.cs" />
+    <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
+    <Compile Include="Core\Util\PrivateStringTests.cs" />
+    <Compile Include="Core\Util\RemoteServerUriTests.cs" />
+    <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
+    <Compile Include="IntegrationTests\CCNet_1902.cs" />
+    <Compile Include="IntegrationTests\CruiseServerHarness.cs" />
+    <Compile Include="IntegrationTests\DynamicValuesTests.cs" />
+    <Compile Include="IntegrationTests\EmbeddedData.cs" />
+    <Compile Include="IntegrationTests\HarnessException.cs" />
+    <Compile Include="IntegrationTests\PreprocessorTest.cs" />
+    <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
+    <Compile Include="IntegrationTests\CCNet_1835.cs" />
+    <Compile Include="IntegrationTests\TriggerTests.cs" />
+    <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
+    <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
+    <Compile Include="Remote\EncryptingConnectionTests.cs" />
+    <Compile Include="Remote\HttpConnectionTests.cs" />
+    <Compile Include="Remote\ItemStatusTests.cs" />
+    <Compile Include="Remote\Messages\ChangeConfigurationRequestTests.cs" />
+    <Compile Include="Remote\Messages\CommunicationsMessageTests.cs" />
+    <Compile Include="Remote\Messages\EncryptedRequestTests.cs" />
+    <Compile Include="Remote\Messages\EncryptedResponseTests.cs" />
+    <Compile Include="Remote\Messages\ErrorMessageTests.cs" />
+    <Compile Include="Remote\Messages\FileTransferRequestTests.cs" />
+    <Compile Include="Remote\Messages\FileTransferResponseTests.cs" />
+    <Compile Include="Remote\Messages\ListPackagesResponseTests.cs" />
+    <Compile Include="Remote\Messages\ProjectItemRequestTests.cs" />
+    <Compile Include="Remote\Messages\StatusSnapshotResponseTests.cs" />
+    <Compile Include="Remote\Monitor\BuildQueueChangedArgsTests.cs" />
+    <Compile Include="Remote\Monitor\ServerUpdateArgsTests.cs" />
+    <Compile Include="Remote\NameValuePairListSerialiserFactoryTests.cs" />
+    <Compile Include="Remote\NameValuePairSerialiserFactoryTests.cs" />
+    <Compile Include="Remote\NameValuePairSerialiserTests.cs" />
+    <Compile Include="Remote\PackageDetailsTests.cs" />
+    <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
+    <Compile Include="Remote\Parameters\DateParameterTests.cs" />
+    <Compile Include="Remote\ProjectStatusSnapshotTests.cs" />
+    <Compile Include="Remote\QueuedRequestSnapshotListTests.cs" />
+    <Compile Include="Remote\QueueSnapshotListTests.cs" />
+    <Compile Include="Remote\WebClientFactoryTests.cs" />
+    <Compile Include="TestClock.cs" />
+    <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
+    <Compile Include="Core\SourceControl\GitTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\HgWebUrlBuilderTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialHistoryParserTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialModificationTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileSystem.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileSystemTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileDirectoryDeleter.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\StubFileDirectoryDeleterTest.cs" />
+    <Compile Include="Core\SourceControl\RobocopyHistoryParserTest.cs" />
+    <Compile Include="Core\SourceControl\VstsHistoryParserTest.cs" />
+    <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
+    <Compile Include="Core\Tasks\HttpRequestSettingsTest.cs" />
+    <Compile Include="Core\Tasks\HttpStatusTaskTest.cs" />
+    <Compile Include="Core\Tasks\NDependTaskTests.cs" />
+    <Compile Include="Core\Tasks\ParallelTaskTests.cs" />
+    <Compile Include="Core\Tasks\SequentialTaskTests.cs" />
+    <Compile Include="Core\Tasks\SynchronisationTaskTests.cs" />
+    <Compile Include="Core\Tasks\TaskBaseTests.cs" />
+    <Compile Include="Core\Tasks\TaskContainerBaseTests.cs" />
+    <Compile Include="Remote\CommunicationsExceptionTests.cs" />
+    <Compile Include="Remote\CruiseServerClientFactoryTests.cs" />
+    <Compile Include="Remote\CruiseServerClientTests.cs" />
+    <Compile Include="Remote\CruiseServerHttpClientTests.cs" />
+    <Compile Include="Remote\ExtensionConfigurationTests.cs" />
+    <Compile Include="Core\Queues\IntegrationQueueManagerFactoryTests.cs" />
+    <Compile Include="Core\Security\ActiveDirectoryAuthenticationTests.cs" />
+    <Compile Include="Core\Security\ExternalFileSecurityManagerTests.cs" />
+    <Compile Include="Core\Security\PermissionBaseTests.cs" />
+    <Compile Include="Core\Security\Auditing\FileXmlReaderTests.cs" />
+    <Compile Include="Core\Security\FileBasedSessionCacheTests.cs" />
+    <Compile Include="Core\Security\Auditing\FileXmlLoggerTests.cs" />
+    <Compile Include="Core\Security\RolePermissionTests.cs" />
+    <Compile Include="Core\Security\UserNameTests.cs" />
+    <Compile Include="Core\Tasks\ReplacementDynamicValueTests.cs" />
+    <Compile Include="Core\Tasks\DirectDynamicValueTests.cs" />
+    <Compile Include="Core\Tasks\DynamicValueUtilityTests.cs" />
+    <Compile Include="Remote\BadReferenceExceptionTests.cs" />
+    <Compile Include="Remote\IntegrationRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildParametersResponseTests.cs" />
+    <Compile Include="Remote\Messages\BuildIntegrationRequestTests.cs" />
+    <Compile Include="Remote\Messages\ChangePasswordRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildListRequestTests.cs" />
+    <Compile Include="Remote\Messages\ListUsersResponseTests.cs" />
+    <Compile Include="Remote\Messages\ProjectStatusResponseTests.cs" />
+    <Compile Include="Remote\Messages\SnapshotResponseTests.cs" />
+    <Compile Include="Remote\Messages\DataListResponseTests.cs" />
+    <Compile Include="Remote\Messages\DataResponseTests.cs" />
+    <Compile Include="Remote\Messages\DiagnoseSecurityRequestTests.cs" />
+    <Compile Include="Remote\Messages\DiagnoseSecurityResponseTests.cs" />
+    <Compile Include="Remote\Messages\ExternalLinksListResponseTests.cs" />
+    <Compile Include="Remote\Messages\LoginRequestTests.cs" />
+    <Compile Include="Remote\Messages\LoginResponseTests.cs" />
+    <Compile Include="Remote\Messages\MessageRequestTests.cs" />
+    <Compile Include="Remote\Messages\ProjectRequestTests.cs" />
+    <Compile Include="Remote\Messages\ReadAuditRequestTests.cs" />
+    <Compile Include="Remote\Messages\ReadAuditResponseTests.cs" />
+    <Compile Include="Remote\Messages\ResponseTests.cs" />
+    <Compile Include="Remote\Messages\ServerRequestTests.cs" />
+    <Compile Include="Remote\MessageTests.cs" />
+    <Compile Include="Remote\Monitor\BuildQueueTests.cs" />
+    <Compile Include="Remote\Monitor\CruiseServerClientMock.cs" />
+    <Compile Include="Remote\Monitor\PollingServerWatcherTests.cs" />
+    <Compile Include="Remote\Monitor\ProjectTests.cs" />
+    <Compile Include="Remote\Monitor\ServerTests.cs" />
+    <Compile Include="Remote\NameValuePairTests.cs" />
+    <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
+    <Compile Include="Remote\Parameters\SelectParameterTests.cs" />
+    <Compile Include="Remote\Parameters\TextParameterTests.cs" />
+    <Compile Include="Remote\Parameters\NumericParameterTests.cs" />
+    <Compile Include="Remote\ProjectActivityTests.cs" />
+    <Compile Include="Remote\ProjectStatusTests.cs" />
+    <Compile Include="Remote\QueuedRequestSnapshotTests.cs" />
+    <Compile Include="Remote\Security\AuditFiltersTests.cs" />
+    <Compile Include="Remote\Security\AuditRecordTests.cs" />
+    <Compile Include="Remote\CruiseControlExceptionTests.cs" />
+    <Compile Include="Remote\PermissionDeniedExceptionTests.cs" />
+    <Compile Include="Remote\SecurityExceptionTests.cs" />
+    <Compile Include="Remote\SessionInvalidExceptionTests.cs" />
+    <Compile Include="Remote\ServerExtensionStub.cs" />
+    <Compile Include="Core\Config\ValidatingLoaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\XslFilesSectionHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ConsoleRunnerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\CruiseServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\CruiseXmlWriterTest.cs" />
+    <Compile Include="Core\FileMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationQueueManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationRequestQueueTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationRunnerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\DateLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\DefaultLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\FileLabellerTest.cs" />
+    <Compile Include="Core\Label\IterationLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\LastChangeLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\RemoteProjectLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\StateFileLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\LogFileTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\CircularArrayTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\CircularArrayTestResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\ServerLogFileReaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\MockBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProcessExecutorTestFixtureBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProcessResultFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectBaseTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectExceptionHandlingTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectIntegratorListFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectIntegratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectStatusFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\BuildLogTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\BuildPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EMailRegexConverterTest.cs" />
+    <Compile Include="Core\Publishers\EmailGroupTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailMessageTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherStub.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailUserTest.cs" />
+    <Compile Include="Core\Publishers\ForceBuildPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\HtmlDetailsMessageBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\HtmlLinkMessageBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\ModificationHistoryPublisherTest.cs" />
+    <Compile Include="Core\Publishers\PublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\RSSPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsChartGeneratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsResultsTest.cs" />
+    <Compile Include="Core\Publishers\XmlIntegrationResultWriterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\XmlLogFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\XmlLogPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueItemTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueSetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\RemoteCruiseServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Security\UserPermissionTests.cs" />
+    <Compile Include="Core\Security\DefaultProjectAuthorisationTest.cs" />
+    <Compile Include="Core\Security\InMemorySessionCacheTest.cs" />
+    <Compile Include="Core\Security\InternalSecurityManagerTest.cs" />
+    <Compile Include="Core\Security\UserPasswordAuthenticationTest.cs" />
+    <Compile Include="Core\Security\NullSecurityManagerTest.cs" />
+    <Compile Include="Core\Security\UserNameAuthenticationTest.cs" />
+    <Compile Include="Core\SimpleBuildFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ActionFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AlienbrainHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AlienbrainTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\BitKeeper\BitKeeperHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\BitKeeper\BitKeeperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CommentFilterTest.cs" />
+    <Compile Include="Core\SourceControl\CvsHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CvsMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CvsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\DefaultIssueTrackerUrlBuilderTest.cs" />
+    <Compile Include="Core\SourceControl\ExternalSourceControlHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ExternalSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\FileSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\FilteredSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MksHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MksTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MockSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ModificationMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ModificationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MultiIssueTrackerUrlbuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MultiSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\NullSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PathFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4HistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4Mother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\ProcessP4InitializerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\ProessP4PurgerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PlasticSCMHistoryTest.cs" />
+    <Compile Include="Core\SourceControl\PlasticSCMTest.cs" />
+    <Compile Include="Core\SourceControl\ProcessSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\QuietPeriodTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\RegExIssueTrackerUrlBuilderTest.cs" />
+    <Compile Include="Core\SourceControl\StarTeamHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\StarTeamTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SurroundHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SurroundTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SvnHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SvnTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\ChangeSynergyUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyClientTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyCommandBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\UserFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Vault317Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Vault3Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VaultHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ViewCVSBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssApplyLabelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssLocaleTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\WebSVNBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\State\FileStateManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\StubSecurityManager.cs" />
+    <Compile Include="Core\Tasks\ArtifactCleanupTest.cs" />
+    <Compile Include="Core\Tasks\GendarmeTaskTest.cs" />
+    <Compile Include="Core\Tasks\PowerShellTaskTest.cs" />
+    <Compile Include="Core\Tasks\RakeTaskTest.cs" />
+    <Compile Include="Core\Tasks\DataTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\DevenvTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\DevenvTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ExecutableTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\FileTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\FinalBuilderTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\MergeFileTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ModificationReaderTaskTest.cs" />
+    <Compile Include="Core\Tasks\ModificationWriterTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\MsBuildTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NAntTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NullTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NUnitArgumentTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NUnitTaskExecutionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NunitTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ProcessTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\TestLogs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\TraceListenerBackup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\FilterTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\IntervalTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\MultipleTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\ProjectTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\ScheduleTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\UrlTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\FileChangedWatcherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HtmlAwareMultiTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HtmlExceptionFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HttpWrapperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\LogFileTraceListenerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\MockFileWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\PathUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ProcessExecutorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ProcessInfoTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ReflectionUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\RegistryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\StringUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\SystemIoFileSystemTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\SystemPathTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TempFileUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TestData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TimeoutSerializationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TimeoutTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\WildCardPathTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlConstraints.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlFragmentWriterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XslTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomAssertion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\CachingImplementationResolverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\TypicalUsageClasses.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\TypicalUsageTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Remote\CruiseServerSnapshotTest.cs" />
+    <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Remote\XmlConversionUtilTests.cs" />
+    <Compile Include="TestHelpers.cs" />
+    <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
+    <Compile Include="UnitTestUtils\HashtableConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\LatchMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\Mockery.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\ResourceUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\XPathAssert.cs" />
+    <Compile Include="WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\DefaultActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\MultipleXslReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\XslMultiGenericReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\XslReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildRequestTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\CruiseManagerBuildNameRetrieverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\CruiseObjectSourceInitializerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultCruiseUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultLinkListFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultPluginLinkCalculatorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\ConfigurablePluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\ProjectConfigurableBuildPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\XslReportPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ProjectGridTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ProjectLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\RecentBuildListerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ServerLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ServerQueryingBuildRetrieverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\SideBarViewBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\TopControlsViewBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\IO\ConditionalGetFingerprintTest.cs" />
+    <Compile Include="WebDashboard\IO\FingerprintFactoryTest.cs" />
+    <Compile Include="WebDashboard\IO\RequestWrappingCruiseRequestTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\BuildCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CachingActionProxyTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CruiseActionFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CruiseActionProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ExceptionCatchingActionProxyTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ProjectCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ServerCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\HtmlViewTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\NameValueCollectionRequestTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\RequestControllerTest.cs" />
+    <Compile Include="WebDashboard\MVC\View\LazilyInitialisingVelocityTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\View\VelocityViewGeneratorWithTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\HtmlBuildLogActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\LatestBuildReportProjectPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionTest.cs" />
+    <Compile Include="WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\BuildGraphTest.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\OhlohProjectPluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListPluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectFileDownloadTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectStatusActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectStatusPluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelineActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelinePluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTest.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\AlternativeNUnitStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\CompileStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\HeaderStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\ModificationStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\MsBuildStylesheetTest.cs" />
+    <Compile Include="Xsl\MsBuildSummaryStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\MsTestSummaryStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\NUnitStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\SimianSummaryStyleSheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\StylesheetTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestMissingIncludeFile.xml" />
+    <None Include="resources\Statistics.csv" />
+    <None Include="resources\templates\TestTransform.vm" />
+    <None Include="test.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx">
+      <DependentUpon>XmlReportActionSchema.xsd</DependentUpon>
+    </None>
+    <None Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionSchema.xsx">
+      <DependentUpon>XmlServerReportActionSchema.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionSchema.xsd">
+      <SubType>
+      </SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\ccnet.config">
+      <Link>Config\ccnet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\CVSAndNAntAndEmailPublisherCCNet.config">
+      <Link>Config\CVSAndNAntAndEmailPublisherCCNet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\P4AndDevenv.config">
+      <Link>Config\P4AndDevenv.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\VSSAndDevenvAndNUnitCCNet.config">
+      <Link>Config\VSSAndDevenvAndNUnitCCNet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CCTrayLib\TestIcon.ico" />
+    <EmbeddedResource Include="Core\Log\TestLog.txt" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.0.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.1.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.2.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.2.bin" />
+    <EmbeddedResource Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd">
+      <SubType>
+      </SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCycle.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestDefineConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncluded2.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncluder.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestParamRef.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestScope.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExpandNodeset.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExpandNodesetWithParams.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseNestedConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\Sample.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestIncluded.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestExpandNodeset.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\SampleProject.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseNestedConst2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestIncludeStack2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack4.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack1.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack3.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCycle2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Test Include File With Spaces.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeVariable.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.BeyondLimits.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.NewFeed.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
+    <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestDataMemberInfo.xml" />
+    <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestData.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestInvalidAttribute.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestInvalidAttribute2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestAttrNodesetDefine.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCount.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestElementAttribute.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestEval.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExplicitDefine.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestFor.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestForEach.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIf.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIfdefIfNDef.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestImport.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestImportFrom.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestProcessingInstruction.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\SampleInclude.xml" />
+    <EmbeddedResource Include="IntegrationTests\Data\DynamicValues.PrivateString.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestDocType.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestEnvironmentVariableExpansion.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestBigFor.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestRedefineBug.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCCNET-1991.xml" />
+    <Content Include="IntegrationTests\IntegrationTests_Readme.txt" />
+    <Content Include="resources\buildlog.xml" />
+    <Content Include="resources\CCNet.git.log.txt" />
+    <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_1.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_2.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_3.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_4.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_5.xml" />
+    <Content Include="resources\IntegrationScenarios\Definitions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
+    <Content Include="resources\IntegrationScenarios\Simple.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\test1.xml" />
+    <Content Include="resources\IntegrationScenarios\test2.xml" />
+    <Content Include="resources\IntegrationScenarios\test3.xml" />
+    <Content Include="resources\IntegrationScenarios\test4.xml" />
+    <Content Include="resources\IntegrationScenarios\test5.xml" />
+    <Content Include="resources\IntegrationScenarios\Triggers.xml" />
+    <Content Include="resources\statistics.xml" />
+    <Content Include="resources\UnitTestResults.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebDashboard\Cache\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>mkdir "$(TargetDir)xsl"
+copy "$(ProjectDir)test.config" "$(TargetPath).config"
+xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"
+xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q
+copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

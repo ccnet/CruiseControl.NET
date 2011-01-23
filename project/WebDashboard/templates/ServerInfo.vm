@@ -1,0 +1,20 @@
+<!-- ServerInfo.vm: Start -->
+<table class="SortableGrid">
+  <thead>
+    <tr class="ProjectGridHeader">
+      <th>$translations.Translate("Server Name")</th>
+      <th>$translations.Translate("Server Version")</th>
+      <th>$translations.Translate("Free Disk Space")</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>$servername</td>
+      <td>$serverversion</td>
+      <td>$serverSpace</td>
+      <td>$translations.Translate($spaceMessage)</td>
+    </tr>
+  </tbody>
+</table>
+<!-- ServerInfo.vm: End -->

@@ -1,0 +1,6 @@
+<!-- BuildLog.vm: Start -->
+<p>
+<a href="$logUrl">$translations.Translate("Click here to open log in its own page")</a>
+</p>
+<pre class="log">$log</pre>
+<!-- BuildLog.vm: End -->

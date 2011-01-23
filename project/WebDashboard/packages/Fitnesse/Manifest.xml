@@ -1,0 +1,32 @@
+﻿<package>
+  <name>Fitnesse Results</name>
+  <description>Display the results of a Fitnesse report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>fitnesse.xsl</file>
+        <file>FitnesseReport.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\fitnesse.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\fitnesse.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\fitnesse.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Fitnesse Report"/>
+        <attribute name="actionName" value="FitnesseBuildReport"/>
+        <attribute name="xslFileName" value="xsl\fitnesse.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

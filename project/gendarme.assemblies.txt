@@ -1,0 +1,13 @@
+CCCmd/CCCmd.exe
+CCTray/cctray.exe
+CCTray/ThoughtWorks.CruiseControl.CCTrayLib.dll
+Core/ThoughtWorks.CruiseControl.Core.dll
+Core/ThoughtWorks.CruiseControl.Core.Extensions.dll
+Objection/Objection.dll
+Remote/ThoughtWorks.CruiseControl.Remote.dll
+Remote/ThoughtWorks.CruiseControl.Remote.Extensions.dll
+Server/ccnet.exe
+Server/ccservice.exe
+Server/CCValidator.exe
+Server/ThoughtWorks.CruiseControl.MSBuild.dll
+WebDashboard/ThoughtWorks.CruiseControl.WebDashboard.dll
