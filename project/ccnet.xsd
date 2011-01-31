@@ -7019,13 +7019,6 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            The directory to base all the file locations from.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
       <xs:element name="manifest" type="ManifestGenerator" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
@@ -7033,23 +7026,12 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="files" minOccurs="1" maxOccurs="1">
+      <xs:element name="packageList" type="PackageItems" minOccurs="1" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The files to include in the package.
+            The list of files and folders to include in the package.
           </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-          <xs:choice minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="file" type="String">
-              <xs:annotation>
-                <xs:documentation>
-                  The name of the file.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-          </xs:choice>
-        </xs:complexType>
       </xs:element>
       <xs:element name="outputDir" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
@@ -7069,6 +7051,98 @@
         <xs:annotation>
           <xs:documentation>
             Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="environment" type="EnvironmentVariables" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of environment variables set for commands that are executed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="PackageItems">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="packageFile" type="packageFile">
+        <xs:annotation>
+          <xs:documentation>
+            Includes the file in the package.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="packageFolder" type="packageFolder">
+        <xs:annotation>
+          <xs:documentation>
+            Includes the folder and its contents into the package.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="packageFile">
+    <xs:all>
+      <xs:element name="sourceFile" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name and path of the file to store into the package
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targetFileName" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the file that is to be saved.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targetFolder" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the folder in the package that the file will be saved under
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="packageFolder">
+    <xs:all>
+      <xs:element name="sourceFolder" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the folder to store into the package
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="fileFilter" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The filename filter to apply
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targetFolder" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the folder in the package that the file will be saved under
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includeSubFolders" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Recursively save files
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="flatten" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Flatten the hierachy
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -7498,7 +7572,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-    </xs:choice>  
+    </xs:choice>
   </xs:complexType>
 
   <xs:complexType name="andCondition">
@@ -7692,7 +7766,7 @@
       </xs:element>
     </xs:all>
   </xs:complexType>
-  
+
   <xs:complexType name="urlHeaderValueCondition">
     <xs:all>
       <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
@@ -8249,7 +8323,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:attribute>
-      </xs:extension>                    
+      </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
 

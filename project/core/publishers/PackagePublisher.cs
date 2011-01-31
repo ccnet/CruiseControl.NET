@@ -27,17 +27,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <title>Package Publisher</title>
     /// <version>1.4.4</version>
     /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;package&gt;
+    /// &lt;name&gt;Example&lt;/name&gt;
+    /// &lt;packageList&gt;
+    /// &lt;packageFile&gt;
+    /// &lt;sourceFile&gt;results.txt&lt;/sourceFile&gt;
+    /// &lt;/packageFile&gt;
+    /// &lt;/packageList&gt;
+    /// &lt;/package&gt;
+    /// </code>
     /// <code title="Full example">
     /// &lt;package&gt;
     /// &lt;name&gt;Example&lt;/name&gt;
     /// &lt;compression&gt;9&lt;/compression&gt;
     /// &lt;always&gt;true&lt;/always&gt;
     /// &lt;flatten&gt;true&lt;/flatten&gt;
-    /// &lt;baseDirectory&gt;C:\Builds\CC.Net&lt;/baseDirectory&gt;
-    /// &lt;manifest type="defaultManifestGenerator" /&gt;
-    /// &lt;files&gt;
-    /// &lt;file&gt;Results.txt&lt;/file&gt;
-    /// &lt;/files&gt;
+    /// &lt;manifest type="defaultManifestGenerator"/&gt;
+    /// &lt;packageList&gt;
+    /// &lt;packageFile&gt;
+    /// &lt;sourceFile&gt;results.txt&lt;/sourceFile&gt;
+    /// &lt;/packageFile&gt;
+    /// &lt;/packageList&gt;
     /// &lt;/package&gt;
     /// </code>
     /// </example>
@@ -62,8 +73,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("name", Required = true)]
         public string PackageName { get; set; }
         #endregion
-        #region CompressionLevel
 
+        #region CompressionLevel
         /// <summary>
         /// The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.
         /// </summary>
