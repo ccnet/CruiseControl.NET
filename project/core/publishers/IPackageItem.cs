@@ -6,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <summary>
     /// Defines an item that can be packaged.
     /// </summary>
+    /// <title>Package Item</title>
     public interface IPackageItem
     {
         /// <summary>

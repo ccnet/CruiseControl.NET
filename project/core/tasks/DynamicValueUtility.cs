@@ -18,8 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public static class DynamicValueUtility
     {
         #region Private fields
-        private static Regex parameterRegex = new Regex(@"\$\[[^\]]*\]", RegexOptions.Compiled);
-        private static Regex paramPartRegex = new Regex(@"(?<!\\)\|", RegexOptions.Compiled);
+        private static readonly Regex parameterRegex = new Regex(@"\$\[[^\]]*\]", RegexOptions.Compiled);
+        private static readonly Regex paramPartRegex = new Regex(@"(?<!\\)\|", RegexOptions.Compiled);
         #endregion
 
         #region Public methods
@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         // Get the name of the property
                         string name = null;
                         var attrib = attribute as ReflectorPropertyAttribute;
-                        if (attrib !=null)
+                        if (attrib != null)
                         {
                             name = attrib.Name;
                         }
@@ -284,27 +284,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     {
                         try
                         {
-                            if (inputValue == null)
-                            {
-                                actualValue = parameter.Convert(parameter.DefaultValue);
-                            }
-                            else
-                            {
-                                actualValue = parameter.Convert(inputValue);
-                            }
+                            actualValue = parameter.Convert(inputValue ?? parameter.DefaultValue);
                         }
                         catch (InvalidCastException)
                         {
-                            if (actualValue == null)
-                            {
-                                throw new CruiseControlException(
-                                    "Unable to set dynamic value for " + parameterName + ", unable to find a valid default value");
-                            }
-                            else
-                            {
-                                throw new CruiseControlException(
-                                    "Unable to set dynamic value for " + parameterName + ", unable to convert value");
-                            }
+                            throw actualValue == null
+                                      ? new CruiseControlException(
+                                            "Unable to set dynamic value for " + parameterName +
+                                            ", unable to find a valid default value")
+                                      : new CruiseControlException(
+                                            "Unable to set dynamic value for " + parameterName +
+                                            ", unable to convert value");
                         }
                         break;
                     }
@@ -369,7 +359,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         parametersEl.AppendChild(dynamicValueEl);
 
                         // Generate the replacement
-                        lastReplacement = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{{{0}{1}}}",
+                        lastReplacement = string.Format(CultureInfo.CurrentCulture, "{{{0}{1}}}",
                             index++,
                             parts.Length > 2 ? ":" + parts[2].Replace("\\|", "|") : string.Empty);
                         return lastReplacement;
@@ -478,7 +468,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             object value = null;
 
             var pi = member as PropertyInfo;
-            if (pi !=null)
+            if (pi != null)
             {
                 value = pi.GetValue(source, new object[0]);
             }
@@ -541,9 +531,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public class PropertyValue
         {
-            private object mySource;
-            private MemberInfo myProperty;
-            private int myArrayIndex;
+            private readonly object mySource;
+            private readonly MemberInfo myProperty;
+            private readonly int myArrayIndex;
 
             internal PropertyValue(object source, MemberInfo property, int arrayIndex)
             {
@@ -573,16 +563,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// </summary>
             public object Value
             {
-                get
-                {
-                    if (myProperty is PropertyInfo)
-                    {
-                        return (myProperty as PropertyInfo).GetValue(mySource, new object[0]);
-                    }
-                    else
-                    {
-                        return (myProperty as FieldInfo).GetValue(mySource);
-                    }
+                get {
+                    return myProperty is PropertyInfo
+                               ? (myProperty as PropertyInfo).GetValue(mySource, new object[0])
+                               : (myProperty as FieldInfo).GetValue(mySource);
                 }
             }
 
@@ -608,20 +592,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// <param name="value"></param>
             private void ChangePropertyValue(object value)
             {
-                object actualValue = value;
-                object[] index = new object[0];
-                PropertyInfo property = (myProperty as PropertyInfo);
+                var actualValue = value;
+                var index = new object[0];
+                var property = (myProperty as PropertyInfo);
 
                 // If it is an array then reset the index and use the array item type instead
                 if (property.PropertyType.IsArray)
                 {
-                    index = new object[] {
-                                myArrayIndex
-                            };
                     if (property.PropertyType.GetElementType() != value.GetType())
                     {
                         actualValue = Convert.ChangeType(value, property.PropertyType.GetElementType(), CultureInfo.CurrentCulture);
                     }
+
+                    var array = property.GetValue(mySource, index) as Array;
+                    array.SetValue(actualValue, myArrayIndex);
                 }
                 else
                 {
@@ -658,8 +642,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         actualValue = Convert.ChangeType(value, property.PropertyType, CultureInfo.CurrentCulture);
                         }
                     }
+
+                    property.SetValue(mySource, actualValue, index);
                 }
-                property.SetValue(mySource, actualValue, index);
             }
 
             /// <summary>

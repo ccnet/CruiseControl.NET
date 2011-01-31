@@ -181,7 +181,7 @@
   <page title="NUnit Task" id="625" url="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task" parentId="1756" source="nunit.wiki"/>
   <page title="Ohloh Project Plugin" id="34013214" url="http://confluence.public.thoughtworks.org//display/CCNET/Ohloh+Project+Plugin" parentId="2973" source="ohlohProjectPlugin.wiki" />
   <page title="Or Condition" id="34701717" url="http://confluence.public.thoughtworks.org//display/CCNET/Or+Condition" parentId="34701711" source="orCondition.wiki" />
-  <page title="Package Publisher" id="26247208" url="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher" parentId="1756" />
+  <page title="Package Publisher" id="26247208" url="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher" parentId="1756" source="package.wiki" />
   <page title="Packaging a Release" id="21004316" url="http://confluence.public.thoughtworks.org//display/CCNET/Packaging+a+Release" parentId="115" />
   <page title="Parallel Task" id="28475398" url="http://confluence.public.thoughtworks.org//display/CCNET/Parallel+Task" parentId="1756" />
   <page title="Parameter Trigger" id="31097547" url="http://confluence.public.thoughtworks.org//display/CCNET/Parameter+Trigger" parentId="1750" />
