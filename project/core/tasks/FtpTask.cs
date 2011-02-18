@@ -147,7 +147,8 @@
         /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription());
+            var relativeLocalFolder = result.BaseFromWorkingDirectory(this.LocalFolderName);
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription(relativeLocalFolder));
 
             string remoteFolder = FtpFolderName;
             FtpLib ftp = new FtpLib(this,result.BuildProgressInformation);
@@ -168,14 +169,14 @@
 
                 if (Action == FtpAction.UploadFolder)
                 {
-                    Log.Debug("Uploading {0} to {1}, recursive : {2}", LocalFolderName, remoteFolder, RecursiveCopy);
-                    ftp.UploadFolder(remoteFolder, LocalFolderName, RecursiveCopy);
+                    Log.Debug("Uploading {0} to {1}, recursive : {2}", relativeLocalFolder, remoteFolder, RecursiveCopy);
+                    ftp.UploadFolder(remoteFolder, relativeLocalFolder, RecursiveCopy);
                 }
 
                 if (Action == FtpAction.DownloadFolder)
                 {
-                    Log.Debug("Downloading {0} to {1}, recursive : {2}", remoteFolder, LocalFolderName, RecursiveCopy);
-                    ftp.DownloadFolder(LocalFolderName, remoteFolder, RecursiveCopy);
+                    Log.Debug("Downloading {0} to {1}, recursive : {2}", remoteFolder, relativeLocalFolder, RecursiveCopy);
+                    ftp.DownloadFolder(relativeLocalFolder, remoteFolder, RecursiveCopy);
                 }
 
             }
@@ -195,14 +196,14 @@
             return true;
         }
 
-        private string GetDescription()
+        private string GetDescription(string relativeLocalFolder)
         {
             if (Action == FtpAction.DownloadFolder)
             {
-                return string.Concat("Downloading ", FtpFolderName, " to ", LocalFolderName);
+                return string.Concat("Downloading ", FtpFolderName, " to ", relativeLocalFolder);
             }
 
-            return string.Concat("Uploading ", LocalFolderName, " to ", FtpFolderName);
+            return string.Concat("Uploading ", relativeLocalFolder, " to ", FtpFolderName);
         }
 
     }

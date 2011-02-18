@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             // Get the name of the executable
             var canCheck = true;
-            var fileName = this.GetProcessFilename();
+            var fileName = this.GetProcessFilename().Trim();
             if (!Path.IsPathRooted(fileName))
             {
                 var project = parent.GetAncestorValue<Project>();
