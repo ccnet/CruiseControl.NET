@@ -3,7 +3,6 @@
     using System;
     using System.IO;
     using System.Threading;
-    using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
@@ -11,6 +10,7 @@
     using CruiseControl.Core.Utilities;
     using Moq;
     using NUnit.Framework;
+    using Messages = CruiseControl.Common.Messages;
 
     public class ProjectTests
     {
@@ -766,9 +766,8 @@
                                   OnLoadState = () => { },
                                   OnStart = () => started = true
                               };
-            var request = new ProjectMessage();
-            var response = project.Start(request);
-            Assert.AreEqual(project.Name, response.ProjectName);
+            var request = new Messages.Blank();
+            project.Start(request);
             Thread.Sleep(100);
             Assert.IsTrue(started);
         }
@@ -783,12 +782,11 @@
                                   OnLoadState = () => { },
                                   OnStop = () => stopped = true
                               };
-            var request = new ProjectMessage();
+            var request = new Messages.Blank();
             project.Start();
             Thread.Sleep(100);
-            var response = project.Stop(request);
+            project.Stop(request);
             Thread.Sleep(500);
-            Assert.AreEqual(project.Name, response.ProjectName);
             Assert.IsTrue(stopped);
         }
         #endregion

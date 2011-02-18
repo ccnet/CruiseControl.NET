@@ -1,9 +1,7 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
-    using System;
     using System.Collections.Generic;
-    using System.Threading;
-    using CruiseControl.Common.Messages;
+    using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using NLog;
 
@@ -58,10 +56,13 @@
         protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
             logger.Info("Sending force build to '{0}'", this.ProjectName);
-            this.Project.Server.ActionInvoker.Invoke(
-                this.ProjectName,
-                "ForceBuild",
-                new ProjectMessage());
+            var arguments = new InvokeArguments
+                                {
+                                    Action = "ForceBuild"
+                                };
+            var result = this.Project.Server.ActionInvoker.Invoke(this.ProjectName, arguments);
+
+            // TODO: Validate the result
             return null;
         }
         #endregion

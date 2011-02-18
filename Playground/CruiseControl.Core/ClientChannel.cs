@@ -1,7 +1,6 @@
 ﻿namespace CruiseControl.Core
 {
     using CruiseControl.Core.Interfaces;
-    using CruiseControl.Core.Utilities;
 
     /// <summary>
     /// A communications channel for clients to use when communicating with the server.

@@ -1,35 +1,34 @@
-﻿namespace CruiseControl.Common.Messages
+﻿namespace CruiseControl.Common
 {
-    using System;
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// The common base for all messages.
+    /// The arguments for a remote action.
     /// </summary>
     [DataContract]
-    public abstract class BaseMessage
+    public class InvokeArguments
     {
         #region Public properties
-        #region Identifier
+        #region Action
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Gets or sets the action.
         /// </summary>
         /// <value>
-        /// The identifier.
+        /// The action.
         /// </value>
         [DataMember]
-        public Guid Identifier { get; set; }
+        public string Action { get; set; }
         #endregion
 
-        #region TimeStamp
+        #region Data
         /// <summary>
-        /// Gets or sets the time stamp.
+        /// Gets or sets the data.
         /// </summary>
         /// <value>
-        /// The time stamp.
+        /// The data.
         /// </value>
         [DataMember]
-        public DateTime TimeStamp { get; set; }
+        public string Data { get; set; }
         #endregion
         #endregion
     }

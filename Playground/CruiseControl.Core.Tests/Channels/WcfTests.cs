@@ -19,11 +19,27 @@
                                                               {
                                                                   Assert.AreEqual("Channel does not have a name", m);
                                                                   CollectionAssert.IsEmpty(a);
-                                                                  warningAdded = true;                                                  
+                                                                  warningAdded = true;
                                                               }
                                 };
             channel.Validate(validator);
             Assert.IsTrue(warningAdded);
+        }
+
+        [Test]
+        [Ignore("Need to implement tests for initialising the channel first")]
+        public void CleanUpCloseChannel()
+        {
+            var channel = new Wcf();
+            channel.Initialise(null);
+            channel.CleanUp();
+        }
+
+        [Test]
+        public void CleanUpDoesNothingIfNotOpen()
+        {
+            var channel = new Wcf();
+            channel.CleanUp();
         }
         #endregion
     }

@@ -1,7 +1,7 @@
 ﻿namespace CruiseControl.Core.Tests.Tasks
 {
     using System.Linq;
-    using CruiseControl.Common.Messages;
+    using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Tasks;
     using Moq;
@@ -22,8 +22,8 @@
             var thisProject = new Project("thisProject", task);
             var invokerMock = new Mock<IActionInvoker>(MockBehavior.Strict);
             invokerMock.SetupSet(ai => ai.Server = It.IsAny<Server>());
-            invokerMock.Setup(ai => ai.Invoke(urnName, "ForceBuild", It.IsAny<ProjectMessage>()))
-                .Returns(new BuildMessage())
+            invokerMock.Setup(ai => ai.Invoke(urnName, It.IsAny<InvokeArguments>()))
+                .Returns(new InvokeResult())
                 .Verifiable();
             new Server("test", thisProject)
                 {

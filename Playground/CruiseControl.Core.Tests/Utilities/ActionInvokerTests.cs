@@ -1,10 +1,12 @@
 ﻿namespace CruiseControl.Core.Tests.Utilities
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using CruiseControl.Common.Messages;
+    using CruiseControl.Common;
     using CruiseControl.Core.Utilities;
     using NUnit.Framework;
+    using Messages = CruiseControl.Common.Messages;
 
     [TestFixture]
     public class ActionInvokerTests
@@ -15,8 +17,9 @@
         {
             var server = new Server("Test");
             var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.Invoke("urn:ccnet:test:ghost", "DoSomething", null));
+            var result = invoker.Invoke("urn:ccnet:test:ghost", new InvokeArguments());
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.UnknownUrn, result.ResultCode);
         }
 
         [Test]
@@ -25,8 +28,30 @@
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.Invoke("urn:ccnet:test:baby", "TestAction", new ServerMessage()));
+            var arguments = new InvokeArguments
+                                {
+                                    Action = "TestAction",
+                                    Data = "<Blank xmlns=\"urn:cruisecontrol:common\" />"
+                                };
+            var result = invoker.Invoke("urn:ccnet:test:baby", arguments);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.InvalidInput, result.ResultCode);
+        }
+
+        [Test]
+        public void InvokeFailsIfInputIsMissing()
+        {
+            var testItem = new TestItem("Baby");
+            var server = new Server("Test", testItem);
+            var invoker = new ActionInvoker(server);
+            var arguments = new InvokeArguments
+                                {
+                                    Action = "TestAction",
+                                    Data = string.Empty
+                                };
+            var result = invoker.Invoke("urn:ccnet:test:baby", arguments);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.InvalidInput, result.ResultCode);
         }
 
         [Test]
@@ -35,10 +60,17 @@
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            var actual = invoker.Invoke("urn:ccnet:test:baby", "TestAction", new ProjectMessage());
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ServerMessage>(actual);
-            Assert.AreEqual("SetAfterCalled", (actual as ServerMessage).ServerName);
+            var arguments = new InvokeArguments
+                                {
+                                    Action = "DoSomething",
+                                    Data = "<Blank xmlns=\"urn:cruisecontrol:common\" />"
+                                };
+            var result = invoker.Invoke("urn:ccnet:test:baby", arguments);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Data);
+            var message = MessageSerialiser.Deserialise(result.Data);
+            Assert.IsInstanceOf<Messages.Blank>(message);
             Assert.IsTrue(testItem.WasInvoked);
         }
 
@@ -48,29 +80,20 @@
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.Invoke("urn:ccnet:test:baby", "DoSomething", null));
+            var result = invoker.Invoke("urn:ccnet:test:baby", new InvokeArguments { Action = "DoesNotExist" });
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.UnknownAction, result.ResultCode);
         }
 
         [Test]
-        public void ListFailsIfTheNameCannotBeFound()
-        {
-            var server = new Server("Test");
-            var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.List("urn:ccnet:test:ghost"));
-        }
-
-        [Test]
-        public void ListReturnsActionsAndDescriptions()
+        public void InvokeFailsIfTheArgumentsAreMissing()
         {
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            var actions = invoker.List("urn:ccnet:test:baby");
-            Assert.AreEqual(1, actions.Length);
-            Assert.AreEqual("TestAction", actions[0].Name);
-            Assert.AreEqual("This is a test action", actions[0].Description);
+            var result = invoker.Invoke("urn:ccnet:test:baby", null);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.MissingArguments, result.ResultCode);
         }
 
         [Test]
@@ -78,31 +101,43 @@
         {
             var server = new Server("Test");
             var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.Query("urn:ccnet:test:ghost", "DoSomething"));
+            var result = invoker.Query("urn:ccnet:test:ghost", null);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.UnknownUrn, result.ResultCode);
         }
 
         [Test]
-        public void QueryFailsIfTheActionCannotBeFound()
+        public void QueryReturnsActions()
         {
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            Assert.Throws<InvalidOperationException>(
-                () => invoker.Query("urn:ccnet:test:baby", "DoSomething"));
+            var result = invoker.Query("urn:ccnet:test:baby", null);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            var expected = new[]
+                               {
+                                   new RemoteActionDefinition {Name = "TestAction", Description = "This is a test action"},
+                                   new RemoteActionDefinition {Name = "DoSomething", Description = "This will do something"}
+                               };
+            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
         }
 
         [Test]
-        public void QueryReturnsActionDetails()
+        public void QueryFiltersActions()
         {
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            var action = invoker.Query("urn:ccnet:test:baby", "TestAction");
-            Assert.AreEqual("TestAction", action.Name);
-            Assert.AreEqual("This is a test action", action.Description);
-            Assert.AreEqual("CruiseControl.Common.Messages.ProjectMessage", action.InputMessage);
-            Assert.AreEqual("CruiseControl.Common.Messages.ServerMessage", action.OutputMessage);
+            var args = new QueryArguments { FilterPattern = "DoSomething" };
+            var result = invoker.Query("urn:ccnet:test:baby", args);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            var expected = new[]
+                               {
+                                   new RemoteActionDefinition {Name = "DoSomething", Description = "This will do something"}
+                               };
+            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
         }
         #endregion
 
@@ -128,14 +163,38 @@
             }
 
             [RemoteAction]
-            [System.ComponentModel.Description("This is a test action")]
-            public ServerMessage TestAction(ProjectMessage message)
+            [Description("This is a test action")]
+            public Messages.Blank TestAction(Messages.BuildRequest message)
             {
                 this.WasInvoked = true;
-                return new ServerMessage
-                           {
-                               ServerName = "SetAfterCalled"
-                           };
+                return new Messages.Blank();
+            }
+
+            [RemoteAction]
+            [Description("This will do something")]
+            public Messages.Blank DoSomething(Messages.Blank message)
+            {
+                this.WasInvoked = true;
+                return new Messages.Blank();
+            }
+        }
+        #endregion
+
+        #region Helper classes
+        public class DefinitionComparer
+            : IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                var xDefinition = x as RemoteActionDefinition;
+                var yDefinition = x as RemoteActionDefinition;
+                var areEqual = xDefinition != null &&
+                    yDefinition != null &&
+                    xDefinition.Description == yDefinition.Description &&
+                    xDefinition.InputData == yDefinition.InputData &&
+                    xDefinition.Name == yDefinition.Name &&
+                    xDefinition.OutputData == yDefinition.OutputData;
+                return areEqual ? 0 : 1;
             }
         }
         #endregion

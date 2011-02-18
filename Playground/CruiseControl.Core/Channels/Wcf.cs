@@ -1,6 +1,6 @@
 ﻿namespace CruiseControl.Core.Channels
 {
-    using System;
+    using System.ServiceModel;
     using CruiseControl.Core.Interfaces;
 
     /// <summary>
@@ -9,6 +9,10 @@
     public class Wcf
         : ClientChannel
     {
+        #region Private fields
+        private ServiceHost host;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Wcf"/> class.
@@ -63,7 +67,12 @@
         /// </summary>
         protected override void OnInitialise()
         {
-            throw new NotImplementedException();
+            if (this.host == null)
+            {
+                this.host = new ServiceHost(typeof(WcfChannel));
+                this.host.Description.Behaviors.Add(new WcfChannelInstanceProvider(this.Invoker));
+                this.host.Open();
+            }
         }
         #endregion
 
@@ -73,7 +82,11 @@
         /// </summary>
         protected override void OnCleanUp()
         {
-            throw new NotImplementedException();
+            if (this.host != null)
+            {
+                this.host.Close();
+                this.host = null;
+            }
         }
         #endregion
         #endregion

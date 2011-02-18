@@ -40,6 +40,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,12 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messages\BuildMessageTests.cs" />
-    <Compile Include="Messages\MessageBaseTests.cs" />
+    <Compile Include="MessageSerialiserTests.cs" />
+    <Compile Include="Messages\BlankTests.cs" />
+    <Compile Include="Messages\BuildRequestTests.cs" />
     <Compile Include="Messages\MessageSerialisationHelper.cs" />
-    <Compile Include="Messages\ProjectMessageTests.cs" />
-    <Compile Include="Messages\ServerMessageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryArgumentsTests.cs" />
+    <Compile Include="QueryResultTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">

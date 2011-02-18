@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\WcfChannel.cs" />
+    <Compile Include="Channels\WcfChannelInstanceProvider.cs" />
     <Compile Include="IntegrationSummary.cs" />
     <Compile Include="PersistedProjectState.cs" />
     <Compile Include="ProjectValue.cs" />
@@ -74,7 +76,6 @@
     <Compile Include="Project.cs" />
     <Compile Include="ProjectState.cs" />
     <Compile Include="RemoteActionAttribute.cs" />
-    <Compile Include="RemoteActionDefinition.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerItem.cs" />
     <Compile Include="IServerItemContainer.cs" />

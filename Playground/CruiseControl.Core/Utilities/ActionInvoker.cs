@@ -5,7 +5,8 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using CruiseControl.Common.Messages;
+    using System.Text.RegularExpressions;
+    using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using Ninject;
 
@@ -51,55 +52,55 @@
         /// <summary>
         /// Invokes an action on an item.
         /// </summary>
-        /// <param name="name">The universal name of the item.</param>
-        /// <param name="action">The action name.</param>
-        /// <param name="message">The message.</param>
+        /// <param name="urn">The URN to invoke the action.</param>
+        /// <param name="arguments">The arguments for the action.</param>
         /// <returns>
         /// The return message from the action.
         /// </returns>
-        public BaseMessage Invoke(string name, string action, BaseMessage message)
+        public InvokeResult Invoke(string urn, InvokeArguments arguments)
         {
-            var item = this.LocateItem(name);
-            var method = FindAction(item.GetType(), action);
-            var input = method.GetParameters()
-                .FirstOrDefault(p => p.ParameterType.IsSubclassOf(typeof(BaseMessage)));
-            if (!input.ParameterType.IsAssignableFrom(message.GetType()))
+            var result = new InvokeResult();
+            var item = this.LocateItem(urn);
+            if (item == null)
             {
-                throw new InvalidOperationException("Invalid input message");
+                result.ResultCode = RemoteResultCode.UnknownUrn;
+                return result;
             }
 
-            var output = method.Invoke(item, new[] { message }) as BaseMessage;
-            return output;
-        }
-        #endregion
-
-        #region List()
-        /// <summary>
-        /// Lists the available actions on an item.
-        /// </summary>
-        /// <param name="name">The universal name of the item.</param>
-        public RemoteActionDefinition[] List(string name)
-        {
-            var item = this.LocateItem(name);
-            var itemType = item.GetType();
-            var actions = new List<RemoteActionDefinition>();
-            foreach (var method in itemType.GetMethods(BindingFlags.Instance | BindingFlags.Public))
+            if (arguments == null)
             {
-                var actionAttributes = method.GetCustomAttributes(
-                    typeof(RemoteActionAttribute), false);
-                if (actionAttributes.Length > 0)
-                {
-                    // TODO: Validate security here
-
-                    var description = ExtractDescription(method);
-                    var definition = new RemoteActionDefinition(
-                        method.Name,
-                        description);
-                    actions.Add(definition);
-                }
+                result.ResultCode = RemoteResultCode.MissingArguments;
+                return result;
             }
 
-            return actions.ToArray();
+            var method = FindAction(item.GetType(), arguments.Action);
+            if (method == null)
+            {
+                result.ResultCode = RemoteResultCode.UnknownAction;
+                return result;
+            }
+
+            // TODO: Validate security
+
+            if (string.IsNullOrEmpty(arguments.Data))
+            {
+                result.ResultCode = RemoteResultCode.InvalidInput;
+                return result;
+            }
+
+            var parameters = method.GetParameters();
+            var input = MessageSerialiser.Deserialise(arguments.Data);
+            if (parameters[0].ParameterType.IsAssignableFrom(input.GetType()))
+            {
+                var output = method.Invoke(item, new[] { input });
+                result.Data = MessageSerialiser.Serialise(output);
+            }
+            else
+            {
+                result.ResultCode = RemoteResultCode.InvalidInput;
+            }
+
+            return result;
         }
         #endregion
 
@@ -107,23 +108,52 @@
         /// <summary>
         /// Queries the details on an item action.
         /// </summary>
-        /// <param name="name">The universal name of the item.</param>
-        /// <param name="action">The action name.</param>
-        public RemoteActionDefinition Query(string name, string action)
+        /// <param name="urn">The URN to query for actions.</param>
+        /// <param name="arguments">The arguments for the query.</param>
+        /// <returns>
+        /// The allowed actions on the URN.
+        /// </returns>
+        public QueryResult Query(string urn, QueryArguments arguments)
         {
-            var item = this.LocateItem(name);
-            var method = FindAction(item.GetType(), action);
-            var description = ExtractDescription(method);
-            var input = method.GetParameters()
-                .FirstOrDefault(p => p.ParameterType.IsSubclassOf(typeof(BaseMessage)));
-            var definition = new RemoteActionDefinition(
-                method.Name,
-                description)
-                                 {
-                                     InputMessage = input == null ? null : input.ParameterType.FullName,
-                                     OutputMessage = method.ReturnType.FullName
-                                 };
-            return definition;
+            var result = new QueryResult();
+
+            var item = this.LocateItem(urn);
+            if (item == null)
+            {
+                result.ResultCode = RemoteResultCode.UnknownUrn;
+                return result;
+            }
+
+            var itemType = item.GetType();
+            var actions = new List<RemoteActionDefinition>();
+            var filterRegex = (arguments == null) || string.IsNullOrEmpty(arguments.FilterPattern) ?
+                null :
+                new Regex(arguments.FilterPattern);
+            foreach (var method in itemType.GetMethods(BindingFlags.Instance | BindingFlags.Public))
+            {
+                var actionAttributes = method.GetCustomAttributes(
+                    typeof(RemoteActionAttribute), false);
+                if ((actionAttributes.Length > 0) &&
+                    ((filterRegex == null) || filterRegex.IsMatch(method.Name)))
+                {
+                    // TODO: Validate security here
+
+                    var description = ExtractDescription(method);
+                    var definition = new RemoteActionDefinition
+                                         {
+                                             Name = method.Name,
+                                             Description = description
+                                         };
+
+                    // TODO: Serialise the input/output messages
+
+                    actions.Add(definition);
+                }
+            }
+
+            // Generate the result
+            result.Actions = actions.ToArray();
+            return result;
         }
         #endregion
         #endregion
@@ -140,11 +170,6 @@
         private object LocateItem(string name)
         {
             var item = this.Server.Locate(name);
-            if (item == null)
-            {
-                throw new InvalidOperationException("Unable to find item with name '" + name + "'");
-            }
-
             return item;
         }
         #endregion
@@ -182,13 +207,6 @@
             var method = itemType.GetMethod(
                 actionName,
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if (method == null)
-            {
-                throw new InvalidOperationException("Unable to find action");
-            }
-
-            // TODO: Validate security here
-
             return method;
         }
         #endregion

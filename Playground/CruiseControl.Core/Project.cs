@@ -11,10 +11,10 @@
     using System.Threading;
     using System.Windows.Markup;
     using System.Xaml;
-    using CruiseControl.Common.Messages;
     using CruiseControl.Core.Interfaces;
     using Ninject;
     using NLog;
+    using Messages = CruiseControl.Common.Messages;
 
     /// <summary>
     /// A project.
@@ -432,13 +432,10 @@
         /// <returns>A message containing the response details.</returns>
         [RemoteAction]
         [Description("Starts a project if it is not already started.")]
-        public virtual ProjectMessage Start(ProjectMessage request)
+        public virtual Messages.Blank Start(Messages.Blank request)
         {
             this.Start();
-            var response = new ProjectMessage
-            {
-                ProjectName = this.Name
-            };
+            var response = new Messages.Blank();
             return response;
         }
         #endregion
@@ -451,13 +448,10 @@
         /// <returns>A message containing the response details.</returns>
         [RemoteAction]
         [Description("Stops a project if it is not already stopped.")]
-        public virtual ProjectMessage Stop(ProjectMessage request)
+        public virtual Messages.Blank Stop(Messages.Blank request)
         {
             this.Stop();
-            var response = new ProjectMessage
-                               {
-                                   ProjectName = this.Name
-                               };
+            var response = new Messages.Blank();
             return response;
         }
         #endregion

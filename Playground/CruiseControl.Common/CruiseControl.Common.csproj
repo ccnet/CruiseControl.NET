@@ -34,6 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,11 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messages\BaseMessage.cs" />
-    <Compile Include="Messages\BuildMessage.cs" />
-    <Compile Include="Messages\ProjectMessage.cs" />
-    <Compile Include="Messages\ServerMessage.cs" />
+    <Compile Include="DataDefinitions.cs" />
+    <Compile Include="ICommunicationsChannel.cs" />
+    <Compile Include="MessageSerialiser.cs" />
+    <Compile Include="Messages\Blank.cs" />
+    <Compile Include="Messages\BuildRequest.cs" />
+    <Compile Include="Messages\BuildRequestValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryArguments.cs" />
+    <Compile Include="QueryResult.cs" />
+    <Compile Include="InvokeArguments.cs" />
+    <Compile Include="RemoteActionDefinition.cs" />
+    <Compile Include="InvokeResult.cs" />
+    <Compile Include="RemoteResultCode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
