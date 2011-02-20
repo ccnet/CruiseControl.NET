@@ -1,15 +1,22 @@
 ﻿namespace CruiseControl.Core.Channels
 {
+    using System;
+    using System.Collections.Generic;
     using System.ServiceModel;
+    using System.Windows.Markup;
+    using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
+    using NLog;
 
     /// <summary>
     /// A client channel using WCF.
     /// </summary>
+    [ContentProperty("Endpoints")]
     public class Wcf
         : ClientChannel
     {
         #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private ServiceHost host;
         #endregion
 
@@ -19,6 +26,7 @@
         /// </summary>
         public Wcf()
         {
+            this.Endpoints = new List<WcfEndpoint>();
         }
 
         /// <summary>
@@ -26,6 +34,7 @@
         /// </summary>
         /// <param name="name">The name.</param>
         public Wcf(string name)
+            : this()
         {
             this.Name = name;
         }
@@ -40,6 +49,13 @@
         /// The channel name.
         /// </value>
         public string Name { get; set; }
+        #endregion
+
+        #region Endpoints
+        /// <summary>
+        /// Gets the endpoints.
+        /// </summary>
+        public IList<WcfEndpoint> Endpoints { get; private set; }
         #endregion
         #endregion
 
@@ -65,14 +81,40 @@
         /// <summary>
         /// Called when this channel is initialised.
         /// </summary>
-        protected override void OnInitialise()
+        protected override bool OnInitialise()
         {
             if (this.host == null)
             {
+                var channelName = this.Name ?? string.Empty;
+                logger.Debug("Initialising WCF channel '{0}'", channelName);
                 this.host = new ServiceHost(typeof(WcfChannel));
+                foreach (var endpoint in this.Endpoints)
+                {
+                    logger.Info("Adding endpoint {0} using {1} to '{2}'", endpoint.Address, endpoint.GetType().Name, channelName);
+                    this.host.AddServiceEndpoint(
+                        typeof(ICommunicationsChannel),
+                        endpoint.Binding,
+                        endpoint.Address);
+                }
+
+                logger.Debug("Adding instance provider to '{0}'", channelName);
                 this.host.Description.Behaviors.Add(new WcfChannelInstanceProvider(this.Invoker));
-                this.host.Open();
+                try
+                {
+                    logger.Info("Opening WCF channel '{0}'", channelName);
+                    this.host.Open();
+                    return true;
+                }
+                catch (Exception error)
+                {
+                    logger.ErrorException(
+                        "Unable to open channel '" + channelName + "'",
+                        error);
+                    this.host = null;
+                }
             }
+
+            return false;
         }
         #endregion
 
@@ -84,8 +126,22 @@
         {
             if (this.host != null)
             {
-                this.host.Close();
-                this.host = null;
+                var channelName = this.Name ?? string.Empty;
+                try
+                {
+                    logger.Info("Closing WCF channel '{0}'", channelName);
+                    this.host.Close();
+                }
+                catch (Exception error)
+                {
+                    logger.WarnException(
+                        "An error occurring while closing channel '" + channelName + "'",
+                        error);
+                }
+                finally
+                {
+                    this.host = null;
+                }
             }
         }
         #endregion

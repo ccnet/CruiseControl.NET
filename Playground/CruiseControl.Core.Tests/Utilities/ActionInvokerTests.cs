@@ -13,6 +13,13 @@
     {
         #region Tests
         [Test]
+        public void PingReturnsTrue()
+        {
+            var channel = new ActionInvoker(null);
+            Assert.IsTrue(channel.Ping());
+        }
+
+        [Test]
         public void InvokeFailsIfTheNameCannotBeFound()
         {
             var server = new Server("Test");

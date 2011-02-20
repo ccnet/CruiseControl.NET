@@ -33,10 +33,11 @@
         /// Initialises this client.
         /// </summary>
         /// <param name="invoker">The invoker.</param>
-        public void Initialise(IActionInvoker invoker)
+        /// <returns></returns>
+        public bool Initialise(IActionInvoker invoker)
         {
             this.Invoker = invoker;
-            this.OnInitialise();
+            return this.OnInitialise();
         }
         #endregion
 
@@ -56,7 +57,7 @@
         /// <summary>
         /// Called when this channel is initialised.
         /// </summary>
-        protected abstract void OnInitialise();
+        protected abstract bool OnInitialise();
         #endregion
 
         #region OnCleanUp()

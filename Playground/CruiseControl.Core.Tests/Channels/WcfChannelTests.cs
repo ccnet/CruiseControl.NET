@@ -11,6 +11,13 @@
     {
         #region Tests
         [Test]
+        public void PingReturnsTrue()
+        {
+            var channel = new WcfChannel(null);
+            Assert.IsTrue(channel.Ping());
+        }
+
+        [Test]
         public void InvokePassesOnCall()
         {
             var urn = string.Empty;

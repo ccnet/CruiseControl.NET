@@ -48,8 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\BasicHttp.cs" />
+    <Compile Include="Channels\NetTcp.cs" />
     <Compile Include="Channels\WcfChannel.cs" />
     <Compile Include="Channels\WcfChannelInstanceProvider.cs" />
+    <Compile Include="Channels\WcfEndpoint.cs" />
     <Compile Include="IntegrationSummary.cs" />
     <Compile Include="PersistedProjectState.cs" />
     <Compile Include="ProjectValue.cs" />

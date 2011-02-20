@@ -55,6 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryArgumentsTests.cs" />
     <Compile Include="QueryResultTests.cs" />
+    <Compile Include="ServerConnectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CruiseControl.Common\CruiseControl.Common.csproj">

@@ -9,6 +9,17 @@
     public interface ICommunicationsChannel
     {
         #region Public methods
+        #region Ping()
+        /// <summary>
+        /// Checks if the service is available.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if the service is available; <c>false</c> otherwise.
+        /// </returns>
+        [OperationContract]
+        bool Ping();
+        #endregion
+
         #region Invoke()
         /// <summary>
         /// Invokes an action on the specified urn.

@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Tests.Channels
 {
+    using CruiseControl.Common;
     using CruiseControl.Core.Channels;
     using CruiseControl.Core.Tests.Stubs;
     using NUnit.Framework;
@@ -27,10 +28,33 @@
         }
 
         [Test]
-        [Ignore("Need to implement tests for initialising the channel first")]
+        public void InitialiseOpensTheWcfHost()
+        {
+            var channel = new Wcf();
+            var address = "net.tcp://localhost/client";
+            channel.Endpoints.Add(new NetTcp { Address = address });
+            var opened = false;
+            try
+            {
+                opened = channel.Initialise(null);
+                Assert.IsTrue(opened);
+                var canPing = ServerConnection.Ping(address);
+                Assert.IsTrue(canPing);
+            }
+            finally
+            {
+                if (opened)
+                {
+                    channel.CleanUp();
+                }
+            }
+        }
+
+        [Test]
         public void CleanUpCloseChannel()
         {
             var channel = new Wcf();
+            channel.Endpoints.Add(new NetTcp { Address = "net.tcp://localhost/client" });
             channel.Initialise(null);
             channel.CleanUp();
         }

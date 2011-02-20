@@ -5,15 +5,15 @@
     public class ChannelStub
         : ClientChannel
     {
-        public Action OnInitialiseAction { get; set; }
-        protected override void OnInitialise()
+        public Func<bool> OnInitialiseAction { get; set; }
+        protected override bool OnInitialise()
         {
             if (this.OnInitialiseAction == null)
             {
                 throw new NotImplementedException();
             }
 
-            this.OnInitialiseAction();
+            return this.OnInitialiseAction();
         }
 
         public Action OnCleanUpAction { get; set; }

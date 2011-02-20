@@ -392,7 +392,14 @@
                 logger.Debug("Loading project state for '{0}'", this.Name);
                 using (var stream = this.FileSystem.OpenFileForRead(configFile))
                 {
-                    this.PersistedState = XamlServices.Load(stream) as PersistedProjectState;
+                    try
+                    {
+                        this.PersistedState = XamlServices.Load(stream) as PersistedProjectState;
+                    }
+                    catch (Exception error)
+                    {
+                        logger.WarnException("Unable to load project state for '" + this.Name + "'", error);
+                    }
                 }
             }
 
