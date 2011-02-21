@@ -15,7 +15,7 @@
             new Dictionary<AttachableMemberIdentifier, object>();
         #endregion
 
-        #region Public proeprties
+        #region Public properties
         #region PropertyCount
         /// <summary>
         /// Gets the count of the attachable member entries in this attachable member store.
