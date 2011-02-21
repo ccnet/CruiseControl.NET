@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Tests.Channels
 {
+    using System.ServiceModel;
     using CruiseControl.Common;
     using CruiseControl.Core.Channels;
     using CruiseControl.Core.Tests.Stubs;
@@ -38,7 +39,8 @@
             {
                 opened = channel.Initialise(null);
                 Assert.IsTrue(opened);
-                var canPing = ServerConnection.Ping(address);
+                var connection = new ServerConnection(address, new NetTcpBinding());
+                var canPing = connection.Ping();
                 Assert.IsTrue(canPing);
             }
             finally
