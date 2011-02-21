@@ -1,10 +1,11 @@
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using System.Globalization;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.Globalization;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using Util;
+
     /// <summary>
     /// <para>
     /// The Build Publisher lets you copy any arbitrary files on a <b>successful</b> build.
@@ -149,11 +150,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             if (result.Succeeded || AlwaysPublish)
             {
-                DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
-                DirectoryInfo pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
-                               
+                var srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
+                var pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
+                Log.Debug("Publish directory is '{0}'", pubDir.FullName);
+                Log.Debug("Source directory is '{0}'", srcDir.FullName);
+                if (!srcDir.Exists)
+                {
+                    Log.Warning("Source directory '{0}' does not exist - cancelling task", srcDir.FullName);
+                    var errorResult = new GeneralTaskResult(
+                        false,
+                        "Unable to find source directory '" + srcDir.FullName + "'");
+                    result.AddTaskResult(errorResult);
+                    return false;
+                }
+
                 if (!pubDir.Exists)
                 {
+                    Log.Info("Publish directory '{0}' does not exist - creating", pubDir.FullName);
                     pubDir.Create();
                 }
                 else
@@ -186,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         break;
 
                     default:
-                        throw new System.Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"unmapped cleaning method choosen {0}", CleanUpMethod));
+                        throw new System.Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture, "unmapped cleaning method choosen {0}", CleanUpMethod));
                 }
             }
 
@@ -199,21 +212,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <param name="srcDir">The SRC dir.</param>
         /// <param name="pubDir">The pub dir.</param>
-        private void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)
+        private static void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)
         {
-            FileInfo[] files = srcDir.GetFiles();
-            foreach (FileInfo file in files)
+            var files = srcDir.GetFiles();
+            foreach (var file in files)
             {
-                FileInfo destFile = new FileInfo(Path.Combine(pubDir.FullName, file.Name));
+                var destFile = new FileInfo(Path.Combine(pubDir.FullName, file.Name));
                 if (destFile.Exists) destFile.Attributes = FileAttributes.Normal;
-
                 file.CopyTo(destFile.ToString(), true);
             }
-            DirectoryInfo[] subDirectories = srcDir.GetDirectories();
-            foreach (DirectoryInfo subDir in subDirectories)
-            {
-                DirectoryInfo subDestination = pubDir.CreateSubdirectory(subDir.Name);
 
+            var subDirectories = srcDir.GetDirectories();
+            foreach (var subDir in subDirectories)
+            {
+                var subDestination = pubDir.CreateSubdirectory(subDir.Name);
                 RecurseSubDirectories(subDir, subDestination);
             }
         }
@@ -226,21 +238,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <param name="buildLogDirectory">The build log directory.</param>
         private void KeepLastXSubDirs(string targetFolder, int amountToKeep, string buildLogDirectory)
         {
-            Util.Log.Trace("Deleting Subdirs of {0}", targetFolder);
+            Log.Trace("Deleting Subdirs of {0}", targetFolder);
 
-            System.Collections.Generic.List<string> sortNames = new System.Collections.Generic.List<string>();
+            var sortNames = new System.Collections.Generic.List<string>();
             const string dateFormat = "yyyyMMddHHmmssffffff";
 
-            foreach (string folder in Directory.GetDirectories(targetFolder))
+            foreach (var folder in Directory.GetDirectories(targetFolder))
             {
                 if (folder != buildLogDirectory)
                     sortNames.Add(Directory.GetCreationTime(folder).ToString(dateFormat, CultureInfo.CurrentCulture) + folder);
             }
 
             sortNames.Sort();
-
-            int amountToDelete = sortNames.Count - amountToKeep;
-            for (int i = 0; i < amountToDelete; i++)
+            var amountToDelete = sortNames.Count - amountToKeep;
+            for (var i = 0; i < amountToDelete; i++)
             {
                 DeleteFolder(sortNames[0].Substring(dateFormat.Length));
                 sortNames.RemoveAt(0);
@@ -249,11 +260,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteSubDirsOlderThanXDays(string targetFolder, int daysToKeep, string buildLogDirectory)
         {
-            Util.Log.Trace("Deleting Subdirs of {0}", targetFolder);
-
-            System.DateTime cutoffDate = System.DateTime.Now.Date.AddDays(-daysToKeep);
-
-            foreach (string folder in Directory.GetDirectories(targetFolder))
+            Log.Trace("Deleting Subdirs of {0}", targetFolder);
+            var cutoffDate = System.DateTime.Now.Date.AddDays(-daysToKeep);
+            foreach (var folder in Directory.GetDirectories(targetFolder))
             {
                 if ((Directory.GetCreationTime(folder).Date < cutoffDate) &&
                     (folder != buildLogDirectory))
@@ -263,21 +272,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteFolder(string folderName)
         {
-            Util.Log.Trace("    Deleting {0}", folderName);
-
+            Log.Trace("Deleting {0}", folderName);
             SetFilesToNormalAttributeAndDelete(folderName);
             Directory.Delete(folderName);
         }
 
         private void SetFilesToNormalAttributeAndDelete(string folderName)
         {
-            foreach (string file in Directory.GetFiles(folderName))
+            foreach (var file in Directory.GetFiles(folderName))
             {
                 File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
             }
 
-            foreach (string subFolder in Directory.GetDirectories(folderName))
+            foreach (var subFolder in Directory.GetDirectories(folderName))
             {
                 DeleteFolder(subFolder);
             }
