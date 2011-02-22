@@ -103,6 +103,7 @@
     <Compile Include="Utilities\LoggingValidationLogTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />
     <Compile Include="Utilities\TaskExecutionFactoryTests.cs" />
+    <Compile Include="Utilities\UrnHelpersTests.cs" />
     <Compile Include="VersionTypeConverterTests.cs" />
     <Compile Include="XmlWriterHelper.cs" />
   </ItemGroup>

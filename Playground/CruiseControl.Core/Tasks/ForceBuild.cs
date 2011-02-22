@@ -1,9 +1,11 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
+    using System;
     using System.Collections.Generic;
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using NLog;
+    using Utilities;
 
     /// <summary>
     /// Forces a build on another project.
@@ -24,6 +26,19 @@
         /// The name of the project to force.
         /// </value>
         public string ProjectName { get; set; }
+        #endregion
+
+        #region ServerAddress
+        /// <summary>
+        /// Gets or sets the server address.
+        /// </summary>
+        /// <value>
+        /// The server address.
+        /// </value>
+        /// <remarks>
+        /// If omitted this will be the local server.
+        /// </remarks>
+        public string ServerAddress { get; set; }
         #endregion
         #endregion
 
@@ -60,9 +75,38 @@
                                 {
                                     Action = "ForceBuild"
                                 };
-            var result = this.Project.Server.ActionInvoker.Invoke(this.ProjectName, arguments);
 
-            // TODO: Validate the result
+            InvokeResult result = null;
+            if (string.IsNullOrEmpty(this.ServerAddress))
+            {
+                var urn = this.ProjectName;
+                if (!UrnHelpers.IsCCNetUrn(urn))
+                {
+                    urn = UrnHelpers.GenerateProjectUrn(this.Project.Server, this.ProjectName);
+                }
+
+                logger.Debug("Performing local force build on '{0}'", urn);
+                result = this.Project.Server.ActionInvoker.Invoke(urn, arguments);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            if (result.ResultCode == RemoteResultCode.Success)
+            {
+                var message = "Force build successfully sent to '" + ProjectName + "'";
+                logger.Info(message);
+                context.AddEntryToBuildLog(message);
+            }
+            else
+            {
+                var message = "Force build failed for '" + ProjectName + "' - result code " + result.ResultCode;
+                logger.Info(message);
+                context.AddEntryToBuildLog(message);
+                context.CurrentStatus = IntegrationStatus.Failure;
+            }
+
             return null;
         }
         #endregion

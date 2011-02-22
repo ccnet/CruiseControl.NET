@@ -152,6 +152,7 @@
     <Compile Include="Utilities\LoggingValidationLog.cs" />
     <Compile Include="Utilities\SystemClock.cs" />
     <Compile Include="Utilities\TaskExecutionFactory.cs" />
+    <Compile Include="Utilities\UrnHelpers.cs" />
     <Compile Include="Utilities\ValidationHelpers.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
