@@ -2,6 +2,7 @@
 {
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
+    using NLog;
 
     /// <summary>
     /// The channel implementation for WCF.
@@ -9,6 +10,10 @@
     public class WcfChannel
         : ICommunicationsChannel
     {
+        #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="WcfChannel"/> class.
@@ -39,6 +44,7 @@
         /// </returns>
         public bool Ping()
         {
+            logger.Debug("Responding to ping");
             return true;
         }
         #endregion
