@@ -6,7 +6,8 @@
     {
         static void Main(string[] args)
         {
-            ServerConnection.Ping(args[0]);
+            var connection = new ServerConnection(args[0]);
+            connection.Ping();
         }
     }
 }

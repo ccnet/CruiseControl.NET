@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Core.Channels
 {
+    using System;
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using NLog;
@@ -60,7 +61,27 @@
         /// </returns>
         public InvokeResult Invoke(string urn, InvokeArguments arguments)
         {
-            return this.Invoker.Invoke(urn, arguments);
+            var logId = Guid.NewGuid();
+            logger.Debug("Performing invoke on '{0}' - {1}", urn, logId);
+            try
+            {
+                var result = this.Invoker.Invoke(urn, arguments);
+                result.LogId = logId;
+                logger.Debug("Invoke completed for '{0}' - {1}", urn, logId);
+                return result;
+            }
+            catch (Exception error)
+            {
+                logger.ErrorException(
+                    "Error happened on invoke for '" + urn +
+                    "' - " + logId + ": " + error.Message,
+                    error);
+                return new InvokeResult
+                           {
+                               LogId = logId,
+                               ResultCode = RemoteResultCode.FatalError
+                           };
+            }
         }
         #endregion
 
@@ -75,7 +96,27 @@
         /// </returns>
         public QueryResult Query(string urn, QueryArguments arguments)
         {
-            return this.Invoker.Query(urn, arguments);
+            var logId = Guid.NewGuid();
+            logger.Debug("Performing invoke on '{0}' - {1}", urn, logId);
+            try
+            {
+                var result = this.Invoker.Query(urn, arguments);
+                result.LogId = logId;
+                logger.Debug("Invoke completed for '{0}' - {1}", urn, logId);
+                return result;
+            }
+            catch (Exception error)
+            {
+                logger.ErrorException(
+                    "Error happened on invoke for '" + urn +
+                    "' - " + logId + ": " + error.Message,
+                    error);
+                return new QueryResult
+                           {
+                               LogId = logId,
+                               ResultCode = RemoteResultCode.FatalError
+                           };
+            }
         }
         #endregion
         #endregion

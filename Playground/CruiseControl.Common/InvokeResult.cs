@@ -1,5 +1,6 @@
 ﻿namespace CruiseControl.Common
 {
+    using System;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -18,6 +19,17 @@
         /// </value>
         [DataMember]
         public RemoteResultCode ResultCode { get; set; }
+        #endregion
+
+        #region LogId
+        /// <summary>
+        /// Gets or sets the log id.
+        /// </summary>
+        /// <value>
+        /// The log id.
+        /// </value>
+        [DataMember]
+        public Guid? LogId { get; set; }
         #endregion
 
         #region Data
