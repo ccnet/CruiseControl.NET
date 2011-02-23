@@ -140,6 +140,19 @@
         /// </summary>
         /// <param name="urn">The URN to invoke the action on.</param>
         /// <param name="action">The action.</param>
+        /// <returns>
+        /// The result of the action.
+        /// </returns>
+        public virtual object Invoke(string urn, string action)
+        {
+            return this.Invoke(urn, action, null);
+        }
+
+        /// <summary>
+        /// Invokes an action.
+        /// </summary>
+        /// <param name="urn">The URN to invoke the action on.</param>
+        /// <param name="action">The action.</param>
         /// <param name="args">The arguments for the action.</param>
         /// <returns>
         /// The result of the action.
@@ -149,12 +162,48 @@
             var request = new InvokeArguments
                               {
                                   Action = action,
-                                  Data = MessageSerialiser.Serialise(args)
+                                  Data = args == null ? null : MessageSerialiser.Serialise(args)
                               };
             var result = this.PerformChannelOperation(c => c.Invoke(urn, request));
             if (result.ResultCode == RemoteResultCode.Success)
             {
                 return MessageSerialiser.Deserialise(result.Data);
+            }
+
+            throw new RemoteServerException(result.ResultCode, result.LogId);
+        }
+        #endregion
+
+        #region Query()
+        /// <summary>
+        /// Queries the specified URN for any actions.
+        /// </summary>
+        /// <param name="urn">The URN to query.</param>
+        /// <returns>
+        /// The actions for the URN.
+        /// </returns>
+        public virtual RemoteActionDefinition[] Query(string urn)
+        {
+            return this.Query(urn, new QueryArguments
+                                       {
+                                           DataToInclude = DataDefinitions.None
+                                       });
+        }
+
+        /// <summary>
+        /// Queries the specified URN for any actions.
+        /// </summary>
+        /// <param name="urn">The URN to query.</param>
+        /// <param name="arguments">The arguments for filtering, etc.</param>
+        /// <returns>
+        /// The actions for the URN.
+        /// </returns>
+        public virtual RemoteActionDefinition[] Query(string urn, QueryArguments arguments)
+        {
+            var result = this.PerformChannelOperation(c => c.Query(urn, arguments));
+            if (result.ResultCode == RemoteResultCode.Success)
+            {
+                return result.Actions;
             }
 
             throw new RemoteServerException(result.ResultCode, result.LogId);

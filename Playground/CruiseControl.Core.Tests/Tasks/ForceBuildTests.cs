@@ -6,6 +6,7 @@
     using CruiseControl.Core.Tasks;
     using Moq;
     using NUnit.Framework;
+    using Messages = CruiseControl.Common.Messages;
 
     [TestFixture]
     public class ForceBuildTests
@@ -103,52 +104,74 @@
         }
 
         [Test]
-        [Ignore("TODO: Work out logic for performing a remote force build")]
         public void RunForcesARemoteBuildUsingUniversalName()
         {
             var urnName = "urn:ccnet:remote:otherproject";
+            var connectionMock = new Mock<ServerConnection>(MockBehavior.Strict);
+            connectionMock.Setup(sc => sc.Invoke(urnName, "ForceBuild"))
+                .Returns(new Messages.Blank());
+            var factoryMock = new Mock<IServerConnectionFactory>(MockBehavior.Strict);
+            var address = "http://somewhere/ccnet";
+            factoryMock.Setup(scf => scf.GenerateConnection(address))
+                .Returns(connectionMock.Object);
             var task = new ForceBuild
                            {
-                               ServerAddress = "http://somewhere/ccnet",
-                               ProjectName = urnName
+                               ServerAddress = address,
+                               ProjectName = urnName,
+                               ServerConnectionFactory = factoryMock.Object
                            };
             var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
-            contextMock.Setup(c => c.AddEntryToBuildLog("Force build successfully sent to '" + urnName + "'")).Verifiable();
+            contextMock.Setup(c => c.AddEntryToBuildLog("Force build successfully sent to '" + urnName + "' at '" + address + "'")).Verifiable();
             task.Run(contextMock.Object).Count();
             contextMock.Verify();
         }
 
         [Test]
-        [Ignore("TODO: Work out logic for performing a remote force build")]
         public void RunForcesARemoteBuildUsingProjectName()
         {
             var projectName = "otherproject";
             var urnName = "urn:ccnet:test:" + projectName;
+            var connectionMock = new Mock<ServerConnection>(MockBehavior.Strict);
+            connectionMock.Setup(sc => sc.Invoke(urnName, "ForceBuild"))
+                .Returns(new Messages.Blank());
+            var factoryMock = new Mock<IServerConnectionFactory>(MockBehavior.Strict);
+            var address = "http://somewhere/ccnet";
+            factoryMock.Setup(scf => scf.GenerateConnection(address))
+                .Returns(connectionMock.Object);
+            factoryMock.Setup(scf => scf.GenerateUrn(address, projectName))
+                .Returns(urnName);
             var task = new ForceBuild
                            {
-                               ServerAddress = "http://somewhere/ccnet",
-                               ProjectName = projectName
+                               ServerAddress = address,
+                               ProjectName = projectName,
+                               ServerConnectionFactory = factoryMock.Object
                            };
             var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
-            contextMock.Setup(c => c.AddEntryToBuildLog("Force build successfully sent to '" + urnName + "'")).Verifiable();
+            contextMock.Setup(c => c.AddEntryToBuildLog("Force build successfully sent to '" + projectName + "' at '" + address + "'")).Verifiable();
             task.Run(contextMock.Object).Count();
             contextMock.Verify();
         }
 
         [Test]
-        [Ignore("TODO: Work out logic for performing a remote force build")]
         public void RunReturnsFailureIfRemoteForceFails()
         {
             var urnName = "urn:ccnet:remote:otherproject";
+            var connectionMock = new Mock<ServerConnection>(MockBehavior.Strict);
+            connectionMock.Setup(sc => sc.Invoke(urnName, "ForceBuild"))
+                .Throws(new RemoteServerException(RemoteResultCode.FatalError, null));
+            var factoryMock = new Mock<IServerConnectionFactory>(MockBehavior.Strict);
+            var address = "http://somewhere/ccnet";
+            factoryMock.Setup(scf => scf.GenerateConnection(address))
+                .Returns(connectionMock.Object);
             var task = new ForceBuild
                            {
-                               ServerAddress = "http://somewhere/ccnet",
-                               ProjectName = urnName
+                               ServerAddress = address,
+                               ProjectName = urnName,
+                               ServerConnectionFactory = factoryMock.Object
                            };
             var contextMock = new Mock<TaskExecutionContext>(MockBehavior.Strict, new TaskExecutionParameters());
-            contextMock
-                .Setup(c => c.AddEntryToBuildLog("Force build failed for '" + urnName + "' - result code " + RemoteResultCode.FatalError))
-                .Verifiable();
+            var message = "Force build failed for '" + urnName + "' at '" + address + "' - result code " + RemoteResultCode.FatalError;
+            contextMock.Setup(c => c.AddEntryToBuildLog(message)).Verifiable();
             contextMock.SetupProperty(c => c.CurrentStatus);
             task.Run(contextMock.Object).Count();
             contextMock.Verify();

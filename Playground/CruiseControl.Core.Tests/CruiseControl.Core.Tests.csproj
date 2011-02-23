@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="AssemblyHelper.cs" />
     <Compile Include="Channels\BasicHttpTests.cs" />
-    <Compile Include="Channels\CommunicationsTests.cs" />
+    <Compile Include="CommunicationsTests.cs" />
     <Compile Include="Channels\NetTcpTests.cs" />
     <Compile Include="Channels\WcfChannelInstanceProviderTests.cs" />
     <Compile Include="Channels\WcfChannelTests.cs" />

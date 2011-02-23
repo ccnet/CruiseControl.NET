@@ -32,6 +32,22 @@
             Assert.AreEqual(message, exception.Message);
             Assert.AreSame(inner, exception.InnerException);
         }
+
+        [Test]
+        public void GenerateMessageHandlesInvalidInput()
+        {
+            var expected = "An invalid request message was passed to the remote server";
+            var actual = RemoteServerException.GenerateMessage(RemoteResultCode.InvalidInput);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GenerateMessageHandlesSuccess()
+        {
+            var expected = "An unknown error has occurred at the remote server, code: " + RemoteResultCode.Success;
+            var actual = RemoteServerException.GenerateMessage(RemoteResultCode.Success);
+            Assert.AreEqual(expected, actual);
+        }
         #endregion
     }
 }

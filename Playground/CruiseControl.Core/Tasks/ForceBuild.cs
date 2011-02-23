@@ -1,6 +1,5 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using CruiseControl.Common;
@@ -86,28 +85,44 @@
         protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
             logger.Info("Sending force build to '{0}'", this.ProjectName);
+            if (string.IsNullOrEmpty(this.ServerAddress))
+            {
+                this.SendLocalRequest(context);
+            }
+            else
+            {
+                this.SendRemoteRequest(context);
+            }
+
+            return null;
+        }
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region SendLocalRequest()
+        /// <summary>
+        /// Sends the request to the local server.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private void SendLocalRequest(TaskExecutionContext context)
+        {
+            // Resolve the URN
+            var urn = this.ProjectName;
+            if (!UrnHelpers.IsCCNetUrn(urn))
+            {
+                urn = UrnHelpers.GenerateProjectUrn(this.Project.Server, this.ProjectName);
+            }
+
+            // Send the actual request
+            logger.Debug("Performing local force build on '{0}'", urn);
             var arguments = new InvokeArguments
                                 {
                                     Action = "ForceBuild"
                                 };
+            var result = this.Project.Server.ActionInvoker.Invoke(urn, arguments);
 
-            InvokeResult result = null;
-            if (string.IsNullOrEmpty(this.ServerAddress))
-            {
-                var urn = this.ProjectName;
-                if (!UrnHelpers.IsCCNetUrn(urn))
-                {
-                    urn = UrnHelpers.GenerateProjectUrn(this.Project.Server, this.ProjectName);
-                }
-
-                logger.Debug("Performing local force build on '{0}'", urn);
-                result = this.Project.Server.ActionInvoker.Invoke(urn, arguments);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-
+            // Check the result
             if (result.ResultCode == RemoteResultCode.Success)
             {
                 var message = "Force build successfully sent to '" + ProjectName + "'";
@@ -121,8 +136,42 @@
                 context.AddEntryToBuildLog(message);
                 context.CurrentStatus = IntegrationStatus.Failure;
             }
+        }
+        #endregion
 
-            return null;
+        #region SendRemoteRequest()
+        /// <summary>
+        /// Sends the request to a remote server.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private void SendRemoteRequest(TaskExecutionContext context)
+        {
+            // Generate the connection
+            var connection = this.ServerConnectionFactory.GenerateConnection(this.ServerAddress);
+
+            // Resolve the URN
+            var urn = this.ProjectName;
+            if (!UrnHelpers.IsCCNetUrn(urn))
+            {
+                urn = this.ServerConnectionFactory.GenerateUrn(this.ServerAddress, urn);
+            }
+
+            // Send the actual request
+            logger.Debug("Sending force build on '{0}' to '{1}'", urn, this.ServerAddress);
+            try
+            {
+                connection.Invoke(urn, "ForceBuild");
+                var message = "Force build successfully sent to '" + ProjectName + "' at '" + this.ServerAddress + "'";
+                logger.Info(message);
+                context.AddEntryToBuildLog(message);
+            }
+            catch (RemoteServerException error)
+            {
+                var message = "Force build failed for '" + ProjectName + "' at '" + this.ServerAddress + "' - result code " + error.ResultCode;
+                logger.Info(message);
+                context.AddEntryToBuildLog(message);
+                context.CurrentStatus = IntegrationStatus.Failure;
+            }
         }
         #endregion
         #endregion
