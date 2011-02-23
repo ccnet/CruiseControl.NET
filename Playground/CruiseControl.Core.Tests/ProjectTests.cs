@@ -710,6 +710,33 @@
         }
 
         [Test]
+        public void LoadPersistedStateHandlesACorruptedFile()
+        {
+            var configFile = Path.Combine(
+                Environment.CurrentDirectory,
+                "Name",
+                "project.state");
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(configFile))
+                .Returns(true)
+                .Verifiable();
+            using (var stream = new MemoryStream())
+            {
+                fileSystemMock.Setup(fs => fs.OpenFileForRead(configFile))
+                    .Returns(stream)
+                    .Verifiable();
+                var project = new Project("Name")
+                                  {
+                                      FileSystem = fileSystemMock.Object
+                                  };
+                project.LoadPersistedState();
+                Assert.IsNotNull(project.PersistedState);
+                Assert.IsNull(project.PersistedState.LastIntegration);
+                fileSystemMock.Verify();
+            }
+        }
+
+        [Test]
         public void LoadPersistedStateStartsANewState()
         {
             var configFile = Path.Combine(

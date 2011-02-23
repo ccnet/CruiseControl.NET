@@ -53,6 +53,7 @@
         /// <returns>
         /// The URN of the server.
         /// </returns>
+        [OperationContract]
         string RetrieveServerName();
         #endregion
         #endregion

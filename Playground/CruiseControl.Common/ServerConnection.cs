@@ -132,7 +132,33 @@
             var serverName = this.PerformChannelOperation(c => c.RetrieveServerName());
             return serverName;
         }
+        #endregion
 
+        #region Invoke()
+        /// <summary>
+        /// Invokes an action.
+        /// </summary>
+        /// <param name="urn">The URN to invoke the action on.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="args">The arguments for the action.</param>
+        /// <returns>
+        /// The result of the action.
+        /// </returns>
+        public virtual object Invoke(string urn, string action, object args)
+        {
+            var request = new InvokeArguments
+                              {
+                                  Action = action,
+                                  Data = MessageSerialiser.Serialise(args)
+                              };
+            var result = this.PerformChannelOperation(c => c.Invoke(urn, request));
+            if (result.ResultCode == RemoteResultCode.Success)
+            {
+                return MessageSerialiser.Deserialise(result.Data);
+            }
+
+            throw new RemoteServerException(result.ResultCode, result.LogId);
+        }
         #endregion
         #endregion
 
