@@ -74,23 +74,10 @@
         /// </returns>
         public bool Ping()
         {
-            var address = new EndpointAddress(this.Address);
             try
             {
-                var channel = ChannelFactory<ICommunicationsChannel>
-                    .CreateChannel(this.Binding, address);
-                try
-                {
-                    return channel.Ping();
-                }
-                finally
-                {
-                    var disposable = channel as IDisposable;
-                    if (disposable != null)
-                    {
-                        disposable.Dispose();
-                    }
-                }
+                var ping = this.PerformChannelOperation(c => c.Ping());
+                return ping;
             }
             catch
             {
@@ -129,6 +116,51 @@
 
                 default:
                     throw new InvalidOperationException("Unknown protocol: " + protocol);
+            }
+        }
+        #endregion
+
+        #region RetrieveServerName()
+        /// <summary>
+        /// Retrieves the URN of the server.
+        /// </summary>
+        /// <returns>
+        /// The server URN.
+        /// </returns>
+        public virtual string RetrieveServerName()
+        {
+            var serverName = this.PerformChannelOperation(c => c.RetrieveServerName());
+            return serverName;
+        }
+
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region PerformChannelOperation()
+        /// <summary>
+        /// Generates the channel.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="operation">The operation.</param>
+        /// <returns>
+        /// The result from the operation.
+        /// </returns>
+        private TResult PerformChannelOperation<TResult>(Func<ICommunicationsChannel, TResult> operation)
+        {
+            var address = new EndpointAddress(this.Address);
+            var channel = ChannelFactory<ICommunicationsChannel>.CreateChannel(this.Binding, address);
+            try
+            {
+                return operation(channel);
+            }
+            finally
+            {
+                var disposable = channel as IDisposable;
+                if (disposable != null)
+                {
+                    disposable.Dispose();
+                }
             }
         }
         #endregion

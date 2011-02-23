@@ -46,6 +46,19 @@
             Assert.AreSame(result, actual);
             invokerMock.Verify();
         }
+
+        [Test]
+        public void RetrieveServerNameRetrievesNameFromInvoker()
+        {
+            var serverName = "urn:ccnet:someserver";
+            var invokerMock = new Mock<IActionInvoker>(MockBehavior.Strict);
+            invokerMock.Setup(i => i.RetrieveServerName()).Returns(serverName).Verifiable();
+
+            var channel = new WcfChannel(invokerMock.Object);
+            var actual = channel.RetrieveServerName();
+            Assert.AreSame(serverName, actual);
+            invokerMock.Verify();
+        }
         #endregion
     }
 }

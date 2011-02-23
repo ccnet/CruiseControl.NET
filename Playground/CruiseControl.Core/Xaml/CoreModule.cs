@@ -27,6 +27,7 @@
             this.Bind<IClock>().To<SystemClock>().InSingletonScope();
             this.Bind<IFileSystem>().To<FileSystem>().InSingletonScope();
             this.Bind<ITaskExecutionFactory>().To<TaskExecutionFactory>().InSingletonScope();
+            this.Bind<IServerConnectionFactory>().To<ServerConnectionFactory>().InSingletonScope();
         }
         #endregion
         #endregion

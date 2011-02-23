@@ -1,7 +1,5 @@
 ﻿namespace CruiseControl.Core.Interfaces
 {
-    using System.Xml;
-
     /// <summary>
     /// Factory methods for working with task executions.
     /// </summary>

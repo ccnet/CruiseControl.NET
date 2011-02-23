@@ -169,6 +169,20 @@
             return result;
         }
         #endregion
+
+        #region RetrieveServerName()
+        /// <summary>
+        /// Retrieves the name of the server.
+        /// </summary>
+        /// <returns>
+        /// The URN of the server.
+        /// </returns>
+        public string RetrieveServerName()
+        {
+            var name = this.Server.UniversalName;
+            return name;
+        }
+        #endregion
         #endregion
 
         #region Private methods

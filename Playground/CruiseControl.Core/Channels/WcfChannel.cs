@@ -119,6 +119,21 @@
             }
         }
         #endregion
+
+        #region RetrieveServerName()
+        /// <summary>
+        /// Retrieves the name of the server.
+        /// </summary>
+        /// <returns>
+        /// The URN of the server.
+        /// </returns>
+        public string RetrieveServerName()
+        {
+            logger.Debug("Retrieving server name");
+            var name = this.Invoker.RetrieveServerName();
+            return name;
+        }
+        #endregion
         #endregion
     }
 }

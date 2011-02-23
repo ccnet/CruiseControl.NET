@@ -101,6 +101,7 @@
     <Compile Include="Triggers\ScheduleTests.cs" />
     <Compile Include="Utilities\FileSystemTests.cs" />
     <Compile Include="Utilities\LoggingValidationLogTests.cs" />
+    <Compile Include="Utilities\ServerConnectionFactoryTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />
     <Compile Include="Utilities\TaskExecutionFactoryTests.cs" />
     <Compile Include="Utilities\UrnHelpersTests.cs" />

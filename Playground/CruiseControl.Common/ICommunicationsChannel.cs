@@ -45,6 +45,16 @@
         [OperationContract]
         QueryResult Query(string urn, QueryArguments arguments);
         #endregion
+
+        #region RetrieveServerName()
+        /// <summary>
+        /// Retrieves the name of the server.
+        /// </summary>
+        /// <returns>
+        /// The URN of the server.
+        /// </returns>
+        string RetrieveServerName();
+        #endregion
         #endregion
     }
 }

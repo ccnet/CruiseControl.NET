@@ -146,6 +146,16 @@
                                };
             CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
         }
+
+        [Test]
+        public void RetrieveServerNameRetrievesUrnFromServer()
+        {
+            var server = new Server("testserver");
+            var invoker = new ActionInvoker(server);
+            var expected = server.UniversalName;
+            var actual = invoker.RetrieveServerName();
+            Assert.AreEqual(expected, actual);
+        }
         #endregion
 
         #region Private classes

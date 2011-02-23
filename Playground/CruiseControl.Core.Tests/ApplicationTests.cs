@@ -168,7 +168,7 @@
             application.Start();
 
             // Give the projects time to start
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            SpinWait.SpinUntil(() => started, TimeSpan.FromSeconds(5));
             Assert.IsTrue(started);
         }
 
@@ -205,10 +205,12 @@
         [Test]
         public void StopStopsProjects()
         {
+            var started = false;
             var stopped = false;
             var project = new ProjectStub
                               {
                                   Name = "Test",
+                                  OnStart = () => started = true,
                                   OnStop = () => stopped = true,
                                   OnLoadState = () => { }
                               };
@@ -220,11 +222,12 @@
             application.Start();
 
             // Give the projects time to start
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            SpinWait.SpinUntil(() => started, TimeSpan.FromSeconds(5));
+            Assert.IsTrue(started); 
             application.Stop();
 
             // Give the projects time to stop
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            SpinWait.SpinUntil(() => stopped, TimeSpan.FromSeconds(5));
             Assert.IsTrue(stopped);
         }
 

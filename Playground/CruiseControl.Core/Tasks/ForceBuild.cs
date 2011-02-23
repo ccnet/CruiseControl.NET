@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
+    using Ninject;
     using NLog;
     using Utilities;
 
@@ -39,6 +41,19 @@
         /// If omitted this will be the local server.
         /// </remarks>
         public string ServerAddress { get; set; }
+        #endregion
+
+        #region ServerConnectionFactory
+        /// <summary>
+        /// Gets or sets the server connection factory.
+        /// </summary>
+        /// <value>
+        /// The server connection factory.
+        /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Inject]
+        public IServerConnectionFactory ServerConnectionFactory { get; set; }
         #endregion
         #endregion
 
