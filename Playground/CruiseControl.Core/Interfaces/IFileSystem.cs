@@ -20,6 +20,17 @@
         bool CheckIfFileExists(string filename);
         #endregion
 
+        #region CheckIfDirectoryExists()
+        /// <summary>
+        /// Checks if a directory exists.
+        /// </summary>
+        /// <param name="path">The path to the directory.</param>
+        /// <returns>
+        /// <c>true</c> if the directory exists; <c>false</c> otherwise.
+        /// </returns>
+        bool CheckIfDirectoryExists(string path);
+        #endregion
+
         #region OpenFileForRead()
         /// <summary>
         /// Opens the file for read.

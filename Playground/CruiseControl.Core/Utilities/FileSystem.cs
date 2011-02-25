@@ -1,6 +1,5 @@
 ﻿namespace CruiseControl.Core.Utilities
 {
-    using System;
     using System.IO;
     using System.Text;
     using System.Xml;
@@ -30,6 +29,22 @@
         {
             logger.Trace("Checking if file '" + (filename ?? string.Empty) + "' exists");
             var exists = File.Exists(filename);
+            return exists;
+        }
+        #endregion
+
+        #region CheckIfDirectoryExists()
+        /// <summary>
+        /// Checks if a directory exists.
+        /// </summary>
+        /// <param name="path">The path to the directory.</param>
+        /// <returns>
+        /// <c>true</c> if the directory exists; <c>false</c> otherwise.
+        /// </returns>
+        public bool CheckIfDirectoryExists(string path)
+        {
+            logger.Trace("Checking if directory '" + (path ?? string.Empty) + "' exists");
+            var exists = Directory.Exists(path);
             return exists;
         }
         #endregion

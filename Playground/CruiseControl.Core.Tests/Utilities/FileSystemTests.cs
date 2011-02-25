@@ -37,6 +37,44 @@
         }
 
         [Test]
+        public void CheckIfDirectoryExistsReturnsTrueIfDirectoryExists()
+        {
+            var fileSystem = new FileSystem();
+            var directoryName = Path.Combine(Path.GetTempPath(), "ARandomTestFolder");
+            try
+            {
+                if (!Directory.Exists(directoryName))
+                {
+                    Directory.CreateDirectory(directoryName);
+                }
+
+                var result = fileSystem.CheckIfDirectoryExists(directoryName);
+                Assert.IsTrue(result);
+            }
+            finally
+            {
+                if (Directory.Exists(directoryName))
+                {
+                    Directory.Delete(directoryName);
+                }
+            }
+        }
+
+        [Test]
+        public void CheckIfDirectoryExistsReturnsFalseIfDirectoryDoesNotExist()
+        {
+            var fileSystem = new FileSystem();
+            var directoryName = Path.Combine(Path.GetTempPath(), "ARandomTestFolder");
+            if (Directory.Exists(directoryName))
+            {
+                Directory.Delete(directoryName);
+            }
+
+            var result = fileSystem.CheckIfDirectoryExists(directoryName);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
         public void OpenFileForReadOpensStream()
         {
             var fileSystem = new FileSystem();

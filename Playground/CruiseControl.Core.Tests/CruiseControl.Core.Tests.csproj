@@ -102,7 +102,15 @@
     <Compile Include="Triggers\ScheduleTests.cs" />
     <Compile Include="Utilities\FileSystemTests.cs" />
     <Compile Include="Utilities\LoggingValidationLogTests.cs" />
+    <Compile Include="Utilities\PrivateStringTests.cs" />
+    <Compile Include="Utilities\PrivateStringTypeConverterTests.cs" />
+    <Compile Include="Utilities\ProcessExecutorTests.cs" />
+    <Compile Include="Utilities\ProcessInfoTests.cs" />
+    <Compile Include="Utilities\ProcessOutputEventArgsTests.cs" />
+    <Compile Include="Utilities\ProcessResultTests.cs" />
+    <Compile Include="Utilities\SecureArgumentsTests.cs" />
     <Compile Include="Utilities\ServerConnectionFactoryTests.cs" />
+    <Compile Include="Utilities\StringHelpersTests.cs" />
     <Compile Include="Utilities\SystemClockTests.cs" />
     <Compile Include="Utilities\TaskExecutionFactoryTests.cs" />
     <Compile Include="Utilities\UrnHelpersTests.cs" />
@@ -190,6 +198,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>xcopy /y/q "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

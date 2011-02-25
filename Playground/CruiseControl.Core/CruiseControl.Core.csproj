@@ -54,7 +54,9 @@
     <Compile Include="Channels\WcfChannelInstanceProvider.cs" />
     <Compile Include="Channels\WcfEndpoint.cs" />
     <Compile Include="IntegrationSummary.cs" />
+    <Compile Include="Interfaces\ISecureData.cs" />
     <Compile Include="Interfaces\IServerConnectionFactory.cs" />
+    <Compile Include="Interfaces\SecureDataMode.cs" />
     <Compile Include="PersistedProjectState.cs" />
     <Compile Include="ProjectValue.cs" />
     <Compile Include="Utilities\ActionInvoker.cs" />
@@ -151,7 +153,16 @@
     <Compile Include="Triggers\Url.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
     <Compile Include="Utilities\LoggingValidationLog.cs" />
+    <Compile Include="Utilities\PrivateString.cs" />
+    <Compile Include="Utilities\PrivateStringTypeConverter.cs" />
+    <Compile Include="Utilities\SecureArguments.cs" />
+    <Compile Include="Utilities\ProcessExecutor.cs" />
+    <Compile Include="Utilities\ProcessInfo.cs" />
+    <Compile Include="Utilities\ProcessOutputEventArgs.cs" />
+    <Compile Include="Utilities\ProcessOutputType.cs" />
+    <Compile Include="Utilities\ProcessResult.cs" />
     <Compile Include="Utilities\ServerConnectionFactory.cs" />
+    <Compile Include="Utilities\StringHelpers.cs" />
     <Compile Include="Utilities\SystemClock.cs" />
     <Compile Include="Utilities\TaskExecutionFactory.cs" />
     <Compile Include="Utilities\UrnHelpers.cs" />
