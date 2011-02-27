@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Core.Tests.Utilities
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Threading;
@@ -93,8 +94,7 @@
         [Test]
         public void KillProcessesForProjectKillsAProcess()
         {
-            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
-            fileSystemMock.Setup(fs => fs.CheckIfFileExists(It.IsAny<string>())).Returns(true);
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper");
             var executor = new ProcessExecutor(fileSystemMock.Object);
             var projectName = "aProject";
@@ -111,9 +111,150 @@
         }
 
         [Test]
+        public void ExecuteRunsProcess()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper", "1");
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+            Assert.IsTrue(result.Succeeded);
+        }
+
+        [Test]
+        public void ExecuteTimesOut()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper") { TimeOut = TimeSpan.FromSeconds(1) };
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+            Assert.IsTrue(result.TimedOut);
+        }
+
+        [Test]
+        public void ExecutePassesOnOutput()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper", "1");
+            var output = new List<ProcessOutputEventArgs>();
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            executor.ProcessOutput += (o, e) => output.Add(e);
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+            CollectionAssert.IsNotEmpty(output);
+        }
+
+        [Test]
+        public void ExecuteChangesPriority()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper", "1", null, ProcessPriorityClass.BelowNormal);
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                    {
+                        try
+                        {
+                            result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                        }
+                        finally
+                        {
+                            waitHandle.Set();
+                        }
+                    });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+        }
+
+        [Test]
+        public void ExecuteWritesToStdIn()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper", "1") {StandardInputContent = "SomeData"};
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+        }
+
+        [Test]
         public void KillProcessesForProjectHandlesAMissingProject()
         {
             ProcessExecutor.KillProcessesForProject(null, "DoesNothingExist");
+        }
+        #endregion
+
+        #region Helper methods
+        private static Mock<IFileSystem> InitialiseFileSystemMockForExecute()
+        {
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(It.IsAny<string>())).Returns(true);
+            fileSystemMock.Setup(fs => fs.OpenFileForWrite("C:\\somewhere.txt")).Returns(new MemoryStream());
+            fileSystemMock.Setup(fs => fs.OpenFileForRead("C:\\somewhere.txt")).Returns(new MemoryStream());
+            return fileSystemMock;
         }
         #endregion
     }
