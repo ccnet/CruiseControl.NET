@@ -89,6 +89,32 @@
             Assert.AreEqual("/usr/bin/pkill", killProcess.StartInfo.FileName);
             Assert.AreEqual("-9 -g 1", killProcess.StartInfo.Arguments);
         }
+
+        [Test]
+        public void KillProcessesForProjectKillsAProcess()
+        {
+            var fileSystemMock = new Mock<IFileSystem>(MockBehavior.Strict);
+            fileSystemMock.Setup(fs => fs.CheckIfFileExists(It.IsAny<string>())).Returns(true);
+            var info = new ProcessInfo("sleeper");
+            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var projectName = "aProject";
+            var thread = new Thread(
+                () => executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt"));
+            thread.Start();
+            var started = SpinWait.SpinUntil(() => Process.GetProcessesByName("sleeper").Length > 0,
+                                             TimeSpan.FromSeconds(5));
+            Assert.IsTrue(started);
+            ProcessExecutor.KillProcessesForProject(fileSystemMock.Object, projectName);
+            var stopped = SpinWait.SpinUntil(() => Process.GetProcessesByName("sleeper").Length == 0,
+                                             TimeSpan.FromSeconds(5));
+            Assert.IsTrue(stopped);
+        }
+
+        [Test]
+        public void KillProcessesForProjectHandlesAMissingProject()
+        {
+            ProcessExecutor.KillProcessesForProject(null, "DoesNothingExist");
+        }
         #endregion
     }
 }

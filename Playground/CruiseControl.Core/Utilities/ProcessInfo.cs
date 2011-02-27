@@ -22,7 +22,6 @@
         private readonly ProcessPriorityClass priority;
         private readonly ProcessStartInfo startInfo = new ProcessStartInfo();
         private readonly int[] successExitCodes;
-        private readonly IFileSystem fileSystem;
         private string standardInputContent;
         private TimeSpan timeout = TimeSpan.FromMinutes(2);
         #endregion
@@ -31,66 +30,55 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessInfo"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
         /// <param name="filename">The filename.</param>
-        public ProcessInfo(IFileSystem fileSystem, string filename) :
-            this(fileSystem, filename, null)
+        public ProcessInfo(string filename) :
+            this(filename, null)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessInfo"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="arguments">The arguments.</param>
-        public ProcessInfo(IFileSystem fileSystem, string filename, SecureArguments arguments) :
-            this(fileSystem, filename, arguments, null)
+        public ProcessInfo(string filename, SecureArguments arguments) :
+            this(filename, arguments, null)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessInfo"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="workingDirectory">The working directory.</param>
-        public ProcessInfo(IFileSystem fileSystem, string filename, SecureArguments arguments, string workingDirectory) :
-            this(fileSystem, filename, arguments, workingDirectory, DefaultPriority)
+        public ProcessInfo(string filename, SecureArguments arguments, string workingDirectory) :
+            this(filename, arguments, workingDirectory, DefaultPriority)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessInfo"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="workingDirectory">The working directory.</param>
         /// <param name="priority">The priority.</param>
-        public ProcessInfo(IFileSystem fileSystem, string filename, SecureArguments arguments, string workingDirectory, ProcessPriorityClass priority) :
-            this(fileSystem, filename, arguments, workingDirectory, priority, null)
+        public ProcessInfo(string filename, SecureArguments arguments, string workingDirectory, ProcessPriorityClass priority) :
+            this(filename, arguments, workingDirectory, priority, null)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessInfo"/> class.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="arguments">The arguments.</param>
         /// <param name="workingDirectory">The working directory.</param>
         /// <param name="priority">The priority.</param>
         /// <param name="successExitCodes">The success exit codes.</param>
-        public ProcessInfo(IFileSystem fileSystem, string filename, SecureArguments arguments, string workingDirectory, ProcessPriorityClass priority, int[] successExitCodes)
+        public ProcessInfo(string filename, SecureArguments arguments, string workingDirectory, ProcessPriorityClass priority, int[] successExitCodes)
         {
-            if (fileSystem == null)
-            {
-                throw new ArgumentNullException("fileSystem");
-            }
-
-            this.fileSystem = fileSystem;
             this.arguments = arguments;
             this.priority = priority;
             startInfo.FileName = filename.StripQuotes();
@@ -101,7 +89,6 @@
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardInput = false;
-            this.RepathExecutableIfItIsInWorkingDirectory();
             this.successExitCodes = successExitCodes ?? new[] { 0 };
         }
         #endregion
@@ -115,11 +102,7 @@
         public string WorkingDirectory
         {
             get { return startInfo.WorkingDirectory; }
-            set
-            {
-                startInfo.WorkingDirectory = value;
-                this.RepathExecutableIfItIsInWorkingDirectory();
-            }
+            set { startInfo.WorkingDirectory = value; }
         }
         #endregion
 
@@ -266,16 +249,23 @@
 
         #region CreateProcess()
         /// <summary>
-        /// Creates the process.	
+        /// Creates the process.
         /// </summary>
+        /// <param name="fileSystem">The file system.</param>
         /// <returns>
         /// The new <see cref="Process"/>.
         /// </returns>
-        public Process CreateProcess()
+        public Process CreateProcess(IFileSystem fileSystem)
         {
+            var executableInWorkingDirectory = Path.Combine(WorkingDirectory ?? string.Empty, FileName);
+            if (fileSystem.CheckIfFileExists(executableInWorkingDirectory))
+            {
+                startInfo.FileName = executableInWorkingDirectory;
+            }
+
             // if WorkingDirectory is filled in, check that it exists
             if (!string.IsNullOrEmpty(WorkingDirectory) &&
-                !this.fileSystem.CheckIfDirectoryExists(WorkingDirectory))
+                !fileSystem.CheckIfDirectoryExists(WorkingDirectory))
             {
                 throw new DirectoryNotFoundException("Directory does not exist: " + WorkingDirectory);
             }
@@ -283,22 +273,6 @@
             logger.Debug("Creating process for '{0}'", this.FileName);
             var process = new Process { StartInfo = startInfo };
             return process;
-        }
-        #endregion
-        #endregion
-
-        #region Private methods
-        #region RepathExecutableIfItIsInWorkingDirectory()
-        /// <summary>
-        /// Rebases the executable if it is in working directory.
-        /// </summary>
-        private void RepathExecutableIfItIsInWorkingDirectory()
-        {
-            var executableInWorkingDirectory = Path.Combine(WorkingDirectory ?? string.Empty, FileName);
-            if (this.fileSystem.CheckIfFileExists(executableInWorkingDirectory))
-            {
-                startInfo.FileName = executableInWorkingDirectory;
-            }
         }
         #endregion
         #endregion
