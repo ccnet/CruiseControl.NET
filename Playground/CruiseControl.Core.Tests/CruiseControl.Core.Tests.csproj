@@ -58,6 +58,7 @@
     <Compile Include="Channels\WcfChannelInstanceProviderTests.cs" />
     <Compile Include="Channels\WcfChannelTests.cs" />
     <Compile Include="PersistedProjectStateTests.cs" />
+    <Compile Include="Structure\ScmProjectTests.cs" />
     <Compile Include="Stubs\ChannelStub.cs" />
     <Compile Include="Tasks\ForceBuildTests.cs" />
     <Compile Include="Triggers\RollUpTests.cs" />

@@ -6,6 +6,8 @@
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
+    using System.Windows.Markup;
+    using System.Xml.Linq;
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using Ninject;
@@ -48,6 +50,63 @@
         #endregion
 
         #region Public methods
+        #region GenerateMessageFormat()
+        /// <summary>
+        /// Generates the message format.
+        /// </summary>
+        /// <param name="namespaces">The namespaces.</param>
+        /// <param name="messageType">Type of the parameter.</param>
+        /// <returns>
+        /// The format of the message.
+        /// </returns>
+        public static string GenerateMessageFormat(
+            IDictionary<string, string> namespaces,
+            Type messageType)
+        {
+            var root = new XElement("definition");
+            root.Add(new XAttribute("name", messageType.Name));
+
+            // Retrieve the namespace
+            string definitionNamespace;
+            var typeNamespace = messageType.Namespace ?? string.Empty;
+            if (!namespaces.TryGetValue(typeNamespace, out definitionNamespace))
+            {
+                var attribute = messageType
+                    .Assembly
+                    .GetCustomAttributes(typeof (XmlnsDefinitionAttribute), false)
+                    .FirstOrDefault(xda => (xda as XmlnsDefinitionAttribute).ClrNamespace == typeNamespace);
+                if (attribute != null)
+                {
+                    definitionNamespace = (attribute as XmlnsDefinitionAttribute).XmlNamespace;
+                }
+                else
+                {
+                    definitionNamespace = "clr-namespace:" + typeNamespace +
+                                          ";assembly=" + messageType.Assembly.GetName().Name;
+                }
+
+                namespaces.Add(typeNamespace, definitionNamespace);
+            }
+
+            // Add the properties
+            root.Add(new XAttribute("namespace", definitionNamespace));
+            foreach (
+                var property in
+                    messageType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanWrite))
+            {
+                var propertyXml = new XElement(
+                    "value",
+                    new XAttribute("name", property.Name),
+                    new XAttribute("type", property.PropertyType.Name.ToLowerInvariant()));
+                root.Add(propertyXml);
+            }
+
+            // Convert to a string
+            var format = root.ToString(SaveOptions.DisableFormatting);
+            return format;
+        }
+        #endregion
+
         #region Ping()
         /// <summary>
         /// Checks if the service is available.
@@ -129,6 +188,7 @@
         public QueryResult Query(string urn, QueryArguments arguments)
         {
             var result = new QueryResult();
+            arguments = arguments ?? new QueryArguments();
 
             var item = this.LocateItem(urn);
             if (item == null)
@@ -142,6 +202,8 @@
             var filterRegex = (arguments == null) || string.IsNullOrEmpty(arguments.FilterPattern) ?
                 null :
                 new Regex(arguments.FilterPattern);
+            var messageFormats = new Dictionary<Type, string>();
+            var namespaces = new Dictionary<string, string>();
             foreach (var method in itemType.GetMethods(BindingFlags.Instance | BindingFlags.Public))
             {
                 var actionAttributes = method.GetCustomAttributes(
@@ -158,7 +220,34 @@
                                              Description = description
                                          };
 
-                    // TODO: Serialise the input/output messages
+                    // Generate the message formats
+                    switch (arguments.DataToInclude)
+                    {
+                        case DataDefinitions.InputOnly:
+                            definition.InputData = GenerateMessageFormat(
+                                messageFormats,
+                                namespaces,
+                                method.GetParameters()[0].ParameterType);
+                            break;
+
+                        case DataDefinitions.OutputOnly:
+                            definition.OutputData = GenerateMessageFormat(
+                                messageFormats,
+                                namespaces,
+                                method.ReturnType);
+                            break;
+
+                        case DataDefinitions.Both:
+                            definition.InputData = GenerateMessageFormat(
+                                messageFormats,
+                                namespaces,
+                                method.GetParameters()[0].ParameterType);
+                            definition.OutputData = GenerateMessageFormat(
+                                messageFormats,
+                                namespaces,
+                                method.ReturnType);
+                            break;
+                    }
 
                     actions.Add(definition);
                 }
@@ -235,6 +324,31 @@
                 actionName,
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             return method;
+        }
+        #endregion
+
+        #region GenerateMessageFormat()
+        /// <summary>
+        /// Generates the message format.
+        /// </summary>
+        /// <param name="messageFormats">The message formats.</param>
+        /// <param name="namespaces">The namespaces.</param>
+        /// <param name="messageType">Type of the message.</param>
+        /// <returns>
+        /// The format of the message.
+        /// </returns>
+        private static string GenerateMessageFormat(IDictionary<Type, string> messageFormats,
+            IDictionary<string, string> namespaces,
+            Type messageType)
+        {
+            string format;
+            if (!messageFormats.TryGetValue(messageType, out format))
+            {
+                format = GenerateMessageFormat(namespaces, messageType);
+                messageFormats.Add(messageType, format);
+            }
+
+            return format;
         }
         #endregion
         #endregion

@@ -124,8 +124,22 @@
             Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
             var expected = new[]
                                {
-                                   new RemoteActionDefinition {Name = "TestAction", Description = "This is a test action"},
-                                   new RemoteActionDefinition {Name = "DoSomething", Description = "This will do something"}
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "TestAction",
+                                           Description = "This is a test action",
+                                           InputData = "<definition name=\"SingleValue\" namespace=\"urn:cruisecontrol:common\">" +
+                                                    "<value name=\"Value\" type=\"string\" />" +
+                                                "</definition>",
+                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       },
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "DoSomething",
+                                           Description = "This will do something",
+                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />",
+                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       }
                                };
             CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
         }
@@ -136,13 +150,77 @@
             var testItem = new TestItem("Baby");
             var server = new Server("Test", testItem);
             var invoker = new ActionInvoker(server);
-            var args = new QueryArguments { FilterPattern = "DoSomething" };
+            var args = new QueryArguments { FilterPattern = "DoSomething", DataToInclude = DataDefinitions.None };
             var result = invoker.Query("urn:ccnet:test:baby", args);
             Assert.IsNotNull(result);
             Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
             var expected = new[]
                                {
-                                   new RemoteActionDefinition {Name = "DoSomething", Description = "This will do something"}
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "DoSomething",
+                                           Description = "This will do something"
+                                       }
+                               };
+            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
+        }
+
+        [Test]
+        public void QueryRetrievesInputDefinitions()
+        {
+            var testItem = new TestItem("Baby");
+            var server = new Server("Test", testItem);
+            var invoker = new ActionInvoker(server);
+            var result = invoker.Query(
+                "urn:ccnet:test:baby",
+                new QueryArguments {DataToInclude = DataDefinitions.InputOnly});
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            var expected = new[]
+                               {
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "TestAction",
+                                           Description = "This is a test action",
+                                           InputData = "<definition name=\"SingleValue\" namespace=\"urn:cruisecontrol:common\">" +
+                                                    "<value name=\"Value\" type=\"string\" />" +
+                                                "</definition>"
+                                       },
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "DoSomething", 
+                                           Description = "This will do something",
+                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       }
+                               };
+            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
+        }
+
+        [Test]
+        public void QueryRetrievesOutputDefinitions()
+        {
+            var testItem = new TestItem("Baby");
+            var server = new Server("Test", testItem);
+            var invoker = new ActionInvoker(server);
+            var result = invoker.Query(
+                "urn:ccnet:test:baby",
+                new QueryArguments { DataToInclude = DataDefinitions.OutputOnly });
+            Assert.IsNotNull(result);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            var expected = new[]
+                               {
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "TestAction",
+                                           Description = "This is a test action",
+                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       },
+                                   new RemoteActionDefinition
+                                       {
+                                           Name = "DoSomething",
+                                           Description = "This will do something",
+                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       }
                                };
             CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
         }
@@ -154,6 +232,57 @@
             var invoker = new ActionInvoker(server);
             var expected = server.UniversalName;
             var actual = invoker.RetrieveServerName();
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GenerateMessageFormatAddsNewNamespace()
+        {
+            var namespaces = new Dictionary<string, string>();
+            ActionInvoker.GenerateMessageFormat(namespaces, typeof (Messages.Blank));
+            Assert.IsTrue(namespaces.ContainsKey("CruiseControl.Common.Messages"));
+            Assert.AreEqual("urn:cruisecontrol:common", namespaces["CruiseControl.Common.Messages"]);
+        }
+
+        [Test]
+        public void GenerateMessageIgnoresExistingNamespace()
+        {
+            var namespaces = new Dictionary<string, string>();
+            var ns = "anotherUrn";
+            namespaces.Add("CruiseControl.Common.Messages", ns);
+            ActionInvoker.GenerateMessageFormat(namespaces, typeof(Messages.Blank));
+            Assert.IsTrue(namespaces.ContainsKey("CruiseControl.Common.Messages"));
+            Assert.AreEqual(ns, namespaces["CruiseControl.Common.Messages"]);
+        }
+
+        [Test]
+        public void GenerateMessageFormatHandlesMissingXmlnsDefinition()
+        {
+            var namespaces = new Dictionary<string, string>();
+            ActionInvoker.GenerateMessageFormat(namespaces, typeof(FakeMessage));
+            Assert.IsTrue(namespaces.ContainsKey("CruiseControl.Core.Tests.Utilities"));
+            Assert.AreEqual(
+                "clr-namespace:CruiseControl.Core.Tests.Utilities;assembly=CruiseControl.Core.Tests", 
+                namespaces["CruiseControl.Core.Tests.Utilities"]);
+        }
+
+        [Test]
+        public void GenerateMessageFormatHandlesMessageWithoutProperties()
+        {
+            var namespaces = new Dictionary<string, string>();
+            var actual = ActionInvoker.GenerateMessageFormat(namespaces, typeof(Messages.Blank));
+            var expected = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />";
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GenerateMessageFormatHandlesMessageWithProperties()
+        {
+            var namespaces = new Dictionary<string, string>();
+            var actual = ActionInvoker.GenerateMessageFormat(namespaces, typeof(Messages.SingleValue));
+            var expected = "<definition name=\"SingleValue\" namespace=\"urn:cruisecontrol:common\">" +
+                            "<value name=\"Value\" type=\"string\" />" +
+                           "</definition>";
             Assert.AreEqual(expected, actual);
         }
         #endregion
@@ -180,20 +309,25 @@
             }
 
             [RemoteAction]
-            [Description("This is a test action")]
-            public Messages.Blank TestAction(Messages.BuildRequest message)
+            [System.ComponentModel.Description("This is a test action")]
+            public Messages.Blank TestAction(Messages.SingleValue message)
             {
                 this.WasInvoked = true;
                 return new Messages.Blank();
             }
 
             [RemoteAction]
-            [Description("This will do something")]
+            [System.ComponentModel.Description("This will do something")]
             public Messages.Blank DoSomething(Messages.Blank message)
             {
                 this.WasInvoked = true;
                 return new Messages.Blank();
             }
+        }
+
+        private class FakeMessage
+        {
+            
         }
         #endregion
 
@@ -204,7 +338,7 @@
             public int Compare(object x, object y)
             {
                 var xDefinition = x as RemoteActionDefinition;
-                var yDefinition = x as RemoteActionDefinition;
+                var yDefinition = y as RemoteActionDefinition;
                 var areEqual = xDefinition != null &&
                     yDefinition != null &&
                     xDefinition.Description == yDefinition.Description &&

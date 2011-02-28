@@ -1,6 +1,7 @@
 ﻿namespace CruiseControl.Common
 {
     using System.Runtime.Serialization;
+    using System.Xml.Linq;
 
     /// <summary>
     /// The definition of an action.
@@ -51,6 +52,46 @@
         /// </value>
         [DataMember]
         public string OutputData { get; set; }
+        #endregion
+        #endregion
+
+        #region Public methods
+        #region ToString()
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            var input = ExtractDefinitionName(this.InputData);
+            var output = ExtractDefinitionName(this.OutputData);
+            var message = "[" + this.Name + "(" + input + ")=>(" + output + ")]";
+            return message;
+        }
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region ExtractDefinitionName()
+        /// <summary>
+        /// Extracts the name of the definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>
+        /// The name of the definition if found; "?" otherwise.
+        /// </returns>
+        private static string ExtractDefinitionName(string definition)
+        {
+            if (string.IsNullOrEmpty(definition))
+            {
+                return "?";
+            }
+
+            var xml = XDocument.Parse(definition);
+            return xml.Root.Attribute("name").Value;
+        }
         #endregion
         #endregion
     }
