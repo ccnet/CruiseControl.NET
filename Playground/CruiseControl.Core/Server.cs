@@ -11,6 +11,7 @@
     using CruiseControl.Core.Utilities;
     using Ninject;
     using NLog;
+    using Messages = CruiseControl.Common.Messages;
 
     /// <summary>
     /// The root configuration node.
@@ -231,6 +232,34 @@
             var projects = this.Children
                 .SelectMany(c => c.ListProjects());
             ValidationHelpers.CheckForDuplicateItems(projects, validationLog, "project");
+        }
+        #endregion
+        #endregion
+
+        #region Actions
+        #region ListProjects()
+        /// <summary>
+        /// Lists the projects on the server.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A message containing the response details.</returns>
+        [RemoteAction]
+        [Description("Lists the projects on the server.")]
+        public virtual Messages.ServerItemList ListProjects(Messages.Blank request)
+        {
+            var projects = this.Children.SelectMany(c => c.ListProjects());
+            var response = new Messages.ServerItemList
+                               {
+                                   Children = projects
+                                   .Select(p => new Messages.ServerItem
+                                                    {
+                                                        Description = p.Description,
+                                                        DisplayName = p.Name,
+                                                        Urn = p.UniversalName
+                                                    })
+                                   .ToArray()
+                               };
+            return response;
         }
         #endregion
         #endregion

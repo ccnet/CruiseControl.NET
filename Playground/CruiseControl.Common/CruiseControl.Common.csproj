@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\ServerItemList.cs" />
+    <Compile Include="Messages\ServerItem.cs" />
     <Compile Include="RemoteServerException.cs" />
     <Compile Include="DataDefinitions.cs" />
     <Compile Include="ICommunicationsChannel.cs" />

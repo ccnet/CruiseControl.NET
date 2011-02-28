@@ -42,6 +42,14 @@
         public string Name { get; set; }
         #endregion
 
+        #region Description
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        [DefaultValue(null)]
+        public string Description { get; set; }
+        #endregion
+
         #region ItemType
         /// <summary>
         /// Gets the type of the item.

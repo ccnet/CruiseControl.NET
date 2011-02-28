@@ -188,6 +188,17 @@
             server.CloseCommunications();
             Assert.IsTrue(cleaned);
         }
+
+        [Test]
+        public void ListProjectsIncludesAllProjects()
+        {
+            var server = new Server(
+                "test",
+                new Project("project1"),
+                new Project("project2"));
+            var result = server.ListProjects(null);
+            Assert.AreEqual(2, result.Children.Length);
+        }
         #endregion
     }
 }
