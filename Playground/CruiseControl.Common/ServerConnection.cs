@@ -145,7 +145,7 @@
         /// </returns>
         public virtual object Invoke(string urn, string action)
         {
-            return this.Invoke(urn, action, null);
+            return this.Invoke(urn, action, (object)null);
         }
 
         /// <summary>
@@ -159,15 +159,33 @@
         /// </returns>
         public virtual object Invoke(string urn, string action, object args)
         {
+            var result = this.Invoke(
+                urn,
+                action,
+                args == null ? null : MessageSerialiser.Serialise(args));
+            return MessageSerialiser.Deserialise(result);
+        }
+
+        /// <summary>
+        /// Invokes an action using raw messages.
+        /// </summary>
+        /// <param name="urn">The URN to invoke the action on.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="args">The arguments for the action in XAML.</param>
+        /// <returns>
+        /// The result of the action in XAML.
+        /// </returns>
+        public virtual string Invoke(string urn, string action, string args)
+        {
             var request = new InvokeArguments
                               {
                                   Action = action,
-                                  Data = args == null ? null : MessageSerialiser.Serialise(args)
+                                  Data = args
                               };
             var result = this.PerformChannelOperation(c => c.Invoke(urn, request));
             if (result.ResultCode == RemoteResultCode.Success)
             {
-                return MessageSerialiser.Deserialise(result.Data);
+                return result.Data;
             }
 
             throw new RemoteServerException(result.ResultCode, result.LogId);
