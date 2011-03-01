@@ -1,5 +1,7 @@
 ﻿namespace CruiseControl.Common.Messages
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// An item on the server.
     /// </summary>
@@ -33,6 +35,7 @@
         /// <value>
         /// The description.
         /// </value>
+        [DefaultValue(null)]
         public string Description { get; set; }
         #endregion
         #endregion

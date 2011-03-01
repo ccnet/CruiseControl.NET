@@ -53,6 +53,7 @@
     <Compile Include="Messages\BlankTests.cs" />
     <Compile Include="Messages\BuildRequestTests.cs" />
     <Compile Include="Messages\MessageSerialisationHelper.cs" />
+    <Compile Include="Messages\ServerItemListTests.cs" />
     <Compile Include="Messages\SingleValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryArgumentsTests.cs" />

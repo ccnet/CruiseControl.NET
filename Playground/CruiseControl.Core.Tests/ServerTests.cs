@@ -197,7 +197,18 @@
                 new Project("project1"),
                 new Project("project2"));
             var result = server.ListProjects(null);
-            Assert.AreEqual(2, result.Children.Length);
+            Assert.AreEqual(2, result.Children.Count);
+        }
+
+        [Test]
+        public void ListChildrenOnlyIncludesDirectChildren()
+        {
+            var server = new Server(
+                "test",
+                new Queue("queue", new Project("project1")),
+                new Project("project2"));
+            var result = server.ListChildren(null);
+            Assert.AreEqual(2, result.Children.Count);
         }
         #endregion
     }

@@ -248,17 +248,36 @@
         public virtual Messages.ServerItemList ListProjects(Messages.Blank request)
         {
             var projects = this.Children.SelectMany(c => c.ListProjects());
-            var response = new Messages.ServerItemList
-                               {
-                                   Children = projects
-                                   .Select(p => new Messages.ServerItem
-                                                    {
-                                                        Description = p.Description,
-                                                        DisplayName = p.Name,
-                                                        Urn = p.UniversalName
-                                                    })
-                                   .ToArray()
-                               };
+            var serverItems = projects
+                .Select(p => new Messages.ServerItem
+                                 {
+                                     Description = p.Description,
+                                     DisplayName = p.Name,
+                                     Urn = p.UniversalName
+                                 });
+            var response = new Messages.ServerItemList(serverItems);
+            return response;
+        }
+        #endregion
+
+        #region ListChildren()
+        /// <summary>
+        /// Lists the direct children of the server.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A message containing the response details.</returns>
+        [RemoteAction]
+        [Description("Lists the direct children of the server.")]
+        public virtual Messages.ServerItemList ListChildren(Messages.Blank request)
+        {
+            var serverItems = this.Children
+                .Select(p => new Messages.ServerItem
+                                 {
+                                     Description = p.Description,
+                                     DisplayName = p.Name,
+                                     Urn = p.UniversalName
+                                 });
+            var response = new Messages.ServerItemList(serverItems);
             return response;
         }
         #endregion

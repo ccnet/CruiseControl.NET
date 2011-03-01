@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using CruiseControl.Common;
     using CruiseControl.Core.Utilities;
     using NUnit.Framework;
@@ -126,22 +127,22 @@
                                {
                                    new RemoteActionDefinition
                                        {
+                                           Name = "DoSomething",
+                                           Description = "This will do something",
+                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />",
+                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       },
+                                   new RemoteActionDefinition
+                                       {
                                            Name = "TestAction",
                                            Description = "This is a test action",
                                            InputData = "<definition name=\"SingleValue\" namespace=\"urn:cruisecontrol:common\">" +
                                                     "<value name=\"Value\" type=\"string\" />" +
                                                 "</definition>",
                                            OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
-                                       },
-                                   new RemoteActionDefinition
-                                       {
-                                           Name = "DoSomething",
-                                           Description = "This will do something",
-                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />",
-                                           OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
                                        }
                                };
-            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
+            CollectionAssert.AreEqual(expected, result.Actions.OrderBy(rad => rad.Name), new DefinitionComparer());
         }
 
         [Test]
@@ -180,20 +181,20 @@
                                {
                                    new RemoteActionDefinition
                                        {
+                                           Name = "DoSomething", 
+                                           Description = "This will do something",
+                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
+                                       },
+                                   new RemoteActionDefinition
+                                       {
                                            Name = "TestAction",
                                            Description = "This is a test action",
                                            InputData = "<definition name=\"SingleValue\" namespace=\"urn:cruisecontrol:common\">" +
                                                     "<value name=\"Value\" type=\"string\" />" +
                                                 "</definition>"
-                                       },
-                                   new RemoteActionDefinition
-                                       {
-                                           Name = "DoSomething", 
-                                           Description = "This will do something",
-                                           InputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
                                        }
                                };
-            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
+            CollectionAssert.AreEqual(expected, result.Actions.OrderBy(rad => rad.Name), new DefinitionComparer());
         }
 
         [Test]
@@ -211,18 +212,18 @@
                                {
                                    new RemoteActionDefinition
                                        {
-                                           Name = "TestAction",
-                                           Description = "This is a test action",
+                                           Name = "DoSomething",
+                                           Description = "This will do something",
                                            OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
                                        },
                                    new RemoteActionDefinition
                                        {
-                                           Name = "DoSomething",
-                                           Description = "This will do something",
+                                           Name = "TestAction",
+                                           Description = "This is a test action",
                                            OutputData = "<definition name=\"Blank\" namespace=\"urn:cruisecontrol:common\" />"
                                        }
                                };
-            CollectionAssert.AreEqual(expected, result.Actions, new DefinitionComparer());
+            CollectionAssert.AreEqual(expected, result.Actions.OrderBy(rad => rad.Name), new DefinitionComparer());
         }
 
         [Test]

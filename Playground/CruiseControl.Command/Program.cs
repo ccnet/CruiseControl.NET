@@ -1,12 +1,15 @@
 ﻿namespace CruiseControl.Command
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using CruiseControl.Common;
 
     class Program
     {
+        private static readonly char[] shortCuts = new[] { '?', '.', '~', '-', '+' };
+
         static void Main(string[] args)
         {
             var connection = new ServerConnection(args[0]);
@@ -28,15 +31,38 @@
                         break;
 
                     case "ping":
+                    case "~":
                         RunPingCommand(connection);
                         break;
 
                     case "query":
+                    case "?":
                         RunQueryCommand(connection, fullUrn);
                         break;
 
                     case "invoke":
+                    case ".":
                         RunInvokeCommand(connection, fullUrn, command.Arguments);
+                        break;
+
+                    case "up":
+                    case "-":
+                        if (shortUrn.Contains(":"))
+                        {
+                            shortUrn = shortUrn.Substring(0, shortUrn.LastIndexOf(':'));
+                            fullUrn = fullUrn.Substring(0, fullUrn.LastIndexOf(':'));
+                        }
+
+                        break;
+
+                    case "down":
+                    case "+":
+                        if (command.Arguments.Length > 0)
+                        {
+                            fullUrn += ":" + command.Arguments[0];
+                            shortUrn += ":" + command.Arguments[0];
+                        }
+
                         break;
                 }
             }
@@ -44,7 +70,12 @@
 
         private static Command ReadFromConsole()
         {
-            var input = Console.ReadLine();
+            var input = Console.ReadLine() ?? string.Empty;
+            if ((input.Length > 1) && (shortCuts.Contains(input[0])))
+            {
+                input = input.Substring(0, 1) + " " + input.Substring(1);
+            }
+
             var parts = input.Split(' ');
             var command = new Command();
             if (parts.Length > 0)
@@ -62,7 +93,14 @@
             try
             {
                 Console.ForegroundColor = colour;
-                Console.WriteLine(message, args);
+                if (args.Length == 0)
+                {
+                    Console.WriteLine(message);
+                }
+                else
+                {
+                    Console.WriteLine(message, args);
+                }
             }
             finally
             {
@@ -92,11 +130,13 @@
             WriteToConsole(ConsoleColor.Yellow, "Querying '{0}'...", fullUrn);
             try
             {
-                var result = connection.Query(fullUrn);
+                var result = connection.Query(
+                    fullUrn,
+                    new QueryArguments { DataToInclude = DataDefinitions.Both });
                 WriteToConsole(ConsoleColor.Yellow, "...{0} action(s) retrieved", result.Length);
                 foreach (var action in result)
                 {
-                    WriteToConsole(ConsoleColor.White, "\t{0}", action.Name);
+                    WriteToConsole(ConsoleColor.White, "\t{0}", action);
                 }
             }
             catch (Exception error)
@@ -105,13 +145,15 @@
             }
         }
 
-        private static void RunInvokeCommand(ServerConnection connection, string fullUrn, string[] arguments)
+        private static void RunInvokeCommand(ServerConnection connection, string fullUrn, IList<string> arguments)
         {
             WriteToConsole(ConsoleColor.Yellow, "Invoking '{1}' on '{0}'...", fullUrn, arguments[0]);
             try
             {
-                var result = connection.Invoke(fullUrn, arguments[0], arguments.Skip(1).ToArray());
+                var message = "<Blank xmlns=\"urn:cruisecontrol:common\" />";
+                var result = connection.Invoke(fullUrn, arguments[0], message);
                 WriteToConsole(ConsoleColor.Yellow, "...completed");
+                WriteToConsole(ConsoleColor.Cyan, result);
             }
             catch (Exception error)
             {
