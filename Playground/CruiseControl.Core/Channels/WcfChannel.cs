@@ -62,7 +62,11 @@
         public InvokeResult Invoke(string urn, InvokeArguments arguments)
         {
             var logId = Guid.NewGuid();
-            logger.Debug("Performing invoke on '{0}' - {1}", urn, logId);
+            logger.Debug(
+                "Invoking '{2}' on '{0}' - {1}", 
+                urn, 
+                logId, 
+                (arguments == null ? string.Empty : arguments.Action ?? string.Empty));
             try
             {
                 var result = this.Invoker.Invoke(urn, arguments);
@@ -97,18 +101,18 @@
         public QueryResult Query(string urn, QueryArguments arguments)
         {
             var logId = Guid.NewGuid();
-            logger.Debug("Performing invoke on '{0}' - {1}", urn, logId);
+            logger.Debug("Performing query on '{0}' - {1}", urn, logId);
             try
             {
                 var result = this.Invoker.Query(urn, arguments);
                 result.LogId = logId;
-                logger.Debug("Invoke completed for '{0}' - {1}", urn, logId);
+                logger.Debug("Query completed for '{0}' - {1}", urn, logId);
                 return result;
             }
             catch (Exception error)
             {
                 logger.ErrorException(
-                    "Error happened on invoke for '" + urn +
+                    "Error happened on query for '" + urn +
                     "' - " + logId + ": " + error.Message,
                     error);
                 return new QueryResult

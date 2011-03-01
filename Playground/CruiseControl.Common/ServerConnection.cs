@@ -241,18 +241,35 @@
         /// </returns>
         private TResult PerformChannelOperation<TResult>(Func<ICommunicationsChannel, TResult> operation)
         {
+            var hasError = false;
             var address = new EndpointAddress(this.Address);
             var channel = ChannelFactory<ICommunicationsChannel>.CreateChannel(this.Binding, address);
             try
             {
                 return operation(channel);
             }
+            catch
+            {
+                hasError=true;
+                throw;
+            }
             finally
             {
                 var disposable = channel as IDisposable;
                 if (disposable != null)
                 {
-                    disposable.Dispose();
+                    try
+                    {
+                        disposable.Dispose();
+                    }
+                    catch
+                    {
+                        // Return only the first exception, ignore subsequent exceptions
+                        if (!hasError)
+                        {
+                            throw;
+                        }
+                    }
                 }
             }
         }

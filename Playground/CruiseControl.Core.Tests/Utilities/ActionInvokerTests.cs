@@ -21,6 +21,27 @@
         }
 
         [Test]
+        public void InvokeHandlesMethodsWithTheSameName()
+        {
+            var called = false;
+            var item = new TroublesomeItem
+                           {
+                               Name = "ghost",
+                               DoSomethingAction = () => called = true
+                           };
+            var server = new Server("Test", item);
+            var invoker = new ActionInvoker(server);
+            var arguments = new InvokeArguments
+                                {
+                                    Action = "DoSomething",
+                                    Data = "<Blank xmlns=\"urn:cruisecontrol:common\" />"
+                                };
+            var result = invoker.Invoke("urn:ccnet:test:ghost", arguments);
+            Assert.AreEqual(RemoteResultCode.Success, result.ResultCode);
+            Assert.IsTrue(called);
+        }
+
+        [Test]
         public void InvokeFailsIfTheNameCannotBeFound()
         {
             var server = new Server("Test");
@@ -323,6 +344,36 @@
             {
                 this.WasInvoked = true;
                 return new Messages.Blank();
+            }
+        }
+
+        private class TroublesomeItem
+            : ServerItem
+        {
+            public void DoSomething()
+            {
+            }
+
+            public Action DoSomethingAction { get; set; }
+
+            [RemoteAction]
+            public Messages.Blank DoSomething(Messages.Blank request)
+            {
+                if (this.DoSomethingAction != null)
+                {
+                    this.DoSomethingAction();
+                }
+
+                return null;
+            }
+
+            public override void AskToIntegrate(IntegrationContext context)
+            {
+            }
+
+            public override IEnumerable<Project> ListProjects()
+            {
+                return new Project[0];
             }
         }
 

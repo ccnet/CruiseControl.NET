@@ -210,6 +210,15 @@
             var result = server.ListChildren(null);
             Assert.AreEqual(2, result.Children.Count);
         }
+
+        [Test]
+        public void GetVersionRetrievesVersionOfCore()
+        {
+            var expected = typeof (Server).Assembly.GetName().Version.ToString();
+            var server = new Server();
+            var actual = server.GetVersion(null).Value;
+            Assert.AreEqual(expected, actual);
+        }
         #endregion
     }
 }

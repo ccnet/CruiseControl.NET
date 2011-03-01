@@ -5,6 +5,24 @@
     /// </summary>
     public class SingleValue
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleValue"/> class.
+        /// </summary>
+        public SingleValue()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleValue"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public SingleValue(string value)
+        {
+            this.Value = value;
+        }
+        #endregion
+
         #region Public properties
         #region Value
         /// <summary>

@@ -297,6 +297,7 @@
                 var message = "The project '" +
                     (this.Name ?? string.Empty) +
                     "'must be in a running state before it can be stopped";
+                logger.Warn(message);
                 // TODO: Use a custom exception
                 throw new InvalidOperationException(message);
             }
@@ -439,11 +440,18 @@
         /// <returns>A message containing the response details.</returns>
         [RemoteAction]
         [Description("Starts a project if it is not already started.")]
-        public virtual Messages.Blank Start(Messages.Blank request)
+        public virtual Messages.OperationReport Start(Messages.Blank request)
         {
-            this.Start();
-            var response = new Messages.Blank();
-            return response;
+            try
+            {
+                this.Start();
+                var response = new Messages.OperationReport(true, "Starting");
+                return response;
+            }
+            catch
+            {
+                return new Messages.OperationReport(false, "Unable to start!");
+            }
         }
         #endregion
 
@@ -455,11 +463,18 @@
         /// <returns>A message containing the response details.</returns>
         [RemoteAction]
         [Description("Stops a project if it is not already stopped.")]
-        public virtual Messages.Blank Stop(Messages.Blank request)
+        public virtual Messages.OperationReport Stop(Messages.Blank request)
         {
-            this.Stop();
-            var response = new Messages.Blank();
-            return response;
+            try
+            {
+                this.Stop();
+                var response = new Messages.OperationReport(true, "Stopping");
+                return response;
+            }
+            catch
+            {
+                return new Messages.OperationReport(false, "Unable to stop!");
+            }
         }
         #endregion
         #endregion

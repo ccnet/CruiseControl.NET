@@ -65,8 +65,15 @@
             {
                 case RemoteResultCode.InvalidInput:
                     return "An invalid request message was passed to the remote server";
+
+                case RemoteResultCode.UnknownAction:
+                    return "Unable to find specified action - check that the action is correct";
+
+                case RemoteResultCode.UnknownUrn:
+                    return "Unable to find target item - check that the URN is correct";
+
                 default:
-                    return "An unknown error has occurred at the remote server, code: " + resultCode;
+                    return "An error has occurred at the remote server, code: " + resultCode;
             }
         }
         #endregion

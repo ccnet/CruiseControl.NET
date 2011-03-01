@@ -11,6 +11,7 @@
     using CruiseControl.Common;
     using CruiseControl.Core.Interfaces;
     using Ninject;
+    using NLog;
 
     /// <summary>
     /// Invokes actions on the various configuration elements using universal names.
@@ -18,6 +19,10 @@
     public class ActionInvoker
         : IActionInvoker
     {
+        #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionInvoker"/> class.
@@ -135,6 +140,7 @@
             var item = this.LocateItem(urn);
             if (item == null)
             {
+                logger.Warn("Request made to unknown URN '{0}'", urn);
                 result.ResultCode = RemoteResultCode.UnknownUrn;
                 return result;
             }
@@ -148,6 +154,7 @@
             var method = FindAction(item.GetType(), arguments.Action);
             if (method == null)
             {
+                logger.Warn("Request made for unknown action '{0}' on '{1}", arguments.Action, urn);
                 result.ResultCode = RemoteResultCode.UnknownAction;
                 return result;
             }
@@ -193,6 +200,7 @@
             var item = this.LocateItem(urn);
             if (item == null)
             {
+                logger.Warn("Request made to unknown URN '{0}'", urn);
                 result.ResultCode = RemoteResultCode.UnknownUrn;
                 return result;
             }
@@ -320,10 +328,11 @@
         /// </returns>
         private static MethodInfo FindAction(Type itemType, string actionName)
         {
-            var method = itemType.GetMethod(
-                actionName,
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            return method;
+            var methods = itemType.GetMethods(
+                BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => m.Name.Equals(actionName, StringComparison.InvariantCultureIgnoreCase));
+            return methods.FirstOrDefault(
+                m => m.GetCustomAttributes(typeof (RemoteActionAttribute), true).Length > 0);
         }
         #endregion
 

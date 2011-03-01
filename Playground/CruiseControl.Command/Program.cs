@@ -16,9 +16,19 @@
             var exit = false;
             WriteToConsole(ConsoleColor.White, "CruiseControl.NET: Interactive Console");
             WriteToConsole(ConsoleColor.White, new string('=', 40));
-            WriteToConsole(ConsoleColor.Yellow, "Retrieving server name...");
-            var fullUrn = connection.RetrieveServerName();
-            WriteToConsole(ConsoleColor.Yellow, "...server name is '{0}'", fullUrn);
+            WriteToConsole(ConsoleColor.DarkGray, "Retrieving server name from '" + args[0] + "'...");
+            string fullUrn;
+            try
+            {
+                fullUrn = connection.RetrieveServerName();
+            }
+            catch (Exception error)
+            {
+                WriteToConsole(ConsoleColor.Red, "...unable to retrieve server name: " + error.Message);
+                return;
+            }
+
+            WriteToConsole(ConsoleColor.DarkGray, "...server name is '{0}'", fullUrn);
             var shortUrn = fullUrn.Substring(10);
             while (!exit)
             {
@@ -27,6 +37,7 @@
                 switch (command.Name)
                 {
                     case "exit":
+                    case "quit":
                         exit = true;
                         break;
 
@@ -63,6 +74,10 @@
                             shortUrn += ":" + command.Arguments[0];
                         }
 
+                        break;
+
+                    default:
+                        WriteToConsole(ConsoleColor.Gray, "!! Unknown command: " + command.Name + " !!");
                         break;
                 }
             }
@@ -110,14 +125,14 @@
 
         private static void RunPingCommand(ServerConnection connection)
         {
-            WriteToConsole(ConsoleColor.Yellow, "Sending ping...");
+            WriteToConsole(ConsoleColor.DarkGray, "Sending ping...");
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var result = connection.Ping();
             stopwatch.Stop();
             if (result)
             {
-                WriteToConsole(ConsoleColor.Yellow, "...ping received in {0}ms", stopwatch.ElapsedMilliseconds);
+                WriteToConsole(ConsoleColor.DarkGray, "...ping received in {0}ms", stopwatch.ElapsedMilliseconds);
             }
             else
             {
@@ -127,14 +142,14 @@
 
         private static void RunQueryCommand(ServerConnection connection, string fullUrn)
         {
-            WriteToConsole(ConsoleColor.Yellow, "Querying '{0}'...", fullUrn);
+            WriteToConsole(ConsoleColor.DarkGray, "Querying '{0}'...", fullUrn);
             try
             {
                 var result = connection.Query(
                     fullUrn,
                     new QueryArguments { DataToInclude = DataDefinitions.Both });
-                WriteToConsole(ConsoleColor.Yellow, "...{0} action(s) retrieved", result.Length);
-                foreach (var action in result)
+                WriteToConsole(ConsoleColor.DarkGray, "...{0} action(s) retrieved", result.Length);
+                foreach (var action in result.OrderBy(a => a.Name))
                 {
                     WriteToConsole(ConsoleColor.White, "\t{0}", action);
                 }
@@ -147,12 +162,12 @@
 
         private static void RunInvokeCommand(ServerConnection connection, string fullUrn, IList<string> arguments)
         {
-            WriteToConsole(ConsoleColor.Yellow, "Invoking '{1}' on '{0}'...", fullUrn, arguments[0]);
+            WriteToConsole(ConsoleColor.DarkGray, "Invoking '{1}' on '{0}'...", fullUrn, arguments[0]);
             try
             {
                 var message = "<Blank xmlns=\"urn:cruisecontrol:common\" />";
                 var result = connection.Invoke(fullUrn, arguments[0], message);
-                WriteToConsole(ConsoleColor.Yellow, "...completed");
+                WriteToConsole(ConsoleColor.DarkGray, "...completed");
                 WriteToConsole(ConsoleColor.Cyan, result);
             }
             catch (Exception error)

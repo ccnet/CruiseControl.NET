@@ -42,9 +42,25 @@
         }
 
         [Test]
+        public void GenerateMessageHandlesUnknownAction()
+        {
+            var expected = "Unable to find specified action - check that the action is correct";
+            var actual = RemoteServerException.GenerateMessage(RemoteResultCode.UnknownAction);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void GenerateMessageHandlesUnknownUrn()
+        {
+            var expected = "Unable to find target item - check that the URN is correct";
+            var actual = RemoteServerException.GenerateMessage(RemoteResultCode.UnknownUrn);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
         public void GenerateMessageHandlesSuccess()
         {
-            var expected = "An unknown error has occurred at the remote server, code: " + RemoteResultCode.Success;
+            var expected = "An error has occurred at the remote server, code: " + RemoteResultCode.Success;
             var actual = RemoteServerException.GenerateMessage(RemoteResultCode.Success);
             Assert.AreEqual(expected, actual);
         }

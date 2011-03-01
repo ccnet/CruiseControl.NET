@@ -6,6 +6,7 @@
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
+    using System.Reflection;
     using System.Windows.Markup;
     using CruiseControl.Core.Interfaces;
     using CruiseControl.Core.Utilities;
@@ -22,6 +23,8 @@
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static Version serverVersion;
+        private static readonly object versionLockObject = new object();
         private IActionInvoker actionInvoker;
         #endregion
 
@@ -278,6 +281,34 @@
                                      Urn = p.UniversalName
                                  });
             var response = new Messages.ServerItemList(serverItems);
+            return response;
+        }
+        #endregion
+
+        #region GetVersion()
+        /// <summary>
+        /// Gets the version of the server.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A message containing the response details.</returns>
+        [RemoteAction]
+        [Description("Gets the current server version.")]
+        public virtual Messages.SingleValue GetVersion(Messages.Blank request)
+        {
+            if (serverVersion == null)
+            {
+                // Retrieve and cache the version
+                lock (versionLockObject)
+                {
+                    if (serverVersion == null)
+                    {
+                        serverVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    }
+                }
+            }
+
+            // Return the version
+            var response = new Messages.SingleValue(serverVersion.ToString());
             return response;
         }
         #endregion
