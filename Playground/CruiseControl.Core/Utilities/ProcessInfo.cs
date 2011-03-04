@@ -9,6 +9,9 @@
     using CruiseControl.Core.Interfaces;
     using NLog;
 
+    /// <summary>
+    /// Information for starting an external process.
+    /// </summary>
     public class ProcessInfo
     {
         #region Constants
@@ -106,7 +109,7 @@
         }
         #endregion
 
-        #region
+        #region FileName
         /// <summary>
         /// Gets the name of the file.	
         /// </summary>

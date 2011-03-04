@@ -60,6 +60,9 @@
     <Compile Include="PersistedProjectStateTests.cs" />
     <Compile Include="Structure\ScmProjectTests.cs" />
     <Compile Include="Stubs\ChannelStub.cs" />
+    <Compile Include="Stubs\ProcessExecutorStub.cs" />
+    <Compile Include="TaskExecutionContextHelpers.cs" />
+    <Compile Include="Tasks\BuildMSBuildTests.cs" />
     <Compile Include="Tasks\ForceBuildTests.cs" />
     <Compile Include="Triggers\RollUpTests.cs" />
     <Compile Include="Utilities\ActionInvokerTests.cs" />

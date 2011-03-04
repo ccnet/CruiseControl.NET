@@ -311,6 +311,21 @@
             return stream;
         }
         #endregion
+
+        #region GeneratePathInWorkingDirectory()
+        /// <summary>
+        /// Generates the full path for a file in the working directory.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>
+        /// The full path to the file.
+        /// </returns>
+        public string GeneratePathInWorkingDirectory(string filename)
+        {
+            var path = GenerateArtifactFileName(this.project, "working", filename);
+            return path;
+        }
+        #endregion
         #endregion
     }
 }

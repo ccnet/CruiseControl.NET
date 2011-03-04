@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\OperationReport.cs" />
+    <Compile Include="Messages\ProjectStatus.cs" />
     <Compile Include="Messages\ServerItemList.cs" />
     <Compile Include="Messages\ServerItem.cs" />
     <Compile Include="Messages\SingleValue.cs" />

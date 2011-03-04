@@ -240,6 +240,25 @@
             fileSystemMock.Verify();
             Assert.AreSame(expected, actual);
         }
+
+        [Test]
+        public void GeneratePathInWorkingDirectoryGeneratesDefaultPath()
+        {
+            var projectName = "Test";
+            var filename = "aTestFile.txt";
+            var expected = Path.Combine(
+                Environment.CurrentDirectory,
+                projectName,
+                "working",
+                filename);
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        Project = new Project(projectName)
+                    });
+            var actual = context.GeneratePathInWorkingDirectory(filename);
+            Assert.AreEqual(expected, actual);
+        }
         #endregion
     }
 }

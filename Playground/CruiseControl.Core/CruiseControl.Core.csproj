@@ -152,6 +152,7 @@
     <Compile Include="Triggers\Schedule.cs" />
     <Compile Include="Triggers\Url.cs" />
     <Compile Include="Utilities\FileSystem.cs" />
+    <Compile Include="Interfaces\IProcessExecutor.cs" />
     <Compile Include="Utilities\LoggingValidationLog.cs" />
     <Compile Include="Utilities\PrivateString.cs" />
     <Compile Include="Utilities\PrivateStringTypeConverter.cs" />

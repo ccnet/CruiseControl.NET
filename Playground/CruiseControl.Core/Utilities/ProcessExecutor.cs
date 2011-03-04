@@ -10,6 +10,7 @@
     using System.Threading;
     using CruiseControl.Core.Exceptions;
     using CruiseControl.Core.Interfaces;
+    using Ninject;
     using NLog;
 
     /// <summary>
@@ -17,11 +18,10 @@
     /// spawns a new <see cref="RunnableProcess" /> using the properties specified in the input <see cref="ProcessInfo" />.
     /// All output from the executed process is contained within the returned <see cref="ProcessResult" />.
     /// </summary>
-    public class ProcessExecutor
+    public class ProcessExecutor : IProcessExecutor
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly IFileSystem fileSystem;
         #endregion
 
         #region Constants
@@ -31,15 +31,17 @@
         public const string Win2KSupportToolsDir = @"C:\Program Files\Support Tools";
         #endregion
 
-        #region Constructors
+        #region Public properties
+        #region FileSystem
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessExecutor"/> class.
+        /// Gets or sets the file system.
         /// </summary>
-        /// <param name="fileSystem">The file system.</param>
-        public ProcessExecutor(IFileSystem fileSystem)
-        {
-            this.fileSystem = fileSystem;
-        }
+        /// <value>
+        /// The file system.
+        /// </value>
+        [Inject]
+        public IFileSystem FileSystem { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -172,26 +174,40 @@
         /// </summary>
         /// <param name="processInfo">The process info.</param>
         /// <param name="projectName">Name of the project.</param>
-        /// <param name="taskId">The task id.</param>
+        /// <param name="itemId">The item id.</param>
         /// <param name="outputFile">The output file.</param>
         /// <returns>
         /// The result of the execution.
         /// </returns>
-        public virtual ProcessResult Execute(ProcessInfo processInfo, string projectName, string taskId, string outputFile)
+        public virtual ProcessResult Execute(ProcessInfo processInfo, string projectName, string itemId, string outputFile)
         {
             using (var p = new RunnableProcess(
-                this.fileSystem,
+                this.FileSystem,
                 processInfo,
                 projectName,
-                taskId))
+                itemId))
             {
                 p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
 
-                ProcessMonitor.MonitorProcessForProject(projectName, taskId, p.Process);
+                ProcessMonitor.MonitorProcessForProject(projectName, itemId, p.Process);
                 var run = p.Run(outputFile);
-                ProcessMonitor.RemoveMonitorForProject(projectName, taskId);
+                ProcessMonitor.RemoveMonitorForProject(projectName, itemId);
                 return run;
             }
+        }
+
+        /// <summary>
+        /// Executes the specified process for a project item.
+        /// </summary>
+        /// <param name="processInfo">The process info.</param>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        /// The result of the execution.
+        /// </returns>
+        public ProcessResult Execute(ProcessInfo processInfo, ProjectItem item, TaskExecutionContext context)
+        {
+            var logFile = context.GeneratePathInWorkingDirectory(item.NameOrType + ".log");
+            return this.Execute(processInfo, item.Project.Name, item.NameOrType, logFile);
         }
         #endregion
 
@@ -409,7 +425,7 @@
             #region Private fields
             private readonly string projectName;
             private readonly ProcessInfo processInfo;
-            private readonly string taskId;
+            private readonly string itemId;
             private readonly Process process;
             private string logFile;
             private readonly EventWaitHandle outputStreamClosed = new ManualResetEvent(false);
@@ -437,13 +453,13 @@
             /// <param name="fileSystem">The file system.</param>
             /// <param name="processInfo">The process info.</param>
             /// <param name="projectName">Name of the project.</param>
-            /// <param name="taskId">The task id.</param>
-            public RunnableProcess(IFileSystem fileSystem, ProcessInfo processInfo, string projectName, string taskId)
+            /// <param name="itemId">The item id.</param>
+            public RunnableProcess(IFileSystem fileSystem, ProcessInfo processInfo, string projectName, string itemId)
             {
                 this.fileSystem = fileSystem;
                 this.projectName = projectName;
                 this.processInfo = processInfo;
-                this.taskId = taskId;
+                this.itemId = itemId;
                 this.process = processInfo.CreateProcess(fileSystem);
             }
             #endregion
@@ -674,7 +690,7 @@
                     "[{0}-{2} {1}] process exited event received",
                     this.projectName,
                     this.processInfo.FileName,
-                    this.taskId);
+                    this.itemId);
                 processExited.Set();
             }
             #endregion

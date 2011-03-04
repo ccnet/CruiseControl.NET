@@ -816,6 +816,14 @@
             Thread.Sleep(500);
             Assert.IsTrue(stopped);
         }
+
+        [Test]
+        public void GetStatusReturnsCurrentStatus()
+        {
+            var project = new Project();
+            var status = project.GetStatus(new Messages.Blank());
+            Assert.AreEqual("Stopped", status.Status);
+        }
         #endregion
 
         #region Private methods

@@ -7,6 +7,7 @@
     using System.Threading;
     using CruiseControl.Core.Exceptions;
     using CruiseControl.Core.Interfaces;
+    using CruiseControl.Core.Tasks;
     using CruiseControl.Core.Utilities;
     using Moq;
     using NUnit.Framework;
@@ -96,7 +97,7 @@
         {
             var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper");
-            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
             var projectName = "aProject";
             var thread = new Thread(
                 () => executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt"));
@@ -115,7 +116,7 @@
         {
             var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper", "1");
-            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
             var projectName = "aProject";
             var waitHandle = new ManualResetEvent(false);
             ProcessResult result = null;
@@ -141,7 +142,7 @@
         {
             var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper") { TimeOut = TimeSpan.FromSeconds(1) };
-            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
             var projectName = "aProject";
             var waitHandle = new ManualResetEvent(false);
             ProcessResult result = null;
@@ -168,7 +169,7 @@
             var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper", "1");
             var output = new List<ProcessOutputEventArgs>();
-            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
             executor.ProcessOutput += (o, e) => output.Add(e);
             var projectName = "aProject";
             var waitHandle = new ManualResetEvent(false);
@@ -188,6 +189,7 @@
             thread.Start();
             waitHandle.WaitOne(TimeSpan.FromSeconds(30));
             CollectionAssert.IsNotEmpty(output);
+            Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
@@ -195,32 +197,7 @@
         {
             var fileSystemMock = InitialiseFileSystemMockForExecute();
             var info = new ProcessInfo("sleeper", "1", null, ProcessPriorityClass.BelowNormal);
-            var executor = new ProcessExecutor(fileSystemMock.Object);
-            var projectName = "aProject";
-            var waitHandle = new ManualResetEvent(false);
-            ProcessResult result = null;
-            var thread = new Thread(
-                () =>
-                    {
-                        try
-                        {
-                            result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
-                        }
-                        finally
-                        {
-                            waitHandle.Set();
-                        }
-                    });
-            thread.Start();
-            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
-        }
-
-        [Test]
-        public void ExecuteWritesToStdIn()
-        {
-            var fileSystemMock = InitialiseFileSystemMockForExecute();
-            var info = new ProcessInfo("sleeper", "1") {StandardInputContent = "SomeData"};
-            var executor = new ProcessExecutor(fileSystemMock.Object);
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
             var projectName = "aProject";
             var waitHandle = new ManualResetEvent(false);
             ProcessResult result = null;
@@ -238,12 +215,67 @@
                 });
             thread.Start();
             waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+            Assert.IsTrue(result.Succeeded);
+        }
+
+        [Test]
+        public void ExecuteWritesToStdIn()
+        {
+            var fileSystemMock = InitialiseFileSystemMockForExecute();
+            var info = new ProcessInfo("sleeper", "1") { StandardInputContent = "SomeData" };
+            var executor = new ProcessExecutor { FileSystem = fileSystemMock.Object };
+            var projectName = "aProject";
+            var waitHandle = new ManualResetEvent(false);
+            ProcessResult result = null;
+            var thread = new Thread(
+                () =>
+                {
+                    try
+                    {
+                        result = executor.Execute(info, projectName, "aTask", "C:\\somewhere.txt");
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            thread.Start();
+            waitHandle.WaitOne(TimeSpan.FromSeconds(30));
+            Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public void KillProcessesForProjectHandlesAMissingProject()
         {
             ProcessExecutor.KillProcessesForProject(null, "DoesNothingExist");
+        }
+
+        [Test]
+        public void ExecuteWithProjectItemGeneratesTheRightArguments()
+        {
+            var info = new ProcessInfo("Test");
+            var item = new Comment
+                           {
+                               Project = new Project("Test")
+                           };
+            var context = new TaskExecutionContext(
+                new TaskExecutionParameters
+                    {
+                        Project = item.Project
+                    });
+            var logFile = context.GeneratePathInWorkingDirectory("Comment.log");
+            var executor = new ProcessExecutorOverride
+                               {
+                                   OnExecute = (pi, p, i, o) =>
+                                                   {
+                                                       Assert.AreSame(info, pi);
+                                                       Assert.AreEqual("Test", p);
+                                                       Assert.AreEqual("Comment", i);
+                                                       Assert.AreEqual(logFile, o);
+                                                       return null;
+                                                   }
+                               };
+            executor.Execute(info, item, context);
         }
         #endregion
 
@@ -255,6 +287,20 @@
             fileSystemMock.Setup(fs => fs.OpenFileForWrite("C:\\somewhere.txt")).Returns(new MemoryStream());
             fileSystemMock.Setup(fs => fs.OpenFileForRead("C:\\somewhere.txt")).Returns(new MemoryStream());
             return fileSystemMock;
+        }
+        #endregion
+
+        #region Private classes
+        private class ProcessExecutorOverride
+            : ProcessExecutor
+        {
+            public Func<ProcessInfo, string, string, string, ProcessResult> OnExecute { get; set; }
+            public override ProcessResult Execute(ProcessInfo processInfo, string projectName, string itemId, string outputFile)
+            {
+                return this.OnExecute != null ?
+                    this.OnExecute(processInfo, projectName, itemId, outputFile) :
+                    base.Execute(processInfo, projectName, itemId, outputFile);
+            }
         }
         #endregion
     }

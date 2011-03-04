@@ -78,7 +78,7 @@
             {
                 var attribute = messageType
                     .Assembly
-                    .GetCustomAttributes(typeof (XmlnsDefinitionAttribute), false)
+                    .GetCustomAttributes(typeof(XmlnsDefinitionAttribute), false)
                     .FirstOrDefault(xda => (xda as XmlnsDefinitionAttribute).ClrNamespace == typeNamespace);
                 if (attribute != null)
                 {
@@ -221,42 +221,7 @@
                 {
                     // TODO: Validate security here
 
-                    var description = ExtractDescription(method);
-                    var definition = new RemoteActionDefinition
-                                         {
-                                             Name = method.Name,
-                                             Description = description
-                                         };
-
-                    // Generate the message formats
-                    switch (arguments.DataToInclude)
-                    {
-                        case DataDefinitions.InputOnly:
-                            definition.InputData = GenerateMessageFormat(
-                                messageFormats,
-                                namespaces,
-                                method.GetParameters()[0].ParameterType);
-                            break;
-
-                        case DataDefinitions.OutputOnly:
-                            definition.OutputData = GenerateMessageFormat(
-                                messageFormats,
-                                namespaces,
-                                method.ReturnType);
-                            break;
-
-                        case DataDefinitions.Both:
-                            definition.InputData = GenerateMessageFormat(
-                                messageFormats,
-                                namespaces,
-                                method.GetParameters()[0].ParameterType);
-                            definition.OutputData = GenerateMessageFormat(
-                                messageFormats,
-                                namespaces,
-                                method.ReturnType);
-                            break;
-                    }
-
+                    var definition = GenerateDefinition(arguments, method, messageFormats, namespaces);
                     actions.Add(definition);
                 }
             }
@@ -332,7 +297,7 @@
                 BindingFlags.Public | BindingFlags.Instance)
                 .Where(m => m.Name.Equals(actionName, StringComparison.InvariantCultureIgnoreCase));
             return methods.FirstOrDefault(
-                m => m.GetCustomAttributes(typeof (RemoteActionAttribute), true).Length > 0);
+                m => m.GetCustomAttributes(typeof(RemoteActionAttribute), true).Length > 0);
         }
         #endregion
 
@@ -358,6 +323,58 @@
             }
 
             return format;
+        }
+        #endregion
+
+        #region GenerateDefinition()
+        /// <summary>
+        /// Generates the definition.
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="messageFormats">The message formats.</param>
+        /// <param name="namespaces">The namespaces.</param>
+        /// <returns>
+        /// The definition for the remote action.
+        /// </returns>
+        private static RemoteActionDefinition GenerateDefinition(QueryArguments arguments, MethodInfo method, Dictionary<Type, string> messageFormats, Dictionary<string, string> namespaces)
+        {
+            var description = ExtractDescription(method);
+            var definition = new RemoteActionDefinition
+            {
+                Name = method.Name,
+                Description = description
+            };
+
+            // Generate the message formats
+            switch (arguments.DataToInclude)
+            {
+                case DataDefinitions.InputOnly:
+                    definition.InputData = GenerateMessageFormat(
+                        messageFormats,
+                        namespaces,
+                        method.GetParameters()[0].ParameterType);
+                    break;
+
+                case DataDefinitions.OutputOnly:
+                    definition.OutputData = GenerateMessageFormat(
+                        messageFormats,
+                        namespaces,
+                        method.ReturnType);
+                    break;
+
+                case DataDefinitions.Both:
+                    definition.InputData = GenerateMessageFormat(
+                        messageFormats,
+                        namespaces,
+                        method.GetParameters()[0].ParameterType);
+                    definition.OutputData = GenerateMessageFormat(
+                        messageFormats,
+                        namespaces,
+                        method.ReturnType);
+                    break;
+            }
+            return definition;
         }
         #endregion
         #endregion

@@ -477,6 +477,25 @@
             }
         }
         #endregion
+
+        #region GetStatus()
+        /// <summary>
+        /// Gets the status.
+        /// </summary>
+        /// <param name="request">The request containing the details.</param>
+        /// <returns>A message containing the response details.</returns>
+        [RemoteAction]
+        [Description("Retrieves the current status of the project.")]
+        public virtual Messages.ProjectStatus GetStatus(Messages.Blank request)
+        {
+            var response = new Messages.ProjectStatus
+                               {
+                                   Status = this.State.ToString(),
+                                   LastBuildDate = this.PersistedState.LastIntegration.FinishTime
+                               };
+            return response;
+        }
+        #endregion
         #endregion
 
         #region Protected methods

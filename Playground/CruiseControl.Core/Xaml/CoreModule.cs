@@ -28,6 +28,7 @@
             this.Bind<IFileSystem>().To<FileSystem>().InSingletonScope();
             this.Bind<ITaskExecutionFactory>().To<TaskExecutionFactory>().InSingletonScope();
             this.Bind<IServerConnectionFactory>().To<ServerConnectionFactory>().InSingletonScope();
+            this.Bind<IProcessExecutor>().To<ProcessExecutor>().InTransientScope();
         }
         #endregion
         #endregion
