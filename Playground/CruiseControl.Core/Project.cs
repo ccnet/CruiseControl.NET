@@ -490,9 +490,13 @@
         {
             var response = new Messages.ProjectStatus
                                {
-                                   Status = this.State.ToString(),
-                                   LastBuildDate = this.PersistedState.LastIntegration.FinishTime
+                                   Status = this.State.ToString()
                                };
+            if ((this.PersistedState != null) && (this.PersistedState.LastIntegration != null))
+            {
+                response.LastBuildDate = this.PersistedState.LastIntegration.FinishTime;
+            }
+
             return response;
         }
         #endregion
