@@ -400,6 +400,7 @@
     <Compile Include="IntegrationTests\PreprocessorTest.cs" />
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
+    <Compile Include="IntegrationTests\SpacesInBuildArgsOfTask.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
@@ -1346,6 +1347,9 @@
     </Content>
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\SpacesInBuildArgsOfTask.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\test1.xml" />

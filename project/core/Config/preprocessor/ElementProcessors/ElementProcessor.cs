@@ -102,7 +102,19 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         protected IEnumerable< XNode > _ProcessText(string value)
         {
             IEnumerable< XNode > result = _Env.EvalTextSymbols( value );
-            return result.GetTextValue() != value ? _ProcessNodes( result ).Cast< XNode >() : result;
+            //return result.GetTextValue() != value ? _ProcessNodes( result ).Cast< XNode >() : result;
+
+
+            var textvalue = result.GetTextValue();
+
+            if (textvalue != value)
+            {
+                return _ProcessNodes(result);
+            }
+            else
+            {
+                return result;
+            }
         }
 
 

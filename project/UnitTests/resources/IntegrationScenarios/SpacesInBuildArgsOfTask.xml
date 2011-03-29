@@ -1,0 +1,64 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <cb:define myBaseDir="some path"/>
+  <cb:define myPort="the"/>
+  <cb:define myUser="lazy"/>
+  <cb:define myPassword="fox"/>
+
+  <project name="SpaceCheck"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/triggerTest09</workingDirectory>
+    <artifactDirectory>scenarioTests/triggerTest09</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers>
+      <scheduleTrigger time="23:00"
+                       buildCondition="ForceBuild" />
+    </triggers>
+
+    <tasks>
+      <exec executable="foo.bat"
+                baseDirectory="some path"
+                buildArgs="the lazy fox"
+                description="Foo" />
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+
+  </project>
+
+  <project name="SpaceCheckPreProcessor"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/triggerTest09</workingDirectory>
+    <artifactDirectory>scenarioTests/triggerTest09</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers>
+      <scheduleTrigger time="23:00"
+                       buildCondition="ForceBuild" />
+    </triggers>
+
+    <tasks>
+      <exec executable="foo.bat"
+                baseDirectory="$(myBaseDir)"
+                buildArgs="$(myPort) $(myUser) $(myPassword)"
+                description="Foo" />
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+
+  </project>
+
+
+</cruisecontrol>

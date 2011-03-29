@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
                     case XmlNodeType.Entity:
                     case XmlNodeType.EntityReference:
                         return new[] { node };
+                        
                     default:
                         throw new InvalidOperationException( "Unhandled Xml Node Type: " +
                                                              node.NodeType );
@@ -80,8 +81,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             /* Clone attributes */
             foreach ( XAttribute attr in element.Attributes() )
             {
-                copy.Add( new XAttribute( attr.Name,
-                                          _ProcessText( attr.Value ).GetTextValue().Trim() ) );
+                //copy.Add( new XAttribute( attr.Name,
+                //                          _ProcessText( attr.Value ).GetTextValue().Trim() ) );
+
+                var processedtext = _ProcessText(attr.Value);
+                var textvalue = processedtext.GetTextValue().Trim();
+
+                copy.Add(new XAttribute(attr.Name, textvalue));
+            
+            
             }
             /* Process content nodes */
             foreach ( XNode node in element.Nodes() )
