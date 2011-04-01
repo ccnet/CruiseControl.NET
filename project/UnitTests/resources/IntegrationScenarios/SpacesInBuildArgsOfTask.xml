@@ -60,5 +60,36 @@
 
   </project>
 
+  <project name="SpaceCheckPreProcessorNewLines"
+         queue="Q1"
+         queuePriority="1"
+         category="cat1"
+         description="first testing project">
+    <workingDirectory>scenarioTests/triggerTest09</workingDirectory>
+    <artifactDirectory>scenarioTests/triggerTest09</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers>
+      <scheduleTrigger time="23:00"
+                       buildCondition="ForceBuild" />
+    </triggers>
+
+    <tasks>
+      <exec executable="foo.bat"
+                baseDirectory="$(myBaseDir)"
+                buildArgs="
+                           $(myPort) 
+                           $(myUser) 
+                           $(myPassword)
+                           "
+                description="Foo" />
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+
+  </project>
+
 
 </cruisecontrol>

@@ -78,18 +78,24 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         protected IEnumerable< XNode > _ProcessNonPpElement(XElement element)
         {
             var copy = new XElement( element.Name );
-            /* Clone attributes */
-            foreach ( XAttribute attr in element.Attributes() )
+            var ignoreWhitespace = _Env._Settings.IgnoreWhitespace;
+            try
             {
-                //copy.Add( new XAttribute( attr.Name,
-                //                          _ProcessText( attr.Value ).GetTextValue().Trim() ) );
+                // Always preserve whitespace in attributes
+                _Env._Settings.IgnoreWhitespace = false;
+                /* Clone attributes */
+                foreach (XAttribute attr in element.Attributes())
+                {                    
+                    var processedtext = _ProcessText(attr.Value);
+                    var textvalue = processedtext.GetTextValue();
 
-                var processedtext = _ProcessText(attr.Value);
-                var textvalue = processedtext.GetTextValue().Trim();
-
-                copy.Add(new XAttribute(attr.Name, textvalue));
-            
-            
+                    copy.Add(new XAttribute(attr.Name, textvalue));
+                }
+            }
+            finally
+            {
+                // Restore ignore whitespace
+                _Env._Settings.IgnoreWhitespace = ignoreWhitespace;
             }
             /* Process content nodes */
             foreach ( XNode node in element.Nodes() )
