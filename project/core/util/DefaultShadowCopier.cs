@@ -44,6 +44,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             public ShadowStore()
             {
+                EnsureTempDirectoryExists();
+            }
+
+            private void EnsureTempDirectoryExists()
+            {
                 if (!Directory.Exists(tempPath))
                     Directory.CreateDirectory(tempPath);
             }
@@ -55,6 +60,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             /// <returns></returns>
             public string CopyFile(string fileName)
             {
+                EnsureTempDirectoryExists();
+
                 var filePath = Path.Combine(tempPath, fileName);
                 if (!File.Exists(filePath))
                 {
