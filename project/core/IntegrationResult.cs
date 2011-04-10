@@ -166,15 +166,13 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get
             {
-                try
-                {
-                    string tempNumericLabel = Regex.Replace(Label, @".*?(\d+$)", "$1");
-                    return int.Parse(tempNumericLabel, CultureInfo.CurrentCulture);
-                }
-                catch (FormatException)
+                int numericLabel;
+                string tempNumericLabel = Regex.Replace(Label, @".*?(\d+$)", "$1");
+                if (!int.TryParse(tempNumericLabel, NumberStyles.Integer, CultureInfo.CurrentCulture, out numericLabel))
                 {
                     return 0;
                 }
+                return numericLabel;
             }
         }
 
