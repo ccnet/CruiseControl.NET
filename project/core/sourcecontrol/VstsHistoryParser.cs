@@ -75,8 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private Modification[] ParseChangeSet(StringBuilder changeSet)
         {
 
-            Regex parser = new Regex(@"Changeset:[ \t](?<changenumber>[0-9]*)\r\nUser:[ \t](?<author>.*)\r\nDate:[ \t](?<date>.*)\r\n\r\nComment:(?<comment>(?:\r\n.*)*)\r\n\r\nItems:(?<items>(?:\r\n.*)*)\r\n\r\n");
-            
+            Regex parser = new Regex(@"Changeset:[ \t](?<changenumber>[0-9]*)\r\nUser:[ \t](?<author>.*)\r\n(Checked in by.*\r\n)?Date:[ \t](?<date>.*)\r\n\r\nComment:(?<comment>(?:\r\n.*)*)\r\n\r\nItems:(?<items>(?:\r\n.*)*)\r\n\r\n");            
             Regex itemParser = new Regex("\n  (?<type>[^$]+) (?<item>\\$/.*)", RegexOptions.Multiline);
 
             Match ChangeSet = parser.Match(changeSet.ToString(), 0);            
