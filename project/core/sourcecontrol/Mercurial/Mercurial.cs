@@ -362,10 +362,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 				CheckMultipleHeads(result);
 			}
 			
-			HgUpdate(result);
-
-			// TODO: update subrepos here?
-
 			if(RevertModifications)
 			{
 				HgRevert(result);
@@ -375,6 +371,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 			{
 				HgPurge(result);
 			}
+
+			HgUpdate(result);
+
+			// TODO: update subrepos here?
 		}
 
 		/// <summary>

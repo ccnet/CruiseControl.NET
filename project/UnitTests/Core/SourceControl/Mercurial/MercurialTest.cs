@@ -312,8 +312,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		{
 			hg.PurgeModifications = true;
 
-			ExpectToExecuteArguments(@"update");
 			ExpectToExecuteArguments(@"purge --all");
+			ExpectToExecuteArguments(@"update");
 
 			hg.GetSource(IntegrationResult());
 		}
@@ -323,8 +323,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		{
 			hg.RevertModifications = true;
 
-			ExpectToExecuteArguments(@"update");
 			ExpectToExecuteArguments(@"revert --all --no-backup");
+			ExpectToExecuteArguments(@"update");
 
 			hg.GetSource(IntegrationResult());
 		}
