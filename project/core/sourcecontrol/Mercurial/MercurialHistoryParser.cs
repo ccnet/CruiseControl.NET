@@ -52,9 +52,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 				if (authorNode != null)
 				{
 					email = authorNode.Attributes["email"].Value;
-					username = (email.Contains("@"))
-						? email.Substring(0, email.IndexOf('@'))
-						: email;
+					if (!string.IsNullOrEmpty(authorNode.InnerText))
+					{
+						username = authorNode.InnerText;
+					}
+					else
+					{
+						username = (email.Contains("@"))
+							? email.Substring(0, email.IndexOf('@'))
+							: email;
+					}
 				}
 
 				var dateNode = logEntry["date"];

@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempHgDir);
 			mockFileDirectoryDeleter.Expect("DeleteIncludingReadOnlyObjects", new object[] { tempWorkDir });
 			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempWorkDir);
-			ExpectToExecuteArguments(@"init " + tempWorkDir, Directory.GetParent(Path.GetFullPath(tempWorkDir)).FullName);
+			ExpectToExecuteArguments(@"init " + StringUtil.AutoDoubleQuoteString(tempWorkDir), Directory.GetParent(Path.GetFullPath(tempWorkDir)).FullName);
 			ExpectToExecuteArguments(@"pull C:\foo", tempWorkDir);
 
 			hg.GetModifications(IntegrationResult(from), IntegrationResult(to));

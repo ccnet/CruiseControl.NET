@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 			Assert.That(mod.Version, Is.EqualTo("48365ef6a3ea"));
 			Assert.That(mod.ChangeNumber, Is.EqualTo("3"));
 			Assert.That(mod.EmailAddress, Is.EqualTo("bbarry@stellarfinancial.com"));
-			Assert.That(mod.UserName, Is.EqualTo("bbarry"));
+			Assert.That(mod.UserName, Is.EqualTo("B Barry"));
 			var expectedModifiedTime = new DateTimeOffset(2008, 4, 24, 22, 14, 59, new TimeSpan(-6, 0, 0));
 			Assert.That(mod.ModifiedTime, Is.EqualTo(expectedModifiedTime.LocalDateTime));
 			Assert.That(mod.Comment, Is.EqualTo("asdf"));
