@@ -521,7 +521,11 @@
                             var keyElement = typeElement != null ? typeElement.Element("key") : null;
                             if ((elements.Count > 0) || (keyElement != null))
                             {
-                                output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
+                                //Thoughtworks confluence style
+                                //output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
+                                
+                                // Redmine Style
+                                output.WriteLine("{background:dodgerblue}. | *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
                                 WriteElements(elements, output, documentation, typeElement, typeVersion);
                             }
                             else
@@ -537,7 +541,13 @@
                                 WriteDocumentation(typeElement, "remarks", output, documentation);
                                 output.WriteLine();
                             }
-                            output.WriteLine("{info:title=Automatically Generated}");
+
+                            //Thoughtworks confluence style                            
+                            //output.WriteLine("{info:title=Automatically Generated}");
+
+                            // Redmine Style
+                            output.WriteLine("*Automatically Generated*");
+
                             output.WriteLine(
                                 "Documentation generated on " +
                                 DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
@@ -548,7 +558,14 @@
                                 output.WriteLine("Using assembly version " + versionNumber);
                             }
 
-                            output.WriteLine("{info}");
+                            //Thoughtworks confluence style                            
+                            //output.WriteLine("{info}");
+
+                            // Redmine Style
+
+                            
+                            
+                            
                             output.Flush();
                         }
 
@@ -808,13 +825,29 @@
                             var options = "borderStyle=solid" +
                                 (codeTitle == null ? string.Empty : "|titleBGColor=#ADD6FF|title=" + codeTitle.Value);
 
+                            // Redmine Wiki
+                            if (codeTitle != null)
+                            {
+                                builder.AppendFormat("*{0}*", codeTitle.Value);
+                                builder.AppendLine();
+                            }
+
+
                             if (isXml)
                             {
                                 try
                                 {
                                     var xmlCode = XDocument.Parse(childElement.Value);
-                                    builder.AppendLine("{code:xml|" + options + "}");
+                                    //ThoughtWorks confluence Wiki
+                                    //builder.AppendLine("{code:xml|" + options + "}");
+
+                                    // Redmine Wiki
+                                    builder.AppendFormat("<pre><code class={0}xml{0}>", "\"");
+
+
                                     builder.AppendLine(xmlCode.ToString(SaveOptions.None));
+                                    
+                                
                                 }
                                 catch
                                 {
@@ -826,16 +859,31 @@
                             {
                                 if ((isXmlAttribute != null) && (isXmlAttribute.Value.Length > 0))
                                 {
-                                    builder.AppendLine("{code:" + isXmlAttribute.Value + "|" + options + "}");
+                                    //ThoughtWorks confluence Wiki                                    
+                                    //builder.AppendLine("{code:" + isXmlAttribute.Value + "|" + options + "}");
+
+                                    // Redmine Wiki
+                                    builder.AppendFormat("<pre><code class={0}{1}{0}>", "\"", isXmlAttribute.Value);
+                                
                                 }
                                 else
                                 {
-                                    builder.AppendLine("{code:" + options + "}");
+                                    //ThoughtWorks confluence Wiki                                    
+                                    //builder.AppendLine("{code:" + options + "}");
+
+                                    // Redmine Wiki
+                                    builder.AppendLine("<pre><code>");
                                 }
+
                                 builder.AppendLine(childElement.Value);
                             }
 
-                            builder.AppendLine("{code}");
+                            //ThoughtWorks confluence Wiki                                                                
+                            //builder.AppendLine("{code}");
+
+                            // Redmine Wiki
+                            builder.AppendLine("</code></pre>");
+                            builder.AppendLine();
                             break;
 
                         case "heading":
