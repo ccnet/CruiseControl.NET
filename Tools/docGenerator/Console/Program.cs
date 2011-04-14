@@ -148,7 +148,7 @@
                     var binding = new BasicHttpBinding();
                     binding.MaxReceivedMessageSize = int.MaxValue;
                     var client = new ConfluenceSoapServiceClient(
-                        binding, 
+                        binding,
                         new EndpointAddress(cmdArgs.Source));
 
                     try
@@ -523,7 +523,7 @@
                             {
                                 //Thoughtworks confluence style
                                 //output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                                
+
                                 // Redmine Style
                                 output.WriteLine("{background:dodgerblue}. | *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
                                 WriteElements(elements, output, documentation, typeElement, typeVersion);
@@ -546,7 +546,9 @@
                             //output.WriteLine("{info:title=Automatically Generated}");
 
                             // Redmine Style
-                            output.WriteLine("*Automatically Generated*");
+                            output.WriteLine();
+                            output.WriteLine("h4. Automatically Generated");
+                            output.WriteLine();
 
                             output.WriteLine(
                                 "Documentation generated on " +
@@ -563,9 +565,9 @@
 
                             // Redmine Style
 
-                            
-                            
-                            
+
+
+
                             output.Flush();
                         }
 
@@ -661,8 +663,8 @@
                             (element.Key as FieldInfo).FieldType :
                             (element.Key as PropertyInfo).PropertyType;
                         output.WriteLine(
-                            "<xs:element name=\"" + element.Value.Name + 
-                            "\" type=\"" + dataType.Name + 
+                            "<xs:element name=\"" + element.Value.Name +
+                            "\" type=\"" + dataType.Name +
                             "\" minOccurs=\"" + (element.Value.Required ? "1" : "0") +
                             "\" maxOccurs=\"1\">");
 
@@ -699,7 +701,8 @@
                 {
                     output.WriteLine("<xs:simpleType name=\"" + enumType.Name + "\">");
                     output.WriteLine("<xs:restriction base=\"xs:string\">");
-                    foreach (var value in Enum.GetNames(enumType)){
+                    foreach (var value in Enum.GetNames(enumType))
+                    {
                         output.WriteLine("<xs:enumeration value=\"" + value + "\"/>");
                     }
 
@@ -743,7 +746,7 @@
                     if (dependency.Name.StartsWith("ThoughtWorks"))
                     {
                         problemList.Add("!!! No xml documentation found for " + dependency.Name + " expected  " + dependencyData);
-                    }                   
+                    }
                 }
             }
         }
@@ -887,7 +890,14 @@
                             break;
 
                         case "heading":
+                            //ThoughtWorks confluence Wiki                                                                                            
+                            //builder.AppendLine("h4. " + TrimValue(childElement.Value));
+
+                            // Redmine Wiki
+                            builder.AppendLine();
                             builder.AppendLine("h4. " + TrimValue(childElement.Value));
+                            builder.AppendLine();
+                            
                             break;
 
                         case "list":
@@ -908,26 +918,58 @@
                             break;
 
                         case "para":
+                            // Redmine Wiki
+                            builder.AppendLine();
+
+
                             var paraType = childElement.Attribute("type");
                             var paraChild = new XElement(childElement);
+                            
                             if (paraType != null)
                             {
-                                builder.Append("{" + paraType.Value);
+                                //ThoughtWorks confluence Wiki                                                                                            
+                                //builder.Append("{" + paraType.Value);
+
+                                // Redmine Wiki
+                                string paratypeContents = "";
+                                if (string.Equals(paraType.Value,"warning", StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    paratypeContents = "!!";
+                                }
+                                
+                                builder.Append("*" + paratypeContents);
+
                                 var paraTitle = paraChild.Element("title");
                                 if (paraTitle != null)
                                 {
-                                    builder.Append(":title=" + TrimValue(paraTitle.Value));
+                                   //ThoughtWorks confluence Wiki                                                                                            
+                                    //builder.Append(":title=" + TrimValue(paraTitle.Value));
+                                
+                                    // Redmine Wiki
+                                    builder.Append(TrimValue(paraTitle.Value));
+                                    
                                     paraTitle.Remove();
                                 }
+                                //ThoughtWorks confluence Wiki
+                                //builder.AppendLine("}");
 
-                                builder.AppendLine("}");
+                                // Redmine Wiki
+                                builder.AppendLine(  paratypeContents + "*");
+                            
                             }
 
                             builder.AppendLine(ParseElement(paraChild));
-                            if (paraType != null)
-                            {
-                                builder.AppendLine("{" + paraType.Value + "}");
-                            }
+                            
+                            //ThoughtWorks confluence Wiki
+                            //if (paraType != null)
+                            //{
+                            //    builder.AppendLine("{" + paraType.Value + "}");
+                            //}
+
+
+                            // Redmine Wiki
+                            builder.AppendLine();
+
                             break;
 
                         case "link":
