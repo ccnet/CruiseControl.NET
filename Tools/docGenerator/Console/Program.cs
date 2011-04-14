@@ -931,13 +931,7 @@
                                 //builder.Append("{" + paraType.Value);
 
                                 // Redmine Wiki
-                                string paratypeContents = "";
-                                if (string.Equals(paraType.Value,"warning", StringComparison.CurrentCultureIgnoreCase))
-                                {
-                                    paratypeContents = "!!";
-                                }
-                                
-                                builder.Append("*" + paratypeContents);
+                                builder.Append("| *" + paraType.Value + "* " );
 
                                 var paraTitle = paraChild.Element("title");
                                 if (paraTitle != null)
@@ -946,7 +940,7 @@
                                     //builder.Append(":title=" + TrimValue(paraTitle.Value));
                                 
                                     // Redmine Wiki
-                                    builder.Append(TrimValue(paraTitle.Value));
+                                    builder.Append(" : " + TrimValue(paraTitle.Value));
                                     
                                     paraTitle.Remove();
                                 }
@@ -954,13 +948,12 @@
                                 //builder.AppendLine("}");
 
                                 // Redmine Wiki
-                                builder.AppendLine(  paratypeContents + "*");
+                                builder.AppendLine(" |");
                             
                             }
 
-                            builder.AppendLine(ParseElement(paraChild));
-                            
                             //ThoughtWorks confluence Wiki
+                            //builder.AppendLine(ParseElement(paraChild));
                             //if (paraType != null)
                             //{
                             //    builder.AppendLine("{" + paraType.Value + "}");
@@ -968,6 +961,7 @@
 
 
                             // Redmine Wiki
+                            builder.AppendLine("| " + ParseElement(paraChild) + " |");
                             builder.AppendLine();
 
                             break;
