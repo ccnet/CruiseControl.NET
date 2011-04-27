@@ -9294,7 +9294,7 @@
   <xs:simpleType name="NotificationType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Always"/>
-      <xs:enumeration value="Changed"/>
+      <xs:enumeration value="Change"/>
       <xs:enumeration value="Failed"/>
       <xs:enumeration value="Success"/>
       <xs:enumeration value="Fixed"/>
