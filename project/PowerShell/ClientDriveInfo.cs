@@ -24,6 +24,7 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
+    using System;
     using System.Management.Automation;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -38,6 +39,11 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// The client to use.
         /// </summary>
         private readonly CruiseServerClientBase client;
+
+        /// <summary>
+        /// The root level folder for a server.
+        /// </summary>
+        private readonly ServerFolder serverFolder;
         #endregion
 
         #region Constructors
@@ -51,6 +57,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         {
             var clientFactory = new CruiseServerClientFactory();
             this.client = clientFactory.GenerateClient(address);
+            var version = new Version(this.client.GetServerVersion());
+            this.serverFolder = new ServerFolder("\\", version);
         }
         #endregion
 
@@ -62,6 +70,16 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         public CruiseServerClientBase Client
         {
             get { return this.client; }
+        }
+        #endregion
+
+        #region Root
+        /// <summary>
+        /// Gets the root folder.
+        /// </summary>
+        public ServerFolder RootFolder
+        {
+            get { return this.serverFolder; }
         }
         #endregion
         #endregion

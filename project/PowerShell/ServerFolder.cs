@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SnapIn.cs" company="The CruiseControl.NET Team">
+// <copyright file="ServerFolder.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,45 +24,33 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
-    using System.ComponentModel;
-    using System.Management.Automation;
+    using System;
 
     /// <summary>
-    /// Registers the snap-in with PowerShell.
+    /// A root level folder for a server.
     /// </summary>
-    [RunInstaller(true)]
-    public class SnapIn
-        : PSSnapIn
+    public class ServerFolder
+        : ClientFolder
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerFolder"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="version">The version.</param>
+        public ServerFolder(string path, Version version)
+            : base(path)
+        {
+            this.Version = version;
+        }
+        #endregion
+
         #region Public properties
-        #region Name
+        #region Version
         /// <summary>
-        /// Gets the name.
+        /// Gets the version.
         /// </summary>
-        public override string Name
-        {
-            get { return "CruiseControl.Net.Client"; }
-        }
-        #endregion
-
-        #region Vendor
-        /// <summary>
-        /// Gets the vendor.
-        /// </summary>
-        public override string Vendor
-        {
-            get { return "The CruiseControl.NET team"; }
-        }
-        #endregion
-
-        #region Description
-        /// <summary>
-        /// Gets the description.
-        /// </summary>
-        public override string Description
-        {
-            get { return "Manage CruiseControl.NET servers."; }
-        }
+        public Version Version { get; private set; }
         #endregion
         #endregion
     }

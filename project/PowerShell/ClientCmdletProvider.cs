@@ -208,7 +208,11 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 return;
             }
 
-            if (IsContainer(path))
+            if (IsRootPath(path))
+            {
+                this.WriteItemObject(drive.RootFolder, path, true);
+            }
+            else if (IsContainer(path))
             {
                 this.WriteItemObject(new ClientFolder(path), path, true);
             }
@@ -455,7 +459,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 return null;
             }
 
-            var queueName = path.Substring(path.LastIndexOf('\\'));
+            var queueName = path.Substring(path.LastIndexOf('\\') + 1);
             var snapshot = this.RetrieveSnapshot();
             var queue = snapshot
                 .QueueSetSnapshot
@@ -480,7 +484,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 return null;
             }
 
-            var projectName = path.Substring(path.LastIndexOf('\\'));
+            var projectName = path.Substring(path.LastIndexOf('\\') + 1);
             var snapshot = this.RetrieveSnapshot();
             var project = snapshot
                 .ProjectStatuses
