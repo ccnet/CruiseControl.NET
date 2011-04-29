@@ -19,6 +19,11 @@
             <Alignment>left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Activity</Label>
+            <Width>12</Width>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
             <Label>Build Status</Label>
             <Width>12</Width>
             <Alignment>left</Alignment>
@@ -49,6 +54,9 @@
                 <PropertyName>Status</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
+                <PropertyName>Activity</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
                 <PropertyName>BuildStatus</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
@@ -59,6 +67,37 @@
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>WebUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>QueueView</Name>
+      <ViewSelectedBy>
+        <TypeName>ThoughtWorks.CruiseControl.Remote.QueueSnapshot</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Name</Label>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Requests</Label>
+            <Alignment>left</Alignment>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <Wrap/>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>QueueName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Requests</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
     /// <summary>
     /// Exposes the client settings as a provider in PowerShell.
     /// </summary>
-    [CmdletProvider("CCNet", ProviderCapabilities.ShouldProcess)]
+    [CmdletProvider("CCNet", ProviderCapabilities.None)]
     public class ClientCmdletProvider
         : NavigationCmdletProvider
     {
@@ -227,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 var project = this.RetrieveProject(path);
                 if (project != null)
                 {
-                    this.WriteItemObject(project, this.MakePath(path, project.Name), false);
+                    this.WriteItemObject(Project.Wrap(drive.Client, project), this.MakePath(path, project.Name), false);
                 }
             }
         }
@@ -332,7 +332,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 {
                     foreach (var project in snapshot.ProjectStatuses)
                     {
-                        this.WriteItemObject(project, this.MakePath(path, project.Name), false);
+                        this.WriteItemObject(Project.Wrap(drive.Client, project), this.MakePath(path, project.Name), false);
                     }
                 }
             }
@@ -428,7 +428,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// </returns>
         private CruiseServerSnapshot RetrieveSnapshot()
         {
-            if ((this.currentSnapshot == null) || ((this.currentSnapshotTime - DateTime.Now).TotalSeconds > 1))
+            if ((this.currentSnapshot == null) || ((DateTime.Now - this.currentSnapshotTime).TotalSeconds > 1))
             {
                 var drive = this.PSDriveInfo as ClientDriveInfo;
                 if (drive == null)
@@ -485,6 +485,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             }
 
             var projectName = path.Substring(path.LastIndexOf('\\') + 1);
+            ClientDriveInfo drive;
             var snapshot = this.RetrieveSnapshot();
             var project = snapshot
                 .ProjectStatuses
