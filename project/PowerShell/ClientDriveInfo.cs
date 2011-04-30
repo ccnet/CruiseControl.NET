@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             var clientFactory = new CruiseServerClientFactory();
             this.client = clientFactory.GenerateClient(address);
             var version = new Version(this.client.GetServerVersion());
-            this.serverFolder = new ServerFolder("\\", version);
+            this.serverFolder = new ServerFolder(this.client, "\\", version);
         }
         #endregion
 

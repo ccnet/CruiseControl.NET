@@ -53,10 +53,12 @@
     <Compile Include="ClientCmdletProvider.cs" />
     <Compile Include="ClientDriveInfo.cs" />
     <Compile Include="ClientFolder.cs" />
+    <Compile Include="Cmdlets\GetLog.cs" />
     <Compile Include="Cmdlets\ProjectCmdlet.cs" />
     <Compile Include="Cmdlets\StartBuild.cs" />
     <Compile Include="Cmdlets\StartProject.cs" />
     <Compile Include="Cmdlets\StopProject.cs" />
+    <Compile Include="IExposeLog.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerFolder.cs" />

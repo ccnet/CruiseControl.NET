@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
     /// Information about a project.
     /// </summary>
     public class Project
-        : ProjectStatus
+        : ProjectStatus, IExposeLog
     {
         #region Private fields
         /// <summary>
@@ -109,6 +109,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             var statuses = this.client.GetProjectStatus();
             var status = statuses.FirstOrDefault(s => s.Name.Equals(this.Name));
             return status == null ? null : Wrap(this.client, status);
+        }
+        #endregion
+
+        #region GetLog()
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        /// <returns>
+        /// Retrieves the log.
+        /// </returns>
+        public string GetLog()
+        {
+            var log = this.client.GetServerLog(this.Name);
+            return log;
         }
         #endregion
         #endregion

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServerFolder.cs" company="The CruiseControl.NET Team">
+// <copyright file="IExposeLog.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,46 +24,11 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
-    using System;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
-    /// A root level folder for a server.
+    /// Marks an item as exposing a log.
     /// </summary>
-    public class ServerFolder
-        : ClientFolder, IExposeLog
+    public interface IExposeLog
     {
-        #region Private fields
-        /// <summary>
-        /// The client to use.
-        /// </summary>
-        private readonly CruiseServerClientBase client;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServerFolder"/> class.
-        /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="version">The version.</param>
-        public ServerFolder(CruiseServerClientBase client, string path, Version version)
-            : base(path)
-        {
-            this.client = client;
-            this.Version = version;
-        }
-        #endregion
-
-        #region Public properties
-        #region Version
-        /// <summary>
-        /// Gets the version.
-        /// </summary>
-        public Version Version { get; private set; }
-        #endregion
-        #endregion
-
         #region Public methods
         #region GetLog()
         /// <summary>
@@ -72,11 +37,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <returns>
         /// Retrieves the log.
         /// </returns>
-        public string GetLog()
-        {
-            var log = this.client.GetServerLog();
-            return log;
-        }
+        string GetLog();
         #endregion
         #endregion
     }
