@@ -50,10 +50,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build.cs" />
     <Compile Include="ClientCmdletProvider.cs" />
     <Compile Include="ClientDriveInfo.cs" />
     <Compile Include="ClientFolder.cs" />
+    <Compile Include="Cmdlets\GetBuild.cs" />
+    <Compile Include="Cmdlets\StopBuild.cs" />
     <Compile Include="Cmdlets\GetLog.cs" />
+    <Compile Include="Cmdlets\GetProject.cs" />
+    <Compile Include="Cmdlets\GetServer.cs" />
+    <Compile Include="Cmdlets\Nouns.cs" />
     <Compile Include="Cmdlets\ProjectCmdlet.cs" />
     <Compile Include="Cmdlets\StartBuild.cs" />
     <Compile Include="Cmdlets\StartProject.cs" />

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="StopBuild.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,10 +28,10 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// A cmdlet for aborting a build.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
+    [Cmdlet(VerbsLifecycle.Stop, Nouns.Build, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    public class StopBuild
         : ProjectCmdlet
     {
         #region Protected methods
@@ -49,14 +49,14 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             foreach (var project in projects)
             {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
+                if (!this.ShouldProcess(project.Name, "Stop a build"))
                 {
                     return;
                 }
 
                 try
                 {
-                    project.Stop();
+                    project.AbortBuild();
                     this.WriteObject(project.Refresh());
                 }
                 catch (CommunicationsException error)

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="Nouns.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,54 +24,26 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
-    using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// Defines the common nouns.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
-        : ProjectCmdlet
+    public static class Nouns
     {
-        #region Protected methods
-        #region ProcessRecord()
+        #region Public constants
         /// <summary>
-        /// Processes a record.
+        /// A server.
         /// </summary>
-        protected override void ProcessRecord()
-        {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
+        public const string Server = "CCServer";
 
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
-                {
-                    return;
-                }
+        /// <summary>
+        /// A project.
+        /// </summary>
+        public const string Project = "CCProject";
 
-                try
-                {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
-        }
-        #endregion
+        /// <summary>
+        /// A build for a project.
+        /// </summary>
+        public const string Build = "CCBuild";
         #endregion
     }
 }

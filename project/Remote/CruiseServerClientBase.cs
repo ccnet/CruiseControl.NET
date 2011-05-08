@@ -651,6 +651,22 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="start">The start.</param>
+        /// <param name="count">The count.</param>
+        /// <returns>
+        /// The build summaries.
+        /// </returns>
+        public virtual IList<BuildSummary> GetBuildSummaries(string projectName, int start, int count)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region Dispose()
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

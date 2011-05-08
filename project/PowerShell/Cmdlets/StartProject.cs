@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     /// <summary>
     /// A cmdlet for starting a project.
     /// </summary>
-    [Cmdlet("Start", "Project", DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsLifecycle.Start, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
     public class StartProject
         : ProjectCmdlet
     {

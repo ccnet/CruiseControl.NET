@@ -5,11 +5,13 @@ namespace ThoughtWorks.CruiseControl.Core
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime;
     using System.Text;
     using System.Xml;
+    using System.Xml.Serialization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Label;
@@ -22,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
     using ThoughtWorks.CruiseControl.Core.Triggers;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
     using ThoughtWorks.CruiseControl.Remote.Parameters;
 
     /// <summary>
@@ -116,6 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
         private IExecutionEnvironment currentExecutionEnvironment;
+        private int logCount = 0;
 
         #region Constructors
         /// <summary>
@@ -549,6 +553,27 @@ namespace ThoughtWorks.CruiseControl.Core
             // Start the integration
             IDisposable impersonation = null;
             var hasError = false;
+            var timer = new Stopwatch();
+            timer.Start();
+            var summary = new BuildSummary
+                              {
+                                  StartTime = DateTime.Now
+                              };
+            var logDirectory = this.GetLogDirectory();
+            var fileSystem = new SystemIoFileSystem();
+            var serialiser = new XmlSerializer(typeof(BuildSummary));
+            Action<IIntegrationResult> writeSummary =
+                r =>
+                {
+                    var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
+                    timer.Stop();
+                    summary.Duration = timer.ElapsedMilliseconds;
+                    summary.Status = r.Status;
+                    using (var output = fileSystem.OpenOutputStream(path))
+                    {
+                        serialiser.Serialize(output, summary);
+                    }
+                };
             try
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
@@ -558,9 +583,12 @@ namespace ThoughtWorks.CruiseControl.Core
                     dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
                 }
                 result = integratable.Integrate(request);
+                summary.Label = result.Label;
+                writeSummary(result);
             }
             catch (Exception error)
             {
+                writeSummary(result);
                 Log.Error(error);
                 hasError = true;
                 throw;
@@ -601,6 +629,47 @@ namespace ThoughtWorks.CruiseControl.Core
 
             // Finally, return the actual result
             return result;
+        }
+
+        /// <summary>
+        /// Retrieves some summaries for the project.
+        /// </summary>
+        /// <param name="start">The first summary to retrieve. This starts from the last summary generated.</param>
+        /// <param name="count">The number of summaries to retrieve.</param>
+        /// <returns>
+        /// The summaries.
+        /// </returns>
+        public IList<BuildSummary> GetSummaries(int start, int count)
+        {
+            var logDirectory = this.GetLogDirectory();
+            if (string.IsNullOrEmpty(logDirectory))
+            {
+                return null;
+            }
+
+            try
+            {
+                count = count > 50 ? 50 : count;
+                var summaries = new List<BuildSummary>();
+                var fileSystem = new SystemIoFileSystem();
+                var serialiser = new XmlSerializer(typeof(BuildSummary));
+                Func<string, BuildSummary> loadSummary = f =>
+                                                             {
+                                                                 using (var stream = fileSystem.OpenInputStream(f))
+                                                                 {
+                                                                     var summary = serialiser.Deserialize(stream);
+                                                                     return summary as BuildSummary;
+                                                                 }
+                                                             };
+                var files = fileSystem.GetFilesInDirectory(logDirectory, "*.summary", SearchOption.TopDirectoryOnly);
+                summaries.AddRange(
+                    files.OrderByDescending(f => f).Skip(start).Take(count).Select(loadSummary));
+                return summaries;
+            }
+            catch (DirectoryNotFoundException error)
+            {
+                throw new CruiseControlException("Log directory does not exist. This normally occurs because there are no builds for this project.", error);
+            }
         }
 
         /// <summary>

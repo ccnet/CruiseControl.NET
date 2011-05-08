@@ -685,5 +685,17 @@ namespace ThoughtWorks.CruiseControl.Core
             return server.GetLinkedSiteId(request);
         }
         #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The response.</returns>
+        public ListBuildSummaryResponse GetBuildSummaries(ListRequest request)
+        {
+            return this.server.GetBuildSummaries(request);
+        }
+        #endregion
     }
 }

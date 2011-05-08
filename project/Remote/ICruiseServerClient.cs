@@ -353,5 +353,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         Response TerminateSecureConnection(ServerRequest request);
         #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The response.</returns>
+        ListBuildSummaryResponse GetBuildSummaries(ListRequest request);
+        #endregion
     }
 }

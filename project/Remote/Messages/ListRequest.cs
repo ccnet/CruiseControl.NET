@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="ListRequest.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,55 +22,61 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
+namespace ThoughtWorks.CruiseControl.Remote.Messages
 {
-    using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
+    using System;
+    using System.Collections.Generic;
+    using System.Xml.Serialization;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// A list request message.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
-        : ProjectCmdlet
+    [XmlRoot("listMessage")]
+    [Serializable]
+    public class ListRequest
+        : ProjectRequest
     {
-        #region Protected methods
-        #region ProcessRecord()
+        #region Constructors
         /// <summary>
-        /// Processes a record.
+        /// Initializes a new instance of the <see cref="ListRequest"/> class.
         /// </summary>
-        protected override void ProcessRecord()
+        public ListRequest()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
-                {
-                    return;
-                }
-
-                try
-                {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListRequest"/> class.
+        /// </summary>
+        /// <param name="start">The start.</param>
+        /// <param name="count">The count.</param>
+        public ListRequest(int start, int count)
+        {
+            this.Start = start;
+            this.Count = count;
+        }
+        #endregion
+
+        #region Public properties
+        #region Credentials
+        /// <summary>
+        /// Gets or sets the count.
+        /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
+        [XmlElement("count")]
+        public int Count { get; set; }
+        #endregion
+
+        #region Start
+        /// <summary>
+        /// Gets or sets the start.
+        /// </summary>
+        /// <value>
+        /// The start.
+        /// </value>
+        [XmlElement("start")]
+        public int Start { get; set; }
         #endregion
         #endregion
     }

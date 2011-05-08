@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServerFolder.cs" company="The CruiseControl.NET Team">
+// <copyright file="BuildSummary.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,78 +22,82 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell
+namespace ThoughtWorks.CruiseControl.Remote
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using ThoughtWorks.CruiseControl.Remote;
+    using System.Xml.Serialization;
 
     /// <summary>
-    /// A root level folder for a server.
+    /// A build summary.
     /// </summary>
-    public class ServerFolder
-        : ClientFolder, IExposeLog
+    [XmlRoot("summary")]
+    [Serializable]
+    public class BuildSummary
     {
-        #region Private fields
-        /// <summary>
-        /// The client to use.
-        /// </summary>
-        private readonly CruiseServerClientBase client;
-        #endregion
-
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerFolder"/> class.
+        /// Initializes a new instance of the <see cref="BuildSummary"/> class.
         /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="version">The version.</param>
-        public ServerFolder(CruiseServerClientBase client, string path, Version version)
-            : base(path)
+        public BuildSummary()
         {
-            this.client = client;
-            this.Version = version;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildSummary"/> class.
+        /// </summary>
+        /// <param name="original">The original.</param>
+        public BuildSummary(BuildSummary original)
+        {
+            this.Duration = original.Duration;
+            this.Label = original.Label;
+            this.StartTime = original.StartTime;
+            this.Status = original.Status;
         }
         #endregion
 
-        #region Public properties
-        #region Version
+        #region Public proeprties
+        #region StartTime
         /// <summary>
-        /// Gets the version.
+        /// Gets or sets the start time.
         /// </summary>
-        public Version Version { get; private set; }
-        #endregion
-        #endregion
-
-        #region Public methods
-        #region GetLog()
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <returns>
-        /// Retrieves the log.
-        /// </returns>
-        public string GetLog()
-        {
-            var log = this.client.GetServerLog();
-            return log;
-        }
+        /// <value>
+        /// The start time.
+        /// </value>
+        [XmlAttribute("start")]
+        public DateTime StartTime { get; set; }
         #endregion
 
-        #region GetProjects()
+        #region Duration
         /// <summary>
-        /// Gets the projects.
+        /// Gets or sets the duration.
         /// </summary>
-        /// <returns>
-        /// The projects for the server.
-        /// </returns>
-        public ICollection<Project> GetProjects()
-        {
-            var snapshot = this.client.GetCruiseServerSnapshot();
-            var projects = snapshot.ProjectStatuses.Select(p => Project.Wrap(this.client, p));
-            return projects.ToList();
-        }
+        /// <value>
+        /// The duration.
+        /// </value>
+        [XmlAttribute("duration")]
+        public long Duration { get; set; }
+        #endregion
+
+        #region Status
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        /// <value>
+        /// The status.
+        /// </value>
+        [XmlAttribute("status")]
+        public IntegrationStatus Status { get; set; }
+        #endregion
+
+        #region Label
+        /// <summary>
+        /// Gets or sets the label.
+        /// </summary>
+        /// <value>
+        /// The label.
+        /// </value>
+        [XmlAttribute("label")]
+        public string Label { get; set; }
         #endregion
         #endregion
     }

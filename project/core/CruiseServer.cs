@@ -1353,6 +1353,24 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
         #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The response.</returns>
+        public ListBuildSummaryResponse GetBuildSummaries(ListRequest request)
+        {
+            IList<BuildSummary> summaries = null;
+            var response = this.RunProjectRequest(
+                request,
+                SecurityPermission.ViewProject,
+                null,
+                (a, r) => summaries = this.GetIntegrator(a.ProjectName).IntegrationRepository.GetSummaries(request.Start, request.Count));
+            return new ListBuildSummaryResponse(response, summaries);
+        }
+        #endregion
         #endregion
 
         #region Private methods

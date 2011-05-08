@@ -707,6 +707,18 @@ namespace ThoughtWorks.CruiseControl.Core
             };
         }
         #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The response.</returns>
+        public ListBuildSummaryResponse GetBuildSummaries(ListRequest request)
+        {
+            return this.cruiseServer.GetBuildSummaries(request);
+        }
+        #endregion
         #endregion
 
         #region Private methods

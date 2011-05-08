@@ -25,6 +25,7 @@
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -71,9 +72,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <summary>
         /// Forces a build.
         /// </summary>
-        public void ForceBuild()
+        /// <param name="condition">The condition.</param>
+        public void ForceBuild(BuildCondition condition)
         {
-            this.client.ForceBuild(this.Name);
+            this.client.ForceBuild(this.Name, new List<NameValuePair>(), condition);
+        }
+        #endregion
+
+        #region AbortBuild()
+        /// <summary>
+        /// Aborts a build.
+        /// </summary>
+        public void AbortBuild()
+        {
+            this.client.AbortBuild(this.Name);
         }
         #endregion
 
@@ -123,6 +135,22 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         {
             var log = this.client.GetServerLog(this.Name);
             return log;
+        }
+        #endregion
+
+        #region GetBuilds()
+        /// <summary>
+        /// Gets some project builds.
+        /// </summary>
+        /// <param name="start">The starting position.</param>
+        /// <param name="count">The number to get.</param>
+        /// <returns>
+        /// The builds.
+        /// </returns>
+        public IList<Build> GetBuilds(int start, int count)
+        {
+            var builds = this.client.GetBuildSummaries(this.Name, start, count);
+            return builds.Select(b => new Build(this.client, b)).ToList();
         }
         #endregion
         #endregion

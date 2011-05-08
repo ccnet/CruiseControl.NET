@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote.Events;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-
 namespace ThoughtWorks.CruiseControl.Remote
 {
+    using System;
+    using ThoughtWorks.CruiseControl.Remote.Events;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+
     /// <summary>
     /// The main server for running Continuous Integration.
     /// </summary>
-	public interface ICruiseServer : IDisposable
-	{
+    public interface ICruiseServer
+        : IDisposable
+    {
         #region Abort()
         /// <summary>
         /// Terminates the CruiseControl.NET server immediately, stopping all started projects
@@ -20,12 +19,12 @@ namespace ThoughtWorks.CruiseControl.Remote
         #endregion
 
         #region Start()
-		/// <summary>
-		/// Launches the CruiseControl.NET server and starts all project schedules it contains
-		/// </summary>
-		void Start();
+        /// <summary>
+        /// Launches the CruiseControl.NET server and starts all project schedules it contains
+        /// </summary>
+        void Start();
 
-		/// <summary>
+        /// <summary>
         /// Attempts to start a project.
         /// </summary>
         /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
@@ -35,47 +34,47 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region Stop()
         /// <summary>
-		/// Requests all started projects within the CruiseControl.NET server to stop
-		/// </summary>
-		void Stop();
+        /// Requests all started projects within the CruiseControl.NET server to stop
+        /// </summary>
+        void Stop();
 
-		/// <summary>
+        /// <summary>
         /// Attempts to stop a project.
-		/// </summary>
+        /// </summary>
         /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
         /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
         Response Stop(ProjectRequest request);
         #endregion
 
         #region CancelPendingRequest()
-		/// <summary>
+        /// <summary>
         /// Cancel a pending project integration request from the integration queue.
-		/// </summary>
+        /// </summary>
         Response CancelPendingRequest(ProjectRequest request);
         #endregion
 
         #region SendMessage()
-		/// <summary>
+        /// <summary>
         /// Send a text message to the server.
-		/// </summary>
+        /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         Response SendMessage(MessageRequest request);
         #endregion
-		
+
         #region GetCruiseServerSnapshot()
-		/// <summary>
-		/// Gets the projects and integration queues snapshot from this server.
-		/// </summary>
+        /// <summary>
+        /// Gets the projects and integration queues snapshot from this server.
+        /// </summary>
         SnapshotResponse GetCruiseServerSnapshot(ServerRequest request);
         #endregion
 
         #region CruiseManager
-		/// <summary>
-		/// Retrieve CruiseManager interface for the server
-		/// </summary>
+        /// <summary>
+        /// Retrieve CruiseManager interface for the server
+        /// </summary>
         [Obsolete("Use CruiseServerClient instead")]
-		ICruiseManager CruiseManager { get; }
+        ICruiseManager CruiseManager { get; }
         #endregion
 
         #region CruiseServerClient
@@ -86,31 +85,31 @@ namespace ThoughtWorks.CruiseControl.Remote
         #endregion
 
         #region GetProjectStatus()
-		/// <summary>
-		/// Gets information about the last build status, current activity and project name.
-		/// for all projects on a cruise server
-		/// </summary>
+        /// <summary>
+        /// Gets information about the last build status, current activity and project name.
+        /// for all projects on a cruise server
+        /// </summary>
         ProjectStatusResponse GetProjectStatus(ServerRequest request);
         #endregion
 
         #region ForceBuild()
-		/// <summary>
-		/// Forces a build for the named project.
-		/// </summary>
+        /// <summary>
+        /// Forces a build for the named project.
+        /// </summary>
         /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
         /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
         Response ForceBuild(ProjectRequest request);
         #endregion
-		
+
         #region AbortBuild()
-		/// <summary>
-		/// Aborts the build of the selected project.
-		/// </summary>
+        /// <summary>
+        /// Aborts the build of the selected project.
+        /// </summary>
         /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
         /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
         Response AbortBuild(ProjectRequest request);
         #endregion
-		
+
         #region WaitForExit()
         /// <summary>
         /// Wait for CruiseControl server to finish executing
@@ -124,32 +123,32 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         Response WaitForExit(ProjectRequest request);
         #endregion
-		
+
         #region GetLatestBuildName()
-		/// <summary>
-		/// Returns the name of the most recent build for the specified project
-		/// </summary>
+        /// <summary>
+        /// Returns the name of the most recent build for the specified project
+        /// </summary>
         DataResponse GetLatestBuildName(ProjectRequest request);
         #endregion
 
         #region GetBuildNames()
-		/// <summary>
-		/// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
-		/// </summary>
+        /// <summary>
+        /// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
         DataListResponse GetBuildNames(ProjectRequest request);
         #endregion
 
         #region GetMostRecentBuildNames()
-		/// <summary>
-		/// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
-		/// </summary>
+        /// <summary>
+        /// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
         DataListResponse GetMostRecentBuildNames(BuildListRequest request);
         #endregion
 
         #region GetLog()
-		/// <summary>
-		/// Returns the build log contents for requested project and build name
-		/// </summary>
+        /// <summary>
+        /// Returns the build log contents for requested project and build name
+        /// </summary>
         DataResponse GetLog(BuildRequest request);
         #endregion
 
@@ -164,50 +163,50 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region GetServerLog()
         /// <summary>
-		/// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
-		/// </summary>
+        /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
+        /// </summary>
         DataResponse GetServerLog(ServerRequest request);
         #endregion
 
         #region GetServerVersion()
-		/// <summary>
+        /// <summary>
         /// Returns the version of the server
-		/// </summary>
+        /// </summary>
         DataResponse GetServerVersion(ServerRequest request);
         #endregion
 
         #region AddProject()
-		/// <summary>
+        /// <summary>
         /// Adds a project to the server
-		/// </summary>
+        /// </summary>
         Response AddProject(ChangeConfigurationRequest request);
         #endregion
 
         #region DeleteProject()
-		/// <summary>
+        /// <summary>
         /// Deletes the specified project from the server
-		/// </summary>
+        /// </summary>
         Response DeleteProject(ChangeConfigurationRequest request);
         #endregion
 
         #region UpdateProject()
-		/// <summary>
+        /// <summary>
         /// Updates the selected project on the server
-		/// </summary>
+        /// </summary>
         Response UpdateProject(ChangeConfigurationRequest request);
         #endregion
 
         #region GetProject()
-		/// <summary>
-		/// Returns the serialized form of the requested project from the server
-		/// </summary>
+        /// <summary>
+        /// Returns the serialized form of the requested project from the server
+        /// </summary>
         DataResponse GetProject(ProjectRequest request);
         #endregion
 
         #region GetExternalLinks()
-		/// <summary>
+        /// <summary>
         /// Retrieve the list of external links for the project.
-		/// </summary>
+        /// </summary>
         ExternalLinksListResponse GetExternalLinks(ProjectRequest request);
         #endregion
 
@@ -370,7 +369,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The list of parameters (if any).</returns>
         BuildParametersResponse ListBuildParameters(ProjectRequest request);
         #endregion
-        
+
         #region ChangePassword()
         /// <summary>
         /// Changes the password of the user.
@@ -441,6 +440,15 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="request"></param>
         /// <returns></returns>
         DataResponse GetLinkedSiteId(ProjectItemRequest request);
+        #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The response.</returns>
+        ListBuildSummaryResponse GetBuildSummaries(ListRequest request);
         #endregion
     }
 }

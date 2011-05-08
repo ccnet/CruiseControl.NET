@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetBuild.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,20 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System;
     using System.Management.Automation;
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// A cmdlet for getting one or more builds.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
+    [Cmdlet(VerbsCommon.Get, Nouns.Build, DefaultParameterSetName = "ServerSet")]
+    public class GetBuild
         : ProjectCmdlet
     {
+        #region Public properties
+        #endregion
+
         #region Protected methods
         #region ProcessRecord()
         /// <summary>
@@ -49,15 +53,9 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             foreach (var project in projects)
             {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
-                {
-                    return;
-                }
-
                 try
                 {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
+                    this.WriteObject(project.GetBuilds(0, 10), true);
                 }
                 catch (CommunicationsException error)
                 {

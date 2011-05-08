@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="Project.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,56 +22,34 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
+namespace ThoughtWorks.CruiseControl.PowerShell
 {
-    using System.Management.Automation;
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// The details on a build.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
-        : ProjectCmdlet
+    public class Build
+        : BuildSummary
     {
-        #region Protected methods
-        #region ProcessRecord()
+        #region Private fields
         /// <summary>
-        /// Processes a record.
+        /// The client to use.
         /// </summary>
-        protected override void ProcessRecord()
-        {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
-                {
-                    return;
-                }
-
-                try
-                {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
-        }
+        private readonly CruiseServerClientBase client;
         #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Build"/> class.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="summary">The summary.</param>
+        public Build(CruiseServerClientBase client, BuildSummary summary)
+            : base(summary)
+        {
+            this.client = client;    
+        }
         #endregion
     }
 }

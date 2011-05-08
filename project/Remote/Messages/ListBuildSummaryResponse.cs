@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServerFolder.cs" company="The CruiseControl.NET Team">
+// <copyright file="ListBuildSummaryResponse.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,77 +22,70 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell
+namespace ThoughtWorks.CruiseControl.Remote.Messages
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using ThoughtWorks.CruiseControl.Remote;
+    using System.Xml.Serialization;
 
     /// <summary>
-    /// A root level folder for a server.
+    /// The response containing build summaries.
     /// </summary>
-    public class ServerFolder
-        : ClientFolder, IExposeLog
+    [XmlRoot("buildSummaryMessage")]
+    [Serializable]
+    public class ListBuildSummaryResponse
+        : Response
     {
         #region Private fields
         /// <summary>
-        /// The client to use.
+        /// The summaries.
         /// </summary>
-        private readonly CruiseServerClientBase client;
+        private readonly List<BuildSummary> summaries = new List<BuildSummary>();
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerFolder"/> class.
+        /// Initializes a new instance of the <see cref="ListBuildSummaryResponse"/> class.
         /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="version">The version.</param>
-        public ServerFolder(CruiseServerClientBase client, string path, Version version)
-            : base(path)
+        public ListBuildSummaryResponse()
         {
-            this.client = client;
-            this.Version = version;
+            this.summaries = new List<BuildSummary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListBuildSummaryResponse"/> class.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        public ListBuildSummaryResponse(ServerRequest request)
+            : base(request)
+        {
+            this.summaries = new List<BuildSummary>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListBuildSummaryResponse"/> class.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="summaries">The summaries.</param>
+        public ListBuildSummaryResponse(Response response, IList<BuildSummary> summaries)
+            : base(response)
+        {
+            this.summaries = new List<BuildSummary>(summaries);
         }
         #endregion
 
         #region Public properties
-        #region Version
+        #region Summaries
         /// <summary>
-        /// Gets the version.
+        /// Gets the summaries.
         /// </summary>
-        public Version Version { get; private set; }
-        #endregion
-        #endregion
-
-        #region Public methods
-        #region GetLog()
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <returns>
-        /// Retrieves the log.
-        /// </returns>
-        public string GetLog()
+        /// <value>
+        /// The summaries.
+        /// </value>
+        [XmlElement("summaries")]
+        public IList<BuildSummary> Summaries
         {
-            var log = this.client.GetServerLog();
-            return log;
-        }
-        #endregion
-
-        #region GetProjects()
-        /// <summary>
-        /// Gets the projects.
-        /// </summary>
-        /// <returns>
-        /// The projects for the server.
-        /// </returns>
-        public ICollection<Project> GetProjects()
-        {
-            var snapshot = this.client.GetCruiseServerSnapshot();
-            var projects = snapshot.ProjectStatuses.Select(p => Project.Wrap(this.client, p));
-            return projects.ToList();
+            get { return this.summaries; }
         }
         #endregion
         #endregion

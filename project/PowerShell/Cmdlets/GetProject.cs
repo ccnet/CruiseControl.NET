@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetProject.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,17 +24,84 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Management.Automation;
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// A cmdlet for getting one or more projects.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
+    [Cmdlet(VerbsCommon.Get, Nouns.Project, DefaultParameterSetName = "ServerSet")]
+    public class GetProject
         : ProjectCmdlet
     {
+        #region Public properties
+        #region Folder
+        /// <summary>
+        /// Gets or sets the folder.
+        /// </summary>
+        /// <value>
+        /// The server folder.
+        /// </value>
+        [Parameter(ParameterSetName = "FolderSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
+        [ValidateNotNullOrEmpty]
+        public ServerFolder Folder { get; set; }
+        #endregion
+
+        #region Server
+        /// <summary>
+        /// Gets or sets the server.
+        /// </summary>
+        /// <value>
+        /// The server.
+        /// </value>
+        [Parameter(ParameterSetName = "ServerSet", Mandatory = true, Position = 1)]
+        [ValidateNotNull]
+        public string Server { get; set; }
+        #endregion
+
+        #region Name
+        /// <summary>
+        /// Gets or sets an optional name to filter the projects by.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        [Parameter]
+        public string Name { get; set; }
+        #endregion
+        #endregion
+
         #region Protected methods
+        #region GetProjects()
+        /// <summary>
+        /// Gets the projects.
+        /// </summary>
+        /// <returns>
+        /// A list of projects to process.
+        /// </returns>
+        protected override ICollection<Project> GetProjects()
+        {
+            var projects = new List<Project>(base.GetProjects());
+            if (this.Folder != null)
+            {
+                projects.AddRange(this.Folder.GetProjects());
+            }
+
+            if (!string.IsNullOrEmpty(this.Server))
+            {
+                var factory = new CruiseServerClientFactory();
+                var client = factory.GenerateClient(this.Server);
+                var snapshot = client.GetCruiseServerSnapshot();
+                projects.AddRange(snapshot.ProjectStatuses.Select(p => Project.Wrap(client, p)));
+            }
+
+            return projects;
+        }
+        #endregion
+
         #region ProcessRecord()
         /// <summary>
         /// Processes a record.
@@ -49,15 +116,17 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             foreach (var project in projects)
             {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
+                if (!string.IsNullOrEmpty(this.Name))
                 {
-                    return;
+                    if (!string.Equals(this.Name, project.Name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
                 }
 
                 try
                 {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
+                    this.WriteObject(project);
                 }
                 catch (CommunicationsException error)
                 {

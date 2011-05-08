@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">project to force</param>
         public override void ForceBuild(string projectName)
         {
-            Response resp = connection.SendMessage("ForceBuild", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("ForceBuild", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
 
@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.BuildValues = parameters;
             request.ServerName = TargetServer;
             request.DisplayName = this.DisplayName;
-            Response resp = connection.SendMessage("ForceBuild", request);
+            var resp = this.connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">The name of the project to abort.</param>
         public override void AbortBuild(string projectName)
         {
-            Response resp = connection.SendMessage("AbortBuild", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("AbortBuild", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -164,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildCondition = integrationRequest.BuildCondition;
             request.ServerName = TargetServer;
-            Response resp = connection.SendMessage("ForceBuild", request);
+            var resp = this.connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName"></param>
         public override void StartProject(string projectName)
         {
-            Response resp = connection.SendMessage("Start", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("Start", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -188,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName"></param>
         public override void StopProject(string projectName)
         {
-            Response resp = connection.SendMessage("Stop", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("Stop", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -209,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.Message = message.Text;
             request.Kind = message.Kind;
             request.ServerName = TargetServer;
-            Response resp = connection.SendMessage("SendMessage", request);
+            var resp = this.connection.SendMessage("SendMessage", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -221,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">The name of the project to use.</param>
         public override void WaitForExit(string projectName)
         {
-            Response resp = connection.SendMessage("WaitForExit", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("WaitForExit", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override void CancelPendingRequest(string projectName)
         {
-            Response resp = connection.SendMessage("CancelPendingRequest", GenerateProjectRequest(projectName));
+            var resp = this.connection.SendMessage("CancelPendingRequest", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -243,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override CruiseServerSnapshot GetCruiseServerSnapshot()
         {
-            SnapshotResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetCruiseServerSnapshot", GenerateServerRequest()))
                 as SnapshotResponse;
             return resp.Snapshot;
@@ -256,7 +256,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetLatestBuildName(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetLatestBuildName", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -269,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string[] GetBuildNames(string projectName)
         {
-            DataListResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetBuildNames", GenerateProjectRequest(projectName)))
                 as DataListResponse;
             return resp.Data.ToArray();
@@ -287,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             BuildListRequest request = new BuildListRequest(SessionToken, projectName);
             request.NumberOfBuilds = buildCount;
             request.ServerName = TargetServer;
-            DataListResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetMostRecentBuildNames", request))
                 as DataListResponse;
             return resp.Data.ToArray();
@@ -310,8 +310,8 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.BuildName = buildName;
             request.ServerName = TargetServer;
             request.CompressData = compress;
-            DataResponse resp = ValidateResponse(
-                connection.SendMessage("GetLog", request))
+            var resp = this.ValidateResponse(
+                this.connection.SendMessage("GetLog", request))
                 as DataResponse;
             return resp.Data;
         }
@@ -352,7 +352,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetServerLog()
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetServerLog", GenerateServerRequest()))
                 as DataResponse;
             return resp.Data;
@@ -363,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetServerLog(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetServerLog", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -376,7 +376,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetServerVersion()
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetServerVersion", GenerateServerRequest()))
                 as DataResponse;
             return resp.Data;
@@ -393,7 +393,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.SessionToken = SessionToken;
             request.ProjectDefinition = serializedProject;
             request.ServerName = TargetServer;
-            Response resp = connection.SendMessage("AddProject", request);
+            var resp = this.connection.SendMessage("AddProject", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -411,7 +411,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.PurgeArtifactDirectory = purgeArtifactDirectory;
             request.PurgeSourceControlEnvironment = purgeSourceControlEnvironment;
             request.ServerName = TargetServer;
-            Response resp = connection.SendMessage("DeleteProject", request);
+            var resp = this.connection.SendMessage("DeleteProject", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -422,7 +422,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetProject(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetProject", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -440,7 +440,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(SessionToken, projectName);
             request.ProjectDefinition = serializedProject;
             request.ServerName = TargetServer;
-            Response resp = connection.SendMessage("UpdateProject", request);
+            var resp = this.connection.SendMessage("UpdateProject", request);
             ValidateResponse(resp);
         }
         #endregion
@@ -468,7 +468,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override string GetArtifactDirectory(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetArtifactDirectory", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -483,7 +483,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override string GetStatisticsDocument(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetStatisticsDocument", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -498,7 +498,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override string GetModificationHistoryDocument(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetModificationHistoryDocument", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -513,7 +513,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override string GetRSSFeed(string projectName)
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetRSSFeed", GenerateProjectRequest(projectName)))
                 as DataResponse;
             return resp.Data;
@@ -573,7 +573,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetSecurityConfiguration()
         {
-            DataResponse resp = ValidateResponse(
+            var resp = this.ValidateResponse(
                 connection.SendMessage("GetSecurityConfiguration", GenerateServerRequest()))
                 as DataResponse;
             return resp.Data;
@@ -844,6 +844,28 @@ namespace ThoughtWorks.CruiseControl.Remote
                 connection.SendMessage("ListServers", GenerateServerRequest()))
                 as DataListResponse;
             return response.Data;
+        }
+        #endregion
+
+        #region GetBuildSummaries()
+        /// <summary>
+        /// Gets some build summaries.
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="start">The start.</param>
+        /// <param name="count">The count.</param>
+        /// <returns>
+        /// The build summaries.
+        /// </returns>
+        public override IList<BuildSummary> GetBuildSummaries(string projectName, int start, int count)
+        {
+            var request = new ListRequest(start, count)
+                              {
+                                  ProjectName = projectName
+                              };
+            var resp = this.ValidateResponse(
+                this.connection.SendMessage("GetBuildSummaries", request)) as ListBuildSummaryResponse;
+            return resp.Summaries;
         }
         #endregion
         #endregion

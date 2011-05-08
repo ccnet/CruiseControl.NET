@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StopProject.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetServer.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,43 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System;
     using System.Management.Automation;
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A cmdlet for forcing a project.
+    /// A cmdlet for getting one or more projects.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
-    public class StopProject
-        : ProjectCmdlet
+    [Cmdlet(VerbsCommon.Get, Nouns.Server, DefaultParameterSetName = "ServerSet")]
+    public class GetServer
+        : Cmdlet
     {
+        #region Public properties
+        #region Folder
+        /// <summary>
+        /// Gets or sets the folder.
+        /// </summary>
+        /// <value>
+        /// The server folder.
+        /// </value>
+        [Parameter(ParameterSetName = "FolderSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
+        [ValidateNotNullOrEmpty]
+        public ServerFolder Folder { get; set; }
+        #endregion
+
+        #region Server
+        /// <summary>
+        /// Gets or sets the server.
+        /// </summary>
+        /// <value>
+        /// The server.
+        /// </value>
+        [Parameter(ParameterSetName = "ServerSet", Mandatory = true, Position = 1)]
+        [ValidateNotNull]
+        public string Server { get; set; }
+        #endregion
+        #endregion
+
         #region Protected methods
         #region ProcessRecord()
         /// <summary>
@@ -41,23 +68,19 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
+            if (this.Folder != null)
             {
-                return;
+                this.WriteObject(this.Folder);
             }
-
-            foreach (var project in projects)
+            else
             {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
-                {
-                    return;
-                }
-
                 try
                 {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
+                    var clientFactory = new CruiseServerClientFactory();
+                    var client = clientFactory.GenerateClient(this.Server);
+                    var version = new Version(client.GetServerVersion());
+                    var serverFolder = new ServerFolder(client, "\\", version);
+                    this.WriteObject(serverFolder);
                 }
                 catch (CommunicationsException error)
                 {
@@ -65,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
                         error,
                         "Communications",
                         ErrorCategory.NotSpecified,
-                        project);
+                        this.Server);
                     this.WriteError(record);
                     return;
                 }

@@ -129,9 +129,12 @@
     <Compile Include="ICruiseServerClientFactory.cs" />
     <Compile Include="IWebClient.cs" />
     <Compile Include="IWebClientFactory.cs" />
+    <Compile Include="BuildSummary.cs" />
     <Compile Include="Messages\CommunicationsMessage.cs" />
     <Compile Include="Messages\EncryptedRequest.cs" />
     <Compile Include="Messages\EncryptedResponse.cs" />
+    <Compile Include="Messages\ListRequest.cs" />
+    <Compile Include="Messages\ListBuildSummaryResponse.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="Monitor\BuildQueue.cs" />
     <Compile Include="Monitor\BuildQueueChangedArgs.cs" />

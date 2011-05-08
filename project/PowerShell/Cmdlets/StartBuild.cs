@@ -30,10 +30,23 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     /// <summary>
     /// A cmdlet for forcing a build.
     /// </summary>
-    [Cmdlet("Start", "Build", DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsLifecycle.Start, Nouns.Build, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
     public class StartBuild
         : ProjectCmdlet
     {
+        #region Public properties
+        #region Condition
+        /// <summary>
+        /// Gets or sets the build condition.
+        /// </summary>
+        /// <value>
+        /// The build condition.
+        /// </value>
+        [Parameter]
+        public BuildCondition? Condition { get; set; }
+        #endregion
+        #endregion
+
         #region Protected methods
         #region ProcessRecord()
         /// <summary>
@@ -56,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
                 try
                 {
-                    project.ForceBuild();
+                    project.ForceBuild(this.Condition.GetValueOrDefault(BuildCondition.IfModificationExists));
                     this.WriteObject(project.Refresh());
                 }
                 catch (CommunicationsException error)

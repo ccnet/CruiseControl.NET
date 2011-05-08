@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// <returns>
         /// A list of projects to process.
         /// </returns>
-        protected ICollection<Project> GetProjects()
+        protected virtual ICollection<Project> GetProjects()
         {
             var projects = new List<Project>();
             if (this.Path != null)
@@ -108,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
                     projects.Add(Project.Wrap(clientDrive.Client, status));
                 }
             }
-            else
+            else if (this.Project != null)
             {
                 projects.Add(this.Project);
             }
