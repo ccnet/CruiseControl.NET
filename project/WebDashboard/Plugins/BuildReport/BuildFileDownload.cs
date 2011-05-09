@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
                     var splitPos = match.Value.IndexOf("=\"");
                     var prefex = match.Value.Substring(0, splitPos + 2);
                     if (match.Value.StartsWith(prefex + "data:", StringComparison.InvariantCultureIgnoreCase) ||
+                        match.Value.StartsWith(prefex + "#", StringComparison.InvariantCultureIgnoreCase) ||
                         match.Value.StartsWith(prefex + "http://", StringComparison.InvariantCultureIgnoreCase))
                     {
                         return match.Value;
