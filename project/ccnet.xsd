@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema targetNamespace="http://thoughtworks.org/ccnet/1/6"
-    elementFormDefault="qualified"
-    xmlns="http://thoughtworks.org/ccnet/1/6"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+           elementFormDefault="qualified"
+           xmlns="http://thoughtworks.org/ccnet/1/6"
+           xmlns:cb="urn:ccnet.config.builder"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="urn:ccnet.config.builder" />
   <xs:element name="cruisecontrol">
     <xs:annotation>
       <xs:documentation>The root element for a CruiseControl.NET server configuration.</xs:documentation>
@@ -42,6 +44,16 @@
             <xs:documentation>
               Configure the behaviour of the build queues.
             </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" ref="cb:define">
+          <xs:annotation>
+            <xs:documentation>Defines a preprocessor constant.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" ref="cb:scope">
+          <xs:annotation>
+            <xs:documentation>Controls the scope of preprocessor definitions.</xs:documentation>
           </xs:annotation>
         </xs:element>
       </xs:choice>
@@ -394,9 +406,14 @@
         </xs:annotation>
         <xs:complexType>
           <xs:choice minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="project" type="project">
+            <xs:element name="project" type="project" maxOccurs="unbounded">
               <xs:annotation>
                 <xs:documentation>A build project.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" ref="cb:scope">
+              <xs:annotation>
+                <xs:documentation>Controls the scope of preprocessor definitions.</xs:documentation>
               </xs:annotation>
             </xs:element>
           </xs:choice>

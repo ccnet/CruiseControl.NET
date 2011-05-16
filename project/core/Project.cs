@@ -569,6 +569,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     timer.Stop();
                     summary.Duration = timer.ElapsedMilliseconds;
                     summary.Status = r.Status;
+                    fileSystem.EnsureFolderExists(path);
                     using (var output = fileSystem.OpenOutputStream(path))
                     {
                         serialiser.Serialize(output, summary);
