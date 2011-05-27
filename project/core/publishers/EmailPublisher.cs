@@ -10,6 +10,8 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.Linq;
+
     /// <summary>
     /// <para>
     /// Publishes results of integrations via email.  This implementation supports plain-text, and Html email formats.
@@ -561,13 +563,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 // If not found then throw a validation exception
                 if (!isPublisher)
                 {
-                    errorProcesser.ProcessWarning("Email publishers are best placed in the publishers section of the configuration");
+                    errorProcesser.ProcessWarning(
+                        "Email publishers are best placed in the publishers section of the configuration");
                 }
             }
             else
             {
-                errorProcesser.ProcessError(
-                    new CruiseControlException("This publisher can only belong to a project"));
+                errorProcesser.ProcessError(new CruiseControlException("This publisher can only belong to a project"));
+            }
+
+            // Make sure the xslFiles are not empty
+            if (this.XslFiles.Any(f => string.IsNullOrEmpty(f)))
+            {
+                errorProcesser.ProcessError("xslFiles cannot contain empty or null filenames");
             }
         }
         #endregion
