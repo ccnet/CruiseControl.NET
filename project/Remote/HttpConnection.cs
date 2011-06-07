@@ -280,12 +280,15 @@
         /// <summary>
         /// Generates the target URI.
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">The request to generate the URI for.</param>
+        /// <returns>The URI for connecting to the target machine.</returns>
         private Uri GenerateTargetUri(ServerRequest request)
         {
-            Uri targetAddress =
-                new Uri(string.Concat(serverAddress.AbsoluteUri, "/server/", request.ServerName, "/RawXmlMessage.aspx"));
+            var baseAddress = this.serverAddress.AbsoluteUri + 
+                (this.serverAddress.AbsoluteUri.EndsWith("/") ? string.Empty : "/") +
+                "server/" + request.ServerName + 
+                "/RawXmlMessage.aspx";
+            var targetAddress = new Uri(baseAddress);
             return targetAddress;
         }
         #endregion
