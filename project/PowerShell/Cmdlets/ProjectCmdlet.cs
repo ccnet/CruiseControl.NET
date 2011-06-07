@@ -25,27 +25,33 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
 
     /// <summary>
-    /// Provides common functionality for project cmdlets.
+    /// Base class for cmdlets that require a project as a parameter.
     /// </summary>
     public abstract class ProjectCmdlet
-        : PSCmdlet
+        : ConnectionCmdlet
     {
-        #region Public properties
-        #region Path
+        #region Public constants
         /// <summary>
-        /// Gets or sets the path.
+        /// The name of the common parameter set.
+        /// </summary>
+        public const string ProjectParameterSet = "ProjectParameterSet";
+        #endregion
+
+        #region Public properties
+        #region Name
+        /// <summary>
+        /// Gets or sets an optional name to filter the projects by.
         /// </summary>
         /// <value>
-        /// The path.
+        /// The name.
         /// </value>
-        [Parameter(ParameterSetName = "PathSet", Mandatory = true, Position = 1)]
-        [ValidateNotNullOrEmpty]
-        public string Path { get; set; }
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = ConnectionCmdlet.ConnectionParameterSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        public string Name { get; set; }
         #endregion
 
         #region Project
@@ -55,65 +61,46 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// <value>
         /// The project.
         /// </value>
-        [Parameter(ParameterSetName = "ProjectSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true, ParameterSetName = ProjectCmdlet.ProjectParameterSet)]
         [ValidateNotNull]
-        public Project Project { get; set; }
+        public CCProject Project { get; set; }
         #endregion
         #endregion
 
         #region Protected methods
-        #region GetProjects()
+        #region ProcessProject()
         /// <summary>
-        /// Gets the projects.
+        /// Processes the project.
         /// </summary>
-        /// <returns>
-        /// A list of projects to process.
-        /// </returns>
-        protected virtual ICollection<Project> GetProjects()
+        /// <param name="action">The action to perform.</param>
+        protected void ProcessProject(Action<CCProject> action)
         {
-            var projects = new List<Project>();
-            if (this.Path != null)
+            if (this.Project != null)
             {
-                ProviderInfo info;
-                var paths = this.GetResolvedProviderPathFromPSPath(this.Path, out info);
-                if (info.ModuleName != typeof(ClientCmdletProvider).Namespace)
+                action(this.Project);
+            }
+            else
+            {
+                var connection = this.Connection
+                                 ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
+
+                var project =
+                    connection.GetProjects().FirstOrDefault(
+                        p => p.Name.Equals(this.Name, StringComparison.CurrentCultureIgnoreCase));
+                if (project == null)
                 {
                     var record = new ErrorRecord(
-                        new Exception("Invalid provider"),
-                        "Validation",
-                        ErrorCategory.InvalidArgument,
-                        this.Path);
+                        new Exception("Unable to find project '" + this.Name + "'"),
+                        "1",
+                        ErrorCategory.ResourceUnavailable,
+                        this);
                     this.WriteError(record);
                 }
-
-                var driveName = this.Path.Substring(0, this.Path.IndexOf(':'));
-                var drive = info.Drives.First(d => d.Name.Equals(driveName, StringComparison.InvariantCultureIgnoreCase));
-                var clientDrive = drive as ClientDriveInfo;
-                var statuses = clientDrive.Client.GetProjectStatus();
-                foreach (var path in paths)
+                else
                 {
-                    var projectName = path.Substring(path.LastIndexOf('\\') + 1);
-                    var status = statuses
-                        .FirstOrDefault(s => s.Name.Equals(projectName, StringComparison.InvariantCultureIgnoreCase));
-                    if (status == null)
-                    {
-                        var record = new ErrorRecord(
-                            new Exception("Invalid project"),
-                            "Validation",
-                            ErrorCategory.InvalidArgument,
-                            this.Path);
-                        this.WriteError(record);
-                    }
-
-                    projects.Add(Project.Wrap(clientDrive.Client, status));
+                    action(project);
                 }
             }
-            else if (this.Project != null)
-            {
-                projects.Add(this.Project);
-            }
-
-            return projects;
         }
         #endregion
         #endregion

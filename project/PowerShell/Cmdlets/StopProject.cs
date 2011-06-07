@@ -25,12 +25,11 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
     /// A cmdlet for forcing a project.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsLifecycle.Stop, Nouns.Project, SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class StopProject
         : ProjectCmdlet
     {
@@ -41,35 +40,12 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Stop a project"))
+            this.WriteVerbose("Stopping project");
+            this.ProcessProject(p =>
                 {
-                    return;
-                }
-
-                try
-                {
-                    project.Stop();
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
+                    p.Stop();
+                    this.WriteObject(p.Refresh());
+                });
         }
         #endregion
         #endregion

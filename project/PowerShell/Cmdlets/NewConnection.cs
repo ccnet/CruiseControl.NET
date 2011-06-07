@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClientFolder.cs" company="The CruiseControl.NET Team">
+// <copyright file="NewConnection.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,30 +22,47 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell
+namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System;
+    using System.Management.Automation;
+
     /// <summary>
-    /// Defines a folder.
+    /// Starts a new connection to a server.
     /// </summary>
-    public class ClientFolder
+    [Cmdlet(VerbsCommon.New, Nouns.Connection, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
+    public class NewConnection
+        : CommonCmdlet
     {
-        #region Constructors
+        #region Public properties
+        #region Address
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientFolder"/> class.
+        /// Gets or sets the address.
         /// </summary>
-        /// <param name="path">The path.</param>
-        public ClientFolder(string path)
-        {
-            this.Name = path;
-        }
+        /// <value>
+        /// The address.
+        /// </value>
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        [ValidateNotNullOrEmpty]
+        public string Address { get; set; }
+        #endregion
         #endregion
 
-        #region Public properties
-        #region Name
+        #region Protected methods
+        #region ProcessRecord()
         /// <summary>
-        /// Gets the name.
+        /// Processes a record.
         /// </summary>
-        public string Name { get; private set; }
+        protected override void ProcessRecord()
+        {
+            this.WriteVerbose("Starting a new server connection");
+            var client = ClientHelpers.GenerateClient(this.Address, this);
+
+            this.WriteVerbose("Retrieving server version");
+            var version = client.GetServerVersion();
+            var connection = new CCConnection(client, new Version(version));
+            this.WriteObject(connection);
+        }
         #endregion
         #endregion
     }

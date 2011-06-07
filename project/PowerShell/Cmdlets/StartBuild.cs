@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     /// <summary>
     /// A cmdlet for forcing a build.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Start, Nouns.Build, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsLifecycle.Start, Nouns.Build, SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class StartBuild
         : ProjectCmdlet
     {
@@ -54,35 +54,12 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Start a build"))
+            this.WriteVerbose("Starting project build");
+            this.ProcessProject(p =>
                 {
-                    return;
-                }
-
-                try
-                {
-                    project.ForceBuild(this.Condition.GetValueOrDefault(BuildCondition.IfModificationExists));
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
+                    p.ForceBuild(this.Condition.GetValueOrDefault(BuildCondition.ForceBuild));
+                    this.WriteObject(p.Refresh());
+                });
         }
         #endregion
         #endregion

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServerFolder.cs" company="The CruiseControl.NET Team">
+// <copyright file="CCConnection.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,13 +27,13 @@ namespace ThoughtWorks.CruiseControl.PowerShell
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A root level folder for a server.
+    /// Defines a connection to a CruiseControl.NET server.
     /// </summary>
-    public class ServerFolder
-        : ClientFolder, IExposeLog
+    public class CCConnection
     {
         #region Private fields
         /// <summary>
@@ -44,13 +44,11 @@ namespace ThoughtWorks.CruiseControl.PowerShell
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServerFolder"/> class.
+        /// Initializes a new instance of the <see cref="CCConnection"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        /// <param name="path">The path.</param>
         /// <param name="version">The version.</param>
-        public ServerFolder(CruiseServerClientBase client, string path, Version version)
-            : base(path)
+        public CCConnection(CruiseServerClientBase client, Version version)
         {
             this.client = client;
             this.Version = version;
@@ -63,6 +61,26 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// Gets the version.
         /// </summary>
         public Version Version { get; private set; }
+        #endregion
+
+        #region Address
+        /// <summary>
+        /// Gets the address.
+        /// </summary>
+        public string Address
+        {
+            get { return this.client.Address; }
+        }
+        #endregion
+
+        #region Target
+        /// <summary>
+        /// Gets the target.
+        /// </summary>
+        public string Target
+        {
+            get { return this.client.TargetServer; }
+        }
         #endregion
         #endregion
 
@@ -88,10 +106,10 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <returns>
         /// The projects for the server.
         /// </returns>
-        public ICollection<Project> GetProjects()
+        public ICollection<CCProject> GetProjects()
         {
             var snapshot = this.client.GetCruiseServerSnapshot();
-            var projects = snapshot.ProjectStatuses.Select(p => Project.Wrap(this.client, p));
+            var projects = snapshot.ProjectStatuses.Select(p => CCProject.Wrap(this.client, p, this));
             return projects.ToList();
         }
         #endregion

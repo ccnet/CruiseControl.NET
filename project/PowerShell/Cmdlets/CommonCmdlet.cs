@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Project.cs" company="The CruiseControl.NET Team">
+// <copyright file="CommonCmdlet.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,34 +22,56 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell
+namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
-    using ThoughtWorks.CruiseControl.Remote;
+    using System.Management.Automation;
 
     /// <summary>
-    /// The details on a build.
+    /// Exposes common parameters for cmdlets.
     /// </summary>
-    public class Build
-        : BuildSummary
+    public abstract class CommonCmdlet
+        : PSCmdlet
     {
-        #region Private fields
+        #region Public constants
         /// <summary>
-        /// The client to use.
+        /// The name of the common parameter set.
         /// </summary>
-        private readonly CruiseServerClientBase client;
+        public const string CommonParameterSet = "CommonParameterSet";
         #endregion
 
-        #region Constructors
+        #region Public properties
+        #region Tagret
         /// <summary>
-        /// Initializes a new instance of the <see cref="Build"/> class.
+        /// Gets or sets the target server.
         /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="summary">The summary.</param>
-        public Build(CruiseServerClientBase client, BuildSummary summary)
-            : base(summary)
-        {
-            this.client = client;    
-        }
+        /// <value>
+        /// The target server.
+        /// </value>
+        [Parameter(ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        public string Target { get; set; }
+        #endregion
+
+        #region BackwardsCompatable
+        /// <summary>
+        /// Gets or sets a value indicating whether the connection is backwards compatable.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if backwards compatable; otherwise, <c>false</c>.
+        /// </value>
+        [Parameter(ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        public bool BackwardsCompatable { get; set; }
+        #endregion
+
+        #region Encrypted
+        /// <summary>
+        /// Gets or sets a value indicating whether the connection is encrypted.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if encrypted; otherwise, <c>false</c>.
+        /// </value>
+        [Parameter(ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        public bool Encrypted { get; set; }
+        #endregion
         #endregion
     }
 }

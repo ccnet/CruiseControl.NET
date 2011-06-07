@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProjectCmdlet.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetLog.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,30 +25,16 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Management.Automation;
 
     /// <summary>
     /// Retrieves a log.
     /// </summary>
-    [Cmdlet("Get", "Log", DefaultParameterSetName = "PathSet")]
+    [Cmdlet(VerbsCommon.Get, Nouns.Log, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class GetLog
-        : PSCmdlet
+        : ConnectionCmdlet
     {
         #region Public properties
-        #region Path
-        /// <summary>
-        /// Gets or sets the path.
-        /// </summary>
-        /// <value>
-        /// The path.
-        /// </value>
-        [Parameter(ParameterSetName = "PathSet", Mandatory = true, Position = 1)]
-        [ValidateNotNullOrEmpty]
-        public string Path { get; set; }
-        #endregion
-
         #region Project
         /// <summary>
         /// Gets or sets the project.
@@ -56,21 +42,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// <value>
         /// The project.
         /// </value>
-        [Parameter(ParameterSetName = "ProjectSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
-        [ValidateNotNull]
-        public Project Project { get; set; }
-        #endregion
-
-        #region Server
-        /// <summary>
-        /// Gets or sets the server.
-        /// </summary>
-        /// <value>
-        /// The server.
-        /// </value>
-        [Parameter(ParameterSetName = "ServerSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
-        [ValidateNotNull]
-        public ServerFolder Server { get; set; }
+        [Parameter(Position = 0, ValueFromPipeline = true, ParameterSetName = ProjectCmdlet.ProjectParameterSet)]
+        public CCProject Project { get; set; }
         #endregion
         #endregion
 
@@ -81,78 +54,33 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var logExposers = new List<IExposeLog>();
-            if (this.Path != null)
-            {
-                ProviderInfo info;
-                var paths = this.GetResolvedProviderPathFromPSPath(this.Path, out info);
-                if (info.ModuleName != typeof(ClientCmdletProvider).Namespace)
-                {
-                    var record = new ErrorRecord(
-                        new Exception("Invalid provider"),
-                        "Validation",
-                        ErrorCategory.InvalidArgument,
-                        this.Path);
-                    this.WriteError(record);
-                }
+            this.WriteVerbose("Getting log");
 
-                var driveName = this.Path.Substring(0, this.Path.IndexOf(':'));
-                var drive = info.Drives.First(d => d.Name.Equals(driveName, StringComparison.InvariantCultureIgnoreCase));
-                var clientDrive = drive as ClientDriveInfo;
-                var statuses = clientDrive.Client.GetProjectStatus();
-                foreach (var path in paths)
-                {
-                    var projectName = path.Substring(path.LastIndexOf('\\') + 1);
-                    if (string.IsNullOrEmpty(projectName))
-                    {
-                        logExposers.Add(clientDrive.RootFolder);
-                    }
-                    else
-                    {
-                        var status = statuses
-                            .FirstOrDefault(s => s.Name.Equals(projectName, StringComparison.InvariantCultureIgnoreCase));
-                        if (status == null)
-                        {
-                            var record = new ErrorRecord(
-                                new Exception("Invalid project"),
-                                "Validation",
-                                ErrorCategory.InvalidArgument,
-                                this.Path);
-                            this.WriteError(record);
-                        }
-
-                        logExposers.Add(Project.Wrap(clientDrive.Client, status));
-                    }
-                }
-            }
-            else if (this.Server != null)
+            if (this.Project != null)
             {
-                logExposers.Add(this.Server);
+                this.WriteLog(this.Project.GetLog());
             }
             else
             {
-                logExposers.Add(this.Project);
+                var connection = this.Connection
+                                 ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
+                this.WriteLog(connection.GetLog());
             }
+        }
+        #endregion
+        #endregion
 
-            foreach (var logExposer in logExposers)
+        #region Private methods
+        #region WriteLog()
+        /// <summary>
+        /// Writes the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        private void WriteLog(string log)
+        {
+            if (log != null)
             {
-                var log = logExposer.GetLog();
-                var lastPos = 0;
-                var pos = log.IndexOf(Environment.NewLine);
-                string line;
-                while (pos >= 0)
-                {
-                    line = log.Substring(lastPos, pos - lastPos);
-                    this.WriteObject(line);
-                    lastPos = pos + 2;
-                    pos = log.IndexOf(Environment.NewLine, lastPos);
-                }
-
-                line = log.Substring(lastPos);
-                if (!string.IsNullOrEmpty(line))
-                {
-                    this.WriteObject(line);
-                }
+                this.WriteObject(log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries), true);
             }
         }
         #endregion

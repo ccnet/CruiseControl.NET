@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IExposeLog.cs" company="The CruiseControl.NET Team">
+// <copyright file="CCBuild.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,20 +24,42 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
-    /// Marks an item as exposing a log.
+    /// The details on a build.
     /// </summary>
-    public interface IExposeLog
+    public class CCBuild
+        : BuildSummary
     {
-        #region Public methods
-        #region GetLog()
+        #region Private fields
         /// <summary>
-        /// Gets the log.
+        /// The client to use.
         /// </summary>
-        /// <returns>
-        /// Retrieves the log.
-        /// </returns>
-        string GetLog();
+        private readonly CruiseServerClientBase client;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CCBuild"/> class.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="summary">The summary.</param>
+        /// <param name="project">The project.</param>
+        public CCBuild(CruiseServerClientBase client, BuildSummary summary, CCProject project)
+            : base(summary)
+        {
+            this.client = client;
+            this.Project = project;
+        }
+        #endregion
+
+        #region Public properties
+        #region Project
+        /// <summary>
+        /// Gets the project.
+        /// </summary>
+        public CCProject Project { get; private set; }
         #endregion
         #endregion
     }

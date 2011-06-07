@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Project.cs" company="The CruiseControl.NET Team">
+// <copyright file="CCProject.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,8 +32,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell
     /// <summary>
     /// Information about a project.
     /// </summary>
-    public class Project
-        : ProjectStatus, IExposeLog
+    public class CCProject
+        : ProjectStatus
     {
         #region Private fields
         /// <summary>
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="Project"/> class from being created.
+        /// Initializes a new instance of the <see cref="CCProject"/> class from being created.
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="name">The name.</param>
@@ -60,11 +60,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <param name="buildStage">The build stage.</param>
         /// <param name="queue">The queue.</param>
         /// <param name="queuePriority">The queue priority.</param>
-        private Project(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority)
+        private CCProject(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority)
             : base(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority)
         {
             this.client = client;
         }
+        #endregion
+
+        #region Public properties
+        #region Connection
+        /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        public CCConnection Connection { get; private set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -114,13 +123,13 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// Generates a refreshed istance.
         /// </summary>
         /// <returns>
-        /// The new <see cref="Project"/> instance.
+        /// The new <see cref="CCProject"/> instance.
         /// </returns>
-        public Project Refresh()
+        public CCProject Refresh()
         {
             var statuses = this.client.GetProjectStatus();
             var status = statuses.FirstOrDefault(s => s.Name.Equals(this.Name));
-            return status == null ? null : Wrap(this.client, status);
+            return status == null ? null : Wrap(this.client, status, this.Connection);
         }
         #endregion
 
@@ -147,10 +156,10 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <returns>
         /// The builds.
         /// </returns>
-        public IList<Build> GetBuilds(int start, int count)
+        public IList<CCBuild> GetBuilds(int start, int count)
         {
             var builds = this.client.GetBuildSummaries(this.Name, start, count);
-            return builds.Select(b => new Build(this.client, b)).ToList();
+            return builds.Select(b => new CCBuild(this.client, b, this)).ToList();
         }
         #endregion
         #endregion
@@ -162,12 +171,13 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// </summary>
         /// <param name="owningClient">The owning client.</param>
         /// <param name="projectStatus">The project status.</param>
+        /// <param name="connection">The connection.</param>
         /// <returns>
-        /// The new <see cref="Project"/>.
+        /// The new <see cref="CCProject"/>.
         /// </returns>
-        internal static Project Wrap(CruiseServerClientBase owningClient, ProjectStatus projectStatus)
+        internal static CCProject Wrap(CruiseServerClientBase owningClient, ProjectStatus projectStatus, CCConnection connection)
         {
-            var project = new Project(
+            var project = new CCProject(
                 owningClient,
                 projectStatus.Name, 
                 projectStatus.Category, 
@@ -181,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 projectStatus.NextBuildTime, 
                 projectStatus.BuildStage, 
                 projectStatus.Queue,
-                projectStatus.QueuePriority);
+                projectStatus.QueuePriority) { Connection = connection };
             return project;
         }
         #endregion

@@ -25,43 +25,17 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
     /// A cmdlet for getting one or more projects.
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, Nouns.Project, DefaultParameterSetName = "ServerSet")]
+    [Cmdlet(VerbsCommon.Get, Nouns.Project, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class GetProject
-        : ProjectCmdlet
+        : ConnectionCmdlet
     {
         #region Public properties
-        #region Folder
-        /// <summary>
-        /// Gets or sets the folder.
-        /// </summary>
-        /// <value>
-        /// The server folder.
-        /// </value>
-        [Parameter(ParameterSetName = "FolderSet", Mandatory = true, Position = 1, ValueFromPipeline = true)]
-        [ValidateNotNullOrEmpty]
-        public ServerFolder Folder { get; set; }
-        #endregion
-
-        #region Server
-        /// <summary>
-        /// Gets or sets the server.
-        /// </summary>
-        /// <value>
-        /// The server.
-        /// </value>
-        [Parameter(ParameterSetName = "ServerSet", Mandatory = true, Position = 1)]
-        [ValidateNotNull]
-        public string Server { get; set; }
-        #endregion
-
         #region Name
         /// <summary>
         /// Gets or sets an optional name to filter the projects by.
@@ -75,70 +49,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         #endregion
 
         #region Protected methods
-        #region GetProjects()
-        /// <summary>
-        /// Gets the projects.
-        /// </summary>
-        /// <returns>
-        /// A list of projects to process.
-        /// </returns>
-        protected override ICollection<Project> GetProjects()
-        {
-            var projects = new List<Project>(base.GetProjects());
-            if (this.Folder != null)
-            {
-                projects.AddRange(this.Folder.GetProjects());
-            }
-
-            if (!string.IsNullOrEmpty(this.Server))
-            {
-                var factory = new CruiseServerClientFactory();
-                var client = factory.GenerateClient(this.Server);
-                var snapshot = client.GetCruiseServerSnapshot();
-                projects.AddRange(snapshot.ProjectStatuses.Select(p => Project.Wrap(client, p)));
-            }
-
-            return projects;
-        }
-        #endregion
-
         #region ProcessRecord()
         /// <summary>
         /// Processes a record.
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
+            this.WriteVerbose("Getting project");
+            var connection = this.Connection
+                             ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
 
-            foreach (var project in projects)
-            {
-                if (!string.IsNullOrEmpty(this.Name))
-                {
-                    if (!string.Equals(this.Name, project.Name, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        continue;
-                    }
-                }
-
-                try
-                {
-                    this.WriteObject(project);
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
+            var projects = connection.GetProjects();
+            this.WriteObject(
+                !string.IsNullOrEmpty(this.Name) ? projects.Where(p => p.Name.IndexOf(this.Name, StringComparison.CurrentCultureIgnoreCase) >= 0) : projects, 
+                true);
         }
         #endregion
         #endregion

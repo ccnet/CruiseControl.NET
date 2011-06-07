@@ -24,18 +24,47 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
-    using System;
     using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
     /// A cmdlet for getting one or more builds.
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, Nouns.Build, DefaultParameterSetName = "ServerSet")]
+    [Cmdlet(VerbsCommon.Get, Nouns.Build, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class GetBuild
         : ProjectCmdlet
     {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetBuild"/> class.
+        /// </summary>
+        public GetBuild()
+        {
+            this.Count = 50;
+        }
+        #endregion
+
         #region Public properties
+        #region Start
+        /// <summary>
+        /// Gets or sets the start position.
+        /// </summary>
+        /// <value>
+        /// The start position.
+        /// </value>
+        [Parameter]
+        public int Start { get; set; }
+        #endregion
+
+        #region Count
+        /// <summary>
+        /// Gets or sets the count.
+        /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
+        [Parameter]
+        public int Count { get; set; }
+        #endregion
         #endregion
 
         #region Protected methods
@@ -45,29 +74,12 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                try
+            this.WriteVerbose("Getting project builds");
+            this.ProcessProject(p =>
                 {
-                    this.WriteObject(project.GetBuilds(0, 10), true);
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
+                    var builds = p.GetBuilds(this.Start, this.Count);
+                    this.WriteObject(builds, true);
+                });
         }
         #endregion
         #endregion

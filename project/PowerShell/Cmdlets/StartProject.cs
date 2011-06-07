@@ -25,12 +25,11 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
     /// A cmdlet for starting a project.
     /// </summary>
-    [Cmdlet(VerbsLifecycle.Start, Nouns.Project, DefaultParameterSetName = "PathSet", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium)]
+    [Cmdlet(VerbsLifecycle.Start, Nouns.Project, SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.Medium, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
     public class StartProject
         : ProjectCmdlet
     {
@@ -41,35 +40,12 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            var projects = this.GetProjects();
-            if (projects.Count == 0)
+            this.WriteVerbose("Starting project");
+            this.ProcessProject(p =>
             {
-                return;
-            }
-
-            foreach (var project in projects)
-            {
-                if (!this.ShouldProcess(project.Name, "Start a project"))
-                {
-                    return;
-                }
-
-                try
-                {
-                    project.Start();
-                    this.WriteObject(project.Refresh());
-                }
-                catch (CommunicationsException error)
-                {
-                    var record = new ErrorRecord(
-                        error,
-                        "Communications",
-                        ErrorCategory.NotSpecified,
-                        project);
-                    this.WriteError(record);
-                    return;
-                }
-            }
+                p.Start();
+                this.WriteObject(p.Refresh());
+            });
         }
         #endregion
         #endregion

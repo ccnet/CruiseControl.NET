@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClientDriveInfo.cs" company="The CruiseControl.NET Team">
+// <copyright file="ConnectionCmdlet.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,65 +22,46 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ThoughtWorks.CruiseControl.PowerShell
+namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
-    using System;
     using System.Management.Automation;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// Exposes a drive to the provider.
+    /// Provides common functionality for cmdlets that require a connection.
     /// </summary>
-    public class ClientDriveInfo
-        : PSDriveInfo
+    public abstract class ConnectionCmdlet
+        : CommonCmdlet
     {
-        #region Private fields
+        #region Public constants
         /// <summary>
-        /// The client to use.
+        /// The name of the common parameter set.
         /// </summary>
-        private readonly CruiseServerClientBase client;
-
-        /// <summary>
-        /// The root level folder for a server.
-        /// </summary>
-        private readonly ServerFolder serverFolder;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClientDriveInfo"/> class.
-        /// </summary>
-        /// <param name="address">The address of the server.</param>
-        /// <param name="drive">The drive.</param>
-        public ClientDriveInfo(string address, PSDriveInfo drive)
-            : base(drive)
-        {
-            var clientFactory = new CruiseServerClientFactory();
-            this.client = clientFactory.GenerateClient(address);
-            var version = new Version(this.client.GetServerVersion());
-            this.serverFolder = new ServerFolder(this.client, "\\", version);
-        }
+        public const string ConnectionParameterSet = "ConnectionParameterSet";
         #endregion
 
         #region Public properties
-        #region Client
+        #region Address
         /// <summary>
-        /// Gets the client.
+        /// Gets or sets the address.
         /// </summary>
-        public CruiseServerClientBase Client
-        {
-            get { return this.client; }
-        }
+        /// <value>
+        /// The address.
+        /// </value>
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = CommonCmdlet.CommonParameterSet)]
+        [ValidateNotNullOrEmpty]
+        public string Address { get; set; }
         #endregion
 
-        #region Root
+        #region Connection
         /// <summary>
-        /// Gets the root folder.
+        /// Gets or sets the connection.
         /// </summary>
-        public ServerFolder RootFolder
-        {
-            get { return this.serverFolder; }
-        }
+        /// <value>
+        /// The connection.
+        /// </value>
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true, ParameterSetName = ConnectionCmdlet.ConnectionParameterSet)]
+        [ValidateNotNull]
+        public CCConnection Connection { get; set; }
         #endregion
         #endregion
     }

@@ -31,9 +31,9 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     {
         #region Public constants
         /// <summary>
-        /// A server.
+        /// A connection to a CruiseControl.NET server.
         /// </summary>
-        public const string Server = "CCServer";
+        public const string Connection = "CCConnection";
 
         /// <summary>
         /// A project.
@@ -44,6 +44,11 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// A build for a project.
         /// </summary>
         public const string Build = "CCBuild";
+
+        /// <summary>
+        /// A log from the server.
+        /// </summary>
+        public const string Log = "CCLog";
         #endregion
     }
 }
