@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CCConnection.cs" company="The CruiseControl.NET Team">
+// <copyright file="CCQueue.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,134 +24,113 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
-    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
-
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// Defines a connection to a CruiseControl.NET server.
+    /// Information about a queue.
     /// </summary>
-    public class CCConnection
+    public class CCQueue
     {
         #region Private fields
         /// <summary>
         /// The client to use.
         /// </summary>
         private readonly CruiseServerClientBase client;
+
+        /// <summary>
+        /// The current requests,
+        /// </summary>
+        private readonly List<QueuedRequestSnapshot> requests = new List<QueuedRequestSnapshot>();
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CCConnection"/> class.
+        /// Initializes a new instance of the <see cref="CCQueue"/> class from being created.
         /// </summary>
         /// <param name="client">The client.</param>
-        /// <param name="version">The version.</param>
-        public CCConnection(CruiseServerClientBase client, Version version)
+        /// <param name="name">The name.</param>
+        /// <param name="requests">The requests.</param>
+        private CCQueue(CruiseServerClientBase client, string name, IEnumerable<QueuedRequestSnapshot> requests)
         {
             this.client = client;
-            this.Version = version;
+            this.Name = name;
+            this.requests.AddRange(
+                requests.Select(r => new QueuedRequestSnapshot(r.ProjectName, r.Activity, r.RequestTime)));
         }
         #endregion
 
         #region Public properties
-        #region Version
+        #region Name
         /// <summary>
-        /// Gets the version.
+        /// Gets the name.
         /// </summary>
-        public Version Version { get; private set; }
+        public string Name { get; private set; }
         #endregion
 
-        #region Address
+        #region Connection
         /// <summary>
-        /// Gets the address.
+        /// Gets the connection.
         /// </summary>
-        public string Address
+        [Browsable(false)]
+        public CCConnection Connection { get; private set; }
+        #endregion
+
+        #region Requests
+        /// <summary>
+        /// Gets the requests.
+        /// </summary>
+        public IEnumerable<QueuedRequestSnapshot> Requests
         {
-            get { return this.client.Address; }
+            get { return this.requests; }
         }
         #endregion
 
-        #region Target
+        #region RequestsPending
         /// <summary>
-        /// Gets the target.
+        /// Gets the number of requests pending.
         /// </summary>
-        public string Target
+        public int RequestsPending
         {
-            get { return this.client.TargetServer; }
-        }
-        #endregion
-
-        #region IsLoggedIn
-        /// <summary>
-        /// Gets a value indicating whether this instance is logged in.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is logged in; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsLoggedIn
-        {
-            get { return this.client.IsLoggedIn; }
-        }
-        #endregion
-
-        #region UserName
-        /// <summary>
-        /// Gets the name of the currently logged in user.
-        /// </summary>
-        /// <value>
-        /// The name of the user.
-        /// </value>
-        public string UserName
-        {
-            get { return this.client.DisplayName; }
+            get { return this.requests.Count; }
         }
         #endregion
         #endregion
 
         #region Public methods
-        #region GetLog()
+        #region Refresh()
         /// <summary>
-        /// Gets the log.
+        /// Generates a refreshed istance.
         /// </summary>
         /// <returns>
-        /// Retrieves the log.
+        /// The new <see cref="CCProject"/> instance.
         /// </returns>
-        public string GetLog()
+        public CCQueue Refresh()
         {
-            var log = this.client.GetServerLog();
-            return log;
+            var statuses = this.client.GetCruiseServerSnapshot();
+            var status = statuses.QueueSetSnapshot.Queues.FirstOrDefault(s => s.QueueName.Equals(this.Name));
+            return status == null ? null : Wrap(this.client, status, this.Connection);
         }
         #endregion
-
-        #region GetProjects()
-        /// <summary>
-        /// Gets the projects.
-        /// </summary>
-        /// <returns>
-        /// The projects for the server.
-        /// </returns>
-        public ICollection<CCProject> GetProjects()
-        {
-            var snapshot = this.client.GetCruiseServerSnapshot();
-            var projects = snapshot.ProjectStatuses.Select(p => CCProject.Wrap(this.client, p, this));
-            return projects.ToList();
-        }
         #endregion
 
-        #region GetQueues()
+        #region Internal methods
+        #region Wrap()
         /// <summary>
-        /// Gets the queues.
+        /// Wraps the specified queue status.
         /// </summary>
+        /// <param name="owningClient">The owning client.</param>
+        /// <param name="queueStatus">The queue status.</param>
+        /// <param name="connection">The connection.</param>
         /// <returns>
-        /// The queues for the server.
+        /// The new <see cref="CCProject"/>.
         /// </returns>
-        public ICollection<CCQueue> GetQueues()
+        internal static CCQueue Wrap(CruiseServerClientBase owningClient, QueueSnapshot queueStatus, CCConnection connection)
         {
-            var snapshot = this.client.GetCruiseServerSnapshot();
-            var queues = snapshot.QueueSetSnapshot.Queues.Select(q => CCQueue.Wrap(this.client, q, this));
-            return queues.ToList();
+            var queue = new CCQueue(owningClient, queueStatus.QueueName, queueStatus.Requests) { Connection = connection };
+            return queue;
         }
         #endregion
         #endregion

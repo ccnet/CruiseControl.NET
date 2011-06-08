@@ -25,6 +25,7 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System;
+    using System.Linq;
     using System.Management.Automation;
 
     /// <summary>
@@ -44,6 +45,17 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </value>
         [Parameter(Position = 0, ValueFromPipeline = true, ParameterSetName = ProjectCmdlet.ProjectParameterSet)]
         public CCProject Project { get; set; }
+        #endregion
+
+        #region ShowRaw
+        /// <summary>
+        /// Gets or sets a value indicating whether the raw log should be displayed or not.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to show the raw log; otherwise, <c>false</c>.
+        /// </value>
+        [Parameter]
+        public bool ShowRaw { get; set; }
         #endregion
         #endregion
 
@@ -78,9 +90,19 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// <param name="log">The log.</param>
         private void WriteLog(string log)
         {
-            if (log != null)
+            if (log == null)
             {
-                this.WriteObject(log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries), true);
+                return;
+            }
+
+            var lines = log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (this.ShowRaw)
+            {
+                this.WriteObject(lines, true);
+            }
+            else
+            {
+                this.WriteObject(lines.Select(l => CCLogLine.Parse(l)), true);
             }
         }
         #endregion

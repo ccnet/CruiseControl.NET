@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Nouns.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetQueue.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,36 +24,47 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System;
+    using System.Linq;
+    using System.Management.Automation;
+
     /// <summary>
-    /// Defines the common nouns.
+    /// A cmdlet for getting one or more queues.
     /// </summary>
-    public static class Nouns
+    [Cmdlet(VerbsCommon.Get, Nouns.Queue, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
+    public class GetQueue
+        : ConnectionCmdlet
     {
-        #region Public constants
+        #region Public properties
+        #region Name
         /// <summary>
-        /// A connection to a CruiseControl.NET server.
+        /// Gets or sets an optional name to filter the queues by.
         /// </summary>
-        public const string Connection = "CCConnection";
+        /// <value>
+        /// The name.
+        /// </value>
+        [Parameter]
+        public string Name { get; set; }
+        #endregion
+        #endregion
 
+        #region Protected methods
+        #region ProcessRecord()
         /// <summary>
-        /// A project.
+        /// Processes a record.
         /// </summary>
-        public const string Project = "CCProject";
+        protected override void ProcessRecord()
+        {
+            this.WriteVerbose("Getting queue");
+            var connection = this.Connection
+                             ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
 
-        /// <summary>
-        /// A queue.
-        /// </summary>
-        public const string Queue = "CCQueue";
-
-        /// <summary>
-        /// A build for a project.
-        /// </summary>
-        public const string Build = "CCBuild";
-
-        /// <summary>
-        /// A log from the server.
-        /// </summary>
-        public const string Log = "CCLog";
+            var queues = connection.GetQueues();
+            this.WriteObject(
+                !string.IsNullOrEmpty(this.Name) ? queues.Where(p => p.Name.IndexOf(this.Name, StringComparison.CurrentCultureIgnoreCase) >= 0) : queues, 
+                true);
+        }
+        #endregion
         #endregion
     }
 }
