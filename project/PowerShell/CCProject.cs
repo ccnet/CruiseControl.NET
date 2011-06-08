@@ -175,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         public IList<CCPackage> GetPackages(int start, int count)
         {
             var packages = this.client.RetrievePackageList(this.Name);
-            var filtered = packages.Skip(start).Take(count);
+            var filtered = packages.OrderByDescending(p => p.DateTime).Skip(start).Take(count);
             return filtered.Select(p => CCPackage.Wrap(this.client, p, this)).ToList();
         }
         #endregion

@@ -55,6 +55,7 @@
     <Compile Include="CCLogLine.cs" />
     <Compile Include="Cmdlets\ClientHelpers.cs" />
     <Compile Include="Cmdlets\CommonCmdlet.cs" />
+    <Compile Include="Cmdlets\ClearQueue.cs" />
     <Compile Include="Cmdlets\GetPackage.cs" />
     <Compile Include="Cmdlets\GetQueue.cs" />
     <Compile Include="Cmdlets\GetBuild.cs" />

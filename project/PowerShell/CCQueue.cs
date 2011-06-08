@@ -24,6 +24,7 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -112,6 +113,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             var statuses = this.client.GetCruiseServerSnapshot();
             var status = statuses.QueueSetSnapshot.Queues.FirstOrDefault(s => s.QueueName.Equals(this.Name));
             return status == null ? null : Wrap(this.client, status, this.Connection);
+        }
+        #endregion
+
+        #region CancelRequest()
+        /// <summary>
+        /// Cancels a pending request request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        public void CancelRequest(QueuedRequestSnapshot request)
+        {
+            if (request.Activity.IsPending())
+            {
+                this.client.CancelPendingRequest(request.ProjectName);
+            }
         }
         #endregion
         #endregion

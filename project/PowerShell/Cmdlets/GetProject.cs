@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         : ConnectionCmdlet
     {
         #region Public properties
-        #region Name
+        #region ProjectName
         /// <summary>
         /// Gets or sets an optional name to filter the projects by.
         /// </summary>
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// The name.
         /// </value>
         [Parameter]
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
         #endregion
         #endregion
 
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             var projects = connection.GetProjects();
             this.WriteObject(
-                !string.IsNullOrEmpty(this.Name) ? projects.Where(p => p.Name.IndexOf(this.Name, StringComparison.CurrentCultureIgnoreCase) >= 0) : projects, 
+                !string.IsNullOrEmpty(this.ProjectName) ? projects.Where(p => p.Name.IndexOf(this.ProjectName, StringComparison.CurrentCultureIgnoreCase) >= 0) : projects, 
                 true);
         }
         #endregion

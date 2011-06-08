@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         #endregion
 
         #region Public properties
-        #region Name
+        #region ProjectName
         /// <summary>
         /// Gets or sets an optional name to filter the projects by.
         /// </summary>
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </value>
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = ConnectionCmdlet.ConnectionParameterSet)]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = CommonCmdlet.CommonParameterSet)]
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
         #endregion
 
         #region Project
@@ -86,11 +86,11 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
                 var project =
                     connection.GetProjects().FirstOrDefault(
-                        p => p.Name.Equals(this.Name, StringComparison.CurrentCultureIgnoreCase));
+                        p => p.Name.Equals(this.ProjectName, StringComparison.CurrentCultureIgnoreCase));
                 if (project == null)
                 {
                     var record = new ErrorRecord(
-                        new Exception("Unable to find project '" + this.Name + "'"),
+                        new Exception("Unable to find project '" + this.ProjectName + "'"),
                         "1",
                         ErrorCategory.ResourceUnavailable,
                         this);

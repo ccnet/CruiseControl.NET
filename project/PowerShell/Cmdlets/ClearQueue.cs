@@ -29,22 +29,35 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
     using System.Management.Automation;
 
     /// <summary>
-    /// A cmdlet for getting one or more queues.
+    /// A cmdlet for clearing pending requests from a queue.
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, Nouns.Queue, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
-    public class GetQueue
+    [Cmdlet(VerbsCommon.Clear, Nouns.Queue, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
+    public class ClearQueue
         : ConnectionCmdlet
     {
         #region Public properties
         #region Name
         /// <summary>
-        /// Gets or sets an optional name to filter the queues by.
+        /// Gets or sets the queue name.
         /// </summary>
         /// <value>
         /// The name.
         /// </value>
-        [Parameter]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = ConnectionCmdlet.ConnectionParameterSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = CommonCmdlet.CommonParameterSet)]
         public string QueueName { get; set; }
+        #endregion
+
+        #region Queue
+        /// <summary>
+        /// Gets or sets the queue.
+        /// </summary>
+        /// <value>
+        /// The queue.
+        /// </value>
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true, ParameterSetName = "QueueParameterSet")]
+        [ValidateNotNull]
+        public CCQueue Queue { get; set; }
         #endregion
         #endregion
 
@@ -55,14 +68,44 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// </summary>
         protected override void ProcessRecord()
         {
-            this.WriteVerbose("Getting queue");
-            var connection = this.Connection
-                             ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
+            this.WriteVerbose("Clearing queue");
 
-            var queues = connection.GetQueues();
-            this.WriteObject(
-                !string.IsNullOrEmpty(this.QueueName) ? queues.Where(p => p.Name.IndexOf(this.QueueName, StringComparison.CurrentCultureIgnoreCase) >= 0) : queues, 
-                true);
+            Action<CCQueue> action = q =>
+                {
+                    var queue = q.Refresh();
+                    foreach (var request in queue.Requests)
+                    {
+                        queue.CancelRequest(request);
+                    }
+
+                    this.WriteObject(queue.Refresh());
+                };
+
+            if (this.Queue != null)
+            {
+                action(this.Queue);
+            }
+            else
+            {
+                var connection = this.Connection
+                                 ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
+
+                var project = connection.GetQueues().FirstOrDefault(
+                        p => p.Name.Equals(this.QueueName, StringComparison.CurrentCultureIgnoreCase));
+                if (project == null)
+                {
+                    var record = new ErrorRecord(
+                        new Exception("Unable to find queue '" + this.QueueName + "'"),
+                        "1",
+                        ErrorCategory.ResourceUnavailable,
+                        this);
+                    this.WriteError(record);
+                }
+                else
+                {
+                    action(project);
+                }
+            }
         }
         #endregion
         #endregion
