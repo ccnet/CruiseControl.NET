@@ -569,6 +569,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     timer.Stop();
                     summary.Duration = timer.ElapsedMilliseconds;
                     summary.Status = r.Status;
+                    summary.LogName = new LogFile(r).Filename;
                     fileSystem.EnsureFolderExists(path);
                     using (var output = fileSystem.OpenOutputStream(path))
                     {

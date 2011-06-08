@@ -62,5 +62,21 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         public CCProject Project { get; private set; }
         #endregion
         #endregion
+
+        #region Public methods
+        #region GetLog()
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        /// <returns>
+        /// Retrieves the log.
+        /// </returns>
+        public string GetLog()
+        {
+            var log = this.client.GetLog(this.Project.Name, this.LogName);
+            return log;
+        }
+        #endregion
+        #endregion
     }
 }

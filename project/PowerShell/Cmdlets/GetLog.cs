@@ -47,6 +47,17 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         public CCProject Project { get; set; }
         #endregion
 
+        #region Build
+        /// <summary>
+        /// Gets or sets the build.
+        /// </summary>
+        /// <value>
+        /// The build.
+        /// </value>
+        [Parameter(Position = 0, ValueFromPipeline = true, ParameterSetName = "BuildParameterSet")]
+        public CCBuild Build { get; set; }
+        #endregion
+
         #region ShowRaw
         /// <summary>
         /// Gets or sets a value indicating whether the raw log should be displayed or not.
@@ -70,13 +81,17 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             if (this.Project != null)
             {
-                this.WriteLog(this.Project.GetLog());
+                this.WriteLog(this.Project.GetLog(), this.ShowRaw);
+            }
+            else if (this.Build != null)
+            {
+                this.WriteLog(this.Build.GetLog(), true);
             }
             else
             {
                 var connection = this.Connection
                                  ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
-                this.WriteLog(connection.GetLog());
+                this.WriteLog(connection.GetLog(), this.ShowRaw);
             }
         }
         #endregion
@@ -88,7 +103,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// Writes the log.
         /// </summary>
         /// <param name="log">The log.</param>
-        private void WriteLog(string log)
+        /// <param name="showRaw">If set to <c>true</c> show the raw log.</param>
+        private void WriteLog(string log, bool showRaw)
         {
             if (log == null)
             {
@@ -96,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
             }
 
             var lines = log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (this.ShowRaw)
+            if (showRaw)
             {
                 this.WriteObject(lines, true);
             }

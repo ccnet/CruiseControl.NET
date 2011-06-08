@@ -52,10 +52,11 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.Label = original.Label;
             this.StartTime = original.StartTime;
             this.Status = original.Status;
+            this.LogName = original.LogName;
         }
         #endregion
 
-        #region Public proeprties
+        #region Public properties
         #region StartTime
         /// <summary>
         /// Gets or sets the start time.
@@ -98,6 +99,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </value>
         [XmlAttribute("label")]
         public string Label { get; set; }
+        #endregion
+
+        #region LogName
+        /// <summary>
+        /// Gets or sets the name of the log.
+        /// </summary>
+        /// <value>
+        /// The name of the log.
+        /// </value>
+        [XmlAttribute("log")]
+        public string LogName { get; set; }
         #endregion
         #endregion
     }
