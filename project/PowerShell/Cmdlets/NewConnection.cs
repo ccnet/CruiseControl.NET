@@ -25,7 +25,10 @@
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
     using System;
+    using System.Collections.Generic;
     using System.Management.Automation;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
 
     /// <summary>
     /// Starts a new connection to a server.
@@ -46,6 +49,28 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         [ValidateNotNullOrEmpty]
         public string Address { get; set; }
         #endregion
+
+        #region UserName
+        /// <summary>
+        /// Gets or sets the name of the user.
+        /// </summary>
+        /// <value>
+        /// The name of the user.
+        /// </value>
+        [Parameter]
+        public string UserName { get; set; }
+        #endregion
+
+        #region Password
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>
+        /// The password.
+        /// </value>
+        [Parameter]
+        public string Password { get; set; }
+        #endregion
         #endregion
 
         #region Protected methods
@@ -60,6 +85,22 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             this.WriteVerbose("Retrieving server version");
             var version = client.GetServerVersion();
+
+            if (!string.IsNullOrEmpty(this.UserName))
+            {
+                this.WriteVerbose("Logging in");
+                var credentials = new List<NameValuePair>
+                    { 
+                        new NameValuePair(LoginRequest.UserNameCredential, this.UserName) 
+                    };
+                if (!string.IsNullOrEmpty(this.Password))
+                {
+                    credentials.Add(new NameValuePair(LoginRequest.PasswordCredential, this.Password));
+                }
+
+                client.Login(credentials);
+            }
+
             var connection = new CCConnection(client, new Version(version));
             this.WriteObject(connection);
         }

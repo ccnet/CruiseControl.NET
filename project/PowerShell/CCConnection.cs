@@ -82,6 +82,32 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             get { return this.client.TargetServer; }
         }
         #endregion
+
+        #region IsLoggedIn
+        /// <summary>
+        /// Gets a value indicating whether this instance is logged in.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is logged in; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoggedIn
+        {
+            get { return this.client.IsLoggedIn; }
+        }
+        #endregion
+
+        #region UserName
+        /// <summary>
+        /// Gets the name of the currently logged in user.
+        /// </summary>
+        /// <value>
+        /// The name of the user.
+        /// </value>
+        public string UserName
+        {
+            get { return this.client.DisplayName; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
