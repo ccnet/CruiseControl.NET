@@ -102,6 +102,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         [ReflectorProperty("channel", InstanceTypeKey = "type", Required = false)]
         public virtual IChannelSecurity Channel { get; set; }
         #endregion
+
+        #region Hash
+        /// <summary>
+        /// Gets or sets the hash.
+        /// </summary>
+        /// <value>
+        /// The hash.
+        /// </value>
+        public byte[] Hash { get; set; }
+        #endregion
         #endregion
 
         #region Public methods

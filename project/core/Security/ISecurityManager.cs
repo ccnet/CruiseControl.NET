@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// Defines the security manager interface. All security calls should go through this manager.
     /// </summary>
     public interface ISecurityManager
+        : IHashStore
     {
         /// <summary>
         /// Does this manager require a session?

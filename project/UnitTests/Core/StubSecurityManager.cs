@@ -67,6 +67,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             set { }
         }
 
+        #region Hash
+        /// <summary>
+        /// Gets or sets the hash.
+        /// </summary>
+        /// <value>
+        /// The hash.
+        /// </value>
+        public byte[] Hash { get; set; }
+        #endregion
+
         public string Login(LoginRequest credentials)
         {
             actualCounts[1]++;

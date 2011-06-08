@@ -11,6 +11,9 @@ using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    using System.Security.Cryptography;
+    using System.Text;
+
     /// <summary>
     /// Load a configuration file using NetReflector.
     /// </summary>
@@ -73,15 +76,26 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             typeTable.InvalidNode += invalidNodeHandler;
             try
             {
+                var sha = new SHA1CryptoServiceProvider();
                 foreach (XmlNode node in document.DocumentElement)
                 {
-                    conflictingXmlNode = string.Empty;                    
+                    conflictingXmlNode = string.Empty;
 
                     if (!(node.NodeType == XmlNodeType.Comment || node.NodeType == XmlNodeType.Text))
                     {
                         conflictingXmlNode = "Conflicting project data : " + node.OuterXml;
 
-                        object loadedItem = ParseElement(node);
+                        // Load the item and generate the hash if required
+                        var loadedItem = this.ParseElement(node);
+                        var hashStore = loadedItem as IHashStore;
+                        if (hashStore != null)
+                        {
+                            var data = Encoding.Unicode.GetBytes(node.OuterXml);
+                            var hash = sha.ComputeHash(data);
+                            hashStore.Hash = hash;
+                        }
+
+                        // Add the item to the configuration
                         if (loadedItem is IProject)
                         {
                             this.LoadAndValidateProject(actualErrorProcesser, projectNames, configuration, loadedItem);
@@ -128,10 +142,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <returns>The parsed element.</returns>
         public object ParseElement(XmlNode node)
         {
-            var loadedItem = reader.Read(node);
+            var loadedItem = this.reader.Read(node);
             return loadedItem;
         }
 
+        /// <summary>
+        /// Loads and validates a security manager.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="loadedItem">The loaded item.</param>
         private void LoadAndValidateSecurityManager(Configuration configuration, object loadedItem)
         {
             ISecurityManager securityManager = loadedItem as ISecurityManager;

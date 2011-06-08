@@ -55,6 +55,7 @@
     <Compile Include="CCLogLine.cs" />
     <Compile Include="Cmdlets\ClientHelpers.cs" />
     <Compile Include="Cmdlets\CommonCmdlet.cs" />
+    <Compile Include="Cmdlets\GetPackage.cs" />
     <Compile Include="Cmdlets\GetQueue.cs" />
     <Compile Include="Cmdlets\GetBuild.cs" />
     <Compile Include="Cmdlets\NewConnection.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Cmdlets\StopProject.cs" />
     <Compile Include="CCProject.cs" />
     <Compile Include="CCQueue.cs" />
+    <Compile Include="CCPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

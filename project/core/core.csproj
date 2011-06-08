@@ -199,6 +199,7 @@
     <Compile Include="Config\IConfigurationErrorProcesser.cs" />
     <Compile Include="Config\IConfigurationValidation.cs" />
     <Compile Include="IDataStore.cs" />
+    <Compile Include="IHashStore.cs" />
     <Compile Include="INetReflectorConfigurationReader.cs" />
     <Compile Include="Config\QueueDuplicateHandling.cs" />
     <Compile Include="Config\Configuration.cs">
@@ -902,6 +903,7 @@
     <Compile Include="util\DefaultCryptoFunctions.cs" />
     <Compile Include="util\DefaultPerformanceCounters.cs" />
     <Compile Include="util\DefaultWebFunctions.cs" />
+    <Compile Include="util\HashUtils.cs" />
     <Compile Include="util\ICompressionService.cs" />
     <Compile Include="util\ICryptoFunctions.cs" />
     <Compile Include="util\IPerformanceCounters.cs" />

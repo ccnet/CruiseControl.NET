@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CCBuild.cs" company="The CruiseControl.NET Team">
+// <copyright file="CCPackage.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,15 +24,16 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// The details on a build.
+    /// Information about a package.
     /// </summary>
-    public class CCBuild
-        : BuildSummary
+    public class CCPackage
+        : PackageDetails
     {
         #region Private fields
         /// <summary>
@@ -43,16 +44,24 @@ namespace ThoughtWorks.CruiseControl.PowerShell
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CCBuild"/> class.
+        /// Initializes a new instance of the <see cref="CCPackage"/> class from being created.
         /// </summary>
         /// <param name="client">The client.</param>
-        /// <param name="summary">The summary.</param>
-        /// <param name="project">The project.</param>
-        public CCBuild(CruiseServerClientBase client, BuildSummary summary, CCProject project)
-            : base(summary)
+        /// <param name="name">The name.</param>
+        /// <param name="buildLabel">The build label.</param>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="numberOfFiles">The number of files.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="fileName">Name of the file.</param>
+        private CCPackage(CruiseServerClientBase client, string name, string buildLabel, DateTime dateTime, int numberOfFiles, long size, string fileName)
+            : base(fileName)
         {
             this.client = client;
-            this.Project = project;
+            this.Name = name;
+            this.BuildLabel = buildLabel;
+            this.DateTime = dateTime;
+            this.NumberOfFiles = numberOfFiles;
+            this.Size = size;
         }
         #endregion
 
@@ -66,34 +75,30 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         #endregion
 
         #region Public methods
-        #region GetLog()
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <returns>
-        /// Retrieves the log.
-        /// </returns>
-        public string GetLog()
-        {
-            var log = this.client.GetLog(this.Project.Name, this.LogName);
-            return log;
-        }
         #endregion
 
-        #region GetPackages()
+        #region Internal methods
+        #region Wrap()
         /// <summary>
-        /// Gets the packages.
+        /// Wraps the specified package status.
         /// </summary>
-        /// <param name="start">The starting position.</param>
-        /// <param name="count">The number to get.</param>
+        /// <param name="owningClient">The owning client.</param>
+        /// <param name="packageStatus">The package status.</param>
+        /// <param name="project">The project.</param>
         /// <returns>
-        /// The packages for the project.
+        /// The new <see cref="CCPackage"/>.
         /// </returns>
-        public IList<CCPackage> GetPackages(int start, int count)
+        internal static CCPackage Wrap(CruiseServerClientBase owningClient, PackageDetails packageStatus, CCProject project)
         {
-            var packages = this.client.RetrievePackageList(this.Project.Name, this.Label);
-            var filtered = packages.Skip(start).Take(count);
-            return filtered.Select(p => CCPackage.Wrap(this.client, p, this.Project)).ToList();
+            var package = new CCPackage(
+                owningClient,
+                packageStatus.Name, 
+                packageStatus.BuildLabel, 
+                packageStatus.DateTime, 
+                packageStatus.NumberOfFiles, 
+                packageStatus.Size, 
+                packageStatus.FileName) { Project = project };
+            return package;
         }
         #endregion
         #endregion

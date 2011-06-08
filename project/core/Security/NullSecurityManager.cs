@@ -46,6 +46,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         }
         #endregion
 
+        #region Hash
+        /// <summary>
+        /// Gets or sets the hash.
+        /// </summary>
+        /// <value>
+        /// The hash.
+        /// </value>
+        public byte[] Hash { get; set; }
+        #endregion
+
         /// <summary>
         /// Starts a new session for a user.
         /// </summary>

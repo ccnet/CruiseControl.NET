@@ -1,0 +1,32 @@
+﻿<package>
+  <name>Microsoft Metrics Results</name>
+  <description>Display the results of a Microsoft Metrics analysis.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>MetricsSummary.xsl</file>
+        <file>Metrics.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\MetricsSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\MetricsSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\Metrics.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Microsoft Metrics"/>
+        <attribute name="actionName" value="MicrosoftMetrics"/>
+        <attribute name="xslFileName" value="xsl\Metrics.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

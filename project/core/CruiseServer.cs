@@ -21,6 +21,8 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    using ThoughtWorks.CruiseControl.Core.util;
+
     /// <summary>
     /// The Continuous Integration server.
     /// </summary>
@@ -306,10 +308,16 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
-            configuration = configurationService.Load();
-            integrationQueueManager.Restart(configuration);
-            securityManager = configuration.SecurityManager;
-            securityManager.Initialise();
+            var oldConfig = this.configuration;
+            this.configuration = this.configurationService.Load();
+            this.integrationQueueManager.Restart(this.configuration);
+
+            if (!HashUtils.AreSame(oldConfig.SecurityManager, this.configuration.SecurityManager))
+            {
+                Log.Info("Configuration changed: Initialising new security");
+                this.securityManager = this.configuration.SecurityManager;
+                this.securityManager.Initialise();
+            }
         }
         #endregion
 

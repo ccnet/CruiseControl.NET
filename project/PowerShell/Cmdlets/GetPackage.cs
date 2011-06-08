@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Nouns.cs" company="The CruiseControl.NET Team">
+// <copyright file="GetPackage.cs" company="The CruiseControl.NET Team">
 //   Copyright (C) 2011 by The CruiseControl.NET Team
 // 
 //   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,41 +24,64 @@
 
 namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 {
+    using System.Management.Automation;
+
     /// <summary>
-    /// Defines the common nouns.
+    /// A cmdlet for getting one or more packages.
     /// </summary>
-    public static class Nouns
+    [Cmdlet(VerbsCommon.Get, Nouns.Package, DefaultParameterSetName = CommonCmdlet.CommonParameterSet)]
+    public class GetPackage
+        : ProjectCmdlet
     {
-        #region Public constants
+        #region Constructors
         /// <summary>
-        /// A connection to a CruiseControl.NET server.
+        /// Initializes a new instance of the <see cref="GetPackage"/> class.
         /// </summary>
-        public const string Connection = "CCConnection";
+        public GetPackage()
+        {
+            this.Count = 50;
+        }
+        #endregion
 
+        #region Public properties
+        #region Start
         /// <summary>
-        /// A project.
+        /// Gets or sets the start position.
         /// </summary>
-        public const string Project = "CCProject";
+        /// <value>
+        /// The start position.
+        /// </value>
+        [Parameter]
+        public int Start { get; set; }
+        #endregion
 
+        #region Count
         /// <summary>
-        /// A queue.
+        /// Gets or sets the count.
         /// </summary>
-        public const string Queue = "CCQueue";
+        /// <value>
+        /// The count.
+        /// </value>
+        [Parameter]
+        public int Count { get; set; }
+        #endregion
+        #endregion
 
+        #region Protected methods
+        #region ProcessRecord()
         /// <summary>
-        /// A build for a project.
+        /// Processes a record.
         /// </summary>
-        public const string Build = "CCBuild";
-
-        /// <summary>
-        /// A log from the server.
-        /// </summary>
-        public const string Log = "CCLog";
-
-        /// <summary>
-        /// A package in a project.
-        /// </summary>
-        public const string Package = "CCPackage";
+        protected override void ProcessRecord()
+        {
+            this.WriteVerbose("Getting project packages");
+            this.ProcessProject(p =>
+                {
+                    var builds = p.GetPackages(this.Start, this.Count);
+                    this.WriteObject(builds, true);
+                });
+        }
+        #endregion
         #endregion
     }
 }

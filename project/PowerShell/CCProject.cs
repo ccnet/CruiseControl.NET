@@ -162,6 +162,23 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             return builds.Select(b => new CCBuild(this.client, b, this)).ToList();
         }
         #endregion
+
+        #region GetPackages()
+        /// <summary>
+        /// Gets the packages.
+        /// </summary>
+        /// <param name="start">The starting position.</param>
+        /// <param name="count">The number to get.</param>
+        /// <returns>
+        /// The packages for the project.
+        /// </returns>
+        public IList<CCPackage> GetPackages(int start, int count)
+        {
+            var packages = this.client.RetrievePackageList(this.Name);
+            var filtered = packages.Skip(start).Take(count);
+            return filtered.Select(p => CCPackage.Wrap(this.client, p, this)).ToList();
+        }
+        #endregion
         #endregion
 
         #region Internal methods
