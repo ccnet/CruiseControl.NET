@@ -58,15 +58,15 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         public CCBuild Build { get; set; }
         #endregion
 
-        #region ShowRaw
+        #region OutputMode
         /// <summary>
-        /// Gets or sets a value indicating whether the raw log should be displayed or not.
+        /// Gets or sets the output mode.
         /// </summary>
         /// <value>
-        /// <c>true</c> to show the raw log; otherwise, <c>false</c>.
+        /// The output mode.
         /// </value>
         [Parameter]
-        public bool ShowRaw { get; set; }
+        public LogOutputMode OutputMode { get; set; }
         #endregion
         #endregion
 
@@ -81,17 +81,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
 
             if (this.Project != null)
             {
-                this.WriteLog(this.Project.GetLog(), this.ShowRaw);
+                this.WriteVerbose("Retrieving project log");
+                this.WriteLog(this.Project.GetLog(), LogOutputMode.Values);
             }
             else if (this.Build != null)
             {
-                this.WriteLog(this.Build.GetLog(), true);
+                this.WriteVerbose("Retrieving build log");
+                this.WriteLog(this.Build.GetLog(), LogOutputMode.Lines);
             }
             else
             {
+                this.WriteVerbose("Retrieving server log");
                 var connection = this.Connection
                                  ?? new CCConnection(ClientHelpers.GenerateClient(this.Address, this), new Version());
-                this.WriteLog(connection.GetLog(), this.ShowRaw);
+                this.WriteLog(connection.GetLog(), LogOutputMode.Values);
             }
         }
         #endregion
@@ -103,22 +106,37 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
         /// Writes the log.
         /// </summary>
         /// <param name="log">The log.</param>
-        /// <param name="showRaw">If set to <c>true</c> show the raw log.</param>
-        private void WriteLog(string log, bool showRaw)
+        /// <param name="defaultMode">The default mode.</param>
+        private void WriteLog(string log, LogOutputMode defaultMode)
         {
             if (log == null)
             {
                 return;
             }
 
-            var lines = log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (showRaw)
+            var mode = this.OutputMode == LogOutputMode.Default ? defaultMode : this.OutputMode;
+            switch (mode)
             {
-                this.WriteObject(lines, true);
-            }
-            else
-            {
-                this.WriteObject(lines.Select(l => CCLogLine.Parse(l)), true);
+                case LogOutputMode.Lines:
+                case LogOutputMode.Values:
+                    this.WriteVerbose("Splitting log into lines");
+                    var lines = log.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (mode == LogOutputMode.Lines)
+                    {
+                        this.WriteObject(lines, true);
+                    }
+                    else
+                    {
+                        this.WriteVerbose("Splitting log into values");
+                        this.WriteObject(lines.Select(l => CCLogLine.Parse(l)), true);
+                    }
+
+                    break;
+
+                default:
+                    this.WriteVerbose("Outputting raw log");
+                    this.WriteObject(log, false);
+                    break;
             }
         }
         #endregion

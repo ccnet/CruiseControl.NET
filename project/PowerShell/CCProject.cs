@@ -179,6 +179,20 @@ namespace ThoughtWorks.CruiseControl.PowerShell
             return filtered.Select(p => CCPackage.Wrap(this.client, p, this)).ToList();
         }
         #endregion
+
+        #region GetConfiguration()
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <returns>
+        /// The configuration for the project.
+        /// </returns>
+        public string GetConfiguration()
+        {
+            var config = this.client.GetProject(this.Name);
+            return config;
+        }
+        #endregion
         #endregion
 
         #region Internal methods

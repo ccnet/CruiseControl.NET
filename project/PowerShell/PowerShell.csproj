@@ -56,9 +56,12 @@
     <Compile Include="Cmdlets\ClientHelpers.cs" />
     <Compile Include="Cmdlets\CommonCmdlet.cs" />
     <Compile Include="Cmdlets\ClearQueue.cs" />
+    <Compile Include="Cmdlets\ShowProject.cs" />
+    <Compile Include="Cmdlets\FormatLog.cs" />
     <Compile Include="Cmdlets\GetPackage.cs" />
     <Compile Include="Cmdlets\GetQueue.cs" />
     <Compile Include="Cmdlets\GetBuild.cs" />
+    <Compile Include="Cmdlets\LogOutputMode.cs" />
     <Compile Include="Cmdlets\NewConnection.cs" />
     <Compile Include="Cmdlets\ProjectCmdlet.cs" />
     <Compile Include="Cmdlets\StopBuild.cs" />
