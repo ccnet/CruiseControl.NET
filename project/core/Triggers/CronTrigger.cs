@@ -104,6 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             {
                 if (nextBuild == DateTime.MinValue)
                 {
+                    schedule = NCrontab.CrontabSchedule.Parse(CronExpression);
                     SetNextIntegrationDateTime();
                 }
                 return nextBuild;
@@ -117,7 +118,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// <remarks></remarks>
         public IntegrationRequest Fire()
         {
-            schedule = NCrontab.CrontabSchedule.Parse(CronExpression);
             DateTime now = dtProvider.Now;
 
             if (now > NextBuild)
