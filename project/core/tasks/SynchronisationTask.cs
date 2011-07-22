@@ -45,6 +45,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class SynchronisationTask
         : TaskContainerBase
     {
+        public SynchronisationTask()
+        {
+            this.TimeoutPeriod = 300;
+        }
+
+
         #region Private fields
         #region contexts
         /// <summary>
@@ -115,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>300</default>
         [ReflectorProperty("timeout", Required = false)]
-        public int? TimeoutPeriod { get; set; }
+        public int TimeoutPeriod { get; set; }
         #endregion
         #endregion
 
@@ -135,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var numberOfTasks = Tasks.Length;
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
                 ? Description
-                : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running tasks in synchronisation context({0} task(s))", numberOfTasks));
+                : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Running tasks in synchronisation context({0} task(s))", numberOfTasks));
             logger.Info("Starting synchronisation task with {0} sub-task(s)", numberOfTasks);
             var contextToUse = this.ContextName ?? "DefaultSynchronisationContext";
 
@@ -149,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             // Attempt to enter the synchronisation context
-            if (Monitor.TryEnter(contexts[contextToUse], TimeoutPeriod.GetValueOrDefault(300) * 1000))
+            if (Monitor.TryEnter(contexts[contextToUse], TimeoutPeriod * 1000))
             {
                 try
                 {
@@ -158,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var failureCount = 0;
                     for (var loop = 0; loop < numberOfTasks; loop++)
                     {
-                        var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", Tasks[loop].GetType().Name, loop);
+                        var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} [{1}]", Tasks[loop].GetType().Name, loop);
                         logger.Debug("Starting task '{0}'", taskName);
                         try
                         {
