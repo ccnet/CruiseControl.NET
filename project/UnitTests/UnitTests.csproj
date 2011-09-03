@@ -1345,6 +1345,9 @@
     <Content Include="resources\IntegrationScenarios\Definitions.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

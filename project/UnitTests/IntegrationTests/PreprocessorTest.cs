@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "CCNetConfigWithPreProcessor.xml");
             var project1StateFile = new System.IO.FileInfo(projectName1 + ".state").FullName;
 
+            IntegrationCompleted.Clear();
             IntegrationCompleted.Add(projectName1, false);
 
             Log("Clear existing state file, to simulate first run : " + project1StateFile);
@@ -222,6 +223,63 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 cruiseServer.Start();
 
                 System.Threading.Thread.Sleep(250);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit();
+                Log("cruiseServer stopped");
+            }
+        }
+
+
+        [Test]
+        [Timeout(120000)]
+        public void MustBeAbleToParse_6()
+        {
+            const string projectName2 = "PowerShell2";
+
+            var project1StateFile = new System.IO.FileInfo(projectName2 + ".state").FullName;
+            var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PowerShellConfig1.xml");
+
+            IntegrationCompleted.Clear();
+            IntegrationCompleted.Add(projectName2, false);
+
+
+            Log("Making CruiseServerFactory");
+            var csf = new CCNet.Core.CruiseServerFactory();
+
+
+            var pr2 = new CCNet.Remote.Messages.ProjectRequest(null, projectName2);
+
+
+            Log("Making cruiseServer with config from :" + ccNetConfigFile);
+            using (var cruiseServer = csf.Create(true, ccNetConfigFile))
+            {
+
+                // subscribe to integration complete to be able to wait for completion of a build
+                cruiseServer.IntegrationCompleted += new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(CruiseServerIntegrationCompleted);
+
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.Threading.Thread.Sleep(250);
+
+                Log("Forcing build on project " + projectName2 );
+                CheckResponse(cruiseServer.ForceBuild(pr2));
+
+                System.Threading.Thread.Sleep(250); // give time to start the build
+
+                Log("Waiting for integration to complete of : " + projectName2);
+                while (!IntegrationCompleted[projectName2])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+                // un-subscribe to integration complete 
+                cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(CruiseServerIntegrationCompleted);
 
                 Log("Stopping cruiseServer");
                 cruiseServer.Stop();

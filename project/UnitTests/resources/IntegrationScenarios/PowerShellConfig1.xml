@@ -1,0 +1,88 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+
+  <project name="PowerShell1"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/PowerShell1</workingDirectory>
+    <artifactDirectory>scenarioTests/PowerShell1</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers />
+
+    <tasks>
+      <powershell>
+        <script>dosomething.ps</script>
+        <executable>C:\program Files\PowerShell\PowerShell.exe</executable>
+        <scriptsDirectory>C:\Scripts</scriptsDirectory>
+        <buildArgs>-level=1</buildArgs>
+        <environment>
+          <variable name="EnvVar1"
+                    value="Some data" />
+        </environment>
+        <successExitCodes>1,2,3</successExitCodes>
+        <buildTimeoutSeconds>10</buildTimeoutSeconds>
+        <description>Example of how to run a PowerShell script.</description>
+      </powershell>
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+
+  <cb:define PowerShellInstallFolder="C:\program Files\PowerShell\" />
+
+
+
+  <project name="PowerShell2"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="Config is the same as 1 but with pre-procssor">
+    <workingDirectory>scenarioTests/PowerShell1</workingDirectory>
+    <artifactDirectory>scenarioTests/PowerShell1</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers />
+
+    <tasks>
+      <powershell>
+        <script>dosomething.ps</script>
+        <executable>$(PowerShellInstallFolder)PowerShell.exe</executable>
+        <scriptsDirectory>C:\Scripts</scriptsDirectory>
+        <buildArgs>-level=1</buildArgs>
+        <environment>
+          <variable name="EnvVar1"
+                    value="Some data" />
+        </environment>
+        <successExitCodes>1,2,3</successExitCodes>
+        <buildTimeoutSeconds>10</buildTimeoutSeconds>
+        <description>Example of how to run a PowerShell script.</description>
+      </powershell>
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+
+
+</cruisecontrol>
