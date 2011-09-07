@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
 			project.Triggers = (ITrigger) mockTrigger.MockInstance;
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
-			project.Publishers = new ITask[] {(ITask) mockPublisher.MockInstance};
+			project.Publishers = new ITask[] {new ThoughtWorks.CruiseControl.Core.Publishers.XmlLogPublisher(),  (ITask) mockPublisher.MockInstance};
 			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance};
 			project.ConfiguredWorkingDirectory = workingDirPath;
 			project.ConfiguredArtifactDirectory = artifactDirPath;
