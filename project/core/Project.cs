@@ -637,11 +637,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private void writeSummary(IIntegrationResult r, string logDir, BuildSummary summary, Stopwatch timer, SystemIoFileSystem fileSystem, XmlSerializer serialiser)
         {
-            // buildsummaries cased this to fail 
-            // do not remove or following tests will fail (if someone can fix those mock setups, please do): 
-            //  ° ThoughtWorks.CruiseControl.UnitTests.Core.ProjectTest.RethrowExceptionIfLoadingStateFileThrowsException()
-            //  ° ThoughtWorks.CruiseControl.UnitTests.Core.ProjectTest.ShouldCallIntegratableWhenIntegrateCalled
-            if (r == null || r.StartTime == null) return;
+            if (r == null) return;
 
             var path = Path.ChangeExtension(Path.Combine(logDir, new LogFile(r).Filename), "summary");
             timer.Stop();
