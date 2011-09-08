@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             var url = "http://somewhere/";
             var factory = new TestClientFactory((u, a, d) =>
             {
-                Assert.AreEqual(url + "/server/TestServer/RawXmlMessage.aspx", u.AbsoluteUri);
+                Assert.AreEqual(url + "server/TestServer/RawXmlMessage.aspx", u.AbsoluteUri);
                 Assert.AreEqual("POST", a);
                 Assert.AreEqual(action, d["action"]);
                 Assert.AreEqual(request.ToString(), d["message"]);
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             var url = "http://somewhere/";
             var factory = new TestClientFactory((u, a, d) =>
             {
-                Assert.AreEqual(url + "/server/TestServer/RawXmlMessage.aspx", u.AbsoluteUri);
+                Assert.AreEqual(url + "server/TestServer/RawXmlMessage.aspx", u.AbsoluteUri);
                 Assert.AreEqual("POST", a);
                 Assert.AreEqual(action, d["action"]);
                 Assert.AreEqual(request.ToString(), d["message"]);
