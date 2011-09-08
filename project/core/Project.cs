@@ -562,20 +562,20 @@ namespace ThoughtWorks.CruiseControl.Core
             var logDirectory = this.GetLogDirectory();
             var fileSystem = new SystemIoFileSystem();
             var serialiser = new XmlSerializer(typeof(BuildSummary));
-            Action<IIntegrationResult> writeSummary =
-                r =>
-                {
-                    var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
-                    timer.Stop();
-                    summary.Duration = timer.ElapsedMilliseconds;
-                    summary.Status = r.Status;
-                    summary.LogName = new LogFile(r).Filename;
-                    fileSystem.EnsureFolderExists(path);
-                    using (var output = fileSystem.OpenOutputStream(path))
-                    {
-                        serialiser.Serialize(output, summary);
-                    }
-                };
+            //Action<IIntegrationResult> writeSummary =
+            //    r =>
+            //    {
+            //        var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
+            //        timer.Stop();
+            //        summary.Duration = timer.ElapsedMilliseconds;
+            //        summary.Status = r.Status;
+            //        summary.LogName = new LogFile(r).Filename;
+            //        fileSystem.EnsureFolderExists(path);
+            //        using (var output = fileSystem.OpenOutputStream(path))
+            //        {
+            //            serialiser.Serialize(output, summary);
+            //        }
+            //    };
             try
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
@@ -586,11 +586,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 result = integratable.Integrate(request);
                 summary.Label = result.Label;
-                writeSummary(result);
+                //writeSummary(result);
+                writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
             }
             catch (Exception error)
             {
-                writeSummary(result);
+                //writeSummary(result);
+                writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
                 Log.Error(error);
                 hasError = true;
                 throw;
@@ -632,6 +634,27 @@ namespace ThoughtWorks.CruiseControl.Core
             // Finally, return the actual result
             return result;
         }
+
+        private void writeSummary(IIntegrationResult r, string logDir, BuildSummary summary, Stopwatch timer, SystemIoFileSystem fileSystem, XmlSerializer serialiser)
+        {
+            // buildsummaries cased this to fail 
+            // do not remove or following tests will fail (if someone can fix those mock setups, please do): 
+            //  ° ThoughtWorks.CruiseControl.UnitTests.Core.ProjectTest.RethrowExceptionIfLoadingStateFileThrowsException()
+            //  ° ThoughtWorks.CruiseControl.UnitTests.Core.ProjectTest.ShouldCallIntegratableWhenIntegrateCalled
+            if (r == null || r.StartTime == null) return;
+
+            var path = Path.ChangeExtension(Path.Combine(logDir, new LogFile(r).Filename), "summary");
+            timer.Stop();
+            summary.Duration = timer.ElapsedMilliseconds;
+            summary.Status = r.Status;
+            summary.LogName = new LogFile(r).Filename;
+            fileSystem.EnsureFolderExists(path);
+            using (var output = fileSystem.OpenOutputStream(path))
+            {
+                serialiser.Serialize(output, summary);
+            }
+        }
+
 
         /// <summary>
         /// Retrieves some summaries for the project.
