@@ -26,12 +26,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         private bool include = true;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StatisticBase" /> class.	
         /// </summary>
         /// <remarks></remarks>
         protected StatisticBase()
         {
+            this.NameSpaces = new StatisticsNamespaceMapping[0];
         }
 
         /// <summary>
@@ -43,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         {
             this.name = name;
             this.xpath = xpath;
+            this.NameSpaces = new StatisticsNamespaceMapping[0];
         }
 
         /// <summary>
@@ -81,6 +84,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             set { generateGraph = value; }
         }
 
+        StatisticsNamespaceMapping[] _NameSpaces;
+        [ReflectorArray("namespaces", Required = false)]
+        public StatisticsNamespaceMapping[] NameSpaces
+        {
+            get { return _NameSpaces; }
+            set { _NameSpaces = value;}
+        }
+
+
         /// <summary>
         /// Should this statistic be collected and published?
         /// </summary>
@@ -111,7 +123,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <returns>The statistic value.</returns>
         protected virtual object Evaluate(XPathNavigator nav)
         {
-            return nav.Evaluate(xpath);
+            if (NameSpaces.Length == 0) return nav.Evaluate(xpath);
+
+            System.Xml.XmlNamespaceManager nmsp = new System.Xml.XmlNamespaceManager(nav.NameTable);
+
+            foreach (var s in NameSpaces)
+            {
+                if (s.Url == "default")
+                {
+                    nmsp.AddNamespace(s.Prefix, string.Empty);
+                }
+                else
+                {
+                    nmsp.AddNamespace(s.Prefix, s.Url);
+                }
+            }
+
+            return nav.Evaluate(xpath,nmsp);
         }
 
         /// <summary>

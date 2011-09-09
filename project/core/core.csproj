@@ -471,6 +471,7 @@
     <Compile Include="publishers\Statistics\StatisticsChartGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\Statistics\StatisticsNamespaceMapping.cs" />
     <Compile Include="publishers\Statistics\StatisticsPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
