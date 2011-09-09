@@ -359,6 +359,7 @@
     <Compile Include="Core\Publishers\PackageFileTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
+    <Compile Include="Core\Publishers\Statistics\StatisticsBuilderWithNamespacesTest.cs" />
     <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
@@ -1363,6 +1364,9 @@
     <Content Include="resources\IntegrationScenarios\Triggers.xml" />
     <Content Include="resources\statistics.xml" />
     <Content Include="resources\UnitTestResults.xml" />
+    <Content Include="resources\UnitTestResults2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WebDashboard\Cache\" />
