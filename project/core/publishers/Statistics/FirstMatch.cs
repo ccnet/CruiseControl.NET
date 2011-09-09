@@ -36,7 +36,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <returns>The statistic value.</returns>
 		protected override object Evaluate(XPathNavigator nav)
 		{
-			XPathNodeIterator nodeIterator = nav.Select(xpath);
+			XPathNodeIterator nodeIterator;
+
+            if (NameSpaces.Length == 0)
+            {
+                nodeIterator = nav.Select(xpath);
+            }
+            else
+            {
+                System.Xml.XmlNamespaceManager nmsp = new System.Xml.XmlNamespaceManager(nav.NameTable);
+
+                foreach (var s in NameSpaces)
+                {
+                    nmsp.AddNamespace(s.Prefix, s.Url);
+                }
+                nodeIterator = nav.Select(xpath,nmsp);
+            }
+
 			return nodeIterator.MoveNext() ? nodeIterator.Current.Value : null;
 		}
 	}	
