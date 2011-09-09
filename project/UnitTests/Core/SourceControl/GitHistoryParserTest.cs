@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+        [Ignore]
 		public void ParsingLogWithLF()
 		{
 			Modification[] modifications = git.Parse(File.OpenText("CCNet.git.log.txt"), new DateTime(2009, 01, 01, 10, 00, 00, DateTimeKind.Utc), new DateTime(2009, 01, 31, 10, 00, 00, DateTimeKind.Utc));
@@ -76,6 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+        [Ignore]
 		public void ParsingLargeGitLog()
 		{
 			Modification[] modifications = git.Parse(File.OpenText("CCNet.git.log.txt"), DateTime.MinValue, DateTime.MaxValue);
