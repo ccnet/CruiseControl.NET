@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         }
 
         StatisticsNamespaceMapping[] _NameSpaces;
-        [ReflectorArray("namespaces", Required = false)]
+        [ReflectorProperty("namespaces", Required = false)]
         public StatisticsNamespaceMapping[] NameSpaces
         {
             get { return _NameSpaces; }
