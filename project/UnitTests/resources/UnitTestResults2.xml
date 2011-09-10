@@ -1,0 +1,429 @@
+<cruisecontrol project="ProjectXAnalyze">
+  <request source="Scheduled_Analyzer"
+           buildCondition="ForceBuild">Build (ForceBuild) triggered from Scheduled_Analyzer</request>
+  <parameters>
+    <parameter name="$CCNetArtifactDirectory"
+               value="D:\Integration\ProjectXAnalyze\Artifacts" />
+    <parameter name="$CCNetBuildCondition"
+               value="ForceBuild" />
+    <parameter name="$CCNetBuildDate"
+               value="2011-09-01" />
+    <parameter name="$CCNetBuildTime"
+               value="21:00:00" />
+    <parameter name="$CCNetFailureUsers"
+               value="System.Collections.ArrayList" />
+    <parameter name="$CCNetIntegrationStatus"
+               value="Unknown" />
+    <parameter name="$CCNetLabel"
+               value="1.0.0.1429" />
+    <parameter name="$CCNetLastIntegrationStatus"
+               value="Success" />
+    <parameter name="$CCNetListenerFile"
+               value="D:\Integration\ProjectXAnalyze\Artifacts\ProjectXAnalyze_ListenFile.xml" />
+    <parameter name="$CCNetModifyingUsers"
+               value="System.Collections.ArrayList" />
+    <parameter name="$CCNetNumericLabel"
+               value="1429" />
+    <parameter name="$CCNetProject"
+               value="ProjectXAnalyze" />
+    <parameter name="$CCNetProjectUrl"
+               value="http://buildserver/ccnet/server/local/project/ProjectXAnalyze/ViewProjectReport.aspx" />
+    <parameter name="$CCNetRequestSource"
+               value="Scheduled_Analyzer" />
+    <parameter name="$CCNetUser"
+               value="" />
+    <parameter name="$CCNetWorkingDirectory"
+               value="d:\wf\ProjectX" />
+  </parameters>
+  
+  <modifications>
+  </modifications>
+  
+  <integrationProperties>
+    <CCNetArtifactDirectory>D:\Integration\ProjectXAnalyze\Artifacts</CCNetArtifactDirectory>
+    <CCNetBuildCondition>ForceBuild</CCNetBuildCondition>
+    <CCNetBuildDate>2011-09-01</CCNetBuildDate>
+    <CCNetBuildTime>21:00:00</CCNetBuildTime>
+    <CCNetFailureUsers />
+    <CCNetIntegrationStatus>Success</CCNetIntegrationStatus>
+    <CCNetLabel>1.0.0.1429</CCNetLabel>
+    <CCNetLastIntegrationStatus>Success</CCNetLastIntegrationStatus>
+    <CCNetListenerFile>D:\Integration\ProjectXAnalyze\Artifacts\ProjectXAnalyze_ListenFile.xml</CCNetListenerFile>
+    <CCNetModifyingUsers>
+    </CCNetModifyingUsers>
+    <CCNetNumericLabel>1429</CCNetNumericLabel>
+    <CCNetProject>ProjectXAnalyze</CCNetProject>
+    <CCNetProjectUrl>http://buildserver/ccnet/server/local/project/ProjectXAnalyze/ViewProjectReport.aspx</CCNetProjectUrl>
+    <CCNetRequestSource>Scheduled_Analyzer</CCNetRequestSource>
+    <CCNetWorkingDirectory>d:\wf\ProjectX</CCNetWorkingDirectory>
+    <LastChangeNumber>10410</LastChangeNumber>
+    <LastIntegrationStatus>Success</LastIntegrationStatus>
+    <LastSuccessfulIntegrationLabel>1.0.0.1429</LastSuccessfulIntegrationLabel>
+    <LastModificationDate>1/09/2011 16:55:42</LastModificationDate>
+  </integrationProperties>
+  
+  <msbuild startTime="09/04/2011 20:50:21"
+           elapsedTime="00:00:00"
+           elapsedSeconds="0"
+           success="true">
+    <project file="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\CCNetStatistics.sln"
+             startTime="09/04/2011 20:50:21"
+             elapsedTime="00:00:00"
+             elapsedSeconds="0"
+             success="true">
+      <target name="ValidateSolutionConfiguration"
+              startTime="09/04/2011 20:50:21"
+              elapsedTime="00:00:00"
+              elapsedSeconds="0"
+              success="true">
+        <message level="normal"><![CDATA[Building solution configuration "Debug|Any CPU".]]></message>
+      </target>
+      <target name="Build"
+              startTime="09/04/2011 20:50:21"
+              elapsedTime="00:00:00"
+              elapsedSeconds="0"
+              success="true">
+        <project file="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\CCNetStatistics\Agents.vbproj"
+                 startTime="09/04/2011 20:50:21"
+                 elapsedTime="00:00:00"
+                 elapsedSeconds="0"
+                 success="true">
+          <target name="CoreResGen"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="normal"><![CDATA[All outputs are up-to-date.]]></message>
+          </target>
+          <target name="GenerateTargetFrameworkMonikerAttribute"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="normal"><![CDATA[Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.]]></message>
+          </target>
+          <target name="CoreCompile"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="normal"><![CDATA[Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.]]></message>
+          </target>
+          <target name="CopyFilesToOutputDirectory"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="high"><![CDATA[Agents -> C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\CCNetStatistics\bin\Debug\Agents.dll]]></message>
+          </target>
+        </project>
+        <project file="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\TestAgents\TestAgents.vbproj"
+                 startTime="09/04/2011 20:50:21"
+                 elapsedTime="00:00:00"
+                 elapsedSeconds="0"
+                 success="true">
+          <target name="GenerateTargetFrameworkMonikerAttribute"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="normal"><![CDATA[Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.]]></message>
+          </target>
+          <target name="CoreCompile"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="normal"><![CDATA[Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.]]></message>
+          </target>
+          <target name="CopyFilesToOutputDirectory"
+                  startTime="09/04/2011 20:50:21"
+                  elapsedTime="00:00:00"
+                  elapsedSeconds="0"
+                  success="true">
+            <message level="high"><![CDATA[TestAgents -> C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\TestAgents\bin\Debug\TestAgents.dll]]></message>
+          </target>
+        </project>
+      </target>
+    </project>
+  </msbuild>
+
+  <TestRun id="32083ab3-68fe-40ab-a13d-c289aef12a28"
+           name="cover_me"
+           runUser="ruben"
+           xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+    <TestSettings name="Cover"
+                  id="9839cf84-0738-4c12-885d-99158bdda72f">
+      <Description>These are default test settings for a local test run.</Description>
+      <Deployment userDeploymentRoot="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics"
+                  useDefaultDeploymentRoot="false"
+                  runDeploymentRoot="cover_me" />
+      <NamingScheme baseName="cover_me"
+                    appendTimeStamp="false"
+                    useDefault="false" />
+      <Execution>
+        <TestTypeSpecific>
+          <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
+            <AssemblyResolution>
+              <TestDirectory useLoadContext="true" />
+            </AssemblyResolution>
+          </UnitTestRunConfig>
+        </TestTypeSpecific>
+        <AgentRule name="LocalMachineDefaultRole">
+          <DataCollectors>
+            <DataCollector uri="datacollector://microsoft/CodeCoverage/1.0"
+                           assemblyQualifiedName="Microsoft.VisualStudio.TestTools.CodeCoverage.CoveragePlugIn, Microsoft.VisualStudio.QualityTools.Plugins.CodeCoverage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                           friendlyName="Code Coverage">
+              <Configuration>
+                <CodeCoverage xmlns="">
+                  <Regular>
+                    <CodeCoverageItem binaryFile="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\CCNetStatistics\bin\Debug\Agents.dll"
+                                      pdbFile="C:\Users\ruben\Documents\Visual Studio 2010\Projects\CCNetStatistics\CCNetStatistics\bin\Debug\Agents.instr.pdb"
+                                      instrumentInPlace="true" />
+                  </Regular>
+                </CodeCoverage>
+              </Configuration>
+            </DataCollector>
+          </DataCollectors>
+        </AgentRule>
+      </Execution>
+    </TestSettings>
+    <Times creation="2011-09-04T20:40:22.8989434+02:00"
+           queuing="2011-09-04T20:40:24.1937456+02:00"
+           start="2011-09-04T20:40:24.3341459+02:00"
+           finish="2011-09-04T20:40:28.0469524+02:00" />
+    <ResultSummary outcome="Failed">
+      <Counters total="2"
+                executed="2"
+                passed="1"
+                error="0"
+                failed="1"
+                timeout="0"
+                aborted="0"
+                inconclusive="0"
+                passedButRunAborted="0"
+                notRunnable="0"
+                notExecuted="0"
+                disconnected="0"
+                warning="0"
+                completed="0"
+                inProgress="0"
+                pending="0" />
+      <ResultFiles>
+        <ResultFile path="LTREMRUBEN\data.coverage" />
+      </ResultFiles>
+    </ResultSummary>
+    <TestDefinitions>
+      <UnitTest name="TestInfiltration"
+                storage="c:\users\ruben\documents\visual studio 2010\projects\ccnetstatistics\testagents\bin\debug\testagents.dll"
+                id="93fe6bec-7340-59e7-ba45-0a396dc614ff">
+        <Execution id="792491ae-0c70-45e3-a474-1f1cb130226b" />
+        <TestMethod codeBase="c:/users/ruben/documents/visual studio 2010/projects/ccnetstatistics/testagents/bin/debug/TestAgents.DLL"
+                    adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                    className="TestAgents.UnitTest1, TestAgents, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                    name="TestInfiltration" />
+      </UnitTest>
+      <UnitTest name="TestReport"
+                storage="c:\users\ruben\documents\visual studio 2010\projects\ccnetstatistics\testagents\bin\debug\testagents.dll"
+                id="09504e3d-ea5f-fda7-5ee0-32f8cc895784">
+        <Execution id="c98799b7-8675-43b9-ae03-7eb7fd2acb70" />
+        <TestMethod codeBase="c:/users/ruben/documents/visual studio 2010/projects/ccnetstatistics/testagents/bin/debug/TestAgents.DLL"
+                    adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                    className="TestAgents.UnitTest1, TestAgents, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                    name="TestReport" />
+      </UnitTest>
+    </TestDefinitions>
+    <TestLists>
+      <TestList name="Smoke"
+                id="39ed6b71-dbd6-41f1-a30d-eebe96ec74ff"
+                parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+        <TestLinks>
+          <TestLink id="93fe6bec-7340-59e7-ba45-0a396dc614ff"
+                    name="TestInfiltration"
+                    storage="c:\users\ruben\documents\visual studio 2010\projects\ccnetstatistics\testagents\bin\debug\testagents.dll"
+                    type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+          <TestLink id="09504e3d-ea5f-fda7-5ee0-32f8cc895784"
+                    name="TestReport"
+                    storage="c:\users\ruben\documents\visual studio 2010\projects\ccnetstatistics\testagents\bin\debug\testagents.dll"
+                    type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        </TestLinks>
+      </TestList>
+      <TestList name="Lists of Results"
+                id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+      <TestList name="All Loaded Results"
+                id="19431567-8539-422a-85d7-44ee4e166bda" />
+    </TestLists>
+    <TestEntries>
+      <TestEntry testId="93fe6bec-7340-59e7-ba45-0a396dc614ff"
+                 executionId="792491ae-0c70-45e3-a474-1f1cb130226b"
+                 testListId="39ed6b71-dbd6-41f1-a30d-eebe96ec74ff" />
+      <TestEntry testId="09504e3d-ea5f-fda7-5ee0-32f8cc895784"
+                 executionId="c98799b7-8675-43b9-ae03-7eb7fd2acb70"
+                 testListId="39ed6b71-dbd6-41f1-a30d-eebe96ec74ff" />
+    </TestEntries>
+    <Results>
+      <UnitTestResult executionId="792491ae-0c70-45e3-a474-1f1cb130226b"
+                      testId="93fe6bec-7340-59e7-ba45-0a396dc614ff"
+                      testName="TestInfiltration"
+                      computerName="LTREMRUBEN"
+                      duration="00:00:00.0342893"
+                      startTime="2011-09-04T20:40:25.9721488+02:00"
+                      endTime="2011-09-04T20:40:26.3777495+02:00"
+                      testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b"
+                      outcome="Passed"
+                      testListId="39ed6b71-dbd6-41f1-a30d-eebe96ec74ff"
+                      relativeResultsDirectory="792491ae-0c70-45e3-a474-1f1cb130226b">
+      </UnitTestResult>
+      <UnitTestResult executionId="c98799b7-8675-43b9-ae03-7eb7fd2acb70"
+                      testId="09504e3d-ea5f-fda7-5ee0-32f8cc895784"
+                      testName="TestReport"
+                      computerName="LTREMRUBEN"
+                      duration="00:00:00.0538581"
+                      startTime="2011-09-04T20:40:26.4089495+02:00"
+                      endTime="2011-09-04T20:40:26.4713496+02:00"
+                      testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b"
+                      outcome="Failed"
+                      testListId="39ed6b71-dbd6-41f1-a30d-eebe96ec74ff"
+                      relativeResultsDirectory="c98799b7-8675-43b9-ae03-7eb7fd2acb70">
+        <Output>
+          <ErrorInfo>
+            <Message>Assert.AreEqual failed. Expected:&lt;&gt;. Actual:&lt;all went ok&gt;. </Message>
+            <StackTrace>
+              at TestAgents.UnitTest1.TestReport() in c:\users\ruben\documents\visual studio 2010\Projects\CCNetStatistics\TestAgents\UnitTest1.vb:line 17
+            </StackTrace>
+          </ErrorInfo>
+        </Output>
+      </UnitTestResult>
+    </Results>
+  </TestRun>
+
+  <CoverageDSPriv>
+    <Module>
+      <ModuleName>Agents.dll</ModuleName>
+      <ImageSize>65536</ImageSize>
+      <ImageLinkTime>0</ImageLinkTime>
+      <LinesCovered>5</LinesCovered>
+      <LinesPartiallyCovered>0</LinesPartiallyCovered>
+      <LinesNotCovered>6</LinesNotCovered>
+      <BlocksCovered>3</BlocksCovered>
+      <BlocksNotCovered>6</BlocksNotCovered>
+      <NamespaceTable>
+        <BlocksCovered>3</BlocksCovered>
+        <BlocksNotCovered>1</BlocksNotCovered>
+        <LinesCovered>5</LinesCovered>
+        <LinesNotCovered>2</LinesNotCovered>
+        <LinesPartiallyCovered>0</LinesPartiallyCovered>
+        <ModuleName>Agents.dll</ModuleName>
+        <NamespaceKeyName>Agents.dllAgents</NamespaceKeyName>
+        <NamespaceName>Agents</NamespaceName>
+        <Class>
+          <ClassKeyName>Agents.dllAgentsOO7</ClassKeyName>
+          <ClassName>OO7</ClassName>
+          <LinesCovered>5</LinesCovered>
+          <LinesNotCovered>2</LinesNotCovered>
+          <LinesPartiallyCovered>0</LinesPartiallyCovered>
+          <BlocksCovered>3</BlocksCovered>
+          <BlocksNotCovered>1</BlocksNotCovered>
+          <NamespaceKeyName>Agents.dllAgents</NamespaceKeyName>
+          <Method>
+            <MethodKeyName>Agents.dll!2a81</MethodKeyName>
+            <MethodName>Infiltrate()</MethodName>
+            <MethodFullName>Infiltrate()</MethodFullName>
+            <LinesCovered>2</LinesCovered>
+            <LinesPartiallyCovered>0</LinesPartiallyCovered>
+            <LinesNotCovered>0</LinesNotCovered>
+            <BlocksCovered>1</BlocksCovered>
+            <BlocksNotCovered>0</BlocksNotCovered>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+          </Method>
+          <Method>
+            <MethodKeyName>Agents.dll!2abc</MethodKeyName>
+            <MethodName>MissionReport()</MethodName>
+            <MethodFullName>MissionReport()</MethodFullName>
+            <LinesCovered>3</LinesCovered>
+            <LinesPartiallyCovered>0</LinesPartiallyCovered>
+            <LinesNotCovered>0</LinesNotCovered>
+            <BlocksCovered>2</BlocksCovered>
+            <BlocksNotCovered>0</BlocksNotCovered>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+          </Method>
+          <Method>
+            <MethodKeyName>Agents.dll!2b01</MethodKeyName>
+            <MethodName>Sabotage()</MethodName>
+            <MethodFullName>Sabotage()</MethodFullName>
+            <LinesCovered>0</LinesCovered>
+            <LinesPartiallyCovered>0</LinesPartiallyCovered>
+            <LinesNotCovered>2</LinesNotCovered>
+            <BlocksCovered>0</BlocksCovered>
+            <BlocksNotCovered>1</BlocksNotCovered>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+          </Method>
+        </Class>
+      </NamespaceTable>
+      <NamespaceTable>
+        <BlocksCovered>0</BlocksCovered>
+        <BlocksNotCovered>5</BlocksNotCovered>
+        <LinesCovered>0</LinesCovered>
+        <LinesNotCovered>4</LinesNotCovered>
+        <LinesPartiallyCovered>0</LinesPartiallyCovered>
+        <ModuleName>Agents.dll</ModuleName>
+        <NamespaceKeyName>Agents.dllAgents.My</NamespaceKeyName>
+        <NamespaceName>Agents.My</NamespaceName>
+        <Class>
+          <ClassKeyName>Agents.dllAgents.MyMySettings</ClassKeyName>
+          <ClassName>MySettings</ClassName>
+          <LinesCovered>0</LinesCovered>
+          <LinesNotCovered>4</LinesNotCovered>
+          <LinesPartiallyCovered>0</LinesPartiallyCovered>
+          <BlocksCovered>0</BlocksCovered>
+          <BlocksNotCovered>5</BlocksNotCovered>
+          <NamespaceKeyName>Agents.dllAgents.My</NamespaceKeyName>
+          <Method>
+            <MethodKeyName>Agents.dll!2a0c</MethodKeyName>
+            <MethodName>get_Default()</MethodName>
+            <MethodFullName>get_Default()</MethodFullName>
+            <LinesCovered>0</LinesCovered>
+            <LinesPartiallyCovered>0</LinesPartiallyCovered>
+            <LinesNotCovered>3</LinesNotCovered>
+            <BlocksCovered>0</BlocksCovered>
+            <BlocksNotCovered>2</BlocksNotCovered>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+            <Lines>
+            </Lines>
+          </Method>
+          <Method>
+            <MethodKeyName>Agents.dll!298c</MethodKeyName>
+            <MethodName>.cctor()</MethodName>
+            <MethodFullName>.cctor()</MethodFullName>
+            <LinesCovered>0</LinesCovered>
+            <LinesPartiallyCovered>0</LinesPartiallyCovered>
+            <LinesNotCovered>1</LinesNotCovered>
+            <BlocksCovered>0</BlocksCovered>
+            <BlocksNotCovered>3</BlocksNotCovered>
+            <Lines>
+            </Lines>
+          </Method>
+        </Class>
+      </NamespaceTable>
+    </Module>
+    <SourceFileNames>
+    </SourceFileNames>
+    <SourceFileNames>
+    </SourceFileNames>
+  </CoverageDSPriv>
+  
+</cruisecontrol>
