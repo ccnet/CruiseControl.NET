@@ -55,6 +55,7 @@
             if (cmd.Length == 0)
             {
                 WriteToOutput("No command specified", OutputType.Error);
+                HelpScreen();
                 exitCode = 11;
             }
             else
@@ -76,6 +77,7 @@
                     default:
                         exitCode = 1;
                         WriteToOutput("Unknown command: " + cmd, OutputType.Error);
+                        HelpScreen();
                         break;
                 }
             }
@@ -96,6 +98,15 @@
 
             return exitCode;
         }
+
+        private static void HelpScreen()
+        {
+            var exeName = Environment.GetCommandLineArgs()[0];
+
+            WriteToOutput(exeName + @" -c=generate -s=..\..\..\..\..\Build\Remote\ThoughtWorks.CruiseControl.Remote.dll -o=documentation -xsd", OutputType.Info);
+            WriteToOutput(exeName + @" -c=generate -s=..\..\..\..\..\Build\Core\ThoughtWorks.CruiseControl.Core.dll -o=documentation -xsd", OutputType.Info);
+        }
+
 
         /// <summary>
         /// Lists the confluence items.
@@ -525,7 +536,8 @@
                                 //output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
 
                                 // Redmine Style
-                                output.WriteLine("{background:dodgerblue}. | *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
+                                // todo better header colors dodgerblue
+                                output.WriteLine("| *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
                                 WriteElements(elements, output, documentation, typeElement, typeVersion);
                             }
                             else
@@ -763,7 +775,7 @@
                         break;
 
                     case OutputType.Info:
-                        System.Console.ForegroundColor = ConsoleColor.White;
+                        System.Console.ForegroundColor = ConsoleColor.Blue;
                         break;
 
                     case OutputType.Warning:
@@ -846,18 +858,14 @@
 
                                     // Redmine Wiki
                                     builder.AppendFormat("<pre><code class={0}xml{0}>", "\"");
-
-
-                                    builder.AppendLine(xmlCode.ToString(SaveOptions.None));
-                                    
-                                
+                                    builder.Append(xmlCode.ToString(SaveOptions.None));
                                 }
                                 catch
                                 {
                                     isXml = false;
                                 }
                             }
-                            
+
                             if (!isXml)
                             {
                                 if ((isXmlAttribute != null) && (isXmlAttribute.Value.Length > 0))
@@ -867,7 +875,6 @@
 
                                     // Redmine Wiki
                                     builder.AppendFormat("<pre><code class={0}{1}{0}>", "\"", isXmlAttribute.Value);
-                                
                                 }
                                 else
                                 {
@@ -875,17 +882,17 @@
                                     //builder.AppendLine("{code:" + options + "}");
 
                                     // Redmine Wiki
-                                    builder.AppendLine("<pre><code>");
+                                    builder.Append("<pre><code>");
                                 }
 
-                                builder.AppendLine(childElement.Value);
+                                builder.Append(childElement.Value);
                             }
 
                             //ThoughtWorks confluence Wiki                                                                
                             //builder.AppendLine("{code}");
 
                             // Redmine Wiki
-                            builder.AppendLine("</code></pre>");
+                            builder.Append("</code></pre>");
                             builder.AppendLine();
                             break;
 
@@ -897,10 +904,11 @@
                             builder.AppendLine();
                             builder.AppendLine("h4. " + TrimValue(childElement.Value));
                             builder.AppendLine();
-                            
+
                             break;
 
                         case "list":
+                            builder.Append("<pre>"); // Redmine Wiki
                             foreach (XElement itemElement in childElement.Elements("item"))
                             {
                                 if (!builder.ToString().EndsWith(Environment.NewLine))
@@ -910,6 +918,7 @@
 
                                 builder.Append("* " + TrimValue(itemElement.Value));
                             }
+                            builder.Append("</pre>"); // Redmine Wiki
                             break;
 
                         case "b":
@@ -918,38 +927,35 @@
                             break;
 
                         case "para":
-                            // Redmine Wiki
-                            builder.AppendLine();
-
-
+                            
                             var paraType = childElement.Attribute("type");
                             var paraChild = new XElement(childElement);
-                            
+
                             if (paraType != null)
                             {
                                 //ThoughtWorks confluence Wiki                                                                                            
                                 //builder.Append("{" + paraType.Value);
 
                                 // Redmine Wiki
-                                builder.Append("| *" + paraType.Value + "* " );
+                                builder.Append("*" + paraType.Value +"*");
 
                                 var paraTitle = paraChild.Element("title");
                                 if (paraTitle != null)
                                 {
-                                   //ThoughtWorks confluence Wiki                                                                                            
+                                    //ThoughtWorks confluence Wiki                                                                                            
                                     //builder.Append(":title=" + TrimValue(paraTitle.Value));
-                                
+
                                     // Redmine Wiki
                                     builder.Append(" : " + TrimValue(paraTitle.Value));
-                                    
+
                                     paraTitle.Remove();
                                 }
                                 //ThoughtWorks confluence Wiki
                                 //builder.AppendLine("}");
 
                                 // Redmine Wiki
-                                builder.AppendLine(" |");
-                            
+                                builder.AppendLine("");
+
                             }
 
                             //ThoughtWorks confluence Wiki
@@ -961,7 +967,7 @@
 
 
                             // Redmine Wiki
-                            builder.AppendLine("| " + ParseElement(paraChild) + " |");
+                            builder.AppendLine("p. " + ParseElement(paraChild));
                             builder.AppendLine();
 
                             break;
@@ -1052,10 +1058,12 @@
                     var names = Enum.GetNames(dataType);
                     var builder = new StringBuilder();
                     builder.Append("String - one of:");
+                    builder.Append("<pre>");// Redmine Wiki
                     foreach (var name in names)
                     {
                         builder.Append(Environment.NewLine + "* " + name);
                     }
+                    builder.Append("</pre>");// Redmine Wiki
 
                     dataTypeName = builder.ToString();
                 }
@@ -1066,7 +1074,7 @@
                     {
                         var names = Enum.GetNames(itemType);
                         var builder = new StringBuilder();
-                        builder.Append("String array\\\\The following values are valid:");
+                        builder.Append("String array The following values are valid:");
                         foreach (var name in names)
                         {
                             builder.Append(Environment.NewLine + "* " + name);
@@ -1109,7 +1117,7 @@
                         // If values are defined, then this must be a string value
                         if (dataType.IsArray)
                         {
-                            dataTypeName = "String array\\\\The following values are valid:";
+                            dataTypeName = "String array. The following values are valid:";
                         }
                         else
                         {
