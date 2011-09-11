@@ -84,6 +84,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             set { generateGraph = value; }
         }
 
+        /// <summary>
+        /// Provides support for the use namespaces.
+        /// 
+        /// </summary>
+        /// <default>none</default>
+        /// <version>1.7</version>
         StatisticsNamespaceMapping[] _NameSpaces;
         [ReflectorProperty("namespaces", Required = false)]
         public StatisticsNamespaceMapping[] NameSpaces
