@@ -1198,7 +1198,7 @@
             var titleAttribute = typeElement != null ? typeElement.Element("title") : null;
             if (titleAttribute != null)
             {
-                return "[" + titleAttribute.Value.Trim() + "]";
+                return "[[" + titleAttribute.Value.Trim() + "]]";
             }
             else
             {
