@@ -16,7 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         public StatisticsNamespaceMapping()
         { }
 
-
+        /// <summary>
+        /// Create with specified settings
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="url"></param>
         public StatisticsNamespaceMapping(string prefix, string url)
         {
             this.Prefix = prefix;
