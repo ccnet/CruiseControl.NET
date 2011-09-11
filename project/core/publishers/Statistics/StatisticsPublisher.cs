@@ -49,6 +49,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
     /// &lt;/statisticList&gt;
     /// &lt;/statistics&gt;
     /// </code>
+    /// <code>
+    ///&lt;statistics&gt;
+    ///    &lt;statisticList&gt;
+    ///        &lt;statistic name="AmountOfFailures" xpath="sum(//test-results/@failures)" /&gt;
+    ///        &lt;firstMatch name="AmountOfTests" xpath="//mstest:TestRun/mstest:ResultSummary/mstest:Counters/@total" &gt;
+    ///         &lt;namespaces&gt;
+    ///             &lt;namespaceMapping prefix="mstest" url="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" /&gt;
+    ///         &lt;/namespaces&gt;
+    ///     &lt;/firstMatch&gt;
+    ///    &lt;/statisticList&gt;
+    ///&lt;/statistics&gt;
+    /// </code>
     /// <para>
     /// For the statistics configured with 'generateGraph="true"', a graph is generated with different builds on x-axis and the configured
     /// metric on y-axis in the artifacts directory named as &lt;statistic name&gt;.png. This chart would still be a very basic representation.
