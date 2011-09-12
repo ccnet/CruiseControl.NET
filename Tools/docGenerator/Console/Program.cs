@@ -20,6 +20,7 @@
         private static List<string> problemList = new List<string>();
         private static TextWriter xmlLog = null;
 
+        [STAThread]
         public static int Main(string[] args)
         {
             var consoleArgs = new ConsoleArgs();
@@ -71,7 +72,7 @@
                         break;
 
                     case "publish":
-                        exitCode = PublishConfluenceItems(consoleArgs);
+                        exitCode = PublishChiliItems(consoleArgs);
                         break;
 
                     default:
@@ -379,6 +380,48 @@
 
             return exitCode;
         }
+
+        private static int PublishChiliItems(ConsoleArgs cmdArgs)
+        {
+            var input = string.Empty;
+            if (string.IsNullOrEmpty(cmdArgs.User))
+            {
+                WriteToOutput("Username not specified", OutputType.Error);
+                return 3;
+            }
+            if (string.IsNullOrEmpty(cmdArgs.Password))
+            {
+                WriteToOutput("Password not specified", OutputType.Error);
+                return 4;
+            }
+            if (string.IsNullOrEmpty(cmdArgs.Destination))
+            {
+                WriteToOutput("Input path not specified", OutputType.Error);
+                return 6;
+            }
+            input = cmdArgs.Destination;
+            if (!Path.IsPathRooted(input))
+            {
+                input = Path.Combine(Environment.CurrentDirectory, input);
+            }
+
+            var chili = new ChiliAutomation();
+            if (!chili.Login(cmdArgs.User, cmdArgs.Password))
+            {
+                WriteToOutput("Login failed or maybe site down.", OutputType.Error);
+                chili.logout();
+                return 8;
+            }
+
+            chili.UpdateDocs(input);
+
+            chili.logout();
+
+
+            return 0;
+        }
+
+
 
         public static int GenerateDocumentation(ConsoleArgs args)
         {
@@ -927,7 +970,7 @@
                             break;
 
                         case "para":
-                            
+
                             var paraType = childElement.Attribute("type");
                             var paraChild = new XElement(childElement);
 
@@ -937,7 +980,7 @@
                                 //builder.Append("{" + paraType.Value);
 
                                 // Redmine Wiki
-                                builder.Append("*" + paraType.Value +"*");
+                                builder.Append("*" + paraType.Value + "*");
 
                                 var paraTitle = paraChild.Element("title");
                                 if (paraTitle != null)
