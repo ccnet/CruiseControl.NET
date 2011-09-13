@@ -1100,7 +1100,7 @@
                 {
                     var names = Enum.GetNames(dataType);
                     var builder = new StringBuilder();
-                    builder.Append("String - one of:");
+                    builder.Append("String - one of: ");
                     builder.Append("<pre>");// Redmine Wiki
                     foreach (var name in names)
                     {
@@ -1164,7 +1164,7 @@
                         }
                         else
                         {
-                            dataTypeName = "String - one of:";
+                            dataTypeName = "String - one of: ";
                         }
 
                         foreach (var valueElement in values.Elements("value"))
