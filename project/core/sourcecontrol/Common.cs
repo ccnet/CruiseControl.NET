@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public enum SourceControlErrorHandlingPolicy
         {
             /// <summary>
-            /// A build log is made on every failure
+            /// A build log is made on every failure. 
             /// </summary>
             ReportEveryFailure,
             /// <summary>

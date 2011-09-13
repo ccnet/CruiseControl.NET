@@ -102,8 +102,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// environment variable to "%USERPROFILE%" and the "PLINK_PROTOCOL" environment variable to "ssh".
     /// </item>
     /// </list>
-    /// <para></para>
-    /// <para></para>
     /// <para>
     /// Homepage: http://code.google.com/p/msysgit/
     /// </para>

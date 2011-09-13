@@ -314,20 +314,18 @@ namespace ThoughtWorks.CruiseControl.Core
         /// What action to take when a source control error occurs (during GetModifications).
         /// </summary>
         /// <remarks>
-        /// <para>
         /// These are the possible values :
-        /// </para>
         /// <list type="1">
         /// <item>
         /// ReportEveryFailure : runs the publisher section whenever there is an error.
         /// </item>
         /// <item>
-        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, the publisher section will
-        /// only be run once.
+        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, <br/>
+        /// the publisher section will only be run once.
         /// </item>
         /// <item>
-        /// ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. When 
-        /// maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.
+        /// ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. <br/>
+        /// When maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.
         /// </item>
         /// </list>
         /// </remarks>
