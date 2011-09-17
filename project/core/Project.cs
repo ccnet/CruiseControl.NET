@@ -373,7 +373,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// The source control block to use.
         /// </summary>
         /// <version>1.0</version>
-        /// <default><link>Null Source Control Block</link></default>
+        /// <default><link>Null_Source_Control</link></default>
         [ReflectorProperty("sourcecontrol", InstanceTypeKey = "type", Required = false)]
         public ISourceControl SourceControl
         {
