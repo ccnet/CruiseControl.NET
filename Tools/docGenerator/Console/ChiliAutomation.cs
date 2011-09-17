@@ -198,7 +198,7 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("multi.wiki", "Multi_Source_Control");
             FileName2ChiliPageNameMapping.Add("multiIssueTracker.wiki", "MultiIssueTracker");
             FileName2ChiliPageNameMapping.Add("multiTrigger.wiki", "Multi_Trigger");
-            FileName2ChiliPageNameMapping.Add("namespaceMapping.wiki", "");
+            FileName2ChiliPageNameMapping.Add("namespaceMapping.wiki", "Namespace_Mapping");
             FileName2ChiliPageNameMapping.Add("nant.wiki", "NAnt_Task");
             FileName2ChiliPageNameMapping.Add("ncoverProfile.wiki", "NCover_Profiler_Task");
             FileName2ChiliPageNameMapping.Add("ncoverReport.wiki", "NCover_Reporting_Task");
@@ -217,11 +217,11 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("parameterTrigger.wiki", "Parameter_Trigger");
             FileName2ChiliPageNameMapping.Add("passwordUser.wiki", "User_Password_Authentication");
             FileName2ChiliPageNameMapping.Add("pathFilter.wiki", "PathFilter");
-            FileName2ChiliPageNameMapping.Add("permissions.wiki", "");
+           // FileName2ChiliPageNameMapping.Add("permissions.wiki", "");
             FileName2ChiliPageNameMapping.Add("plasticscm.wiki", "Plastic");
             FileName2ChiliPageNameMapping.Add("powershell.wiki", "PowerShell_Task");
             FileName2ChiliPageNameMapping.Add("project.wiki", "Project_Configuration_Block");
-            FileName2ChiliPageNameMapping.Add("projectSecurity.wiki", "");
+           // FileName2ChiliPageNameMapping.Add("projectSecurity.wiki", "");
             FileName2ChiliPageNameMapping.Add("projectTrigger.wiki", "Project_Trigger");
             FileName2ChiliPageNameMapping.Add("pvcs.wiki", "PVCS");
             FileName2ChiliPageNameMapping.Add("queue.wiki", "Queue_Configuration");
@@ -266,7 +266,7 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("websvn.wiki", "WebSVN_URL_Builder");
             FileName2ChiliPageNameMapping.Add("xmlFileAudit.wiki", "XML_File_Audit_Logger");
             FileName2ChiliPageNameMapping.Add("xmlFileAuditReader.wiki", "XML_File_Audit_Reader");
-            FileName2ChiliPageNameMapping.Add("xmlFolderData.wiki", "");
+        //    FileName2ChiliPageNameMapping.Add("xmlFolderData.wiki", "");
             FileName2ChiliPageNameMapping.Add("xmllogger.wiki", "Xml_Log_Publisher");
 
 
