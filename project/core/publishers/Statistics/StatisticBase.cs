@@ -26,6 +26,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         private bool include = true;
 
+        private StatisticsNamespaceMapping[] nameSpaces;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StatisticBase" /> class.	
@@ -85,17 +87,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         }
 
         /// <summary>
-        /// Provides support for the use namespaces.
-        /// 
+        /// Provides support for the use of xml namespaces.
         /// </summary>
         /// <default>none</default>
-        /// <version>1.7</version>
-        StatisticsNamespaceMapping[] _NameSpaces;
+        /// <version>1.7</version>        
         [ReflectorProperty("namespaces", Required = false)]
         public StatisticsNamespaceMapping[] NameSpaces
         {
-            get { return _NameSpaces; }
-            set { _NameSpaces = value;}
+            get { return nameSpaces; }
+            set { nameSpaces = value;}
         }
 
 
