@@ -1016,13 +1016,13 @@
                             break;
 
                         case "link":
-                            builder.Append("[" + TrimValue(childElement.Value) + "]");
+                            builder.Append("[[" + TrimValue(childElement.Value) + "]]");
                             break;
 
                         case "includePage":
-                            builder.Append("{include:" + TrimValue(childElement.Value) + "}");
+                            builder.Append("{{include(" + TrimValue(childElement.Value) + "}}");
                             break;
-
+                       
                         default:
                             builder.Append(ParseElement(childElement));
                             break;

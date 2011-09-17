@@ -1,5 +1,4 @@
-﻿using System;
-using Exortech.NetReflector;
+﻿using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -7,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
     /// This class foresees for the mappings of a prefix to an xml namespace. For example :
     /// xmlns:mstest=http://microsoft.com/schemas/VisualStudio/TeamTest/2010
     /// </summary>
+    /// <title>Namespace Mapping</title>
     [ReflectorType("namespaceMapping")]
     public class StatisticsNamespaceMapping
     {

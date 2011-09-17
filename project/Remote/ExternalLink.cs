@@ -6,13 +6,14 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-    /// <title>External Links</title>
-    /// <version>1.0</version>
+
     /// <summary>
     /// The &lt;externalLinks&gt; section can contain any number of &lt;externalLink&gt; sub-sections. Each of these 
     /// are used to display project related links on the project report page of the Web Dashboard, and are meant as a
     /// convenient shortcut to project-related web sites outside of CruiseControl.NET.
     /// </summary>
+    /// <title>External Links</title>
+    /// <version>1.0</version>
     /// <example>
     /// <code>
     /// &lt;externalLinks&gt;
