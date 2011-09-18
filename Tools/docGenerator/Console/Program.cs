@@ -75,6 +75,10 @@
                         exitCode = PublishChiliItems(consoleArgs);
                         break;
 
+                    case "reportnotmapped":
+                        exitCode = ReportNotMappedItems(consoleArgs);
+                        break;
+
                     default:
                         exitCode = 1;
                         WriteToOutput("Unknown command: " + cmd, OutputType.Error);
@@ -100,12 +104,26 @@
             return exitCode;
         }
 
+        private static int ReportNotMappedItems(ConsoleArgs consoleArgs)
+        {
+            ChiliAutomation chili = new ChiliAutomation();
+            var output = consoleArgs.Destination;
+            if (!Path.IsPathRooted(output))
+            {
+                output = Path.Combine(Environment.CurrentDirectory, output);
+            }
+
+            return chili.ReportNotMappedWikiFiles(output);
+        }
+
+
         private static void HelpScreen()
         {
             var exeName = Environment.GetCommandLineArgs()[0];
 
             WriteToOutput(exeName + @" -c=generate -s=..\..\..\..\..\Build\Remote\ThoughtWorks.CruiseControl.Remote.dll -o=documentation -xsd", OutputType.Info);
-            WriteToOutput(exeName + @" -c=generate -s=..\..\..\..\..\Build\Core\ThoughtWorks.CruiseControl.Core.dll -o=documentation -xsd", OutputType.Info);
+            WriteToOutput(exeName + @" -c=publish -u=optimus -p=prime -o=documentation", OutputType.Info);
+            WriteToOutput(exeName + @" -c=reportnotmapped -o=documentation", OutputType.Info);
         }
 
 
@@ -381,6 +399,11 @@
             return exitCode;
         }
 
+        /// <summary>
+        /// Publish items to chili page
+        /// </summary>
+        /// <param name="cmdArgs"></param>
+        /// <returns></returns>
         private static int PublishChiliItems(ConsoleArgs cmdArgs)
         {
             var input = string.Empty;
@@ -501,13 +524,17 @@
 
                         // There can be only one!
                         var attribute = attributes[0] as ReflectorTypeAttribute;
-                        var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
+                        var baseFileName = attribute.Name + ".wiki";
+                        var fileName = Path.Combine(baseFolder, baseFileName);
                         WriteToOutput("Generating " + attribute.Name + ".wiki for " + publicType.FullName, OutputType.Info);
                         var itemStopwatch = new Stopwatch();
                         itemStopwatch.Start();
+
+
                         if (File.Exists(fileName))
                         {
-                            File.Delete(fileName);
+                            //to be sure that the reflector type is unique in the entire ccnet solution!
+                            throw new Exception(string.Format("Filename {0} coming from class {1} already exists", baseFileName, publicType.Name));
                         }
 
                         var typeElement = (from element in documentation.Descendants("member")

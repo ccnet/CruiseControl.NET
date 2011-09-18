@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// <summary>
     /// Define an XSL-T parameter.
     /// </summary>
+    /// <title>xsltParameter</title>
     [Serializable]
     [ReflectorType("xsltParameter")]
     public class XsltParameter
