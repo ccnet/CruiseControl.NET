@@ -4,7 +4,15 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
-	// ToDo - Test!
+	/// <summary>
+	/// Shows the entire build log. No parsing has been done, 
+    /// so it is the same as looking at the buildlog file from the artifact folder.
+    /// <para>
+    /// LinkDescription : View Build Log
+    /// </para>
+	/// </summary>
+    /// <title>View Build Log Plugin</title>
+    /// <version>1.0</version>
 	[ReflectorType("buildLogBuildPlugin")]
 	public class BuildLogBuildPlugin : ProjectConfigurableBuildPlugin
 	{
