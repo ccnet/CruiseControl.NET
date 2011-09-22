@@ -7,13 +7,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
     using ThoughtWorks.CruiseControl.WebDashboard.MVC;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
-    // ToDo - Test!
-	[ReflectorType("farmReportFarmPlugin")]
-	public class FarmReportFarmPlugin : ICruiseAction, IPlugin
-	{
-		public static readonly string ACTION_NAME = "ViewFarmReport";
+    /// <summary>
+    /// The main page of CCNet. This gives an overview of all projects of all build servers.
+    /// <para>
+    /// LinkDescription : Farm Report.
+    /// </para>
+    /// </summary>
+    /// <title>Farm Report Farm Plugin</title>
+    /// <version>1.0.0</version>
+    [ReflectorType("farmReportFarmPlugin")]
+    public class FarmReportFarmPlugin : ICruiseAction, IPlugin
+    {
+        public static readonly string ACTION_NAME = "ViewFarmReport";
 
-		private readonly IProjectGridAction projectGridAction;
+        private readonly IProjectGridAction projectGridAction;
         private readonly ProjectParametersAction parametersAction;
         private ProjectGridSortColumn? sortColumn;
         private readonly CategorizedFarmReportFarmPlugin categorizedView;
@@ -23,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         /// <summary>
         /// The default column to sort by.
         /// </summary>
+        /// <default>N/A</default>
+        /// <version>1.4.4</version>
         [ReflectorProperty("defaultSort", Required = false)]
         public string DefaultSortColumn
         {
@@ -43,53 +52,57 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
         #region SuccessIndicatorBarLocation
         /// <summary>
-        /// Gets or sets the success indicator bar location.
+        /// The location of the success indicator bar.
         /// </summary>
         /// <value>The success indicator bar location.</value>
+        /// <default>Bottom</default>
         [ReflectorProperty("successBar", Required = false)]
         public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
         #endregion
 
         #region UseCategories
+        /// <summary>
+        /// Displays the categoried farm view or not.
+        /// </summary>
         [ReflectorProperty("categories", Required = false)]
         public bool UseCategories { get; set; }
         #endregion
         #endregion
 
         public FarmReportFarmPlugin(
-            IProjectGridAction projectGridAction, 
+            IProjectGridAction projectGridAction,
             ProjectParametersAction parametersAction,
             CategorizedFarmReportFarmPlugin categorizedView)
-		{
-			this.projectGridAction = projectGridAction;
+        {
+            this.projectGridAction = projectGridAction;
             this.parametersAction = parametersAction;
             this.SuccessIndicatorBarLocation = IndicatorBarLocation.Bottom;
             this.categorizedView = categorizedView;
-		}
+        }
 
-		public IResponse Execute(ICruiseRequest request)
-		{
+        public IResponse Execute(ICruiseRequest request)
+        {
             if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
             this.projectGridAction.SuccessIndicatorBarLocation = this.SuccessIndicatorBarLocation;
             return projectGridAction.Execute(ACTION_NAME, request);
-		}
+        }
 
-		public string LinkDescription
-		{
-			get { return "Farm Report"; }
-		}
+        public string LinkDescription
+        {
+            get { return "Farm Report"; }
+        }
 
-		public INamedAction[] NamedActions
-		{
+        public INamedAction[] NamedActions
+        {
             get
             {
-                var action = this.UseCategories ? 
-                    (ICruiseAction)categorizedView : 
+                var action = this.UseCategories ?
+                    (ICruiseAction)categorizedView :
                     (ICruiseAction)this;
                 return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, action),
                         new ImmutableNamedActionWithoutSiteTemplate(ProjectParametersAction.ActionName, parametersAction)
                     };
             }
-		}
-	}
+        }
+    }
 }

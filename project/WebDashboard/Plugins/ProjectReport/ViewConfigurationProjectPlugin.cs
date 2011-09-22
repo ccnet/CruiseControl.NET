@@ -15,6 +15,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     /// <version>1.3.0</version>
     /// <summary>
     /// The View Configuration Project Plugin shows the configuration for a project.
+    /// <para>
+    /// LinkDescription : Project Configuration.
+    /// </para>
     /// </summary>
     /// <example>
     /// <code title="Minimalist Example">
@@ -148,7 +151,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
             return result.ToString();
         }
-
-
     }
 }
