@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// This publisher logs all modifications for each build in a file.
     /// </para>
     /// <para>
-    /// These modifications can be viewed in the Dashboard with the <link>modificationHistoryProjectPlugin</link> plugin enabled.
+    /// These modifications can be viewed in the Dashboard with the <link>modification_History_Project_Plugin</link> plugin enabled.
     /// </para>
     /// </summary>
     /// <example>

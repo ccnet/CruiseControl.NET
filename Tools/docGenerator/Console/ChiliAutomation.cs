@@ -110,13 +110,15 @@ namespace Console
             int missingFiles = 0;
 
             var existingFiles = System.IO.Directory.GetFiles(docFolder, "*.wiki");
+            WriteToOutput(string.Format("Files in output folder {0}, files in wiki mapping {1}", existingFiles.Length, FileName2ChiliPageNameMapping.Count), OutputType.Info);
 
             foreach (var ef in existingFiles)
             {
-                if (!FileName2ChiliPageNameMapping.ContainsKey(ef))
+                var barefilename = new System.IO.FileInfo(ef).Name;
+                if (!FileName2ChiliPageNameMapping.ContainsKey(barefilename))
                 {
                     missingFiles++;
-                    WriteToOutput(string.Format("{0}", new System.IO.FileInfo(ef).Name), OutputType.Warning);
+                    WriteToOutput(string.Format("{0}", barefilename), OutputType.Warning);
                 }
             }
 
@@ -304,44 +306,44 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("textParameter.wiki", "TextParameter");
 
 
-            FileName2ChiliPageNameMapping.Add("administrationPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("administrationPlugin.wiki", "Dashboard_Administration_Plugin");
             FileName2ChiliPageNameMapping.Add("buildLogBuildPlugin.wiki", "Build_Log_Build_Plugin");
             FileName2ChiliPageNameMapping.Add("buildReportBuildPlugin.wiki", "Build_Report_Build_Plugin");
             FileName2ChiliPageNameMapping.Add("categorizedFarmReportFarmPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("cctrayDownloadPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("cctrayDownloadPlugin.wiki", "CCTray_Download_Plugin");
             FileName2ChiliPageNameMapping.Add("configurablePlugin.wiki", "");
             FileName2ChiliPageNameMapping.Add("cookieStore.wiki", "");
-            FileName2ChiliPageNameMapping.Add("farmReportFarmPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("farmReportFarmPlugin.wiki", "Farm_Report_Farm_Plugin");
             FileName2ChiliPageNameMapping.Add("finalBuildStatusPlugin.wiki", "Final_Build_Status_Display_Plugin");
             FileName2ChiliPageNameMapping.Add("htmlReportPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("latestBuildReportProjectPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("latestBuildReportProjectPlugin.wiki", "latestBuildReportProjectPlugin.wiki");
             FileName2ChiliPageNameMapping.Add("multipleXslReportAction.wiki", "Multiple_XSL_Report_Build_Plugin");
             FileName2ChiliPageNameMapping.Add("namedAction.wiki", "");
-            FileName2ChiliPageNameMapping.Add("ohlohProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("packageListPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("plugins.wiki", "");
-            FileName2ChiliPageNameMapping.Add("projectConfigurationServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("projectReportProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("projectStatisticsPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("projectTimelinePlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("queueStatusServerPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("ohlohProjectPlugin.wiki", "Ohloh_Stats_Display_Plugin");
+            FileName2ChiliPageNameMapping.Add("packageListPlugin.wiki", "Package_List_Plugin");
+            FileName2ChiliPageNameMapping.Add("plugins.wiki", "Plugins");
+            FileName2ChiliPageNameMapping.Add("projectConfigurationServerPlugin.wiki", "Project_Configuration_Server_Plugin");
+            FileName2ChiliPageNameMapping.Add("projectReportProjectPlugin.wiki", "Project_Report_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("projectStatisticsPlugin.wiki", "projectStatisticsPlugin");
+            FileName2ChiliPageNameMapping.Add("projectTimelinePlugin.wiki", "Project_Timeline_Plugin");
+            FileName2ChiliPageNameMapping.Add("queueStatusServerPlugin.wiki", "View_ServerQueue_Server_Plugin");
             FileName2ChiliPageNameMapping.Add("remoteServices.wiki", "RemoteServices");
             FileName2ChiliPageNameMapping.Add("server.wiki", "Server");
-            FileName2ChiliPageNameMapping.Add("serverAuditHistoryProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverAuditHistoryServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverInformationServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverLogProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverLogServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverReportServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverSecurityConfigurationProjectPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("serverAuditHistoryProjectPlugin.wiki", "Audit_History_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverAuditHistoryServerPlugin.wiki", "Server_Audit_History_Server_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverInformationServerPlugin.wiki", "Server_Information_Server_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverLogProjectPlugin.wiki", "Server_Log_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverLogServerPlugin.wiki", "Server_Log_Server_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverReportServerPlugin.wiki", "Server_Report_Server_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverSecurityConfigurationProjectPlugin.wiki", "Security_Configuration_Project_Plugin");
             FileName2ChiliPageNameMapping.Add("serverSecurityConfigurationServerPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverUserListProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("serverUserListServerPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("serverUserListProjectPlugin.wiki", "User_List_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("serverUserListServerPlugin.wiki", "User_List_Server_Plugin");
             FileName2ChiliPageNameMapping.Add("simpleSecurity.wiki", "");
             FileName2ChiliPageNameMapping.Add("stylesheet.wiki", "");
-            FileName2ChiliPageNameMapping.Add("viewAllBuildsProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("viewConfigurationProjectPlugin.wiki", "");
-            FileName2ChiliPageNameMapping.Add("viewProjectStatusPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("viewAllBuildsProjectPlugin.wiki", "View_All_Builds_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("viewConfigurationProjectPlugin.wiki", "View_Configuration_Project_Plugin");
+            FileName2ChiliPageNameMapping.Add("viewProjectStatusPlugin.wiki", "Project_Status_Plugin");
             FileName2ChiliPageNameMapping.Add("xslMultiReportBuildPlugin.wiki", "");
             FileName2ChiliPageNameMapping.Add("xslReportBuildAction.wiki", "");
             FileName2ChiliPageNameMapping.Add("xslReportBuildPlugin.wiki", "XSL_Report_Build_Plugin");

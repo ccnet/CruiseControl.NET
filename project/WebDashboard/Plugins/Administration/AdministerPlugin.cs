@@ -8,7 +8,11 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
 {
     /// <summary>
-    /// A plugin for administering the dashboard.
+    /// A plugin for administering the dashboard. This allows to install and uninstall the various plugins without modifying the Dashboard.config by hand.
+    /// This plugin is enabled by default. The admin password must be entered into the Dashboard.config once, there is no default password, and this plugin does not work with a blank password.
+    /// <para>
+    /// LinkDescription : Administer Dashboard.
+    /// </para>
     /// </summary>
     [ReflectorType("administrationPlugin")]
     public class AdministerPlugin

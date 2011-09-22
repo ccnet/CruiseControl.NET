@@ -913,6 +913,7 @@
                             // Redmine Wiki
                             if (codeTitle != null)
                             {
+                                builder.AppendLine();
                                 builder.AppendFormat("*{0}*", codeTitle.Value);
                                 builder.AppendLine();
                             }
@@ -1037,9 +1038,16 @@
 
 
                             // Redmine Wiki
-                            builder.AppendLine("p. " + ParseElement(paraChild));
+                            builder.AppendLine("");
+                            builder.AppendLine(System.Environment.NewLine + "p. " + ParseElement(paraChild));
                             builder.AppendLine();
 
+                            break;
+
+                        case "showChildren":
+                            builder.AppendLine("");
+                            builder.AppendLine("{{child_pages}}");
+                            builder.AppendLine();
                             break;
 
                         case "link":

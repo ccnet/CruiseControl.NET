@@ -26,7 +26,7 @@
     /// </code>
     /// </example>
     /// <remarks>
-    /// <includePage>Integration Properties</includePage>
+    /// <includePage>Integration_Properties</includePage>
     /// </remarks>
     [ReflectorType("ftp")]
     public class FtpTask : TaskBase

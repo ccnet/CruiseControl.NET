@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// line utility, users of FinalBuilder 3 and 4 will need the Professional Edition. FinalBuilder 5 users can use
     /// either the Standard or Professional editions. A free 30 day trial download is available.
     /// </para>
-    /// <includePage>Integration Properties</includePage>
+    /// <includePage>Integration_Properties</includePage>
     /// </remarks>
     [ReflectorType("FinalBuilder")]
 	public class FinalBuilderTask

@@ -10,7 +10,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
     /// <version>1.0</version>
 	/// <summary>
     /// The View All Builds Project Plugin lists all available builds for a project.
-	/// </summary>
+    /// <para>
+    /// LinkDescription : View All Builds.
+    /// </para>
+    /// </summary>
     /// <example>
     /// <code>
     /// &lt;viewAllBuildsProjectPlugin /&gt;

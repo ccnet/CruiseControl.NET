@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
     /// <para>
     /// From version 1.5 onwards it is advised to use the administration plugin to enable / disable plugins.
     /// </para>
+    /// <showChildren></showChildren>
     /// </summary>
     /// <example>
     /// <code>
