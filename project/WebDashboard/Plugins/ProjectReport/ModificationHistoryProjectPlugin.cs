@@ -10,11 +10,32 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    /// <title>Modification History Project Plugin</title>
+    /// <summary>
+    /// This plugin shows all the modifications of a project. The newest builds are shown first.
+    /// The project must use the <link>ModificationHistory Publisher</link> to get results to show up.
+    /// <para>
+    /// LinkDescription : View Final Project Status.
+    /// </para>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;projectPlugins&gt;
+    /// &lt;modificationHistoryProjectPlugin /&gt; 
+    /// &lt;/projectPlugins&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;projectPlugins&gt;
+    /// &lt;modificationHistoryProjectPlugin  onlyShowBuildsWithModifications="true"  /&gt;   
+    /// &lt;/projectPlugins&gt;    
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <version>1.4.3</version>
     [ReflectorType("modificationHistoryProjectPlugin")]
-    class ModificationHistoryProjectPlugin : ICruiseAction, IPlugin
+    public class ModificationHistoryProjectPlugin : ICruiseAction, IPlugin
     {
         public const string ActionName = "ViewProjectModificationHistory";
-        private const string XslFileName = "xsl\\ModificationHistory.xsl";
+        private const string XslFileName = @"xsl\ModificationHistory.xsl";
         private readonly IPhysicalApplicationPathProvider pathProvider;
         private bool onlyShowBuildsWithModifications = false;
 
@@ -24,6 +45,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         /// <summary>
         /// Filters out builds without modifications when set to true.
         /// </summary>
+        /// <default>false</default>
+        /// <version>1.4.3</version>
         [ReflectorProperty("onlyShowBuildsWithModifications", Required = false)]
         public bool OnlyShowBuildsWithModifications
         {
@@ -32,14 +55,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         }
 
         public ModificationHistoryProjectPlugin(IFarmService farmService, IPhysicalApplicationPathProvider pathProvider)
-		{
+        {
             this.farmService = farmService;
             transformer = new XslTransformer();
             this.pathProvider = pathProvider;
-		}
+        }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
-		{			
+        {
             Hashtable xsltArgs = new Hashtable();
             xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
             xsltArgs["onlyShowBuildsWithModifications"] = OnlyShowBuildsWithModifications;
@@ -55,17 +78,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                 return new HtmlFragmentResponse(transformer.Transform(HistoryDocument, xslFile, xsltArgs));
             }
 
-		}
+        }
 
         public string LinkDescription
-		{
-			get { return "View Modification History"; }
-		}
+        {
+            get { return "View Modification History"; }
+        }
 
-		public INamedAction[] NamedActions
-		{
-			get { return new INamedAction[] {new ImmutableNamedAction(ActionName, this)}; }
-		}
-	
+        public INamedAction[] NamedActions
+        {
+            get { return new INamedAction[] { new ImmutableNamedAction(ActionName, this) }; }
+        }
+
     }
 }

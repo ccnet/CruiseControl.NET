@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     /// <summary>
     /// The Project Report Project Plugin shows you summary details for a specific project. Part of these details are any <link>External
     /// Links</link> you have specified in the project configuration.
+    /// A graph with the recent builds is also provided
     /// </summary>
     /// <example>
     /// <code>

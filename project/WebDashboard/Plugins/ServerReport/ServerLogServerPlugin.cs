@@ -16,7 +16,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
     /// <title>Server Log Server Plugin</title>
     /// <version>1.0</version>
     /// <summary>
-    /// The Server Log Server Plugin shows you recent activity that has been output to the server log for a specific build server. 
+    /// The Server Log Server Plugin shows you recent activity that has been output to the server log for a specific build server.
+    /// <para>
+    /// LinkDescription : View Server Log.
+    /// </para>
     /// </summary>
     /// <example>
     /// <code>

@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// ReportEveryFailure : runs the publisher section whenever there is an error.
         /// </item>
         /// <item>
-        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, <br/>
+        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, <br/> 
         /// the publisher section will only be run once.
         /// </item>
         /// <item>

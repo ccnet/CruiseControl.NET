@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// The following parameters are passed to the external program using environment variables, in addition to those you specify in
     /// the &lt;environment&gt; element.:
     /// </para>
-    /// <includePage>Integration Properties</includePage>
+    /// <includePage>Integration_Properties</includePage>
     /// </remarks>
     [ReflectorType("exec")]
 	public class ExecutableTask
