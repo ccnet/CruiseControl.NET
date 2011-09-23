@@ -1337,6 +1337,12 @@
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithMultiLinebuildArgs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithMultilineInIncludeFile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor.xml" />
     <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_1.xml" />
     <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_2.xml" />
@@ -1344,6 +1350,9 @@
     <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_4.xml" />
     <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor_5.xml" />
     <Content Include="resources\IntegrationScenarios\Definitions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
