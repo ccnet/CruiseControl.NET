@@ -1,0 +1,32 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define nant_exe="d:\tools\nant\bin\nant.exe"/>
+  <cb:define sol_file="D:\Whatever.sln"/>
+
+
+  <project name="multi_line_test">
+    <triggers />
+    
+    <tasks>
+      <nant>
+        <executable>$(nant_exe)</executable>
+        <buildFile>D:\ci\default.build.xml</buildFile>
+        <buildArgs>
+          -D:SolutionFile=$(sol_file)
+          -D:LocalDeployRoot="D:\ci\deploy\MyProject"
+        </buildArgs>
+        <targetList>
+          <target>build</target>
+        </targetList>
+      </nant>
+    </tasks>
+    
+    <publishers>
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+    </publishers>
+  </project>
+  
+  
+</cruisecontrol>
