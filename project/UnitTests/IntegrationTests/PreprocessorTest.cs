@@ -294,7 +294,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
         [Timeout(120000)]
         public void MustBeAbleToParse_7()
         {
-            var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "CCNetConfigWithPreProcessor_5.xml");
+            var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "CCNetConfigWithMultiLinebuildArgs.xml");
 
             Log("Making CruiseServerFactory");
             var csf = new CCNet.Core.CruiseServerFactory();
@@ -316,6 +316,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             }
         }
 
+        [Test]
+        [Timeout(120000)]
+        public void MustBeAbleToParse_8()
+        {
+            var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "CCNetConfigWithMultilineInIncludeFile.xml");
+
+            Log("Making CruiseServerFactory");
+            var csf = new CCNet.Core.CruiseServerFactory();
+
+            Log("Making cruiseServer with config from :" + ccNetConfigFile);
+            using (var cruiseServer = csf.Create(true, ccNetConfigFile))
+            {
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.Threading.Thread.Sleep(250);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit();
+                Log("cruiseServer stopped");
+            }
+        }
 
 
         void CruiseServerIntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)

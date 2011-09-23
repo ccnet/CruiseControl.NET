@@ -1,0 +1,22 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:include href="MultiLineInclude.xml"
+              xmlns:cb="urn:ccnet.config.builder"/>
+
+
+  <project name="multi_line_test">
+    <triggers />
+
+    <tasks>
+      <cb:nant_multi/>
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+    </publishers>
+  </project>
+
+
+</cruisecontrol>
