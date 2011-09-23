@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         private string xslFileName = string.Empty;
         private string description = "no description set";
         private string actionName = "NoActionSet";
+        private XsltParameter[] parameters = new XsltParameter[0];
 
         public XslReportBuildPlugin(IActionInstantiator actionInstantiator)
         {
@@ -34,7 +35,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// Optional parameters to pass into the XSLT.
         /// </summary>
         [ReflectorProperty("parameters", Required = false)]
-        public XsltParameter[] Parameters { get; set; }
+        public XsltParameter[] Parameters 
+        {
+            get { return parameters; }
+            set { parameters = value; } 
+        }
 
         // These 2 are separate due to inheritence / property monkey-ness
         /// <summary>
