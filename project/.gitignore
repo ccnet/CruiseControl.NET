@@ -9,3 +9,5 @@
 /ccnet.resharper.user
 /ccnet.sln.cache
 /resharper.caches
+
+*.user
