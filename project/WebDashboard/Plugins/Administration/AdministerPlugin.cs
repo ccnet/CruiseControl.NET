@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
     /// A plugin for administering the dashboard. This allows to install and uninstall the various plugins without modifying the Dashboard.config by hand.
     /// This plugin is enabled by default. The admin password must be entered into the Dashboard.config once, there is no default password, and this plugin does not work with a blank password.
     /// <para>
-    /// The plugin also allows for adding and removing build servers, and maintainting their properties : see <link>remoteServices</link> of the <link>Dashboard_Configuration_Block</link>.
+    /// The plugin also allows for adding and removing build servers, and maintainting their properties : see <link>remoteServices</link> of the <link>Dashboard Configuration Block</link>.
     /// Like the ability to enable or disable the start/stop buttons and the force build button.
     /// </para>  
     /// <para>
