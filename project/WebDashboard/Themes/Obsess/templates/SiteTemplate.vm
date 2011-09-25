@@ -5,6 +5,7 @@
 		<link type="text/css" rel="stylesheet" href="$applicationPath/themes/Obsess/cruisecontrol.css" />
 		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/theme/ui.all.css" />
 		<link rel="shortcut icon" href="$applicationPath/AppIcon.ico" />
+		<meta http-equiv="refresh" content="$refreshinterval" > 
 		<script src="$applicationPath/javascript/ccnet.js" type="text/javascript"></script>
 		<script src="$applicationPath/javascript/jquery.js" type="text/javascript"></script>
 		<script src="$applicationPath/javascript/jquery-ui.js" type="text/javascript"></script>

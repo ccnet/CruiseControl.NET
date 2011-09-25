@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
                 if (topControlsViewBuilder == null)
                 {
                     topControlsViewBuilder =
-                        (TopControlsViewBuilder) objectSource.GetByType(typeof (TopControlsViewBuilder));
+                        (TopControlsViewBuilder)objectSource.GetByType(typeof(TopControlsViewBuilder));
                 }
                 return topControlsViewBuilder;
             }
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
                 if (sideBarViewBuilder == null)
                 {
                     sideBarViewBuilder =
-                        (SideBarViewBuilder) objectSource.GetByType(typeof (SideBarViewBuilder));
+                        (SideBarViewBuilder)objectSource.GetByType(typeof(SideBarViewBuilder));
                 }
                 return sideBarViewBuilder;
             }
@@ -89,14 +89,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             {
                 velocityContext["breadcrumbs"] = (TopControlsViewBuilder.Execute()).ResponseFragment;
                 velocityContext["sidebar"] = (SideBarViewBuilder.Execute(cruiseRequest)).ResponseFragment;
-                velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
+                velocityContext["mainContent"] = ((HtmlFragmentResponse)decoratedActionResponse).ResponseFragment;
                 velocityContext["dashboardversion"] = versionProvider.GetVersion();
                 if (request.ApplicationPath == "/")
                     velocityContext["applicationPath"] = string.Empty;
                 else
                     velocityContext["applicationPath"] = request.ApplicationPath;
-            	velocityContext["renderedAt"] = DateUtil.FormatDate(DateTime.Now);
+                velocityContext["renderedAt"] = DateUtil.FormatDate(DateTime.Now);
                 velocityContext["loginView"] = LoginViewBuilder.Execute().ResponseFragment;
+
+                // set to no refresh if refresh interval lower than 5 seconds
+                Int32 refreshIntervalInSeconds = Int32.MaxValue;
+                if (request.RefreshInterval >= 5) refreshIntervalInSeconds = request.RefreshInterval;
+
+                velocityContext["refreshinterval"] = refreshIntervalInSeconds;
 
                 GeneratejQueryLinks(velocityContext);
 
@@ -111,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
         public ConditionalGetFingerprint GetFingerprint(IRequest request)
         {
             ConditionalGetFingerprint fingerprint = CalculateLocalFingerprint(request);
-            return fingerprint.Combine(((IConditionalGetFingerprintProvider) decoratedAction).GetFingerprint(request));
+            return fingerprint.Combine(((IConditionalGetFingerprintProvider)decoratedAction).GetFingerprint(request));
         }
 
         private void GeneratejQueryLinks(Hashtable velocityContext)
