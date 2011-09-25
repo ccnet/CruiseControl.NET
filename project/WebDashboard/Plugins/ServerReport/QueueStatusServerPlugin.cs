@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
@@ -32,6 +33,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		private readonly IFarmService farmService;
 		private readonly IVelocityViewGenerator viewGenerator;
 
+
+        /// <summary>
+        /// Amount in seconds to autorefresh
+        /// </summary>
+        /// <default>0 - no refresh</default>
+        /// <version>1.7</version>
+        [ReflectorProperty("refreshInterval", Required = false)]
+        public Int32 RefreshInterval { get; set; }
+
+
 		public QueueStatusServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
 		{
 			this.farmService = farmService;
@@ -40,6 +51,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
+            request.Request.RefreshInterval = RefreshInterval;
+
 			Hashtable velocityContext = new Hashtable();
 
             CruiseServerSnapshotListAndExceptions snapshot = farmService.GetCruiseServerSnapshotListAndExceptions(request.ServerSpecifier, request.RetrieveSessionToken());

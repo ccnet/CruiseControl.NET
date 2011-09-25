@@ -45,6 +45,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
 
+
+        /// <summary>
+        /// Amount in seconds to autorefresh
+        /// </summary>
+        /// <default>0 - no refresh</default>
+        /// <version>1.7</version>
+        [ReflectorProperty("refreshInterval", Required = false)]
+        public Int32 RefreshInterval { get; set; }
+
+
         public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
             IRemoteServicesConfiguration configuration, ICruiseUrlBuilder urlBuilder)
         {
@@ -57,6 +67,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
+            cruiseRequest.Request.RefreshInterval = RefreshInterval;
+
             Hashtable velocityContext = new Hashtable();
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
             IServerSpecifier serverSpecifier = FindServer(projectSpecifier);

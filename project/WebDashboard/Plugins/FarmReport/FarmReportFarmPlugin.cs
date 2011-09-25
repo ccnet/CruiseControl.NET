@@ -67,6 +67,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         [ReflectorProperty("categories", Required = false)]
         public bool UseCategories { get; set; }
         #endregion
+
+
+        /// <summary>
+        /// Amount in seconds to autorefresh
+        /// </summary>
+        /// <default>0 - no refresh</default>
+        /// <version>1.7</version>
+        [ReflectorProperty("refreshInterval", Required = false)]
+        public Int32 RefreshInterval { get; set; }
+
         #endregion
 
         public FarmReportFarmPlugin(
@@ -82,6 +92,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
         public IResponse Execute(ICruiseRequest request)
         {
+            request.Request.RefreshInterval = RefreshInterval;
+
             if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
             this.projectGridAction.SuccessIndicatorBarLocation = this.SuccessIndicatorBarLocation;
             return projectGridAction.Execute(ACTION_NAME, request);

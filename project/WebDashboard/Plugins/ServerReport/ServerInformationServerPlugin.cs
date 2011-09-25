@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
@@ -36,6 +37,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.viewGenerator = viewGenerator;
 		}
 
+
+        /// <summary>
+        /// Amount in seconds to autorefresh
+        /// </summary>
+        /// <default>0 - no refresh</default>
+        /// <version>1.7</version>
+        [ReflectorProperty("refreshInterval", Required = false)]
+        public Int32 RefreshInterval { get; set; }
+
+
         /// <summary>
         /// The minimum required amount of free disk space in bytes. If the free disk space is less than this a warning will be displayed.
         /// </summary>
@@ -50,6 +61,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
+            request.Request.RefreshInterval = RefreshInterval;
+
 			Hashtable velocityContext = new Hashtable();
 			
 			velocityContext["serverversion"] = farmService.GetServerVersion(request.ServerSpecifier);
