@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             ProcessInfo info = (ProcessInfo)constraint.Parameter;
             Assert.AreEqual(POWERSHELL_PATH, info.FileName);
             Assert.AreEqual(PowerShellTask.DefaultBuildTimeOut * 1000, info.TimeOut);
-            CustomAssertion.AssertStartsWith(@"D:\CruiseControl\MyScript.ps1", info.Arguments);
+            CustomAssertion.AssertStartsWith(@"-nologo -NoProfile -NonInteractive -file ""D:\CruiseControl\MyScript.ps1""", info.Arguments);
         }
 
         [Test]
