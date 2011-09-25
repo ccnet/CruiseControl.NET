@@ -40,14 +40,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </code>
     /// </example>
     [ReflectorType("powershell")]
-	public class PowerShellTask 
+    public class PowerShellTask
         : TaskBase
-	{
+    {
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const int DefaultBuildTimeOut = 600;
+        public const int DefaultBuildTimeOut = 600;
         /// <summary>
         /// 	
         /// </summary>
@@ -75,13 +75,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public static string DefaultScriptsDirectory = System.Environment.GetEnvironmentVariable("USERPROFILE") + @"\Documents\WindowsPowerShell\";
 
         private string executable;
-		private ProcessExecutor executor;
+        private ProcessExecutor executor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PowerShellTask" /> class.	
         /// </summary>
         /// <remarks></remarks>
-		public PowerShellTask() : this(new Registry(), new ProcessExecutor()) { }
+        public PowerShellTask() : this(new Registry(), new ProcessExecutor()) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PowerShellTask" /> class.	
@@ -89,16 +89,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="registry">The registry.</param>
         /// <param name="executor">The executor.</param>
         /// <remarks></remarks>
-		public PowerShellTask(IRegistry registry, ProcessExecutor executor)
-		{
+        public PowerShellTask(IRegistry registry, ProcessExecutor executor)
+        {
             this.Registry = registry;
-			this.executor = executor;
+            this.executor = executor;
             this.BuildTimeoutSeconds = DefaultBuildTimeOut;
             this.Priority = ProcessPriorityClass.Normal;
             this.ConfiguredScriptsDirectory = DefaultScriptsDirectory;
             this.BuildArgs = string.Empty;
             this.EnvironmentVariables = new EnvironmentVariable[0];
-		}
+        }
 
         /// <summary>
         /// Expose the registry so the unit tests can change it if necessary.
@@ -114,23 +114,23 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public string Script { get; set; }
 
         /// <summary>
-        /// The PowerShell executable.
+        /// The PowerShell executable. If not set location is read from the registry.
         /// </summary>
         /// <version>1.5</version>
         /// <default>PowerShell.exe</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable
         {
-            get 
-			{ 
-				if (executable == null)
-				{
-					executable = ReadPowerShellFromRegistry();
-				}
-				return executable; 
-			}	
-			set { executable = value; }
-		}
+            get
+            {
+                if (executable == null)
+                {
+                    executable = ReadPowerShellFromRegistry();
+                }
+                return executable;
+            }
+            set { executable = value; }
+        }
 
         /// <summary>
         /// The priority class of the spawned process.
@@ -156,15 +156,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("buildArgs", Required = false)]
         public string BuildArgs { get; set; }
 
-		/// <summary>
+        /// <summary>
         /// Any environment variables to pass into the script. 
-		/// </summary>
+        /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("environment", Required = false)]
         public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
-		private int[] successExitCodes/* = null*/;
+        private int[] successExitCodes/* = null*/;
 
         /// <summary>
         /// The exit codes that mark the script as being successful. 
@@ -172,9 +172,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>0</default>
         [ReflectorProperty("successExitCodes", Required = false)]
-		public string SuccessExitCodes
-		{
-			get 
+        public string SuccessExitCodes
+        {
+            get
             {
                 string result = string.Empty;
                 if (successExitCodes != null)
@@ -189,8 +189,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 return result;
             }
 
-			set 
-			{
+            set
+            {
                 if (!string.IsNullOrEmpty(value))
                 {
                     string[] codes = value.Split(',');
@@ -206,13 +206,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     successExitCodes = null;
                 }
-			}
-		}
-		
-		/// <summary>
+            }
+        }
+
+        /// <summary>
         /// The maximum number of seconds the build can take. If the build process takes longer than
-		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
-		/// </summary>
+        /// this period, it will be killed.  Specify this value as zero to disable process timeouts.
+        /// </summary>
         /// <version>1.5</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
@@ -222,66 +222,66 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified PowerShell and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-				protected override bool Execute(IIntegrationResult result)
-				{
-					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
-																																				 ? Description
-																																				 : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
+        protected override bool Execute(IIntegrationResult result)
+        {
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
+                                                                                                                                         ? Description
+                                                                                                                                         : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
 
-					ProcessInfo processInfo = NewProcessInfoFrom(result);
+            ProcessInfo processInfo = NewProcessInfoFrom(result);
 
-					ProcessResult processResult = AttemptToExecute(processInfo);
+            ProcessResult processResult = AttemptToExecute(processInfo);
 
-					if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
-					{
-						// The PowerShell produced some output.  We need to transform it into an XML build report 
-						// fragment so the rest of CC.Net can process it.
-						ProcessResult newResult = new ProcessResult(
-								MakeBuildResult(processResult.StandardOutput, string.Empty),
-								MakeBuildResult(processResult.StandardError, "Error"),
-								processResult.ExitCode,
-								processResult.TimedOut,
-								processResult.Failed);
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+            {
+                // The PowerShell produced some output.  We need to transform it into an XML build report 
+                // fragment so the rest of CC.Net can process it.
+                ProcessResult newResult = new ProcessResult(
+                        MakeBuildResult(processResult.StandardOutput, string.Empty),
+                        MakeBuildResult(processResult.StandardError, "Error"),
+                        processResult.ExitCode,
+                        processResult.TimedOut,
+                        processResult.Failed);
 
-						processResult = newResult;
-					}
-					result.AddTaskResult(new ProcessTaskResult(processResult));
+                processResult = newResult;
+            }
+            result.AddTaskResult(new ProcessTaskResult(processResult));
 
-					if (processResult.TimedOut)
-						result.AddTaskResult(MakeTimeoutBuildResult(processInfo));
+            if (processResult.TimedOut)
+                result.AddTaskResult(MakeTimeoutBuildResult(processInfo));
 
-					return processResult.Succeeded;
-				}
+            return processResult.Succeeded;
+        }
 
-				private static string MakeTimeoutBuildResult(ProcessInfo info)
-				{
-					string message = string.Format(CultureInfo.CurrentCulture,
-															"Command line '{0} {1}' timed out after {2} seconds.",
-															info.FileName,
-															info.Arguments,
-															info.TimeOut / 1000);
-					return StringUtil.MakeBuildResult(message, string.Empty);
-				}
+        private static string MakeTimeoutBuildResult(ProcessInfo info)
+        {
+            string message = string.Format(CultureInfo.CurrentCulture,
+                                                    "Command line '{0} {1}' timed out after {2} seconds.",
+                                                    info.FileName,
+                                                    info.Arguments,
+                                                    info.TimeOut / 1000);
+            return StringUtil.MakeBuildResult(message, string.Empty);
+        }
 
 
-		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
-		{
-            ProcessInfo info = new ProcessInfo( Executable, Args(result), BaseDirectory(result), this.Priority, successExitCodes);
-			info.TimeOut = BuildTimeoutSeconds*1000;
+        private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
+        {
+            ProcessInfo info = new ProcessInfo(Executable, Args(result), BaseDirectory(result), this.Priority, successExitCodes);
+            info.TimeOut = BuildTimeoutSeconds * 1000;
             SetConfiguredEnvironmentVariables(info.EnvironmentVariables, this.EnvironmentVariables);
             IDictionary properties = result.IntegrationProperties;
-			foreach (string key in properties.Keys)
-			{
-				info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
-			}
+            foreach (string key in properties.Keys)
+            {
+                info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
+            }
 
-			return info;
-		}
+            return info;
+        }
 
-		private string BaseDirectory(IIntegrationResult result)
-		{
+        private string BaseDirectory(IIntegrationResult result)
+        {
             return result.BaseFromWorkingDirectory(ConfiguredScriptsDirectory);
-		}
+        }
 
         /// <summary>
         /// Attempts to execute.	
@@ -289,27 +289,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="info">The info.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected ProcessResult AttemptToExecute(ProcessInfo info)
-		{
-			try
-			{
-				return executor.Execute(info);
-			}
-			catch (IOException e)
-			{
-				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute: {0}\n{1}", info, e), e);
-			}
-		}
+        protected ProcessResult AttemptToExecute(ProcessInfo info)
+        {
+            try
+            {
+                return executor.Execute(info);
+            }
+            catch (IOException e)
+            {
+                throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture, "Unable to execute: {0}\n{1}", info, e), e);
+            }
+        }
 
         /// <summary>
         /// Toes the string.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		public override string ToString()
-		{
-			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, PowerShell: {1}", ConfiguredScriptsDirectory, PowerShellExe);
-		}
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, PowerShell: {1}", ConfiguredScriptsDirectory, PowerShellExe);
+        }
 
         /// <summary>
         /// Convert a stream of text lines separated with newline sequences into an XML build result.
@@ -372,20 +372,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 variablePool[item.name] = item.value;
         }
 
-         /// <summary>
+        /// <summary>
         /// Get the name of the PowerShell executable for the highest version installed on this machine.
         /// </summary>
         /// <returns>The fully-qualified pathname of the executable.</returns>
-		private string ReadPowerShellFromRegistry()
-		{
-			string registryValue = null;
+        private string ReadPowerShellFromRegistry()
+        {
+            string registryValue = null;
 
             registryValue = Registry.GetLocalMachineSubKeyValue(regkeypowershell2, regkeyholder);
 
-			if (registryValue == null)
-			{
+            if (registryValue == null)
+            {
                 registryValue = Registry.GetLocalMachineSubKeyValue(regkeypowershell1, regkeyholder);
-			}
+            }
 
             if (registryValue == null)
             {
@@ -393,28 +393,33 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 throw new BuilderException(this, "Unable to find PowerShell and it was not defined in Executable Parameter");
             }
 
-			return Path.Combine(registryValue, PowerShellExe);
-		}
+            return Path.Combine(registryValue, PowerShellExe);
+        }
 
         private string Args(IIntegrationResult result)
         {
             ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 
+            builder.AppendArgument("-nologo");
+            builder.AppendArgument("-NoProfile");
+            builder.AppendArgument("-NonInteractive");
+            builder.AppendArgument("-file");
+
             if (!string.IsNullOrEmpty(Script))
             {
                 if (ConfiguredScriptsDirectory.EndsWith("\\"))
                 {
-                    builder.AppendArgument(ConfiguredScriptsDirectory + Script);
+                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + Script + @"""");
                 }
                 else
                 {
-                    builder.AppendArgument(ConfiguredScriptsDirectory + "\\" + Script);
+                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + "\\" + Script + @"""");
                 }
             }
 
             if (!string.IsNullOrEmpty(BuildArgs)) builder.AppendArgument(BuildArgs);
             return builder.ToString();
-        }  
+        }
 
     }
 }
