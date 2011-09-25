@@ -125,5 +125,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	    {
             get { return headers["If-None-Match"]; }
 	    }
-	}
+
+        int refreshInterval;
+        public int RefreshInterval
+        {
+            get
+            {
+                return refreshInterval; 
+            }
+            set
+            {
+                refreshInterval = value;
+            }
+        }
+    }
 }

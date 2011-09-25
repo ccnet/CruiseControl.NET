@@ -12,5 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		string ApplicationPath { get; }
 	    string IfModifiedSince { get; }
 	    string IfNoneMatch { get; }
+
+        int RefreshInterval { get; set; }
 	}
 }
