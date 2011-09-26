@@ -12,9 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	/// </summary>
     /// <title>Assembly Version Labeller</title>
     /// <version>1.4.4</version>
-    /// <remarks>This labeller will not generate revision version numbers until a commit-triggered build is performed.
-    /// A forced build re-uses the revision number from last commit (which defaults to 1 if no commits were yet performed
-    /// after enabling this labeller).</remarks>
     /// <example>
     /// <code title="Minimalist Example">
     /// &lt;labeller type="assemblyVersionLabeller" /&gt;

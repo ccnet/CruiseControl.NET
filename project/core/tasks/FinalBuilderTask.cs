@@ -319,17 +319,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
             int fbversion = GetFBVersion();			
 			string keyName = String.Format(CultureInfo.CurrentCulture, @"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
-            string keyName64 = String.Format(CultureInfo.CurrentCulture, @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\{0}.0", fbversion); // for 64 bits os 
 	
 			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");
             if (string.IsNullOrEmpty((executableDir)))
-            {
-                executableDir = _registry.GetLocalMachineSubKeyValue(keyName64, "Location");
-                if (string.IsNullOrEmpty((executableDir)))
-                {
-                    throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture, "Path to Finalbuilder {0} command line executable could not be found.", fbversion));
-                }
-            }
+			{
+				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Path to Finalbuilder {0} command line executable could not be found.", fbversion));				
+			}
 
             if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
             {

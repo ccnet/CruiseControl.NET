@@ -187,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             integrationElement.AppendChild(CreateTextElement(
                 integrationElement.OwnerDocument, "guid", System.Guid.NewGuid().ToString()));
             integrationElement.AppendChild(CreateTextElement(
-                integrationElement.OwnerDocument, "pubDate", System.DateTime.Now.ToUniversalTime().ToString("r", CultureInfo.CurrentCulture)));
+                integrationElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r", CultureInfo.CurrentCulture)));
 
             if (result.HasModifications())
             {

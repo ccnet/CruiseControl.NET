@@ -166,8 +166,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             ExpectThatExecuteWillNotBeCalled();
             _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
-            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location");
-
             _task.ProjectFile = @"C:\Dummy\Project.fbz5";
             Assert.That(delegate { _task.Run(_result); },
                         Throws.TypeOf<BuilderException>().With.Message.EqualTo("Path to Finalbuilder 5 command line executable could not be found."));

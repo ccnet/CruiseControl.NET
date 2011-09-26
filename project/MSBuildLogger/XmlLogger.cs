@@ -26,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.MSBuild
         private string outputPath;
         private XmlDocument outputDoc;
         private XmlElement currentElement;
-        private object lockObject = new object(); 
 
         /// <summary>
         /// Initializes the logger by attaching events and parsing command line.
@@ -126,18 +125,12 @@ namespace ThoughtWorks.CruiseControl.MSBuild
 
         private void eventSource_WarningRaised(object sender, BuildWarningEventArgs e)
         {
-            lock (lockObject)
-            {
-                LogErrorOrWarning(XmlLoggerElements.Warning, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
-            }
+            LogErrorOrWarning(XmlLoggerElements.Warning, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
         }
 
         private void eventSource_ErrorRaised(object sender, BuildErrorEventArgs e)
         {
-            lock (lockObject)
-            {
-                LogErrorOrWarning(XmlLoggerElements.Error, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
-            }
+            LogErrorOrWarning(XmlLoggerElements.Error, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
         }
 
         private void eventSource_MessageHandler(object sender, BuildMessageEventArgs e)

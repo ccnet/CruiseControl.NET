@@ -220,16 +220,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.lvProjects = new System.Windows.Forms.ListView();
-            this.colProject = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colServer = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colCategory = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colActivity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colDetail = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colLastBuildLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colLastBuildTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colProjectStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colQName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colQPriority = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colProject = new System.Windows.Forms.ColumnHeader();
+            this.colServer = new System.Windows.Forms.ColumnHeader();
+            this.colCategory = new System.Windows.Forms.ColumnHeader();
+            this.colActivity = new System.Windows.Forms.ColumnHeader();
+            this.colDetail = new System.Windows.Forms.ColumnHeader();
+            this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
+            this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
+            this.colProjectStatus = new System.Windows.Forms.ColumnHeader();
+            this.colQName = new System.Windows.Forms.ColumnHeader();
+            this.colQPriority = new System.Windows.Forms.ColumnHeader();
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
             this.mnuAbort = new System.Windows.Forms.MenuItem();
@@ -263,7 +263,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
@@ -274,6 +273,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.updateProjectsButton = new System.Windows.Forms.Button();
             this.updateProjectsMessage = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
@@ -319,9 +319,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
-            this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
             this.lvProjects.DoubleClick += new System.EventHandler(this.lvProjects_DoubleClick);
+            this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             // 
             // colProject
             // 
@@ -371,6 +371,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.colQPriority.Text = "Q Priority";
             this.colQPriority.Width = 100;
+
             // 
             // projectContextMenu
             // 
@@ -615,18 +616,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
             // 
-            // queueTreeView
-            // 
-            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queueTreeView.ImageIndex = 0;
-            this.queueTreeView.ImageList = this.queueIconList;
-            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
-            this.queueTreeView.Name = "queueTreeView";
-            this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 188);
-            this.queueTreeView.TabIndex = 2;
-            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
-            // 
             // queueIconList
             // 
             this.queueIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
@@ -693,8 +682,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // updateProjectsMessage
             // 
-            this.updateProjectsMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateProjectsMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.updateProjectsMessage.AutoEllipsis = true;
             this.updateProjectsMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.updateProjectsMessage.Location = new System.Drawing.Point(42, 3);
@@ -710,6 +699,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.trayIcon.Visible = true;
             this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
             this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
+            // 
+            // queueTreeView
+            // 
+            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
+            this.queueTreeView.ImageList = this.queueIconList;
+            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+            this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
+            this.queueTreeView.Size = new System.Drawing.Size(200, 188);
+            this.queueTreeView.TabIndex = 2;
+            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // MainForm
             // 
@@ -850,10 +851,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             btnForceBuild.Text = controller.IsProjectBuilding ? "Abort &Build" : "Force &Build";
             btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowForceBuildButton);
-            mnuAbort.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowForceBuildButton);
-            mnuForce.Enabled =  ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowForceBuildButton);
-            mnuStart.Enabled  = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowStartStopButton);
-            mnuStop.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowStartStopButton);
         }
 
         private void mnuWebPage_Click(object sender, EventArgs e)
@@ -898,7 +895,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             mnuFixBuild.Visible = controller.CanFixBuild();
             mnuCopyBuildLabel.Visible = controller.IsProjectSelected;
             currentStatusMenu.Visible = controller.IsProjectSelected;
-            packagesMenu.Visible = controller.IsProjectSelected;         
+            packagesMenu.Visible = controller.IsProjectSelected;
         }
 
         private void mnuFilePreferences_Click(object sender, EventArgs e)
@@ -1270,6 +1267,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             controller.UpdateProjectList();
         }
-
     }
 }
