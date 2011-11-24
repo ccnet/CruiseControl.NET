@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Web;
 using System.Xml;
@@ -7,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
@@ -36,6 +38,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     public class ViewConfigurationProjectPlugin : ICruiseAction, IPlugin
     {
         private readonly ICruiseManagerWrapper cruiseManager;
+        private readonly IVelocityViewGenerator viewGenerator;
 
         private bool hidePasswords = true;
 
@@ -54,16 +57,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             set { hidePasswords = value; }
         }
 
-        public ViewConfigurationProjectPlugin(ICruiseManagerWrapper cruiseManager)
+        public ViewConfigurationProjectPlugin(ICruiseManagerWrapper cruiseManager, IVelocityViewGenerator viewGenerator)
         {
             this.cruiseManager = cruiseManager;
+            this.viewGenerator = viewGenerator;
         }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
             string projectXml = cruiseManager.GetProject(projectSpecifier, cruiseRequest.RetrieveSessionToken());
-            return new HtmlFragmentResponse("<pre>" + HttpUtility.HtmlEncode(FormatXml(projectXml)) + "</pre>");
+            //return new HtmlFragmentResponse("<pre><code>" + HttpUtility.HtmlEncode(FormatXml(projectXml)) + "</code></pre>");
+            var xmlContext = new Hashtable();
+            xmlContext["xml"] = HttpUtility.HtmlEncode(FormatXml(projectXml));
+            return viewGenerator.GenerateView(@"ProjectConfiguration.vm", xmlContext);
         }
 
         private string FormatXml(string projectXml)
