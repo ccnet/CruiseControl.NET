@@ -83,42 +83,43 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="integrationQueueItem">The integration queue item.</param>
 		public void Enqueue(IIntegrationQueueItem integrationQueueItem)
 		{
-			lock (this)
-			{
-				if (Count == 0)
-				{
-					// We can start integration straight away as first in first served
-					AddToQueue(integrationQueueItem);
-				}
-				else
-				{
-					// We need to see if we already have a integration request for this project on the queue
-					// If so then we will ignore the latest request.
-					// Note we start at queue position 1 since position 0 is currently integrating.
+            lock (this)
+            {
+                if (Count == 0)
+                {
+                    // We can start integration straight away as first in first served
+                    AddToQueue(integrationQueueItem);
+                }
+                else
+                {
+                    // We need to see if we already have a integration request for this project on the queue
+                    // If so then we will ignore the latest request.
+                    // Note we start at queue position 1 since position 0 is currently integrating.
 
-					int? foundIndex = null;
+                    int? foundIndex = null;
                     bool addItem = true;
                     IIntegrationQueueItem foundItem = null;
 
-					for (int index = 1; index < Count; index++)
-					{
-						IIntegrationQueueItem queuedItem = GetIntegrationQueueItem(index);
-						if (queuedItem.Project == integrationQueueItem.Project)
-						{
+                    for (int index = 1; index < Count; index++)
+                    {
+                        IIntegrationQueueItem queuedItem = GetIntegrationQueueItem(index);
+                        if (queuedItem.Project == integrationQueueItem.Project)
+                        {
                             foundItem = queuedItem;
                             foundIndex = index;
                             break;
 
-						}
-					}
+                        }
+                    }
 
-					if (foundIndex != null)
- 					{
+                    #region
+                    if (foundIndex != null)
+                    {
                         switch (configuration.HandlingMode)
                         {
                             case QueueDuplicateHandlingMode.UseFirst:
                                 // Only use the first item in the queue - if a newer item is added it will be ignored
-                                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 addItem = false;
                                 break;
 
@@ -126,12 +127,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 // If a force build is added to the queue, it will remove an existing non-force build and add the new request to the end of the queue
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                     addItem = false;
                                 }
                                 else
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
@@ -144,16 +145,16 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 }
                                 else
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
                                         // Add project to the queue directly after the currently building one.
-                                        AddToQueue(integrationQueueItem, 1);
+                                        AddToQueue(integrationQueueItem);
                                     }
                                 }
                                 break;
@@ -163,11 +164,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 }
                                 else
                                 {
-                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
@@ -178,7 +179,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                             default:
                                 throw new ConfigurationException("Unknown handling mode for duplicates: " + configuration.HandlingMode);
                         }
- 					}
+                    }
+                    #endregion
 
                     if (addItem)
                     {
@@ -187,8 +189,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                             AddToQueue(integrationQueueItem);
                         }
                     }
-				}
-			}
+                }
+            }
 		}
 
 		private IIntegrationQueueItem GetIntegrationQueueItem(int index)
@@ -321,7 +323,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
             if (!queuePosition.HasValue)
             {
-                queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
+                queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority, integrationQueueItem.IntegrationRequest.BuildCondition);
                 Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: '{0}' is added to queue: '{1}' in position {2}. Requestsource : {3} ({4})",
                                        integrationQueueItem.Project.Name, Name, queuePosition, integrationQueueItem.IntegrationRequest.Source,integrationQueueItem.IntegrationRequest.UserName));
             }
@@ -329,32 +331,57 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			Insert(queuePosition.Value, integrationQueueItem);
 		}
 
-		private int GetPrioritisedQueuePosition(int insertingItemPriority)
-		{
-			// Assume the back of the queue will be where we insert it.
-			int targetQueuePosition = Count;
+        private int GetPrioritisedQueuePosition(int insertingItemPriority, BuildCondition insertingItemBuildCondition)
+        {
+            // Assume the back of the queue will be where we insert it.
+            int targetQueuePosition = Count;
 
-			// Items with priority zero always get added to the end of the queue, as will anything if the
-			// queue only has one item in it as we assume that item is integrating already and cannot be moved.
-			if (insertingItemPriority != 0 && Count > 1)
-			{
-				for (int index = 1; index < Count; index++)
-				{
-					IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
-					if (queuedIntegrationQueueItem != null)
-					{
-						int compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
-						// If two items have the same priority it will be FIFO order for that priority
-						if (compareQueuePosition == 0 || compareQueuePosition > insertingItemPriority)
-						{
-							targetQueuePosition = index;
-							break;
-						}
-					}
-				}
-			}
-			return targetQueuePosition;
-		}
+
+            // Items with priority zero always get added to the end of the queue, as will anything if the
+            // queue only has one item in it as we assume that item is integrating already and cannot be moved.
+            if (insertingItemPriority != 0 && Count > 1)
+            {
+                for (int index = 1; index < Count; index++)
+                {
+                    IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
+
+                    if (queuedIntegrationQueueItem != null)
+                    {
+                        int queuedPriority = queuedIntegrationQueueItem.Project.QueuePriority;
+                        BuildCondition compareBuildCondidion = queuedIntegrationQueueItem.IntegrationRequest.BuildCondition;
+
+                        if (insertingItemBuildCondition != null && insertingItemBuildCondition == BuildCondition.ForceBuild)
+                        {
+                            // ForceBuild should be done before other build condidions, but it remains FIFO for forcebuilds
+                            if (compareBuildCondidion < insertingItemBuildCondition)
+                            {
+                                targetQueuePosition = index;
+                                break;
+                            }
+                            if (compareBuildCondidion == insertingItemBuildCondition)
+                            {
+                                if (queuedPriority > insertingItemPriority)
+                                {
+                                    targetQueuePosition = index;
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        // If two items have the same priority it will be FIFO order for that priority
+                        if (queuedPriority == 0 || queuedPriority > insertingItemPriority)
+                        {
+                            targetQueuePosition = index;
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            return targetQueuePosition;
+        }
 
 		private void RemoveProjectItems(IProject project, bool considerFirstQueueItem)
 		{
