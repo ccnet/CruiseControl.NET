@@ -196,6 +196,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.AuthCaching = AuthCachingMode.None;
             this.Executable = DefaultExecutable;
             this.TagOnSuccess = false;
+            this.TagCommitMessage = "CCNET build {0}";
+            this.TagNameFormat = "{0}";
             this.TagWorkingCopy = false;
             this.DeleteObstructions = false;
             this.AutoGetSource = true;
@@ -246,6 +248,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
         public string WorkingDirectory { get; set; }
+
+        /// <summary>
+        /// Format string for the commit message of each tag. \{0\} is the placeholder for the current build label. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>CCNet Build \{0\}</default>
+        [ReflectorProperty("tagCommitMessage", Required = false)]
+        public string TagCommitMessage { get; set; }
+
+        /// <summary>
+        /// Format string for the name of each tag. Make sure you're only using allowed characters. \{0\} is the placeholder for the current
+        /// build label. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>CCNet-Build-\{0\}</default>
+        [ReflectorProperty("tagNameFormat", Required = false)]
+        public string TagNameFormat { get; set; }
 
         /// <summary>
         /// Indicates that the repository should be tagged if the build succeeds. 
@@ -813,9 +832,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return pos;
         }
 
-        private static string TagMessage(string label)
+        private string TagMessage(string label)
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"-m \"CCNET build {0}\"", label);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"-m \"{0}\"", string.Format(CultureInfo.CurrentCulture, TagCommitMessage, label));
+
         }
 
         private string TagSource(IIntegrationResult result)
@@ -829,7 +849,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagDestination(string label)
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", TagBaseUrl, label);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", TagBaseUrl, string.Format(CultureInfo.CurrentCulture, TagNameFormat, label));
         }
 
         private void AppendCommonSwitches(PrivateArguments buffer)
