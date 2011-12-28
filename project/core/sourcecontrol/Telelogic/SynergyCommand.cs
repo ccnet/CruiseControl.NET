@@ -20,7 +20,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	///         the initialized/configured values for the Synergy project specification.
 	///     </notes>
 	/// </remarks>
-	/// <include file="example.xml" path="/example" />
 	public class SynergyCommand : ISynergyCommand
 	{
 		/// <summary>

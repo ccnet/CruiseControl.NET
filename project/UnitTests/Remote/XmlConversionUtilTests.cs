@@ -39,7 +39,7 @@
                 ResponseResult.Success,
                 DateTime.Today);
             object result = XmlConversionUtil.ConvertXmlToObject(typeof(Response), xml);
-            Assert.IsInstanceOfType(typeof(Response), result);
+            Assert.That(result, Is.InstanceOf<Response>());
             Assert.AreEqual(xml, result.ToString());
         }
         #endregion
@@ -66,7 +66,7 @@
                 ResponseResult.Success,
                 DateTime.Today);
             object result = XmlConversionUtil.ProcessResponse(xml);
-            Assert.IsInstanceOfType(typeof(Response), result);
+            Assert.That(result, Is.InstanceOf<Response>());
             Assert.AreEqual(xml, result.ToString());
         }
 

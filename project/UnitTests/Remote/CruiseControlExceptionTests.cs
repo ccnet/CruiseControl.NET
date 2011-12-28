@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             CruiseControlException exception = new CruiseControlException(message);
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(CruiseControlException), result);
+            Assert.That(result, Is.InstanceOf<CruiseControlException>());
             Assert.AreEqual(message, (result as CruiseControlException).Message);
         }
     }

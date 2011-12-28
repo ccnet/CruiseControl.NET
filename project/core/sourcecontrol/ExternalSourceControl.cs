@@ -355,8 +355,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="variablePool">The collection of environment variables to be updated.</param>
         /// <param name="varsToSet">The collection of variables to set.</param>
         /// <remarks>
-        /// Any variable without a value will be set to null (just as in 
-        /// <see cref="ExecutableTask.SetConfiguredEnvironmentVariables"/>).
+        /// Any variable without a value will be set to null.
         /// </remarks>
         private static void SetCCNetEnvironmentVariables(StringDictionary variablePool, IDictionary varsToSet)
         {

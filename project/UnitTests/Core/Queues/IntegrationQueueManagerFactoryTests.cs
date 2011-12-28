@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             mocks.ReplayAll();
 
             object instance = IntegrationQueueManagerFactory.CreateManager(listFactory, configuration, null);
-            Assert.IsInstanceOfType(typeof(IntegrationQueueManager), instance);
+            Assert.That(instance, Is.InstanceOf<IntegrationQueueManager>());
         }
 
         [Test]

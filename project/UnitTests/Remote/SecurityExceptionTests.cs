@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             SecurityException exception = new SecurityException();
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(SecurityException), result);
+            Assert.That(result, Is.InstanceOf<SecurityException>());
             Assert.AreEqual("A security failure has occurred.", (result as SecurityException).Message);
         }
     }
