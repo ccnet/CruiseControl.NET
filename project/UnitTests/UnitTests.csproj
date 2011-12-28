@@ -379,6 +379,9 @@
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\Publishers\Statistics\StatisticsBuilderWithNamespacesTest.cs" />
+    <Compile Include="Core\SourceControl\MultiFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
