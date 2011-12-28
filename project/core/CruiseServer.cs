@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
@@ -1718,6 +1718,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     // The project has been found and it has security
                     authorisation = projectIntegrator.Project.Security;
                     requiresSession = authorisation.RequiresSession(securityManager);
+					if (string.IsNullOrEmpty(userName))
+						userName = authorisation.GuestAccountName;
                 }
                 else if ((projectIntegrator != null) &&
                     (projectIntegrator.Project != null) &&
