@@ -278,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
                         // to us sending a timer download header message.
                         byte[] timerDownload = TimerDownloadMessage(DateTime.Now);
                         comm.Write(timerDownload, 0, timerDownload.Length);
-                        int ignoreNum = comm.ReadByte();  // Ignore checksum
+                        comm.ReadByte(); // Ignore checksum
                         comm.Write(okBuffer, 0, 1);
                     }
                     x++;
