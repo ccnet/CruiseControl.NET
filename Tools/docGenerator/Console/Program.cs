@@ -20,6 +20,7 @@
         private static List<string> problemList = new List<string>();
         private static TextWriter xmlLog = null;
 
+        [STAThread]
         public static int Main(string[] args)
         {
             var consoleArgs = new ConsoleArgs();
@@ -55,6 +56,7 @@
             if (cmd.Length == 0)
             {
                 WriteToOutput("No command specified", OutputType.Error);
+                HelpScreen();
                 exitCode = 11;
             }
             else
@@ -70,12 +72,17 @@
                         break;
 
                     case "publish":
-                        exitCode = PublishConfluenceItems(consoleArgs);
+                        exitCode = PublishChiliItems(consoleArgs);
+                        break;
+
+                    case "reportnotmapped":
+                        exitCode = ReportNotMappedItems(consoleArgs);
                         break;
 
                     default:
                         exitCode = 1;
                         WriteToOutput("Unknown command: " + cmd, OutputType.Error);
+                        HelpScreen();
                         break;
                 }
             }
@@ -96,6 +103,29 @@
 
             return exitCode;
         }
+
+        private static int ReportNotMappedItems(ConsoleArgs consoleArgs)
+        {
+            ChiliAutomation chili = new ChiliAutomation();
+            var output = consoleArgs.Destination;
+            if (!Path.IsPathRooted(output))
+            {
+                output = Path.Combine(Environment.CurrentDirectory, output);
+            }
+
+            return chili.ReportNotMappedWikiFiles(output);
+        }
+
+
+        private static void HelpScreen()
+        {
+            var exeName = Environment.GetCommandLineArgs()[0];
+
+            WriteToOutput(exeName + @" -c=generate -s=..\..\..\..\..\Build\Remote\ThoughtWorks.CruiseControl.Remote.dll -o=documentation -xsd", OutputType.Info);
+            WriteToOutput(exeName + @" -c=publish -u=optimus -p=prime -o=documentation", OutputType.Info);
+            WriteToOutput(exeName + @" -c=reportnotmapped -o=documentation", OutputType.Info);
+        }
+
 
         /// <summary>
         /// Lists the confluence items.
@@ -369,6 +399,53 @@
             return exitCode;
         }
 
+        /// <summary>
+        /// Publish items to chili page
+        /// </summary>
+        /// <param name="cmdArgs"></param>
+        /// <returns></returns>
+        private static int PublishChiliItems(ConsoleArgs cmdArgs)
+        {
+            var input = string.Empty;
+            if (string.IsNullOrEmpty(cmdArgs.User))
+            {
+                WriteToOutput("Username not specified", OutputType.Error);
+                return 3;
+            }
+            if (string.IsNullOrEmpty(cmdArgs.Password))
+            {
+                WriteToOutput("Password not specified", OutputType.Error);
+                return 4;
+            }
+            if (string.IsNullOrEmpty(cmdArgs.Destination))
+            {
+                WriteToOutput("Input path not specified", OutputType.Error);
+                return 6;
+            }
+            input = cmdArgs.Destination;
+            if (!Path.IsPathRooted(input))
+            {
+                input = Path.Combine(Environment.CurrentDirectory, input);
+            }
+
+            var chili = new ChiliAutomation();
+            if (!chili.Login(cmdArgs.User, cmdArgs.Password))
+            {
+                WriteToOutput("Login failed or maybe site down.", OutputType.Error);
+                chili.logout();
+                return 8;
+            }
+
+            chili.UpdateDocs(input);
+
+            chili.logout();
+
+
+            return 0;
+        }
+
+
+
         public static int GenerateDocumentation(ConsoleArgs args)
         {
             specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
@@ -447,13 +524,17 @@
 
                         // There can be only one!
                         var attribute = attributes[0] as ReflectorTypeAttribute;
-                        var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
+                        var baseFileName = attribute.Name + ".wiki";
+                        var fileName = Path.Combine(baseFolder, baseFileName);
                         WriteToOutput("Generating " + attribute.Name + ".wiki for " + publicType.FullName, OutputType.Info);
                         var itemStopwatch = new Stopwatch();
                         itemStopwatch.Start();
+
+
                         if (File.Exists(fileName))
                         {
-                            File.Delete(fileName);
+                            //to be sure that the reflector type is unique in the entire ccnet solution!
+                            throw new Exception(string.Format("Filename {0} coming from class {1} already exists", baseFileName, publicType.Name));
                         }
 
                         var typeElement = (from element in documentation.Descendants("member")
@@ -525,7 +606,8 @@
                                 //output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
 
                                 // Redmine Style
-                                output.WriteLine("{background:dodgerblue}. | *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
+                                // todo better header colors dodgerblue
+                                output.WriteLine("| *Element* | *Description* | *Type* | *Required* | *Default* | *Version* |");
                                 WriteElements(elements, output, documentation, typeElement, typeVersion);
                             }
                             else
@@ -763,7 +845,7 @@
                         break;
 
                     case OutputType.Info:
-                        System.Console.ForegroundColor = ConsoleColor.White;
+                        System.Console.ForegroundColor = ConsoleColor.Blue;
                         break;
 
                     case OutputType.Warning:
@@ -831,6 +913,7 @@
                             // Redmine Wiki
                             if (codeTitle != null)
                             {
+                                builder.AppendLine();
                                 builder.AppendFormat("*{0}*", codeTitle.Value);
                                 builder.AppendLine();
                             }
@@ -846,18 +929,14 @@
 
                                     // Redmine Wiki
                                     builder.AppendFormat("<pre><code class={0}xml{0}>", "\"");
-
-
-                                    builder.AppendLine(xmlCode.ToString(SaveOptions.None));
-                                    
-                                
+                                    builder.Append(xmlCode.ToString(SaveOptions.None));
                                 }
                                 catch
                                 {
                                     isXml = false;
                                 }
                             }
-                            
+
                             if (!isXml)
                             {
                                 if ((isXmlAttribute != null) && (isXmlAttribute.Value.Length > 0))
@@ -867,7 +946,6 @@
 
                                     // Redmine Wiki
                                     builder.AppendFormat("<pre><code class={0}{1}{0}>", "\"", isXmlAttribute.Value);
-                                
                                 }
                                 else
                                 {
@@ -875,17 +953,17 @@
                                     //builder.AppendLine("{code:" + options + "}");
 
                                     // Redmine Wiki
-                                    builder.AppendLine("<pre><code>");
+                                    builder.Append("<pre><code>");
                                 }
 
-                                builder.AppendLine(childElement.Value);
+                                builder.Append(childElement.Value);
                             }
 
                             //ThoughtWorks confluence Wiki                                                                
                             //builder.AppendLine("{code}");
 
                             // Redmine Wiki
-                            builder.AppendLine("</code></pre>");
+                            builder.Append("</code></pre>");
                             builder.AppendLine();
                             break;
 
@@ -897,10 +975,11 @@
                             builder.AppendLine();
                             builder.AppendLine("h4. " + TrimValue(childElement.Value));
                             builder.AppendLine();
-                            
+
                             break;
 
                         case "list":
+                            builder.Append("<pre>"); // Redmine Wiki
                             foreach (XElement itemElement in childElement.Elements("item"))
                             {
                                 if (!builder.ToString().EndsWith(Environment.NewLine))
@@ -910,6 +989,7 @@
 
                                 builder.Append("* " + TrimValue(itemElement.Value));
                             }
+                            builder.Append("</pre>"); // Redmine Wiki
                             break;
 
                         case "b":
@@ -918,38 +998,35 @@
                             break;
 
                         case "para":
-                            // Redmine Wiki
-                            builder.AppendLine();
-
 
                             var paraType = childElement.Attribute("type");
                             var paraChild = new XElement(childElement);
-                            
+
                             if (paraType != null)
                             {
                                 //ThoughtWorks confluence Wiki                                                                                            
                                 //builder.Append("{" + paraType.Value);
 
                                 // Redmine Wiki
-                                builder.Append("| *" + paraType.Value + "* " );
+                                builder.Append("*" + paraType.Value + "*");
 
                                 var paraTitle = paraChild.Element("title");
                                 if (paraTitle != null)
                                 {
-                                   //ThoughtWorks confluence Wiki                                                                                            
+                                    //ThoughtWorks confluence Wiki                                                                                            
                                     //builder.Append(":title=" + TrimValue(paraTitle.Value));
-                                
+
                                     // Redmine Wiki
                                     builder.Append(" : " + TrimValue(paraTitle.Value));
-                                    
+
                                     paraTitle.Remove();
                                 }
                                 //ThoughtWorks confluence Wiki
                                 //builder.AppendLine("}");
 
                                 // Redmine Wiki
-                                builder.AppendLine(" |");
-                            
+                                builder.AppendLine("");
+
                             }
 
                             //ThoughtWorks confluence Wiki
@@ -961,19 +1038,26 @@
 
 
                             // Redmine Wiki
-                            builder.AppendLine("| " + ParseElement(paraChild) + " |");
+                            builder.AppendLine("");
+                            builder.AppendLine(System.Environment.NewLine + "p. " + ParseElement(paraChild));
                             builder.AppendLine();
 
                             break;
 
+                        case "showChildren":
+                            builder.AppendLine("");
+                            builder.AppendLine("{{child_pages}}");
+                            builder.AppendLine();
+                            break;
+
                         case "link":
-                            builder.Append("[" + TrimValue(childElement.Value) + "]");
+                            builder.Append("[[" + TrimValue(childElement.Value) + "]]");
                             break;
 
                         case "includePage":
-                            builder.Append("{include:" + TrimValue(childElement.Value) + "}");
+                            builder.Append("{{include(" + TrimValue(childElement.Value) + "}}");
                             break;
-
+                       
                         default:
                             builder.Append(ParseElement(childElement));
                             break;
@@ -1051,11 +1135,13 @@
                 {
                     var names = Enum.GetNames(dataType);
                     var builder = new StringBuilder();
-                    builder.Append("String - one of:");
+                    builder.Append("String - one of: ");
+                    builder.Append("<pre>");// Redmine Wiki
                     foreach (var name in names)
                     {
                         builder.Append(Environment.NewLine + "* " + name);
                     }
+                    builder.Append("</pre>");// Redmine Wiki
 
                     dataTypeName = builder.ToString();
                 }
@@ -1066,7 +1152,7 @@
                     {
                         var names = Enum.GetNames(itemType);
                         var builder = new StringBuilder();
-                        builder.Append("String array\\\\The following values are valid:");
+                        builder.Append("String array The following values are valid:");
                         foreach (var name in names)
                         {
                             builder.Append(Environment.NewLine + "* " + name);
@@ -1109,11 +1195,11 @@
                         // If values are defined, then this must be a string value
                         if (dataType.IsArray)
                         {
-                            dataTypeName = "String array\\\\The following values are valid:";
+                            dataTypeName = "String array. The following values are valid:";
                         }
                         else
                         {
-                            dataTypeName = "String - one of:";
+                            dataTypeName = "String - one of: ";
                         }
 
                         foreach (var valueElement in values.Elements("value"))
@@ -1190,7 +1276,7 @@
             var titleAttribute = typeElement != null ? typeElement.Element("title") : null;
             if (titleAttribute != null)
             {
-                return "[" + titleAttribute.Value.Trim() + "]";
+                return "[[" + titleAttribute.Value.Trim() + "]]";
             }
             else
             {

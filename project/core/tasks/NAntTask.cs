@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and
     /// not write it out to the build log.
     /// </para>
-    /// <includePage>Integration Properties</includePage>
+    /// <includePage>Integration_Properties</includePage>
     /// <code>
     /// &lt;target name="test.unit" depends="compile" description="runs unit tests"&gt;
     /// &lt;nunit2&gt;

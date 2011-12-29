@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// Often programmers like to use a centralised project to build an entire software system. They define specific dependencies and the
 	/// build order on that specific project to reproduce the behaviours of an nmake build.
 	/// </para>
-	/// <includePage>Integration Properties</includePage>
+	/// <includePage>Integration_Properties</includePage>
 	/// </remarks>
 	/// <example>
 	/// <code title="Minimalist example">

@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
@@ -51,6 +52,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
         [ReflectorProperty("successBar", Required = false)]
         public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
         #endregion
+
+        /// <summary>
+        /// Amount in seconds to autorefresh
+        /// </summary>
+        /// <default>0 - no refresh</default>
+        /// <version>1.7</version>
+        [ReflectorProperty("refreshInterval", Required = false)]
+        public Int32 RefreshInterval { get; set; }
+
+
         #endregion
 
 		public ServerReportServerPlugin(IProjectGridAction projectGridAction)
@@ -61,6 +72,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
+            request.Request.RefreshInterval = RefreshInterval;
+
             this.projectGridAction.DefaultSortColumn = sortColumn;
             this.projectGridAction.SuccessIndicatorBarLocation = this.SuccessIndicatorBarLocation;
             return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request);

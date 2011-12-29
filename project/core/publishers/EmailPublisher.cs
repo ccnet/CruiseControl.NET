@@ -573,7 +573,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
 
             // Make sure the xslFiles are not empty
-            if (this.XslFiles.Any(f => string.IsNullOrEmpty(f)))
+            if (this.xslFiles != null &&  this.XslFiles.Any(f => string.IsNullOrEmpty(f)))
             {
                 errorProcesser.ProcessError("xslFiles cannot contain empty or null filenames");
             }

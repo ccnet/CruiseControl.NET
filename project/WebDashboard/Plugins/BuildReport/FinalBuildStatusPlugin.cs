@@ -14,6 +14,9 @@
     /// <version>1.6</version>
     /// <summary>
     /// Display the final status of a project after a build.
+    /// <para>
+    /// LinkDescription : View Final Project Status.
+    /// </para>
     /// </summary>
     /// <example>
     /// <code>

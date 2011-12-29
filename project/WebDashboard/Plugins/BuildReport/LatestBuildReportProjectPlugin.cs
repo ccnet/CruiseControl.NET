@@ -8,6 +8,13 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
+    /// <summary>
+    /// Shows the build page <link>Build Report Build Plugin</link> of the latest build of the project.
+    /// <para>
+    /// LinkDescription : Latest Build.
+    /// </para>
+    /// </summary>
+    /// <title>Latest Build Report Project Plugin</title>
 	[ReflectorType("latestBuildReportProjectPlugin")]
 	public class LatestBuildReportProjectPlugin : ICruiseAction, IPlugin
 	{

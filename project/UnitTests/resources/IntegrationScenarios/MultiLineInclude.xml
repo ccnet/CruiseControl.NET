@@ -1,0 +1,22 @@
+﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define nant_exe="d:\tools\nant\bin\nant.exe"/>
+  <cb:define sol_file="D:\Whatever.sln"/>
+
+
+  <cb:define name="nant_multi">
+    <nant>
+      <executable>$(nant_exe)</executable>
+      <buildFile>D:\ci\default.build.xml</buildFile>
+      <buildArgs>
+        -D:SolutionFile=$(sol_file)
+        -D:LocalDeployRoot="D:\ci\deploy\MyProject"
+      </buildArgs>
+      <targetList>
+        <target>build</target>
+      </targetList>
+    </nant>
+  </cb:define>
+
+
+</cb:config-template>

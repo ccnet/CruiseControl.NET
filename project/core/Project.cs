@@ -314,20 +314,18 @@ namespace ThoughtWorks.CruiseControl.Core
         /// What action to take when a source control error occurs (during GetModifications).
         /// </summary>
         /// <remarks>
-        /// <para>
         /// These are the possible values :
-        /// </para>
         /// <list type="1">
         /// <item>
         /// ReportEveryFailure : runs the publisher section whenever there is an error.
         /// </item>
         /// <item>
-        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, the publisher section will
-        /// only be run once.
+        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, <br/> 
+        /// the publisher section will only be run once.
         /// </item>
         /// <item>
-        /// ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. When 
-        /// maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.
+        /// ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. <br/>
+        /// When maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.
         /// </item>
         /// </list>
         /// </remarks>
@@ -375,7 +373,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// The source control block to use.
         /// </summary>
         /// <version>1.0</version>
-        /// <default><link>Null Source Control Block</link></default>
+        /// <default><link>Null_Source_Control</link></default>
         [ReflectorProperty("sourcecontrol", InstanceTypeKey = "type", Required = false)]
         public ISourceControl SourceControl
         {
@@ -562,20 +560,20 @@ namespace ThoughtWorks.CruiseControl.Core
             var logDirectory = this.GetLogDirectory();
             var fileSystem = new SystemIoFileSystem();
             var serialiser = new XmlSerializer(typeof(BuildSummary));
-            Action<IIntegrationResult> writeSummary =
-                r =>
-                {
-                    var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
-                    timer.Stop();
-                    summary.Duration = timer.ElapsedMilliseconds;
-                    summary.Status = r.Status;
-                    summary.LogName = new LogFile(r).Filename;
-                    fileSystem.EnsureFolderExists(path);
-                    using (var output = fileSystem.OpenOutputStream(path))
-                    {
-                        serialiser.Serialize(output, summary);
-                    }
-                };
+            //Action<IIntegrationResult> writeSummary =
+            //    r =>
+            //    {
+            //        var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
+            //        timer.Stop();
+            //        summary.Duration = timer.ElapsedMilliseconds;
+            //        summary.Status = r.Status;
+            //        summary.LogName = new LogFile(r).Filename;
+            //        fileSystem.EnsureFolderExists(path);
+            //        using (var output = fileSystem.OpenOutputStream(path))
+            //        {
+            //            serialiser.Serialize(output, summary);
+            //        }
+            //    };
             try
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
@@ -586,11 +584,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 result = integratable.Integrate(request);
                 summary.Label = result.Label;
-                writeSummary(result);
+                //writeSummary(result);
+                writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
             }
             catch (Exception error)
             {
-                writeSummary(result);
+                //writeSummary(result);
+                writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
                 Log.Error(error);
                 hasError = true;
                 throw;
@@ -632,6 +632,23 @@ namespace ThoughtWorks.CruiseControl.Core
             // Finally, return the actual result
             return result;
         }
+
+        private void writeSummary(IIntegrationResult r, string logDir, BuildSummary summary, Stopwatch timer, SystemIoFileSystem fileSystem, XmlSerializer serialiser)
+        {
+            if (r == null) return;
+
+            var path = Path.ChangeExtension(Path.Combine(logDir, new LogFile(r).Filename), "summary");
+            timer.Stop();
+            summary.Duration = timer.ElapsedMilliseconds;
+            summary.Status = r.Status;
+            summary.LogName = new LogFile(r).Filename;
+            fileSystem.EnsureFolderExists(path);
+            using (var output = fileSystem.OpenOutputStream(path))
+            {
+                serialiser.Serialize(output, summary);
+            }
+        }
+
 
         /// <summary>
         /// Retrieves some summaries for the project.

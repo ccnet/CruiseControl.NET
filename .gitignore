@@ -1,6 +1,9 @@
 /*.nsi
+/*.user
 /Build
 /Dist
 /Publish
 /build.txt
 /nant-*.log*
+bin/
+obj/

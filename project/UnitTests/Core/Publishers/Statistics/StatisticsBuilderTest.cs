@@ -121,5 +121,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
             AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString(), results);
             //AssertHasStatistic("ProjectName", "Foo", results);
         }
+
     }
 }

@@ -76,7 +76,19 @@
       <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
                        cleanUpValue="10" />
       <xmllogger />
-      <statistics />
+      
+      <statistics >
+        <statisticList>
+          <firstMatch name="mstest"
+                      xpath="//mstest:TestRun/mstest:ResultSummary/mstest:Counters/@total" >
+            <namespaces>
+              <namespaceMapping prefix="mstest"
+                                url="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" />
+            </namespaces>
+          </firstMatch>
+          </statisticList>
+      </statistics>
+      
       <modificationHistory  onlyLogWhenChangesFound="true" />
       <rss/>
     </publishers>

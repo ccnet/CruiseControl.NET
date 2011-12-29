@@ -51,6 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 }
                 else
                 {
+                    
                     text = File.AppendText(fileName);
                 }
                 WriteStats(text);

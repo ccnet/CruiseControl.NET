@@ -14,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     /// <version>1.5</version>
     /// <summary>
     /// Displays all the users in the system, plus the security rights they have for the project.
+    /// <para>
+    /// LinkDescription : View User List.
+    /// </para>
     /// </summary>
     /// <example>
     /// <code>

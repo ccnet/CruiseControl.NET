@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
 			project.Triggers = (ITrigger) mockTrigger.MockInstance;
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
-			project.Publishers = new ITask[] {(ITask) mockPublisher.MockInstance};
+			project.Publishers = new ITask[] {new ThoughtWorks.CruiseControl.Core.Publishers.XmlLogPublisher(),  (ITask) mockPublisher.MockInstance};
 			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance};
 			project.ConfiguredWorkingDirectory = workingDirPath;
 			project.ConfiguredArtifactDirectory = artifactDirPath;
@@ -340,6 +340,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             DynamicMock resultMock = new DynamicMock(typeof(IIntegrationResult));
             resultMock.SetupResult("Status", IntegrationStatus.Unknown);
+            resultMock.SetupResult("StartTime", DateTime.Now);
+            resultMock.SetupResult("Succeeded", false);
+
+            
+
 			IIntegrationResult result = (IIntegrationResult)resultMock.MockInstance;
 			IntegrationRequest request = ForceBuildRequest();
 			integratableMock.ExpectAndReturn("Integrate", result, request);
@@ -435,6 +440,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
+
+            DynamicMock resultMock = new DynamicMock(typeof(IIntegrationResult));
+            resultMock.SetupResult("Status", IntegrationStatus.Unknown);
+            resultMock.SetupResult("StartTime", DateTime.Now);
+            resultMock.SetupResult("Succeeded", false);
+
 
             Assert.That(delegate { project.Integrate(ModificationExistRequest()); },
                         Throws.TypeOf<CruiseControlException>());
