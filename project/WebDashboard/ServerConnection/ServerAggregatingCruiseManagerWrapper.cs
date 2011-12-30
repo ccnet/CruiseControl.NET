@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using ThoughtWorks.CruiseControl.Core;
@@ -282,7 +282,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
                 {
                     BackwardsCompatable = config.BackwardCompatible
                 });
-            if (!string.IsNullOrEmpty(sessionToken)) manager.SessionToken = sessionToken;
+            manager.SessionToken = sessionToken;
             return manager;
 		}
 
