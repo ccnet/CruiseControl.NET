@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,12 +24,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private string CreateMessage()
 		{
-			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
+			return string.Format(CultureInfo.CurrentCulture,"{0}", DateTime.Now.ToString(CultureInfo.CurrentCulture));
 		}
 
 		private string CreateMessage(string category)
 		{
-			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1}", DateTime.Now.ToString(CultureInfo.CurrentCulture), category);
+			return string.Format(CultureInfo.CurrentCulture,"{0}: {1}", DateTime.Now.ToString(CultureInfo.CurrentCulture), category);
 		}
 
         /// <summary>
