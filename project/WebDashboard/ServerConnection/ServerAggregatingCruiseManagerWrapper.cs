@@ -201,9 +201,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
                 .StopProject(projectSpecifier.ProjectName);
 		}
 
-		public string GetServerVersion(IServerSpecifier serverSpecifier)
+		public string GetServerVersion(IServerSpecifier serverSpecifier, string sessionToken)
 		{
-            var response = GetCruiseManager(serverSpecifier, null)
+            var response = GetCruiseManager(serverSpecifier, sessionToken)
                 .GetServerVersion();
             return response;
 		}
@@ -257,9 +257,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             return response;
         }
 
-        public string GetRSSFeed(IProjectSpecifier projectSpecifier)
+        public string GetRSSFeed(IProjectSpecifier projectSpecifier, string sessionToken)
         {
-            var response = GetCruiseManager(projectSpecifier, null)
+            var response = GetCruiseManager(projectSpecifier, sessionToken)
                 .GetRSSFeed(projectSpecifier.ProjectName);
             return response;
         }

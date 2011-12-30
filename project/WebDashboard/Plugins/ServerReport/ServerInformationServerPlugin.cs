@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -64,8 +64,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             request.Request.RefreshInterval = RefreshInterval;
 
 			Hashtable velocityContext = new Hashtable();
-			
-			velocityContext["serverversion"] = farmService.GetServerVersion(request.ServerSpecifier);
+			string sessionToken = request.RetrieveSessionToken();
+			velocityContext["serverversion"] = farmService.GetServerVersion(request.ServerSpecifier, sessionToken);
 			velocityContext["servername"] = request.ServerSpecifier.ServerName;
             long freeSpace = farmService.GetFreeDiskSpace(request.ServerSpecifier);
             velocityContext["serverSpace"] = FormatSpace(freeSpace);
