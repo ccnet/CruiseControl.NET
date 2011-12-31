@@ -576,6 +576,7 @@
     <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
     <Compile Include="Security\SecureMessagesChannel.cs" />
     <Compile Include="sourcecontrol\IQuitePeriod.cs" />
+    <Compile Include="sourcecontrol\MultiFilter.cs" />
     <Compile Include="Storage\BaseFolderDataStore.cs" />
     <Compile Include="Storage\XmlFolderDataStore.cs" />
     <Compile Include="SystemClock.cs" />
