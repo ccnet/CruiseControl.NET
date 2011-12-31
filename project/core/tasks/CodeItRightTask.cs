@@ -68,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initializes a new instance of the <see cref="CodeItRightTask"/> class.
         /// </summary>
         /// <param name="executor">The executor.</param>
+        /// <param name="fileSystem">The filesystem.</param>
         public CodeItRightTask(ProcessExecutor executor, IFileSystem fileSystem)
         {
             this.executor = executor;

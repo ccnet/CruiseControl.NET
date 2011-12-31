@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -11,10 +13,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
-using System;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration; 
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
@@ -277,9 +277,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 		{
 			IBuildPlugin plugIn = new TestPlugin();
 			IResponse response =  plugIn.NamedActions[0].Action.Execute(cruiseRequest);
-			
+
 			Assert.IsNotNull(response, "Response is null");
-			Assert.IsInstanceOfType(typeof(HtmlFragmentResponse), response, "Response is not HTML");
+			Assert.That(response, Is.InstanceOf<HtmlFragmentResponse>(), "Response is not HTML");
 
 			Assert.AreEqual(new HtmlFragmentResponse("test").ResponseFragment, 
 							((HtmlFragmentResponse)response).ResponseFragment, "Responses are not equal");

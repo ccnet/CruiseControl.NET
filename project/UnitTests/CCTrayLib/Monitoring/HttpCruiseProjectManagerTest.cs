@@ -36,26 +36,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SetUp()
 		{
             serverClient = mocks.DynamicMock<CruiseServerClientBase>();
-            serverManagerMock = mocks.StrictMock<ICruiseServerManager>();
-            manager = new HttpCruiseProjectManager(serverClient, "yyy", serverManagerMock);		
+            manager = new HttpCruiseProjectManager(serverClient, "yyy");		
 		}
 
 		[Test]
 		public void ShouldNotThrowExceptionsOnCreation()
 		{
             new HttpCruiseProjectManager(mocks.StrictMock<CruiseServerClientBase>(), 
-                "foo",
-                mocks.StrictMock<ICruiseServerManager>());
+                "foo");
 		}
 
 		[Test]
 		public void ShouldNotUseTheWebRetrieverOrServerManagerOnCreation()
 		{
             var client = mocks.StrictMock<CruiseServerClientBase>();
-            var server = mocks.StrictMock<ICruiseServerManager>();
 
             mocks.ReplayAll();
-            new HttpCruiseProjectManager(client, "foo", server);
+            new HttpCruiseProjectManager(client, "foo");
             mocks.VerifyAll();
 		}
 		

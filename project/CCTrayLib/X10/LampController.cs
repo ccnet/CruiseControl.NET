@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 
-
 namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 {
 	public class LampController : ILampController

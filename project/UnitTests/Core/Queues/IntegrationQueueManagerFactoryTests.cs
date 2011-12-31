@@ -28,14 +28,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             mocks.ReplayAll();
 
             object instance = IntegrationQueueManagerFactory.CreateManager(listFactory, configuration, null);
-            Assert.IsInstanceOfType(typeof(IntegrationQueueManager), instance);
+            Assert.That(instance, Is.InstanceOf<IntegrationQueueManager>());
         }
 
         [Test]
         public void OverrideChangesFactory()
         {
-            IQueueManagerFactory newFactory = mocks.CreateMock<IQueueManagerFactory>();
-            IQueueManager newManager = mocks.CreateMock<IQueueManager>();
+            IQueueManagerFactory newFactory = mocks.StrictMock<IQueueManagerFactory>();
+            IQueueManager newManager = mocks.StrictMock<IQueueManager>();
             Expect.Call(newFactory.Create(null, null, null)).Return(newManager);
             mocks.ReplayAll();
 

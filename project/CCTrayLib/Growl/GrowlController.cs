@@ -1,14 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Drawing;
 using System.Text;
 using Growl.Connector;
+using Growl.CoreLibrary;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
-using Growl.CoreLibrary;
-using System.Drawing;
-using System.Collections.Specialized;
-using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Growl
 {
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Growl
 			string caption = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1} ",
 			                               projectName, captionAndMessage.Caption);
 
-			Notification notification = new Notification(ApplicationName, captionAndMessage.Caption, null, projectName, captionAndMessage.Message);
+            Notification notification = new Notification(ApplicationName, caption, null, projectName, captionAndMessage.Message);
 			growl.Notify(notification);
 		}
 

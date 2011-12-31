@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             NetReflectorReader reader = new NetReflectorReader(typeTable);
 
             object result = reader.Read("<inMemoryCache duration=\"5\" mode=\"Fixed\"/>");
-            Assert.IsInstanceOfType(typeof(InMemorySessionCache), result);
+            Assert.That(result, Is.InstanceOf<InMemorySessionCache>());
             InMemorySessionCache cache = result as InMemorySessionCache;
             Assert.AreEqual(5, cache.Duration);
             Assert.AreEqual(SessionExpiryMode.Fixed, cache.ExpiryMode);
