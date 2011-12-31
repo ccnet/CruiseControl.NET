@@ -64,6 +64,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// &lt;/commentFilter&gt;
     /// &lt;/exclusionFilters&gt;
     /// &lt;/sourcecontrol&gt;
+    /// &lt;multiFilter&gt;
+    /// &lt;filters&gt;
+    /// &lt;/pathFilter&gt;
+    /// &lt;/inclusionFilters&gt;
+    /// &lt;exclusionFilters&gt;
+    /// &lt;pathFilter&gt;
+    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
+    /// &lt;/pathFilter&gt;
+    /// &lt;actionFilter&gt;
+    /// &lt;actions&gt;&lt;action&gt;deleted&lt;/action&gt;&lt;/actions&gt;
+    /// &lt;/actionFilter&gt;
+    /// &lt;/filters&gt;
+    /// &lt;multiFilter&gt;
     /// </code>
     /// </example>
     /// <remarks>
