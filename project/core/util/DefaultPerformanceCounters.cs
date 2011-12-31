@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
-using System.Collections.Generic;
 
     /// <summary>
     /// Default implementation of <see cref="IPerformanceCounters"/>.
@@ -66,6 +66,7 @@ using System.Collections.Generic;
         /// <summary>
         /// Retrieves the counter.
         /// </summary>
+        /// <param name="category">The category.</param>
         /// <param name="name">The name.</param>
         /// <returns></returns>
         private PerformanceCounter RetrieveCounter(string category, string name)

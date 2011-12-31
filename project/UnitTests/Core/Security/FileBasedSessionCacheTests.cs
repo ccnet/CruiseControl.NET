@@ -1,9 +1,9 @@
-﻿using Exortech.NetReflector;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Exortech.NetReflector;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Security;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             NetReflectorReader reader = new NetReflectorReader(typeTable);
 
             object result = reader.Read("<fileBasedCache duration=\"5\" mode=\"Fixed\"/>");
-            Assert.IsInstanceOfType(typeof(FileBasedSessionCache), result);
+            Assert.That(result, Is.InstanceOf<FileBasedSessionCache>());
             FileBasedSessionCache cache = result as FileBasedSessionCache;
             Assert.AreEqual(5, cache.Duration);
             Assert.AreEqual(SessionExpiryMode.Fixed, cache.ExpiryMode);

@@ -8,8 +8,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public partial class SpeechSettingsControl : UserControl
 	{
-		private SpeechConfiguration currentConfiguration;
-		
 		public SpeechSettingsControl()
 		{
 			InitializeComponent();
@@ -18,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		
 		public void BindSpeechControls(SpeechConfiguration configuration)
 		{
-            this.currentConfiguration = configuration;
             this.checkBoxSpeechEnabled.Checked = configuration.Enabled;
             this.checkBoxSpeakBuildStartedEvents.Checked = configuration.SpeakBuildStarted;
             this.checkBoxSpeakBuildSuccededEvents.Checked = configuration.SpeakBuildSucceded;
@@ -31,8 +28,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             configuration.SpeakBuildStarted = this.checkBoxSpeakBuildStartedEvents.Checked;
             configuration.SpeakBuildSucceded = this.checkBoxSpeakBuildSuccededEvents.Checked;
             configuration.SpeakBuildFailed = this.checkBoxSpeakBuildFailedEvents.Checked;
-
-            this.currentConfiguration = configuration;
 		}
 		
         private void UpdateEnabledState()

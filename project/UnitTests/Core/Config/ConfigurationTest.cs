@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             Configuration config = new Configuration();
             IQueueConfiguration foundConfig = config.FindQueueConfiguration("Test Queue");
             Assert.IsNotNull(foundConfig);
-            Assert.IsInstanceOfType(typeof(DefaultQueueConfiguration), foundConfig);
+            Assert.That(foundConfig, Is.InstanceOf<DefaultQueueConfiguration>());
             Assert.AreEqual("Test Queue", foundConfig.Name);
             Assert.AreEqual(QueueDuplicateHandlingMode.UseFirst, foundConfig.HandlingMode);
         }

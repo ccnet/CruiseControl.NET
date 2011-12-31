@@ -4,9 +4,9 @@ Author: Jeremy Lew
 Created: 2008.03.24
 */
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Xml;
-using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         internal UndefinedSymbolException(string msg) : base(msg)
         {
         }
-        internal static Exception CreateException(string msg, params object[] args)
+        new internal static Exception CreateException(string msg, params object[] args)
         {
             return new UndefinedSymbolException(String.Format(msg, args));
         }
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             : base(msg)
         {
         }
-        internal static Exception CreateException(string msg, params object[] args)
+        new internal static Exception CreateException(string msg, params object[] args)
         {
             return new CyclicalEvaluationException(String.Format(CultureInfo.CurrentCulture, msg, args));
         }

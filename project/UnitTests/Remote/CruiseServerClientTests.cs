@@ -714,11 +714,23 @@
                 throw new NotImplementedException();
             }
 
-            public event EventHandler<MessageReceivedEventArgs> SendMessageCompleted;
+            public event EventHandler<MessageReceivedEventArgs> SendMessageCompleted
+            {
+                add { }
+                remove { }
+            }
 
-            public event EventHandler<CommunicationsEventArgs> RequestSending;
+            public event EventHandler<CommunicationsEventArgs> RequestSending
+            {
+                add { }
+                remove { }
+            }
 
-            public event EventHandler<CommunicationsEventArgs> ResponseReceived;
+            public event EventHandler<CommunicationsEventArgs> ResponseReceived
+            {
+                add { }
+                remove { }
+            }
 
             #endregion
         }

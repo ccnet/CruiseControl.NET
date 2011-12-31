@@ -236,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             SecurityRight eventRight = SecurityRight.Allow;
             string message = "A message";
 
-            IAuditLogger logger = mocks.CreateMock<IAuditLogger>();
+            IAuditLogger logger = mocks.StrictMock<IAuditLogger>();
             Expect.Call(delegate { logger.LogEvent(projectName, userName, eventType, eventRight, message); });
 
             mocks.ReplayAll();

@@ -1,16 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib.Growl;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 #if !DISABLE_COM
 using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 #endif
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.CCTrayLib.Growl;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -65,8 +65,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			
 			growlController = new GrowlController(aggregatedProjectMonitor, configuration.Growl);
 
-			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
 #if !DISABLE_COM
+			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
 			speakerForTheDead = new SpeakingProjectMonitor(aggregatedProjectMonitor, balloonMessageProvider, configuration.Speech);
 #endif
 		}

@@ -365,23 +365,6 @@ namespace ThoughtWorks.CruiseControl.Remote
                 : DateTime.Parse(value, CultureInfo.CurrentCulture);
             return dateValue;
         }
-
-        /// <summary>
-        /// Retrieves an attribute value.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="attributeName"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-//  COMMENTED BY CODEIT.RIGHT
-//        private TEnum RetrieveAttributeValue<TEnum>(XmlElement element, string attributeName, TEnum defaultValue)
-//        {
-//            var value = element.GetAttribute(attributeName);
-//            var enumValue = string.IsNullOrEmpty(value)
-//                ? defaultValue
-//                : (TEnum)Enum.Parse(typeof(TEnum), value);
-//            return enumValue;
-//        }
         #endregion
 
         #region SendButtonPush()
