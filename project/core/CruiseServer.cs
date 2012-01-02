@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -447,6 +448,10 @@ namespace ThoughtWorks.CruiseControl.Core
                         snapshot.ProjectStatuses = this.FilterProjects(
                             request.SessionToken, 
                             snapshot.ProjectStatuses);
+                        snapshot.QueueSetSnapshot = this.FilterQueues(
+                            request.SessionToken,
+ 							snapshot.ProjectStatuses, // must contain the filtered projects
+                            snapshot.QueueSetSnapshot);
                     }
                 }));
             response.Snapshot = snapshot;
@@ -1569,6 +1574,28 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             }
             return allowedProjects.ToArray();
+        }
+        #endregion
+
+        #region FilterQueues()
+        /// <summary>
+        /// Filters a list of queues and only returns the queues for the projects that a user is allowed to view.
+        /// </summary>
+        /// <param name="sessionToken">The session token to use in filtering.</param>
+        /// <param name="filteredProjects">The already filtered projects.</param>
+        /// <param name="queueSet">The set of queues to filter.</param>
+        /// <returns>The filtered set.</returns>
+        private QueueSetSnapshot FilterQueues(string sessionToken, ProjectStatus[] filteredProjects, QueueSetSnapshot queueSet)
+        {
+            var allowedQueues = new QueueSetSnapshot();
+            var userName = securityManager.GetUserName(sessionToken);
+            var defaultIsAllowed = (securityManager.GetDefaultRight(SecurityPermission.ViewProject) == SecurityRight.Allow);
+            foreach (QueueSnapshot queue in queueSet.Queues)
+            {
+				if (filteredProjects.Select(x=>x.Queue).Contains(queue.QueueName))
+					allowedQueues.Queues.Add(queue);
+            }
+            return allowedQueues;
         }
         #endregion
 
