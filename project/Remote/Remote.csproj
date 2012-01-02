@@ -213,8 +213,6 @@
     <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="Parameters\BooleanParameter.cs" />
     <Compile Include="ProjectStatusSnapshot.cs" />
-    <Compile Include="QueuedRequestSnapshotList.cs" />
-    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemotingConnection.cs" />
     <Compile Include="Security\AuditFilterBase.cs" />
     <Compile Include="BadReferenceException.cs" />

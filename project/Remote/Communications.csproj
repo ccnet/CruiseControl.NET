@@ -212,10 +212,8 @@
     <Compile Include="ProjectStatus.cs" />
     <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
-    <Compile Include="QueuedRequestSnapshotList.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
     <Compile Include="QueueSnapshot.cs" />
-    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemotingConnection.cs" />
     <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="Security\AuditFilterBase.cs" />
