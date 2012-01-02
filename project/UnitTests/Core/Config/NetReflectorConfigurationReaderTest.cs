@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<nullSecurity/>";
             IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
-            Assert.IsInstanceOfType(typeof(NullSecurityManager), configuration.SecurityManager);
+            Assert.That(configuration.SecurityManager, Is.InstanceOf<NullSecurityManager>());
         }
 
         [Test]

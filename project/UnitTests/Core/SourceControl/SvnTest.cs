@@ -12,7 +12,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
-	[TestFixture]
+
+    [TestFixture]
 	public class SvnTest : ProcessExecutorTestFixtureBase
 	{
 		private Svn svn;
@@ -67,6 +68,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<username>user</username>
 	<password>password</password>
 	<tagOnSuccess>true</tagOnSuccess>
+    <tagCommitMessage>MyTagMessage</tagCommitMessage>
+    <tagNameFormat>MyTagNameFormat</tagNameFormat>
 	<tagWorkingCopy>true</tagWorkingCopy>
 	<tagBaseUrl>svn://myserver/mypath/tags</tagBaseUrl>
 	<autoGetSource>true</autoGetSource>
@@ -81,6 +84,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("user", svn.Username);
 			Assert.AreEqual("password", svn.Password.PrivateValue);
 			Assert.AreEqual(true, svn.TagOnSuccess);
+            Assert.AreEqual("MyTagMessage", svn.TagCommitMessage);
+            Assert.AreEqual("MyTagNameFormat", svn.TagNameFormat);
             Assert.AreEqual(true, svn.TagWorkingCopy);
 			Assert.AreEqual(true, svn.AutoGetSource);
 			Assert.AreEqual(true, svn.CheckExternals);
@@ -147,6 +152,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
 
+        [Test]
+        public void ShouldApplyLabelWithCustomMessageIfTagOnSuccessTrueAndACustomMessageIsSpecified()
+        {
+            ExpectToExecuteArguments(string.Format(@"copy -m ""a---- foo ----a"" {0} svn://someserver/tags/foo/foo --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+         
+            svn.TagOnSuccess = true;
+            svn.TagCommitMessage = "a---- {0} ----a";
+            svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+        }
+
+        [Test]
+        public void ShouldApplyTagNameFormatWithCustomFormatIfTagOnSuccessTrueAndATagNameFormatIsSpecified()
+        {
+            ExpectToExecuteArguments(string.Format(@"copy -m ""CCNET build bar"" {0} svn://someserver/tags/foo/Build/bar --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            
+            svn.TagOnSuccess = true;
+            svn.TagNameFormat = "Build/{0}";
+        
+            svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("bar"));
+        }
 		[Test]
 		public void ShouldApplyLabelUsingRebasedWorkingDirectory()
 		{

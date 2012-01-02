@@ -97,7 +97,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.Priority = ProcessPriorityClass.Normal;
             this.ConfiguredScriptsDirectory = DefaultScriptsDirectory;
             this.BuildArgs = string.Empty;
-            this.EnvironmentVariables = new EnvironmentVariable[0];
         }
 
         /// <summary>
@@ -155,14 +154,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
         public string BuildArgs { get; set; }
-
-        /// <summary>
-        /// Any environment variables to pass into the script. 
-        /// </summary>
-        /// <version>1.5</version>
-        /// <default>None</default>
-        [ReflectorProperty("environment", Required = false)]
-        public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
         private int[] successExitCodes/* = null*/;
 

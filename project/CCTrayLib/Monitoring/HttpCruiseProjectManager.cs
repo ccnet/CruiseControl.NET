@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Specialized;
-using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Collections.Specialized;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -11,13 +11,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		private readonly string projectName;
         private readonly CruiseServerClientBase client;
-		private readonly ICruiseServerManager serverManager;
 
-		public HttpCruiseProjectManager(CruiseServerClientBase client, string projectName, ICruiseServerManager serverManager)
+		public HttpCruiseProjectManager(CruiseServerClientBase client, string projectName)
 		{
 			this.projectName = projectName;
             this.client = client;
-			this.serverManager = serverManager;
 		}
 
         public void ForceBuild(string sessionToken, Dictionary<string, string> parameters, string userName)

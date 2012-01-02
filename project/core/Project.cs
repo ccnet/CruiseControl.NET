@@ -119,7 +119,6 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
         private IExecutionEnvironment currentExecutionEnvironment;
-        private int logCount = 0;
 
         #region Constructors
         /// <summary>

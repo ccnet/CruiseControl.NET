@@ -1754,6 +1754,12 @@ namespace ThoughtWorks.CruiseControl.Core
                     throw new NoSuchProjectException(projectName);
                 }
             }
+			
+			// if guest have some rights, ccnet svc must be able to check the rights, but without userName it wont work.
+			if (userName == null && authorisation != null && authorisation.GuestAccountName != null && authorisation.GuestAccountName != "")
+			{
+				userName = authorisation.GuestAccountName;
+			}
 
             if (!requiresSession || (userName != null))
             {

@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             PermissionDeniedException exception = new PermissionDeniedException(permission);
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(PermissionDeniedException), result);
+            Assert.That(result, Is.InstanceOf<PermissionDeniedException>());
             Assert.AreEqual("Permission to execute 'Something' has been denied.", exception.Message);
             Assert.AreEqual(permission, (result as PermissionDeniedException).Permission);
         }
