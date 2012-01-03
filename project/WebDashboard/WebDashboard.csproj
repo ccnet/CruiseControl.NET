@@ -932,5 +932,4 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
 </Project>

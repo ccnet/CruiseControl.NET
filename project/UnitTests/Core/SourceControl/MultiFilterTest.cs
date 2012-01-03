@@ -63,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void LoadFromConfiguration()
         {
-            filter = (MultiFilter)NetReflector.Read(@"<multiFilter><Filters><actionFilter><actions><action>Delete</action>></actions></actionFilter>
-                                                        <userFilter><names><name>bob</name><name>perry</name></names></userFilter></Filters></multiFilter>");
+            filter = (MultiFilter)NetReflector.Read(@"<multiFilter><filters><actionFilter><actions><action>Delete</action></actions></actionFilter>
+                                                        <userFilter><names><name>bob</name><name>perry</name></names></userFilter></filters></multiFilter>");
             Assert.AreEqual(2, filter.Filters.Length);
         }
     }
