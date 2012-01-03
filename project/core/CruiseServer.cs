@@ -1745,6 +1745,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     // The project has been found and it has security
                     authorisation = projectIntegrator.Project.Security;
                     requiresSession = authorisation.RequiresSession(securityManager);
+					// if "Guest" have some rights, the service must be able to check the
+					// rights for "Guest", but without userName it wont work.
 					if (string.IsNullOrEmpty(userName))
 						userName = authorisation.GuestAccountName;
                 }
@@ -1781,12 +1783,6 @@ namespace ThoughtWorks.CruiseControl.Core
                     throw new NoSuchProjectException(projectName);
                 }
             }
-			
-			// if guest have some rights, ccnet svc must be able to check the rights, but without userName it wont work.
-			if (userName == null && authorisation != null && authorisation.GuestAccountName != null && authorisation.GuestAccountName != "")
-			{
-				userName = authorisation.GuestAccountName;
-			}
 
             if (!requiresSession || (userName != null))
             {
