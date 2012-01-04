@@ -79,14 +79,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <includePage>Integration_Properties</includePage>
     /// </remarks>
     [ReflectorType("exec")]
-	public class ExecutableTask
+    public class ExecutableTask
         : BaseExecutableTask
-	{
+    {
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const int DEFAULT_BUILD_TIMEOUT = 600;
+        public const int DEFAULT_BUILD_TIMEOUT = 600;
         /// <summary>
         /// 	
         /// </summary>
@@ -97,24 +97,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initializes a new instance of the <see cref="ExecutableTask" /> class.	
         /// </summary>
         /// <remarks></remarks>
-		public ExecutableTask() : this(new ProcessExecutor())
-		{}
+        public ExecutableTask()
+            : this(new ProcessExecutor())
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutableTask" /> class.	
         /// </summary>
         /// <param name="executor">The executor.</param>
         /// <remarks></remarks>
-		public ExecutableTask(ProcessExecutor executor)
-		{
-			this.executor = executor;
+        public ExecutableTask(ProcessExecutor executor)
+        {
+            this.executor = executor;
             this.Executable = string.Empty;
             this.Priority = DEFAULT_PRIORITY;
             this.ConfiguredBaseDirectory = string.Empty;
             this.BuildArgs = string.Empty;
             this.EnvironmentVariables = new EnvironmentVariable[0];
             this.BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
-		}
+        }
 
         /// <summary>
         /// The path of the program to run. If this is relative, then must be relative to either (a) the base
@@ -159,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         //[ReflectorProperty("environment", Required = false)]
         //public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
-		private int[] successExitCodes;
+        private int[] successExitCodes;
 
         /// <summary>
         /// The list of exit codes that indicate success, separated by commas.
@@ -167,11 +168,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("successExitCodes", Required = false)]
-		public string SuccessExitCodes
-		{
-			get 
+        public string SuccessExitCodes
+        {
+            get
             {
-                string result =string.Empty;
+                string result = string.Empty;
                 if (successExitCodes != null)
                 {
                     foreach (int code in successExitCodes)
@@ -184,30 +185,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 return result;
             }
 
-			set
-			{
-				string[] codes = value.Split(',');
+            set
+            {
+                string[] codes = value.Split(',');
 
-				if (codes.Length == 0)
-				{
-					successExitCodes = null;
-					return;
-				}
+                if (codes.Length == 0)
+                {
+                    successExitCodes = null;
+                    return;
+                }
 
-				successExitCodes = new int[codes.Length];
+                successExitCodes = new int[codes.Length];
 
-				for (int i = 0; i < codes.Length; ++i)
-				{
-					successExitCodes[i] = Int32.Parse(codes[i], CultureInfo.CurrentCulture);
-				}
-			}
-		}
-		
-		/// <summary>
+                for (int i = 0; i < codes.Length; ++i)
+                {
+                    successExitCodes[i] = Int32.Parse(codes[i], CultureInfo.CurrentCulture);
+                }
+            }
+        }
+
+        /// <summary>
         /// Number of seconds to wait before assuming that the process has hung and should be killed.  If the 
         /// build process takes longer than this period, it will be killed.  Specify this value as zero to 
         /// disable process timeouts.
-		/// </summary>
+        /// </summary>
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
@@ -217,45 +218,45 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified executable and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-				protected override bool Execute(IIntegrationResult result)
-				{
-					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
+        protected override bool Execute(IIntegrationResult result)
+        {
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
 
-					ProcessInfo info = CreateProcessInfo(result);
+            ProcessInfo info = CreateProcessInfo(result);
 
-					ProcessResult processResult = TryToRun(info, result);
+            ProcessResult processResult = TryToRun(info, result);
 
-					if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
-					{
-						// The executable produced some output.  We need to transform it into an XML build report 
-						// fragment so the rest of CC.Net can process it.
-						ProcessResult newResult = new ProcessResult(
-								StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty),
-								StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
-								processResult.ExitCode,
-								processResult.TimedOut,
-								processResult.Failed);
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+            {
+                // The executable produced some output.  We need to transform it into an XML build report 
+                // fragment so the rest of CC.Net can process it.
+                ProcessResult newResult = new ProcessResult(
+                        StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty),
+                        StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
+                        processResult.ExitCode,
+                        processResult.TimedOut,
+                        processResult.Failed);
 
-						processResult = newResult;
-					}
+                processResult = newResult;
+            }
 
-					result.AddTaskResult(new ProcessTaskResult(processResult));
+            result.AddTaskResult(new ProcessTaskResult(processResult));
 
-					if (processResult.TimedOut)
-						result.AddTaskResult(MakeTimeoutBuildResult(info));
+            if (processResult.TimedOut)
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
 
-					return processResult.Succeeded;
-				}
+            return processResult.Succeeded;
+        }
 
         /// <summary>
         /// Gets the process filename.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessFilename()
-		{
-			return Executable;
-		}
+        protected override string GetProcessFilename()
+        {
+            return Executable;
+        }
 
         /// <summary>
         /// Gets the process arguments.	
@@ -263,10 +264,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessArguments(IIntegrationResult result)
-		{
-			return BuildArgs;
-		}
+        protected override string GetProcessArguments(IIntegrationResult result)
+        {
+            return BuildArgs;
+        }
 
         /// <summary>
         /// Gets the process base directory.	
@@ -274,30 +275,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessBaseDirectory(IIntegrationResult result)
-		{
-			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
-		}
+        protected override string GetProcessBaseDirectory(IIntegrationResult result)
+        {
+            return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
+        }
 
         /// <summary>
         /// Gets the process success codes.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override int[] GetProcessSuccessCodes()
-		{
-			return successExitCodes;
-		}
+        protected override int[] GetProcessSuccessCodes()
+        {
+            return successExitCodes;
+        }
 
         /// <summary>
         /// Gets the process timeout.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override int GetProcessTimeout()
-		{
-			return BuildTimeoutSeconds*1000;
-		}
+        protected override int GetProcessTimeout()
+        {
+            return BuildTimeoutSeconds * 1000;
+        }
 
         /// <summary>
         /// Gets the process priority class.	
@@ -314,10 +315,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		public override string ToString()
-		{
-			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
-		}
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
+        }
 
     }
 }

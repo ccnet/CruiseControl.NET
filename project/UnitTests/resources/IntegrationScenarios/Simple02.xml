@@ -1,0 +1,54 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <project name="LabelTest"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/LabelTest/wf</workingDirectory>
+    <artifactDirectory>scenarioTests/LabelTest</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers />
+
+    <labeller type="defaultlabeller">
+      <initialBuildLabel>1603</initialBuildLabel>
+      <prefix>1.5.</prefix>
+      <incrementOnFailure>false</incrementOnFailure>
+      <labelFormat>0000</labelFormat>
+    </labeller>
+
+    <tasks>
+      <conditional>
+        <conditions>
+          <fileExistsCondition file="checkFile.txt" />
+        </conditions>
+
+        <tasks>
+          <nullTask  simulateFailure="false"
+                     description="good task" />
+        </tasks>
+
+        <elseTasks>
+          <nullTask  simulateFailure="true"
+                     description="bad task" />
+        </elseTasks>
+
+      </conditional>
+
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+
+</cruisecontrol>

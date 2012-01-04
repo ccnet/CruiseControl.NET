@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 result.AddTaskResult("All OK for " + (!string.IsNullOrEmpty(Description) ? Description : "Null task"));
             }
             
-            return !SimulateFailure;
+            return true;
         }
     }
 }
