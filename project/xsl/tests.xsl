@@ -1,10 +1,10 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/TR/html4/strict.dtd">	
 	<xsl:output method="html"/>	
 	<xsl:param name="applicationPath"/>
 
 	<xsl:template match="/">
-		<xsl:variable name="tests.root" select="cruisecontrol//test-results" />
+		<xsl:variable name="tests.root" select="cruisecontrol//test-results/test-suite/results/test-suite" />
 		<div id="report">
 			<script>
 				function toggleDiv( imgId, divId )
@@ -54,12 +54,12 @@
 			</div>
 			<div id="details">
 				<h3>Assembly Test Details:</h3>
-				<xsl:apply-templates select="$tests.root" />
+				<xsl:apply-templates select="$tests.root" mode="assembly" />
 			</div>
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="test-results">
+	<xsl:template match="test-suite" mode="assembly">
 		<xsl:variable name="test.suite.id" select="generate-id()" />
 		<xsl:variable name="test.suite.name" select="./@name"/>
 		<xsl:variable name="failure.count" select="count(.//results/test-case[@success='False'])" />
