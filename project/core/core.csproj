@@ -112,6 +112,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="$(DISABLE_JSCRIPT) == true">
+    <DefineConstants>DISABLE_JSCRIPT</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="edtFTPnet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4b0c991f43097782">
       <SpecificVersion>False</SpecificVersion>

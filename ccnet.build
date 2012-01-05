@@ -114,6 +114,10 @@
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
 			<property name="DISABLE_COM" value="${platform::is-unix()}" />
 
+			<!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
+			<!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
+			<property name="DISABLE_JSCRIPT" value="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+
 			<!-- Hack for current xbuild issues on Mono 2.5 -->
 			<environment>
 				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
