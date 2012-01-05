@@ -1,9 +1,11 @@
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
+﻿using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
-	// Same pattern as a normal IAction, but request is already converted to a ICruiseRequest
-	// See CruiseActionProxyAction
+    /// <summary>
+    /// Same pattern as a normal IAction, but request is already converted to a ICruiseRequest
+    /// See CruiseActionProxyAction
+    /// </summary>
 	public interface ICruiseAction
 	{
 		IResponse Execute(ICruiseRequest cruiseRequest);

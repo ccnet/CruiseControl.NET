@@ -213,8 +213,6 @@
     <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="Parameters\BooleanParameter.cs" />
     <Compile Include="ProjectStatusSnapshot.cs" />
-    <Compile Include="QueuedRequestSnapshotList.cs" />
-    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemotingConnection.cs" />
     <Compile Include="Security\AuditFilterBase.cs" />
     <Compile Include="BadReferenceException.cs" />
@@ -259,8 +257,6 @@
     </Compile>
     <Compile Include="ItemBuildStatus.cs" />
     <Compile Include="ItemStatus.cs" />
-    <Compile Include="PermissionDeniedException.cs" />
-    <Compile Include="SecurityException.cs" />
     <Compile Include="Security\ISecurityCredentials.cs" />
     <Compile Include="ITrigger.cs">
       <SubType>Code</SubType>
@@ -303,9 +299,11 @@
     <Compile Include="Security\CombinationAuditFilter.cs" />
     <Compile Include="Security\DateRangeAuditFilter.cs" />
     <Compile Include="Security\EventTypeAuditFilter.cs" />
+    <Compile Include="Security\PermissionDeniedException.cs" />
     <Compile Include="Security\ProjectAuditFilter.cs" />
     <Compile Include="Security\SecurityCheckDiagnostics.cs" />
     <Compile Include="Security\SecurityEvent.cs" />
+    <Compile Include="Security\SecurityException.cs" />
     <Compile Include="Security\SecurityRight.cs" />
     <Compile Include="Security\SecurityRightFilter.cs" />
     <Compile Include="Security\UserAuditFilter.cs" />

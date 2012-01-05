@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             var newCookie = new HttpCookie("CCNetSessionToken");
             newCookie.Value = sessionToken;
             newCookie.HttpOnly = true;
-            newCookie.Expires = DateTime.Now.AddMinutes(15);
+            // A session cookie is created when no newCookie.Expires is set
             HttpContext.Current.Response.Cookies.Add(newCookie);
         }
         #endregion

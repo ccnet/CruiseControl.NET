@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         }
         #endregion
 
-        #region RetrieveStorer()
+        #region RetrieveRetriever()
         /// <summary>
         /// Retrieve the session retriever.
         /// </summary>

@@ -449,8 +449,7 @@
     <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
     <Compile Include="Remote\Parameters\DateParameterTests.cs" />
     <Compile Include="Remote\ProjectStatusSnapshotTests.cs" />
-    <Compile Include="Remote\QueuedRequestSnapshotListTests.cs" />
-    <Compile Include="Remote\QueueSnapshotListTests.cs" />
+    <Compile Include="Remote\QueueSetSnapshotTests.cs" />
     <Compile Include="Remote\WebClientFactoryTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
