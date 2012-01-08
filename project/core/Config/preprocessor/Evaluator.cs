@@ -1,4 +1,6 @@
+
 using System;
+#if !DISABLE_JSCRIPT
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.IO;
@@ -6,11 +8,13 @@ using System.Reflection;
 using System.Text;
 using Microsoft.JScript;
 using Convert = System.Convert;
+#endif
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
     public class Evaluator
     {
+#if !DISABLE_JSCRIPT
         // Fields
         private const string JSCRIPT_SOURCE =
             @"import System.IO;
@@ -127,5 +131,41 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                 throw new ApplicationException(
                     "This feature requires JSCRIPT.NET and is not supported under Mono" );
         }
+#else
+        public static bool EvalToBool(string statement)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static double EvalToDouble(string statement)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static int EvalToInteger(string statement)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static object EvalToObject(string statement)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static string EvalToString(string statement)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static T EvalToType<T>(string expression)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+
+        public static string StringAsLiteral(string theString)
+        {
+            throw new NotSupportedException("Not compilable under Mono");
+        }
+#endif
     }
 }
