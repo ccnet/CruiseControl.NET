@@ -142,6 +142,213 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         }
 
+
+        [Test]
+        public void ForceBuildOfGoodProjectWithDefaultLabelerWithInitialBuildLabelMustHaveInitialBuildLabelAsLastBuildLabel()
+        {
+            const string ProjectName1 = "LabelTest";
+
+            string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
+            string WorkingFolder = System.IO.Path.Combine(IntegrationFolder, "wf");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "Simple02.xml");
+            string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
+
+            string CheckFileOfConditionalTask = System.IO.Path.Combine(WorkingFolder, "checkFile.txt");
+
+
+            IntegrationCompleted.Add(ProjectName1, false);
+
+            Log("Clear existing state file, to simulate first run : " + ProjectStateFile);
+            System.IO.File.Delete(ProjectStateFile);
+
+            Log("Clear integration folder to simulate first run");
+            if (System.IO.Directory.Exists(IntegrationFolder)) System.IO.Directory.Delete(IntegrationFolder, true);
+
+
+            CCNet.Remote.Messages.ProjectStatusResponse psr;
+            CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+
+
+            Log("Making CruiseServerFactory");
+            CCNet.Core.CruiseServerFactory csf = new CCNet.Core.CruiseServerFactory();
+
+            Log("Making cruiseServer with config from :" + CCNetConfigFile);
+            using (var cruiseServer = csf.Create(true, CCNetConfigFile))
+            {
+                // subscribe to integration complete to be able to wait for completion of a build
+                cruiseServer.IntegrationCompleted += new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
+
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.IO.File.WriteAllText(CheckFileOfConditionalTask, "hello");
+
+                System.Threading.Thread.Sleep(250); // give time to start
+
+
+                Log("Forcing build - conditional ok");
+                CheckResponse(cruiseServer.ForceBuild(pr1));
+
+
+                Log("Waiting for integration to complete");
+                while (!IntegrationCompleted[ProjectName1])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+                // un-subscribe to integration complete 
+                cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
+
+                Log("getting project status");
+                psr = cruiseServer.GetProjectStatus(pr1);
+                CheckResponse(psr);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit(pr1);
+                Log("cruiseServer stopped");
+
+            }
+
+            Log("Checking the data");
+            Assert.AreEqual(1, psr.Projects.Count, "Amount of projects in configfile is not correct." + CCNetConfigFile);
+
+            CCNet.Remote.ProjectStatus ps = null;
+
+            Log("checking data of project " + ProjectName1);
+            foreach (var p in psr.Projects)
+            {
+                if (p.Name == ProjectName1) ps = p;
+            }
+
+            // 1 good build 
+
+            Assert.AreEqual(ProjectName1, ps.Name);
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus);
+            Assert.AreEqual(string.Empty, ps.CurrentMessage, "message should be empty after ok build");
+            Assert.AreEqual("1.5.1603", ps.LastBuildLabel, "after ok build with initial label, the result must be the inital label");
+            Assert.AreEqual("1.5.1603", ps.LastSuccessfulBuildLabel, "after ok build with initial label, the result must be the inital label");
+            Assert.AreEqual(0, ps.Messages.Length);
+
+        }
+
+        [Test]
+        [Ignore("Fails because of very old bug")]
+        public void ForceBuildOfBadProjectAfterGoodWithDefaultLabelerWithInitialBuildLabelMustHaveInitialBuildLabelAsLastBuildLabel()
+        {
+            // in the labeller is a comparison with previous integration result, and an ITaskResult that always returns true for CheckIfSuccess 
+            // this looks weird and should be investigated
+            // old part of the codebase since 2009
+
+            
+            const string ProjectName1 = "LabelTest";
+            string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
+            string WorkingFolder = System.IO.Path.Combine(IntegrationFolder, "wf");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "Simple02.xml");
+            string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
+
+            string CheckFileOfConditionalTask = System.IO.Path.Combine(WorkingFolder, "checkFile.txt");
+
+
+            IntegrationCompleted.Add(ProjectName1, false);
+
+            Log("Clear existing state file, to simulate first run : " + ProjectStateFile);
+            System.IO.File.Delete(ProjectStateFile);
+
+            Log("Clear integration folder to simulate first run");
+            if (System.IO.Directory.Exists(IntegrationFolder)) System.IO.Directory.Delete(IntegrationFolder, true);
+
+
+            CCNet.Remote.Messages.ProjectStatusResponse psr;
+            CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+
+
+            Log("Making CruiseServerFactory");
+            CCNet.Core.CruiseServerFactory csf = new CCNet.Core.CruiseServerFactory();
+
+            Log("Making cruiseServer with config from :" + CCNetConfigFile);
+            using (var cruiseServer = csf.Create(true, CCNetConfigFile))
+            {
+                // subscribe to integration complete to be able to wait for completion of a build
+                cruiseServer.IntegrationCompleted += new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
+
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.IO.File.WriteAllText(CheckFileOfConditionalTask, "hello");
+
+                System.Threading.Thread.Sleep(250); // give time to start
+
+
+                Log("Forcing build - conditional ok");
+                CheckResponse(cruiseServer.ForceBuild(pr1));
+
+
+                Log("Waiting for integration to complete");
+                while (!IntegrationCompleted[ProjectName1])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+                IntegrationCompleted[ProjectName1] = false;
+                System.IO.File.Delete(CheckFileOfConditionalTask);
+                System.Threading.Thread.Sleep(250); // give time to finish delete
+
+
+                Log("Forcing build - conditional Not ok");
+                CheckResponse(cruiseServer.ForceBuild(pr1));
+
+
+                Log("Waiting for integration to complete");
+                while (!IntegrationCompleted[ProjectName1])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+
+                // un-subscribe to integration complete 
+                cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
+
+                Log("getting project status");
+                psr = cruiseServer.GetProjectStatus(pr1);
+                CheckResponse(psr);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit(pr1);
+                Log("cruiseServer stopped");
+
+            }
+
+            Log("Checking the data");
+            Assert.AreEqual(1, psr.Projects.Count, "Amount of projects in configfile is not correct." + CCNetConfigFile);
+
+            CCNet.Remote.ProjectStatus ps = null;
+
+            Log("checking data of project " + ProjectName1);
+            foreach (var p in psr.Projects)
+            {
+                if (p.Name == ProjectName1) ps = p;
+            }
+
+            // 1 good build and 1 bad
+
+            Assert.AreEqual(ProjectName1, ps.Name);
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Failure, ps.BuildStatus);
+            Assert.AreEqual("bad task", ps.CurrentMessage, "message should be the descripton / name of the failing task");
+            Assert.AreEqual("1.5.1603", ps.LastBuildLabel, "do not increase label, because the increase on failure is set to false");
+            Assert.AreEqual("1.5.1603", ps.LastSuccessfulBuildLabel, "do not increase label, because the increase on failure is set to false");
+
+        }
+
+
         void cruiseServer_IntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
             Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete. Project {0} ", e.ProjectName));
