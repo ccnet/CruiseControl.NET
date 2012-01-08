@@ -1384,6 +1384,9 @@
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\Simple02.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\SpacesInBuildArgsOfTask.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
