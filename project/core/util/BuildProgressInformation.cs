@@ -18,6 +18,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private readonly object lockObject = new object();
         private System.Collections.Generic.List<BuildProgressInformationData> Progress;
         private const Int32 MaxItemsInQueue = 10;
+        private OnStartupInformationUpdatedDelegate _OnStartupInformationUpdated = null;
+
+
+        private void DoStartupInformationUpdated(string information)
+        {
+            this._lastTimeQueried = DateTime.Now.AddYears(-10);
+            if (_OnStartupInformationUpdated != null)
+                OnStartupInformationUpdated(information, OnStartupInformationUpdatedUserObject);
+        }
 
 
         /// <summary>
@@ -56,9 +65,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 this._buildInformation = GetQueueDataAsXml();
                 this._lastTimeQueried = DateTime.Now.AddYears(-10);
 
+                DoStartupInformationUpdated(information);
             }
         }
 
+        public delegate void OnStartupInformationUpdatedDelegate(string information, object UserObject);
+        public OnStartupInformationUpdatedDelegate OnStartupInformationUpdated { get { return _OnStartupInformationUpdated; } set { _OnStartupInformationUpdated += value; } }
+        public object OnStartupInformationUpdatedUserObject { get; set; }
 
         /// <summary>
         /// Adds the task information.	
@@ -73,6 +86,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+
+        public void UpdateStartupInformation(string information)
+        {
+            Progress[0] = new BuildProgressInformationData(information);
+
+            DoStartupInformationUpdated(information);
+        }
 
         /// <summary>
         /// Gets the build progress information.	
