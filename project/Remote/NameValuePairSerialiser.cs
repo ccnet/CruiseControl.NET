@@ -1,4 +1,4 @@
-﻿namespace ThoughtWorks.CruiseControl.Remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +6,7 @@
     using Exortech.NetReflector;
     using Exortech.NetReflector.Util;
     using System.Xml;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
 
     /// <summary>
     /// Serialise/deserialise a name/value pair.
@@ -77,7 +78,15 @@
         {
             if (isList)
             {
-                var list = target as NameValuePair[];
+                var list = target as IEnumerable<NameValuePair>;
+                if (list == null)
+                {
+                    SelectParameter parameter = target as SelectParameter;
+                    if (parameter != null)
+                    {
+                        list = parameter.DataValues;
+                    }
+                }                
                 if (list != null)
                 {
                     writer.WriteStartElement(base.Attribute.Name);
