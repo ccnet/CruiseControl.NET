@@ -1,4 +1,4 @@
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
+﻿using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -27,7 +27,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS
 
         public IResponse Execute(ICruiseRequest request)
         {
-            return new XmlFragmentResponse(farmService.GetRSSFeed(request.ProjectSpecifier));
+			var sessionToken = request.RetrieveSessionToken();
+
+            return new XmlFragmentResponse(farmService.GetRSSFeed(request.ProjectSpecifier, sessionToken));
         }
     }
 }

@@ -3,14 +3,15 @@
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
 
-    public class QueuedRequestSnapshotListTests
+    public class QueueSetSnapshotTests
     {
         #region Tests
         [Test]
         public void ConstructorWorks()
         {
-            var snapshot = new QueuedRequestSnapshotList();
-            Assert.IsNotNull(snapshot.GetEnumerator());
+            var snapshot = new QueueSetSnapshot();
+            Assert.IsNotNull(snapshot.Queues);
+            Assert.IsEmpty(snapshot.Queues);
         }
         #endregion
     }

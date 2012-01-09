@@ -1,11 +1,14 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Web;
 using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 {
-	// No need for session state yet, but if we do later then we should also add IRequiresSessionState to list of interfaces
+    /// <summary>
+    /// No need for session state yet, but if we do later then we should also 
+    /// add IRequiresSessionState to list of interfaces
+    /// </summary>
 	public class HttpHandler : IHttpHandler
 	{
 		private const string RESOLVED_TYPE_MAP = "ResolvedTypeMap";
