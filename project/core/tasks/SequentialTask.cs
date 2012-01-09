@@ -111,9 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
-                ? Description
-                : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running sequential tasks ({0} task(s))", numberOfTasks));
+            result.BuildProgressInformation.SignalStartRunTask(_getStatusInformation("", null));
             logger.Info("Starting sequential task with {0} sub-task(s)", numberOfTasks);
 
             // Launch each task
