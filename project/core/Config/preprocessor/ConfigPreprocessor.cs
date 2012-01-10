@@ -111,5 +111,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         public static XName Name = "name";
         public static XName TestExpr = "test-expr";
         public static XName Type = "type";
+        public static XName UseScope = "use-scope";
     }
 }

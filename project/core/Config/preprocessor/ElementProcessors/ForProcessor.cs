@@ -30,7 +30,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
                 _ProcessText( element.GetAttributeValue( AttrName.InitExpr ) ).GetTextValue();
             string test_expr = element.GetAttributeValue( AttrName.TestExpr );
             string count_expr = element.GetAttributeValue( AttrName.CountExpr );
-            var generated_nodes = new List< XNode >();
+            bool use_scope = true;
+            if (element.HasAttribute(AttrName.UseScope))
+            {
+                use_scope = (bool)element.Attribute(AttrName.UseScope);
+            }
+            var generated_nodes = new List<XNode>();
 
             string current_expr = init_expr;
             int count = _ExprAsInt( current_expr );
@@ -39,36 +44,46 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             {
                 /* Necessary due to "modified closure" lambda interaction rules */
                 int count1 = count;
-                XNode[] nodes = _Env.Call( () =>
-                                               {
-                                                   // Define the counter value in the environment
-                                                   _Env.DefineTextSymbol( counter_name,
-                                                                          count1.ToString(
-                                                                              NumberFormatInfo.
-                                                                                  InvariantInfo ) );
-                                                   // Test for loop termination condition
-                                                   if (
-                                                       !_Env.EvalBool(
-                                                           _ProcessText( test_expr ).GetTextValue() ) )
-                                                   {
-                                                       /* terminate */
-                                                       run = false;
-                                                       return new XNode[] {};
-                                                   }
+                XNode[] nodes = null;
+                if (use_scope)
+                    nodes = _Env.Call(() =>
+                                      {
+                                          return _GetSubNodes(element, count_expr, counter_name, test_expr, ref count1, ref run);
+                                      });
+                else
+                    nodes = _GetSubNodes(element, count_expr, counter_name, test_expr, ref count1, ref run);
 
-                                                   // Evaluate the count expression (must be done in the current environment stack frame)
-                                                   count1 =
-                                                       _ExprAsInt(
-                                                           _ProcessText( count_expr ).GetTextValue() );
-
-                                                   // Process the loop body
-                                                   return _ProcessNodes( element.Nodes() ).ToArray();
-                                               } );
                 /* Necessary due to "modified closure" lambda interaction rules */
                 count = count1;
                 generated_nodes.AddRange( nodes );
             }
             return generated_nodes;
+        }
+
+        private XNode[] _GetSubNodes(XElement element, string count_expr, string counter_name, string test_expr, ref int count1, ref bool run)
+        {
+            // Define the counter value in the environment
+            _Env.DefineTextSymbol(counter_name,
+                                   count1.ToString(
+                                       NumberFormatInfo.
+                                           InvariantInfo));
+            // Test for loop termination condition
+            if (
+                !_Env.EvalBool(
+                    _ProcessText(test_expr).GetTextValue()))
+            {
+                /* terminate */
+                run = false;
+                return new XNode[] { };
+            }
+
+            // Evaluate the count expression (must be done in the current environment stack frame)
+            count1 =
+                _ExprAsInt(
+                    _ProcessText(count_expr).GetTextValue());
+
+            // Process the loop body
+            return _ProcessNodes(element.Nodes()).ToArray();
         }
 
         private int _ExprAsInt(string expr)
