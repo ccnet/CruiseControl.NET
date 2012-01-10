@@ -86,6 +86,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 
 			state = new FileStateManager(fileSystem, executionEnvironment);
 			state.StateFileDirectory = foldername;
+
+            // get the value so that the folder is created 
+            foldername = state.StateFileDirectory;
 		}
 
 		[Test]
