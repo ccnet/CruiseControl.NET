@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public LoginViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, 
             IVelocityViewGenerator velocityViewGenerator, IDashboardConfiguration configuration,
-            ISessionRetriever retriever, ISessionStorer storer)
+            ISessionStorer storer)
         {
             this.request = request;
             this.linkFactory = linkFactory;

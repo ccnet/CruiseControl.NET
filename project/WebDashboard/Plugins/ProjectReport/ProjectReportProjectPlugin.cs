@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Web;
 using Exortech.NetReflector;
@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             else
                 velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
 
-            velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier).Length > 0;
+            velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier, sessionToken).Length > 0;
 
             // I (willemsruben) can not figure out why the line below does not work :-(
             // velocityContext["rss"] = linkFactory.CreateProjectLink(projectSpecifier, WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME).Url;
