@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Web;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -36,15 +36,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			// get category from request...
 			string category = request.Request.GetText("Category");
-
-			// ... or from the project status itself!
-			if (string.IsNullOrEmpty(category) &&
-				!string.IsNullOrEmpty(request.ServerName) &&
-				!string.IsNullOrEmpty(request.ProjectName))
-				category = farmService
-                    .GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken(sessionRetriever))
-					.GetStatusForProject(request.ProjectName)
-					.Category;
+			
+			try 
+			{
+				// ... or from the project status itself!
+				if (string.IsNullOrEmpty(category) &&
+					!string.IsNullOrEmpty(request.ServerName) &&
+					!string.IsNullOrEmpty(request.ProjectName))
+					category = farmService
+	                    .GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken(sessionRetriever))
+						.GetStatusForProject(request.ProjectName)
+						.Category;
+			}
+			catch (Remote.NoSuchProjectException)
+			{
+				// we can get here if the user got automatically logged out from the server, thus
+				// not having the right to see the requested project anymore. This yields a
+				// NoSuchProjectException exception. We mask this exception and set the category
+				// to "Unknown". 
+				category = "Unknown";
+			}
 
 			return category;
 		}
