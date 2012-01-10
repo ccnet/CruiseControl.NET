@@ -53,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public FileSourceControl(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+            CheckRecursively = true;
         }
 
         /// <summary>
@@ -78,6 +79,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource { get; set; }
+
+        /// <summary>
+        /// Whether or not to check recursively for changes inside repositoryRoot.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>true</default>
+        [ReflectorProperty("checkRecursively", Required = false)]
+        public bool CheckRecursively { get; set; }
 
         /// <summary>
         /// Gets the modifications.	
@@ -108,7 +117,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 foreach (DirectoryInfo sub in dir.GetDirectories())
                 {
-                    mods.AddRange(GetMods(sub, from));
+                    if (IsLocalFileChanged(sub, from))
+                    {
+                        mods.Add(CreateModification(sub));
+                    }
+
+                    if (CheckRecursively)
+                    {
+                        mods.AddRange(GetMods(sub, from));
+                    }
                 }
             }
             catch (DirectoryNotFoundException)
@@ -124,9 +141,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private Modification CreateModification(FileInfo info)
         {
+            Modification result = CreateModificationBase(info);
+            result.FolderName = info.DirectoryName;
+            return result;
+        }
+
+        private Modification CreateModification(DirectoryInfo info)
+        {
+            Modification result = CreateModificationBase(info);
+            result.FolderName = info.Name;
+            return result;
+        }
+
+        private Modification CreateModificationBase(FileSystemInfo info)
+        {
             Modification modification = new Modification();
             modification.FileName = info.Name;
-            modification.FolderName = info.DirectoryName;
 
             if (info.CreationTime > info.LastWriteTime)
             {
@@ -140,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return modification;
         }
 
-        private bool IsLocalFileChanged(FileInfo reposFile, DateTime date)
+        private bool IsLocalFileChanged(FileSystemInfo reposFile, DateTime date)
         {
             bool result = false;
 

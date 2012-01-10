@@ -69,17 +69,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 
-			Assert.AreEqual(3, mods.Length);
+			Assert.AreEqual(4, mods.Length);
 			Assert.AreEqual("file1.txt", mods[0].FileName);
 			Assert.AreEqual("file2.txt", mods[1].FileName);
-			Assert.AreEqual("file3.txt", mods[2].FileName);
+            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FileName);
+            Assert.AreEqual("file3.txt", mods[3].FileName);
 			Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
 			Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
-			Assert.AreEqual(Path.GetDirectoryName(file3), mods[2].FolderName);
+            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FolderName);
+            Assert.AreEqual(Path.GetDirectoryName(file3), mods[3].FolderName);
 
 			Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
 			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
-			Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
+            Assert.AreEqual(new FileInfo(tempSubRoot.ToString()).LastWriteTime, mods[2].ModifiedTime);
+            Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[3].ModifiedTime);
 
 			mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
 			Assert.AreEqual(0, mods.Length);
@@ -134,5 +137,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			return IntegrationResultMother.CreateSuccessful(date);
 		}
+
+        [Test]
+        public void GetModifications_NonRecursive()
+        {
+            tempRoot.CreateDirectory();
+            tempSubRoot.CreateDirectory();
+            string file1 = tempRoot.CreateTextFile("file1.txt", "foo").ToString();
+            string file2 = tempRoot.CreateTextFile("file2.txt", "bar").ToString();
+            string file3 = tempSubRoot.CreateTextFile("file3.txt", "bat").ToString();
+
+            sc.CheckRecursively = false;
+
+            Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+
+            Assert.AreEqual(3, mods.Length);
+            Assert.AreEqual("file1.txt", mods[0].FileName);
+            Assert.AreEqual("file2.txt", mods[1].FileName);
+            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FileName);
+            Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
+            Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
+            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FolderName);
+
+            Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
+            Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
+            Assert.AreEqual(new FileInfo(tempSubRoot.ToString()).LastWriteTime, mods[2].ModifiedTime);
+
+            mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
+            Assert.AreEqual(0, mods.Length);
+        }
 	}
 }
