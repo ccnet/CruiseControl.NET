@@ -53,5 +53,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.That(delegate { sourceControl.LabelSourceControl(null); },
                         Throws.TypeOf<Exception>().With.Message.EqualTo("Failing label source control"));
         }
+
+        [Test]
+        public void ShouldReturnNonEmptyListOfModificationsWhenAlwaysModifiedIsTrue()
+        {
+            sourceControl.AlwaysModified = true;
+            Assert.AreNotEqual(0, sourceControl.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.MinValue), IntegrationResultMother.CreateSuccessful(DateTime.MaxValue)).Length);
+        }
+
     }
 }
