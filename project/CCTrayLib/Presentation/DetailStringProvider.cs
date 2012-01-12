@@ -25,9 +25,27 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		    bool breakerFound = false;
 		    bool breakingTaskFound = false;
 		    bool aborterFound = false;
+            bool fixerFound = false;
+            
 
             for (int i = projectStatus.Messages.Length - 1; i >= 0; i--)
             {
+
+                if (projectStatus.Messages[i].Kind == Message.MessageKind.Fixer)
+                {
+                    if (!fixerFound)
+                    {
+                        if (projectStatus.CurrentMessage != projectStatus.Messages[i].Text)
+                        {
+                            if (message.Length > 0) message += " - ";
+                            message += projectStatus.Messages[i].Text;
+                        }
+
+                        fixerFound = true;
+                    }
+                }
+
+                
                 if (projectStatus.Messages[i].Kind == Message.MessageKind.Breakers)
                 {
                     if (!breakerFound)

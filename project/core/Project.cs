@@ -559,20 +559,7 @@ namespace ThoughtWorks.CruiseControl.Core
             var logDirectory = this.GetLogDirectory();
             var fileSystem = new SystemIoFileSystem();
             var serialiser = new XmlSerializer(typeof(BuildSummary));
-            //Action<IIntegrationResult> writeSummary =
-            //    r =>
-            //    {
-            //        var path = Path.ChangeExtension(Path.Combine(logDirectory, new LogFile(r).Filename), "summary");
-            //        timer.Stop();
-            //        summary.Duration = timer.ElapsedMilliseconds;
-            //        summary.Status = r.Status;
-            //        summary.LogName = new LogFile(r).Filename;
-            //        fileSystem.EnsureFolderExists(path);
-            //        using (var output = fileSystem.OpenOutputStream(path))
-            //        {
-            //            serialiser.Serialize(output, summary);
-            //        }
-            //    };
+
             try
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
@@ -621,6 +608,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
                 }
             }
+
+            
 
             // Store the project status so it can be used by other parts of the system
             if (this.DataStore != null)
@@ -1378,11 +1367,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public void AddMessage(Message message)
         {
-            // only show the last fixer
-            var existingFixerMessage = (from m in messages where m.Kind == Message.MessageKind.Fixer select m).SingleOrDefault();
-            if (existingFixerMessage != null)
+            if (message.Kind == Message.MessageKind.Fixer)
             {
-                messages.Remove(existingFixerMessage);
+                // only show the last fixer
+                var existingFixerMessage = (from m in messages where m.Kind == Message.MessageKind.Fixer select m).SingleOrDefault();
+                if (existingFixerMessage != null)
+                {
+                    messages.Remove(existingFixerMessage);
+                }
             }
 
             messages.Add(message);
