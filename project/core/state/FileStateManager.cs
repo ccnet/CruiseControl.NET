@@ -58,14 +58,14 @@ namespace ThoughtWorks.CruiseControl.Core.State
         [ReflectorProperty("directory", Required=false)]
         public string StateFileDirectory
 		{
-			get { return stateFileDirectory; }
-			set
-			{
-                if (!string.IsNullOrEmpty(value))
-					fileSystem.EnsureFolderExists(value);
+			get 
+            { 
+                if (!string.IsNullOrEmpty(stateFileDirectory))
+					fileSystem.EnsureFolderExists(stateFileDirectory);
 
-				stateFileDirectory = value;
-			}
+                return stateFileDirectory; 
+            }
+			set { stateFileDirectory = value; }
 		}
 
         /// <summary>
