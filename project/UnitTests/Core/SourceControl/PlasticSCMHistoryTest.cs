@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[0].UserName = "testing01";
 
             mod[1] = new Modification();
-            mod[1].FileName = "comment2";
+            mod[1].Comment = "comment2";
             mod[1].ChangeNumber = "29";
             mod[1].ModifiedTime = DateTime.ParseExact(DATE_STRING_CS2, PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
             mod[1].UserName = "edmund";

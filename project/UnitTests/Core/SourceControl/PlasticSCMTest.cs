@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
             PlasticSCM plasticscm = new PlasticSCM();
             NetReflector.Read(PLASTICSCM_XML, plasticscm);
-            string expected = @"cm stb br:/main";
+            string expected = @"c:\plastic\client\cm.exe stb br:/main -repository=mainrep";
             ProcessInfo info = plasticscm.GoToBranchProcessInfo(result);
             Assert.AreEqual(expected, info.FileName + " " + info.Arguments);
 
