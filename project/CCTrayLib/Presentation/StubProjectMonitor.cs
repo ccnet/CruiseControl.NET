@@ -31,6 +31,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return projectName; }
 		}
 
+
+        public string ProjectDescription
+        {
+            get { return ProjectStatus.Description; }
+        }
+
+
         public string ServerName
         {
             get { return string.Empty; }

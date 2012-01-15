@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public interface ISingleProjectDetail 
 	{
         string ProjectName { get; }
+        string ProjectDescription { get; }
+
         /// <summary>
         /// Retrieve the configuration for this project.
         /// </summary>
@@ -36,6 +38,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         string CurrentBuildStage { get; }
         Message[] Messages { get; }
 		
+
 		/// <summary>
 		/// Returns TimeSpan.MaxValue if unknown
 		/// </summary>
