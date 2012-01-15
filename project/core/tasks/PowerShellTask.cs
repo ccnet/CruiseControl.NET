@@ -398,15 +398,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             if (!string.IsNullOrEmpty(Script))
             {
-                if (ConfiguredScriptsDirectory.EndsWith("\\"))
+
+                if (Script.IndexOf(":") == 1) //drive letter specified, so it's not a relative path
                 {
-                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + Script + @"""");
+                    builder.AppendArgument(@"""" + Script + @"""");
                 }
                 else
                 {
-                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + "\\" + Script + @"""");
+
+                    if (ConfiguredScriptsDirectory.EndsWith("\\"))
+                    {
+                        builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + Script + @"""");
+                    }
+                    else
+                    {
+                        builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + "\\" + Script + @"""");
+                    }
                 }
             }
+
 
             if (!string.IsNullOrEmpty(BuildArgs)) builder.AppendArgument(BuildArgs);
             return builder.ToString();
