@@ -48,8 +48,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
                     if (!string.IsNullOrEmpty(password)) credentials.AddCredential(LoginRequest.PasswordCredential, password);
                     string sessionToken = farmService.Login(cruiseRequest.ServerName, credentials);
                     if (string.IsNullOrEmpty(sessionToken)) throw new CruiseControlException("Login failed!");
-                    storer.SessionToken = sessionToken;
-                    AddSessionCookie(sessionToken);
+                    storer.StoreSessionToken(sessionToken);
                     template = "LoggedIn.vm";
                 }
                 catch (Exception error)
@@ -60,23 +59,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             velocityContext["hidePassword"] = hidePassword;
             return viewGenerator.GenerateView(template, velocityContext);
         }
-        #endregion
-
-        #region Private methods
-        #region AddSessionCookie()
-        /// <summary>
-        /// Adds the session cookie.
-        /// </summary>
-        /// <param name="sessionToken"></param>
-        private void AddSessionCookie(string sessionToken)
-        {
-            var newCookie = new HttpCookie("CCNetSessionToken");
-            newCookie.Value = sessionToken;
-            newCookie.HttpOnly = true;
-            // A session cookie is created when no newCookie.Expires is set
-            HttpContext.Current.Response.Cookies.Add(newCookie);
-        }
-        #endregion
         #endregion
     }
 }

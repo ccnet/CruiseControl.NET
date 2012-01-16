@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
         /// </summary>
         /// <remarks></remarks>
 		public static readonly string DEFAULT_EXTENSION = "aspx";
-        private ISessionStorer sessionStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultUrlBuilder" /> class.	
@@ -22,17 +21,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		{
 			extension = DEFAULT_EXTENSION;
 		}
-
-        /// <summary>
-        /// Gets or sets the session storer.	
-        /// </summary>
-        /// <value>The session storer.</value>
-        /// <remarks></remarks>
-        public ISessionStorer SessionStorer
-        {
-            get { return sessionStore; }
-            set { sessionStore = value; }
-        }
 
         /// <summary>
         /// Gets or sets the extension.	
@@ -74,7 +62,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		/// </summary>
 		public string BuildUrl(string action, string queryString, string path)
 		{
-            queryString = GenerateQuery(queryString);
 			string url = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}.{2}", CalculatePath(path), action, extension);
 			if (!string.IsNullOrEmpty(queryString))
 			{
@@ -82,25 +69,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			}
 			return url;
 		}
-
-        private string GenerateQuery(string queryString)
-        {
-            if (sessionStore != null)
-            {
-                if (string.IsNullOrEmpty(queryString))
-                {
-                    return sessionStore.GenerateQueryToken();
-                }
-                else
-                {
-                    return queryString + "&" + sessionStore.GenerateQueryToken();
-                }
-            }
-            else
-            {
-                return queryString == null ? string.Empty : queryString;
-            }
-        }
 
 		private string CalculatePath(string path)
 		{

@@ -201,7 +201,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\StylesheetConfiguration.cs" />
-    <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
     <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
     <Compile Include="Dashboard\Actions\XsltParameter.cs" />
     <Compile Include="Dashboard\CookieSessionRetriever.cs" />

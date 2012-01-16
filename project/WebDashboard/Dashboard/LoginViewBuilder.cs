@@ -14,17 +14,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly ILinkFactory linkFactory;
         private readonly IVelocityViewGenerator velocityViewGenerator;
         private readonly IDashboardConfiguration configuration;
-        private readonly ISessionStorer storer;
+		private readonly ISessionRetriever retriever;
 
         public LoginViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, 
             IVelocityViewGenerator velocityViewGenerator, IDashboardConfiguration configuration,
-            ISessionStorer storer)
+            ISessionRetriever retriever)
         {
             this.request = request;
             this.linkFactory = linkFactory;
             this.velocityViewGenerator = velocityViewGenerator;
             this.configuration = configuration;
-            this.storer = storer;
+            this.retriever = retriever;
         }
 
         public HtmlFragmentResponse Execute()
@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             string serverName = request.ServerName;
             if (!string.IsNullOrEmpty(serverName) && (configuration.PluginConfiguration.SecurityPlugins.Length > 0))
             {
-                if (string.IsNullOrEmpty(storer.SessionToken))
+                if (string.IsNullOrEmpty(retriever.RetrieveSessionToken(request.Request)))
                 {
                     velocityContext["action"] = linkFactory.CreateServerLink(request.ServerSpecifier,
                         "Login",

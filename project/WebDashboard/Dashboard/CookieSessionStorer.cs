@@ -1,4 +1,6 @@
-﻿using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+﻿using System;
+using System.Web;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -11,22 +13,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         #region Public properties
         #region SessionToken
         /// <summary>
-        /// The session token.
+        /// Stores the session token in a cookie or deletes the cookie.
         /// </summary>
-        public string SessionToken { get; set; }
-        #endregion
-        #endregion
-
-        #region Public methods
-        #region RetrieveSessionToken()
-        /// <summary>
-        /// Generate a query value containing the session token.
-        /// </summary>
-        /// <returns></returns>
-        public string GenerateQueryToken()
-        {
-            return string.Empty;
-        }
+        public void StoreSessionToken(string sessionToken)
+		{
+			var newCookie = new HttpCookie("CCNetSessionToken");
+			newCookie.HttpOnly = true;
+			if (string.IsNullOrEmpty(sessionToken))
+			{
+				newCookie.Expires = DateTime.Now.AddDays(-1);
+			}
+			else
+			{
+				newCookie.Value = sessionToken;
+				// A session cookie is created when no newCookie.Expires is set
+			}
+			HttpContext.Current.Response.Cookies.Add(newCookie);
+		}
         #endregion
         #endregion
     }
