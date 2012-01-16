@@ -10,41 +10,39 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 {
-    public class LogoutSecurityAction
-        : ICruiseAction
-    {
-        #region Public consts
-        public const string ActionName = "ServerLogout";
-        #endregion
+	public class LogoutSecurityAction
+		: ICruiseAction
+	{
+		#region Public consts
+		public const string ActionName = "ServerLogout";
+		#endregion
 
-        #region Private fields
-        private readonly IFarmService farmService;
-        private readonly IVelocityViewGenerator viewGenerator;
-        private readonly ISessionStorer storer;
-        #endregion
+		#region Private fields
+		private readonly IFarmService farmService;
+		private readonly IVelocityViewGenerator viewGenerator;
+		private readonly ISessionStorer storer;
+		#endregion
 
-        #region Constructors
-        public LogoutSecurityAction(IFarmService farmService, IVelocityViewGenerator viewGenerator,
-            ISessionStorer storer)
-        {
-            this.farmService = farmService;
-            this.viewGenerator = viewGenerator;
-            this.storer = storer;
-        }
-        #endregion
+		#region Constructors
+		public LogoutSecurityAction(IFarmService farmService, IVelocityViewGenerator viewGenerator,
+			ISessionStorer storer)
+		{
+			this.farmService = farmService;
+			this.viewGenerator = viewGenerator;
+			this.storer = storer;
+		}
+		#endregion
 
-        #region Public methods
-        public IResponse Execute(ICruiseRequest cruiseRequest)
-        {
-            Hashtable velocityContext = new Hashtable();
-            if (!string.IsNullOrEmpty(storer.SessionToken)) farmService.Logout(cruiseRequest.ServerName, storer.SessionToken);
-            storer.SessionToken = null;
-            var newCookie = new HttpCookie("CCNetSessionToken");
-            newCookie.HttpOnly = true;
-            newCookie.Expires = DateTime.Now.AddDays(-1);
-            HttpContext.Current.Response.Cookies.Add(newCookie);
-            return viewGenerator.GenerateView("LoggedOut.vm", velocityContext);
-        }
-        #endregion
-    }
+		#region Public methods
+		public IResponse Execute(ICruiseRequest cruiseRequest)
+		{
+			Hashtable velocityContext = new Hashtable();
+			string sessionToken = cruiseRequest.RetrieveSessionToken();
+			if (!string.IsNullOrEmpty(sessionToken))
+				farmService.Logout(cruiseRequest.ServerName, sessionToken);
+			storer.StoreSessionToken(null);
+			return viewGenerator.GenerateView("LoggedOut.vm", velocityContext);
+		}
+		#endregion
+	}
 }

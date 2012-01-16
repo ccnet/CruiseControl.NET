@@ -6,14 +6,8 @@
     public interface ISessionStorer
     {
         /// <summary>
-        /// Generates a token to add to a query string for a session.
+        /// The session token to store, null to delete.
         /// </summary>
-        /// <returns></returns>
-        string GenerateQueryToken();
-
-        /// <summary>
-        /// The session token to store.
-        /// </summary>
-        string SessionToken { get; set; }
+		void StoreSessionToken(string sessionToken);
     }
 }

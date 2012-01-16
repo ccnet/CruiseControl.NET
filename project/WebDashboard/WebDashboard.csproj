@@ -201,7 +201,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration\StylesheetConfiguration.cs" />
-    <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
     <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
     <Compile Include="Dashboard\Actions\XsltParameter.cs" />
     <Compile Include="Dashboard\CookieSessionRetriever.cs" />
@@ -932,6 +931,5 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets')" />
-
-  </Project>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets')" />
+</Project>

@@ -13,10 +13,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <param name="request"></param>
         /// <returns></returns>
         string RetrieveSessionToken(IRequest request);
-
-        /// <summary>
-        /// The retrieved session token.
-        /// </summary>
-        string SessionToken { get; set; }
     }
 }

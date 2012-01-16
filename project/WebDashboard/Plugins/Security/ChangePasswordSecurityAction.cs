@@ -20,7 +20,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
         #region Private fields
         private readonly IFarmService farmService;
         private readonly IVelocityViewGenerator viewGenerator;
-        private readonly ISessionStorer storer;
         #endregion
 
         #region Constructors
@@ -29,7 +28,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
-            this.storer = storer;
         }
         #endregion
 
@@ -48,7 +46,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
                 try
                 {
                     if (newPassword1 != newPassword2) throw new CruiseControlException("New passwords do not match");
-                    farmService.ChangePassword(cruiseRequest.ServerName, storer.SessionToken, oldPassword, newPassword1);
+					string sessionToken = cruiseRequest.RetrieveSessionToken();
+                    farmService.ChangePassword(cruiseRequest.ServerName, sessionToken, oldPassword, newPassword1);
                     velocityContext["message"] = "Password has been changed";
                 }
                 catch (Exception error)

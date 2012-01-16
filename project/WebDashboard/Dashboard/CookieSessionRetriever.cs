@@ -9,15 +9,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     public class CookieSessionRetriever
         : ISessionRetriever
     {
-        #region Public properties
-        #region SessionToken
-        /// <summary>
-        /// The session token.
-        /// </summary>
-        public string SessionToken { get; set; }
-        #endregion
-        #endregion
-
         #region Public methods
         #region RetrieveSessionToken()
         /// <summary>
@@ -30,13 +21,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             var cookie = HttpContext.Current.Request.Cookies["CCNetSessionToken"];
             if (cookie != null)
             {
-                SessionToken = cookie.Value;
+                return cookie.Value;
             }
-            else
-            {
-                SessionToken = string.Empty;
-            }
-            return SessionToken;
+            return string.Empty;
         }
         #endregion
         #endregion
