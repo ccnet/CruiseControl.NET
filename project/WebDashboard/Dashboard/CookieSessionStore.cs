@@ -1,5 +1,8 @@
-﻿using Exortech.NetReflector;
+﻿using System;
+using System.Web;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -8,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     /// </summary>
     [ReflectorType("cookieStore")]    
     public class CookieSessionStore
-        : ISessionStore
+		: ISessionStore, ISessionRetriever, ISessionStorer
     {
         #region Public methods
         #region RetrieveStorer()
@@ -18,8 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns>Returns an object that will store a session token.</returns>
         public ISessionStorer RetrieveStorer()
         {
-            var storer = new CookieSessionStorer();
-            return storer;
+            return this;
         }
         #endregion
 
@@ -30,10 +32,59 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns>Returns an object that will retrieve a session token.</returns>
         public ISessionRetriever RetrieveRetriever()
         {
-            var retriever = new CookieSessionRetriever();
-            return retriever;
+            return this;
         }
         #endregion
-        #endregion
-    }
+
+		#region SessionToken
+		/// <summary>
+		/// Stores the session token in a cookie or deletes the cookie.
+		/// </summary>
+		public void StoreSessionToken(string sessionToken)
+		{
+			var newCookie = new HttpCookie("CCNetSessionToken");
+			newCookie.HttpOnly = true;
+			if (string.IsNullOrEmpty(sessionToken))
+			{
+				_sessionToken = string.Empty;
+				newCookie.Expires = DateTime.Now.AddDays(-1);
+			}
+			else
+			{
+				_sessionToken = sessionToken;
+				newCookie.Value = sessionToken;
+				// A session cookie is created when no newCookie.Expires is set
+			}
+			HttpContext.Current.Response.Cookies.Add(newCookie);
+		}
+		#endregion
+
+		#region RetrieveSessionToken()
+		/// <summary>
+		/// Retrieve the session token.
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		public string RetrieveSessionToken(IRequest request)
+		{
+			if (_sessionToken == null)
+			{
+				var cookie = HttpContext.Current.Request.Cookies["CCNetSessionToken"];
+				if (cookie != null)
+				{
+					_sessionToken = cookie.Value;
+				}
+				else
+				{
+					_sessionToken = string.Empty;
+				}
+			}
+			return _sessionToken;
+		}
+		#endregion
+
+		#endregion
+
+		private string _sessionToken;
+	}
 }

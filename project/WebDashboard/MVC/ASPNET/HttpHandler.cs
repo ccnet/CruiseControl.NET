@@ -12,13 +12,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 	public class HttpHandler : IHttpHandler, IRequiresSessionState
 	{
 		private const string RESOLVED_TYPE_MAP = "ResolvedTypeMap";
+		private const string CruiseObjectSourceInitializerName = "CruiseObjectSourceInitializer";
 
 		public void ProcessRequest(HttpContext context)
 		{
-			ObjectionStore objectionStore = new ObjectionStore(
-				new CachingImplementationResolver(new NMockAwareImplementationResolver(), new CachedTypeMap(context.Cache, RESOLVED_TYPE_MAP)),
-				new MaxLengthConstructorSelectionStrategy());
-			ObjectSource objectSource = new CruiseObjectSourceInitializer(objectionStore).SetupObjectSourceForRequest(context);
+			CruiseObjectSourceInitializer sourceSetup = (CruiseObjectSourceInitializer)context.Session[CruiseObjectSourceInitializerName];
+			ObjectSource objectSource = null;
+			if (sourceSetup == null)
+			{
+				ObjectionStore objectionStore = new ObjectionStore(
+					new CachingImplementationResolver(new NMockAwareImplementationResolver(), new CachedTypeMap(context.Cache, RESOLVED_TYPE_MAP)),
+					new MaxLengthConstructorSelectionStrategy());
+				sourceSetup = new CruiseObjectSourceInitializer(objectionStore);
+				sourceSetup.SetupObjectSourceForFirstRequest(context);
+				context.Session[CruiseObjectSourceInitializerName] = sourceSetup;
+			}
+			objectSource = sourceSetup.UpdateObjectSourceForRequest(context);
 
 			context.Response.AppendHeader("X-CCNet-Version",
 				string.Format(System.Globalization.CultureInfo.CurrentCulture, "CruiseControl.NET/{0}", Assembly.GetExecutingAssembly().GetName().Version));
