@@ -21,56 +21,45 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class CruiseObjectSourceInitializer
 	{
-		private readonly ObjectionManager objectionManager;
+		private readonly ObjectionManager _objectionManager;
 
 		public CruiseObjectSourceInitializer(ObjectionManager objectionManager)
 		{
-			this.objectionManager = objectionManager;
+			_objectionManager = objectionManager;
 		}
 
-		// This all needs breaking up a bit (to make it testable, apart from anything else)
-		public ObjectSource SetupObjectSourceForRequest(HttpContext context)
+		public void SetupObjectSourceForFirstRequest(HttpContext context)
 		{
-			ObjectSource objectSource = (ObjectSource)objectionManager; // Yuch - put this in Object Wizard somewhere
-			objectionManager.AddInstanceForType(typeof(ObjectSource), objectionManager);
+			_objectionManager.AddInstanceForType(typeof(ObjectSource), _objectionManager);
 
-			objectionManager.AddInstanceForType(typeof(HttpContext), context);
-			HttpRequest request = context.Request;
-			objectionManager.AddInstanceForType(typeof(HttpRequest), request);
-
-			NameValueCollection parametersCollection = new NameValueCollection();
-			parametersCollection.Add(request.QueryString);
-			parametersCollection.Add(request.Form);
-			objectionManager.AddInstanceForType(typeof(IRequest),
-												new NameValueCollectionRequest(parametersCollection, request.Headers, request.Path,
-																			   request.RawUrl, request.ApplicationPath));
+			ObjectSource objectSource = UpdateObjectSourceForRequest(context);
 
 			DefaultUrlBuilder urlBuilder = new DefaultUrlBuilder();
-			objectionManager.AddInstanceForType(typeof(IUrlBuilder),
+			_objectionManager.AddInstanceForType(typeof(IUrlBuilder),
 												new AbsolutePathUrlBuilderDecorator(
 													urlBuilder,
-													request.ApplicationPath));
+													context.Request.ApplicationPath));
 
-			objectionManager.SetImplementationType(typeof(ICruiseRequest), typeof(RequestWrappingCruiseRequest));
+			_objectionManager.SetImplementationType(typeof(ICruiseRequest), typeof(RequestWrappingCruiseRequest));
 
-			objectionManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
+			_objectionManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
 
-			objectionManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof(HtmlAwareMultiTransformer));
+			_objectionManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof(HtmlAwareMultiTransformer));
 
 			IDashboardConfiguration config = GetDashboardConfiguration(objectSource, context);
-			objectionManager.AddInstanceForType(typeof(IDashboardConfiguration), config);
+			_objectionManager.AddInstanceForType(typeof(IDashboardConfiguration), config);
 
 			IRemoteServicesConfiguration remoteServicesConfig = config.RemoteServices;
-			objectionManager.AddInstanceForType(typeof(IRemoteServicesConfiguration), remoteServicesConfig);
+			_objectionManager.AddInstanceForType(typeof(IRemoteServicesConfiguration), remoteServicesConfig);
 
 			IPluginConfiguration pluginConfig = config.PluginConfiguration;
-			objectionManager.AddInstanceForType(typeof(IPluginConfiguration), pluginConfig);
+			_objectionManager.AddInstanceForType(typeof(IPluginConfiguration), pluginConfig);
 
 			ISessionRetriever sessionRetriever = pluginConfig.SessionStore.RetrieveRetriever();
-			objectionManager.AddInstanceForType(typeof(ISessionRetriever), sessionRetriever);
+			_objectionManager.AddInstanceForType(typeof(ISessionRetriever), sessionRetriever);
 
 			ISessionStorer sessionStorer = pluginConfig.SessionStore.RetrieveStorer();
-			objectionManager.AddInstanceForType(typeof(ISessionStorer), sessionStorer);
+			_objectionManager.AddInstanceForType(typeof(ISessionStorer), sessionStorer);
 
 			LoadFarmPlugins(pluginConfig);
 			LoadServerPlugins(pluginConfig);
@@ -84,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			catch (ApplicationException)
 			{
 				IPlugin latestBuildPlugin = (IPlugin)objectSource.GetByType(typeof(LatestBuildReportProjectPlugin));
-				objectionManager.AddInstanceForName(latestBuildPlugin.NamedActions[0].ActionName.ToLowerInvariant(), latestBuildPlugin.NamedActions[0].Action)
+				AddActionInstance(latestBuildPlugin.NamedActions[0])
 					.Decorate(typeof(ServerCheckingProxyAction))
 					.Decorate(typeof(ProjectCheckingProxyAction))
 					.Decorate(typeof(CruiseActionProxyAction))
@@ -100,55 +89,69 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			// ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
 			// See BuildLogBuildPlugin for linked todo
-			objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlBuildLogAction))
+			_objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlBuildLogAction))
 				.Decorate(typeof(ServerCheckingProxyAction))
 				.Decorate(typeof(BuildCheckingProxyAction))
 				.Decorate(typeof(ProjectCheckingProxyAction))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// TODO - Xml Exceptions?
-			objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME.ToLowerInvariant(), typeof(ForceBuildXmlAction))
+			_objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME.ToLowerInvariant(), typeof(ForceBuildXmlAction))
 				.Decorate(typeof(ServerCheckingProxyAction))
 				.Decorate(typeof(ProjectCheckingProxyAction))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// Supporting xml project status queries from CCTray or clients earlier than version 1.3
 			// Also still used by the web dashboard for displaying farm/server reports
-			objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlReportAction));
-			objectionManager.AddTypeForName(ProjectXmlReport.ActionName.ToLowerInvariant(), typeof(ProjectXmlReport))
+			_objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlReportAction));
+			_objectionManager.AddTypeForName(ProjectXmlReport.ActionName.ToLowerInvariant(), typeof(ProjectXmlReport))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
-			objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlServerReportAction));
+			_objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlServerReportAction));
 
 			// Security handler for CCTray or client 1.5 or later
-			objectionManager.AddTypeForName(XmlServerSecurityAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlServerSecurityAction));
+			_objectionManager.AddTypeForName(XmlServerSecurityAction.ACTION_NAME.ToLowerInvariant(), typeof(XmlServerSecurityAction));
 
 			// RSS publisher
-			objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME.ToLowerInvariant(), typeof(Plugins.RSS.RSSFeed))
+			_objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME.ToLowerInvariant(), typeof(Plugins.RSS.RSSFeed))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// Status data
-			objectionManager.AddTypeForName(ProjectStatusAction.ActionName.ToLowerInvariant(), typeof(ProjectStatusAction))
+			_objectionManager.AddTypeForName(ProjectStatusAction.ActionName.ToLowerInvariant(), typeof(ProjectStatusAction))
 				.Decorate(typeof(ServerCheckingProxyAction))
 				.Decorate(typeof(ProjectCheckingProxyAction))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// File downloads
-			objectionManager.AddTypeForName(ProjectFileDownload.ActionName.ToLowerInvariant(), typeof(ProjectFileDownload))
+			_objectionManager.AddTypeForName(ProjectFileDownload.ActionName.ToLowerInvariant(), typeof(ProjectFileDownload))
 				.Decorate(typeof(CruiseActionProxyAction));
-			objectionManager.AddTypeForName(BuildFileDownload.ActionName.ToLowerInvariant(), typeof(BuildFileDownload))
+			_objectionManager.AddTypeForName(BuildFileDownload.ActionName.ToLowerInvariant(), typeof(BuildFileDownload))
 				.Decorate(typeof(CruiseActionProxyAction));
 
 			// Parameters handler for CCTray or client 1.5 or later
-			objectionManager.AddInstanceForName(XmlProjectParametersReportAction.ACTION_NAME.ToLowerInvariant(),
+			_objectionManager.AddInstanceForName(XmlProjectParametersReportAction.ACTION_NAME.ToLowerInvariant(),
 				objectSource.GetByType(typeof(XmlProjectParametersReportAction)));
 
 			// Raw XML request handler
-			objectionManager.AddTypeForName(MessageHandlerPlugin.ActionName.ToLowerInvariant(), typeof(MessageHandlerPlugin))
+			_objectionManager.AddTypeForName(MessageHandlerPlugin.ActionName.ToLowerInvariant(), typeof(MessageHandlerPlugin))
 				.Decorate(typeof(CruiseActionProxyAction));
+		}
 
-			return objectSource;
+		public ObjectSource UpdateObjectSourceForRequest(HttpContext context)
+		{
+			_objectionManager.AddInstanceForType(typeof(HttpContext), context);
+			HttpRequest request = context.Request;
+			_objectionManager.AddInstanceForType(typeof(HttpRequest), request);
+
+			NameValueCollection parametersCollection = new NameValueCollection();
+			parametersCollection.Add(request.QueryString);
+			parametersCollection.Add(request.Form);
+			_objectionManager.AddInstanceForType(typeof(IRequest),
+				new NameValueCollectionRequest(
+					parametersCollection, request.Headers, request.Path,
+					request.RawUrl, request.ApplicationPath));
+			return (ObjectSource)_objectionManager; // Yuch - put this in Object Wizard somewhere
 		}
 
 		private void LoadFarmPlugins(IPluginConfiguration pluginConfig)
@@ -170,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					{
 						if ((action as INoSiteTemplateAction) == null)
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(CruiseActionProxyAction))
 								.Decorate(typeof(ExceptionCatchingActionProxy))
 								.Decorate(typeof(SiteTemplateActionDecorator))
@@ -178,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						}
 						else
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(CruiseActionProxyAction))
 								.Decorate(typeof(ExceptionCatchingActionProxy))
 								.Decorate(typeof(NoCacheabilityActionProxy));
@@ -208,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					{
 						if ((action as INoSiteTemplateAction) == null)
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(CruiseActionProxyAction))
 								.Decorate(typeof(ExceptionCatchingActionProxy))
@@ -217,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						}
 						else
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(CruiseActionProxyAction))
 								.Decorate(typeof(ExceptionCatchingActionProxy))
@@ -248,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					{
 						if ((action as INoSiteTemplateAction) == null)
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(ProjectCheckingProxyAction))
 								.Decorate(typeof(CruiseActionProxyAction))
@@ -257,7 +260,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						}
 						else
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(ProjectCheckingProxyAction))
 								.Decorate(typeof(CruiseActionProxyAction))
@@ -288,10 +291,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					{
 						if ((action as INoSiteTemplateAction) == null)
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant() + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
+							_objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant() + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
 								.Decorate(typeof(CruiseActionProxyAction))
 								.Decorate(typeof(SiteTemplateActionDecorator));
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(BuildCheckingProxyAction))
 								.Decorate(typeof(ProjectCheckingProxyAction))
@@ -302,9 +305,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						}
 						else
 						{
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant() + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
+							_objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant() + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
 								.Decorate(typeof(CruiseActionProxyAction));
-							objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+							AddActionInstance(action)
 								.Decorate(typeof(ServerCheckingProxyAction))
 								.Decorate(typeof(BuildCheckingProxyAction))
 								.Decorate(typeof(ProjectCheckingProxyAction))
@@ -332,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				{
 					if ((action as INoSiteTemplateAction) == null)
 					{
-						objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+						AddActionInstance(action)
 							.Decorate(typeof(ServerCheckingProxyAction))
 							.Decorate(typeof(CruiseActionProxyAction))
 							.Decorate(typeof(ExceptionCatchingActionProxy))
@@ -341,7 +344,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					}
 					else
 					{
-						objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action)
+						AddActionInstance(action)
 							.Decorate(typeof(ServerCheckingProxyAction))
 							.Decorate(typeof(CruiseActionProxyAction))
 							.Decorate(typeof(ExceptionCatchingActionProxy))
@@ -355,7 +358,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		private void AddRequiredSecurityAction(string actionName, Type actionType)
 		{
-			objectionManager.AddTypeForName(actionName, actionType)
+			_objectionManager.AddTypeForName(actionName, actionType)
 				.Decorate(typeof(ServerCheckingProxyAction))
 				.Decorate(typeof(CruiseActionProxyAction))
 				.Decorate(typeof(ExceptionCatchingActionProxy))
@@ -383,6 +386,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				ErrorDescription.AppendLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " * {0}", item));
 			}
 			throw new CruiseControlException(ErrorDescription.ToString());
+		}
+
+		private DecoratableByType AddActionInstance(INamedAction action)
+		{
+			return _objectionManager.AddInstanceForName(action.ActionName.ToLowerInvariant(), action.Action);
 		}
 
 	}

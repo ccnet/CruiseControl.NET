@@ -203,9 +203,7 @@
     <Compile Include="Configuration\StylesheetConfiguration.cs" />
     <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
     <Compile Include="Dashboard\Actions\XsltParameter.cs" />
-    <Compile Include="Dashboard\CookieSessionRetriever.cs" />
     <Compile Include="Dashboard\CookieSessionStore.cs" />
-    <Compile Include="Dashboard\CookieSessionStorer.cs" />
     <Compile Include="Dashboard\GenericPlugins\HtmlReportPlugin.cs" />
     <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
     <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
