@@ -78,7 +78,6 @@ namespace Validator
                     }
 
                 }
-
                 if (extra.Count == 1) isValid = main.ValidateConfig(extra[0]);
                 if (!nogui)
                 {

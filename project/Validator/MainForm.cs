@@ -672,16 +672,15 @@ namespace Validator
                     message));
                 LogMessage(message);
             }
-            return isValid;
+            return isValid && errorProcesser.Passed;
         }
 
         private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row, IConfigurationErrorProcesser errorProcesser)
         {
-            bool isValid = true;
-
             try
             {
                 validator.Validate(configuration, ConfigurationTrace.Start(configuration), errorProcesser);
+                return true;
             }
             catch (Exception error)
             {
@@ -696,10 +695,9 @@ namespace Validator
                         new HtmlAttribute("class", "error"),
                         message)));
                 LogMessage(message);
-                isValid = false;
                 row++;
             }
-            return isValid;
+            return false;
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
