@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 using Exortech.NetReflector;
 using NMock.Constraints;
 using NUnit.Framework;
@@ -90,9 +91,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
 
-			Assert.IsTrue(result.Succeeded);
+            StringWriter buffer = new StringWriter();
+            new ReflectorTypeAttribute("task").Write(new XmlTextWriter(buffer), task);
+
+            Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine
+                + buffer.ToString() + System.Environment.NewLine + "  <message>" 
                 + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>" 
                 + System.Environment.NewLine, result.TaskOutput);
             Verify();
@@ -106,9 +111,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
 
+            StringWriter buffer = new StringWriter();
+            new ReflectorTypeAttribute("task").Write(new XmlTextWriter(buffer), task);
+
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine
+                + buffer.ToString() + System.Environment.NewLine + "  <message>" 
                 + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>" 
                 + System.Environment.NewLine, result.TaskOutput);
 
@@ -218,10 +227,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.IsTrue(result.Succeeded);
             Assert.AreEqual(IntegrationStatus.Success, result.Status);
 
+            StringWriter buffer = new StringWriter();
+            new ReflectorTypeAttribute("task").Write(new XmlTextWriter(buffer), xmlTestTask);
+            
             // TODO: The following only works correctly when ProcessResultOutput is a single non-empty line.
             // That is always the case, courtesy of our superclass' initialization.  If that should ever
             // change, this test needs to be adjusted accordingly.
-            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine
+                + buffer.ToString() + System.Environment.NewLine + "  <message>" 
                 + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>"
                 + System.Environment.NewLine, result.TaskOutput);
             Verify();

@@ -231,8 +231,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // The executable produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.
                 ProcessResult newResult = new ProcessResult(
-                        StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty),
-                        StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
+                        StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty, this),
+                        StringUtil.MakeBuildResult(processResult.StandardError, "Error", this),
                         processResult.ExitCode,
                         processResult.TimedOut,
                         processResult.Failed);
