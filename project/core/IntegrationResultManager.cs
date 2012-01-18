@@ -131,6 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core
             string lastSuccessfulIntegrationLabel = (integration.Succeeded) ? integration.Label : integration.LastSuccessfulIntegrationLabel;
             IntegrationSummary newSummary = new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);
             newSummary.FailureUsers = integration.FailureUsers;
+            newSummary.FailureTasks = integration.FailureTasks;
             return newSummary;
         }
     }

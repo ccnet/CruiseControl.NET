@@ -983,11 +983,18 @@ namespace ThoughtWorks.CruiseControl.Core
             if (result.Succeeded)
             {
                 messages.Clear();
+                //result.FailureTasks.Clear();
             }
             else
             {
                 AddBreakersToMessages(result);
                 AddFailedTaskToMessages();
+
+                var failedTasks = new List<string>();
+                FindFailedTasks(currentProjectStatus, failedTasks);
+
+                //result.FailureTasks.Clear();
+                result.FailureTasks.AddRange(failedTasks);
             }
 
             this.ClearMessages(Message.MessageKind.BuildStatus);

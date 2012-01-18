@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.IO;
+using System.Reflection;
 using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -55,7 +57,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             
             AssertXPathExists(xml, "cruisecontrol/integrationProperties");
 
-
+            // Go through the list of integration property names constants and check they are here
+            FieldInfo[] fieldInfos = typeof(IntegrationPropertyNames).GetFields(BindingFlags.Public | BindingFlags.Static);
+            foreach (FieldInfo fi in fieldInfos)
+                if (fi.IsLiteral && !fi.IsInitOnly)
+                {
+                    string integrationPropertyName = (string)fi.GetValue(null);
+                    if (result.IntegrationProperties[integrationPropertyName] != null)
+                        AssertXPathExists(xml, "cruisecontrol/integrationProperties/" + integrationPropertyName);
+                }
 		}
 
 		[Test]

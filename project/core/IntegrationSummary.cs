@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string lastSuccessfulIntegrationLabel;
 		private DateTime startTime;
         private ArrayList failureUsers = new ArrayList();
+        private ArrayList failureTasks = new ArrayList();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationSummary" /> class.	
@@ -133,5 +134,16 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return failureUsers; }
             set { failureUsers = value; }
         }
-	}
+
+        /// <summary>
+        /// Gets or sets the failure tasks.	
+        /// </summary>
+        /// <value>The failure tasks.</value>
+        /// <remarks></remarks>
+        public ArrayList FailureTasks
+        {
+            get { return failureTasks; }
+            set { failureTasks = value; }
+        }
+    }
 }

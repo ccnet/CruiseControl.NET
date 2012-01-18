@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
         // mutable properties
         private IntegrationStatus status = IntegrationStatus.Unknown;
         private ArrayList failureUsers = new ArrayList();
+        private ArrayList failureTasks = new ArrayList();
         private string label = InitialLabel;
         private DateTime startTime;
         private DateTime endTime;
@@ -550,6 +551,15 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
+        /// The list of names of tasks which contributed to the current build failure.
+        /// </summary>
+        public ArrayList FailureTasks
+        {
+            get { return failureTasks; }
+            set { failureTasks = value; }
+        }
+
+        /// <summary>
         /// Gets the integration request.	
         /// </summary>
         /// <value></value>
@@ -584,6 +594,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetLastIntegrationStatus] = LastIntegrationStatus;
                 fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
                 fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;
+                fullProps[IntegrationPropertyNames.CCNetFailureTasks] = FailureTasks;
                 fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
                 fullProps[IntegrationPropertyNames.CCNetUser] = request.UserName;
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
