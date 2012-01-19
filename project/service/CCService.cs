@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
         public CCService()
         {
-            if (string.Equals(ConfigurationManager.AppSettings["DebugCCService"], "yes", StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(ConfigurationManager.AppSettings["DebugCCService"], "yes", StringComparison.OrdinalIgnoreCase))
             {
                 Debugger.Launch();
             }
@@ -59,8 +59,8 @@ namespace ThoughtWorks.CruiseControl.Service
 
             // Allow the user to turn shadow-copying off
             var setting = ConfigurationManager.AppSettings["ShadowCopy"] ?? string.Empty;
-            var useShadowCopying = !(string.Equals(setting, "off", StringComparison.InvariantCultureIgnoreCase) ||
-                string.Equals(setting, "false", StringComparison.InvariantCultureIgnoreCase));
+            var useShadowCopying = !(string.Equals(setting, "off", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(setting, "false", StringComparison.OrdinalIgnoreCase));
             try
             {
                 this.runnerDomain = CreateNewDomain(useShadowCopying);

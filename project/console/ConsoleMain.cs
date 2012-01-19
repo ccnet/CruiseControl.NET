@@ -52,8 +52,8 @@ namespace ThoughtWorks.CruiseControl.Console
                     // Load the domain and start the runner
                     // Allow the user to turn shadow-copying off
                     var setting = ConfigurationManager.AppSettings["ShadowCopy"] ?? string.Empty;
-                    var useShadowCopying = !(string.Equals(setting, "off", StringComparison.InvariantCultureIgnoreCase) ||
-                        string.Equals(setting, "false", StringComparison.InvariantCultureIgnoreCase));
+                    var useShadowCopying = !(string.Equals(setting, "off", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(setting, "false", StringComparison.OrdinalIgnoreCase));
                     AppDomain runnerDomain;
                     try
                     {

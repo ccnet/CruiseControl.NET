@@ -49,8 +49,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell.Cmdlets
             if (!actualAddress.Contains("//"))
             {
                 // Address does not contain the protocol
-                if (actualAddress.Equals("localhost", StringComparison.InvariantCultureIgnoreCase) ||
-                    actualAddress.Equals("127.0.0.1", StringComparison.InvariantCultureIgnoreCase))
+                if (actualAddress.Equals("localhost", StringComparison.OrdinalIgnoreCase) ||
+                    actualAddress.Equals("127.0.0.1", StringComparison.OrdinalIgnoreCase))
                 {
                     actualAddress = "tcp://" + actualAddress;
                     if (!actualAddress.Contains(":"))
