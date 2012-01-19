@@ -110,14 +110,11 @@ namespace ThoughtWorks.CruiseControl.Core
         private ParameterBase[] parameters = new ParameterBase[0];
         private ProjectInitialState initialState = ProjectInitialState.Started;
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
-        private bool stopProjectOnReachingMaxSourceControlRetries;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
         private ProjectStatusSnapshot currentProjectStatus;
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
         private IConfiguration configuration;
-        private bool showForceBuildButton = true;
-        private bool showStartStopButton = true;
         private IExecutionEnvironment currentExecutionEnvironment;
 
         #region Constructors
@@ -130,6 +127,8 @@ namespace ThoughtWorks.CruiseControl.Core
             integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
             this.PrebuildTasks = new ITask[0];
             this.CryptoFunctions = new DefaultCryptoFunctions();
+            this.ShowForceBuildButton = true;
+            this.ShowStartStopButton = true;
 
             // Generates the initial snapshot
             currentProjectStatus = new ProjectStatusSnapshot();
@@ -269,14 +268,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <version>1.4</version>
         /// <default>false</default>
         [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
-        public bool StopProjectOnReachingMaxSourceControlRetries
-        {
-            get { return stopProjectOnReachingMaxSourceControlRetries; }
-            set { stopProjectOnReachingMaxSourceControlRetries = value; }
-        }
-
-
-
+        public bool StopProjectOnReachingMaxSourceControlRetries {get; set;}
+        
         /// <summary>
         /// (Should) show or hide the ForceBuildButton in UI programs. This is an extra setting on top of security.
         /// This is setting is mainly meant to disable the possibility to force a project via a UI. (dashboard and cctray)
@@ -287,11 +280,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <version>1.6</version>
         /// <default>True</default>
         [ReflectorProperty("showForceBuildButton", Required = false)]
-        public bool ShowForceBuildButton
-        {
-            get { return showForceBuildButton; }
-            set { showForceBuildButton = value; }
-        }
+        public  bool ShowForceBuildButton {get; set;}
+        
 
         /// <summary>
         /// (Should) show or hide the Start - Stop Button in UI programs. This is an extra setting on top of security.
@@ -303,11 +293,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <version>1.6</version>
         /// <default>True</default>
         [ReflectorProperty("showStartStopButton", Required = false)]
-        public bool ShowStartStopButton
-        {
-            get { return showStartStopButton; }
-            set { showStartStopButton = value; }
-        }
+        public bool ShowStartStopButton { get; set; }
+        
 
         /// <summary>
         /// What action to take when a source control error occurs (during GetModifications).

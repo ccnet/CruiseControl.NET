@@ -1076,13 +1076,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 var sourceProject = GetIntegrator(request.ProjectName).Project;
                 var filePath = Path.Combine(sourceProject.ArtifactDirectory, request.FileName);
                 var fileInfo = new FileInfo(filePath);
-                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
+                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.OrdinalIgnoreCase))
                 {
                     var message = string.Format(CultureInfo.CurrentCulture,"Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);
                     throw new CruiseControlException(message);
                 }
-                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
+                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.OrdinalIgnoreCase))
                 {
                     var message = string.Format(CultureInfo.CurrentCulture,"Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);

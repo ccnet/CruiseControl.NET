@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns>True if the permission is valid for the user, false otherwise.</returns>
         protected override bool CheckUserActual(ISecurityManager manager, string userName)
         {
-            return string.Equals(userName, this.userName, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(userName, this.userName, StringComparison.OrdinalIgnoreCase);
         }
         #endregion
         #endregion

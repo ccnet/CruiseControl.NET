@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
             // Convert a ServerClient URI to a Manager URI.
             var actualUri = url;
-            if (url.EndsWith(serverClientUri, StringComparison.InvariantCultureIgnoreCase))
+            if (url.EndsWith(serverClientUri, StringComparison.OrdinalIgnoreCase))
             {
                 actualUri = url.Substring(0, url.Length - serverClientUri.Length) + managerUri;
             }
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
             // Convert a ServerClient URI to a Manager URI.
             var actualUri = url;
-            if (url.EndsWith(managerUri, StringComparison.InvariantCultureIgnoreCase))
+            if (url.EndsWith(managerUri, StringComparison.OrdinalIgnoreCase))
             {
                 actualUri = url.Substring(0, url.Length - managerUri.Length) + serverClientUri;
             }

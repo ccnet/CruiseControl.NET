@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             ProjectStatusListAndExceptions list = farmService.GetProjectStatusListAndCaptureExceptions(projectSpecifier.ServerSpecifier, request.RetrieveSessionToken());
             foreach (ProjectStatusOnServer status in list.StatusAndServerList)
             {
-                if (string.Equals(status.ProjectStatus.Name, projectSpecifier.ProjectName, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(status.ProjectStatus.Name, projectSpecifier.ProjectName, StringComparison.OrdinalIgnoreCase))
                 {
                     return status.ProjectStatus;
                 }

@@ -15,12 +15,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     public sealed class UndefinedSymbolException : EvaluationException
     {
-        internal UndefinedSymbolException(string msg) : base(msg)
+        internal UndefinedSymbolException(string message) : base(message)
         {
         }
-        new internal static Exception CreateException(string msg, params object[] args)
+        new internal static Exception CreateException(string message, params object[] args)
         {
-            return new UndefinedSymbolException(String.Format(msg, args));
+            return new UndefinedSymbolException(String.Format(message, args));
         }
     }
 
@@ -29,13 +29,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     public sealed class CyclicalEvaluationException : EvaluationException
     {
-        internal CyclicalEvaluationException(string msg)
-            : base(msg)
+        internal CyclicalEvaluationException(string message)
+            : base(message)
         {
         }
-        new internal static Exception CreateException(string msg, params object[] args)
+        new internal static Exception CreateException(string message, params object[] args)
         {
-            return new CyclicalEvaluationException(String.Format(CultureInfo.CurrentCulture, msg, args));
+            return new CyclicalEvaluationException(String.Format(CultureInfo.CurrentCulture, message, args));
         }
     }
     /// <summary>
@@ -43,13 +43,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     public class EvaluationException : PreprocessorException
     {
-        internal EvaluationException(string msg) : base( msg )
+        internal EvaluationException(string message) : base( message )
         {
         }
 
-        internal static Exception CreateException(string msg, params object[] args)
+        internal static Exception CreateException(string message, params object[] args)
         {
-            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
+            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, message, args ) );
         }
 
         internal static Exception CreateException(string expr, Exception cause)
@@ -69,16 +69,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Initializes a new instance of the <see cref="ExplicitDefinitionRequiredException" /> class.	
         /// </summary>
-        /// <param name="msg">The MSG.</param>
+        /// <param name="message">The MSG.</param>
         /// <remarks></remarks>
-        public ExplicitDefinitionRequiredException(string msg)
-            : base( msg )
+        public ExplicitDefinitionRequiredException(string message)
+            : base( message )
         {
         }
 
-        internal new static Exception CreateException(string msg, params object[] args)
+        internal new static Exception CreateException(string message, params object[] args)
         {
-            return new ExplicitDefinitionRequiredException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
+            return new ExplicitDefinitionRequiredException( String.Format( CultureInfo.CurrentCulture, message, args ) );
         }
     }
 
@@ -91,16 +91,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportException" /> class.	
         /// </summary>
-        /// <param name="msg">The MSG.</param>
+        /// <param name="message">The MSG.</param>
         /// <remarks></remarks>
-        public ImportException(string msg)
-            : base( msg )
+        public ImportException(string message)
+            : base( message )
         {
         }
 
-        internal static Exception CreateException(string msg, params object[] args)
+        internal static Exception CreateException(string message, params object[] args)
         {
-            return new ImportException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
+            return new ImportException( String.Format( CultureInfo.CurrentCulture, message, args ) );
         }
     }
 
@@ -109,13 +109,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     public sealed class DefinitionException : PreprocessorException
     {
-        internal DefinitionException(string msg) : base( msg )
+        internal DefinitionException(string message) : base( message )
         {
         }
 
-        internal static Exception CreateException(string msg, params object[] args)
+        internal static Exception CreateException(string message, params object[] args)
         {
-            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
+            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, message, args ) );
         }
     }
 
@@ -127,15 +127,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidMarkupException" /> class.	
         /// </summary>
-        /// <param name="msg">The MSG.</param>
+        /// <param name="message">The MSG.</param>
         /// <remarks></remarks>
-        public InvalidMarkupException(string msg) : base( msg )
+        public InvalidMarkupException(string message) : base( message )
         {
         }
 
-        internal static Exception CreateException(string msg, params object[] args)
+        internal static Exception CreateException(string message, params object[] args)
         {
-            return new InvalidMarkupException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
+            return new InvalidMarkupException( String.Format( CultureInfo.CurrentCulture, message, args ) );
         }
     }
 
@@ -154,9 +154,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         {
         }
 
-        internal static Exception CreateException(string msg, params object[] args)
+        internal static Exception CreateException(string message, params object[] args)
         {
-            return new MissingIncludeException(String.Format(CultureInfo.CurrentCulture, msg, args));
+            return new MissingIncludeException(String.Format(CultureInfo.CurrentCulture, message, args));
         }
     }
 
@@ -169,12 +169,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         {
         }
 
-        internal PreprocessorException(string msg) : this( msg, null, null )
+        internal PreprocessorException(string message) : this( message, null, null )
         {
         }
 
-        internal PreprocessorException(string msg, Exception innerEX, XmlContext ctx)
-            : base( msg, innerEX )
+        internal PreprocessorException(string message, Exception innerEX, XmlContext ctx)
+            : base( message, innerEX )
         {
             Context = ctx;
         }
@@ -238,8 +238,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
     internal sealed class UnexpectedPreprocessorException : PreprocessorException
     {
-        private UnexpectedPreprocessorException(Exception innerEX, string msg, XmlContext context)
-            : base( msg, innerEX, context )
+        private UnexpectedPreprocessorException(Exception innerEX, string message, XmlContext context)
+            : base( message, innerEX, context )
         {
             Context = context;
         }
@@ -260,5 +260,5 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <param name="msg"></param>
     /// <param name="args"></param>
     /// <returns></returns>
-    internal delegate Exception ExceptionFactory(string msg, params object[] args);
+    internal delegate Exception ExceptionFactory(string message, params object[] args);
 }

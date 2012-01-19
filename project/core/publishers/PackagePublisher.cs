@@ -457,7 +457,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private static string EnsureFileExtension(string fileName, string extension)
         {
             var actualFile = fileName;
-            if (!actualFile.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
+            if (!actualFile.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
             {
                 actualFile += extension;
             }

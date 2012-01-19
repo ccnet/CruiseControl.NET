@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             bool userFound = false;
             foreach (UserName user in users)
             {
-                if (string.Equals(userName, user.Name, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(userName, user.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     userFound = true;
                     break;
