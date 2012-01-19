@@ -570,12 +570,10 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 result = integratable.Integrate(request);
                 summary.Label = result.Label;
-                //writeSummary(result);
                 writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
             }
             catch (Exception error)
             {
-                //writeSummary(result);
                 writeSummary(result, logDirectory, summary, timer, fileSystem, serialiser);
                 Log.Error(error);
                 hasError = true;
@@ -609,7 +607,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             }
 
-            
+
 
             // Store the project status so it can be used by other parts of the system
             if (this.DataStore != null)
