@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     else
                     {
                         // store the file with the path minus the baseFolder
-                        if (fileName.StartsWith(baseFolder, StringComparison.InvariantCultureIgnoreCase))
+                        if (fileName.StartsWith(baseFolder, StringComparison.OrdinalIgnoreCase))
                             fileName = fileName.Substring(baseFolder.Length);
                     }
                     if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);

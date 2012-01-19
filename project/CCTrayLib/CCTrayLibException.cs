@@ -7,8 +7,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	public class CCTrayLibException : ApplicationException
 	{
 		public CCTrayLibException() : base(string.Empty) {}
-		public CCTrayLibException(string s) : base(s) {}
-		public CCTrayLibException(string s, Exception e) : base(s, e) {}
+		public CCTrayLibException(string message) : base(message) {}
+		public CCTrayLibException(string message, Exception e) : base(message, e) {}
 		public CCTrayLibException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }

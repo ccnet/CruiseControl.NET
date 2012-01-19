@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 foreach (NameValuePair value in values)
                 {
-                    if (string.Equals(value.name, name, StringComparison.InvariantCultureIgnoreCase))
+                    if (string.Equals(value.name, name, StringComparison.OrdinalIgnoreCase))
                     {
                         actualValue = value.Value;
                         break;

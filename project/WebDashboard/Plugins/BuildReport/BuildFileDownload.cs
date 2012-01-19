@@ -32,8 +32,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             string fileName = cruiseRequest.Request.GetText("file").Replace("/", "\\");
-            if (fileName.EndsWith(".html", StringComparison.InvariantCultureIgnoreCase) ||
-                fileName.EndsWith(".htm", StringComparison.InvariantCultureIgnoreCase))
+            if (fileName.EndsWith(".html", StringComparison.OrdinalIgnoreCase) ||
+                fileName.EndsWith(".htm", StringComparison.OrdinalIgnoreCase))
             {
                 var htmlData = LoadHtmlFile(cruiseRequest, fileName);
                 var prefixPos = fileName.LastIndexOf("\\");
@@ -42,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
                 {
                     var splitPos = match.Value.IndexOf("=\"");
                     var prefex = match.Value.Substring(0, splitPos + 2);
-                    if (match.Value.StartsWith(prefex + "data:", StringComparison.InvariantCultureIgnoreCase) ||
-                        match.Value.StartsWith(prefex + "#", StringComparison.InvariantCultureIgnoreCase) ||
-                        match.Value.StartsWith(prefex + "http://", StringComparison.InvariantCultureIgnoreCase))
+                    if (match.Value.StartsWith(prefex + "data:", StringComparison.OrdinalIgnoreCase) ||
+                        match.Value.StartsWith(prefex + "#", StringComparison.OrdinalIgnoreCase) ||
+                        match.Value.StartsWith(prefex + "http://", StringComparison.OrdinalIgnoreCase))
                     {
                         return match.Value;
                     }

@@ -56,11 +56,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         {
             IResponse response;
 
-            if (string.Equals(cruiseRequest.Request.FileNameWithoutExtension, TimelineActionName, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(cruiseRequest.Request.FileNameWithoutExtension, TimelineActionName, StringComparison.OrdinalIgnoreCase))
             {
                 response = this.GenerateTimelinePage(cruiseRequest);
             }
-            else if (string.Equals(cruiseRequest.Request.FileNameWithoutExtension, DataActionName, StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(cruiseRequest.Request.FileNameWithoutExtension, DataActionName, StringComparison.OrdinalIgnoreCase))
             {
                 response = this.GenerateData(cruiseRequest);
             }

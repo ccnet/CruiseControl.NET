@@ -19,18 +19,18 @@
         /// <summary>
         /// Initialise a new <see cref="CommunicationsException"/>.
         /// </summary>
-        public CommunicationsException(string s) : base(s) { }
+        public CommunicationsException(string message) : base(message) { }
 
         /// <summary>
         /// Initialise a new <see cref="CommunicationsException"/>.
         /// </summary>
-        public CommunicationsException(string s, Exception e) : base(s, e) { }
+        public CommunicationsException(string message, Exception e) : base(message, e) { }
 
         /// <summary>
         /// Initialise a new <see cref="CommunicationsException"/>.
         /// </summary>
-        public CommunicationsException(string s, string type)
-            : base(s)
+        public CommunicationsException(string message, string type)
+            : base(message)
         {
             this.ErrorType = type;
         }
@@ -38,7 +38,7 @@
         /// <summary>
         /// Initialise a new <see cref="CommunicationsException"/>.
         /// </summary>
-        public CommunicationsException(string s, Exception e, string type) : base(s, e)
+        public CommunicationsException(string message, Exception e, string type) : base(message, e)
         {
             this.ErrorType = type;
         }

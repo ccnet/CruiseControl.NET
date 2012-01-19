@@ -275,7 +275,7 @@
             // Check if th file exists
             Log.Debug("Checking for configuration file '{0}'", configFile);
             var fileExists = fileSystem.FileExists(configFile);
-            if (!fileExists && !configFile.EndsWith("ccnet.config", StringComparison.InvariantCultureIgnoreCase))
+            if (!fileExists && !configFile.EndsWith("ccnet.config", StringComparison.OrdinalIgnoreCase))
             {
                 // Try adding ccnet.config and see if it exists
                 configFile = Path.Combine(configFile, "ccnet.config");
