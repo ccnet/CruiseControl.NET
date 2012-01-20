@@ -61,21 +61,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             velocityContext["projectLinks"] = links;
             string sessionToken = request.RetrieveSessionToken(sessionRetriever);
             string securityConfig = farmService.GetServerSecurity(request.ServerSpecifier, sessionToken);
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(securityConfig);
-            if (string.IsNullOrEmpty(request.ProjectName))
-            {
-                securityConfig = document.SelectSingleNode("/security/manager").OuterXml;
-            }
-            else
-            {
-                velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
-                string xpath = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/security/projects/projectSecurity[name='{0}']/authorisation", request.ProjectSpecifier.ProjectName);
-                securityConfig = document.SelectSingleNode(xpath).OuterXml;
-            }
-            string xmlData = FormatXml(securityConfig);
-            velocityContext["log"] = xmlData;
-
+			if (!string.IsNullOrEmpty(securityConfig))
+			{
+            	XmlDocument document = new XmlDocument();
+            	document.LoadXml(securityConfig);
+	            if (string.IsNullOrEmpty(request.ProjectName))
+	            {
+	                securityConfig = document.SelectSingleNode("/security/manager").OuterXml;
+	            }
+	            else
+	            {
+	                velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
+	                string xpath = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/security/projects/projectSecurity[name='{0}']/authorisation", request.ProjectSpecifier.ProjectName);
+	                securityConfig = document.SelectSingleNode(xpath).OuterXml;
+	            }
+	            string xmlData = FormatXml(securityConfig);
+	            velocityContext["log"] = xmlData;
+			}
+			else
+			{
+				velocityContext["log"] = "No security configuration could be retrieved from the server";
+			}
             return viewGenerator.GenerateView(@"SecurityConfiguration.vm", velocityContext);
         }
 
