@@ -833,6 +833,11 @@
             }
         }
 
+        /// <summary>
+        /// Writes the message to the console in the specified format / color
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
         private static void WriteToOutput(string message, OutputType type)
         {
             if (xmlLog == null)
@@ -949,6 +954,8 @@
                                 }
                                 else
                                 {
+                                    WriteToOutput("  ## writing code as plain tekst!" , OutputType.Warning);
+                                   
                                     //ThoughtWorks confluence Wiki                                    
                                     //builder.AppendLine("{code:" + options + "}");
 
@@ -1153,10 +1160,12 @@
                         var names = Enum.GetNames(itemType);
                         var builder = new StringBuilder();
                         builder.Append("String array The following values are valid:");
+                        builder.Append("<pre>");// Redmine Wiki
                         foreach (var name in names)
                         {
                             builder.Append(Environment.NewLine + "* " + name);
                         }
+                        builder.Append("</pre>");// Redmine Wiki
 
                         dataTypeName = builder.ToString();
                     }
