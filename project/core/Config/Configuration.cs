@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             // Attempt to find the configuration
             foreach (IQueueConfiguration config in queueConfigurations)
             {
-                if (string.Equals(config.Name, name, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(config.Name, name, StringComparison.OrdinalIgnoreCase))
                 {
                     actualConfig = config;
                     break;

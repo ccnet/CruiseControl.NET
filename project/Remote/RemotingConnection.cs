@@ -210,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 // Handle both old and new style connections
                 var actualUri = serverAddress.AbsoluteUri;
-                if (actualUri.EndsWith(managerUri, StringComparison.InvariantCultureIgnoreCase))
+                if (actualUri.EndsWith(managerUri, StringComparison.OrdinalIgnoreCase))
                 {
                     actualUri = actualUri.Substring(0, actualUri.Length - managerUri.Length) + serverClientUri;
                 }

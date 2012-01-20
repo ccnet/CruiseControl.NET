@@ -27,18 +27,18 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Initializes a new instance of the <see cref="BadReferenceException" /> class.	
         /// </summary>
         /// <param name="reference">The reference.</param>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <remarks></remarks>
-        public BadReferenceException(string reference, string s) : this(reference, s, null) { }
+        public BadReferenceException(string reference, string message) : this(reference, message, null) { }
         /// <summary>
         /// Initializes a new instance of the <see cref="BadReferenceException" /> class.	
         /// </summary>
         /// <param name="reference">The reference.</param>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <param name="e">The e.</param>
         /// <remarks></remarks>
-        public BadReferenceException(string reference, string s, Exception e)
-            : base(s, e)
+        public BadReferenceException(string reference, string message, Exception e)
+            : base(message, e)
         {
             this.reference = reference;
         }

@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                     {
                         foreach (IAuthentication securitySetting in users)
                         {
-                            if (securitySetting.Identifier.Equals(identifier, StringComparison.InvariantCultureIgnoreCase))
+                            if (securitySetting.Identifier.Equals(identifier, StringComparison.OrdinalIgnoreCase))
                             {
                                 setting = securitySetting;
                                 break;
@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                     // Otherwise iterate through each and every item
                     foreach (IPermission securitySetting in permissions)
                     {
-                        if (securitySetting.Identifier.Equals(identifier, StringComparison.InvariantCultureIgnoreCase))
+                        if (securitySetting.Identifier.Equals(identifier, StringComparison.OrdinalIgnoreCase))
                         {
                             setting = securitySetting;
                             break;

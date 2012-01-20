@@ -6,6 +6,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Xml;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -260,6 +263,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
         /// <param name="input">the text stream</param>
         /// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
+        /// <param name="task">the task to serialize alongside the result, if any</param>
         /// <returns>the build result string</returns>
         /// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
         /// <code>&lt;message&gt;</code> element and the entire set is wrapped in a
@@ -268,7 +272,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// empty string is returned.
         /// Note: If we can't manage to understand the input, we just return it unchanged.
         /// </remarks>
-        public static string MakeBuildResult(string input, string msgLevel)
+        public static string MakeBuildResult(string input, string msgLevel, TaskBase task)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -284,6 +288,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 sb.Append(Environment.NewLine);
                 sb.Append("<buildresults>");
                 sb.Append(Environment.NewLine);
+
+                if (task != null)
+                {
+                    StringWriter buffer = new StringWriter();
+                    new ReflectorTypeAttribute("task").Write(new XmlTextWriter(buffer), task);
+                    sb.Append(buffer.ToString());
+                    sb.Append(Environment.NewLine);
+                }
+
                 foreach (Match line in lines)
                 {
                     sb.Append("  <message");
@@ -300,6 +313,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             else
                 sb.Append(input); // All of that stuff failed, just return our input
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Convert a stream of text lines separated with newline sequences into an XML build result.
+        /// </summary>
+        /// <param name="input">the text stream</param>
+        /// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
+        /// <returns>the build result string</returns>
+        /// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
+        /// <code>&lt;message&gt;</code> element and the entire set is wrapped in a
+        /// <code>&lt;buildresults&gt;</code> element and returned.  Each line of the input is encoded
+        /// as XML CDATA rules require.  If the input is empty or contains only whitspace, an 
+        /// empty string is returned.
+        /// Note: If we can't manage to understand the input, we just return it unchanged.
+        /// </remarks>
+        public static string MakeBuildResult(string input, string msgLevel)
+        {
+            return MakeBuildResult(input, msgLevel, null);
         }
 
         /// <summary>

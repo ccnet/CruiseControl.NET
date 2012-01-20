@@ -19,16 +19,16 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionInvalidException" /> class.	
         /// </summary>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <remarks></remarks>
-		public SessionInvalidException(string s) : base(s) {}
+		public SessionInvalidException(string message) : base(message) {}
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionInvalidException" /> class.	
         /// </summary>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <param name="e">The e.</param>
         /// <remarks></remarks>
-		public SessionInvalidException(string s, Exception e) : base(s, e) {}
+		public SessionInvalidException(string message, Exception e) : base(message, e) {}
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionInvalidException" /> class.	
         /// </summary>

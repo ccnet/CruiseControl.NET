@@ -27,18 +27,18 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Initializes a new instance of the <see cref="PermissionDeniedException" /> class.	
         /// </summary>
         /// <param name="permission">The permission.</param>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <remarks></remarks>
-        public PermissionDeniedException(string permission, string s) : this(permission, s, null) { }
+        public PermissionDeniedException(string permission, string message) : this(permission, message, null) { }
         /// <summary>
         /// Initializes a new instance of the <see cref="PermissionDeniedException" /> class.	
         /// </summary>
         /// <param name="permission">The permission.</param>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <param name="e">The e.</param>
         /// <remarks></remarks>
-        public PermissionDeniedException(string permission, string s, Exception e)
-            : base(s, e)
+        public PermissionDeniedException(string permission, string message, Exception e)
+            : base(message, e)
         {
             this.permission = permission;
         }
