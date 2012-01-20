@@ -226,6 +226,7 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("multi.wiki", "Multi_Source_Control");
             FileName2ChiliPageNameMapping.Add("multiIssueTracker.wiki", "MultiIssueTracker");
             FileName2ChiliPageNameMapping.Add("multiTrigger.wiki", "Multi_Trigger");
+            FileName2ChiliPageNameMapping.Add("multiFilter.wiki", "MultiFilter");
             FileName2ChiliPageNameMapping.Add("namespaceMapping.wiki", "Namespace_Mapping");
             FileName2ChiliPageNameMapping.Add("nant.wiki", "NAnt_Task");
             FileName2ChiliPageNameMapping.Add("ncoverProfile.wiki", "NCover_Profiler_Task");
