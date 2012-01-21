@@ -641,6 +641,12 @@
     <Content Include="..\xsl\msbuild.xsl">
       <Link>xsl\msbuild.xsl</Link>
     </Content>
+    <Content Include="..\xsl\MsTest2010Cover.xsl">
+      <Link>xsl\MsTest2010Cover.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\MsTestReport2010.xsl">
+      <Link>xsl\MsTestReport2010.xsl</Link>
+    </Content>
     <Content Include="..\xsl\NAntTiming.xsl">
       <Link>xsl\NAntTiming.xsl</Link>
     </Content>
@@ -932,6 +938,5 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets')" />
-
-  </Project>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets')" />
+</Project>
