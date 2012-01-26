@@ -123,7 +123,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(0, result3.FailureUsers.Count);
         }
 
-		private void ExpectToLoadState(IIntegrationResult result)
+        [Test]
+        public void FailedIntegrationShouldResetFailedTasksOnNextIntegration()
+        {
+            IIntegrationResult lastResult = IntegrationResultMother.CreateFailed();
+            lastResult.FailureTasks.Add("task1");
+            ExpectToLoadState(lastResult);
+
+            IIntegrationResult newResult = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(0, newResult.FailureTasks.Count, "Mismatched count of inherited FailureTasks");
+
+            Modification modification = new Modification();
+            modification.UserName = "user";
+            newResult.Modifications = new Modification[] { modification };
+            newResult.Status = IntegrationStatus.Failure;
+            newResult.FailureTasks.Add("task2");
+            mockStateManager.Expect("SaveState", newResult);
+            manager.FinishIntegration();
+
+            Assert.AreEqual(1, newResult.FailureTasks.Count, "Mismatched count of resulting FailureTasks");
+        }
+
+        [Test]
+        public void SuccessfulIntegrationShouldResetFailedTasksOnNextIntegration()
+        {
+            IIntegrationResult result1 = IntegrationResultMother.CreateFailed();
+            result1.FailureTasks.Add("task1");
+            ExpectToLoadState(result1);
+
+            IIntegrationResult result2 = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(0, result2.FailureTasks.Count);
+
+            Modification modification = new Modification();
+            modification.UserName = "user";
+            result2.Modifications = new Modification[] { modification };
+            result2.Status = IntegrationStatus.Success;
+            result2.FailureTasks.Add("task2");
+            mockStateManager.Expect("SaveState", result2);
+            manager.FinishIntegration();
+            Assert.AreEqual(1, result2.FailureTasks.Count);
+            Assert.AreEqual("task2", result2.FailureTasks[0]);
+
+            IIntegrationResult result3 = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(0, result3.FailureTasks.Count);
+        }
+
+        private void ExpectToLoadState(IIntegrationResult result)
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", true, "project");
 			mockStateManager.ExpectAndReturn("LoadState", result, "project");
