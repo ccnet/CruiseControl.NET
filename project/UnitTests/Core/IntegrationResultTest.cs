@@ -192,13 +192,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 			result.ProjectUrl = "http://localhost/ccnet2";
             result.FailureUsers.Add("user");
+            result.FailureTasks.Add("task");
 
             Modification mods = new Modification();
             mods.UserName = "John";
 
             result.Modifications = new Modification[] { mods };            
 
-			Assert.AreEqual(16, result.IntegrationProperties.Count);
+			Assert.AreEqual(17, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties[IntegrationPropertyNames.CCNetProject]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
             Assert.AreEqual("label23", result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
@@ -218,6 +219,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.IsNotNull(failureUsers);
             Assert.AreEqual(1, failureUsers.Count);
             Assert.AreEqual("user", failureUsers[0]);
+            ArrayList failureTasks = result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureTasks] as ArrayList;
+            Assert.IsNotNull(failureTasks);
+            Assert.AreEqual(1, failureTasks.Count);
+            Assert.AreEqual("task", failureTasks[0]);
             ArrayList Modifiers = result.IntegrationProperties[IntegrationPropertyNames.CCNetModifyingUsers] as ArrayList;
             Assert.IsNotNull(Modifiers);
             Assert.AreEqual(1, Modifiers.Count);

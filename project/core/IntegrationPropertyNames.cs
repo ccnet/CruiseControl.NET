@@ -64,6 +64,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public const string CCNetFailureUsers = "CCNetFailureUsers";
         /// <summary>
+        /// The list of name of tasks which have contributed to the current build failure. 
+        /// </summary>
+        public const string CCNetFailureTasks = "CCNetFailureTasks";
+        /// <summary>
         /// The list of users who have contributed to the current build only 
         /// </summary>
         public const string CCNetModifyingUsers = "CCNetModifyingUsers";

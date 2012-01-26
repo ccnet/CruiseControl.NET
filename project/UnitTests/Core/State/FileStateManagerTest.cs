@@ -124,6 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
   <LastIntegrationStatus>Success</LastIntegrationStatus>
   <LastSuccessfulIntegrationLabel>7</LastSuccessfulIntegrationLabel>
   <FailureUsers />
+  <FailureTasks />
 </IntegrationResult>";
 
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
