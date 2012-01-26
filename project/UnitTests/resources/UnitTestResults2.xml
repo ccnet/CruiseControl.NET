@@ -12,6 +12,8 @@
                value="21:00:00" />
     <parameter name="$CCNetFailureUsers"
                value="System.Collections.ArrayList" />
+    <parameter name="$CCNetFailureTasks"
+               value="System.Collections.ArrayList" />
     <parameter name="$CCNetIntegrationStatus"
                value="Unknown" />
     <parameter name="$CCNetLabel"
@@ -45,6 +47,7 @@
     <CCNetBuildDate>2011-09-01</CCNetBuildDate>
     <CCNetBuildTime>21:00:00</CCNetBuildTime>
     <CCNetFailureUsers />
+    <CCNetFailureTasks />
     <CCNetIntegrationStatus>Success</CCNetIntegrationStatus>
     <CCNetLabel>1.0.0.1429</CCNetLabel>
     <CCNetLastIntegrationStatus>Success</CCNetLastIntegrationStatus>

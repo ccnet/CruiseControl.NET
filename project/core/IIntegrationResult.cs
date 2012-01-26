@@ -153,6 +153,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <value></value>
         /// <remarks></remarks>
         ArrayList FailureUsers { get; }             // This should really be a Set but sets are not available in .NET 1.1
+        // Name of the tasks which contributed to the current build failure:
+        /// <summary>
+        /// Gets the failure tasks.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
+        ArrayList FailureTasks { get; }             // This should really be a Set but sets are not available in .NET 1.1
         /// <summary>
         /// Gets the last modification date.	
         /// </summary>

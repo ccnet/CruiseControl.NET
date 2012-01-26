@@ -691,6 +691,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             SetupResult.For(result.Succeeded).Return(false);
             SetupResult.For(result.Modifications).Return(new Modification[0]);
             SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            SetupResult.For(result.FailureTasks).Return(new ArrayList());
             var results = new List<ITaskResult>();
             SetupResult.For(result.TaskResults).Return(results);
             var project = new Project();
@@ -721,6 +722,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             SetupResult.For(result.Succeeded).Return(false);
             SetupResult.For(result.Modifications).Return(new Modification[0]);
             SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            SetupResult.For(result.FailureTasks).Return(new ArrayList());
             var results = new List<ITaskResult>();
             SetupResult.For(result.TaskResults).Return(results);
             var project = new Project();
