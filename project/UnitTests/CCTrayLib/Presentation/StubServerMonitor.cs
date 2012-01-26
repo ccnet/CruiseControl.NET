@@ -117,7 +117,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
         /// <summary>
         /// The snapshot of projects has changed.
         /// </summary>
-        public event ServerSnapshotChangedEventHandler ServerSnapshotChanged;
+        public event ServerSnapshotChangedEventHandler ServerSnapshotChanged
+        {
+            add { }
+            remove { }
+        }
         #endregion
     }
 }

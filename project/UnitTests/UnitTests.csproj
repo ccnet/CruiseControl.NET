@@ -379,6 +379,9 @@
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\Publishers\Statistics\StatisticsBuilderWithNamespacesTest.cs" />
+    <Compile Include="Core\SourceControl\MultiFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
@@ -446,8 +449,7 @@
     <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
     <Compile Include="Remote\Parameters\DateParameterTests.cs" />
     <Compile Include="Remote\ProjectStatusSnapshotTests.cs" />
-    <Compile Include="Remote\QueuedRequestSnapshotListTests.cs" />
-    <Compile Include="Remote\QueueSnapshotListTests.cs" />
+    <Compile Include="Remote\QueueSetSnapshotTests.cs" />
     <Compile Include="Remote\WebClientFactoryTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
@@ -1379,6 +1381,9 @@
     </Content>
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\Simple02.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\SpacesInBuildArgsOfTask.xml">

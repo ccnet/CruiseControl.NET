@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Framework;
+using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote.Security;
@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             string userName = "johndoe";
             string badReference = "doesNotExist";
-            ISecurityManager manager = mocks.CreateMock<ISecurityManager>();
+            ISecurityManager manager = mocks.StrictMock<ISecurityManager>();
             Expect.Call(manager.RetrievePermission(badReference)).Return(null);
 
             mocks.ReplayAll();
@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             string userName = "johndoe";
             string goodReference = "doesExist";
-            IPermission goodAssertion = mocks.CreateMock<IPermission>();
-            ISecurityManager manager = mocks.CreateMock<ISecurityManager>();
+            IPermission goodAssertion = mocks.StrictMock<IPermission>();
+            ISecurityManager manager = mocks.StrictMock<ISecurityManager>();
             Expect.Call(manager.RetrievePermission(goodReference)).Return(goodAssertion);
             Expect.Call(goodAssertion.CheckUser(manager, userName)).Return(true);
 
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             SecurityPermission permission = SecurityPermission.ForceAbortBuild;
             string badReference = "doesNotExist";
-            ISecurityManager manager = mocks.CreateMock<ISecurityManager>();
+            ISecurityManager manager = mocks.StrictMock<ISecurityManager>();
             Expect.Call(manager.RetrievePermission(badReference)).Return(null);
 
             mocks.ReplayAll();
@@ -67,8 +67,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             SecurityPermission permission = SecurityPermission.ForceAbortBuild;
             string goodReference = "doesExist";
-            IPermission goodAssertion = mocks.CreateMock<IPermission>();
-            ISecurityManager manager = mocks.CreateMock<ISecurityManager>();
+            IPermission goodAssertion = mocks.StrictMock<IPermission>();
+            ISecurityManager manager = mocks.StrictMock<ISecurityManager>();
             Expect.Call(manager.RetrievePermission(goodReference)).Return(goodAssertion);
             Expect.Call(goodAssertion.CheckPermission(manager, permission)).Return(SecurityRight.Allow);
 

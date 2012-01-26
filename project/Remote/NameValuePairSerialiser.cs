@@ -6,6 +6,7 @@
     using Exortech.NetReflector;
     using Exortech.NetReflector.Util;
     using System.Xml;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
 
     /// <summary>
     /// Serialise/deserialise a name/value pair.
@@ -52,7 +53,7 @@
         /// <param name="node"></param>
         /// <param name="table"></param>
         /// <returns></returns>
-		public override object Read(XmlNode node, NetReflectorTypeTable table)
+        public override object Read(XmlNode node, NetReflectorTypeTable table)
         {
             if (isList)
             {
@@ -65,7 +66,7 @@
             }
         }
 
-    	#endregion
+        #endregion
 
         #region Write()
         /// <summary>
@@ -77,7 +78,16 @@
         {
             if (isList)
             {
-                var list = target as NameValuePair[];
+                var list = target as IEnumerable<NameValuePair>;
+
+                if (list == null)
+                {
+                    SelectParameter parameter = target as SelectParameter;
+                    if (parameter != null)
+                    {
+                        list = parameter.DataValues;
+                    }
+                }
                 if (list != null)
                 {
                     writer.WriteStartElement(base.Attribute.Name);

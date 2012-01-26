@@ -1,6 +1,7 @@
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     using Exortech.NetReflector;
+    using System;
 
     /// <summary>
     /// Use the Null Source Control if you don't want to check a Source Control repository for changes. In this instance you would always want
@@ -49,6 +50,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public bool FailGetSource { get; set; }
 
         /// <summary>
+        /// Defines wheter or not to always indicate that there were modifications
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>false</default>
+        [ReflectorProperty("alwaysModified", Required = false)]
+        public bool AlwaysModified { get; set; }
+
+        /// <summary>
         /// Gets the modifications from the source control provider
         /// </summary>
         /// <param name="from"></param>
@@ -59,6 +68,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (FailGetModifications)
             {
                 throw new System.Exception("Failing GetModifications");
+            }
+            else if (AlwaysModified)
+            {
+                Modification[] mods = new Modification[1];
+                Modification mod = new Modification();
+                mod.FileName = "AlwaysModified";
+                mod.FolderName = "NullSourceControl";
+                mod.ModifiedTime = DateTime.Now;
+                mod.UserName = "JohnWayne";
+                mods[0] = mod;
+                return mods;
             }
             else
             {

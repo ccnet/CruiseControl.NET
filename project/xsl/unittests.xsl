@@ -120,6 +120,7 @@
     </tr>
   </xsl:template>
   <!-- Unit Test Successes -->
+<!-- no need to show hundreds of ok, focus on the not ok ones
   <xsl:template match="test-case[@success='True']">
     <tr>
       <xsl:if test="($junit.success.count + position()) mod 2 = 0">
@@ -131,6 +132,7 @@
       <td class="successnote">Success</td>
     </tr>
   </xsl:template>
+  -->
   <!-- Unit Test Warnings -->
   <xsl:template match="reason">
     <tr>

@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -15,8 +15,6 @@ namespace ThoughtWorks.CruiseControl.Remote
 	{
 		private string queueName;
         private List<QueuedRequestSnapshot> queueRequests = new List<QueuedRequestSnapshot>();
-        // Required for 1.4.4 or earlier compatibility
-        private QueuedRequestSnapshotList _requests;
 
         /// <summary>
         /// Initialise a new blank <see cref="QueueSnapshot"/>.
@@ -61,27 +59,5 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             get { return queueRequests.Count == 0; }
         }
-
-        #region Private methods
-        #region DataReceived()
-        /// <summary>
-        /// Handle any old (pre-1.5.0) data.
-        /// </summary>
-        /// <param name="context"></param>
-//  COMMENTED BY CODEIT.RIGHT
-//        [OnDeserialized]
-//        private void DataReceived(StreamingContext context)
-//        {
-//            if (_requests != null)
-//            {
-//                queueRequests = new List<QueuedRequestSnapshot>();
-//                foreach (var queue in _requests)
-//                {
-//                    queueRequests.Add(queue as QueuedRequestSnapshot);
-//                }
-//            }
-//        }
-        #endregion
-        #endregion
     }
 }

@@ -221,8 +221,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                         // Need to perform two checks here as some Windows names have two multiple dots - therefore GetFileNameWithoutExtension will strip the last part, 
                         // whether or not it is an extension
-                        if (string.Equals(fileToTest, executableName1, StringComparison.InvariantCultureIgnoreCase) ||
-                            string.Equals(fileToTest, executableName2, StringComparison.InvariantCultureIgnoreCase))
+                        if (string.Equals(fileToTest, executableName1, StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(fileToTest, executableName2, StringComparison.OrdinalIgnoreCase))
                         {
                             fileExists = true;
                             break;

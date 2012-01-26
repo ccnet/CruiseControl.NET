@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 {
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
                 // factory will return null driver if it can't create one - caller needs to check!
                 if (driver != null)
                 {
-                    Assert.IsInstanceOfType(typeof(Cm11LowLevelDriver), driver,"driver should be correct type");
+                    Assert.That(driver, Is.InstanceOf<Cm11LowLevelDriver>(), "driver should be correct type");
                 }
             }
             catch (ApplicationException appEx)
@@ -48,9 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
             // factory will return null driver if it can't create one - caller needs to check!
             if (driver != null)
             {
-                Assert.IsInstanceOfType(typeof(Cm17LowLevelDriver), driver);
+                Assert.That(driver, Is.InstanceOf<Cm17LowLevelDriver>());
             }
-
         }
     }
 }

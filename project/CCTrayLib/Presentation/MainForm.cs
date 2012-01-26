@@ -778,13 +778,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             if (!controller.SelectedProject.Detail.IsConnected)
             { return string.Empty; }
 
+
+            
+
             if (controller.SelectedProject.ProjectState != ProjectState.Building &&
                 controller.SelectedProject.ProjectState != ProjectState.BrokenAndBuilding)
-            { return string.Empty; }
+            { return controller.SelectedProject.Detail.ProjectDescription; }
 
             String currentBuildStage = controller.SelectedProject.Detail.CurrentBuildStage;
             if (currentBuildStage == null || currentBuildStage.Length == 0)
-            { return string.Empty; }
+            { return string.Empty ; }
 
             System.Text.StringBuilder SB = new System.Text.StringBuilder();
             System.IO.StringWriter BuildStage = new System.IO.StringWriter(SB);

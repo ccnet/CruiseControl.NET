@@ -97,7 +97,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.Priority = ProcessPriorityClass.Normal;
             this.ConfiguredScriptsDirectory = DefaultScriptsDirectory;
             this.BuildArgs = string.Empty;
-            this.EnvironmentVariables = new EnvironmentVariable[0];
         }
 
         /// <summary>
@@ -155,14 +154,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
         public string BuildArgs { get; set; }
-
-        /// <summary>
-        /// Any environment variables to pass into the script. 
-        /// </summary>
-        /// <version>1.5</version>
-        /// <default>None</default>
-        [ReflectorProperty("environment", Required = false)]
-        public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
         private int[] successExitCodes/* = null*/;
 
@@ -407,15 +398,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             if (!string.IsNullOrEmpty(Script))
             {
-                if (ConfiguredScriptsDirectory.EndsWith("\\"))
+
+                if (Script.IndexOf(":") == 1) //drive letter specified, so it's not a relative path
                 {
-                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + Script + @"""");
+                    builder.AppendArgument(@"""" + Script + @"""");
                 }
                 else
                 {
-                    builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + "\\" + Script + @"""");
+
+                    if (ConfiguredScriptsDirectory.EndsWith("\\"))
+                    {
+                        builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + Script + @"""");
+                    }
+                    else
+                    {
+                        builder.AppendArgument(@"""" + ConfiguredScriptsDirectory + "\\" + Script + @"""");
+                    }
                 }
             }
+
 
             if (!string.IsNullOrEmpty(BuildArgs)) builder.AppendArgument(BuildArgs);
             return builder.ToString();

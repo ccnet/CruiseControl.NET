@@ -18,16 +18,16 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="CruiseControlException" /> class.	
         /// </summary>
-        /// <param name="s">The s.</param>
+        /// <param name="message">The message.</param>
         /// <remarks></remarks>
-		public CruiseControlException(string s) : base(s) {}
+		public CruiseControlException(string message) : base(message) {}
         /// <summary>
         /// Initializes a new instance of the <see cref="CruiseControlException" /> class.	
         /// </summary>
-        /// <param name="s">The s.</param>
-        /// <param name="e">The e.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="e">The exception.</param>
         /// <remarks></remarks>
-		public CruiseControlException(string s, Exception e) : base(s, e) {}
+		public CruiseControlException(string message, Exception e) : base(message, e) {}
         /// <summary>
         /// Initializes a new instance of the <see cref="CruiseControlException" /> class.	
         /// </summary>

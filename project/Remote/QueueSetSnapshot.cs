@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -14,8 +14,6 @@ namespace ThoughtWorks.CruiseControl.Remote
 	public class QueueSetSnapshot
 	{
         private List<QueueSnapshot> snapshots = new List<QueueSnapshot>();
-        // Required for 1.4.4 or earlier compatibility
-        private QueueSnapshotList queueSnapshots = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QueueSetSnapshot"/> class.
@@ -49,27 +47,5 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
             return null;
         }
-
-        #region Private methods
-        #region DataReceived()
-        /// <summary>
-        /// Handle any old (pre-1.5.0) data.
-        /// </summary>
-        /// <param name="context"></param>
-//  COMMENTED BY CODEIT.RIGHT
-//        [OnDeserialized]
-//        private void DataReceived(StreamingContext context)
-//        {
-//            if (queueSnapshots != null)
-//            {
-//                snapshots = new List<QueueSnapshot>();
-//                foreach (var queue in queueSnapshots)
-//                {
-//                    snapshots.Add(queue as QueueSnapshot);
-//                }
-//            }
-//        }
-        #endregion
-        #endregion
     }
 }

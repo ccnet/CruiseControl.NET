@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             SessionInvalidException exception = new SessionInvalidException();
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(SessionInvalidException), result);
+            Assert.That(result, Is.InstanceOf<SessionInvalidException>());
             Assert.AreEqual("The session token is either invalid or is for a session that has expired.", (result as SessionInvalidException).Message);
         }
     }

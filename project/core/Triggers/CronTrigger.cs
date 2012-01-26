@@ -87,6 +87,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         {
             if (triggered)
             {
+                // need to update StartData so next occurance actually moves forward
+                this.StartDate = dtProvider.Now;
                 SetNextIntegrationDateTime();
             }
             triggered = false;

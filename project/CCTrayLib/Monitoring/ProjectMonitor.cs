@@ -142,6 +142,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             }
         }
 
+
+        public string ProjectDescription
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.Description;
+                }
+                return string.Empty;
+            }
+        }
+
 		public DateTime LastBuildTime
 		{
 			get

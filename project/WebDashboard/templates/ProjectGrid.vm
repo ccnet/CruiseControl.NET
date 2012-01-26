@@ -124,7 +124,7 @@
               <a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
             </td>
             <td class="$projectGridRow.BuildStatusHtmlColor">$translations.Translate($projectGridRow.BuildStatus)</td>
-            <td>$projectGridRow.LastBuildDate</td>
+            <td><a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.LastBuildDate</a></td>
             <td>$translations.Translate($projectGridRow.NextBuildTime)</td>
             <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
             <td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>

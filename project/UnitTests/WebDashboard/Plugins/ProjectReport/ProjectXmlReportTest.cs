@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             IResponse response = report.Execute((ICruiseRequest) mockRequest.MockInstance);
 
-            Assert.IsInstanceOfType(typeof (XmlFragmentResponse), response);
+            Assert.That(response, Is.InstanceOf<XmlFragmentResponse>());
             string xml = ((XmlFragmentResponse) response).ResponseFragment;
             XPathAssert.Matches(XPathAssert.LoadAsDocument(xml), "/CruiseControl/Projects/Project/@name", "test");
         }

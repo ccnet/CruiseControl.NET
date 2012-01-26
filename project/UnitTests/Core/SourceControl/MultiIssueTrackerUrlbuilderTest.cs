@@ -51,8 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             NetReflector.Read(configFile, multiIssue);
 
             Assert.AreEqual(1, multiIssue.IssueTrackers.Length);
-            Assert.IsInstanceOfType(typeof(DefaultIssueTrackerUrlBuilder), multiIssue.IssueTrackers[0]);
-
+            Assert.That(multiIssue.IssueTrackers[0], Is.InstanceOf<DefaultIssueTrackerUrlBuilder>());
         }
 
         [Test]
@@ -64,8 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             NetReflector.Read(configFile, multiIssue);
 
             Assert.AreEqual(1, multiIssue.IssueTrackers.Length);
-            Assert.IsInstanceOfType(typeof(RegExIssueTrackerUrlBuilder), multiIssue.IssueTrackers[0]);
-
+            Assert.That(multiIssue.IssueTrackers[0], Is.InstanceOf<RegExIssueTrackerUrlBuilder>());
         }
 
 
@@ -78,10 +76,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             NetReflector.Read(configFile, multiIssue);
 
             Assert.AreEqual(2, multiIssue.IssueTrackers.Length);
-            Assert.IsInstanceOfType(typeof(DefaultIssueTrackerUrlBuilder), multiIssue.IssueTrackers[0]);
-            Assert.IsInstanceOfType(typeof(RegExIssueTrackerUrlBuilder), multiIssue.IssueTrackers[1]);
-
+            Assert.That(multiIssue.IssueTrackers[0], Is.InstanceOf<DefaultIssueTrackerUrlBuilder>());
+            Assert.That(multiIssue.IssueTrackers[1], Is.InstanceOf<RegExIssueTrackerUrlBuilder>());
         }
-
     }
 }

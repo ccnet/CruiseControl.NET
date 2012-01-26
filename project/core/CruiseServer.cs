@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -447,6 +448,10 @@ namespace ThoughtWorks.CruiseControl.Core
                         snapshot.ProjectStatuses = this.FilterProjects(
                             request.SessionToken, 
                             snapshot.ProjectStatuses);
+                        snapshot.QueueSetSnapshot = this.FilterQueues(
+                            request.SessionToken,
+ 							snapshot.ProjectStatuses, // must contain the filtered projects
+                            snapshot.QueueSetSnapshot);
                     }
                 }));
             response.Snapshot = snapshot;
@@ -1071,13 +1076,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 var sourceProject = GetIntegrator(request.ProjectName).Project;
                 var filePath = Path.Combine(sourceProject.ArtifactDirectory, request.FileName);
                 var fileInfo = new FileInfo(filePath);
-                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
+                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.OrdinalIgnoreCase))
                 {
                     var message = string.Format(CultureInfo.CurrentCulture,"Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);
                     throw new CruiseControlException(message);
                 }
-                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
+                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.OrdinalIgnoreCase))
                 {
                     var message = string.Format(CultureInfo.CurrentCulture,"Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);
@@ -1572,6 +1577,28 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
+        #region FilterQueues()
+        /// <summary>
+        /// Filters a list of queues and only returns the queues for the projects that a user is allowed to view.
+        /// </summary>
+        /// <param name="sessionToken">The session token to use in filtering.</param>
+        /// <param name="filteredProjects">The already filtered projects.</param>
+        /// <param name="queueSet">The set of queues to filter.</param>
+        /// <returns>The filtered set.</returns>
+        private QueueSetSnapshot FilterQueues(string sessionToken, ProjectStatus[] filteredProjects, QueueSetSnapshot queueSet)
+        {
+            var allowedQueues = new QueueSetSnapshot();
+            var userName = securityManager.GetUserName(sessionToken);
+            var defaultIsAllowed = (securityManager.GetDefaultRight(SecurityPermission.ViewProject) == SecurityRight.Allow);
+            foreach (QueueSnapshot queue in queueSet.Queues)
+            {
+				if (filteredProjects.Select(x=>x.Queue).Contains(queue.QueueName))
+					allowedQueues.Queues.Add(queue);
+            }
+            return allowedQueues;
+        }
+        #endregion
+
         #region OnIntegrationStarted()
         /// <summary>
         /// Pass this event onto any listeners.
@@ -1718,6 +1745,10 @@ namespace ThoughtWorks.CruiseControl.Core
                     // The project has been found and it has security
                     authorisation = projectIntegrator.Project.Security;
                     requiresSession = authorisation.RequiresSession(securityManager);
+					// if "Guest" have some rights, the service must be able to check the
+					// rights for "Guest", but without userName it wont work.
+					if (string.IsNullOrEmpty(userName))
+						userName = authorisation.GuestAccountName;
                 }
                 else if ((projectIntegrator != null) &&
                     (projectIntegrator.Project != null) &&

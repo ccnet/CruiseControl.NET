@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 default:
                     {
                         var client = GenerateHttpClient(server);
-                        return new HttpCruiseProjectManager(client, project.ProjectName, serverManagers[server]);
+                        return new HttpCruiseProjectManager(client, project.ProjectName);
                     }
             }
         }

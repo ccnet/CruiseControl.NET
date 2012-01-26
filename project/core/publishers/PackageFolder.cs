@@ -7,7 +7,7 @@ using ICSharpCode.SharpZipLib.Zip;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     /// <summary>
-    /// 	
+    /// A folder to include in the package	
     /// </summary>
     [ReflectorType("packageFolder")]
     public class PackageFolder
@@ -30,8 +30,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// The filename filter to apply
         /// </summary>
         /// <remarks>
-        /// Use this attribute to filter files that will be stored into the package. For example <code>*.*</code> 
-        /// will select all files (default), <code>*.xml</code> will only select xml files, <code>test*.xml</code> will select 
+        /// Use this attribute to filter files that will be stored into the package. For example <code type="None">*.*</code> 
+        /// will select all files (default), <code type="None">*.xml</code> will only select xml files, <code type="None">test*.xml</code> will select 
         /// only files that start with the word test and have an extension of xml.
         /// </remarks>
         [ReflectorProperty("fileFilter", Required = true)]
@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     else
                     {
                         // store the file with the path minus the baseFolder
-                        if (fileName.StartsWith(baseFolder, StringComparison.InvariantCultureIgnoreCase))
+                        if (fileName.StartsWith(baseFolder, StringComparison.OrdinalIgnoreCase))
                             fileName = fileName.Substring(baseFolder.Length);
                     }
                     if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);

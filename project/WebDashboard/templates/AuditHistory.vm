@@ -92,8 +92,8 @@
       $auditRecord.UserName
       #end
     </td>
-    <td>$translations.Translate($auditRecord.EventType)</td>
-    <td>$translations.Translate($auditRecord.SecurityRight)</td>
+    <td>$auditRecord.EventType</td>
+    <td>$auditRecord.SecurityRight</td>
   </tr>
   #if ($auditRecord.Message.Length > 0)
   <tr class="even">

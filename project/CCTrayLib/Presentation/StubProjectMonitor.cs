@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -13,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ProjectState projectState = ProjectState.NotConnected;
 		private IntegrationStatus integrationStatus = IntegrationStatus.Unknown;
 		private string projectName;
-        private string category;
 		private Exception connectException;
         private CCTrayProject _configuration;
 
@@ -24,13 +23,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         public string Category
         {
-            get { return category; }
+            get { return string.Empty; }
         }
 
 		public string ProjectName
 		{
 			get { return projectName; }
 		}
+
+
+        public string ProjectDescription
+        {
+            get { return ProjectStatus.Description; }
+        }
+
 
         public string ServerName
         {

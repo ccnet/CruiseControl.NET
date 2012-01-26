@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             NoSuchProjectException exception = new NoSuchProjectException(requestedProject);
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(NoSuchProjectException), result);
+            Assert.That(result, Is.InstanceOf<NoSuchProjectException>());
             Assert.AreEqual("The project 'Something' does not exist on the CCNet server.", (result as NoSuchProjectException).Message);
             Assert.AreEqual(requestedProject, (result as NoSuchProjectException).RequestedProject);
         }

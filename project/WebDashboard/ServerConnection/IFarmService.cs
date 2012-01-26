@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
@@ -24,13 +24,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier, string sessionToken);
 		IServerSpecifier[] GetServerSpecifiers();
         IServerSpecifier GetServerConfiguration(string serverName);
-		string GetServerVersion(IServerSpecifier serverSpecifier);
+		string GetServerVersion(IServerSpecifier serverSpecifier, string sessionToken);
         string GetArtifactDirectory(IProjectSpecifier projectSpecifier, string sessionToken);
         string GetStatisticsDocument(IProjectSpecifier projectSpecifier, string sessionToken);
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(string sessionToken);
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier, string sessionToken);
         string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier, string sessionToken);
-        string GetRSSFeed(IProjectSpecifier projectSpecifier);
+        string GetRSSFeed(IProjectSpecifier projectSpecifier, string sessionToken);
         string Login(string server, LoginRequest credentials);
         void Logout(string server, string sessionToken);
         void ChangePassword(string server, string sessionToken, string oldPassword, string newPassword);
