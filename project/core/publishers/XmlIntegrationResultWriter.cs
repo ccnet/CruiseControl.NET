@@ -163,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers],
                                                             IntegrationPropertyNames.CCNetFailureUsers);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureTasks],
-                                                            IntegrationPropertyNames.CCNetFailureTasks);
+                                                            IntegrationPropertyNames.CCNetFailureTasks, "task");
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus],
                                                             IntegrationPropertyNames.CCNetIntegrationStatus);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel],
@@ -203,6 +203,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void WriteIntegrationProperty(object value, string propertyName)
         {
+            WriteIntegrationProperty(value, propertyName, "user");
+        }
+
+        private void WriteIntegrationProperty(object value, string propertyName, string arrayElementName)
+        {
             if (value == null) return ;
 
 
@@ -221,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                     foreach (string s in tmp)
                     {
-                        WriteIntegrationProperty(s, "user");
+                        WriteIntegrationProperty(s, arrayElementName);
                     }
                 }
                 else

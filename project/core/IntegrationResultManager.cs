@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -104,6 +105,12 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             try
             {
+                // Put the failed tasks into the appropriate list.
+                // Must be done here as it is before the build log is dumped
+                var failedTasks = new List<string>();
+                project.FindFailedTasks(failedTasks);
+                currentIntegration.FailureTasks.AddRange(failedTasks);
+
                 // Save users who may have broken integration so we can email them until it's fixed
                 if (currentIntegration.Status == IntegrationStatus.Failure)
                 {
