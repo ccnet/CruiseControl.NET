@@ -957,18 +957,11 @@ namespace ThoughtWorks.CruiseControl.Core
             if (result.Succeeded)
             {
                 messages.Clear();
-                //result.FailureTasks.Clear();
             }
             else
             {
                 AddBreakersToMessages(result);
                 AddFailedTaskToMessages();
-
-                var failedTasks = new List<string>();
-                FindFailedTasks(currentProjectStatus, failedTasks);
-
-                //result.FailureTasks.Clear();
-                result.FailureTasks.AddRange(failedTasks);
             }
 
             this.ClearMessages(Message.MessageKind.BuildStatus);
@@ -1190,7 +1183,7 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-        private void FindFailedTasks(ItemStatus item, List<string> failedTasks)
+        private static void FindFailedTasks(ItemStatus item, List<string> failedTasks)
         {
             if (item.ChildItems.Count > 0)
             {
@@ -1209,6 +1202,11 @@ namespace ThoughtWorks.CruiseControl.Core
                     { failedTasks.Add(item.Description); }
                 }
             }
+        }
+
+        public void FindFailedTasks(List<string> failedTasks)
+        {
+            FindFailedTasks(currentProjectStatus, failedTasks);
         }
 
         /// <summary>
