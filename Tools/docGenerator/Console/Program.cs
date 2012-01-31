@@ -448,7 +448,7 @@
 
         public static int GenerateDocumentation(ConsoleArgs args)
         {
-            specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
+            specialChars = new Regex(@"[\|\[\]\*_+]", RegexOptions.Compiled);
             if (string.IsNullOrEmpty(args.Source))
             {
                 WriteToOutput("No assembly specified", OutputType.Error);
@@ -1253,7 +1253,8 @@
                     {
                         if (count++ > 0)
                         {
-                            builder.Append("\\\\");
+                            //builder.Append("\\\\");
+                            builder.AppendLine();
                         }
 
                         builder.Append(value);
