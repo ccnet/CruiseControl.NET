@@ -155,6 +155,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>ThoughtWorks.CruiseControl.MsBuild.XmlLogger, ThoughtWorks.CruiseControl.MsBuild.dll</default>
         [ReflectorProperty("logger", Required = false)]
         public string Logger { get; set; }
+
+        /// <summary>
+        /// The parameters to be given to the custom logger
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Empty</default>
+        [ReflectorProperty("loggerParameters", Required = false)]
+        public string[] LoggerParameters { get; set; }
         #endregion
 
         #region Timeout
@@ -311,7 +319,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
-			return builder.ToString();
+
+            foreach (string parameter in LoggerParameters)
+                builder.Append(";" + parameter);
+
+            return builder.ToString();
 		}
 
 		private string MsBuildOutputFile(IIntegrationResult result)
@@ -323,8 +335,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			if (logger.IndexOf(';') > -1)
 			{
-				Log.Error("The <logger> setting contains semicolons. Only commas are allowed.");
-				throw new CruiseControlException("The <logger> setting contains semicolons. Only commas are allowed.");
+				Log.Error("The <logger> setting contains semicolons. Only commas are allowed, use the loggerParameters property to specify the arguments");
+                throw new CruiseControlException("The <logger> setting contains semicolons. Only commas are allowed, use the loggerParameters property to specify the arguments");
 			}
 
 			bool spaceFound = false;
