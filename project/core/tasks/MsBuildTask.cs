@@ -321,7 +321,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 
             foreach (string parameter in LoggerParameters)
-                builder.Append(parameter + ";");
+                builder.Append(";" + parameter);
 
             return builder.ToString();
 		}
