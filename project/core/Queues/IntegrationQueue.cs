@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 break;
 
                             case QueueDuplicateHandlingMode.ApplyForceBuildsReAddTop:
-                                // If a force build is added to th queue, it will remove an existing non-force build and add the new request to the beginning of the queue
+                                // If a force build is added to the queue, it will remove an existing non-force build and add the new request to the beginning of the queue
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
