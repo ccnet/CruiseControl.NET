@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     /// <remarks>
     /// <heading>Duplicate Handling</heading>
     /// <para>
-    /// There are three different settings that can be used to specify how force build requests should be handled.
+    /// There are different settings that can be used to specify how force build requests should be handled.
     /// </para>
     /// <para>
     /// The default behaviour is to not allow force build requests to update the queue and use the first request that was added.
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     /// &lt;cruisecontrol&gt;
     ///   &lt;queue name="Q1" duplicates="UseFirst"/&gt;
     ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
-    ///     ...
+    ///     &lt;otherProjectSettings /&gt;
     ///   &lt;/project&gt;
     /// &lt;/cruisecontrol&gt;
     /// </code>
@@ -41,18 +41,30 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     /// &lt;cruisecontrol&gt;
     ///   &lt;queue name="Q1" duplicates="ApplyForceBuildsReplace"/&gt;
     ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
-    ///     ...
+    ///     &lt;otherProjectSettings /&gt;
     ///   &lt;/project&gt;
     /// &lt;/cruisecontrol&gt;
     /// </code>
     /// <para>
-    /// The following example shows how to configure a queue so that force build requests will remove existing requests of the interval trigger and re-add a force build request. This is changing the position of the request in the queue.
+    /// The following example shows how to configure a queue so that force build requests will remove existing non forced requests of the interval trigger and re-add the force build request. This is changing the position of the request in the queue.
+    /// Basically : remove the interval (non forced) builds and add the forced builds via the queue priority setting
     /// </para>
     /// <code>
     /// &lt;cruisecontrol&gt;
     ///   &lt;queue name="Q1" duplicates="ApplyForceBuildsReAdd"/&gt;
     ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
-    ///     ...
+    ///     &lt;otherProjectSettings /&gt;
+    ///   &lt;/project&gt;
+    /// &lt;/cruisecontrol&gt;
+    /// </code>
+    /// <para>
+    /// The following example shows how to configure a queue so that force build requests will remove existing non forced requests of the interval trigger and re-add a force build request to the first item in the queue.
+    /// </para>
+    /// <code>
+    /// &lt;cruisecontrol&gt;
+    ///   &lt;queue name="Q1" duplicates="ApplyForceBuildsReAddTop"/&gt;
+    ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
+    ///     &lt;otherProjectSettings /&gt;
     ///   &lt;/project&gt;
     /// &lt;/cruisecontrol&gt;
     /// </code>
@@ -65,10 +77,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     ///   &lt;queue name="Q1" lockqueues="Q2"/&gt;
     ///   &lt;queue name="Q2" lockqueues="Q1"/&gt;
     ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
-    ///     ...
+    ///     &lt;otherProjectSettings /&gt;
     ///   &lt;/project&gt;
     ///   &lt;project name="MySecondProject" queue="Q2" queuePriority="1"&gt;
-    ///     ...
+    ///     &lt;otherProjectSettings /&gt;
     ///   &lt;/project&gt;
     /// &lt;/cruisecontrol&gt;
     /// </code>
