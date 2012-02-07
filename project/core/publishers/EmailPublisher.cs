@@ -87,8 +87,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// constructed from xsl transformations on the build log. If the xslFiles section is filled these files will be
     /// used, if not defined the xls files are defined in the ccnet.exe.config in the xslFiles section. (see 
     /// also: <link>Server Application Config File</link>). When adjusting one of these, restart the console/service.
-    /// </para>
-    /// <para>
     /// The benefits of defining the xsl files in the email publisher: 
     /// </para>
     /// <list type="1">
@@ -99,7 +97,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// it is possible to give projects different xsl transformations
     /// </item>
     /// </list>
-    /// <para/>
     /// <para type="warning">
     /// The groups node may be empty, but the group section must exist.
     /// </para>
