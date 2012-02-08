@@ -864,6 +864,7 @@
     <Compile Include="tasks\CruiseServerControlTaskAction.cs" />
     <Compile Include="tasks\CruiseServerControlTaskActionType.cs" />
     <Compile Include="tasks\DirectDynamicValue.cs" />
+    <Compile Include="tasks\DumpValueTask.cs" />
     <Compile Include="tasks\DupFinderTask.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
     <Compile Include="tasks\FakeTask.cs" />
