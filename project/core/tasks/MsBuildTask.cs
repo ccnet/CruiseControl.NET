@@ -91,6 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.Executable = GetDefaultExecutable();
             this.Timeout = DefaultTimeout;
             this.Priority = ProcessPriorityClass.Normal;
+
+            this.LoggerParameters = new string[0];
         }
 
         #region Public fields
