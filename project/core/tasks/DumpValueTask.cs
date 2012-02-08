@@ -37,13 +37,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("DumpValue")]
     public class DumpValueTask : TaskBase
     {
+        private string xmlFileName = string.Empty;
+
         /// <summary>
         /// The name of the XML file to write
         /// </summary>
         /// <version>1.7</version>
         /// <default>None</default>
         [ReflectorProperty("xmlFileName", Required = true)]
-        public string XmlFileName = string.Empty;
+        public string XmlFileName { get { return xmlFileName; } set { xmlFileName = value; } }
 
         /// <summary>
         /// The values to dump in the given XML file.
