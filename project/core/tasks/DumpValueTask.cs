@@ -114,8 +114,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             XmlWriter writer = XmlTextWriter.Create(XmlFileName, settings);
 
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
             XmlSerializer serializer = new XmlSerializer(typeof(ValueDumper));
-            serializer.Serialize(writer, new ValueDumper(this));
+            serializer.Serialize(writer, new ValueDumper(this), namespaces);
             writer.Close();
 
             return true;
