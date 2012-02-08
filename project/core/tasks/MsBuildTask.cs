@@ -148,15 +148,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Logger
+        private string logger;
+
         /// <summary>
-        /// The full path to the assembly containing the custom logger to use. Arguments can be passed to the logger by appending them
-        /// after the logger name separated by a semicolon. Only if the assembly contains more than one logger implementation you need to
-        /// specify the logger class (see MSBuild reference): [LoggerClass,]LoggerAssembly[;LoggerParameters] 
+        /// The full path to the assembly containing the custom logger to use. 
+        /// Contrary to the usual MSBuild command line, arguments MUST NOT  be passed to the logger by appending them
+        /// after the logger name separated by a semicolon. You MUST use the loggerParameters property for this.
+        /// Only if the assembly contains more than one logger implementation you need to specify the logger class 
+        /// (see MSBuild reference): [LoggerClass,]LoggerAssembly
         /// </summary>
         /// <version>1.0</version>
         /// <default>ThoughtWorks.CruiseControl.MsBuild.XmlLogger, ThoughtWorks.CruiseControl.MsBuild.dll</default>
         [ReflectorProperty("logger", Required = false)]
-        public string Logger { get; set; }
+        public string Logger { get { return logger; } set { logger = CheckAndQuoteLoggerSetting(value); } }
 
         /// <summary>
         /// The parameters to be given to the custom logger
