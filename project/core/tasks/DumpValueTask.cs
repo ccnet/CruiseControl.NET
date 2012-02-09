@@ -22,11 +22,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <code title="Minimalist example">
     /// &lt;DumpValue&gt;
     /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
-    /// &lt;values&gt;
-    /// &lt;namedValue name="MyValue" value="ValueContent" /&gt;
-    /// &lt;/values&gt;
+    /// &lt;dumpValueItems&gt;
+    /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
+    /// &lt;/dumpValueItems&gt;
     /// &lt;/DumpValue&gt;
     /// </code>
+    /// <code title="Full example">
+    /// &lt;DumpValue&gt;
+    /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
+    /// &lt;dumpValueItems&gt;
+    /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
+    /// &lt;dumpValueItem name="MyValueNotInCDATA" value="some other content" valueInCDATA="false" /&gt;
+    /// &lt;/dumpValueItems&gt;
+    /// &lt;/DumpValue&gt;
+    /// </code>
+    /// </example>
     /// </example>
     /// <remarks>
     /// <includePage>Integration Properties</includePage>
