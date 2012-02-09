@@ -22,11 +22,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <code title="Minimalist example">
     /// &lt;DumpValue&gt;
     /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
-    /// &lt;values&gt;
-    /// &lt;namedValue name="MyValue" value="ValueContent" /&gt;
-    /// &lt;/values&gt;
+    /// &lt;dumpValueItems&gt;
+    /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
+    /// &lt;/dumpValueItems&gt;
     /// &lt;/DumpValue&gt;
     /// </code>
+    /// <code title="Full example">
+    /// &lt;DumpValue&gt;
+    /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
+    /// &lt;dumpValueItems&gt;
+    /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
+    /// &lt;dumpValueItem name="MyValueNotInCDATA" value="some other content" valueInCDATA="false" /&gt;
+    /// &lt;/dumpValueItems&gt;
+    /// &lt;/DumpValue&gt;
+    /// </code>
+    /// </example>
     /// </example>
     /// <remarks>
     /// <includePage>Integration Properties</includePage>
@@ -34,9 +44,50 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// Originally developped by Olivier Sannier.
     /// </para>
     /// </remarks>
-    [ReflectorType("DumpValue")]
+    [ReflectorType("dumpValue")]
     public class DumpValueTask : TaskBase
     {
+        /// <summary>
+        /// <para>
+        /// The DumpValueItem is used to specify which values are written to the dump file
+        /// The values are put in CDATA sections by default
+        /// </para>
+        /// </summary>
+        /// <title>DumpValue Item</title>
+        /// <version>1.7</version>
+        [ReflectorType("dumpValueItem")]
+        public class DumpValueItem : NameValuePair
+        {
+            bool valueInCDATA = true;
+
+            /// <summary>
+            /// Starts a new <see cref="DumpValueItem"/> with no name and no value.
+            /// </summary>
+            public DumpValueItem() : base() { }
+
+            /// <summary>
+            /// Starts a new <see cref="DumpValueItem"/> with a name and value.
+            /// </summary>
+            public DumpValueItem(string name, string value) : base(name, value) { }
+
+            /// <summary>
+            /// Starts a new <see cref="DumpValueItem"/> with a name, a value, and a flag for ValueInCDATA.
+            /// </summary>
+            public DumpValueItem(string name, string value, bool valueInCDATA)
+                : this(name, value) 
+            {
+                this.valueInCDATA = valueInCDATA;
+            }
+
+            /// <summary>
+            /// Whether to put the value in CDATA or not
+            /// </summary>
+            /// <version>1.7</version>
+            /// <default>true</default>
+            [ReflectorProperty("valueInCDATA", Required = false)]
+            public bool ValueInCDATA { get { return valueInCDATA; } set { valueInCDATA = value; } }
+        }
+
         private string xmlFileName = string.Empty;
 
         /// <summary>
@@ -52,30 +103,40 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.7</version>
         /// <default>n/a</default>
-        [ReflectorProperty("values", Required = false)]
-        public NameValuePair[] Values { get; set; }
+        [ReflectorProperty("dumpValueItems", Required = false)]
+        public DumpValueItem[] Items { get; set; }
 
         [Serializable]
         public class ValueDumperItem
         {
             private string value;
+            private bool valueInCDATA;
 
             public ValueDumperItem() { }
-            public ValueDumperItem(NameValuePair ValuePair)
+            public ValueDumperItem(DumpValueItem Item)
             {
-                Name = ValuePair.Name;
-                value = ValuePair.Value;
+                Name = Item.Name;
+                value = Item.Value;
+                valueInCDATA = Item.ValueInCDATA;
             }
 
             public string Name { get; set; }
 
             [XmlElement("Value")]
-            public XmlCDataSection Message
+            public XmlCharacterData Message
             {
                 get
                 {
-                    XmlDocument doc = new XmlDocument();
-                    return doc.CreateCDataSection(value);
+                    if (valueInCDATA)
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        return doc.CreateCDataSection(value);
+                    }
+                    else
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        return doc.CreateTextNode(value);
+                    }
                 }
                 set
                 {
@@ -96,9 +157,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             { 
                 this.parent = parent;
 
-                foreach (NameValuePair Value in parent.Values)
+                foreach (DumpValueItem Item in parent.Items)
                 {
-                    Add(new ValueDumperItem(Value));
+                    Add(new ValueDumperItem(Item));
                 }
             }
         }
@@ -106,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-                string.Format("Executing DumpValue: Dumping {0} value(s) into {1}", Values.Length, XmlFileName));
+                string.Format("Executing DumpValue: Dumping {0} value(s) into {1}", Items.Length, XmlFileName));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
@@ -115,13 +176,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             settings.CloseOutput = true;
 
             XmlWriter writer = XmlTextWriter.Create(XmlFileName, settings);
+            try
+            {
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add("", "");
 
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-            namespaces.Add("", "");
-
-            XmlSerializer serializer = new XmlSerializer(typeof(ValueDumper));
-            serializer.Serialize(writer, new ValueDumper(this), namespaces);
-            writer.Close();
+                XmlSerializer serializer = new XmlSerializer(typeof(ValueDumper));
+                serializer.Serialize(writer, new ValueDumper(this), namespaces);
+            }
+            finally
+            {
+                writer.Close();
+            }
 
             return true;
         }

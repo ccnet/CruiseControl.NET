@@ -51,27 +51,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             var task = new DumpValueTask();
             const string xml = @"
-    <DumpValue>
+    <dumpValue>
     	<xmlFileName>C:\some\path\to\file.xml</xmlFileName>
-    	<values>
-            <namedValue name='The Name' value='something' />
-            <namedValue name='The Name 2' value='some other thing' />
-            <namedValue name='The Name 3' value='stuff' />
-            <namedValue name='The Name 4' value='last but not least' />
-        </values>
-    </DumpValue>";
+    	<dumpValueItems>
+            <dumpValueItem name='The Name' value='something' />
+            <dumpValueItem name='The Name 2' value='some other thing' />
+            <dumpValueItem name='The Name 3' value='stuff' />
+            <dumpValueItem name='The Name 4' value='last but not least' />
+            <dumpValueItem name='NotInCDATA' value='given data' valueInCDATA='false' />
+        </dumpValueItems>
+    </dumpValue>";
 
             NetReflector.Read(xml, task);
             Assert.AreEqual(@"C:\some\path\to\file.xml", task.XmlFileName);
-            Assert.AreEqual(4, task.Values.Length);
-            Assert.AreEqual("The Name", task.Values[0].Name);
-            Assert.AreEqual("something", task.Values[0].Value);
-            Assert.AreEqual("The Name 2", task.Values[1].Name);
-            Assert.AreEqual("some other thing", task.Values[1].Value);
-            Assert.AreEqual("The Name 3", task.Values[2].Name);
-            Assert.AreEqual("stuff", task.Values[2].Value);
-            Assert.AreEqual("The Name 4", task.Values[3].Name);
-            Assert.AreEqual("last but not least", task.Values[3].Value);
+            Assert.AreEqual(5, task.Items.Length);
+            Assert.AreEqual("The Name", task.Items[0].Name);
+            Assert.AreEqual("something", task.Items[0].Value);
+            Assert.IsTrue(task.Items[0].ValueInCDATA);
+            Assert.AreEqual("The Name 2", task.Items[1].Name);
+            Assert.AreEqual("some other thing", task.Items[1].Value);
+            Assert.IsTrue(task.Items[1].ValueInCDATA);
+            Assert.AreEqual("The Name 3", task.Items[2].Name);
+            Assert.AreEqual("stuff", task.Items[2].Value);
+            Assert.IsTrue(task.Items[2].ValueInCDATA);
+            Assert.AreEqual("The Name 4", task.Items[3].Name);
+            Assert.AreEqual("last but not least", task.Items[3].Value);
+            Assert.IsTrue(task.Items[3].ValueInCDATA);
+            Assert.AreEqual("NotInCDATA", task.Items[4].Name);
+            Assert.AreEqual("given data", task.Items[4].Value);
+            Assert.IsFalse(task.Items[4].ValueInCDATA);
         }
 
         /// <summary>
@@ -80,47 +88,73 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void MinimalRun()
         {
-
-            BaseTest(new NameValuePair[] {new NameValuePair("TestName", "TestValue")});
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue") });
         }
 
         [Test]
         public void MultiplePairsRun()
         {
-
-            BaseTest(new NameValuePair[] { new NameValuePair("TestName", "TestValue"), 
-                                           new NameValuePair("SecondName", "SecondValue")});
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue"), 
+                                                         new DumpValueTask.DumpValueItem("SecondName", "SecondValue")});
         }
 
         [Test]
         public void WithCarriageReturnRun()
         {
-
-            BaseTest(new NameValuePair[] { new NameValuePair("TestName", "TestValue\r\nWith carriage returns") });
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue\r\nWith carriage returns") });
         }
 
         [Test]
         public void WithXMLCharsRun()
         {
-
-            BaseTest(new NameValuePair[] { new NameValuePair("TestName", "TestValue With > nice & xml < \" ' characters") });
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters") });
         }
+
+        [Test]
+        public void MinimalRunNoCDATA()
+        {
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue", false) });
+        }
+
+        [Test]
+        public void WithXMLCharsRunNoCDATA()
+        {
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters", false) });
+        }
+
+        [Test]
+        public void MultiplePairsRunOnlyOneNoCDATA()
+        {
+            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue"), 
+                                                         new DumpValueTask.DumpValueItem("SecondName", "SecondValue", false),
+                                                         new DumpValueTask.DumpValueItem("ThirdName", "Dummy"),
+                                                       }
+                    );
+        }
+
         #endregion
 
         #region Private methods
-        private void BaseTest(NameValuePair[] NameValues)
+        private void BaseTest(DumpValueTask.DumpValueItem[] NameValues)
         {
             DumpValueTask task = new DumpValueTask();
             task.XmlFileName = dumpFilePath;
-            task.Values = NameValues;
+            task.Items = NameValues;
             task.Run(GetResult());
             Assert.IsTrue(File.Exists(dumpFilePath), "Dump file not generated");
 
             StreamReader reader = File.OpenText(dumpFilePath);
-            string dumpContent = reader.ReadToEnd();
-            reader.Close();
+            string dumpContent;
+            try
+            {
+                dumpContent = reader.ReadToEnd();
+            }
+            finally
+            {
+                reader.Close();
+            }
 
-            Assert.AreEqual(GetExpectedXMLContent(task.Values), dumpContent);
+            Assert.AreEqual(GetExpectedXMLContent(task.Items), dumpContent);
         }
 
         private IntegrationResult GetResult()
@@ -151,15 +185,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             return modification;
         }
 
-        private string GetExpectedXMLContent(NameValuePair[] NameValues)
+        private string GetExpectedXMLContent(DumpValueTask.DumpValueItem[] Items)
         {
             StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
                                                       "<ValueDumper>\r\n");
-            foreach (NameValuePair pair in NameValues)
+            foreach (DumpValueTask.DumpValueItem item in Items)
             {
                 builder.Append("  <ValueDumperItem>\r\n");
-                builder.Append("    <Name>" + pair.Name + "</Name>\r\n");
-                builder.Append("    <Value><![CDATA[" + pair.Value + "]]></Value>\r\n");
+                builder.Append("    <Name>" + item.Name + "</Name>\r\n");
+                if (item.ValueInCDATA)
+                    builder.Append("    <Value><![CDATA[" + item.Value + "]]></Value>\r\n");
+                else
+                    builder.Append("    <Value>" + item.Value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;") + "</Value>\r\n");
                 builder.Append("  </ValueDumperItem>\r\n");
             }
             builder.Append("</ValueDumper>");
