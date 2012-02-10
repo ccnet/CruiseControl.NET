@@ -232,7 +232,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             int idx = ProjectFile.LastIndexOf('\\');
             if (idx > -1)
               info.WorkingDirectory = ProjectFile.Remove(idx, ProjectFile.Length - idx); // Trim down proj. file to get working dir.
-			// Add IntegrationProperties as environment variables
+
+            // Add IntegrationProperties as environment variables
 			foreach (string varName in result.IntegrationProperties.Keys)
 			{
 				object obj1 = result.IntegrationProperties[varName];
