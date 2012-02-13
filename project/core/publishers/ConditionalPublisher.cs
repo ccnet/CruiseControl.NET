@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             string Value = !string.IsNullOrEmpty(Description)
                             ? Description
-                            : string.Format("Running publishers ({0} task(s))", Tasks.Length);
+                            : string.Format("Running conditionned publishers ({0} task(s))", Tasks.Length);
 
             if (Details != null)
                 Value += string.Format(": [{0}] {1}",

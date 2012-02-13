@@ -482,7 +482,7 @@
         {
             string Value = !string.IsNullOrEmpty(Description)
                             ? Description
-                            : string.Format("Running {1} tasks ({0} task(s))", Tasks.Length, Details.RunningIfTasks ? "if" : "else");
+                            : string.Format("Running {1} tasks ({0} task(s))", Tasks.Length, Details.RunningIfTasks ? "\"if\"" : "\"else\"");
 
             if (Details != null)
                 Value += string.Format(": [{0}] {1}",
