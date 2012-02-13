@@ -113,30 +113,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        private class _RunningSubTaskStatus
-        {
-            private IIntegrationResult _ParentResult;
+        private RunningSubTaskDetails[] _TasksStatuses;
 
-            public _RunningSubTaskStatus(IIntegrationResult ParentResult)
-            {
-                _ParentResult = ParentResult;
-                Finished = false;
-            }
-
-            public string Information { get; set; }
-            public bool Finished { get; set; }
-            public IIntegrationResult ParentResult { get { return _ParentResult; } }
-        }
-
-        private _RunningSubTaskStatus[] _TasksStatuses;
-
-        private string _getStatusInformation(bool ShowTasksStatus)
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
         {
             string Value = !string.IsNullOrEmpty(Description)
                             ? Description
                             : string.Format("Running parallel tasks ({0} task(s))", Tasks.Length);
 
-            if (ShowTasksStatus)
+            if (Details != null)
             {
                 Value += ": ";
                 for (var loop = 0; loop < Tasks.Length; loop++)
@@ -166,8 +151,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            _TasksStatuses = new _RunningSubTaskStatus[numberOfTasks];
-            result.BuildProgressInformation.SignalStartRunTask(_getStatusInformation(false));
+            _TasksStatuses = new RunningSubTaskDetails[numberOfTasks];
+            result.BuildProgressInformation.SignalStartRunTask(GetStatusInformation(null));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
             // Initialise the arrays
@@ -182,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 events[loop] = new ManualResetEvent(false);
                 results[loop] = result.Clone();
-                _TasksStatuses[loop] = new _RunningSubTaskStatus(result);
+                _TasksStatuses[loop] = new RunningSubTaskDetails(loop, result);
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
                     var taskNumber = (int)state;
@@ -195,9 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         // Start the actual task
                         var task = Tasks[taskNumber];
                         var taskResult = results[taskNumber];
-                        taskResult.BuildProgressInformation.OnStartupInformationUpdatedUserObject = _TasksStatuses[taskNumber];
-                        taskResult.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
-                        RunTask(task, taskResult);
+                        RunTask(task, taskResult, _TasksStatuses[taskNumber]);
                     }
                     catch (Exception error)
                     {
@@ -223,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     // Tell everyone the task is done
                     events[taskNumber].Set();
                     _TasksStatuses[taskNumber].Finished = true;
-                    _TasksStatuses[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(_getStatusInformation(true));
+                    _TasksStatuses[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(_TasksStatuses[taskNumber]));
                 }, loop);
 
             }
@@ -246,12 +229,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
         #endregion
         #endregion
-
-        private void SubTaskStartupInformationUpdated(string information, object UserObject)
-        {
-            var Status = ((_RunningSubTaskStatus)UserObject);
-            Status.Information = information;
-            Status.ParentResult.BuildProgressInformation.UpdateStartupInformation(_getStatusInformation(true));
-        }
     }
 }

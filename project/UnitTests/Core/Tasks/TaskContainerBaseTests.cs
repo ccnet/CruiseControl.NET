@@ -169,9 +169,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             protected override bool Execute(IIntegrationResult result)
             {
+                int loop = 0;
                 foreach (var task in Tasks)
                 {
-                    RunTask(task, result);
+                    var taskResult = result.Clone();
+                    RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
+                    result.Merge(taskResult);
+
+                    loop++;
                 }
                 return true;
             }
@@ -179,6 +184,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             public void TestStatus()
             {
                 InitialiseStatus();
+            }
+
+            protected override string GetStatusInformation(RunningSubTaskDetails Details)
+            {
+                string Value = !string.IsNullOrEmpty(Description)
+                                ? Description
+                                : string.Format("Running test sub tasks ({0} task(s))", Tasks.Length);
+
+                if (Details != null)
+                    Value += string.Format(": [{0}] {1}",
+                                            Details.Index,
+                                            !string.IsNullOrEmpty(Details.Information)
+                                             ? Details.Information
+                                             : "No information");
+
+                return Value;
             }
         }
 
