@@ -68,22 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        private class _RunningSubTaskDetails
-        {
-            private int _Index;
-            private IIntegrationResult _ParentResult;
-
-            public _RunningSubTaskDetails(int Index, IIntegrationResult ParentResult)
-            {
-                _Index = Index;
-                _ParentResult = ParentResult;
-            }
-
-            public int Index { get { return _Index; } }
-            public IIntegrationResult ParentResult { get { return _ParentResult; } }
-        }
-
-        private string _getStatusInformation(string runningSubTaskStartupInfo, _RunningSubTaskDetails Details)
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
         {
             string Value = !string.IsNullOrEmpty(Description)
                             ? Description
@@ -92,8 +77,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (Details != null)
                 Value += string.Format(": [{0}] {1}",
                                         Details.Index,
-                                        !string.IsNullOrEmpty(runningSubTaskStartupInfo)
-                                         ? runningSubTaskStartupInfo
+                                        !string.IsNullOrEmpty(Details.Information)
+                                         ? Details.Information
                                          : "No information");
 
             return Value;
@@ -111,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            result.BuildProgressInformation.SignalStartRunTask(_getStatusInformation("", null));
+            result.BuildProgressInformation.SignalStartRunTask(GetStatusInformation(null));
             logger.Info("Starting sequential task with {0} sub-task(s)", numberOfTasks);
 
             // Launch each task
@@ -125,10 +110,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     // Start the actual task
                     var taskResult = result.Clone();
-                    taskResult.BuildProgressInformation.OnStartupInformationUpdatedUserObject = new _RunningSubTaskDetails(loop, result);
-                    taskResult.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
                     var task = Tasks[loop];
-                    RunTask(task, taskResult);
+                    RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
                     result.Merge(taskResult);
                 }
                 catch (Exception error)
@@ -158,11 +141,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
         #endregion
         #endregion
-
-        private void SubTaskStartupInformationUpdated(string information, object UserObject)
-        {
-            _RunningSubTaskDetails Details = (_RunningSubTaskDetails)UserObject;
-            Details.ParentResult.BuildProgressInformation.UpdateStartupInformation(_getStatusInformation(information, Details));
-        }
     }
 }

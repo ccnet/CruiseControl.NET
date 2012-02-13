@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             // Start the actual task
                             var taskResult = result.Clone();
                             var task = Tasks[loop];
-                            RunTask(task, taskResult);
+                            RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
                             result.Merge(taskResult);
                         }
                         catch (Exception error)
@@ -212,6 +212,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return (result.Status == IntegrationStatus.Success);
         }
         #endregion
+
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
+        {
+            string Value = !string.IsNullOrEmpty(Description)
+                            ? Description
+                            : string.Format("Running synchronized tasks ({0} task(s))", Tasks.Length);
+
+            if (Details != null)
+                Value += string.Format(": [{0}] {1}",
+                                        Details.Index,
+                                        !string.IsNullOrEmpty(Details.Information)
+                                         ? Details.Information
+                                         : "No information");
+
+            return Value;
+        }
         #endregion
     }
 }
