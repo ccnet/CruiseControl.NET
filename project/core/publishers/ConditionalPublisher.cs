@@ -101,11 +101,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 logger.Info("Conditions met - running publishers");
                 for (var loop = 0; loop < this.Tasks.Length; loop++)
                 {
-                    var publisher = this.Tasks[loop];
                     logger.Debug("Running publisher #{0}", loop);
                     try
                     {
                         var taskResult = result.Clone();
+                        var publisher = this.Tasks[loop];
                         RunTask(publisher, taskResult, new RunningSubTaskDetails(loop, result));
                         result.Merge(taskResult);
                     }
