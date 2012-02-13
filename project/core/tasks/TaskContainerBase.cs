@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
-            if (result.BuildProgressInformation != null)
+            if (result != null)
             {
                 result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
                 result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
