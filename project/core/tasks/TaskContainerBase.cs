@@ -123,7 +123,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="task"></param>
         /// <param name="result"></param>
-        protected virtual void RunTask(ITask task, IIntegrationResult result)
+        /// <param name="taskDetails"></param>
+        protected virtual void RunTask(ITask task, IIntegrationResult result, RunningSubTaskDetails taskDetails)
         {
             var tsk = task as IParamatisedItem;
             if (tsk != null)
@@ -131,6 +132,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
+            if (result != null)
+            {
+                result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
+                result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
+            }
             task.Run(result);
         }
         #endregion
@@ -154,6 +160,64 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
             }
         }
+        #endregion
+
+        #region SubTasks status management
+        /// <summary>
+        /// Use this task as a container for subtask details while running them
+        /// </summary>
+        protected class RunningSubTaskDetails
+        {
+            private int index;
+            private IIntegrationResult parentResult;
+
+            public RunningSubTaskDetails(int Index, IIntegrationResult ParentResult)
+            {
+                this.index = Index;
+                this.parentResult = ParentResult;
+                this.Finished = false;
+            }
+            /// <summary>
+            /// Index of the subtask in the parent's list
+            /// </summary>
+            public int Index { get { return index; } }
+            /// <summary>
+            /// The current information for the subtask, as a string
+            /// This one is updated by the delegate below, if you use it
+            /// </summary>
+            public string Information { get; set; }
+            /// <summary>
+            /// true if the task is finished.            
+            /// This one has to be updated by you, should you need it
+            /// </summary>
+            public bool Finished { get; set; }
+            /// <summary>
+            /// The parent "result", used by the delegate to update the status while running
+            /// </summary>
+            public IIntegrationResult ParentResult { get { return parentResult; } }
+        }
+
+        /// <summary>
+        /// This method builds the current status for the parent task, using the running subtask details
+        /// given as a parameter
+        /// </summary>
+        /// <param name="Details">The currently running subtask details</param>
+        /// <returns>The status of the parent task, with the running subtask details if need be</returns>
+        protected abstract string GetStatusInformation(RunningSubTaskDetails Details);
+
+        /// <summary>
+        /// Use this as a delegate for IIntegrationResult.BuildProgressInformation.OnStartupInformationUpdated 
+        /// RunTask above uses it
+        /// </summary>
+        /// <param name="information">The current information for the task that has changed status</param>
+        /// <param name="UserObject">Some user object passed through. In this context, always a RunningSubTaskDetails instance</param>
+        protected void SubTaskStartupInformationUpdated(string information, object UserObject)
+        {
+            var Details = ((RunningSubTaskDetails)UserObject);
+            Details.Information = information;
+            Details.ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(Details));
+        }
+
         #endregion
         #endregion
     }

@@ -101,11 +101,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 logger.Info("Conditions met - running publishers");
                 for (var loop = 0; loop < this.Tasks.Length; loop++)
                 {
-                    var publisher = this.Tasks[loop];
                     logger.Debug("Running publisher #{0}", loop);
                     try
                     {
-                        RunTask(publisher, result);
+                        var taskResult = result.Clone();
+                        var publisher = this.Tasks[loop];
+                        RunTask(publisher, taskResult, new RunningSubTaskDetails(loop, result));
+                        result.Merge(taskResult);
                     }
                     catch (Exception e)
                     {
@@ -123,6 +125,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return true;
         }
         #endregion
+
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
+        {
+            string Value = !string.IsNullOrEmpty(Description)
+                            ? Description
+                            : string.Format("Running conditionned publishers ({0} task(s))", Tasks.Length);
+
+            if (Details != null)
+                Value += string.Format(": [{0}] {1}",
+                                        Details.Index,
+                                        !string.IsNullOrEmpty(Details.Information)
+                                         ? Details.Information
+                                         : "No information");
+
+            return Value;
+        }
         #endregion
     }
 }

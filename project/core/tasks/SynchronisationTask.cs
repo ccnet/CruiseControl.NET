@@ -26,19 +26,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <version>1.5</version>
     /// <example>
     /// <code title="Minimalist example">
-    /// &lt;sequential&gt;
+    /// &lt;synchronised&gt;
     /// &lt;tasks&gt;
     /// &lt;!-- Tasks defined here --&gt;
     /// &lt;/tasks&gt;
-    /// &lt;/sequential&gt;
+    /// &lt;/synchronised&gt;
     /// </code>
     /// <code title="Full example">
-    /// &lt;sequential continueOnFailure="true" context="thereCanBeOnlyOne" timeout="1200"&gt;
+    /// &lt;synchronised continueOnFailure="true" context="thereCanBeOnlyOne" timeout="1200"&gt;
     /// &lt;description&gt;Example of how to run multiple tasks in a synchronisation context.&lt;/description&gt;
     /// &lt;tasks&gt;
     /// &lt;!-- Tasks defined here --&gt;
     /// &lt;/tasks&gt;
-    /// &lt;/sequential&gt;
+    /// &lt;/synchronised&gt;
     /// </code>
     /// </example>
     [ReflectorType("synchronised")]
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             // Start the actual task
                             var taskResult = result.Clone();
                             var task = Tasks[loop];
-                            RunTask(task, taskResult);
+                            RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
                             result.Merge(taskResult);
                         }
                         catch (Exception error)
@@ -212,6 +212,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return (result.Status == IntegrationStatus.Success);
         }
         #endregion
+
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
+        {
+            string Value = !string.IsNullOrEmpty(Description)
+                            ? Description
+                            : string.Format("Running synchronized tasks ({0} task(s))", Tasks.Length);
+
+            if (Details != null)
+                Value += string.Format(": [{0}] {1}",
+                                        Details.Index,
+                                        !string.IsNullOrEmpty(Details.Information)
+                                         ? Details.Information
+                                         : "No information");
+
+            return Value;
+        }
         #endregion
     }
 }
