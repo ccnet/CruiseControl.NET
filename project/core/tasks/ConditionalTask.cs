@@ -373,6 +373,7 @@
         /// </summary>
         /// <param name="task"></param>
         /// <param name="result"></param>
+        /// <param name="taskDetails"></param>
         private void RunTask(ITask task, IIntegrationResult result, RunningSubTaskDetails taskDetails)
         {
             var tsk = task as IParamatisedItem;
@@ -381,8 +382,11 @@
                 tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
-            result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
-            result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
+            if (result.BuildProgressInformation != null)
+            {
+                result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
+                result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
+            }
             task.Run(result);
         }
         #endregion

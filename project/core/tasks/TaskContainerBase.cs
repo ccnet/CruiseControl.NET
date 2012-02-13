@@ -132,8 +132,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
-            result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
-            result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
+            if (result.BuildProgressInformation != null)
+            {
+                result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
+                result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
+            }
             task.Run(result);
         }
         #endregion
