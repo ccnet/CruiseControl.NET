@@ -24,7 +24,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             var result = GenerateResultMock();
             var logger = mocks.DynamicMock<ILogger>();
             var childPublisher = mocks.StrictMock<ITask>();
-            Expect.Call(() => { childPublisher.Run(result); });
+            Expect.Call(result.Clone()).Return(null);
+            Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.Anything));
+            Expect.Call(() => { childPublisher.Run(null); });
             var publisher = new ConditionalPublisher
             {
                 Logger = logger,
