@@ -198,7 +198,7 @@
                 logger.Info("Conditions passed - running tasks");
                 this.elseStatus.Status = ItemBuildStatus.Cancelled;
                 CancelTasks(this.elseTaskStatuses);
-                successful = this.RunTasks(this.Tasks, logger, result);
+                successful = this.RunTasks(this.Tasks, logger, true, result);
                 CancelTasks(this.taskStatuses);
                 this.mainStatus.Status = successful ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
             }
@@ -207,7 +207,7 @@
                 logger.Info("Conditions did not pass - running else tasks");
                 this.mainStatus.Status = ItemBuildStatus.Cancelled;
                 CancelTasks(this.taskStatuses);
-                successful = this.RunTasks(this.ElseTasks, logger, result);
+                successful = this.RunTasks(this.ElseTasks, logger, false, result);
                 CancelTasks(this.elseTaskStatuses);
                 this.elseStatus.Status = successful ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
             }
@@ -373,7 +373,7 @@
         /// </summary>
         /// <param name="task"></param>
         /// <param name="result"></param>
-        private void RunTask(ITask task, IIntegrationResult result)
+        private void RunTask(ITask task, IIntegrationResult result, RunningSubTaskDetails taskDetails)
         {
             var tsk = task as IParamatisedItem;
             if (tsk!= null)
@@ -381,6 +381,8 @@
                 tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
+            result.BuildProgressInformation.OnStartupInformationUpdatedUserObject = taskDetails;
+            result.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
             task.Run(result);
         }
         #endregion
@@ -391,9 +393,10 @@
         /// </summary>
         /// <param name="tasks">The tasks.</param>
         /// <param name="logger">The logger.</param>
+        /// <param name="runningIfTasks">true if running the "if" tasks.</param>
         /// <param name="result">The result.</param>
         /// <returns><c>true</c> if all the tasks are successul; <c>false</c> otherwise.</returns>
-        private bool RunTasks(ITask[] tasks, ILogger logger, IIntegrationResult result)
+        private bool RunTasks(ITask[] tasks, ILogger logger, bool runningIfTasks, IIntegrationResult result)
         {
             // Launch each task
             var successCount = 0;
@@ -407,7 +410,7 @@
                     // Start the actual task
                     var taskResult = result.Clone();
                     var task = tasks[loop];
-                    this.RunTask(task, taskResult);
+                    this.RunTask(task, taskResult, new RunningSubTaskDetails(loop, runningIfTasks, result));
                     result.Merge(taskResult);
                 }
                 catch (Exception error)
@@ -433,6 +436,60 @@
             return failureCount == 0;
         }
         #endregion
+
+        private class RunningSubTaskDetails
+        {
+            private int index;
+            private IIntegrationResult parentResult;
+            private bool runningIfTasks;
+
+            public RunningSubTaskDetails(int Index, bool RunningIfTasks, IIntegrationResult ParentResult)
+            {
+                this.index = Index;
+                this.parentResult = ParentResult;
+                this.runningIfTasks = RunningIfTasks;
+            }
+            /// <summary>
+            /// Index of the subtask in the parent's list
+            /// </summary>
+            public int Index { get { return index; } }
+            /// <summary>
+            /// The current information for the subtask, as a string
+            /// </summary>
+            public string Information { get; set; }
+            /// <summary>
+            /// true if the task is running for the "if" part.            
+            /// </summary>
+            public bool RunningIfTasks { get { return runningIfTasks; } }
+            /// <summary>
+            /// The parent "result", used by the delegate to update the status while running
+            /// </summary>
+            public IIntegrationResult ParentResult { get { return parentResult; } }
+        }
+
+        private void SubTaskStartupInformationUpdated(string information, object UserObject)
+        {
+            var Details = ((RunningSubTaskDetails)UserObject);
+            Details.Information = information;
+            Details.ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(Details));
+        }
+
+        private string GetStatusInformation(RunningSubTaskDetails Details)
+        {
+            string Value = !string.IsNullOrEmpty(Description)
+                            ? Description
+                            : string.Format("Running {1} tasks ({0} task(s))", Tasks.Length, Details.RunningIfTasks ? "if" : "else");
+
+            if (Details != null)
+                Value += string.Format(": [{0}] {1}",
+                                        Details.Index,
+                                        !string.IsNullOrEmpty(Details.Information)
+                                         ? Details.Information
+                                         : "No information");
+
+            return Value;
+        }
+
         #endregion
     }
 }
