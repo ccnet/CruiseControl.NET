@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using NUnit.Framework;
@@ -215,6 +216,84 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             ">\r\n" +
                             "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
                             "  <parameters />\r\n" +
+                            "</projectStatus>",
+                            writer.ToString());
+        }
+
+        [Test]
+        public void StreamToXMLFullConstructorWithParametersTest()
+        {
+            string projectName = "full test";
+            string category = "categ1";
+            ProjectActivity activity = ProjectActivity.Building;
+            IntegrationStatus buildStatus = IntegrationStatus.Failure;
+            ProjectIntegratorState status = ProjectIntegratorState.Stopped;
+            string webURL = "someurl";
+            DateTime lastBuildDate = DateTime.Now;
+            string lastBuildLabel = "lastLabel";
+            string lastSuccessfulBuildLabel = "lastSuccess";
+            DateTime nextBuildTime = DateTime.Now.AddDays(2);
+            string buildStage = "some stage";
+            string queue = "someQueue";
+            int queuePriority = 25;
+            ParameterBase[] parameters = new ParameterBase[] { new TextParameter("textParam"), new BooleanParameter("boolParam") };
+
+            ProjectStatus projectStatus = new ProjectStatus(projectName, category, activity, buildStatus,
+                                                            status, webURL, lastBuildDate, lastBuildLabel,
+                                                            lastSuccessfulBuildLabel, nextBuildTime, buildStage,
+                                                            queue, queuePriority, parameters);
+
+            string streamedParameters = String.Empty;
+            foreach (ParameterBase parameter in parameters)
+            {
+                XmlSerializerNamespaces parameternmsp = new XmlSerializerNamespaces();
+                parameternmsp.Add("", "");
+
+                XmlSerializer parameterSerializer = new XmlSerializer(parameter.GetType());
+                TextWriter parameterWriter = new StringWriter();
+
+                XmlWriterSettings writerSettings = new XmlWriterSettings();
+                writerSettings.OmitXmlDeclaration = true;
+                using (XmlWriter xmlWriter = XmlWriter.Create(parameterWriter, writerSettings))
+                {
+                    parameterSerializer.Serialize(xmlWriter, parameter, parameternmsp);
+                }
+                string streamedParameter = parameterWriter.ToString();
+                streamedParameter = Regex.Replace(streamedParameter, parameter.GetType().Name, "parameter d3p1:type=\"" + parameter.GetType().Name + "\"", RegexOptions.IgnoreCase);
+                streamedParameter = Regex.Replace(streamedParameter, "/>", "xmlns:d3p1=\"http://www.w3.org/2001/XMLSchema-instance\" />", RegexOptions.IgnoreCase);
+                streamedParameters += "    " + streamedParameter + "\r\n";
+            }
+
+            XmlSerializerNamespaces nmsp = new XmlSerializerNamespaces();
+            nmsp.Add("", "");
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ProjectStatus));
+            TextWriter writer = new StringWriter();
+
+            serializer.Serialize(writer, projectStatus, nmsp);
+
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                            "<projectStatus " +
+                            "stage=\"" + buildStage + "\" " +
+                            "showForceBuildButton=\"true\" " +
+                            "showStartStopButton=\"true\" " +
+                            "serverName=\"" + Environment.MachineName + "\" " +
+                            "status=\"" + status.ToString() + "\" " +
+                            "buildStatus=\"" + buildStatus.ToString() + "\" " +
+                            "name=\"" + projectName + "\" " +
+                            "category=\"" + category + "\" " +
+                            "queueName=\"" + queue + "\" " +
+                            "queuePriority=\"" + queuePriority.ToString() + "\" " +
+                            "url=\"" + webURL + "\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "lastBuildLabel=\"" + lastBuildLabel + "\" " +
+                            "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
+                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\"" +
+                            ">\r\n" +
+                            "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
+                            "  <parameters>\r\n" + 
+                            streamedParameters +
+                            "  </parameters>\r\n" +
                             "</projectStatus>",
                             writer.ToString());
         }
