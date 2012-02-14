@@ -113,7 +113,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        private RunningSubTaskDetails[] _TasksStatuses;
+        private class ParallelRunningSubTaskDetails : RunningSubTaskDetails
+        {
+            public ParallelRunningSubTaskDetails(int Index, IIntegrationResult ParentResult): base(Index, ParentResult)
+            {
+                this.Finished = false;
+            }
+
+            /// <summary>
+            /// true if the task is finished.            
+            /// This one has to be updated by you, should you need it
+            /// </summary>
+            public bool Finished { get; set; }
+        }
+
+        private ParallelRunningSubTaskDetails[] tasksDetails;
 
         protected override string GetStatusInformation(RunningSubTaskDetails Details)
         {
@@ -126,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 Value += ": ";
                 for (var loop = 0; loop < Tasks.Length; loop++)
                 {
-                    var Status = _TasksStatuses[loop];
+                    var Status = tasksDetails[loop];
 
                     if (!Status.Finished)
                         Value += string.Format("[{0}] {1} --- ",
@@ -151,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            _TasksStatuses = new RunningSubTaskDetails[numberOfTasks];
+            tasksDetails = new ParallelRunningSubTaskDetails[numberOfTasks];
             result.BuildProgressInformation.SignalStartRunTask(GetStatusInformation(null));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
@@ -167,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 events[loop] = new ManualResetEvent(false);
                 results[loop] = result.Clone();
-                _TasksStatuses[loop] = new RunningSubTaskDetails(loop, result);
+                tasksDetails[loop] = new ParallelRunningSubTaskDetails(loop, result);
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
                     var taskNumber = (int)state;
@@ -180,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         // Start the actual task
                         var task = Tasks[taskNumber];
                         var taskResult = results[taskNumber];
-                        RunTask(task, taskResult, _TasksStatuses[taskNumber]);
+                        RunTask(task, taskResult, tasksDetails[taskNumber]);
                     }
                     catch (Exception error)
                     {
@@ -205,8 +219,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                     // Tell everyone the task is done
                     events[taskNumber].Set();
-                    _TasksStatuses[taskNumber].Finished = true;
-                    _TasksStatuses[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(_TasksStatuses[taskNumber]));
+                    tasksDetails[taskNumber].Finished = true;
+                    tasksDetails[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(tasksDetails[taskNumber]));
                 }, loop);
 
             }
