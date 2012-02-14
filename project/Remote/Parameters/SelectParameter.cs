@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// An array of allowed values.
         /// </summary>
-        [XmlElement("allowedValue")]
+        [XmlIgnore]
         public override string[] AllowedValues
         {
             get
