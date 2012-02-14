@@ -14,6 +14,6 @@ using System.Reflection;
 [assembly: AssemblyProductAttribute("CruiseControl.NET")]
 [assembly: AssemblyCopyrightAttribute("Copyright © 2003 - 2012 ThoughtWorks Inc.")]
 [assembly: AssemblyTrademarkAttribute("")]
-[assembly: AssemblyVersionAttribute("1.7.700.8065")]
-[assembly: AssemblyFileVersionAttribute("1.7.700.8065")]
+[assembly: AssemblyVersionAttribute("0.0.0.0")]
+[assembly: AssemblyFileVersionAttribute("0.0.0.0")]
 
