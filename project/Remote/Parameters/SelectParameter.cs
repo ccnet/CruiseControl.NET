@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 #if !NoReflector
         [ReflectorProperty("allowedValues", typeof(NameValuePairListSerialiserFactory), Required = false)]
 #endif
-        [XmlIgnore]
+        [XmlArray("allowedValues"), XmlArrayItem("allowedValue")]
         public virtual NameValuePair[] DataValues
         {
             get { return myAllowedValues; }
@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 #if !NoReflector
         [ReflectorProperty("default", Required = false)]
 #endif
-        [XmlIgnore]
+        [XmlAttribute("default")]
         public override string DefaultValue
         {
             get { return base.DefaultValue; }
