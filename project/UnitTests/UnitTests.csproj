@@ -403,6 +403,7 @@
     <Compile Include="Core\Tasks\CoverageFilterTests.cs" />
     <Compile Include="Core\Tasks\CoverageThresholdTests.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
+    <Compile Include="Core\Tasks\DumpValueTaskTest.cs" />
     <Compile Include="Core\Tasks\FakeTaskTest.cs" />
     <Compile Include="Core\Tasks\MockTask.cs" />
     <Compile Include="Core\Tasks\XmlTaskResultTests.cs" />

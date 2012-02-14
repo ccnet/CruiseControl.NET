@@ -198,6 +198,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running unit tests: {0} {1}", NUnitPath, args));
 
             ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory, Priority);
+
+            System.Collections.IDictionary properties = result.IntegrationProperties;
+            // pass user defined the environment variables
+            foreach (EnvironmentVariable item in EnvironmentVariables)
+                info.EnvironmentVariables[item.name] = item.value;
+
+            // Pass the integration environment variables to devenv.
+            foreach (string key in properties.Keys)
+            {
+                info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
+            }
+
             info.TimeOut = Timeout * 1000;
             return info;
         }
