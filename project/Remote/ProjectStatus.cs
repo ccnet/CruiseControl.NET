@@ -71,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="buildStage"></param>
         /// <param name="queue"></param>
         /// <param name="queuePriority"></param>
+        /// <param name="parameters"></param>
         public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters)
 		{
 			this.status = status;
