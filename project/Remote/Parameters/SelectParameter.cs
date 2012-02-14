@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 #if !NoReflector
         [ReflectorProperty("allowedValues", typeof(NameValuePairListSerialiserFactory), Required = false)]
 #endif
-        [XmlIgnore]
+        [XmlArray("allowedValues"), XmlArrayItem("allowedValue")]
         public virtual NameValuePair[] DataValues
         {
             get { return myAllowedValues; }
@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// An array of allowed values.
         /// </summary>
-        [XmlElement("allowedValue")]
+        [XmlIgnore]
         public override string[] AllowedValues
         {
             get
