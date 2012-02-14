@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             set { activity = value; }
 		}
 
-        [XmlArray("parameters")]
+        [XmlArray("parameters"), XmlArrayItem("parameter")]
         public ParameterBase[] Parameters
         {
             get { return parameters; }
