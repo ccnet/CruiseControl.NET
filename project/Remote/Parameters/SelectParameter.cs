@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 #if !NoReflector
         [ReflectorProperty("default", Required = false)]
 #endif
-        [XmlAttribute("default")]
+        [XmlIgnore]
         public override string DefaultValue
         {
             get { return base.DefaultValue; }
