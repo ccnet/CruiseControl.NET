@@ -175,7 +175,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 this.index = Index;
                 this.parentResult = ParentResult;
-                this.Finished = false;
             }
             /// <summary>
             /// Index of the subtask in the parent's list
@@ -186,11 +185,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// This one is updated by the delegate below, if you use it
             /// </summary>
             public string Information { get; set; }
-            /// <summary>
-            /// true if the task is finished.            
-            /// This one has to be updated by you, should you need it
-            /// </summary>
-            public bool Finished { get; set; }
             /// <summary>
             /// The parent "result", used by the delegate to update the status while running
             /// </summary>
