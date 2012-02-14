@@ -3,7 +3,9 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-	/// <summary>
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
+    /// <summary>
 	/// Value type that contains extensive details about a project's most recent
 	/// integration.
 	/// </summary>
@@ -32,6 +34,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         private int queuePriority;
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
+        private ParameterBase[] parameters;
 
         /// <summary>
         /// Initialises a new blank <see cref="ProjectStatus"/>.
@@ -68,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="buildStage"></param>
         /// <param name="queue"></param>
         /// <param name="queuePriority"></param>
-        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority)
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
@@ -83,6 +86,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.currentBuildStage = buildStage;
             this.queue = queue;
             this.queuePriority = queuePriority;
+            this.parameters = parameters;
 		}
 
         /// <summary>
@@ -157,6 +161,13 @@ namespace ThoughtWorks.CruiseControl.Remote
 			get { return activity; }
             set { activity = value; }
 		}
+
+        [XmlArray("parameters")]
+        public ParameterBase[] Parameters
+        {
+            get { return parameters; }
+            set { parameters = value; }
+        }
 
         /// <summary>
         /// The name of the project.

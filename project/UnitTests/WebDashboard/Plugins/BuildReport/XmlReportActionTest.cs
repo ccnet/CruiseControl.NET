@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
@@ -120,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			return
 				new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
 				                  "http://blah", LastBuildTime, "build_8", "build_7",
-                                  NextBuildTime, "", "", 0);
+                                  NextBuildTime, "", "", 0, new ParameterBase[0]);
 		}
 
 		private XmlSchema ReadSchemaFromResources(string filename)

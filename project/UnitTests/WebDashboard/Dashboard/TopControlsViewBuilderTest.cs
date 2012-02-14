@@ -4,6 +4,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -147,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
 			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
 
-			ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1);
+            ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new ParameterBase[0]);
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
 			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
@@ -188,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
 			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
 
-			ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1);
+            ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new ParameterBase[0]);
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
 			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
