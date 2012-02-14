@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
@@ -99,6 +103,120 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             ProjectStatus activity = new ProjectStatus();
             activity.NextBuildTime = timeNow;
             Assert.AreEqual(timeNow, activity.NextBuildTime);
+        }
+
+        [Test]
+        public void StreamToXMLDefaultConstructorTest()
+        {
+            ProjectStatus projectStatus = new ProjectStatus();
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ProjectStatus));
+            TextWriter writer = new StringWriter();
+            XmlSerializerNamespaces nmsp = new XmlSerializerNamespaces();
+            nmsp.Add("", "");
+
+            serializer.Serialize(writer, projectStatus, nmsp);
+
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                            "<projectStatus " +
+                            "showForceBuildButton=\"true\" " +
+                            "showStartStopButton=\"true\" " +
+                            "serverName=\"" + Environment.MachineName + "\" " +
+                            "status=\"Running\" " +
+                            "buildStatus=\"Success\" " +
+                            "queuePriority=\"0\" " +
+                            "lastBuildDate=\"0001-01-01T00:00:00\" " +
+                            "nextBuildTime=\"0001-01-01T00:00:00\"" +
+                            ">\r\n" +
+                            "  <activity type=\"Sleeping\" />\r\n" +
+                            "</projectStatus>",
+                            writer.ToString());
+        }
+
+        [Test]
+        public void StreamToXMLPartialConstructorTest()
+        {
+            string projectName = "test project";
+            IntegrationStatus buildStatus = IntegrationStatus.Exception;
+            DateTime lastBuildDate = DateTime.Now;
+            ProjectStatus projectStatus = new ProjectStatus(projectName, buildStatus, lastBuildDate);
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ProjectStatus));
+            TextWriter writer = new StringWriter();
+            XmlSerializerNamespaces nmsp = new XmlSerializerNamespaces();
+            nmsp.Add("", "");
+
+            serializer.Serialize(writer, projectStatus, nmsp);
+
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                            "<projectStatus " +
+                            "showForceBuildButton=\"true\" " +
+                            "showStartStopButton=\"true\" " +
+                            "serverName=\"" + Environment.MachineName + "\" " +
+                            "status=\"Running\" " +
+                            "buildStatus=\"" + buildStatus.ToString() + "\" " +
+                            "name=\"" + projectName + "\" " +
+                            "queuePriority=\"0\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "nextBuildTime=\"0001-01-01T00:00:00\"" +
+                            ">\r\n" +
+                            "  <activity type=\"Sleeping\" />\r\n" +
+                            "</projectStatus>",
+                            writer.ToString());
+        }
+
+        [Test]
+        public void StreamToXMLFullConstructorTest()
+        {
+            string projectName = "full test";
+            string category = "categ1";
+            ProjectActivity activity = ProjectActivity.Building;
+            IntegrationStatus buildStatus = IntegrationStatus.Failure;
+            ProjectIntegratorState status = ProjectIntegratorState.Stopped;
+            string webURL = "someurl";
+            DateTime lastBuildDate = DateTime.Now;
+            string lastBuildLabel = "lastLabel";
+            string lastSuccessfulBuildLabel = "lastSuccess";
+            DateTime nextBuildTime = DateTime.Now.AddDays(2);
+            string buildStage = "some stage";
+            string queue = "someQueue";
+            int queuePriority = 25;
+            ParameterBase[] parameters = new ParameterBase[] {};
+
+            ProjectStatus projectStatus = new ProjectStatus(projectName, category, activity, buildStatus,
+                                                            status, webURL, lastBuildDate, lastBuildLabel,
+                                                            lastSuccessfulBuildLabel, nextBuildTime, buildStage,
+                                                            queue, queuePriority, parameters);
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ProjectStatus));
+            TextWriter writer = new StringWriter();
+            XmlSerializerNamespaces nmsp = new XmlSerializerNamespaces();
+            nmsp.Add("", "");
+
+            serializer.Serialize(writer, projectStatus, nmsp);
+
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+                            "<projectStatus " +
+                            "stage=\"" + buildStage + "\" " +
+                            "showForceBuildButton=\"true\" " +
+                            "showStartStopButton=\"true\" " +
+                            "serverName=\"" + Environment.MachineName + "\" " +
+                            "status=\"" + status.ToString() + "\" " +
+                            "buildStatus=\"" + buildStatus.ToString() + "\" " +
+                            "name=\"" + projectName + "\" " +
+                            "category=\"" + category + "\" " +
+                            "queueName=\"" + queue + "\" " +
+                            "queuePriority=\"" + queuePriority.ToString() + "\" " +
+                            "url=\"" + webURL + "\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "lastBuildLabel=\"" + lastBuildLabel + "\" " +
+                            "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
+                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\"" +
+                            ">\r\n" +
+                            "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
+                            "  <parameters />\r\n" +
+                            "</projectStatus>",
+                            writer.ToString());
         }
         #endregion
         #endregion
