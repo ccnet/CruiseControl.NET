@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "buildStatus=\"" + buildStatus.ToString() + "\" " +
                             "name=\"" + projectName + "\" " +
                             "queuePriority=\"0\" " +
-                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\" " +
                             "nextBuildTime=\"0001-01-01T00:00:00\"" +
                             ">\r\n" +
                             "  <activity type=\"Sleeping\" />\r\n" +
@@ -209,10 +209,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "queueName=\"" + queue + "\" " +
                             "queuePriority=\"" + queuePriority.ToString() + "\" " +
                             "url=\"" + webURL + "\" " +
-                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\" " +
                             "lastBuildLabel=\"" + lastBuildLabel + "\" " +
                             "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
-                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\"" +
+                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\"" +
                             ">\r\n" +
                             "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
                             "  <parameters />\r\n" +
@@ -285,10 +285,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "queueName=\"" + queue + "\" " +
                             "queuePriority=\"" + queuePriority.ToString() + "\" " +
                             "url=\"" + webURL + "\" " +
-                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\" " +
+                            "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\" " +
                             "lastBuildLabel=\"" + lastBuildLabel + "\" " +
                             "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
-                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddThh:mm:ss.FFFFFFF") + "\"" +
+                            "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\"" +
                             ">\r\n" +
                             "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
                             "  <parameters>\r\n" + 
