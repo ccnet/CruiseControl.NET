@@ -130,6 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "nextBuildTime=\"0001-01-01T00:00:00\"" +
                             ">\r\n" +
                             "  <activity type=\"Sleeping\" />\r\n" +
+                            "  <parameters />\r\n" +
                             "</projectStatus>",
                             writer.ToString());
         }
@@ -162,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "nextBuildTime=\"0001-01-01T00:00:00\"" +
                             ">\r\n" +
                             "  <activity type=\"Sleeping\" />\r\n" +
+                            "  <parameters />\r\n" +
                             "</projectStatus>",
                             writer.ToString());
         }

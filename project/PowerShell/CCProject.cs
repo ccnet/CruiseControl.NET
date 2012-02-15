@@ -225,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 projectStatus.BuildStage, 
                 projectStatus.Queue,
                 projectStatus.QueuePriority,
-                projectStatus.Parameters) { Connection = connection };
+                projectStatus.Parameters.ToArray()) { Connection = connection };
             return project;
         }
         #endregion

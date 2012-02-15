@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
@@ -164,10 +165,16 @@ namespace ThoughtWorks.CruiseControl.Remote
 		}
 
         [XmlArray("parameters"), XmlArrayItem("parameter")]
-        public ParameterBase[] Parameters
+        public List<ParameterBase> Parameters
         {
-            get { return parameters; }
-            set { parameters = value; }
+            get 
+            { 
+                if (parameters != null) 
+                    return new List<ParameterBase>(parameters); 
+                else
+                    return new List<ParameterBase>();
+            }
+            set { parameters = value.ToArray(); }
         }
 
         /// <summary>
