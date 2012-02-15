@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <param name="queue">The queue.</param>
         /// <param name="queuePriority">The queue priority.</param>
         /// <param name="parameters">The project parameters</param>
-        private CCProject(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters)
+        private CCProject(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, List<ParameterBase> parameters)
             : base(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority, parameters)
         {
             this.client = client;
@@ -225,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 projectStatus.BuildStage, 
                 projectStatus.Queue,
                 projectStatus.QueuePriority,
-                projectStatus.Parameters.ToArray()) { Connection = connection };
+                projectStatus.Parameters) { Connection = connection };
             return project;
         }
         #endregion

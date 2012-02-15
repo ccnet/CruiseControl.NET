@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         private int queuePriority;
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
-        private ParameterBase[] parameters;
+        private List<ParameterBase> parameters = new List<ParameterBase>();
 
         /// <summary>
         /// Initialises a new blank <see cref="ProjectStatus"/>.
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="queue"></param>
         /// <param name="queuePriority"></param>
         /// <param name="parameters"></param>
-        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters)
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, List<ParameterBase> parameters)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
@@ -90,6 +90,8 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.queuePriority = queuePriority;
             this.parameters = parameters;
 		}
+
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters) : this(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority, (parameters == null) ? new List<ParameterBase>() : new List<ParameterBase>(parameters)) { }
 
         /// <summary>
         /// The current stage of the build.
@@ -167,14 +169,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         [XmlArray("parameters"), XmlArrayItem("parameter")]
         public List<ParameterBase> Parameters
         {
-            get 
-            { 
-                if (parameters != null) 
-                    return new List<ParameterBase>(parameters); 
-                else
-                    return new List<ParameterBase>();
-            }
-            set { parameters = value.ToArray(); }
+            get { return parameters; } set { parameters = value; }
         }
 
         /// <summary>

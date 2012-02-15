@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 		public void SaveAndLoadProjectStatus()
 		{
 			ProjectStatus projectStatus = new ProjectStatus("project", "category", ProjectActivity.Building, IntegrationStatus.Failure,
-                                                            ProjectIntegratorState.Running, "http://localhost/ccnet", DateTime.Now, "1.0", "1.0", DateTime.Now, "building", "", 0, new ParameterBase[0]);
+                                                            ProjectIntegratorState.Running, "http://localhost/ccnet", DateTime.Now, "1.0", "1.0", DateTime.Now, "building", "", 0, new List<ParameterBase>());
 
 			BinaryFormatter binaryFormatter = new BinaryFormatter();
 			using (MemoryStream stream = new MemoryStream())

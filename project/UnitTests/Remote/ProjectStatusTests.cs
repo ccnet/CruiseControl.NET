@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             string buildStage = "some stage";
             string queue = "someQueue";
             int queuePriority = 25;
-            ParameterBase[] parameters = new ParameterBase[] {};
+            List<ParameterBase> parameters = new List<ParameterBase>();
 
             ProjectStatus projectStatus = new ProjectStatus(projectName, category, activity, buildStatus,
                                                             status, webURL, lastBuildDate, lastBuildLabel,
@@ -238,7 +238,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             string buildStage = "some stage";
             string queue = "someQueue";
             int queuePriority = 25;
-            ParameterBase[] parameters = new ParameterBase[] { new TextParameter("textParam"), new BooleanParameter("boolParam") };
+            List<ParameterBase> parameters = new List<ParameterBase> { new TextParameter("textParam"), new BooleanParameter("boolParam") };
 
             ProjectStatus projectStatus = new ProjectStatus(projectName, category, activity, buildStatus,
                                                             status, webURL, lastBuildDate, lastBuildLabel,

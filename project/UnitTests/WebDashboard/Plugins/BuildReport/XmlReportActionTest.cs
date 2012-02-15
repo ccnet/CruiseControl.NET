@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -121,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			return
 				new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
 				                  "http://blah", LastBuildTime, "build_8", "build_7",
-                                  NextBuildTime, "", "", 0, new ParameterBase[0]);
+                                  NextBuildTime, "", "", 0, new List<ParameterBase>());
 		}
 
 		private XmlSchema ReadSchemaFromResources(string filename)
