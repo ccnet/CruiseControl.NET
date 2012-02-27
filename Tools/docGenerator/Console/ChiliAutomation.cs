@@ -177,6 +177,8 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("devenv.wiki", "Visual_Studio_Task");
             FileName2ChiliPageNameMapping.Add("directValue.wiki", "Direct_Dynamic_Value");
             FileName2ChiliPageNameMapping.Add("dupfinder.wiki", "Duplicate_Finder_Task");
+            FileName2ChiliPageNameMapping.Add("dumpValue.wiki", "DumpValue");
+            FileName2ChiliPageNameMapping.Add("dumpValueItem.wiki", "DumpValue_Item");
             FileName2ChiliPageNameMapping.Add("email.wiki", "Email_Publisher");
             FileName2ChiliPageNameMapping.Add("encryptedChannel.wiki", "Encrypted_Messages_Channel");
             FileName2ChiliPageNameMapping.Add("exec.wiki", "Executable_Task");
