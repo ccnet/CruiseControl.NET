@@ -68,6 +68,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
         /// <summary>
         /// Allows you to set the initial build number.
+        /// This will only be used when on the first build of a project, meaning that when you change this value,
+        /// you'll have to stop the CCNet service and delete the state file.
         /// </summary>
         /// <version>1.5</version>
         /// <default>1</default>

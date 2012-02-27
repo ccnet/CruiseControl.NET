@@ -16,27 +16,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// The created file is encoded using UTF-8 and the values are put in CDATA sections
     /// </para>
     /// </summary>
-    /// <title>DumpValue Task</title>
+    /// <title>Dump Value Task</title>
     /// <version>1.7</version>
     /// <example>
     /// <code title="Minimalist example">
-    /// &lt;DumpValue&gt;
+    /// &lt;dumpValue&gt;
     /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
     /// &lt;dumpValueItems&gt;
     /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
     /// &lt;/dumpValueItems&gt;
-    /// &lt;/DumpValue&gt;
+    /// &lt;/dumpValue&gt;
     /// </code>
     /// <code title="Full example">
-    /// &lt;DumpValue&gt;
+    /// &lt;dumpValue&gt;
     /// &lt;xmlFileName&gt;somefile.xml&lt;/xmlFileName&gt;
     /// &lt;dumpValueItems&gt;
     /// &lt;dumpValueItem name="MyValue" value="ValueContent" /&gt;
     /// &lt;dumpValueItem name="MyValueNotInCDATA" value="some other content" valueInCDATA="false" /&gt;
     /// &lt;/dumpValueItems&gt;
-    /// &lt;/DumpValue&gt;
+    /// &lt;/dumpValue&gt;
     /// </code>
-    /// </example>
     /// </example>
     /// <remarks>
     /// <includePage>Integration Properties</includePage>
@@ -47,46 +46,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("dumpValue")]
     public class DumpValueTask : TaskBase
     {
-        /// <summary>
-        /// <para>
-        /// The DumpValueItem is used to specify which values are written to the dump file
-        /// The values are put in CDATA sections by default
-        /// </para>
-        /// </summary>
-        /// <title>DumpValue Item</title>
-        /// <version>1.7</version>
-        [ReflectorType("dumpValueItem")]
-        public class DumpValueItem : NameValuePair
-        {
-            bool valueInCDATA = true;
-
-            /// <summary>
-            /// Starts a new <see cref="DumpValueItem"/> with no name and no value.
-            /// </summary>
-            public DumpValueItem() : base() { }
-
-            /// <summary>
-            /// Starts a new <see cref="DumpValueItem"/> with a name and value.
-            /// </summary>
-            public DumpValueItem(string name, string value) : base(name, value) { }
-
-            /// <summary>
-            /// Starts a new <see cref="DumpValueItem"/> with a name, a value, and a flag for ValueInCDATA.
-            /// </summary>
-            public DumpValueItem(string name, string value, bool valueInCDATA)
-                : this(name, value) 
-            {
-                this.valueInCDATA = valueInCDATA;
-            }
-
-            /// <summary>
-            /// Whether to put the value in CDATA or not
-            /// </summary>
-            /// <version>1.7</version>
-            /// <default>true</default>
-            [ReflectorProperty("valueInCDATA", Required = false)]
-            public bool ValueInCDATA { get { return valueInCDATA; } set { valueInCDATA = value; } }
-        }
 
         private string xmlFileName = string.Empty;
 
