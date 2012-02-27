@@ -303,7 +303,7 @@ namespace Console
 
             FileName2ChiliPageNameMapping.Add("booleanParameter.wiki", "BooleanParameter");
             FileName2ChiliPageNameMapping.Add("dateParameter.wiki", "dateParameter");
-            FileName2ChiliPageNameMapping.Add("namedValue.wiki", "namedValue");
+            FileName2ChiliPageNameMapping.Add("namedValue.wiki", "named_Value");
             FileName2ChiliPageNameMapping.Add("numericParameter.wiki", "numericParameter");
             FileName2ChiliPageNameMapping.Add("selectParameter.wiki", "selectParameter");
             FileName2ChiliPageNameMapping.Add("textParameter.wiki", "TextParameter");
