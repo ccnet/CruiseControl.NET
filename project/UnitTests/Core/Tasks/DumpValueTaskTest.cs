@@ -88,46 +88,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void MinimalRun()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue") });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue") });
         }
 
         [Test]
         public void MultiplePairsRun()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue"), 
-                                                         new DumpValueTask.DumpValueItem("SecondName", "SecondValue")});
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue"), 
+                                                         new DumpValueItem("SecondName", "SecondValue")});
         }
 
         [Test]
         public void WithCarriageReturnRun()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue\r\nWith carriage returns") });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue\r\nWith carriage returns") });
         }
 
         [Test]
         public void WithXMLCharsRun()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters") });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters") });
         }
 
         [Test]
         public void MinimalRunNoCDATA()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue", false) });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue", false) });
         }
 
         [Test]
         public void WithXMLCharsRunNoCDATA()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters", false) });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue With > nice & xml < \" ' characters", false) });
         }
 
         [Test]
         public void MultiplePairsRunOnlyOneNoCDATA()
         {
-            BaseTest(new DumpValueTask.DumpValueItem[] { new DumpValueTask.DumpValueItem("TestName", "TestValue"), 
-                                                         new DumpValueTask.DumpValueItem("SecondName", "SecondValue", false),
-                                                         new DumpValueTask.DumpValueItem("ThirdName", "Dummy"),
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue"), 
+                                                         new DumpValueItem("SecondName", "SecondValue", false),
+                                                         new DumpValueItem("ThirdName", "Dummy"),
                                                        }
                     );
         }
@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         #endregion
 
         #region Private methods
-        private void BaseTest(DumpValueTask.DumpValueItem[] NameValues)
+        private void BaseTest(DumpValueItem[] NameValues)
         {
             DumpValueTask task = new DumpValueTask();
             task.XmlFileName = dumpFilePath;
@@ -185,11 +185,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             return modification;
         }
 
-        private string GetExpectedXMLContent(DumpValueTask.DumpValueItem[] Items)
+        private string GetExpectedXMLContent(DumpValueItem[] Items)
         {
             StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
                                                       "<ValueDumper>\r\n");
-            foreach (DumpValueTask.DumpValueItem item in Items)
+            foreach (DumpValueItem item in Items)
             {
                 builder.Append("  <ValueDumperItem>\r\n");
                 builder.Append("    <Name>" + item.Name + "</Name>\r\n");
