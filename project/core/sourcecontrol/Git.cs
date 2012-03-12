@@ -589,6 +589,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("fetch");
 			buffer.AddArgument("origin");
+			buffer.AddArgument("--tags");
 
 			// initialize progress information
 			var bpi = GetBuildProgressInformation(result);
