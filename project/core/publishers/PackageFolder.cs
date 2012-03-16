@@ -82,6 +82,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
+        /// Base folder to strip out of the file names (if flatten is false)
+        /// </summary>
+        /// <default>Working Directory for the project</default>
+        [ReflectorProperty("baseFolder", Required = false)]
+        public string BaseFolder
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Packages the specified items.
         /// </summary>
         /// <param name="result">The result.</param>
@@ -90,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public IEnumerable<string> Package(IIntegrationResult result, ZipOutputStream zipStream)
         {
             var filesAdded = new List<string>();
-            var baseFolder = result.WorkingDirectory;
+            var effectiveBaseFolder = (BaseFolder == null) ? result.WorkingDirectory : BaseFolder;
             var fullName = Path.IsPathRooted(this.SourceFolder) ? this.SourceFolder : result.BaseFromWorkingDirectory(this.SourceFolder);
             var folderInfo = new DirectoryInfo(fullName);
             if (folderInfo.Exists)
@@ -112,8 +123,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     else
                     {
                         // store the file with the path minus the baseFolder
-                        if (fileName.StartsWith(baseFolder, StringComparison.OrdinalIgnoreCase))
-                            fileName = fileName.Substring(baseFolder.Length);
+                        if (fileName.StartsWith(effectiveBaseFolder, StringComparison.OrdinalIgnoreCase))
+                            fileName = fileName.Substring(effectiveBaseFolder.Length);
                     }
                     if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);
 
