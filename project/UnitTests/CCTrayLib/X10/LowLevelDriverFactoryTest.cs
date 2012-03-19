@@ -51,5 +51,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
                 Assert.That(driver, Is.InstanceOf<Cm17LowLevelDriver>());
             }
         }
+
+        [Test]
+        public void ShouldCreateTheCm19DriverBasedOnType()
+        {
+            X10Configuration configuration = new X10Configuration();
+            configuration.DeviceType = ControllerType.CM19.ToString();
+
+            LowLevelDriverFactory factory = new LowLevelDriverFactory(configuration);
+            IX10LowLevelDriver driver = factory.getDriver();
+
+            // factory will return null driver if it can't create one - caller needs to check!
+            if (driver != null)
+            {
+                Assert.That(driver, Is.InstanceOf<Cm19LowLevelDriver>());
+            }
+        }
     }
 }
