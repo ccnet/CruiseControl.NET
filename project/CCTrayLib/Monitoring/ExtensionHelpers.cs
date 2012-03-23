@@ -48,7 +48,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         public static ITransportExtension RetrieveExtension(string name)
         {
             object extensionInstance = RetrieveTypedObject(name);
-            if (!(extensionInstance is ITransportExtension)) throw new CCTrayLibException("Extension '" + extensionInstance.GetType().Name + "'does not implement ITransportExtension");
+
+            if (!(extensionInstance is ITransportExtension))
+            {
+                throw new CCTrayLibException("Extension '" + extensionInstance.GetType().Name + "'does not implement ITransportExtension");
+            }
+
             return extensionInstance as ITransportExtension;
         }
 
