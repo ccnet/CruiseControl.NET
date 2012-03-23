@@ -1,0 +1,1497 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.TeamFoundation.Build.Common</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildAccessRight"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildAccessRight.AdministerBuild"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildAccessRight.EditBuildStatus"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildAccessRight.GenericRead"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildAccessRight.StartBuild"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildAccessRight.UpdateBuild"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildConstants"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildControllerService"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildLogFileName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildNumberArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildService"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStoreService"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildTypeFolderName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildUriArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.CustomEventsFileName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.DefaultLocaleStr"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.DropLocationArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.LastBuildStep"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.LogFilePerProjectArgument"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.MaxPathLength"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.MaxPathNameLength"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.MaxUriLength"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.PlatformFlavorFormatText"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ProjectFileName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ServerUICultureArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ServiceApplicationName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ServiceFileName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ServiceName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.TeamBuildDataBase"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.TfsProjectFileArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.TfsUrlArgument"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.ToolId"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.BuildFailed"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.BuildInitializing"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.BuildStopped"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.BuildSucceeded"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.FinishedCompilation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.StartedCompilation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.StartedTesting"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.Sync"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.SyncCompleted"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatus.TestCompleted"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatusIconID"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatusIconID.Default">
+      <summary />
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatusIconID.BuildSucceeded">
+      <summary />
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatusIconID.BuildFailed">
+      <summary />
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.BuildConstants.BuildStatusIconID.BuildStopped">
+      <summary />
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildException"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildException.#ctor"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <param name="info"></param>
+      <param name="context"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildException.#ctor(System.String)">
+      <param name="message"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildException.#ctor(System.String,System.Exception)">
+      <param name="message"></param>
+      <param name="innerException"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.BuildPath"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.Combine(System.String,System.String)">
+      <param name="parent"></param>
+      <param name="relative"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.GetFullPath(System.String)">
+      <param name="buildPath"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.GetItemDepth(System.String)">
+      <param name="buildPath"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.GetItemName(System.String)">
+      <param name="buildPath"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.GetTeamProject(System.String)">
+      <param name="buildPath"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.IsRecursive(System.String)">
+      <param name="queryPath"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.BuildPath.IsValidPath(System.String@,System.Boolean,System.String@)">
+      <param name="path"></param>
+      <param name="allowWildcards"></param>
+      <param name="error"></param>
+    </member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.BuildPath.RootFolder"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ColumnInfo"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ColumnInfo.#ctor(System.String,System.Type)">
+      <param name="name"></param>
+      <param name="type"></param>
+    </member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ColumnInfo.Name"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ColumnInfo.Type"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ColumnName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.AggAssemblySize"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.AssignedTo"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildEventMessage"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildID"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildNumber"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildQuality"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildStatus"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildStepName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildType"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.BuildURI"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Category"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ChangesetID"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ChangesetURI"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.CheckedInBy"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.CheckinTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ColumnNumber"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Comment"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ConfigurationFileURI"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ConfigurationName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.DropLocation"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.EventCode"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.EventTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.EventType"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.FileName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.FileSystemEntityPath"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.FileSystemEntityType"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.FinishTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.FlavorName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.GoodBuildFlag"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Importance"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LastChangedBy"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LastChangedOn"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LineNumber"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesAdded"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesDeleted"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesModified"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesNotCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LinesPartiallyCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.LogLocation"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.MachineName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Message"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Name"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.OriginatingTarget"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.OriginatingTask"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Owner"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ParentProjectFilePath"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.PlatformName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ProjectFilePath"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ProjectName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.ProjectStatus"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.RequestedBy"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.RunId"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.RunUser"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.SolutionName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.SourcePullLabel"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.StartTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Status"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.StepMessage"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TargetName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TaskName"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TeamProject"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TestOwner"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TestRun"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TestsFailed"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TestsPassed"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TestsTotal"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TimeStamp"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.Title"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TotalCodeAnalysisErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TotalCodeAnalysisWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TotalCompilerErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TotalCompilerWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.TotalLines"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.WorkItemID"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.ColumnName.WorkItemURI"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.DatabaseDetails"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.DatabaseDetails.CheckIfDefaultDate(System.DateTime)">
+      <param name="date"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.DatabaseDetails.IsDefaultDate(System.DateTime)">
+      <param name="date"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.InformationFields">
+      <summary>Encapsulates the built-in information node field names.</summary>
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.AssignedTo"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.BlocksCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.BlocksNotCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.ChangesetId"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.ChangesetUri"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.CheckedInBy"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Comment"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.CompilationErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.CompilationWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.FinishTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Flavor"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.IsBuildCoverageProcessing"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.LinesCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.LinesNotCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.LinesPartiallyCovered"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.LogFile"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Message"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Name"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Platform"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.ProjectFile"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.RunId"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.RunPassed"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.RunUser"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.StartTime"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.StaticAnalysisErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.StaticAnalysisWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Status"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TestsFailed"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TestsPassed"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TestsTotal"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.Title"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TotalCompilationErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TotalCompilationWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TotalStaticAnalysisErrors"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.TotalStaticAnalysisWarnings"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.WorkItemId"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationFields.WorkItemUri"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.InformationTypes">
+      <summary>Encapsulates the built-in information node type names.</summary>
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.AssociatedChangeset"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.AssociatedWorkItem"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.BuildStep"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.CodeCoverageSummary"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.CompilationSummary"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.ConfigurationSummary"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.OpenedWorkItem"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Common.InformationTypes.TestSummary"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.Project"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.Project.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.DefaultTargets"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.Import"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.ItemConfigGroup"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.ItemGroup"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.ItemMetaDataFileGroup"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.Name"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.ProjectExtensions"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.Project.PropertyGroup"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectConfigurationToBuild"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectConfigurationToBuild.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectConfigurationToBuild.FlavorToBuild"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectConfigurationToBuild.Include"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectConfigurationToBuild.PlatformToBuild"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectImport"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectImport.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectImport.Project"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectMetaDataFile"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectMetaDataFile.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectMetaDataFile.Include"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectMetaDataFile.TestList"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectProjectExtensions"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectProjectExtensions.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectProjectExtensions.BuildMachine"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectProjectExtensions.Description"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.BuildDirectoryPath"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.BuildlogText"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.DescriptionText"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.DropLocation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.ErrorWarningLogText"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.RunCodeAnalysis"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.RunTest"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.TeamProject"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.UpdateAssociatedWorkItems"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.WorkItemFieldValues"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectPropertyGroup.WorkItemTitle"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.ProjectSolutionToBuild"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.ProjectSolutionToBuild.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Common.ProjectSolutionToBuild.Include"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Common.WebServiceUrls"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.WebServiceUrls.GetBuildControllerUrl(System.String)">
+      <param name="server"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.WebServiceUrls.GetBuildStoreUrl(System.String)">
+      <param name="server"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.WebServiceUrls.GetServerUrl(System.String)">
+      <param name="server"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.WebServiceUrls.GetServiceUrl(System.String,Microsoft.TeamFoundation.Server.RegistrationEntry[])">
+      <param name="serviceInterface"></param>
+      <param name="regEntries"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Common.WebServiceUrls.ProjectExists(System.String,System.String)">
+      <param name="server"></param>
+      <param name="projectName"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.AddBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddBuildStepCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddChangeSetsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddOpenedWorkItemsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddPlatformFlavorLogForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddProjectDetailsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.AddWorkItemsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildCompletedCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildController"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginBuildCompleted(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginDeleteBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginInsertBuildQuality(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginRemoveBuildQuality(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginRemoveRun(System.String,System.Guid,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="runId"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginReportBuildError(System.String,System.Int32,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="exitCode"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginStartBuild(Microsoft.TeamFoundation.Build.Proxy.BuildParameters,System.AsyncCallback,System.Object)">
+      <param name="buildParameters"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginStopBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BeginValidateBuildStart(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="buildMachine"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BuildCompleted(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BuildCompletedAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.BuildCompletedAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.BuildCompletedCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.CancelAsync(System.Object)">
+      <param name="userState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.DeleteBuild(System.String,System.String@)">
+      <param name="buildUri"></param>
+      <param name="failureMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.DeleteBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.DeleteBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.DeleteBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndBuildCompleted(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndDeleteBuild(System.IAsyncResult,System.String@)">
+      <param name="asyncResult"></param>
+      <param name="failureMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndInsertBuildQuality(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndRemoveBuildQuality(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndRemoveRun(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndReportBuildError(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndStartBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndStopBuild(System.IAsyncResult,System.String@)">
+      <param name="asyncResult"></param>
+      <param name="failureMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.EndValidateBuildStart(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.InsertBuildQuality(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.InsertBuildQualityAsync(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.InsertBuildQualityAsync(System.String,System.String,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.InsertBuildQualityCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveBuildQuality(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveBuildQualityAsync(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveBuildQualityAsync(System.String,System.String,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildQuality"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveBuildQualityCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveRun(System.String,System.Guid)">
+      <param name="buildUri"></param>
+      <param name="runId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveRunAsync(System.String,System.Guid)">
+      <param name="buildUri"></param>
+      <param name="runId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveRunAsync(System.String,System.Guid,System.Object)">
+      <param name="buildUri"></param>
+      <param name="runId"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.RemoveRunCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ReportBuildError(System.String,System.Int32)">
+      <param name="buildUri"></param>
+      <param name="exitCode"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ReportBuildErrorAsync(System.String,System.Int32)">
+      <param name="buildUri"></param>
+      <param name="exitCode"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ReportBuildErrorAsync(System.String,System.Int32,System.Object)">
+      <param name="buildUri"></param>
+      <param name="exitCode"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.ReportBuildErrorCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StartBuild(Microsoft.TeamFoundation.Build.Proxy.BuildParameters)">
+      <param name="buildParameters"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StartBuildAsync(Microsoft.TeamFoundation.Build.Proxy.BuildParameters)">
+      <param name="buildParameters"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StartBuildAsync(Microsoft.TeamFoundation.Build.Proxy.BuildParameters,System.Object)">
+      <param name="buildParameters"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.StartBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StopBuild(System.String,System.String@)">
+      <param name="buildUri"></param>
+      <param name="failureMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StopBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.StopBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.StopBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ValidateBuildStart(System.String,System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="buildMachine"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ValidateBuildStartAsync(System.String,System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="buildMachine"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildController.ValidateBuildStartAsync(System.String,System.String,System.String,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="buildMachine"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildController.ValidateBuildStartCompleted"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildMachine"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildNumber"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildQuality"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildStatus"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildStatusId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildType"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildTypeFileUri"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.BuildUri"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.DropLocation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.FinishTime"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.GoodBuild"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.LastChangedBy"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.LastChangedOn"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.LogLocation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.RequestedBy"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.StartTime"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildData.TeamProject"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildParameters"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.BuildDirectory"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.BuildMachine"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.BuildNumber"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.BuildType"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.BuildUri"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.DropLocation"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.LastBuildNumber"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.LastGoodBuildNumber"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.RequestedBy"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.TeamFoundationServer"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildParameters.TeamProject"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildProxyUtilities"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildProxyUtilities.GetMessageFromException(System.Exception)">
+      <param name="e"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildProxyUtilities.GetMessageFromException(System.Exception,System.String@)">
+      <param name="e"></param>
+      <param name="message"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildStepData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.BuildStepId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.BuildStepMessage"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.BuildStepName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.FinishTime"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.ParentBuildStepId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.StartTime"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.BuildStepData.Status"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus"></member>
+    <member name="F:Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus.InProgress">
+      <summary />
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus.Failed">
+      <summary />
+    </member>
+    <member name="F:Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus.Succeeded">
+      <summary />
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.BuildStore"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.BuildData)">
+      <param name="teamProject"></param>
+      <param name="buildData"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.BuildData)">
+      <param name="teamProject"></param>
+      <param name="buildData"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.BuildData,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildData"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStep(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStep(System.String,System.String,System.String,System.DateTime,System.Int64,System.Int64@)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="startTime"></param>
+      <param name="parentBuildStepId"></param>
+      <param name="buildStepId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStepAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStepAsync(System.String,System.String,System.String,System.DateTime,System.Int64)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="startTime"></param>
+      <param name="parentBuildStepId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStepAsync(System.String,System.String,System.String,System.DateTime,System.Int64,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="startTime"></param>
+      <param name="parentBuildStepId"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStepAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddBuildStepCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddChangeSetsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.ChangeSetData[])">
+      <param name="buildUri"></param>
+      <param name="changesets"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddChangeSetsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.ChangeSetData[])">
+      <param name="buildUri"></param>
+      <param name="changesets"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddChangeSetsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.ChangeSetData[],System.Object)">
+      <param name="buildUri"></param>
+      <param name="changesets"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddChangeSetsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddOpenedWorkItemsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[])">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddOpenedWorkItemsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[])">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddOpenedWorkItemsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[],System.Object)">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddOpenedWorkItemsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddPlatformFlavorLogForBuild(System.String,System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="logFileName"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddPlatformFlavorLogForBuildAsync(System.String,System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="logFileName"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddPlatformFlavorLogForBuildAsync(System.String,System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="logFileName"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddPlatformFlavorLogForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddProjectDetailsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.ProjectData)">
+      <param name="buildUri"></param>
+      <param name="project"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddProjectDetailsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.ProjectData)">
+      <param name="buildUri"></param>
+      <param name="project"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddProjectDetailsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.ProjectData,System.Object)">
+      <param name="buildUri"></param>
+      <param name="project"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddProjectDetailsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddWorkItemsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[])">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddWorkItemsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[])">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddWorkItemsForBuildAsync(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[],System.Object)">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.AddWorkItemsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.BuildData,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildData"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddBuildStep(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddBuildStep(System.String,System.String,System.String,System.DateTime,System.Int64,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="stepMessage"></param>
+      <param name="startTime"></param>
+      <param name="parentBuildStepId"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddChangeSetsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.ChangeSetData[],System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="changesets"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddOpenedWorkItemsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[],System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddPlatformFlavorLogForBuild(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="logFileName"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddProjectDetailsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.ProjectData,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="project"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginAddWorkItemsForBuild(System.String,Microsoft.TeamFoundation.Build.Proxy.WorkItemData[],System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="workItems"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetBuildDetails(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetBuildQualities(System.AsyncCallback,System.Object)">
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetBuildSteps(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetBuildUri(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildNumber"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetChangeSetsForBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetCodeCoverageForBuild(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetCompilationSummaryForBuild(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetListOfBuilds(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetOpenedWorkItemsForBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetPlatformFlavorsForBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetTestResultsForBuild(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginGetWorkItemsForBuild(System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildFinishTime(System.String,System.DateTime,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="finishTime"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildFlag(System.String,System.Boolean,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="isGoodBuild"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildLogLocation(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="logLocation"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildNumberAndDropLocation(System.String,System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildNumber"></param>
+      <param name="dropLocation"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildQuality(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildQuality"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildStatus(System.String,System.String,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStatus"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildStep(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.BeginUpdateBuildStep(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.Int64,System.AsyncCallback,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="buildStepId"></param>
+      <param name="callback"></param>
+      <param name="asyncState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.CancelAsync(System.Object)">
+      <param name="userState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddBuildStep(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddBuildStep(System.IAsyncResult,System.Int64@)">
+      <param name="asyncResult"></param>
+      <param name="buildStepId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddChangeSetsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddOpenedWorkItemsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddPlatformFlavorLogForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddProjectDetailsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndAddWorkItemsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetBuildDetails(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetBuildQualities(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetBuildSteps(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetBuildUri(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetChangeSetsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetCodeCoverageForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetCompilationSummaryForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetListOfBuilds(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetOpenedWorkItemsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetPlatformFlavorsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetTestResultsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndGetWorkItemsForBuild(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildFinishTime(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildFlag(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildLogLocation(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildNumberAndDropLocation(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildQuality(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildStatus(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.EndUpdateBuildStep(System.IAsyncResult)">
+      <param name="asyncResult"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildDetails(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildDetailsAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildDetailsAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildDetailsCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildQualities"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildQualitiesAsync"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildQualitiesAsync(System.Object)">
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildQualitiesCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildSteps(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildStepsAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildStepsAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildStepsCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildUri(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildNumber"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildUriAsync(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildNumber"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildUriAsync(System.String,System.String,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildNumber"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetBuildUriCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetChangeSetsForBuild(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetChangeSetsForBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetChangeSetsForBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetChangeSetsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageForBuild(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageForBuildAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageForBuildAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageStatusForBuild(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageStatusForBuildAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageStatusForBuildAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCodeCoverageStatusForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCompilationSummaryForBuild(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCompilationSummaryForBuildAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCompilationSummaryForBuildAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetCompilationSummaryForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetListOfBuilds(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetListOfBuildsAsync(System.String,System.String)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetListOfBuildsAsync(System.String,System.String,System.Object)">
+      <param name="teamProject"></param>
+      <param name="buildType"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetListOfBuildsCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetOpenedWorkItemsForBuild(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetOpenedWorkItemsForBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetOpenedWorkItemsForBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetOpenedWorkItemsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetPlatformFlavorsForBuild(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetPlatformFlavorsForBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetPlatformFlavorsForBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetPlatformFlavorsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetTestResultsForBuild(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetTestResultsForBuildAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetTestResultsForBuildAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="platform"></param>
+      <param name="flavor"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetTestResultsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetWorkItemsForBuild(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetWorkItemsForBuildAsync(System.String)">
+      <param name="buildUri"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetWorkItemsForBuildAsync(System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.GetWorkItemsForBuildCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFinishTime(System.String,System.DateTime)">
+      <param name="buildUri"></param>
+      <param name="finishTime"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFinishTimeAsync(System.String,System.DateTime)">
+      <param name="buildUri"></param>
+      <param name="finishTime"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFinishTimeAsync(System.String,System.DateTime,System.Object)">
+      <param name="buildUri"></param>
+      <param name="finishTime"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFinishTimeCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFlag(System.String,System.Boolean)">
+      <param name="buildUri"></param>
+      <param name="isGoodBuild"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFlagAsync(System.String,System.Boolean)">
+      <param name="buildUri"></param>
+      <param name="isGoodBuild"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFlagAsync(System.String,System.Boolean,System.Object)">
+      <param name="buildUri"></param>
+      <param name="isGoodBuild"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildFlagCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildLogLocation(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="logLocation"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildLogLocationAsync(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="logLocation"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildLogLocationAsync(System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="logLocation"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildLogLocationCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildNumberAndDropLocation(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildNumber"></param>
+      <param name="dropLocation"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildNumberAndDropLocationAsync(System.String,System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildNumber"></param>
+      <param name="dropLocation"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildNumberAndDropLocationAsync(System.String,System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildNumber"></param>
+      <param name="dropLocation"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildNumberAndDropLocationCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildQuality(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildQualityAsync(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildQuality"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildQualityAsync(System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildQuality"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildQualityCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStatus(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildStatus"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStatusAsync(System.String,System.String)">
+      <param name="buildUri"></param>
+      <param name="buildStatus"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStatusAsync(System.String,System.String,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStatus"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStatusCompleted"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStep(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStep(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.Int64)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="buildStepId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStepAsync(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStepAsync(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.Int64)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="buildStepId"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStepAsync(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.Int64,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="buildStepId"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStepAsync(System.String,System.String,System.DateTime,Microsoft.TeamFoundation.Build.Proxy.BuildStepStatus,System.Object)">
+      <param name="buildUri"></param>
+      <param name="buildStepName"></param>
+      <param name="finishTime"></param>
+      <param name="status"></param>
+      <param name="userState"></param>
+    </member>
+    <member name="E:Microsoft.TeamFoundation.Build.Proxy.BuildStore.UpdateBuildStepCompleted"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData.ChangeSetId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData.ChangeSetUri"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData.CheckedInBy"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ChangeSetData.Comment"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.BlocksCovered"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.BlocksNotCovered"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.IsBuildCoverageProcessing"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.LinesCovered"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.LinesNotCovered"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.LinesPartiallyCovered"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.Name"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.RunId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageData.RunUser"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageStatus"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageStatus.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageStatus.ErrorLogFile"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CodeCoverageStatus.IsBuildCoverageProcessing"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.LogFileName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.TotalCodeAnalysisErrors"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.TotalCodeAnalysisWarnings"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.TotalCompilerErrors"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.CompilationSummaryData.TotalCompilerWarnings"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.DeleteBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.DeleteBuildCompletedEventArgs.failureMessage"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.DeleteBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.DeleteBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildDetailsCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetBuildDetailsCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildDetailsCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildQualitiesCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetBuildQualitiesCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildQualitiesCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildStepsCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetBuildStepsCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildStepsCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildUriCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetBuildUriCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetBuildUriCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetChangeSetsForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetChangeSetsForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetChangeSetsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageStatusForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageStatusForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCodeCoverageStatusForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCompilationSummaryForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetCompilationSummaryForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetCompilationSummaryForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetListOfBuildsCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetListOfBuildsCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetListOfBuildsCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetOpenedWorkItemsForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetOpenedWorkItemsForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetOpenedWorkItemsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetPlatformFlavorsForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetPlatformFlavorsForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetPlatformFlavorsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetTestResultsForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetTestResultsForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetTestResultsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetWorkItemsForBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.GetWorkItemsForBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.GetWorkItemsForBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.InsertBuildQualityCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.PlatformFlavorData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.PlatformFlavorData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.PlatformFlavorData.FlavorName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.PlatformFlavorData.PlatformName"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.ProjectData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.ProjectData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.CodeAnalysisErrors"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.CodeAnalysisWarnings"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.CompileErrors"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.CompileWarnings"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.FlavourName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.ParentProjectFile"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.PlatformName"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ProjectData.ProjectFile"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.RemoveBuildQualityCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.RemoveRunCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.RemoveRunCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.RemoveRunCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.ReportBuildErrorCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.StartBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.StartBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.StartBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.StopBuildCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.StopBuildCompletedEventArgs.failureMessage"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.StopBuildCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.StopBuildCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.TestResultData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.TestResultData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.Name"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.RunId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.RunPassed"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.RunUser"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.TestsFailed"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.TestsPassed"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.TestResultData.TestsTotal"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildFinishTimeCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildFlagCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildLogLocationCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildNumberAndDropLocationCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildQualityCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildStatusCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.UpdateBuildStepCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.ValidateBuildStartCompletedEventArgs"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.ValidateBuildStartCompletedEventArgs.Result"></member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.ValidateBuildStartCompletedEventHandler">
+      <param name="sender"></param>
+      <param name="e"></param>
+    </member>
+    <member name="T:Microsoft.TeamFoundation.Build.Proxy.WorkItemData"></member>
+    <member name="M:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.#ctor"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.AssignedTo"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.Status"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.Title"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.WorkItemId"></member>
+    <member name="P:Microsoft.TeamFoundation.Build.Proxy.WorkItemData.WorkItemUri"></member>
+  </members>
+</doc>

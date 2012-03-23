@@ -38,6 +38,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
                     case ControllerType.CM17A:
                         driver = new Cm17LowLevelDriver(configuration.HouseCode, configuration.ComPort);
                         break;
+                    case ControllerType.CM19:
+                        driver = new Cm19LowLevelDriver(configuration.HouseCode);   //USB
+                        break;
                 }
                return driver;
             }
