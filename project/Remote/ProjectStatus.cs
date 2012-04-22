@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-	/// <summary>
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
+    /// <summary>
 	/// Value type that contains extensive details about a project's most recent
 	/// integration.
 	/// </summary>
@@ -32,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         private int queuePriority;
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
+        private List<ParameterBase> parameters = new List<ParameterBase>();
 
         /// <summary>
         /// Initialises a new blank <see cref="ProjectStatus"/>.
@@ -68,7 +72,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="buildStage"></param>
         /// <param name="queue"></param>
         /// <param name="queuePriority"></param>
-        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority)
+        /// <param name="parameters"></param>
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, List<ParameterBase> parameters)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
@@ -83,7 +88,10 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.currentBuildStage = buildStage;
             this.queue = queue;
             this.queuePriority = queuePriority;
+            this.parameters = parameters;
 		}
+
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, ParameterBase[] parameters) : this(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority, (parameters == null) ? new List<ParameterBase>() : new List<ParameterBase>(parameters)) { }
 
         /// <summary>
         /// The current stage of the build.
@@ -157,6 +165,12 @@ namespace ThoughtWorks.CruiseControl.Remote
 			get { return activity; }
             set { activity = value; }
 		}
+
+        [XmlArray("parameters"), XmlArrayItem("parameter")]
+        public List<ParameterBase> Parameters
+        {
+            get { return parameters; } set { parameters = value; }
+        }
 
         /// <summary>
         /// The name of the project.

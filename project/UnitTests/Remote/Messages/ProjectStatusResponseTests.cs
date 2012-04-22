@@ -78,6 +78,7 @@
                 "<project showForceBuildButton=\"true\" showStartStopButton=\"true\" serverName=\"{5}\" status=\"Running\" buildStatus=\"Success\" name=\"test project\" " +
                 "queuePriority=\"0\" lastBuildDate=\"{3:yyyy-MM-ddTHH:mm:ss.FFFFFFF}\" nextBuildTime=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFF}\">" + 
                 "<activity type=\"Sleeping\" />" +
+                "<parameters />" +
                 "</project>" + 
                 "</projectStatusResponse>",
                 response.RequestIdentifier,

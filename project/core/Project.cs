@@ -1327,7 +1327,8 @@ namespace ThoughtWorks.CruiseControl.Core
                 this.Triggers.NextBuild,
                 this.CurrentBuildStage(),
                 this.QueueName,
-                this.QueuePriority);
+                this.QueuePriority,
+                this.Parameters);
             status.Description = this.Description;
             status.Messages = this.messages.ToArray();
             status.ShowForceBuildButton = this.ShowForceBuildButton;
