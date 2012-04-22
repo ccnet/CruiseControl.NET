@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 				</task></target></buildresults></build></cruisecontrol>";
 
 			string actualXml = LoadStylesheetAndTransformInput(xml);
-			CustomAssertion.AssertContains("6 tests", actualXml);
+			CustomAssertion.AssertContains("6\xA0tests", actualXml);
 		}
 	}
 }
