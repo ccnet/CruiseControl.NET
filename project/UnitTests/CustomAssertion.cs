@@ -43,6 +43,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 			Assert.IsTrue(Regex.IsMatch(actual, pattern), message);
 		}
 
+		public static void AssertMatchCount(int expectedCount, string pattern, string actual)
+		{
+			int actualCount = Regex.Matches(actual, pattern).Count;
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, 
+			                               "Actual string <{0}> \nmatches pattern <{1}> \n {2} times, expected was {3} times", 
+			                               actual, pattern, actualCount, expectedCount);
+			Assert.AreEqual(expectedCount, actualCount, message);
+		}
+
 		public static void AssertFalse(bool assert)
 		{
 			Assert.IsTrue(!assert);
