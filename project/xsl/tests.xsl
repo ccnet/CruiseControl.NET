@@ -88,7 +88,7 @@
 						<xsl:attribute name="id">img<xsl:value-of select="$test.suite.id"/></xsl:attribute>
 						<xsl:attribute name="onclick">javascript:toggleDiv('img<xsl:value-of select="$test.suite.id"/>', 'divDetails<xsl:value-of select="$test.suite.id"/>');</xsl:attribute>
 					</input>&#160;<xsl:value-of select="$test.suite.name"/>
-            </td>
+				</td>
 			</tr>
 		</table>
 		<div>
@@ -100,13 +100,16 @@
 						<th>Status</th>
 						<th>Progress</th>
 					</tr>
-					<xsl:apply-templates select=".//test-suite[@success='False'][results/test-case]">
+					<xsl:apply-templates select=".//test-suite[@result='Failure'][results/test-case]">
 						<xsl:sort select="@name" order="ascending" data-type="text"/>
 					</xsl:apply-templates>
-					<xsl:apply-templates select=".//test-suite[results/test-case/@executed='False']">
+					<xsl:apply-templates select=".//test-suite[@result='Inconclusive'][results/test-case]">
 						<xsl:sort select="@name" order="ascending" data-type="text"/>
 					</xsl:apply-templates>
-					<xsl:apply-templates select=".//test-suite[@success='True'][results/test-case/@executed='True']" mode="success">
+					<xsl:apply-templates select=".//test-suite[@result='Success'][results/test-case/@executed='False']">
+						<xsl:sort select="@name" order="ascending" data-type="text"/>
+					</xsl:apply-templates>
+					<xsl:apply-templates select=".//test-suite[@result='Success'][results/test-case/@executed='True']" mode="success">
 						<xsl:sort select="@name" order="ascending" data-type="text"/>
 					</xsl:apply-templates>
 				</table>

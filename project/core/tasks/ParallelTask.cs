@@ -113,35 +113,34 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        private class _RunningSubTaskStatus
+        private class ParallelRunningSubTaskDetails : RunningSubTaskDetails
         {
-            private IIntegrationResult _ParentResult;
-
-            public _RunningSubTaskStatus(IIntegrationResult ParentResult)
+            public ParallelRunningSubTaskDetails(int Index, IIntegrationResult ParentResult): base(Index, ParentResult)
             {
-                _ParentResult = ParentResult;
-                Finished = false;
+                this.Finished = false;
             }
 
-            public string Information { get; set; }
+            /// <summary>
+            /// true if the task is finished.            
+            /// This one has to be updated by you, should you need it
+            /// </summary>
             public bool Finished { get; set; }
-            public IIntegrationResult ParentResult { get { return _ParentResult; } }
         }
 
-        private _RunningSubTaskStatus[] _TasksStatuses;
+        private ParallelRunningSubTaskDetails[] tasksDetails;
 
-        private string _getStatusInformation(bool ShowTasksStatus)
+        protected override string GetStatusInformation(RunningSubTaskDetails Details)
         {
             string Value = !string.IsNullOrEmpty(Description)
                             ? Description
                             : string.Format("Running parallel tasks ({0} task(s))", Tasks.Length);
 
-            if (ShowTasksStatus)
+            if (Details != null)
             {
                 Value += ": ";
                 for (var loop = 0; loop < Tasks.Length; loop++)
                 {
-                    var Status = _TasksStatuses[loop];
+                    var Status = tasksDetails[loop];
 
                     if (!Status.Finished)
                         Value += string.Format("[{0}] {1} --- ",
@@ -166,8 +165,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            _TasksStatuses = new _RunningSubTaskStatus[numberOfTasks];
-            result.BuildProgressInformation.SignalStartRunTask(_getStatusInformation(false));
+            tasksDetails = new ParallelRunningSubTaskDetails[numberOfTasks];
+            result.BuildProgressInformation.SignalStartRunTask(GetStatusInformation(null));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
             // Initialise the arrays
@@ -182,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 events[loop] = new ManualResetEvent(false);
                 results[loop] = result.Clone();
-                _TasksStatuses[loop] = new _RunningSubTaskStatus(result);
+                tasksDetails[loop] = new ParallelRunningSubTaskDetails(loop, result);
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
                     var taskNumber = (int)state;
@@ -195,9 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         // Start the actual task
                         var task = Tasks[taskNumber];
                         var taskResult = results[taskNumber];
-                        taskResult.BuildProgressInformation.OnStartupInformationUpdatedUserObject = _TasksStatuses[taskNumber];
-                        taskResult.BuildProgressInformation.OnStartupInformationUpdated = SubTaskStartupInformationUpdated;
-                        RunTask(task, taskResult);
+                        RunTask(task, taskResult, tasksDetails[taskNumber]);
                     }
                     catch (Exception error)
                     {
@@ -222,8 +219,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                     // Tell everyone the task is done
                     events[taskNumber].Set();
-                    _TasksStatuses[taskNumber].Finished = true;
-                    _TasksStatuses[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(_getStatusInformation(true));
+                    tasksDetails[taskNumber].Finished = true;
+                    tasksDetails[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(tasksDetails[taskNumber]));
                 }, loop);
 
             }
@@ -246,12 +243,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
         #endregion
         #endregion
-
-        private void SubTaskStartupInformationUpdated(string information, object UserObject)
-        {
-            var Status = ((_RunningSubTaskStatus)UserObject);
-            Status.Information = information;
-            Status.ParentResult.BuildProgressInformation.UpdateStartupInformation(_getStatusInformation(true));
-        }
     }
 }

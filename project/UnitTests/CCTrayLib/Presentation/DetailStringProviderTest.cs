@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -64,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 				"NAME", "category",
 				ProjectActivity.Sleeping,
 				IntegrationStatus.Unknown,
-                ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime,string.Empty,string.Empty, 0);
+                ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime, string.Empty, string.Empty, 0, new List<ParameterBase>());
 		}
 	}
 }

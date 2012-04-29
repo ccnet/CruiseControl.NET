@@ -68,7 +68,7 @@
                         break;
 
                     case "list":
-                        exitCode = ListConfluenceItems(consoleArgs);
+                        //exitCode = ListConfluenceItems(consoleArgs);
                         break;
 
                     case "publish":
@@ -126,279 +126,6 @@
             WriteToOutput(exeName + @" -c=reportnotmapped -o=documentation", OutputType.Info);
         }
 
-
-        /// <summary>
-        /// Lists the confluence items.
-        /// </summary>
-        /// <param name="cmdArgs">The command-line args.</param>
-        private static int ListConfluenceItems(ConsoleArgs cmdArgs)
-        {
-            var exitCode = 0;
-            var isValid = false;
-            var output = string.Empty;
-            if (string.IsNullOrEmpty(cmdArgs.Source))
-            {
-                WriteToOutput("Confluence URL not specified", OutputType.Error);
-                exitCode = 2;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.User))
-            {
-                WriteToOutput("Username not specified", OutputType.Error);
-                exitCode = 3;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.Password))
-            {
-                WriteToOutput("Password not specified", OutputType.Error);
-                exitCode = 4;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.Destination))
-            {
-                WriteToOutput("Output path not specified", OutputType.Error);
-                exitCode = 5;
-            }
-            else
-            {
-                isValid = true;
-                output = cmdArgs.Destination;
-                if (!Path.IsPathRooted(output))
-                {
-                    output = Path.Combine(Environment.CurrentDirectory, output);
-                }
-            }
-
-            if (isValid)
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                WriteToOutput("Retrieving Confluence items from " + cmdArgs.Source, OutputType.Info);
-                var count = 0;
-
-                try
-                {
-                    var binding = new BasicHttpBinding();
-                    binding.MaxReceivedMessageSize = int.MaxValue;
-                    var client = new ConfluenceSoapServiceClient(
-                        binding,
-                        new EndpointAddress(cmdArgs.Source));
-
-                    try
-                    {
-                        var session = client.login(cmdArgs.User, cmdArgs.Password);
-                        try
-                        {
-                            var pages = client.getPages(session, "CCNET");
-                            var document = new XDocument();
-                            if (File.Exists(output))
-                            {
-                                document = XDocument.Load(output);
-                            }
-
-                            // Make sure there is a root element
-                            var rootEl = document.Root;
-                            if (rootEl == null)
-                            {
-                                rootEl = new XElement(
-                                    "confluence",
-                                    new XAttribute("space", "CCNET"));
-                                document.Add(rootEl);
-                            }
-
-                            foreach (var page in pages)
-                            {
-                                // Attempt to find each page
-                                var pageId = page.id.ToString();
-                                var pageEl = (from element in rootEl.Elements("page")
-                                              where element.Attribute("id").Value == pageId
-                                              select element).SingleOrDefault();
-                                if (pageEl == null)
-                                {
-                                    // If the page does not exist, add it
-                                    pageEl = new XElement(
-                                        "page",
-                                        new XAttribute("title", page.title),
-                                        new XAttribute("id", pageId),
-                                        new XAttribute("url", page.url),
-                                        new XAttribute("parentId", page.parentId.ToString()));
-                                    rootEl.Add(pageEl);
-                                    count++;
-                                    WriteToOutput("New item added: " + page.title, OutputType.Info);
-                                }
-                            }
-
-                            if (count > 0)
-                            {
-                                // Order all the elements
-                                var newDoc = new XDocument(
-                                    new XElement("confluence",
-                                        new XAttribute("space", "CCNET")));
-                                newDoc.Root.Add(from element in document.Root.Elements()
-                                                orderby element.Attribute("title").Value
-                                                select element);
-                                newDoc.Save(output);
-                                WriteToOutput("Document updated", OutputType.Info);
-                            }
-                        }
-                        finally
-                        {
-                            client.logout(session);
-                        }
-                    }
-                    catch (Exception error)
-                    {
-                        WriteToOutput("ERROR: " + error.Message, OutputType.Error);
-                        exitCode = 10;
-                    }
-                }
-                catch (Exception error)
-                {
-                    WriteToOutput("ERROR: " + error.Message, OutputType.Error);
-                    exitCode = 10;
-                }
-
-                stopwatch.Stop();
-                WriteToOutput(
-                    count.ToString() + " new confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    OutputType.Info);
-            }
-
-            return exitCode;
-        }
-
-        /// <summary>
-        /// Publishes items to Confluence.
-        /// </summary>
-        /// <param name="cmdArgs">The command-line args.</param>
-        private static int PublishConfluenceItems(ConsoleArgs cmdArgs)
-        {
-            var exitCode = 0;
-            var isValid = false;
-            var input = string.Empty;
-            if (string.IsNullOrEmpty(cmdArgs.Destination))
-            {
-                WriteToOutput("Confluence URL not specified", OutputType.Error);
-                exitCode = 2;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.User))
-            {
-                WriteToOutput("Username not specified", OutputType.Error);
-                exitCode = 3;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.Password))
-            {
-                WriteToOutput("Password not specified", OutputType.Error);
-                exitCode = 4;
-            }
-            else if (string.IsNullOrEmpty(cmdArgs.Source))
-            {
-                WriteToOutput("Input path not specified", OutputType.Error);
-                exitCode = 6;
-            }
-            else
-            {
-                isValid = true;
-                input = cmdArgs.Source;
-                if (!Path.IsPathRooted(input))
-                {
-                    input = Path.Combine(Environment.CurrentDirectory, input);
-                }
-            }
-
-            if (isValid)
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                WriteToOutput("Publishing Confluence items to " + cmdArgs.Destination, OutputType.Info);
-                var count = 0;
-
-                try
-                {
-                    var binding = new BasicHttpBinding();
-                    binding.MaxReceivedMessageSize = int.MaxValue;
-                    binding.ReaderQuotas.MaxStringContentLength = int.MaxValue;
-                    var client = new ConfluenceSoapServiceClient(
-                        binding,
-                        new EndpointAddress(cmdArgs.Destination));
-
-                    try
-                    {
-                        var session = client.login(cmdArgs.User, cmdArgs.Password);
-                        try
-                        {
-                            var inputDir = Path.GetDirectoryName(input);
-                            var inputDoc = XDocument.Load(input);
-                            foreach (var pageEl in inputDoc.Root.Elements())
-                            {
-                                var sourceAttr = pageEl.Attribute("source");
-                                var titleAttr = pageEl.Attribute("title");
-                                var idAttr = pageEl.Attribute("id");
-                                var parentAttr = pageEl.Attribute("parentId");
-                                if (sourceAttr != null)
-                                {
-                                    WriteToOutput(
-                                        "Publishing " + sourceAttr.Value + " to " + titleAttr.Value + "[" + idAttr.Value + "]",
-                                        OutputType.Debug);
-
-                                    var sourcePath = sourceAttr.Value;
-                                    if (!Path.IsPathRooted(sourcePath))
-                                    {
-                                        sourcePath = Path.Combine(inputDir, sourcePath);
-                                    }
-
-                                    if (!File.Exists(sourcePath))
-                                    {
-                                        WriteToOutput("Unable to find file " + sourcePath, OutputType.Warning);
-                                    }
-                                    else
-                                    {
-                                        var page = client.getPage(session, "CCNET", titleAttr.Value);
-                                        var newContent = File.ReadAllText(sourcePath).Replace("\r\n", "\n");
-                                        var autoPos = newContent.LastIndexOf("{info:title=Automatically Generated}");
-                                        if (string.Compare(page.content, 0, newContent, 0, autoPos == -1 ? newContent.Length : autoPos) != 0)
-                                        {
-                                            page.content = newContent;
-                                            client.storePage(session, page);
-                                            WriteToOutput(titleAttr.Value + " updated", OutputType.Info);
-                                            count++;
-                                        }
-                                        else
-                                        {
-                                            WriteToOutput(titleAttr.Value + " unchanged, publish skipped", OutputType.Debug);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    WriteToOutput(string.Format("Missing source attribute for {0}.", titleAttr),
-                                                  OutputType.Warning);
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            client.logout(session);
-                        }
-                    }
-                    catch (Exception error)
-                    {
-                        WriteToOutput("ERROR: " + error.Message, OutputType.Error);
-                        exitCode = 10;
-                    }
-                }
-                catch (Exception error)
-                {
-                    WriteToOutput("ERROR: " + error.Message, OutputType.Error);
-                    exitCode = 10;
-                }
-
-                stopwatch.Stop();
-                WriteToOutput(
-                    count.ToString() + " confluence items updated in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    OutputType.Info);
-            }
-
-            return exitCode;
-        }
-
         /// <summary>
         /// Publish items to chili page
         /// </summary>
@@ -444,11 +171,9 @@
             return 0;
         }
 
-
-
         public static int GenerateDocumentation(ConsoleArgs args)
         {
-            specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
+            specialChars = new Regex(@"[\|\[\]\*+]", RegexOptions.Compiled);
             if (string.IsNullOrEmpty(args.Source))
             {
                 WriteToOutput("No assembly specified", OutputType.Error);
@@ -1062,7 +787,7 @@
                             break;
 
                         case "includePage":
-                            builder.Append("{{include(" + TrimValue(childElement.Value) + "}}");
+                            builder.Append("{{include(" + TrimValue(childElement.Value) + ")}}");
                             break;
                        
                         default:
@@ -1253,7 +978,8 @@
                     {
                         if (count++ > 0)
                         {
-                            builder.Append("\\\\");
+                            //builder.Append("\\\\");
+                            builder.AppendLine();
                         }
 
                         builder.Append(value);

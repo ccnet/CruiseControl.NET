@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.PowerShell
     using System.Collections.Generic;
     using System.Linq;
     using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
 
     /// <summary>
     /// Information about a project.
@@ -60,8 +61,9 @@ namespace ThoughtWorks.CruiseControl.PowerShell
         /// <param name="buildStage">The build stage.</param>
         /// <param name="queue">The queue.</param>
         /// <param name="queuePriority">The queue priority.</param>
-        private CCProject(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority)
-            : base(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority)
+        /// <param name="parameters">The project parameters</param>
+        private CCProject(CruiseServerClientBase client, string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage, string queue, int queuePriority, List<ParameterBase> parameters)
+            : base(name, category, activity, buildStatus, status, webURL, lastBuildDate, lastBuildLabel, lastSuccessfulBuildLabel, nextBuildTime, buildStage, queue, queuePriority, parameters)
         {
             this.client = client;
         }
@@ -222,7 +224,8 @@ namespace ThoughtWorks.CruiseControl.PowerShell
                 projectStatus.NextBuildTime, 
                 projectStatus.BuildStage, 
                 projectStatus.Queue,
-                projectStatus.QueuePriority) { Connection = connection };
+                projectStatus.QueuePriority,
+                projectStatus.Parameters) { Connection = connection };
             return project;
         }
         #endregion

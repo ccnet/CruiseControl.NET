@@ -166,7 +166,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	<buildArgs>/p:Configuration=Debug /v:diag</buildArgs>
 	<targets>Build;Test</targets>
 	<timeout>15</timeout>
-	<logger>Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml</logger>
+	<logger>Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll</logger>
+    <loggerParameters>
+        <loggerParameter>buildresult.xml</loggerParameter>
+        <loggerParameter>someField=true</loggerParameter>
+    </loggerParameters>
     <priority>BelowNormal</priority>
 </msbuild>";
 			task = (MsBuildTask) NetReflector.Read(xml);
@@ -176,7 +180,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("Build;Test", task.Targets);
 			Assert.AreEqual("/p:Configuration=Debug /v:diag", task.BuildArgs);
 			Assert.AreEqual(15, task.Timeout);
-			Assert.AreEqual("Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml", task.Logger);
+			Assert.AreEqual("Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll", task.Logger);
+            Assert.AreEqual(2, task.LoggerParameters.Length);
+            Assert.AreEqual("buildresult.xml", task.LoggerParameters[0]);
+            Assert.AreEqual("someField=true", task.LoggerParameters[1]);
             Assert.AreEqual(ProcessPriorityClass.BelowNormal, task.Priority);
 		}
 
@@ -189,7 +196,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(null, task.Logger);
 		}
 
-		private string GetLoggerArgument()
+        [Test]
+        public void PopulateFromConfigurationBogusLoggerParameters()
+        {
+            const string xml = @"<msbuild>
+	<executable>C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe</executable>
+	<workingDirectory>C:\dev\ccnet</workingDirectory>
+	<projectFile>CCNet.sln</projectFile>
+	<buildArgs>/p:Configuration=Debug /v:diag</buildArgs>
+	<targets>Build;Test</targets>
+	<timeout>15</timeout>
+	<logger>Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml</logger>
+    <priority>BelowNormal</priority>
+</msbuild>";
+            Assert.That(delegate { task = (MsBuildTask)NetReflector.Read(xml); },
+                        Throws.TypeOf<NetReflectorException>());
+            ;
+        }
+
+        private string GetLoggerArgument()
 		{
 			var logger = string.IsNullOrEmpty(task.Logger) ? defaultLogger : task.Logger;
             return string.Format(@" /l:{0};{1}", StringUtil.AutoDoubleQuoteString(logger), StringUtil.AutoDoubleQuoteString(string.Format(logfile, task.LogFileId)));

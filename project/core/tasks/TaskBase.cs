@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 
         /// <summary>                                                                                              
-        /// A set of environment variables set for commands that are executed.                                     
+        /// A set of environment variables set for commands that are executed.                               
         /// </summary>                                                                                             
         /// <remarks>                                                                                              
         /// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.         

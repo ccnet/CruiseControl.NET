@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -52,6 +53,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         [XmlAttribute()]
         public int queuePriority;
+
+        [XmlElement()]
+        public ParameterBase[] parameters;
 
 	}
 
@@ -165,7 +169,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                         dashboardProject.nextBuildTime,
                         dashboardProject.buildStage,
                         dashboardProject.queue,
-                        dashboardProject.queuePriority);
+                        dashboardProject.queuePriority,
+                        dashboardProject.parameters);
                     projectStatuses[index].ServerName = dashboardProject.serverName;
                 }
             }

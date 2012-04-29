@@ -77,7 +77,7 @@
                 "<error>Error 2</error>" +
                 "<parameter xsi:type=\"TextParameter\" name=\"text\" display=\"text\" />" +
                 "<parameter xsi:type=\"NumericParameter\" name=\"numeric\" display=\"numeric\" />" +
-                "<parameter xsi:type=\"SelectParameter\" name=\"select\" display=\"select\" />" +
+                "<parameter xsi:type=\"SelectParameter\" name=\"select\" display=\"select\"><allowedValues /></parameter>" +
                 "</buildParametersResponse>",
                 response.RequestIdentifier,
                 response.Result,

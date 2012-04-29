@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using Exortech.NetReflector;
 using NMock;
@@ -209,7 +209,7 @@ Current project could not be identified.
 		[Test]
 		public void GetReconfigureTimeShouldHandleNonUSDates()
 		{
-			string dateString = "samedi 2 d�cembre 2006";
+            string dateString = "samedi 2 décembre 2006";
 			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
 			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(dateString), new IsAnything());
 			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();

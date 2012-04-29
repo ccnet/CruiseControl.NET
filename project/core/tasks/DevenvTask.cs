@@ -349,6 +349,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
 			IDictionary properties = result.IntegrationProperties;
 
+            // pass user defined the environment variables
+            foreach (EnvironmentVariable item in EnvironmentVariables)
+                processInfo.EnvironmentVariables[item.name] = item.value;
+
 			// Pass the integration environment variables to devenv.
 			foreach (string key in properties.Keys)
 			{
