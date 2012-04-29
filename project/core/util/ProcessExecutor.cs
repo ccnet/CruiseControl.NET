@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 				catch (Win32Exception e)
 				{
-					string msg = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
+					string msg = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute file [{0}].  The file may not exist or may not be executable. ({1})", filename, e.Message);
 					throw new IOException(msg, e);
 				}
 
