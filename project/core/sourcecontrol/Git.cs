@@ -3,6 +3,8 @@ using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Globalization;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -61,13 +63,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <b>Checking for modifications</b>
     /// </para>
     /// <para>
-    /// One the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. In the next step the sha-1 hash
-    /// of the specified remote branch and the local checkout is compared. If they're identical Cruise Control.NET will expect that there are
-    /// no changes.
-    /// </para>
-    /// <para>
-    /// If the 2 sha-1 hashes are different a "git log --name-status -c --before=... --after=..." command is issued to get a list of the new
-    /// commits and their changes.
+    /// Once the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. Next,
+    /// "git log $LastIntegrationCommit..origin/$BranchName --name-status -c",
+    /// is issued to get a list of commits and their changes, where $LastIntegrationCommit is the commit which was
+    /// checked out the last time an integration was run. If the project has not yet been integrated, a
+    /// "git log origin/$BranchName --name-status -c"
+    /// command is issued instead.
     /// </para>
     /// <para>
     /// <b>Getting the source</b>
@@ -118,6 +119,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("git")]
 	public class Git : ProcessSourceControl
 	{
+        /// <summary>
+        /// Used as the key for storing the most recently integrated commit within
+        /// <see cref="IIntegrationResult.SourceControlData"/>.
+        /// </summary>
+        private const string COMMIT_KEY = "commit";
 		private const string historyFormat = "Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:";
 
 		private readonly IFileSystem _fileSystem;
@@ -266,20 +272,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			// fetch lates changes from the remote repository
+			// fetch latest changes from the remote repository
 			RepositoryAction result = CreateUpateLocalRepository(to);
 
-			// check whenever the remote hash has changed after a "git fetch" command
-			string originHeadHash = GitLogOriginHash(Branch, to);
-			if (result == RepositoryAction.Updated && (originHeadHash == GitLogLocalHash(to)))
+			Dictionary<string, string> revisionData = NameValuePair.ToDictionary(from.SourceControlData);
+			ProcessResult logResult;
+			string lastCommit;
+			if (revisionData.TryGetValue(COMMIT_KEY, out lastCommit))
 			{
-				Log.Debug(string.Concat("[Git] Local and origin hash of branch '", Branch,
-										"' matches, no modifications found. Current hash is '", originHeadHash, "'"));
-				return new Modification[0];
+				logResult = GitLogHistory(Branch, lastCommit, to);
+			}
+			else
+			{
+				Log.Debug(string.Concat("[Git] last integrated commit not found, using all ancestors of origin/",
+					Branch, " as the set of modifications."));
+				logResult = GitLogHistory(Branch, to);
 			}
 
-			// parse git log history
-			return ParseModifications(GitLogHistory(Branch, from, to), from.StartTime, to.StartTime);
+			// Get the hash of the origin head, and store it against the integration result.
+			string originHeadHash = GitLogOriginHash(Branch, to);
+			revisionData[COMMIT_KEY] = originHeadHash;
+			to.SourceControlData.Clear();
+			NameValuePair.Copy(revisionData, to.SourceControlData);
+
+			return ParseModifications(logResult, lastCommit);
 		}
 
         /// <summary>
@@ -461,57 +477,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(string.Concat("origin/", branchName));
-			buffer.AddArgument("--date-order");
 			buffer.AddArgument("-1");
 			buffer.AddArgument("--pretty=format:\"%H\"");
 			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
 		}
 
 		/// <summary>
-		/// Get the hash of the latest commit in the local repository
+		/// Get the commit history including changes between <paramref name="from"/> and origin/<paramref name="branchName"/>
 		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private string GitLogLocalHash(IIntegrationResult result)
+		/// <param name="branchName">Name of the branch.</param>
+		/// <param name="from">The commit from which to start logging.</param>
+		/// <param name="to">IIntegrationResult of the current build.</param>
+		/// <returns>Result of the "git log" command.</returns>
+		private ProcessResult GitLogHistory(string branchName, string from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument("--date-order");
-			buffer.AddArgument("-1");
-			buffer.AddArgument("--pretty=format:\"%H\"");
-
-			string hash = null;
-			try
-			{
-				hash = Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
-			}
-			catch (CruiseControlException ex)
-			{
-				if (!ex.Message.Contains("fatal: bad default revision 'HEAD'"))
-					throw;
-			}
-			return hash;
+			buffer.AddArgument(string.Concat(from, "..origin/", branchName));
+			AppendLogOptions(buffer);
+			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
 
-		/// <summary>
-		/// Get the commit history including changes in date order in the provided upper and lower time limit.
-		/// </summary>
-		/// <param name="branchName">Name of the branch.</param>
-		/// <param name="from">IIntegrationResult of the last build.</param>
-		/// <param name="to">IIntegrationResult of the current build.</param>
-		/// <returns>Result of the "git log" command.</returns>
-		private ProcessResult GitLogHistory(string branchName, IIntegrationResult from, IIntegrationResult to)
+		private ProcessResult GitLogHistory(string branchName, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(string.Concat("origin/", branchName));
-			buffer.AddArgument("--date-order");
-			buffer.AddArgument("--name-status");
-            buffer.AddArgument("-c"); // CCNET-1854: detect merge commits
-			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R", CultureInfo.CurrentCulture)));
-			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R", CultureInfo.CurrentCulture)));
-			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
-
+			AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
+		}
+
+		private void AppendLogOptions(ProcessArgumentBuilder buffer)
+		{
+			buffer.AddArgument("--name-status");
+			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
 		}
 
 		/// <summary>
