@@ -511,6 +511,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			buffer.AddArgument("--name-status");
 			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
+            buffer.AddArgument("-m"); // for getting the commits seen via merges
 		}
 
 		/// <summary>

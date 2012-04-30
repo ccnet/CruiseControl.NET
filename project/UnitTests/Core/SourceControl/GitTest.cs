@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_COMMIT_KEY = "commit";
 		const string FROM_COMMIT = "0123456789abcdef";
 		const string TO_COMMIT = "fedcba9876543210";
-		const string GIT_LOG_OPTIONS = "--name-status --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
+		const string GIT_LOG_OPTIONS = "--name-status --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\" -m";
 		const string GIT_LOG_REMOTE_COMMITS = "log " + FROM_COMMIT + "..origin/master " + GIT_LOG_OPTIONS;
 		const string GIT_LOG_ALL = "log origin/master " + GIT_LOG_OPTIONS;
 
