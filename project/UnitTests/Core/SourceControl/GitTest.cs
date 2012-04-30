@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.UnitTests.Core;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
 using NMock.Constraints;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -18,14 +19,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	{
 		const string GIT_CLONE = "clone xyz.git";
 		const string GIT_FETCH = "fetch origin";
-		const string GIT_REMOTE_HASH = "log origin/master --date-order -1 --pretty=format:\"%H\"";
-		const string GIT_LOCAL_HASH = "log --date-order -1 --pretty=format:\"%H\"";
-		string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status -c \"--after={0}\" \"--before={1}\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
+		const string GIT_REMOTE_HASH = "log origin/master -1 --pretty=format:\"%H\"";
+		const string GIT_LOCAL_HASH = "log -1 --pretty=format:\"%H\"";
+		const string GIT_COMMIT_KEY = "commit";
+		const string FROM_COMMIT = "0123456789abcdef";
+		const string TO_COMMIT = "fedcba9876543210";
+		const string GIT_LOG_OPTIONS = "--name-status --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\" -m";
+		const string GIT_LOG_REMOTE_COMMITS = "log " + FROM_COMMIT + "..origin/master " + GIT_LOG_OPTIONS;
+		const string GIT_LOG_ALL = "log origin/master " + GIT_LOG_OPTIONS;
 
 		private Git git;
 		private IMock mockHistoryParser;
-		private DateTime from;
-		private DateTime to;
 		private IMock mockFileSystem;
 		private IMock mockFileDirectoryDeleter;
 
@@ -36,12 +40,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockFileSystem = new DynamicMock(typeof(IFileSystem));
 			mockFileDirectoryDeleter = new DynamicMock(typeof(IFileDirectoryDeleter));
 			CreateProcessExecutorMock("git");
-
-			from = new DateTime(2001, 1, 21, 20, 0, 0, DateTimeKind.Local);
-			to = from.AddDays(1);
-
-			GIT_REMOTE_COMMITS = string.Format(GIT_REMOTE_COMMITS, from.ToUniversalTime().ToString("R"),
-											   to.ToUniversalTime().ToString("R"));
 
 			SetupGit((IFileSystem)mockFileSystem.MockInstance, (IFileDirectoryDeleter)mockFileDirectoryDeleter.MockInstance);
 		}
@@ -196,52 +194,54 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void ShouldCloneIfDirectoryDoesntExist()
+		public void ShouldCloneIfDirectoryDoesNotExist()
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", false, DefaultWorkingDirectory);
+			ExpectCloneAndInitialiseRepository();
 
-			ExpectToExecuteArguments(string.Concat(GIT_CLONE, " ", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)), Path.GetDirectoryName(DefaultWorkingDirectory.TrimEnd(Path.DirectorySeparatorChar)));
+			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
+			ExpectLogRemoteHead(TO_COMMIT);
+			mockHistoryParser.ExpectAndReturn("Parse", new Modification[] { }, new IsAnything(), new IsAnything(), new IsAnything());
 
-			ExpectToExecuteArguments("config --get user.name");
-			ExpectToExecuteArguments("config --get user.email");
+			IIntegrationResult to = IntegrationResult();
+			git.GetModifications(IntegrationResult(FROM_COMMIT), to);
 
-			ExpectToExecuteArguments("log origin/master --date-order -1 --pretty=format:\"%H\"");
-
-			ExpectToExecuteArguments(GIT_REMOTE_COMMITS);
-
-			git.GetModifications(IntegrationResult(from), IntegrationResult(to));
+			AssertIntegrationResultTaggedWithCommit(to, TO_COMMIT);
 		}
 
 		[Test]
-		[Ignore("Does not correctly work")]
-		public void ShouldCloneAndDeleteWorkingDirIfGitDirectoryDoesntExist()
+		public void ShouldCloneAndDeleteWorkingDirIfGitDirectoryDoesNotExist()
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", true, DefaultWorkingDirectory);
 			mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(DefaultWorkingDirectory, ".git"));
+			mockFileDirectoryDeleter.Expect("DeleteIncludingReadOnlyObjects", DefaultWorkingDirectory);
+			mockFileSystem.ExpectAndReturn("DirectoryExists", false, DefaultWorkingDirectory);
+			ExpectCloneAndInitialiseRepository();
 
-			ExpectToExecuteArguments(string.Concat(GIT_CLONE, " ", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)), Path.GetDirectoryName(DefaultWorkingDirectory.TrimEnd(Path.DirectorySeparatorChar)));
+			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
+			ExpectLogRemoteHead(TO_COMMIT);
+			mockHistoryParser.ExpectAndReturn("Parse", new Modification[] { }, new IsAnything(), new IsAnything(), new IsAnything());
 
-			ExpectToExecuteArguments("log origin/master --date-order -1 --pretty=format:\"%H\"");
+			IIntegrationResult to = IntegrationResult();
+			git.GetModifications(IntegrationResult(FROM_COMMIT), to);
 
-			ExpectToExecuteArguments(GIT_REMOTE_COMMITS);
-
-			git.GetModifications(IntegrationResult(from), IntegrationResult(to));
+			AssertIntegrationResultTaggedWithCommit(to, TO_COMMIT);
 		}
 
 		[Test]
-		public void ShouldNotGetModificationsWhenHashsMatch()
+		public void ShouldLogWholeHistoryIfCommitNotPresentInFromIntegrationResult()
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", true, DefaultWorkingDirectory);
 			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectory, ".git"));
 
 			ExpectToExecuteArguments(GIT_FETCH);
+			ExpectToExecuteArguments(GIT_LOG_ALL);
+			ExpectLogRemoteHead(TO_COMMIT);
 
-			ExpectToExecuteWithArgumentsAndReturn(GIT_REMOTE_HASH, new ProcessResult("abcdef", "", 0, false));
-			ExpectToExecuteWithArgumentsAndReturn(GIT_LOCAL_HASH, new ProcessResult("abcdef", "", 0, false));
+			IIntegrationResult to = IntegrationResult();
+			git.GetModifications(IntegrationResult(), to);
 
-			Modification[] mods = git.GetModifications(IntegrationResult(from), IntegrationResult(to));
-
-			Assert.AreEqual(0, mods.Length);
+			AssertIntegrationResultTaggedWithCommit(to, TO_COMMIT);
 		}
 
 		private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue)
@@ -299,16 +299,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification[] modifications = new Modification[2] { new Modification(), new Modification() };
 
 			ExpectToExecuteArguments(GIT_FETCH);
+			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
+			ExpectLogRemoteHead(TO_COMMIT);
 
-			ExpectToExecuteWithArgumentsAndReturn(GIT_REMOTE_HASH, new ProcessResult("abcdef", "", 0, false));
-			ExpectToExecuteWithArgumentsAndReturn(GIT_LOCAL_HASH, new ProcessResult("ghijkl", "", 0, false));
+			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
 
-			ExpectToExecuteArguments(GIT_REMOTE_COMMITS);
+			IIntegrationResult to = IntegrationResult();
+			Modification[] result = git.GetModifications(IntegrationResult(FROM_COMMIT), to);
 
-			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), from, new IsAnything());
-
-			Modification[] result = git.GetModifications(IntegrationResult(from), IntegrationResult(to));
 			Assert.AreEqual(modifications, result);
+			AssertIntegrationResultTaggedWithCommit(to, TO_COMMIT);
 		}
 
 		private void SetupGit(IFileSystem filesystem, IFileDirectoryDeleter fileDirectoryDeleter)
@@ -316,6 +316,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			git = new Git((IHistoryParser)mockHistoryParser.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance, filesystem, fileDirectoryDeleter);
 			git.Repository = @"xyz.git";
 			git.WorkingDirectory = DefaultWorkingDirectory;
+		}
+
+		private IIntegrationResult IntegrationResult(string commit)
+		{
+			IntegrationResult r = new IntegrationResult();
+			r.SourceControlData.Add(new NameValuePair(GIT_COMMIT_KEY, commit));
+			return r;
+		}
+
+		/// <summary>
+		/// Sets an expectation that git will call 'log' to get the remote head commit, printing the value of
+		/// <paramref name="commit"/> to stdout.
+		/// </summary>
+		/// <param name="commit"></param>
+		private void ExpectLogRemoteHead(string commit)
+		{
+			ExpectToExecuteWithArgumentsAndReturn(GIT_REMOTE_HASH, new ProcessResult(commit, "", 0, false));
+		}
+
+		private void ExpectCloneAndInitialiseRepository()
+		{
+			ExpectToExecuteArguments(string.Concat(GIT_CLONE, " ", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)), Path.GetDirectoryName(DefaultWorkingDirectory.TrimEnd(Path.DirectorySeparatorChar)));
+			ExpectToExecuteArguments("config --get user.name");
+			ExpectToExecuteArguments("config --get user.email");
+		}
+
+		private void AssertIntegrationResultTaggedWithCommit(IIntegrationResult result, string commit)
+		{
+			Dictionary<string, string> data = NameValuePair.ToDictionary(result.SourceControlData);
+			Assert.That(data.ContainsKey(GIT_COMMIT_KEY), "IntegrationResult.SourceControlData did not contain commit info.");
+			Assert.That(data[GIT_COMMIT_KEY], Is.EqualTo(commit));
 		}
 	}
 }
