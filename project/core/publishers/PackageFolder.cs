@@ -101,7 +101,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public IEnumerable<string> Package(IIntegrationResult result, ZipOutputStream zipStream)
         {
             var filesAdded = new List<string>();
-            var effectiveBaseFolder = (BaseFolder == null) ? result.WorkingDirectory : BaseFolder;
+
+            string effectiveBaseFolder;
+            if (BaseFolder == null)
+            {
+                effectiveBaseFolder = result.WorkingDirectory;
+            }
+            else
+            {
+                // If base is relative, make it relative to working directory and ensure we convert to absolute path
+                effectiveBaseFolder = Path.IsPathRooted(this.BaseFolder) ? this.BaseFolder : Path.GetFullPath(result.BaseFromWorkingDirectory(this.BaseFolder));
+            }
+            
             var fullName = Path.IsPathRooted(this.SourceFolder) ? this.SourceFolder : result.BaseFromWorkingDirectory(this.SourceFolder);
             var folderInfo = new DirectoryInfo(fullName);
             if (folderInfo.Exists)

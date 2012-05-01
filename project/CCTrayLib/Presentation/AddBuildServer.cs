@@ -62,7 +62,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             LoadExtensions();
 		}
 
-
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -369,6 +368,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnConfigureExtension.TabIndex = 20;
             this.btnConfigureExtension.Text = "Configure Extension";
             this.btnConfigureExtension.UseVisualStyleBackColor = true;
+            this.btnConfigureExtension.Click += new EventHandler(btnConfigureExtension_Click);
             // 
             // cmbExtension
             // 
@@ -381,6 +381,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.cmbExtension.Size = new System.Drawing.Size(609, 21);
             this.cmbExtension.Sorted = true;
             this.cmbExtension.TabIndex = 18;
+            this.cmbExtension.SelectedIndexChanged += new EventHandler(cmbExtension_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -582,13 +583,34 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			return null;
 		}
 
-
-
         private void LoadExtensions()
         {
             cmbExtension.Items.Clear();
             string extensionsPath = Path.Combine(Environment.CurrentDirectory, "Extensions");
             cmbExtension.Items.AddRange(ExtensionHelpers.QueryAssembliesForTypes(extensionsPath, "ITransportExtension"));
+        }
+
+        /// <summary>
+        /// Call configure on the Transport extension, as defined in ITransportExtension
+        /// </summary>
+        void btnConfigureExtension_Click(object sender, EventArgs e)
+        {
+            if (transportExtension != null)
+            {
+                transportExtension.Configure(this);
+            }
+        }
+
+        /// <summary>
+        /// Load the Transport extension, this method will throw if the extension cannot be loaded. 
+        /// </summary>
+        void cmbExtension_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbExtension.SelectedIndex >= 0)
+            {
+                // try loading the transport extension... 
+                transportExtension = ExtensionHelpers.RetrieveExtension(cmbExtension.SelectedItem.ToString());
+            }
         }
 
         private void panel4_Paint(object sender, PaintEventArgs e)
