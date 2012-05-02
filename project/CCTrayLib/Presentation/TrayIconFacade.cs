@@ -54,6 +54,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void Monitor_MessageReceived(string projectName, ThoughtWorks.CruiseControl.Remote.Message message)
 		{
+            // filter out unwanted messages, this should only allow messages that are not 'build' related
+            // example of messages to allow : fixing the build, aborted the build, ...
+            if (message.Kind == Remote.Message.MessageKind.NotDefined) return;
             trayIcon.ShowBalloonTip(5000, projectName, message.ToString(), ToolTipIcon.Info);
 		}
 
