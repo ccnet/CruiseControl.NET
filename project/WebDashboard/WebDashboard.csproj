@@ -846,7 +846,9 @@
     <Content Include="Themes\Obsess\cruisecontrol.css" />
     <Content Include="Themes\Obsess\Manifest.xml" />
     <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
-    <None Include="dashboard.config" />
+    <None Include="dashboard.config">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="Resources\Languages.fr.resx">
       <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
@@ -876,16 +878,24 @@
     <None Include="templates\OhlohStats.vm" />
     <None Include="templates\PackageList.vm" />
     <None Include="templates\ProjectGrid.vm" />
-    <None Include="templates\ProjectParameters.vm" />
+    <None Include="templates\ProjectParameters.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\ProjectReport.vm" />
-    <None Include="templates\ProjectServerConfiguration.vm" />
+    <None Include="templates\ProjectServerConfiguration.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\ProjectSideBar.vm" />
     <None Include="templates\ProjectStatusReport.vm" />
     <None Include="templates\ProjectTimeline.vm" />
     <None Include="templates\RecentBuilds.vm" />
-    <None Include="templates\SecurityConfiguration.vm" />
+    <None Include="templates\SecurityConfiguration.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\ServerInfo.vm" />
-    <None Include="templates\ServerLog.vm" />
+    <None Include="templates\ServerLog.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\ServerQueueStatus.vm" />
     <None Include="templates\ServerSideBar.vm" />
     <None Include="templates\SiteTemplate.vm" />
