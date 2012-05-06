@@ -359,7 +359,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendArgument("-logger:{0}", Logger);
 			buffer.AppendArgument("-logfile:{0}", StringUtil.AutoDoubleQuoteString(GetNantOutputFile(result)));
 			buffer.AppendArgument("-listener:{0}", Listener);
-			buffer.AppendArgument(BuildArgs);
+            AppendBuildArguments(buffer);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
@@ -406,6 +406,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				buffer.AppendArgument(t);
 			}
 		}
+
+        private void AppendBuildArguments(ProcessArgumentBuilder buffer)
+        {
+            var args = System.Text.RegularExpressions.Regex.Split(BuildArgs, @"\n");
+            foreach (string t in args)
+            {
+                if (! string.IsNullOrEmpty(t.Trim())) buffer.AppendArgument(t);
+            }
+        }
 
         /// <summary>
         /// Toes the string.	
