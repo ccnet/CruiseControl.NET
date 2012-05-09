@@ -220,13 +220,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         public void EnsureFolderExists(string fileName)
         {
             string directory = Path.GetDirectoryName(fileName);
-            if (!Directory.Exists(directory))
-            {
-                Log.Debug("Creating folder [" + directory + "]");
-                Directory.CreateDirectory(directory);
-            }
+            EnsureGivenFolderExists(directory);
         }
         #endregion
+
+        public void EnsureGivenFolderExists(string folder)
+        {
+            if (!Directory.Exists(folder))
+            {
+                Log.Debug("Creating folder [" + folder + "]");
+                Directory.CreateDirectory(folder);
+            }
+        }
 
         /// <summary>
         /// Ensures that the specified file exists.

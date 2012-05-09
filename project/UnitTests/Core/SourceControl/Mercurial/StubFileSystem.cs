@@ -54,6 +54,10 @@
 		{
 		}
 
+        public void EnsureGivenFolderExists(string folder)
+        {
+        }
+
 		public bool FileExists(string file)
 		{
 			return true;
