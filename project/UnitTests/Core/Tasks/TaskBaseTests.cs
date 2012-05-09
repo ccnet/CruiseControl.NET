@@ -197,12 +197,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [ReflectorType("item")]
         private class Item
         {
+            [ReflectorType("subItem")]
             public class SubItem
             {
                 [ReflectorProperty("subSubItems", Required = false)]
                 public SubSubItem[] SubSubItems { get; set; }
             }
 
+            [ReflectorType("subSubItem")]
             public class SubSubItem
             {
             }
@@ -246,6 +248,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var task = new TestTask();
             NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
             typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(Item.SubItem));
+            typeTable.Add(typeof(Item.SubSubItem));
             var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItems><subItem><subSubItems><subSubItem></subSubItem><subSubItem></subSubItem></subSubItems></subItem></subItems>" +
                 "<dynamicValues>" +
