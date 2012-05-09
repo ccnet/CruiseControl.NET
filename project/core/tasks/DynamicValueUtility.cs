@@ -305,6 +305,33 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region ConvertXmlToDynamicValues()
+        private static void buildImputMembers(ref Dictionary<string, XmlMemberSerialiser> inputMembers, NetReflectorTypeTable typeTable, string inputNodeName)
+        {
+            var inputNodeType = typeTable.ContainsType(inputNodeName) ? typeTable[inputNodeName] : null;
+            if (inputNodeType != null)
+            {
+                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
+                {
+                    if (value != null)
+                    {
+                        if (!inputMembers.ContainsKey(value.Attribute.Name))
+                            inputMembers.Add(value.Attribute.Name, value);
+
+                        Type SubElementType;
+                        if (value.ReflectorMember.MemberType.IsArray)
+                            SubElementType = value.ReflectorMember.MemberType.GetElementType();
+                        else
+                            SubElementType = value.ReflectorMember.MemberType;
+
+                        Attribute[] attrs = Attribute.GetCustomAttributes(SubElementType);
+                        foreach (Attribute attr in attrs)
+                            if (attr is Exortech.NetReflector.ReflectorTypeAttribute)
+                                buildImputMembers(ref inputMembers, typeTable, ((Exortech.NetReflector.ReflectorTypeAttribute)attr).Name);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Check for and convert inline XML dynamic value notation into <see cref="IDynamicValue"/> definitions.
         /// </summary>
@@ -319,18 +346,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var parameters = new List<XmlElement>();
 
             // Initialise the values from the reflection
-            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
             var inputMembers = new Dictionary<string, XmlMemberSerialiser>();
-            if (inputNodeType != null)
-            {
-                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
-                {
-                    if (value != null)
-                    {
-                        inputMembers.Add(value.Attribute.Name, value);
-                    }
-                }
-            }
+            buildImputMembers(ref inputMembers, typeTable, inputNode.Name);
 
             var nodes = inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*");
             foreach (XmlNode nodeWithParam in nodes)
