@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			get 
             { 
                 if (!string.IsNullOrEmpty(stateFileDirectory))
-					fileSystem.EnsureFolderExists(stateFileDirectory);
+					fileSystem.EnsureGivenFolderExists(stateFileDirectory);
 
                 return stateFileDirectory; 
             }

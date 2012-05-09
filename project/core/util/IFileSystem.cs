@@ -69,6 +69,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         void EnsureFolderExists(string fileName);
 
         /// <summary>
+        /// Ensures that the given folder exists.
+        /// </summary>
+        /// <param name="folder">The name of the folder.</param>
+        void EnsureGivenFolderExists(string folder);
+
+        /// <summary>
         /// Ensures that the specified file exists.
         /// </summary>
         /// <param name="fileName">The name of the file.</param>
