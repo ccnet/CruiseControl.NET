@@ -305,9 +305,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region ConvertXmlToDynamicValues()
-        private static void buildImputMembers(ref Dictionary<string, XmlMemberSerialiser> inputMembers, NetReflectorTypeTable typeTable, string inputNodeName)
+        private static void buildImputMembers(ref Dictionary<string, XmlMemberSerialiser> inputMembers, NetReflectorTypeTable typeTable, XmlNode inputNode)
         {
-            var inputNodeType = typeTable.ContainsType(inputNodeName) ? typeTable[inputNodeName] : null;
+            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
             if (inputNodeType != null)
             {
                 foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
@@ -316,19 +316,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     {
                         if (!inputMembers.ContainsKey(value.Attribute.Name))
                             inputMembers.Add(value.Attribute.Name, value);
-
-                        Type SubElementType;
-                        if (value.ReflectorMember.MemberType.IsArray)
-                            SubElementType = value.ReflectorMember.MemberType.GetElementType();
-                        else
-                            SubElementType = value.ReflectorMember.MemberType;
-
-                        Attribute[] attrs = Attribute.GetCustomAttributes(SubElementType);
-                        foreach (Attribute attr in attrs)
-                            if (attr is Exortech.NetReflector.ReflectorTypeAttribute)
-                                buildImputMembers(ref inputMembers, typeTable, ((Exortech.NetReflector.ReflectorTypeAttribute)attr).Name);
                     }
                 }
+            }
+
+            foreach (XmlNode childNode in inputNode.ChildNodes)
+            {
+                buildImputMembers(ref inputMembers, typeTable, childNode);
             }
         }
 
@@ -347,7 +341,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Initialise the values from the reflection
             var inputMembers = new Dictionary<string, XmlMemberSerialiser>();
-            buildImputMembers(ref inputMembers, typeTable, inputNode.Name);
+            buildImputMembers(ref inputMembers, typeTable, inputNode);
 
             var nodes = inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*");
             foreach (XmlNode nodeWithParam in nodes)
