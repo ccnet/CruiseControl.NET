@@ -645,7 +645,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             try
             {
                 // Try to read in the document at the resolved url
-                using (Stream stream = (Stream)_resolver.GetEntity(url, null, typeof(Stream)))  // must dispose of the stream so that the file is longer locked at the system level
+                using (Stream stream = (Stream)_resolver.GetEntity(url, null, typeof(Stream)))  // must dispose of the stream so that the file is no longer locked at the system level
                 {
                     using (
                         XmlReader reader =
