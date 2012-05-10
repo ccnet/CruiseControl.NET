@@ -305,6 +305,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region ConvertXmlToDynamicValues()
+        private static void buildImputMembers(ref Dictionary<string, XmlMemberSerialiser> inputMembers, NetReflectorTypeTable typeTable, XmlNode inputNode)
+        {
+            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
+            if (inputNodeType != null)
+            {
+                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
+                {
+                    if (value != null)
+                    {
+                        if (!inputMembers.ContainsKey(value.Attribute.Name))
+                            inputMembers.Add(value.Attribute.Name, value);
+                    }
+                }
+            }
+
+            foreach (XmlNode childNode in inputNode.ChildNodes)
+            {
+                buildImputMembers(ref inputMembers, typeTable, childNode);
+            }
+        }
+
         /// <summary>
         /// Check for and convert inline XML dynamic value notation into <see cref="IDynamicValue"/> definitions.
         /// </summary>
@@ -319,18 +340,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var parameters = new List<XmlElement>();
 
             // Initialise the values from the reflection
-            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
             var inputMembers = new Dictionary<string, XmlMemberSerialiser>();
-            if (inputNodeType != null)
-            {
-                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
-                {
-                    if (value != null)
-                    {
-                        inputMembers.Add(value.Attribute.Name, value);
-                    }
-                }
-            }
+            buildImputMembers(ref inputMembers, typeTable, inputNode);
 
             var nodes = inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*");
             foreach (XmlNode nodeWithParam in nodes)
