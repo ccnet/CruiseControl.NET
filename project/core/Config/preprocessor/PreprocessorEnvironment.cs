@@ -642,10 +642,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             // Record for posterity
             AddToFileset( url );
 
+            // Try to read in the document at the resolved url
             try
             {
-                // Try to read in the document at the resolved url
-                using (Stream stream = (Stream)_resolver.GetEntity(url, null, typeof(Stream)))  // must dispose of the stream so that the file is no longer locked at the system level
+                // As XmlReader does not do it for us like other classes do, we must dispose of the stream 
+                // so that the file is no longer locked at the system level
+                using (Stream stream = (Stream)_resolver.GetEntity(url, null, typeof(Stream)))
                 {
                     using (
                         XmlReader reader =
