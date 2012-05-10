@@ -1395,6 +1395,12 @@
     <Content Include="resources\IntegrationScenarios\test3.xml" />
     <Content Include="resources\IntegrationScenarios\test4.xml" />
     <Content Include="resources\IntegrationScenarios\test5.xml" />
+    <Content Include="resources\IntegrationScenarios\TestIfRelativeFolder.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\TestIfRelativeFolderIncluded.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\Triggers.xml" />
     <Content Include="resources\statistics.xml" />
     <Content Include="resources\UnitTestResults.xml" />

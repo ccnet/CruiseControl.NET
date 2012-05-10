@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define name="FromIncluded">
+    <project name="Test" />
+  </cb:define>
+</cb:config-template>
