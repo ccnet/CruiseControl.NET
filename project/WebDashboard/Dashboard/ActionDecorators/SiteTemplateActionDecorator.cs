@@ -104,6 +104,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 
                 velocityContext["refreshinterval"] = refreshIntervalInSeconds;
 
+                string headerSuffix = string.Empty;
+                if (!string.IsNullOrEmpty(loginViewBuilder.BuildServerName)) headerSuffix = LoginViewBuilder.BuildServerName;
+                if (!string.IsNullOrEmpty(LoginViewBuilder.ProjectName)) headerSuffix = string.Concat(headerSuffix, " - ", loginViewBuilder.ProjectName);
+
+                velocityContext["headersuffix"] = headerSuffix;
+
                 GeneratejQueryLinks(velocityContext);
 
                 return velocityViewGenerator.GenerateView(TEMPLATE_NAME, velocityContext);
