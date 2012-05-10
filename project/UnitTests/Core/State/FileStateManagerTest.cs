@@ -47,7 +47,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			Assert.AreEqual(@"c:\temp", state.StateFileDirectory);
 		}
 
-		[Test]
+        [Test]
+        public void SaveToNonExistingFolder()
+        {
+            string newDirectory = Directory.GetCurrentDirectory() + "\\NewDirectory";
+            Assert.IsFalse(Directory.Exists(newDirectory), "The test directory should not exist");
+
+            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().
+                Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
+            Expect.Call(delegate { fileSystem.EnsureGivenFolderExists(newDirectory); });
+            Expect.Call(delegate { fileSystem.AtomicSave(string.Empty, string.Empty); }).IgnoreArguments().Constraints(
+                Rhino.Mocks.Constraints.Is.NotNull(), Rhino.Mocks.Constraints.Is.Anything());
+            mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
+            state.StateFileDirectory = newDirectory;
+            result = IntegrationResultMother.CreateSuccessful();
+            result.ProjectName = "my project";
+            state.SaveState(result);
+        }
+
+        [Test]
 		public void LoadShouldThrowExceptionIfStateFileDoesNotExist()
 		{
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
@@ -81,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			string foldername = @"c:\CCNet_remove_invalid";
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
 			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
-			Expect.Call(delegate { fileSystem.EnsureFolderExists(foldername); });
+			Expect.Call(delegate { fileSystem.EnsureGivenFolderExists(foldername); });
 			mocks.ReplayAll();
 
 			state = new FileStateManager(fileSystem, executionEnvironment);
