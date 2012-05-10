@@ -342,6 +342,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             }
         }
 
+        [Test]
+        [Timeout(120000)]
+        public void TestIfRelativeFolder()
+        {
+            var ccNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "TestIfRelativeFolder.xml");
+
+            Log("Making CruiseServerFactory");
+            var csf = new CCNet.Core.CruiseServerFactory();
+
+            Log("Making cruiseServer with config from :" + ccNetConfigFile);
+            using (var cruiseServer = csf.Create(true, ccNetConfigFile))
+            {
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.Threading.Thread.Sleep(250);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit();
+                Log("cruiseServer stopped");
+            }
+        }
+
 
         void CruiseServerIntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {

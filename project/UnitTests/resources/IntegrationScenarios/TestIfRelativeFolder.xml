@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <cb:if expr="File.Exists('TestIfRelativeFolderIncluded.xml')">
+    <cb:include href="./TestIfRelativeFolderIncluded.xml" />
+  </cb:if>
+  
+  <cb:FromIncluded />
+</cruisecontrol>

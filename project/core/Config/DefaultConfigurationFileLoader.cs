@@ -79,10 +79,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <remarks></remarks>
 		public XmlDocument LoadConfiguration(FileInfo configFile)
 		{
-			VerifyConfigFileExists(configFile);
+            VerifyConfigFileExists(configFile);
 
-			XmlDocument config = AttemptLoadConfiguration(configFile);
-			return config;
+            string previousCurrentDirectory = Directory.GetCurrentDirectory();
+            try
+            {
+                if (Path.IsPathRooted(configFile.DirectoryName))
+                    Directory.SetCurrentDirectory(configFile.DirectoryName);
+
+                XmlDocument config = AttemptLoadConfiguration(configFile);
+                return config;
+            }
+            finally
+            {
+                Directory.SetCurrentDirectory(previousCurrentDirectory);
+            }
 		}
 
 		private XmlDocument AttemptLoadConfiguration(FileInfo configFile)
