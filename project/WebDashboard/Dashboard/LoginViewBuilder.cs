@@ -25,7 +25,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             this.velocityViewGenerator = velocityViewGenerator;
             this.configuration = configuration;
             this.retriever = retriever;
+
+            this.BuildServerName = request.ServerName;
+            this.ProjectName = request.ProjectName;
         }
+
+
+        public readonly string BuildServerName;
+        public readonly string ProjectName;
 
         public HtmlFragmentResponse Execute()
         {
