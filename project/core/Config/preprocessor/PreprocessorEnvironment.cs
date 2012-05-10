@@ -645,19 +645,22 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             try
             {
                 // Try to read in the document at the resolved url
-                using (
-                    XmlReader reader =
-                        XmlReader.Create((Stream)_resolver.GetEntity(url, null, typeof(Stream)))
-                    )
+                using (Stream stream = (Stream)_resolver.GetEntity(url, null, typeof(Stream)))  // must dispose of the stream so that the file is longer locked at the system level
                 {
-                    XDocument document = XDocument.Load(reader,
-                                                         LoadOptions.SetLineInfo |
-                                                         LoadOptions.SetBaseUri |
-                                                         LoadOptions.PreserveWhitespace);
-                    // Load was successful, push the current base URL onto the include stack and set the
-                    // resolver's base dir.
-                    _include_stack.Push(url);
-                    return document;
+                    using (
+                        XmlReader reader =
+                            XmlReader.Create(stream)
+                        )
+                    {
+                        XDocument document = XDocument.Load(reader,
+                                                             LoadOptions.SetLineInfo |
+                                                             LoadOptions.SetBaseUri |
+                                                             LoadOptions.PreserveWhitespace);
+                        // Load was successful, push the current base URL onto the include stack and set the
+                        // resolver's base dir.
+                        _include_stack.Push(url);
+                        return document;
+                    }
                 }
             }
             catch (FileNotFoundException fnfe)
