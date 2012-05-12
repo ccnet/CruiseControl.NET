@@ -251,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                                                     info.FileName,
                                                     info.Arguments,
                                                     info.TimeOut / 1000);
-            return StringUtil.MakeBuildResult(message, string.Empty);
+            return StringUtil.MakeBuildResult(message, "Error");
         }
 
 
