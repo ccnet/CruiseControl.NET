@@ -591,6 +591,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetNumericLabel] = NumericLabel;
                 fullProps[IntegrationPropertyNames.CCNetBuildDate] = StartTime.ToString("yyyy-MM-dd", null);
                 fullProps[IntegrationPropertyNames.CCNetBuildTime] = StartTime.ToString("HH:mm:ss", null);
+                fullProps[IntegrationPropertyNames.CCNetBuildTime2] = StartTime.ToString("HH_mm_ss", null);
                 fullProps[IntegrationPropertyNames.CCNetLastIntegrationStatus] = LastIntegrationStatus;
                 fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
                 fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;

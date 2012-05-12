@@ -10,6 +10,8 @@
                value="2011-09-01" />
     <parameter name="$CCNetBuildTime"
                value="21:00:00" />
+    <parameter name="$CCNetBuildTime2"
+               value="21_00_00" />
     <parameter name="$CCNetFailureUsers"
                value="System.Collections.ArrayList" />
     <parameter name="$CCNetFailureTasks"
@@ -46,6 +48,7 @@
     <CCNetBuildCondition>ForceBuild</CCNetBuildCondition>
     <CCNetBuildDate>2011-09-01</CCNetBuildDate>
     <CCNetBuildTime>21:00:00</CCNetBuildTime>
+    <CCNetBuildTime2>21_00_00</CCNetBuildTime2>
     <CCNetFailureUsers />
     <CCNetFailureTasks />
     <CCNetIntegrationStatus>Success</CCNetIntegrationStatus>

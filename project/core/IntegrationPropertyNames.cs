@@ -51,6 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public const string CCNetBuildTime = "CCNetBuildTime";
         /// <summary>
+        /// The time of the start of the build (in HH_mm_ss format) 
+        /// </summary>
+        public const string CCNetBuildTime2 = "CCNetBuildTime2";
+        /// <summary>
         /// The status of the previous integration. Could be Success, Failure, Exception or Unknown 
         /// </summary>
         public const string CCNetLastIntegrationStatus = "CCNetLastIntegrationStatus";

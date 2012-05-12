@@ -160,6 +160,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                                                             IntegrationPropertyNames.CCNetBuildDate);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime],
                                                             IntegrationPropertyNames.CCNetBuildTime);
+            WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime2],
+                                                            IntegrationPropertyNames.CCNetBuildTime2);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers],
                                                             IntegrationPropertyNames.CCNetFailureUsers);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureTasks],

@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             result.Modifications = new Modification[] { mods };            
 
-			Assert.AreEqual(17, result.IntegrationProperties.Count);
+			Assert.AreEqual(18, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties[IntegrationPropertyNames.CCNetProject]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
             Assert.AreEqual("label23", result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
@@ -209,6 +209,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			// We purposefully use culture-independent string formats
             Assert.AreEqual("2005-06-06", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate]);
             Assert.AreEqual("08:45:00", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime]);
+            Assert.AreEqual("08_45_00", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime2]);
             Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition]);
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus]);
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetLastIntegrationStatus]);
