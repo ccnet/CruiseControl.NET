@@ -130,8 +130,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 													info.FileName,
                                                     info.PublicArguments, 
 													info.TimeOut / 1000);
-            Log.Warning(message);
-			return StringUtil.MakeBuildResult(message, string.Empty);
+            Log.Error(message);
+			return StringUtil.MakeBuildResult(message, "Error");
 		}
 
 		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
