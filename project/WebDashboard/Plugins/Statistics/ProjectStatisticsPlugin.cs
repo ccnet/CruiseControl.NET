@@ -133,7 +133,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
                 throw new ApplicationException("XSL File Name has not been set for XSL Report Action");
             }
             Hashtable xsltArgs = new Hashtable();
-            xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+            if (cruiseRequest.Request.ApplicationPath == "/")
+                xsltArgs["applicationPath"] = string.Empty;
+            else
+                xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
 
             string xslFile = pathProvider.GetFullPathFor(XslFileName);
             string statisticsDocument = farmService.GetStatisticsDocument(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
