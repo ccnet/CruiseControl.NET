@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -79,6 +80,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// The user who forced the build. If security is off, or the build is not forced, then this will not be set. 
         /// </summary>
         public const string CCNetUser = "CCNetUser";
+
+        /// <summary>
+        /// A unique GUID for the build (in 0123456789abcdef0123456789abcdef format)
+        /// so no curly braces or minus symbols
+        /// </summary>
+        public const string CCNetBuildId = "CCNetBuildId";
 
     }
 }

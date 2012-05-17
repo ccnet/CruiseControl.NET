@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private DateTime endTime;
         private Modification[] modifications = new Modification[0];
         private Exception exception;
+        private Guid buildId = Guid.NewGuid();
 
         private readonly List<ITaskResult> taskResults = new List<ITaskResult>();
 
@@ -361,6 +362,16 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return EndTime - StartTime; }
         }
 
+        /// <summary>
+        /// Gets or sets the build id, an id that is unique for each build.
+        /// </summary>
+        public Guid BuildId
+        {
+            get { return buildId; }
+            set { buildId = value; }
+        }
+
+
         // Exceptions cannot be serialised because of permission attributes
         /// <summary>
         /// Gets or sets the exception result.	
@@ -597,6 +608,8 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetFailureTasks] = FailureTasks;
                 fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
                 fullProps[IntegrationPropertyNames.CCNetUser] = request.UserName;
+                fullProps[IntegrationPropertyNames.CCNetBuildId] = BuildId.ToString("N"); //32 hexadecimal characters, no dashes or braces
+
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
             }
