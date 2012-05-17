@@ -8,10 +8,10 @@
                value="ForceBuild" />
     <parameter name="$CCNetBuildDate"
                value="2011-09-01" />
+    <parameter name="$CCNetBuildGuid"
+               value="0123456789abcdef0123456789abcdef" />
     <parameter name="$CCNetBuildTime"
                value="21:00:00" />
-    <parameter name="$CCNetBuildTime2"
-               value="21_00_00" />
     <parameter name="$CCNetFailureUsers"
                value="System.Collections.ArrayList" />
     <parameter name="$CCNetFailureTasks"
@@ -47,8 +47,8 @@
     <CCNetArtifactDirectory>D:\Integration\ProjectXAnalyze\Artifacts</CCNetArtifactDirectory>
     <CCNetBuildCondition>ForceBuild</CCNetBuildCondition>
     <CCNetBuildDate>2011-09-01</CCNetBuildDate>
+    <CCNetBuildGuid>0123456789abcdef0123456789abcdef</CCNetBuildGuid>
     <CCNetBuildTime>21:00:00</CCNetBuildTime>
-    <CCNetBuildTime2>21_00_00</CCNetBuildTime2>
     <CCNetFailureUsers />
     <CCNetFailureTasks />
     <CCNetIntegrationStatus>Success</CCNetIntegrationStatus>

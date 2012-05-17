@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         protected DateTime testDate = new DateTime(2005, 06, 06, 08, 45, 00);
         protected string testDateString = "2005-06-06";
         protected string testTimeString = "08:45:00";
-        protected string testTimeString2 = "08_45_00";
+        protected string testGuid = "0123456789abcdef0123456789abcdef";
 
         protected IMock mockProcessExecutor;
         protected string defaultExecutable;

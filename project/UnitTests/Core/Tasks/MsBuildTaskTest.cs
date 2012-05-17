@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -39,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             result = IntegrationResult();
             result.Label = "1.0";
             result.ArtifactDirectory = DefaultWorkingDirectory;
+            result.Guid = new Guid("0123456789abcdef0123456789abcdef");
             logfile = Path.Combine(result.ArtifactDirectory, MsBuildTask.LogFilename);
             TempFileUtil.DeleteTempFile(logfile);
         }
@@ -96,11 +98,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             // are not sorted alphabetically.
             string expectedProperties = string.Join(";", new string[]
             {
+                //in alphabetical order
                 string.Format("/p:CCNetArtifactDirectory={0}", StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory)), 
                 "CCNetBuildCondition=IfModificationExists",
                 string.Format("CCNetBuildDate={0}", testDateString),
+                string.Format("CCNetBuildGuid={0}", testGuid),
                 string.Format("CCNetBuildTime={0}", testTimeString), 
-                string.Format("CCNetBuildTime2={0}", testTimeString2), 
                 "CCNetFailureTasks=", 
                 "CCNetFailureUsers=", 
                 "CCNetIntegrationStatus=Success",
@@ -245,11 +248,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             // are not sorted alphabetically.
             return string.Join(";", new string[]
             {
+                //in alphabetical order
                 string.Format("/p:CCNetArtifactDirectory={0}", StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory)), 
                 "CCNetBuildCondition=IfModificationExists",
                 string.Format("CCNetBuildDate={0}", testDateString),
+                string.Format("CCNetBuildGuid={0}", testGuid),
                 string.Format("CCNetBuildTime={0}", testTimeString), 
-                string.Format("CCNetBuildTime2={0}", testTimeString2), 
                 "CCNetFailureTasks=", 
                 "CCNetFailureUsers=", 
                 "CCNetIntegrationStatus=Success",

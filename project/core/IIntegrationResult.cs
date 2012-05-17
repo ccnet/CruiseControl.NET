@@ -76,6 +76,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
 		string Label { get; set; }
         /// <summary>
+        /// Gets or sets the build Guid.	
+        /// </summary>
+        /// <value>The build Guid.</value>
+        /// <remarks></remarks>
+        Guid Guid { get; set; }
+        /// <summary>
         /// Gets or sets the status.	
         /// </summary>
         /// <value>The status.</value>

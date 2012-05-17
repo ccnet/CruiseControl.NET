@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ArrayList failureUsers = new ArrayList();
         private ArrayList failureTasks = new ArrayList();
         private string label = InitialLabel;
+        private Guid guid = Guid.NewGuid();
         private DateTime startTime;
         private DateTime endTime;
         private Modification[] modifications = new Modification[0];
@@ -591,7 +592,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetNumericLabel] = NumericLabel;
                 fullProps[IntegrationPropertyNames.CCNetBuildDate] = StartTime.ToString("yyyy-MM-dd", null);
                 fullProps[IntegrationPropertyNames.CCNetBuildTime] = StartTime.ToString("HH:mm:ss", null);
-                fullProps[IntegrationPropertyNames.CCNetBuildTime2] = StartTime.ToString("HH_mm_ss", null);
+                fullProps[IntegrationPropertyNames.CCNetBuildGuid] = Guid.ToString("N"); //32 hexadecimal characters, no dashes or braces
                 fullProps[IntegrationPropertyNames.CCNetLastIntegrationStatus] = LastIntegrationStatus;
                 fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
                 fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;
@@ -601,6 +602,17 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the build Guid.	
+        /// </summary>
+        /// <value>The build Guid.</value>
+        /// <remarks></remarks>
+        public Guid Guid
+        {
+            get { return guid; }
+            set { guid = value; }
         }
 
         /// <summary>

@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
             result = IntegrationResult();
             result.Label = "1.0";
+            result.Guid = new Guid("0123456789abcdef0123456789abcdef");
         }
 
         [TearDown]
@@ -260,11 +261,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             // are not sorted alphabetically.
             return string.Join(" ", new string[]
             {
+                //in alphabetical order
                 string.Format("-D:CCNetArtifactDirectory={0}", StringUtil.AutoDoubleQuoteString(artifactDirectory)), 
                 "-D:CCNetBuildCondition=IfModificationExists",
                 string.Format("-D:CCNetBuildDate={0}", testDateString),
+                string.Format("-D:CCNetBuildGuid={0}", testGuid), 
                 string.Format("-D:CCNetBuildTime={0}", testTimeString), 
-                string.Format("-D:CCNetBuildTime2={0}", testTimeString2), 
                 "-D:CCNetFailureTasks=", 
                 "-D:CCNetFailureUsers=", 
                 "-D:CCNetIntegrationStatus=Success",
