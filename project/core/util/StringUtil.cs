@@ -244,6 +244,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if ((value is string) || (value is int) || (value is Enum))
                 return value.ToString();
 
+            if (value is Guid)
+            {
+                var x =  (Guid) value;
+                return x.ToString("N");
+            }
+
             var dummy = value as ArrayList;
             if (dummy != null)
             {

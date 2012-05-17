@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class IntegrationResultMother
 	{
 		public const string DefaultProjectName = "test";
+        public const string DefaultBuildId = "0123456789abcdef0123456789abcdef";
 
 		public static IntegrationResult Create(IntegrationStatus status)
 		{
@@ -31,7 +32,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.StartTime = date;
 			result.EndTime = date;
 			result.Label = "2.0";
-			result.ArtifactDirectory = Path.GetTempPath();            
+			result.ArtifactDirectory = Path.GetTempPath();
+            result.BuildId = new Guid(DefaultBuildId);
 			return result;
 		}
 
