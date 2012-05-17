@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             result.Modifications = new Modification[] { mods };            
 
-			Assert.AreEqual(17, result.IntegrationProperties.Count);
+			Assert.AreEqual(18, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties[IntegrationPropertyNames.CCNetProject]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
             Assert.AreEqual("label23", result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
@@ -208,6 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(workingDir, result.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory]);
 			// We purposefully use culture-independent string formats
             Assert.AreEqual("2005-06-06", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate]);
+            Assert.IsTrue(IsGuid(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildGuid].ToString()));
             Assert.AreEqual("08:45:00", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime]);
             Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition]);
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus]);
@@ -228,6 +229,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(1, Modifiers.Count);
             Assert.AreEqual("John", Modifiers[0]);
 		}
+
+        private bool IsGuid(string guidString)
+        {
+            try
+            {
+                Guid guid = new Guid(guidString);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 		[Test]
 		public void VerifyIntegrationArtifactDir()

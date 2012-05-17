@@ -152,12 +152,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             writer.WriteStartElement(Elements.IntegrationProps);
             
+            //in alphabetical order
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory],
                                                             IntegrationPropertyNames.CCNetArtifactDirectory);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition],
                                                             IntegrationPropertyNames.CCNetBuildCondition);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate],
                                                             IntegrationPropertyNames.CCNetBuildDate);
+            WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildGuid],
+                                                            IntegrationPropertyNames.CCNetBuildGuid);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime],
                                                             IntegrationPropertyNames.CCNetBuildTime);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers],
