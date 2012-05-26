@@ -407,6 +407,7 @@
     <Compile Include="Core\Tasks\FakeTaskTest.cs" />
     <Compile Include="Core\Tasks\MockTask.cs" />
     <Compile Include="Core\Tasks\XmlTaskResultTests.cs" />
+    <Compile Include="Core\Tasks\XslTransformationTaskTest.cs" />
     <Compile Include="Core\Triggers\CronTriggerTest.cs" />
     <Compile Include="Core\Triggers\ParameterTriggerTests.cs" />
     <Compile Include="Core\Triggers\RollUpTriggerTest.cs" />
