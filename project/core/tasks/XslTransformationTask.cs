@@ -26,7 +26,7 @@
     /// </code>
     /// </example>
     [ReflectorType("xslt")]
-    class XslTransformationTask : TaskBase
+    public class XslTransformationTask : TaskBase
     {
         private ITransformer transformer;
         private IFileSystem fileSystem;

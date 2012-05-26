@@ -4,7 +4,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     /// <summary>
-    /// The MultiFilter can be used with any other filter type.  All filters within a MultiFilter much accept the chnage in order to return true.
+    /// The MultiFilter can be used with any other filter type.  All filters within a MultiFilter much accept the change in order to return true.
     /// </summary>
     /// <version>1.7</version>
     /// <title>MultiFilter</title>
