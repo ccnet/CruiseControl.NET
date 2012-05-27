@@ -77,6 +77,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 mod.FolderName = "NullSourceControl";
                 mod.ModifiedTime = DateTime.Now;
                 mod.UserName = "JohnWayne";
+                mod.ChangeNumber = Guid.NewGuid().ToString("N");
+                mod.Comment = "Making a change";
+                mod.Type = "modified";
                 mods[0] = mod;
                 return mods;
             }
