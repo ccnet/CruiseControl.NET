@@ -1,5 +1,5 @@
 ﻿<package>
-  <name>Modifications of a build</name>
+  <name>Modifications</name>
   <description>Display the modifications done in the build.</description>
   <type>Plugin</type>
   <folders>

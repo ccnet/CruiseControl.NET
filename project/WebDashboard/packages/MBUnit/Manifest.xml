@@ -1,0 +1,32 @@
+﻿<package>
+  <name>MBUnit Results</name>
+  <description>Display the results of a MBUnit run.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>MBUnitDetails.xsl</file>
+        <file>MBUnitSummary.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\MBUnitSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\MBUnitSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\MBUnitDetails.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="MB Unit Details"/>
+        <attribute name="actionName" value="MBUnitDetailsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\MBUnitDetails.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>
