@@ -1,0 +1,44 @@
+﻿<package>
+  <name>MSTest2010 Results</name>
+  <description>Display the results of a MSTest 2010 report. (mstest en coverage)</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>MsTestSummary2010.xsl</file>
+        <file>MsTestReport2010.xsl</file>
+        <file>MsTestCover2010.xsl</file>     
+	  </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\MsTestSummary2010.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\MsTestSummary2010.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\MsTestReport2010.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="MSTest2010 Report"/>
+        <attribute name="actionName" value="MSTestBuildReport2010"/>
+        <attribute name="xslFileName" value="xsl\MsTestReport2010.xsl"/>
+      </attributes>
+    </setting>
+   <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\MsTestCover2010.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="MSTest Coverage 2010"/>
+        <attribute name="actionName" value="MSTestBuildCoverReport2010"/>
+        <attribute name="xslFileName" value="xsl\MsTestCover2010.xsl"/>
+      </attributes>
+    </setting>
+  
+ </configuration>
+</package>
