@@ -6,7 +6,7 @@
   <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" group="Dashboard"/>
   <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="no" group="Project"/>
   <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="no" group="Project"/>
-  <package name="Modifications" description="Display the modifications done in the build." type="Plugin" file="Modifications.zip" installed="no" group="Build"/>
+  <package name="Modifications" description="Display the modifications done in the build." type="Plugin" file="Modifications.zip" installed="yes" group="Build"/>
   <package name="ModificationsByChangeNumber" description="Display the modifications done in the build, grouped by the changenumber of your source control." type="Plugin" file="ModificationsGrouped.zip" installed="no" group="Build"/>
   <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="no" group="Project"/>
   <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="no" group="Build"/>
@@ -29,5 +29,9 @@
   <package name="Project Timeline" description="Display a timeline of project builds." type="Plugin" file="ProjectTimeline.zip" installed="no" group="Project" />
   <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" group="Build" />
   <package name="CodeIt.Right Analysis" description="Display the results of a CodeIt.Right Analysis." type="Plugin" file="CodeItRight.zip" installed="no" group="Build"/>
-  <package name="Final Build Status" description="Display the final status of the project at the end of a build." type="Plugin" file="FinalBuild.zip" installed="no" group="Build" />
-</packages>
+  <package name="Final Build Status" description="Display the final status of the project at the end of a build." type="Plugin" file="FinalBuildStatus.zip" installed="no" group="Build" />
+  <package name="Emma Cover Results" description="Display the results of an Emma cover report." type="Plugin" file="EmmaCover.zip" installed="no" group="Build" />
+  <package name="MBUnit Results" description="Display the results of a MBUnit run." type="Plugin" file="MBUnit.zip" installed="no" group="Build" />
+  <package name="MSTest2010 Results" description="Display the results of a MSTest 2010 report. (mstest en coverage)" type="Plugin" file="MSTest2010.zip" installed="no" group="Build"/>
+
+ </packages>

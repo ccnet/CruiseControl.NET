@@ -174,9 +174,37 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package,build.emmacover.package,build.mbunit.package,build.msTest2010.package">
 	</target>
 
+	
+  <target name="build.emmacover.package" description="Generates the emma coverage package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/EmmaCover.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/EmmaCoverage">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="emma.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+	
+	<target name="build.mbunit.package" description="Generates the MBUnit package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/MBUnit.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/MBUnit">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="MBUnitDetails.xsl"/>
+				<include name="MBUnitSummary.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+
+	
 	<target name="build.nunit.package" description="Generates the NUnit package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/NUnit.zip">
@@ -268,6 +296,21 @@
 		</zip>
 	</target>
 
+	
+	<target name="build.msTest2010.package" description="Generates the MSTest 2010 package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/MSTest2010.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/MSTest2010">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="MsTestSummary2010.xsl"/>
+				<include name="MsTestReport2010.xsl"/>
+				<include name="MsTestCover2010.xsl"/> 
+			</fileset>
+		</zip>
+	</target>
+	
 	<target name="build.fxcop.package" description="Generates the FxCop package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/FxCop.zip">
