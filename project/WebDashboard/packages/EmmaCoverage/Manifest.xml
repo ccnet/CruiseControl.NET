@@ -1,0 +1,21 @@
+﻿<package>
+  <name>Emma Cover Results</name>
+  <description>Display the results of an Emma cover report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>emma.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\emma.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\emma.xsl</value>
+    </setting>
+  </configuration>
+</package>

@@ -30,4 +30,6 @@
   <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" group="Build" />
   <package name="CodeIt.Right Analysis" description="Display the results of a CodeIt.Right Analysis." type="Plugin" file="CodeItRight.zip" installed="no" group="Build"/>
   <package name="Final Build Status" description="Display the final status of the project at the end of a build." type="Plugin" file="FinalBuildStatus.zip" installed="no" group="Build" />
-</packages>
+  <package name="Emma Cover Results" description="Display the results of an Emma cover report." type="Plugin" file="EmmaCover.zip" installed="no" group="Build" />
+
+ </packages>
