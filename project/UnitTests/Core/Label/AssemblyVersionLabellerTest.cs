@@ -50,6 +50,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			Assert.AreEqual(new Version(0, 0, 1, 30).ToString(), labeller.Generate(result));
 		}
 
+
+        [Test]
+        public void GenerateLabelWithLabelFormats()
+        {
+            labeller.MajorLabelFormat = "00";
+            labeller.MinorLabelFormat = "000";
+            labeller.BuildLabelFormat = "0000";
+            labeller.RevisionLabelFormat = "00000";
+
+            IntegrationResult result = CreateIntegrationResult();
+            AddModifications(result);
+            Assert.AreEqual("00.000.0001.00030", labeller.Generate(result));
+        }
+
+
+
 		[Test]
 		public void GenerateLabelFromNoMods()
 		{
