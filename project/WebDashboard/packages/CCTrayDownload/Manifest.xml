@@ -1,6 +1,6 @@
 ﻿<package>
   <name>CCTray Download</name>
-  <description>Download the CCtray client</description>
+  <description>Download the CCTray client</description>
   <type>Plugin</type>
   <configuration>
     <setting>
