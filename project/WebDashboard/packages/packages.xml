@@ -36,6 +36,7 @@
   <package name="CCTray Download" description="Download the CCTray client" type="Plugin" file="CCTrayDownload.zip" installed="yes" group="Dashboard"/>
   <package name="Audit History" description="Displays the audit log." type="Plugin" file="AuditHistory.zip" installed="no" group="Dashboard"/>
   <package name="Latest build" description="Provides a link to the latest build of a project" type="Plugin" file="ProjectLatestBuild.zip" installed="yes" group="Project"/>
+  <package name="All builds" description="Provides a section with an overview of all the builds" type="Plugin" file="ProjectAllBuilds.zip" installed="yes" group="Project"/>
 
   
   
