@@ -13,7 +13,7 @@
 	</target>
 
 	<target name="farm.level.packages" description="Generate the farm level packages"
-          depends="build.admin.package">
+          depends="build.admin.package,build.CCTrayDownload.package">
 	</target>
 
 	<target name="build.admin.package" description="Generates the web dashboard admin package">
@@ -29,6 +29,16 @@
 		</zip>
 	</target>
 
+	<target name="build.CCTrayDownload.package" description="Generates the CCTray client download package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/CCTrayDownload.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/CCTrayDownload">
+				<include name="*.*"/>
+			</fileset>
+		</zip>
+	</target>
+	
+	
 	<target name="server.level.packages" description="Generate the server level packages"
           depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
 	</target>

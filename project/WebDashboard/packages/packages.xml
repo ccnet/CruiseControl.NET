@@ -33,5 +33,6 @@
   <package name="Emma Cover Results" description="Display the results of an Emma cover report." type="Plugin" file="EmmaCover.zip" installed="no" group="Build" />
   <package name="MBUnit Results" description="Display the results of a MBUnit run." type="Plugin" file="MBUnit.zip" installed="no" group="Build" />
   <package name="MSTest2010 Results" description="Display the results of a MSTest 2010 report. (mstest en coverage)" type="Plugin" file="MSTest2010.zip" installed="no" group="Build"/>
+  <package name="CCTray Download" description="Download the CCTray client" type="Plugin" file="CCTrayDownload.zip" installed="yes" group="Dashboard"/>
 
  </packages>
