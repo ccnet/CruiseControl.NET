@@ -40,7 +40,7 @@
 	
 	
 	<target name="server.level.packages" description="Generate the server level packages"
-          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
+          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package,build.audit.package">
 	</target>
 
 	<target name="build.queueStatus.package" description="Generates the queue status package">
@@ -55,6 +55,17 @@
 		</zip>
 	</target>
 
+
+  <target name="build.audit.package" description="Generates the server - project audit history package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/AuditHistory.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/AuditHistory">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+			
+	
 	<target name="build.serverLog.package" description="Generates the server log package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/ServerLog.zip">
@@ -132,6 +143,8 @@
 		</zip>
 	</target>
 
+
+	
   <target name="build.projectConfig.package" description="Generates the project configuration package">
     <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
     <zip zipfile="${build.dir}/WebDashboard/packages/ProjectConfig.zip">
