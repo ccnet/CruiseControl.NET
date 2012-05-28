@@ -16,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
     /// <version>1.5</version>
     /// <summary>
     /// The Server Audit History Server Plugin displays the audit log from the server.
-    /// server is running.
     /// </summary>
     /// <example>
     /// <code>

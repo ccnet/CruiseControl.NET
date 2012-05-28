@@ -1,0 +1,11 @@
+﻿<package>
+  <name>Latest build</name>
+  <description>Provides a link to the latest build of a project</description>
+  <type>Plugin</type>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>latestBuildReportProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

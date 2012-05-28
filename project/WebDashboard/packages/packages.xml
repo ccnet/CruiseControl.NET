@@ -34,6 +34,9 @@
   <package name="MBUnit Results" description="Display the results of a MBUnit run." type="Plugin" file="MBUnit.zip" installed="no" group="Build" />
   <package name="MSTest2010 Results" description="Display the results of a MSTest 2010 report. (mstest en coverage)" type="Plugin" file="MSTest2010.zip" installed="no" group="Build"/>
   <package name="CCTray Download" description="Download the CCTray client" type="Plugin" file="CCTrayDownload.zip" installed="yes" group="Dashboard"/>
-  <package name="Project Audit History" description="Displays the audit log." type="Plugin" file="AuditHistory.zip" installed="no" group="Dashboard"/>
+  <package name="Audit History" description="Displays the audit log." type="Plugin" file="AuditHistory.zip" installed="no" group="Dashboard"/>
+  <package name="Latest build" description="Provides a link to the latest build of a project" type="Plugin" file="ProjectLatestBuild.zip" installed="yes" group="Project"/>
 
+  
+  
  </packages>
