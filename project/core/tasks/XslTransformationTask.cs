@@ -17,11 +17,19 @@
     /// <title>XSL Transformation Task</title>
     /// <version>1.7</version>
     /// <example>
-    /// <code title="Example">
+    /// <code title="Simple example">
     /// &lt;xslt&gt;
     /// &lt;xmlfile&gt;XMLFile&lt;/xmlfile&gt;
     /// &lt;xslfile&gt;XSLFile&lt;/xslfile&gt;
     /// &lt;outputfile&gt;OutputFile&lt;/outputfile&gt;
+    /// &lt;/xslt&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;xslt&gt;
+    /// &lt;xmlfile&gt;XMLFile&lt;/xmlfile&gt;
+    /// &lt;xslfile&gt;XSLFile&lt;/xslfile&gt;
+    /// &lt;outputfile&gt;OutputFile&lt;/outputfile&gt;
+    /// &lt;xsltArgs&gt;&lt;namedValue name="BuildDate" value="$[$CCNetBuildDate]" /&gt;&lt;/xsltArgs&gt;
     /// &lt;/xslt&gt;
     /// </code>
     /// </example>
@@ -57,6 +65,9 @@
 
         /// <summary>
         /// The arguments to give to the XSL transformation.
+        /// You could use this to send an integration property (build date, build time, reason)
+        /// to the XSL stylesheet so that it can use it to generate the output.
+        /// Please see http://msdn.microsoft.com/en-us/library/dfktf882.aspx for detailed usage informations
         /// </summary>
         /// <version>1.7</version>
         /// <default>n/a</default>
