@@ -1,0 +1,11 @@
+﻿<package>
+  <name>All builds</name>
+  <description>Provides a section with an overview of all the builds</description>
+  <type>Plugin</type>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>viewAllBuildsProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

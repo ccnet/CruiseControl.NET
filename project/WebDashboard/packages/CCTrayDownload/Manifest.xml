@@ -1,0 +1,11 @@
+﻿<package>
+  <name>CCTray Download</name>
+  <description>Download the CCTray client</description>
+  <type>Plugin</type>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/farmPlugins</path>
+      <name>cctrayDownloadPlugin</name>
+    </setting>
+  </configuration>
+</package>

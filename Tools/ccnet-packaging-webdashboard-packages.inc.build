@@ -13,7 +13,7 @@
 	</target>
 
 	<target name="farm.level.packages" description="Generate the farm level packages"
-          depends="build.admin.package">
+          depends="build.admin.package,build.CCTrayDownload.package">
 	</target>
 
 	<target name="build.admin.package" description="Generates the web dashboard admin package">
@@ -29,8 +29,18 @@
 		</zip>
 	</target>
 
+	<target name="build.CCTrayDownload.package" description="Generates the CCTray client download package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/CCTrayDownload.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/CCTrayDownload">
+				<include name="*.*"/>
+			</fileset>
+		</zip>
+	</target>
+	
+	
 	<target name="server.level.packages" description="Generate the server level packages"
-          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
+          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package,build.audit.package">
 	</target>
 
 	<target name="build.queueStatus.package" description="Generates the queue status package">
@@ -45,6 +55,17 @@
 		</zip>
 	</target>
 
+
+  <target name="build.audit.package" description="Generates the server - project audit history package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/AuditHistory.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/AuditHistory">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+			
+	
 	<target name="build.serverLog.package" description="Generates the server log package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/ServerLog.zip">
@@ -107,7 +128,7 @@
 	</target>
 
 	<target name="project.level.packages" description="Generate the project level packages"
-          depends="build.projectStats.package,build.projectConfig.package,build.projectTimeline.package,build.modificationHistory.package,build.packageList.package,build.ohlohStats.package">
+          depends="build.projectStats.package,build.projectConfig.package,build.projectTimeline.package,build.modificationHistory.package,build.packageList.package,build.ohlohStats.package,build.projectLatestBuild.package,build.projectAllBuilds.package">
 	</target>
 
 	<target name="build.projectStats.package" description="Generates the project statistics package">
@@ -122,6 +143,27 @@
 		</zip>
 	</target>
 
+
+  <target name="build.projectLatestBuild.package" description="Generates the project latest build package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ProjectLatestBuild.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ProjectLatestBuild">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  
+  <target name="build.projectAllBuilds.package" description="Generates the project all builds package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ProjectAllBuilds.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ProjectAllBuilds">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+	
   <target name="build.projectConfig.package" description="Generates the project configuration package">
     <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
     <zip zipfile="${build.dir}/WebDashboard/packages/ProjectConfig.zip">
