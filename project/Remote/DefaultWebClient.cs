@@ -15,12 +15,21 @@
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultWebClient"/> class
+        /// </summary>
+        public DefaultWebClient() : this(new WebClient())
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultWebClient"/> class.
         /// </summary>
-        public DefaultWebClient()
+        /// <param name="webClient">instance of <see cref="WebClient"/> to use</param>
+        public DefaultWebClient(WebClient webClient)
         {
-            this.innerClient = new WebClient();
+            this.innerClient = webClient;
             this.innerClient.UploadValuesCompleted += (o, e) =>
             {
                 // Pass on the event
@@ -43,8 +52,10 @@
         /// <returns>The response data.</returns>
         public byte[] UploadValues(Uri address, string method, NameValueCollection data)
         {
+            SetCredentials(address);
             return this.innerClient.UploadValues(address, method, data);
         }
+
         #endregion
 
         #region
@@ -56,6 +67,7 @@
         /// <param name="data">The data.</param>
         public void UploadValuesAsync(Uri address, string method, NameValueCollection data)
         {
+            SetCredentials(address);
             this.innerClient.UploadValuesAsync(address, method, data);
         }
         #endregion
@@ -77,6 +89,30 @@
         /// Occurs when the values have completed uploading.
         /// </summary>
         public event EventHandler<BinaryDataEventArgs> UploadValuesCompleted;
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region SetCredentials
+        /// <summary>
+        /// Sets credentials on client if address contains user info.
+        /// </summary>
+        /// <param name="address">The address to check for user info.</param>
+        private void SetCredentials(Uri address)
+        {
+            if (address.UserInfo.Length <= 0) return;
+
+            var userInfoValues = address.UserInfo.Split(':');
+            var credentials = new NetworkCredential
+                                  {
+                                      UserName = userInfoValues[0]
+                                  };
+
+            if (userInfoValues.Length > 1)
+                credentials.Password = userInfoValues[1];
+
+            this.innerClient.Credentials = credentials;
+        }
         #endregion
         #endregion
     }

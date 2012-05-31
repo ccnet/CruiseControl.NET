@@ -429,6 +429,7 @@
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
+    <Compile Include="Remote\DefaultWebClientTests.cs" />
     <Compile Include="Remote\EncryptingConnectionTests.cs" />
     <Compile Include="Remote\HttpConnectionTests.cs" />
     <Compile Include="Remote\ItemStatusTests.cs" />
