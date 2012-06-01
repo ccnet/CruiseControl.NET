@@ -120,6 +120,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         }
 
         [Test]
+        public void StartProjectSetsCredentialsOnWebClient()
+        {
+            var webClient = mocks.DynamicMock<WebClient>();
+            SetupResult.For(webClient.Credentials).PropertyBehavior();
+            var url = "http://test1:test2@test3";
+            var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
+
+            mocks.ReplayAll();
+            client.StartProject(null);
+
+            Assert.IsNotNull(webClient.Credentials, "No credentials set");
+            var cred = webClient.Credentials.GetCredential(new Uri(url), "Basic");
+            Assert.AreEqual("test1", cred.UserName, "Unexpected username");
+            Assert.AreEqual("test2", cred.Password, "Unexpected password");
+        }
+
+        [Test]
         public void GetProjectStatusForcesAuthorizationIf403ForbiddenIsReceived()
         {
             var webClient = mocks.DynamicMock<WebClient>();
