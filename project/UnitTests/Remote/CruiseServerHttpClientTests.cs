@@ -80,6 +80,68 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         #endregion
 
         [Test]
+        public void GetCruiseServerSnapshotSetsCredentialsOnWebClient()
+        {
+            var webClient = mocks.DynamicMock<WebClient>();
+            Expect.Call(webClient.DownloadString(""))
+                .IgnoreArguments()
+                .Return(xmlFrom11);
+            SetupResult.For(webClient.Credentials).PropertyBehavior();
+            var url = "http://test1:test2@test3";
+            var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
+
+            mocks.ReplayAll();
+            client.GetCruiseServerSnapshot();
+
+            Assert.IsNotNull(webClient.Credentials, "No credentials set");
+            var cred = webClient.Credentials.GetCredential(new Uri(url), "Basic");
+            Assert.AreEqual("test1", cred.UserName, "Unexpected username");
+            Assert.AreEqual("test2", cred.Password, "Unexpected password");
+        }
+
+        [Test]
+        public void GetProjectStatusSetsCredentialsOnWebClient()
+        {
+            var webClient = mocks.DynamicMock<WebClient>();
+            Expect.Call(webClient.DownloadString(""))
+                .IgnoreArguments()
+                .Return(xmlFrom11);
+            SetupResult.For(webClient.Credentials).PropertyBehavior();
+            var url = "http://test1:test2@test3";
+            var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
+
+            mocks.ReplayAll();
+            client.GetProjectStatus();
+
+            Assert.IsNotNull(webClient.Credentials, "No credentials set");
+            var cred = webClient.Credentials.GetCredential(new Uri(url), "Basic");
+            Assert.AreEqual("test1", cred.UserName, "Unexpected username");
+            Assert.AreEqual("test2", cred.Password, "Unexpected password");
+        }
+
+        [Test]
+        public void GetProjectStatusForcesAuthorizationIf403ForbiddenIsReceived()
+        {
+            var webClient = mocks.DynamicMock<WebClient>();
+            Expect.Call(webClient.DownloadString(""))
+                .IgnoreArguments()
+                .Throw(new WebException("The remote server returned an error: (403) Forbidden."));
+            Expect.Call(webClient.DownloadString(""))
+                .IgnoreArguments()
+                .Return(xmlFrom11);
+            SetupResult.For(webClient.Credentials).PropertyBehavior();
+            SetupResult.For(webClient.Headers).PropertyBehavior();
+            webClient.Headers = new WebHeaderCollection();
+            var url = "http://test1:test2@test3";
+            var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
+
+            mocks.ReplayAll();
+            client.GetProjectStatus();
+
+            Assert.AreEqual("Basic dGVzdDE6dGVzdDI=", webClient.Headers["Authorization"], "Unexpected Authorization header");
+        }
+
+        [Test]
         public void GetProjectStatusCorrectlyHandlesRelativePath()
         {
             var webClient = mocks.StrictMock<WebClient>();
