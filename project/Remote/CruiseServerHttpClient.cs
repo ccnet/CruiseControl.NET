@@ -18,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         private readonly string serverUri;
         private string targetServer;
         private WebClient client;
+        private IWebFunctions webFunctions;
+
         #endregion
 
         #region Constructors
@@ -39,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             this.serverUri = serverUri.EndsWith("/", StringComparison.CurrentCulture) ? serverUri.Substring(0, serverUri.Length - 1) : serverUri;
             this.client = client;
+            this.webFunctions = new DefaultWebFunctions();
         }
         #endregion
 
@@ -88,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                 // Retrieve the XML from the server
                 var url = GenerateUrl("XmlStatusReport.aspx");
                 var uri = new Uri(url);
-                SetCredentials(uri, false);
+                webFunctions.SetCredentials(client, uri, false);
                 string response;
                 try
                 {
@@ -100,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                     {
                         // Jenkins doesn't give a challenge for HTTP Authentication
                         // So we need to force an Authorization header
-                        SetCredentials(uri, true);
+                        webFunctions.SetCredentials(client, uri, true);
                         response = client.DownloadString(url);
                     }
                     else
@@ -203,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                 {
                     // Retrieve the XML from the server - 1.3 or later
                     var url = GenerateUrl("XmlServerReport.aspx");
-                    SetCredentials(new Uri(url), false);
+                    webFunctions.SetCredentials(client, new Uri(url), false);
                     response = client.DownloadString(url);
                 }
                 catch (Exception)
@@ -403,7 +406,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             values.Add("serverName", TargetServer);
             try
             {
-                SetCredentials(new Uri(url), false);
+                webFunctions.SetCredentials(client, new Uri(url), false);
                 client.UploadValues(url, values);
             }
             catch (Exception error)
@@ -412,43 +415,6 @@ namespace ThoughtWorks.CruiseControl.Remote
                     string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} failed: {1}", command, error.Message),
                     error);
             }
-        }
-        #endregion
-
-        #region SetCredentials
-
-        /// <summary>
-        /// Sets credentials on client if address contains user info.
-        /// </summary>
-        /// <param name="address">The address to check for user info.</param>
-        /// <param name="forceAuthorization">Whether to force an Authorization header or allow WebClient credentials to handle it.</param>
-        private void SetCredentials(Uri address, bool forceAuthorization)
-        {
-            if (address.UserInfo.Length <= 0) return;
-
-            var userInfoValues = address.UserInfo.Split(':');
-            var credentials = new NetworkCredential
-                                  {
-                                      UserName = userInfoValues[0]
-                                  };
-
-            if (userInfoValues.Length > 1)
-                credentials.Password = userInfoValues[1];
-
-            if (forceAuthorization)
-                client.Headers.Add("Authorization", GenerateAuthorizationFromCredentials(credentials));
-            else
-                client.Credentials = credentials;
-        }
-        #endregion
-
-        #region GenerateAuthorizationFromCredentials
-        private static string GenerateAuthorizationFromCredentials(NetworkCredential credentials)
-        {
-            string credentialsText = String.Format("{0}:{1}", credentials.UserName, credentials.Password);
-            byte[] bytes = Encoding.ASCII.GetBytes(credentialsText);
-            string base64 = Convert.ToBase64String(bytes);
-            return String.Concat("Basic ", base64);
         }
         #endregion
         #endregion
