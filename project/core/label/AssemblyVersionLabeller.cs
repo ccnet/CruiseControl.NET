@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
             string result = string.Concat(Major.ToString(MajorLabelFormat), ".", Minor.ToString(MinorLabelFormat), ".", currentBuild.ToString(BuildLabelFormat), ".", currentRevision.ToString(RevisionLabelFormat));
 
-            Log.Debug(string.Concat("[assemblyVersionLabeller] New version is: ", result.ToString()));
+            Log.Debug(string.Concat("[assemblyVersionLabeller] New version is: ", result));
 
 			// return new version string
             return result;
