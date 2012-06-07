@@ -124,8 +124,15 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			foreach (ITrigger trigger in triggers)
 			{
 				IntegrationRequest triggerRequest = trigger.Fire();
-
-				if (Operator == Operator.And && triggerRequest == null) return null;
+                //todo : shouldn't we loop over all triggers before we return null?
+                // suppose you have operator AND     and    Operator Or
+                // if the AND operator does not have a trigger request, we return null
+                // but the OR part could have a valid request
+                // nasty stuff concerning JIRA issue 1835 
+                if (Operator == Operator.And && triggerRequest == null)
+                {
+                    return null;
+                }
 
 				if (triggerRequest != null)
 				{
@@ -133,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 						request = triggerRequest;
 				}
 			}
-			return request;
+                return request;
 		}
 
         /// <summary>
