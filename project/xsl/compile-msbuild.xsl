@@ -39,12 +39,10 @@
 	
 	<xsl:template match="error">
 		<div style="color:orangered">
-			<xsl:if test="parent::target/@name != ''">
-			Msbuild target: <xsl:value-of select="parent::target/@name" />&#160;
-			</xsl:if>
 			<xsl:if test="@file != ''" >
-				<xsl:value-of select="@file"/> (Line <xsl:value-of select="@line"/>, col <xsl:value-of select="@column"/>):
-			</xsl:if>error <xsl:value-of select="@code"/>: <xsl:value-of select="text()" />
+				<xsl:value-of select="@file"/> (<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):
+			</xsl:if>
+			error<xsl:value-of select="@code"/>: <xsl:value-of select="text()" />
 		</div>
 	</xsl:template>
 
