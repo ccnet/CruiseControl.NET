@@ -1,0 +1,873 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Step_4_Add_Coverage by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Step 4 Add Coverage - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FStep_4_Add_Coverage" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Step_4_Add_Coverage/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="Scenarios.html">Scenarios</a> &#187; <a href="Build_Server_Scenarios.html">Build Server Scenarios</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Step-4-Add-Coverage"></a>
+<h1 >Step 4 Add Coverage<a href="#Step-4-Add-Coverage" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Now we have our code tested, we want to know how much of the code is tested. It's better to have 10 tests that go through 50% of the code, than having 100 tests that just test 1 method.<br />This is where code coverage comes in. There are a few code covering frameworks, the best known is NCover, of which the latest versions are not free anymore :-(. <br />Since the previous scenario steps are with VS2010 and MSTest, I'll use the coverage of MS-test.</p>
+
+
+	<p>Wikipedia <a href="http://en.wikipedia.org/wiki/Code_coverage" class="external">article</a> on Code Coverage.</p>
+
+
+	<a name="Turning-on-Code-Coverage"></a>
+<h2 >Turning on Code Coverage<a href="#Turning-on-Code-Coverage" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>When setting up the unit tests in VS.NET, a localtestrun.testrunconfig file will be created and added as part of the solution. Double-click this file and find the option Code Coverage option on the left of the dialog. Select the assemblies for which you want to collect code coverage information and then re-run the unit tests. Code coverage information will be collected and is available. To get the code coverage information open the test results window and click on the code coverage results button, which will open an alternative window with the results.</p>
+
+
+	<p>I just made a company rule that for code coverage to be ran via ccnet, the testsettings file must be named : CodeCoverage.testsettings,<br />with a specific base name(cover_me) and no timestamps appended. Just to make things easier for me. If you want MS-Test to run coverage, just pass the testsettings as an extra argument :</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;exec</span> <span class="attribute-name">program</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mstest_exe}</span><span class="delimiter">&quot;</span></span> <span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testmetadata:${mstest_metadatafile}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/resultsfile:${mstest_unit_test_file}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testlist:UnitTests</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">5</span>  <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testsettings:CodeCoverage.testsettings</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">6</span><span class="tag">&lt;/exec&gt;</span>
+</span></code></pre>
+
+	<p><strong>There is a catch</strong> : Ms-Test from VS2010 does not produce XML anymore, see this <a href="http://www.codebadger.com/blog/post/2009/05/12/Turning-Visual-Studio-MSTEST-code-coverage-files-into-Xml.aspx" class="external">post</a> for a solution. You really need the dll from VS2008 for it to work, the VS2010 has another interface sadly enough. So best to digg up your DVD of VS2008. Below is an updated version of the program, which also removes the <em>Lines</em> elements from the coverage result file, making it a lot smaller to merge (size reduction up to 66%). This updated version fails the build if a certain module/assembly is below the threshold. Should you do not want the build to break, just enter 0 for the threshold :-)</p>
+
+
+	<a name="Putting-it-all-together"></a>
+<h2 >Putting it all together<a href="#Putting-it-all-together" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Now we have all the needed info, so let's start with setting it all up. Do we want to run code coverage in the CI build or not? In my opinion this is on the edge. To keep this setup as clean as possible, we'll add another CCNet-project for this solution : a QA one. QA stands for Quality Assurance. <br /><em><strong>Tip</strong></em> it's best to instruct the build to break if coverage goes below a certain threshold, otherwise there is no real point in doing coverage at all. Also keep a pragmatic approach, demanding 100% coverage is extreme. Example : how does one test network outage?  You'll probably have some error handling code, that you tested once or a couple of times by pulling out the network cable. But I've not seen a way to test these kind of scenario's automated together with other tests.</p>
+
+
+	<a name="The-new-project-definition-in-CCNetconfig"></a>
+<h3 >The new project definition in CCNet.config<a href="#The-new-project-definition-in-CCNetconfig" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span> <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ProjectX</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>   <span class="tag">&lt;cb:define</span> <span class="attribute-name">ProjectType</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">_QA</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)$(ProjectType)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">801</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingDir)$(ProjectName)$(ProjectType)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ProjectType)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 6</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;scheduleTrigger</span> <span class="attribute-name">time</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">06:30</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ForceBuild</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">QA_Scheduled</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>      
+<span class="line-numbers"> 8</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;labeller</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultlabeller</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>
+<span class="line-numbers">11</span>      <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">vsts</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">12</span>          <span class="tag">&lt;workspace&gt;</span>$(ProjectName)<span class="tag">&lt;/workspace&gt;</span>
+<span class="line-numbers">13</span>          <span class="tag">&lt;project&gt;</span>$/$(ProjectName)/Main<span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">14</span>          <span class="tag">&lt;cb:vsts_ci</span><span class="tag">/&gt;</span>             
+<span class="line-numbers">15</span>      <span class="tag">&lt;/sourcecontrol&gt;</span> 
+<span class="line-numbers">16</span>
+<span class="line-numbers">17</span>      <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">18</span>         <span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers">19</span>            <span class="tag">&lt;cb:nant_common</span><span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>            <span class="tag">&lt;cb:nant_target_qa</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">21</span>         <span class="tag">&lt;/nant&gt;</span>    
+<span class="line-numbers">22</span>      <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">23</span>
+<span class="line-numbers">24</span>      <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">25</span>         <span class="tag">&lt;cb:common_publishers</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">26</span>      <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">27</span>
+<span class="line-numbers">28</span>    <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">29</span>  <span class="tag">&lt;/cb:scope&gt;</span>
+</span></code></pre>
+
+	<p>I usually schedule this in the morning, so when you enter the office, you know that the QA build is broken or not. If broken you know what to do :-)</p>
+
+
+	<p>As you see, there is a new Nant target : <em>nant_target_qa</em><br />This has the following layout :<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nant_target_qa</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>   <span class="tag">&lt;targetList&gt;</span>
+<span class="line-numbers">3</span>        <span class="tag">&lt;target&gt;</span>clean<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers">4</span>        <span class="tag">&lt;target&gt;</span>compile<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers">5</span>        <span class="tag">&lt;target&gt;</span>cover<span class="tag">&lt;/target&gt;</span>      
+<span class="line-numbers">6</span>   <span class="tag">&lt;/targetList&gt;</span>
+<span class="line-numbers">7</span><span class="tag">&lt;/cb:define&gt;</span> 
+</span></code></pre></p>
+
+
+	<a name="The-Build-Script"></a>
+<h3 >The Build Script<a href="#The-Build-Script" class="wiki-anchor">&para;</a></h3>
+
+
+This involves a bit more than just putting the 6 mentioned lines above into a Nant target. Reason : if any test fails, we still need to process that coverage file into xml, so it an be merged. If we do not do this, we would only have coverage info when all tests are ok. This is how we do this in NAnt :
+	<ul>
+	<li>do not let the tests fail the build : <code>failonerror="false"</code></li>
+		<li>store the result of the tests in a property : <code>resultproperty="testresult.temp"</code></li>
+		<li>proces the coverage file : <code>exec</code></li>
+		<li>if the tests failed, fail the build : <code>fail</code></li>
+	</ul>
+
+
+	<a name="The-cover-target"></a>
+<h4 >The cover target<a href="#The-cover-target" class="wiki-anchor">&para;</a></h4>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;target</span> <span class="attribute-name">name</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">cover</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">description</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">runs the tests with coverage</span><span class="delimiter">&quot;</span></span> <span class="tag">&gt;</span>     
+<span class="line-numbers"> 2</span><span class="comment">&lt;!-- </span>
+<span class="line-numbers"> 3</span><span class="comment">    company rule : code coverage settings must be set via the file CodeCoverage.testsettings </span>
+<span class="line-numbers"> 4</span><span class="comment">    with the following NamingScheme : baseName=&quot;cover_me&quot; appendTimeStamp=&quot;false&quot; useDefault=&quot;false&quot; </span>
+<span class="line-numbers"> 5</span><span class="comment">--&gt;</span>
+<span class="line-numbers"> 6</span>     <span class="tag">&lt;if</span> <span class="attribute-name">test</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${file::exists('CodeCoverage.testsettings')}</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span> 
+<span class="line-numbers"> 7</span>
+<span class="line-numbers"> 8</span>        <span class="tag">&lt;exec</span> <span class="attribute-name">program</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${mstest_exe}</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">failonerror</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">resultproperty</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">testresult.temp</span><span class="delimiter">&quot;</span></span> <span class="tag">&gt;</span>
+<span class="line-numbers"> 9</span>          <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testmetadata:${mstest_metadatafile}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>          <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/resultsfile:${mstest_unit_test_file}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">11</span>          <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testsettings:CodeCoverage.testsettings</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">12</span>          <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/testlist:UnitTests</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>          
+<span class="line-numbers">13</span>        <span class="tag">&lt;/exec&gt;</span>             
+<span class="line-numbers">14</span>
+<span class="line-numbers">15</span>        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TestsOK</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${int::parse(testresult.temp)==0}</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span> 
+<span class="line-numbers">16</span>
+<span class="line-numbers">17</span>        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">DataCoverageFilePath</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${RuWi::FindFile('cover_me','data.coverage')}</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers">18</span>        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TurnCoverageFileIntoXml_exe</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C:\Tools\TurnCoverageFileIntoXml\TurnCoverageFileIntoXml.exe</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers">19</span>        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MS_Test_CoverageFile</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MSTestCover.xml</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>                <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WantedCoveragePercent</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">75</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers">21</span>
+<span class="line-numbers">22</span>        <span class="tag">&lt;fail</span> <span class="attribute-name">message</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">No data.coverage found in cover_me folder</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${string::get-length(DataCoverageFilePath)</span></span><span class="error">&gt;</span>0}&quot; /<span class="error">&gt;</span>
+<span class="line-numbers">23</span>
+<span class="line-numbers">24</span>        <span class="tag">&lt;echo</span> <span class="attribute-name">message</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">DataCoverageFilePath : ${DataCoverageFilePath}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>               
+<span class="line-numbers">25</span>
+<span class="line-numbers">26</span>        <span class="tag">&lt;exec</span> <span class="attribute-name">program</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${TurnCoverageFileIntoXml_exe}</span><span class="delimiter">&quot;</span></span> <span class="tag">&gt;</span>
+<span class="line-numbers">27</span>            <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${DataCoverageFilePath}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>            <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">cover_me\Out</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">29</span>            <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${MS_Test_CoverageFile}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>            <span class="tag">&lt;arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${WantedCoveragePercent}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">31</span>        <span class="tag">&lt;/exec&gt;</span>
+<span class="line-numbers">32</span>
+<span class="line-numbers">33</span>        <span class="tag">&lt;fail</span> <span class="attribute-name">message</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Failures reported in unit tests.</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${TestsOK}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">34</span>    <span class="tag">&lt;/if&gt;</span>
+<span class="line-numbers">35</span><span class="tag">&lt;/target&gt;</span>
+</span></code></pre>
+
+	<a name="Code-section"></a>
+<h2 >Code section<a href="#Code-section" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="CCNetconfig"></a>
+<h3 >CCNet.config<a href="#CCNetconfig" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">  1</span> <span class="tag">&lt;cruisecontrol</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">  2</span> <span class="comment">&lt;!-- preprocessor settings --&gt;</span>
+<span class="line-numbers">  3</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">D:\WorkingFolders\</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">  4</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingMainDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">D:\ArtifactFolders\</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">  5</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">ArtifactsDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">\Artifacts</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">  6</span>
+<span class="line-numbers">  7</span> <span class="comment">&lt;!-- TFS settings for a CI build --&gt;</span>
+<span class="line-numbers">  8</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">vsts_ci</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">  9</span>     <span class="tag">&lt;server&gt;</span>http://tfs-server:8080/tfs/default/<span class="tag">&lt;/server&gt;</span>
+<span class="line-numbers"> <strong>10</strong></span>     <span class="tag">&lt;username&gt;</span>cruise<span class="tag">&lt;/username&gt;</span>
+<span class="line-numbers"> 11</span>     <span class="tag">&lt;password&gt;</span>**********<span class="tag">&lt;/password&gt;</span>
+<span class="line-numbers"> 12</span>     <span class="tag">&lt;domain&gt;</span>tfs-server<span class="tag">&lt;/domain&gt;</span>
+<span class="line-numbers"> 13</span>     <span class="tag">&lt;autoGetSource&gt;</span>true<span class="tag">&lt;/autoGetSource&gt;</span>
+<span class="line-numbers"> 14</span>     <span class="tag">&lt;cleanCopy&gt;</span>true<span class="tag">&lt;/cleanCopy&gt;</span>
+<span class="line-numbers"> 15</span>     <span class="tag">&lt;force&gt;</span>true<span class="tag">&lt;/force&gt;</span>
+<span class="line-numbers"> 16</span>     <span class="tag">&lt;deleteWorkspace&gt;</span>true<span class="tag">&lt;/deleteWorkspace&gt;</span>
+<span class="line-numbers"> 17</span> <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers"> 18</span>
+<span class="line-numbers"> 19</span> <span class="comment">&lt;!-- all projects will have at least these publishers  --&gt;</span>
+<span class="line-numbers"> <strong>20</strong></span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">common_publishers</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 21</span>    <span class="tag">&lt;merge&gt;</span>
+<span class="line-numbers"> 22</span>       <span class="tag">&lt;files&gt;</span>
+<span class="line-numbers"> 23</span>           <span class="tag">&lt;file&gt;</span>MStest_UnitTestResults.xml<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers"> 24</span>        <span class="tag">&lt;/files&gt;</span>
+<span class="line-numbers"> 25</span>     <span class="tag">&lt;/merge&gt;</span>
+<span class="line-numbers"> 26</span>     <span class="tag">&lt;xmllogger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 27</span>     <span class="tag">&lt;statistics</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 28</span>     <span class="tag">&lt;modificationHistory</span>  <span class="attribute-name">onlyLogWhenChangesFound</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">true</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 29</span>     <span class="tag">&lt;artifactcleanup</span>      <span class="attribute-name">cleanUpMethod</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">KeepLastXSubDirs</span><span class="delimiter">&quot;</span></span>   <span class="attribute-name">cleanUpValue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> <strong>30</strong></span>     <span class="tag">&lt;artifactcleanup</span>      <span class="attribute-name">cleanUpMethod</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">KeepLastXBuilds</span><span class="delimiter">&quot;</span></span>    <span class="attribute-name">cleanUpValue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">25000</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 31</span>     <span class="comment">&lt;!-- email the breakers on a broken build and when it's fixed --&gt;</span>
+<span class="line-numbers"> 32</span>     <span class="tag">&lt;email</span> <span class="attribute-name">from</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">CruiseControl@TheBuilder.com</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 33</span>           <span class="attribute-name">mailhost</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TheMailer.Company.com</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 34</span>           <span class="attribute-name">includeDetails</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TRUE</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 35</span>         <span class="tag">&lt;groups</span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 36</span>         <span class="tag">&lt;users</span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 37</span>         <span class="tag">&lt;converters&gt;</span>
+<span class="line-numbers"> 38</span>             <span class="tag">&lt;ldapConverter</span> <span class="attribute-name">domainName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Company</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers"> 39</span>         <span class="tag">&lt;/converters&gt;</span> 
+<span class="line-numbers"> <strong>40</strong></span>         <span class="tag">&lt;modifierNotificationTypes&gt;</span>
+<span class="line-numbers"> 41</span>            <span class="tag">&lt;NotificationType&gt;</span>Failed<span class="tag">&lt;/NotificationType&gt;</span>
+<span class="line-numbers"> 42</span>            <span class="tag">&lt;NotificationType&gt;</span>Fixed<span class="tag">&lt;/NotificationType&gt;</span>
+<span class="line-numbers"> 43</span>         <span class="tag">&lt;/modifierNotificationTypes&gt;</span>
+<span class="line-numbers"> 44</span>     <span class="tag">&lt;/email&gt;</span> 
+<span class="line-numbers"> 45</span> <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers"> 46</span>
+<span class="line-numbers"> 47</span> <span class="comment">&lt;!-- the Nant build arguments for a CI build  --&gt;</span>
+<span class="line-numbers"> 48</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nant_CI</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 49</span>   <span class="tag">&lt;executable&gt;</span>c:\Tools\nant\bin\nant.exe<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers"> <strong>50</strong></span>   <span class="tag">&lt;nologo&gt;</span>true<span class="tag">&lt;/nologo&gt;</span>
+<span class="line-numbers"> 51</span>   <span class="tag">&lt;buildTimeoutSeconds&gt;</span>1800<span class="tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="line-numbers"> 52</span>   <span class="tag">&lt;buildArgs&gt;</span>-D:useExtraMsbuildLogger=true  -D:isCI=true  -listener:CCNetListener,CCNetListener -D:configuration=Debug<span class="tag">&lt;/buildArgs&gt;</span>
+<span class="line-numbers"> 53</span> <span class="tag">&lt;/cb:define&gt;</span> 
+<span class="line-numbers"> 54</span>
+<span class="line-numbers"> 55</span> <span class="comment">&lt;!-- the nant  targets for a CI build --&gt;</span>
+<span class="line-numbers"> 56</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nant_target_CI</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 57</span>    <span class="tag">&lt;targetList&gt;</span>
+<span class="line-numbers"> 58</span>         <span class="tag">&lt;target&gt;</span>clean<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"> 59</span>         <span class="tag">&lt;target&gt;</span>compile<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"> <strong>60</strong></span>         <span class="tag">&lt;target&gt;</span>unit_test<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"> 61</span>    <span class="tag">&lt;/targetList&gt;</span>
+<span class="line-numbers"> 62</span> <span class="tag">&lt;/cb:define&gt;</span> 
+<span class="line-numbers"> 63</span>
+<span class="line-numbers"> 64</span><span class="comment">&lt;!-- the nant  targets for a QA build --&gt;</span>
+<span class="line-numbers"> 65</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nant_target_qa</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 66</span>    <span class="tag">&lt;targetList&gt;</span>
+<span class="line-numbers"> 67</span>         <span class="tag">&lt;target&gt;</span>clean<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"> 68</span>         <span class="tag">&lt;target&gt;</span>compile<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"> 69</span>         <span class="tag">&lt;target&gt;</span>cover<span class="tag">&lt;/target&gt;</span>      
+<span class="line-numbers"> <strong>70</strong></span>    <span class="tag">&lt;/targetList&gt;</span>
+<span class="line-numbers"> 71</span> <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers"> 72</span>
+<span class="line-numbers"> 73</span> <span class="comment">&lt;!-- end preprocessor settings --&gt;</span>
+<span class="line-numbers"> 74</span>
+<span class="line-numbers"> 75</span> <span class="comment">&lt;!-- Projects --&gt;</span>
+<span class="line-numbers"> 76</span>  <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ProjectX</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 77</span>    <span class="tag">&lt;cb:define</span> <span class="attribute-name">ProjectType</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">_CI</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 78</span>     <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)$(ProjectType)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">901</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 79</span>       <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingDir)$(ProjectName)$(ProjectType)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> <strong>80</strong></span>       <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ProjectType)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 81</span>
+<span class="line-numbers"> 82</span>       <span class="tag">&lt;labeller</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultlabeller</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 83</span>
+<span class="line-numbers"> 84</span>       <span class="tag">&lt;intervalTrigger</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">continuous</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">seconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">30</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IfModificationExists</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">initialSeconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">30</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 85</span>
+<span class="line-numbers"> 86</span>       <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">vsts</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 87</span>           <span class="tag">&lt;workspace&gt;</span>$(ProjectName)<span class="tag">&lt;/workspace&gt;</span>
+<span class="line-numbers"> 88</span>           <span class="tag">&lt;project&gt;</span>$/$(ProjectName)/Trunk<span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers"> 89</span>           <span class="tag">&lt;cb:vsts_ci</span><span class="tag">/&gt;</span>          
+<span class="line-numbers"> <strong>90</strong></span>       <span class="tag">&lt;/sourcecontrol&gt;</span> 
+<span class="line-numbers"> 91</span>
+<span class="line-numbers"> 92</span>       <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers"> 93</span>          <span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers"> 94</span>             <span class="tag">&lt;cb:nant_CI</span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 95</span>             <span class="tag">&lt;cb:nant_target_CI</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 96</span>          <span class="tag">&lt;/nant&gt;</span>    
+<span class="line-numbers"> 97</span>       <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers"> 98</span>
+<span class="line-numbers"> 99</span>       <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers"><strong>100</strong></span>          <span class="tag">&lt;cb:common_publishers</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">101</span>       <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">102</span>
+<span class="line-numbers">103</span>     <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">104</span>   <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">105</span>
+<span class="line-numbers">106</span>    <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ProjectX</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">107</span>      <span class="tag">&lt;cb:define</span> <span class="attribute-name">ProjectType</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">_QA</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">108</span>       <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)$(ProjectType)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">801</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">109</span>         <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingDir)$(ProjectName)$(ProjectType)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"><strong>110</strong></span>         <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ProjectType)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers">111</span>
+<span class="line-numbers">112</span>         <span class="tag">&lt;scheduleTrigger</span> <span class="attribute-name">time</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">06:30</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ForceBuild</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">QA_Scheduled</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>      
+<span class="line-numbers">113</span>
+<span class="line-numbers">114</span>         <span class="tag">&lt;labeller</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultlabeller</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">115</span>
+<span class="line-numbers">116</span>         <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">vsts</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">117</span>             <span class="tag">&lt;workspace&gt;</span>$(ProjectName)<span class="tag">&lt;/workspace&gt;</span>
+<span class="line-numbers">118</span>             <span class="tag">&lt;project&gt;</span>$/$(ProjectName)/Main<span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">119</span>             <span class="tag">&lt;cb:vsts_ci</span><span class="tag">/&gt;</span>             
+<span class="line-numbers"><strong>120</strong></span>         <span class="tag">&lt;/sourcecontrol&gt;</span> 
+<span class="line-numbers">121</span>
+<span class="line-numbers">122</span>         <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">123</span>            <span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers">124</span>               <span class="tag">&lt;cb:nant_CI</span><span class="tag">/&gt;</span>
+<span class="line-numbers">125</span>               <span class="tag">&lt;cb:nant_target_qa</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">126</span>            <span class="tag">&lt;/nant&gt;</span>    
+<span class="line-numbers">127</span>         <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">128</span>
+<span class="line-numbers">129</span>         <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers"><strong>130</strong></span>            <span class="tag">&lt;cb:common_publishers</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">131</span>         <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">132</span>
+<span class="line-numbers">133</span>       <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">134</span>    <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">135</span>
+<span class="line-numbers">136</span> <span class="comment">&lt;!-- End Projects --&gt;</span>
+<span class="line-numbers">137</span> <span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<a name="Build-Script"></a>
+<h3 >Build Script<a href="#Build-Script" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">  1</span><span class="tag">&lt;project</span> <span class="attribute-name">default</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">  2</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">solution</span><span class="delimiter">&quot;</span></span>                           <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${property::exists('solution')}</span><span class="delimiter">&quot;</span></span>                            <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ProjectX.sln</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>    
+<span class="line-numbers">  3</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">configuration</span><span class="delimiter">&quot;</span></span>                      <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${property::exists('configuration')}</span><span class="delimiter">&quot;</span></span>                       <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Debug</span><span class="delimiter">&quot;</span></span>        <span class="tag">/&gt;</span>    
+<span class="line-numbers">  4</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">CCNetListenerFile</span><span class="delimiter">&quot;</span></span>                  <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${property::exists('CCNetListenerFile')}</span><span class="delimiter">&quot;</span></span>                   <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">listen.xml</span><span class="delimiter">&quot;</span></span>    <span class="tag">/&gt;</span>    
+<span class="line-numbers">  5</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">msbuildverbose</span><span class="delimiter">&quot;</span></span>                     <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${property::exists('msbuildverbose')}</span><span class="delimiter">&quot;</span></span>                      <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span>       <span class="tag">/&gt;</span>    
+<span class="line-numbers">  6</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">CCNetLabel</span><span class="delimiter">&quot;</span></span>                         <span class="attribute-name">unless</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${property::exists('CCNetLabel')}</span><span class="delimiter">&quot;</span></span>                          <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.0.0</span><span class="delimiter">&quot;</span></span>      <span class="tag">/&gt;</span>     
+<span class="line-numbers">  7</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WantedCoveragePercent</span><span class="delimiter">&quot;</span></span>              <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">75</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>      
+<span class="line-numbers">  8</span>
+<span class="line-numbers">  9</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mstest_metadatafile</span><span class="delimiter">&quot;</span></span>                <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${string::replace(solution, '.sln', '.vsmdi')}</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>    
+<span class="line-numbers"> <strong>10</strong></span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mstest_unit_test_file</span><span class="delimiter">&quot;</span></span>              <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MStest_UnitTestResults.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>    
+<span class="line-numbers"> 11</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mstest_CoverageFile</span><span class="delimiter">&quot;</span></span>                <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MStest_Cover.xml</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers"> 12</span>      <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TurnCoverageFileIntoXml_exe</span><span class="delimiter">&quot;</span></span>        <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C:\Tools\TurnCoverageFileIntoXml\TurnCoverageFileIntoXml.exe</span><span class="delimiter">&quot;</span></span>  <span class="tag">/&gt;</span>
+<span class="line-numbers"> 13</span>
+<span class="line-numbers"> 14</span>      <span class="tag">&lt;property</span> <span class="attribute-name">overwrite</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">msbuildlogger</span><span class="delimiter">&quot;</span></span>    <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C:\Program Files\CruiseControl.NET\server\MSBuildListener.dll</span><span class="delimiter">&quot;</span></span>                     <span class="tag">/&gt;</span>
+<span class="line-numbers"> 15</span>      <span class="tag">&lt;property</span> <span class="attribute-name">overwrite</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">versionInfofile</span><span class="delimiter">&quot;</span></span>  <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">VersionInfo.cs</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 16</span>
+<span class="line-numbers"> 17</span>      <span class="comment">&lt;!-- custom scripts --&gt;</span> 
+<span class="line-numbers"> 18</span>       <span class="tag">&lt;script</span> <span class="attribute-name">language</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C#</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">prefix</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">RuWi</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 19</span><span class="inline">            <span class="tag">&lt;references&gt;</span></span>
+<span class="line-numbers"> <strong>20</strong></span><span class="inline">                <span class="tag">&lt;include</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">System.Xml.dll</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span>
+<span class="line-numbers"> 21</span><span class="inline">                <span class="tag">&lt;include</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">System.dll</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span>
+<span class="line-numbers"> 22</span><span class="inline">            <span class="tag">&lt;/references&gt;</span></span>
+<span class="line-numbers"> 23</span><span class="inline">            <span class="tag">&lt;imports&gt;</span></span>
+<span class="line-numbers"> 24</span><span class="inline">                <span class="tag">&lt;import</span> <span class="attribute-name">namespace</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">System.Text</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span>
+<span class="line-numbers"> 25</span><span class="inline">            <span class="tag">&lt;/imports&gt;</span></span>
+<span class="line-numbers"> 26</span><span class="inline">            &amp;lt;code&amp;gt;</span>
+<span class="line-numbers"> 27</span><span class="inline">              &amp;lt;![CDATA[</span>
+<span class="line-numbers"> 28</span><span class="inline">                  [Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">UpdateVersionFile</span><span class="delimiter">&quot;</span></span>)]</span>
+<span class="line-numbers"> 29</span><span class="inline">                  <span class="reserved">public</span> <span class="reserved">static</span> bool UpdateVersionFile(string inputFile, string newVersion, bool debugMode)</span>
+<span class="line-numbers"> <strong>30</strong></span><span class="inline">                  {</span>
+<span class="line-numbers"> 31</span><span class="inline">                      bool ok = <span class="predefined-constant">true</span>;</span>
+<span class="line-numbers"> 32</span><span class="inline">                      <span class="keyword">try</span></span>
+<span class="line-numbers"> 33</span><span class="inline">                      {</span>
+<span class="line-numbers"> 34</span><span class="inline">                          System.IO.StreamReader versionFile = <span class="keyword">new</span> System.IO.StreamReader(inputFile, System.Text.Encoding.ASCII);</span>
+<span class="line-numbers"> 35</span><span class="inline">                          string line = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;</span>
+<span class="line-numbers"> 36</span><span class="inline">                          System.Text.StringBuilder result = <span class="keyword">new</span> StringBuilder();</span>
+<span class="line-numbers"> 37</span><span class="inline">                          string searchPatternVersion = <span class="error">@</span><span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="content">\d</span><span class="content">+</span><span class="content">\.</span><span class="content">\d</span><span class="content">+</span><span class="content">\.</span><span class="content">\d</span><span class="content">+</span><span class="content">\.</span><span class="content">\d</span><span class="content">+)</span><span class="delimiter">&quot;</span></span>;</span>
+<span class="line-numbers"> 38</span><span class="inline">                          string searchPatternAssemblyProduct = string.Format(<span class="error">@</span><span class="string"><span class="delimiter">&quot;</span><span class="content">AssemblyProduct</span><span class="content">\(</span><span class="content">{0}(.*?)</span><span class="content">\{</span><span class="content">0}</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="delimiter">&quot;</span></span>);</span>
+<span class="line-numbers"> 39</span><span class="inline">                          string replacePatternAssemblyProduct = string.Format(<span class="error">@</span><span class="string"><span class="delimiter">&quot;</span><span class="content">AssemblyProduct({0}(Debug)${1}1{2}{0}</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>);</span>
+<span class="line-numbers"> <strong>40</strong></span><span class="inline"></span>
+<span class="line-numbers"> 41</span><span class="inline">                          <span class="keyword">while</span> (!versionFile.EndOfStream)</span>
+<span class="line-numbers"> 42</span><span class="inline">                          {</span>
+<span class="line-numbers"> 43</span><span class="inline">                              line = versionFile.ReadLine();</span>
+<span class="line-numbers"> 44</span><span class="inline"></span>
+<span class="line-numbers"> 45</span><span class="inline">                              <span class="keyword">if</span> (System.Text.RegularExpressions.Regex.IsMatch(line, searchPatternVersion) &#38;&#38; (line.Contains(<span class="string"><span class="delimiter">&quot;</span><span class="content">AssemblyFileVersion</span><span class="delimiter">&quot;</span></span>)))</span>
+<span class="line-numbers"> 46</span><span class="inline">                              {</span>
+<span class="line-numbers"> 47</span><span class="inline">                                  line = System.Text.RegularExpressions.Regex.Replace(line, searchPatternVersion, newVersion);</span>
+<span class="line-numbers"> 48</span><span class="inline">                              }</span>
+<span class="line-numbers"> 49</span><span class="inline"></span>
+<span class="line-numbers"> <strong>50</strong></span><span class="inline">                              <span class="keyword">if</span> (debugMode &#38;&#38; System.Text.RegularExpressions.Regex.IsMatch(line, searchPatternAssemblyProduct))</span>
+<span class="line-numbers"> 51</span><span class="inline">                              {</span>
+<span class="line-numbers"> 52</span><span class="inline">                                  line = System.Text.RegularExpressions.Regex.Replace(line, searchPatternAssemblyProduct, replacePatternAssemblyProduct);</span>
+<span class="line-numbers"> 53</span><span class="inline">                              }</span>
+<span class="line-numbers"> 54</span><span class="inline"></span>
+<span class="line-numbers"> 55</span><span class="inline">                              result.AppendLine(line);</span>
+<span class="line-numbers"> 56</span><span class="inline">                          }</span>
+<span class="line-numbers"> 57</span><span class="inline"></span>
+<span class="line-numbers"> 58</span><span class="inline">                          versionFile.Close();</span>
+<span class="line-numbers"> 59</span><span class="inline"></span>
+<span class="line-numbers"> <strong>60</strong></span><span class="inline">                          System.IO.StreamWriter updatedVersionfile = <span class="keyword">new</span> System.IO.StreamWriter(inputFile);</span>
+<span class="line-numbers"> 61</span><span class="inline">                          updatedVersionfile.Write(result.ToString());</span>
+<span class="line-numbers"> 62</span><span class="inline">                          updatedVersionfile.Close();</span>
+<span class="line-numbers"> 63</span><span class="inline">                      }</span>
+<span class="line-numbers"> 64</span><span class="inline">                      <span class="keyword">catch</span> (Exception ex)</span>
+<span class="line-numbers"> 65</span><span class="inline">                      {</span>
+<span class="line-numbers"> 66</span><span class="inline">                          ok = <span class="predefined-constant">false</span>;</span>
+<span class="line-numbers"> 67</span><span class="inline">                          Console.WriteLine(ex.ToString());</span>
+<span class="line-numbers"> 68</span><span class="inline">                      }</span>
+<span class="line-numbers"> 69</span><span class="inline">                      <span class="keyword">return</span> ok;</span>
+<span class="line-numbers"> <strong>70</strong></span><span class="inline">                  }</span>
+<span class="line-numbers"> 71</span><span class="inline">                  ]]&amp;gt;</span>
+<span class="line-numbers"> 72</span><span class="inline">            &amp;lt;<span class="regexp"><span class="delimiter">/</span><span class="content">code&amp;gt;</span></span></span>
+<span class="line-numbers"> 73</span><span class="inline"><span class="regexp"><span class="content">       &amp;lt;</span><span class="delimiter">/</span></span>script&amp;gt;</span>
+<span class="line-numbers"> 74</span><span class="inline"></span>
+<span class="line-numbers"> 75</span><span class="inline">         &amp;lt;script language=<span class="string"><span class="delimiter">&quot;</span><span class="content">C#</span><span class="delimiter">&quot;</span></span> prefix=<span class="string"><span class="delimiter">&quot;</span><span class="content">RuWi</span><span class="delimiter">&quot;</span></span>&amp;gt;</span>
+<span class="line-numbers"> 76</span><span class="inline">              &amp;lt;code&amp;gt;</span>
+<span class="line-numbers"> 77</span><span class="inline">                &amp;lt;![CDATA[</span>
+<span class="line-numbers"> 78</span><span class="inline">                    [Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">FindFile</span><span class="delimiter">&quot;</span></span>)]</span>
+<span class="line-numbers"> 79</span><span class="inline">                    <span class="reserved">public</span> <span class="reserved">static</span> string FindFile(string folderName, string searchPattern)</span>
+<span class="line-numbers"> <strong>80</strong></span><span class="inline">                    {</span>
+<span class="line-numbers"> 81</span><span class="inline">                        <span class="keyword">var</span> f =  System.IO.Directory.GetFiles(folderName, searchPattern, System.IO.SearchOption.AllDirectories);</span>
+<span class="line-numbers"> 82</span><span class="inline">                        <span class="keyword">if</span> (f.Length &amp;gt; <span class="integer">0</span>)</span>
+<span class="line-numbers"> 83</span><span class="inline">                        {</span>
+<span class="line-numbers"> 84</span><span class="inline">                            <span class="keyword">return</span> f[<span class="integer">0</span>];</span>
+<span class="line-numbers"> 85</span><span class="inline">                        }</span>
+<span class="line-numbers"> 86</span><span class="inline"></span>
+<span class="line-numbers"> 87</span><span class="inline">                        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;</span>
+<span class="line-numbers"> 88</span><span class="inline">                    }                            </span>
+<span class="line-numbers"> 89</span><span class="inline">                ]]&amp;gt;</span>
+<span class="line-numbers"> <strong>90</strong></span><span class="inline">          &amp;lt;<span class="regexp"><span class="delimiter">/</span><span class="content">code&amp;gt;</span></span></span>
+<span class="line-numbers"> 91</span><span class="inline"><span class="regexp"><span class="content">      &amp;lt;</span><span class="delimiter">/</span></span>script&amp;gt;       </span>
+<span class="line-numbers"> 92</span><span class="inline"></span>
+<span class="line-numbers"> 93</span><span class="inline">      &amp;lt;!-- end custom scripts --&amp;gt; </span>
+<span class="line-numbers"> 94</span><span class="inline"></span>
+<span class="line-numbers"> 95</span><span class="inline">      &amp;lt;target name=<span class="string"><span class="delimiter">&quot;</span><span class="content">help</span><span class="delimiter">&quot;</span></span> &amp;gt;   </span>
+<span class="line-numbers"> 96</span><span class="inline">          &amp;lt;echo message=<span class="string"><span class="delimiter">&quot;</span><span class="content">Removed for keeping the file shorter.</span><span class="delimiter">&quot;</span></span> /&amp;gt;</span>
+<span class="line-numbers"> 97</span><span class="inline">      &amp;lt;<span class="regexp"><span class="delimiter">/</span><span class="content">target&amp;gt;</span></span></span>
+<span class="line-numbers"> 98</span><span class="inline"><span class="regexp"><span class="content"></span></span></span>
+<span class="line-numbers"> 99</span><span class="inline"><span class="regexp"><span class="content">      &amp;lt;target name=&quot;clean&quot; description=&quot;deletes all created files&quot;&amp;gt;</span></span></span>
+<span class="line-numbers"><strong>100</strong></span><span class="inline"><span class="regexp"><span class="content">          &amp;lt;delete &amp;gt;</span></span></span>
+<span class="line-numbers">101</span><span class="inline"><span class="regexp"><span class="content">              &amp;lt;fileset&amp;gt;</span></span></span>
+<span class="line-numbers">102</span><span class="inline"><span class="regexp"><span class="content">                  &amp;lt;patternset &amp;gt;</span></span></span>
+<span class="line-numbers">103</span><span class="inline"><span class="regexp"><span class="content">                      &amp;lt;include name=&quot;**</span><span class="delimiter">/</span></span>bin<span class="comment">/**&quot;  /&amp;gt;</span></span>
+<span class="line-numbers">104</span><span class="inline"><span class="comment">                      &amp;lt;include name=&quot;**/</span>obj<span class="comment">/**&quot;  /&amp;gt;</span></span>
+<span class="line-numbers">105</span><span class="inline"><span class="comment">                      &amp;lt;include name=&quot;${mstest_unit_test_file}&quot; /&amp;gt;  </span></span>
+<span class="line-numbers">106</span><span class="inline"><span class="comment">                      &amp;lt;include name=&quot;${mstest_CoverageFile}&quot; /&amp;gt;  </span></span>
+<span class="line-numbers">107</span><span class="inline"><span class="comment">                  &amp;lt;/patternset&amp;gt;</span></span>
+<span class="line-numbers">108</span><span class="inline"><span class="comment">              &amp;lt;/fileset&amp;gt;</span></span>
+<span class="line-numbers">109</span><span class="inline"><span class="comment">          &amp;lt;/delete&amp;gt;</span></span>
+<span class="line-numbers"><strong>110</strong></span><span class="inline"><span class="comment">      &amp;lt;/target&amp;gt;</span></span>
+<span class="line-numbers">111</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">112</span><span class="inline"><span class="comment">      &amp;lt;target name=&quot;adjustversion&quot; description=&quot;Adjusts the version in the version.info file&quot;&amp;gt;</span></span>
+<span class="line-numbers">113</span><span class="inline"><span class="comment">          &amp;lt;if test=&quot;${not file::exists(versionInfofile)}&quot;&amp;gt;</span></span>
+<span class="line-numbers">114</span><span class="inline"><span class="comment">              &amp;lt;fail message=&quot;file: ${versionInfofile}  which must contains the version info was NOT found&quot; /&amp;gt;</span></span>
+<span class="line-numbers">115</span><span class="inline"><span class="comment">          &amp;lt;/if&amp;gt;</span></span>
+<span class="line-numbers">116</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">117</span><span class="inline"><span class="comment">          &amp;lt;echo message=&quot;Setting version to ${CCNetLabel}&quot; /&amp;gt;        </span></span>
+<span class="line-numbers">118</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">119</span><span class="inline"><span class="comment">          &amp;lt;property name=&quot;debugMode&quot; value = &quot;False&quot; /&amp;gt;</span></span>
+<span class="line-numbers"><strong>120</strong></span><span class="inline"><span class="comment">          &amp;lt;property name=&quot;debugMode&quot; value = &quot;True&quot;  if=&quot;${configuration=='Debug'}&quot;  /&amp;gt;</span></span>
+<span class="line-numbers">121</span><span class="inline"><span class="comment">          &amp;lt;if test=&quot;${not RuWi::UpdateVersionFile(versionInfofile,CCNetLabel,debugMode)}&quot;&amp;gt;</span></span>
+<span class="line-numbers">122</span><span class="inline"><span class="comment">              &amp;lt;fail message=&quot;updating file: ${versionInfofile}  which must contains the version info failed&quot; /&amp;gt;</span></span>
+<span class="line-numbers">123</span><span class="inline"><span class="comment">          &amp;lt;/if&amp;gt;</span></span>
+<span class="line-numbers">124</span><span class="inline"><span class="comment">      &amp;lt;/target&amp;gt;</span></span>
+<span class="line-numbers">125</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">126</span><span class="inline"><span class="comment">      &amp;lt;target name=&quot;compile&quot; description=&quot;compiles the solution in the wanted configuration&quot; depends=&quot;adjustversion&quot;&amp;gt;                         </span></span>
+<span class="line-numbers">127</span><span class="inline"><span class="comment">          &amp;lt;msbuild  project=&quot;${solution}&quot; &amp;gt;</span></span>
+<span class="line-numbers">128</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/p:Configuration=${configuration}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">129</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/p:CCNetListenerFile=${CCNetListenerFile}&quot; /&amp;gt;</span></span>
+<span class="line-numbers"><strong>130</strong></span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/v:${msbuildverbose}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">131</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/l:${msbuildlogger}&quot; /&amp;gt; </span></span>
+<span class="line-numbers">132</span><span class="inline"><span class="comment">          &amp;lt;/msbuild&amp;gt;</span></span>
+<span class="line-numbers">133</span><span class="inline"><span class="comment">      &amp;lt;/target&amp;gt;</span></span>
+<span class="line-numbers">134</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">135</span><span class="inline"><span class="comment">     &amp;lt;target name=&quot;unit_test&quot; description=&quot;runs the unit tests&quot;    depends=&quot;compile&quot;&amp;gt;</span></span>
+<span class="line-numbers">136</span><span class="inline"><span class="comment">         &amp;lt;if test=&quot;${file::exists(mstest_metadatafile)}&quot;&amp;gt;</span></span>
+<span class="line-numbers">137</span><span class="inline"><span class="comment">            &amp;lt;exec program=&quot;${mstest_exe}&quot;&amp;gt;</span></span>
+<span class="line-numbers">138</span><span class="inline"><span class="comment">               &amp;lt;arg value=&quot;/testmetadata:${mstest_metadatafile}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">139</span><span class="inline"><span class="comment">               &amp;lt;arg value=&quot;/resultsfile:${mstest_unit_test_file}&quot; /&amp;gt;</span></span>
+<span class="line-numbers"><strong>140</strong></span><span class="inline"><span class="comment">               &amp;lt;arg value=&quot;/testlist:UnitTests&quot; /&amp;gt;</span></span>
+<span class="line-numbers">141</span><span class="inline"><span class="comment">            &amp;lt;/exec&amp;gt;             </span></span>
+<span class="line-numbers">142</span><span class="inline"><span class="comment">         &amp;lt;/if&amp;gt;</span></span>
+<span class="line-numbers">143</span><span class="inline"><span class="comment">     &amp;lt;/target&amp;gt;</span></span>
+<span class="line-numbers">144</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">145</span><span class="inline"><span class="comment">    &amp;lt;target name = &quot;cover&quot; description=&quot;runs the tests with coverage&quot; &amp;gt;     </span></span>
+<span class="line-numbers">146</span><span class="inline"><span class="comment">    &amp;lt;!-- </span></span>
+<span class="line-numbers">147</span><span class="inline"><span class="comment">        company rule : code coverage settings must be set via the file CodeCoverage.testsettings </span></span>
+<span class="line-numbers">148</span><span class="inline"><span class="comment">        with the following NamingScheme : baseName=&quot;cover_me&quot; appendTimeStamp=&quot;false&quot; useDefault=&quot;false&quot; </span></span>
+<span class="line-numbers">149</span><span class="inline"><span class="comment">    --&amp;gt;</span></span>
+<span class="line-numbers"><strong>150</strong></span><span class="inline"><span class="comment">         &amp;lt;if test=&quot;${file::exists('CodeCoverage.testsettings')}&quot;&amp;gt; </span></span>
+<span class="line-numbers">151</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">152</span><span class="inline"><span class="comment">            &amp;lt;exec program=&quot;${mstest_exe}&quot; failonerror=&quot;false&quot; resultproperty=&quot;testresult.temp&quot; &amp;gt;</span></span>
+<span class="line-numbers">153</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/testmetadata:${mstest_metadatafile}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">154</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/resultsfile:${mstest_unit_test_file}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">155</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/testsettings:CodeCoverage.testsettings&quot; /&amp;gt;</span></span>
+<span class="line-numbers">156</span><span class="inline"><span class="comment">              &amp;lt;arg value=&quot;/testlist:UnitTests&quot; /&amp;gt;</span></span>
+<span class="line-numbers">157</span><span class="inline"><span class="comment">            &amp;lt;/exec&amp;gt;             </span></span>
+<span class="line-numbers">158</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">159</span><span class="inline"><span class="comment">            &amp;lt;property name=&quot;TestsOK&quot; value=&quot;false&quot; unless=&quot;${int::parse(testresult.temp)==0}&quot;/&amp;gt; </span></span>
+<span class="line-numbers"><strong>160</strong></span><span class="inline"><span class="comment">            &amp;lt;property name=&quot;DataCoverageFilePath&quot; value=&quot;${RuWi::FindFile('cover_me','data.coverage')}&quot;  /&amp;gt;</span></span>
+<span class="line-numbers">161</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">162</span><span class="inline"><span class="comment">            &amp;lt;fail message=&quot;No data.coverage found in cover_me folder&quot; unless=&quot;${string::get-length(DataCoverageFilePath)&amp;gt;0}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">163</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">164</span><span class="inline"><span class="comment">            &amp;lt;echo message=&quot;DataCoverageFilePath : ${DataCoverageFilePath}&quot; /&amp;gt;               </span></span>
+<span class="line-numbers">165</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">166</span><span class="inline"><span class="comment">            &amp;lt;exec program=&quot;${TurnCoverageFileIntoXml_exe}&quot; &amp;gt;</span></span>
+<span class="line-numbers">167</span><span class="inline"><span class="comment">                &amp;lt;arg value=&quot;${DataCoverageFilePath}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">168</span><span class="inline"><span class="comment">                &amp;lt;arg value=&quot;cover_me\Out&quot; /&amp;gt;</span></span>
+<span class="line-numbers">169</span><span class="inline"><span class="comment">                &amp;lt;arg value=&quot;${mstest_CoverageFile}&quot; /&amp;gt;</span></span>
+<span class="line-numbers"><strong>170</strong></span><span class="inline"><span class="comment">                                &amp;lt;arg value=&quot;${WantedCoveragePercent}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">171</span><span class="inline"><span class="comment">            &amp;lt;/exec&amp;gt;</span></span>
+<span class="line-numbers">172</span><span class="inline"><span class="comment"></span></span>
+<span class="line-numbers">173</span><span class="inline"><span class="comment">            &amp;lt;fail message=&quot;Failures reported in unit tests.&quot; unless=&quot;${TestsOK}&quot; /&amp;gt;</span></span>
+<span class="line-numbers">174</span><span class="inline"><span class="comment">        &amp;lt;/if&amp;gt;</span></span>
+<span class="line-numbers">175</span><span class="inline"><span class="comment">    &amp;lt;/target&amp;gt;</span></span>
+<span class="line-numbers">176</span><span class="inline"><span class="comment">  &amp;lt;/project&amp;gt;   </span></span>
+<span class="line-numbers">177</span><span class="inline"><span class="comment"></span></span></span></code></pre>
+
+	<a name="Code-for-converting-coverage-to-XML"></a>
+<h3 >Code for converting coverage to XML<a href="#Code-for-converting-coverage-to-XML" class="wiki-anchor">&para;</a></h3>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="line-numbers">  1</span><span class="directive">using</span> System;
+<span class="line-numbers">  2</span><span class="directive">using</span> Microsoft.VisualStudio.CodeCoverage;
+<span class="line-numbers">  3</span>
+<span class="line-numbers">  4</span><span class="keyword">namespace</span> VS_CodeCoverage
+<span class="line-numbers">  5</span>{
+<span class="line-numbers">  6</span>    <span class="keyword">class</span> <span class="class">Program</span>
+<span class="line-numbers">  7</span>    {
+<span class="line-numbers">  8</span>        <span class="directive">static</span> <span class="predefined-type">int</span> Main(<span class="predefined-type">string</span>[] args)
+<span class="line-numbers">  9</span>        {
+<span class="line-numbers"> <strong>10</strong></span>            <span class="predefined-type">string</span>[] Arguments = null;
+<span class="line-numbers"> 11</span>            var obc = Console.BackgroundColor;
+<span class="line-numbers"> 12</span>            <span class="predefined-type">int</span> returnValue = <span class="integer">0</span>;
+<span class="line-numbers"> 13</span>            <span class="predefined-type">bool</span> ShouldBreakBecauseOfNotEnoughCovered =<span class="predefined-constant">false</span>;
+<span class="line-numbers"> 14</span>
+<span class="line-numbers"> 15</span>            <span class="keyword">try</span>
+<span class="line-numbers"> 16</span>            {
+<span class="line-numbers"> 17</span>                Arguments = Environment.GetCommandLineArgs();
+<span class="line-numbers"> 18</span>
+<span class="line-numbers"> 19</span>                <span class="keyword">if</span> (Arguments.Length != <span class="integer">5</span>)
+<span class="line-numbers"> <strong>20</strong></span>                {
+<span class="line-numbers"> 21</span>                    Console.BackgroundColor = ConsoleColor.Blue;
+<span class="line-numbers"> 22</span>                    Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Usage : {0} DataCoverageFilePath CoveredFilesPath ResultXmlFilePath wantedCoverage</span><span class="delimiter">&quot;</span></span>, Arguments[<span class="integer">0</span>]);
+<span class="line-numbers"> 23</span>                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+<span class="line-numbers"> 24</span>                    Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content"> {0}  In</span><span class="char">\\</span><span class="content">LTREMRUBEN</span><span class="char">\\</span><span class="content">data.coverage Out d:</span><span class="char">\\</span><span class="content">codecover.xml 75</span><span class="delimiter">&quot;</span></span>, Arguments[<span class="integer">0</span>]);
+<span class="line-numbers"> 25</span>                    Console.BackgroundColor = obc;
+<span class="line-numbers"> 26</span>                    <span class="keyword">return</span> <span class="integer">1</span>;
+<span class="line-numbers"> 27</span>                }
+<span class="line-numbers"> 28</span>
+<span class="line-numbers"> 29</span>                <span class="predefined-type">string</span> DataCoverageFilePath = Arguments[<span class="integer">1</span>];
+<span class="line-numbers"> <strong>30</strong></span>                <span class="predefined-type">string</span> CoveredFilesPath = Arguments[<span class="integer">2</span>];
+<span class="line-numbers"> 31</span>                <span class="predefined-type">string</span> ResultXmlFilePath = Arguments[<span class="integer">3</span>];
+<span class="line-numbers"> 32</span>                decimal wantedCoverage = Convert.ToDecimal(Arguments[<span class="integer">4</span>]);
+<span class="line-numbers"> 33</span>
+<span class="line-numbers"> 34</span>                CoverageInfoManager.ExePath = CoveredFilesPath;
+<span class="line-numbers"> 35</span>                CoverageInfoManager.SymPath = CoveredFilesPath;
+<span class="line-numbers"> 36</span>
+<span class="line-numbers"> 37</span>                Console.WriteLine();
+<span class="line-numbers"> 38</span>                Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Converting {0} ...</span><span class="delimiter">&quot;</span></span>, DataCoverageFilePath);
+<span class="line-numbers"> 39</span>                var coverage = CoverageInfoManager.CreateInfoFromFile(DataCoverageFilePath);
+<span class="line-numbers"> <strong>40</strong></span>
+<span class="line-numbers"> 41</span>                var CoverResult = coverage.BuildDataSet(null);
+<span class="line-numbers"> 42</span>
+<span class="line-numbers"> 43</span>                System.IO.MemoryStream CoverResultStream = <span class="keyword">new</span> System.IO.MemoryStream();
+<span class="line-numbers"> 44</span>                CoverResult.WriteXml(CoverResultStream);
+<span class="line-numbers"> 45</span>
+<span class="line-numbers"> 46</span>                Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Initial Size in bytes : {0:0,0}</span><span class="delimiter">&quot;</span></span>, CoverResultStream.Length);
+<span class="line-numbers"> 47</span>                CoverResultStream.Position = <span class="integer">0</span>;
+<span class="line-numbers"> 48</span>
+<span class="line-numbers"> 49</span>                Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cleaning up xml info ...</span><span class="delimiter">&quot;</span></span>);
+<span class="line-numbers"> <strong>50</strong></span>                System.Xml.XmlDocument CoverResultXmlDoc = <span class="keyword">new</span> System.Xml.XmlDocument();
+<span class="line-numbers"> 51</span>                CoverResultXmlDoc.Load(CoverResultStream);
+<span class="line-numbers"> 52</span>
+<span class="line-numbers"> 53</span>                var LineInfos = CoverResultXmlDoc.SelectNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">//Lines</span><span class="delimiter">&quot;</span></span>);
+<span class="line-numbers"> 54</span>
+<span class="line-numbers"> 55</span>                foreach (System.Xml.XmlNode lineInfo in LineInfos)
+<span class="line-numbers"> 56</span>                {
+<span class="line-numbers"> 57</span>                    lineInfo.RemoveAll();
+<span class="line-numbers"> 58</span>                }
+<span class="line-numbers"> 59</span>
+<span class="line-numbers"> <strong>60</strong></span>                var SourceFileNameInfos = CoverResultXmlDoc.SelectNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">//SourceFileNames</span><span class="delimiter">&quot;</span></span>);
+<span class="line-numbers"> 61</span>                foreach (System.Xml.XmlNode SourceFileNameInfo in SourceFileNameInfos)
+<span class="line-numbers"> 62</span>                {
+<span class="line-numbers"> 63</span>                    SourceFileNameInfo.RemoveAll();
+<span class="line-numbers"> 64</span>                }
+<span class="line-numbers"> 65</span>
+<span class="line-numbers"> 66</span>                CoverResultXmlDoc.PreserveWhitespace = <span class="predefined-constant">false</span>;
+<span class="line-numbers"> 67</span>                CoverResultXmlDoc.Normalize();
+<span class="line-numbers"> 68</span>                CoverResultXmlDoc.Save(ResultXmlFilePath);
+<span class="line-numbers"> 69</span>
+<span class="line-numbers"> <strong>70</strong></span>                Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">--&gt; Compressed Size in bytes : {0:0,0}</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> System.IO.FileInfo(ResultXmlFilePath).Length);
+<span class="line-numbers"> 71</span>                Console.WriteLine();
+<span class="line-numbers"> 72</span>                var moduleInfos = CoverResultXmlDoc.SelectNodes(<span class="string"><span class="delimiter">&quot;</span><span class="content">//Module</span><span class="delimiter">&quot;</span></span>);
+<span class="line-numbers"> 73</span>                foreach (System.Xml.XmlNode moduleNode in moduleInfos)
+<span class="line-numbers"> 74</span>                {
+<span class="line-numbers"> 75</span>                    <span class="predefined-type">string</span> moduleName =  moduleNode.SelectSingleNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">./ModuleName</span><span class="delimiter">&quot;</span></span>).InnerText;
+<span class="line-numbers"> 76</span>                    var BlocksCovered = Convert.ToDecimal( moduleNode.SelectSingleNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">./BlocksCovered</span><span class="delimiter">&quot;</span></span>).InnerText);
+<span class="line-numbers"> 77</span>                    var BlocksNotCovered = Convert.ToDecimal(moduleNode.SelectSingleNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">./BlocksNotCovered</span><span class="delimiter">&quot;</span></span>).InnerText);
+<span class="line-numbers"> 78</span>
+<span class="line-numbers"> 79</span>                    decimal pct = (BlocksCovered / (BlocksCovered + BlocksNotCovered)) * <span class="integer">100</span>;
+<span class="line-numbers"> <strong>80</strong></span>
+<span class="line-numbers"> 81</span>                    Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Module {0} : pct {1:0.0000}</span><span class="delimiter">&quot;</span></span>, moduleName, pct);
+<span class="line-numbers"> 82</span>
+<span class="line-numbers"> 83</span>                    <span class="keyword">if</span> (pct &lt; wantedCoverage) ShouldBreakBecauseOfNotEnoughCovered = <span class="predefined-constant">true</span>;
+<span class="line-numbers"> 84</span>                }
+<span class="line-numbers"> 85</span>                Console.WriteLine();
+<span class="line-numbers"> 86</span>
+<span class="line-numbers"> 87</span>                <span class="keyword">if</span> (ShouldBreakBecauseOfNotEnoughCovered)
+<span class="line-numbers"> 88</span>                {
+<span class="line-numbers"> 89</span>                    returnValue = <span class="integer">3</span>;
+<span class="line-numbers"> <strong>90</strong></span>                    Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">! ! Coverage not high enough, wanted set to {0:0.00}</span><span class="delimiter">&quot;</span></span>, wantedCoverage);
+<span class="line-numbers"> 91</span>                }
+<span class="line-numbers"> 92</span>                <span class="keyword">else</span>
+<span class="line-numbers"> 93</span>                {
+<span class="line-numbers"> 94</span>                    Console.WriteLine(<span class="string"><span class="delimiter">&quot;</span><span class="content">Done.</span><span class="delimiter">&quot;</span></span>);
+<span class="line-numbers"> 95</span>                }
+<span class="line-numbers"> 96</span>
+<span class="line-numbers"> 97</span>            }
+<span class="line-numbers"> 98</span>            <span class="keyword">catch</span> (Exception ex)
+<span class="line-numbers"> 99</span>            {
+<span class="line-numbers"><strong>100</strong></span>                returnValue = <span class="integer">2</span>;
+<span class="line-numbers">101</span>                Console.WriteLine(ex.ToString());
+<span class="line-numbers">102</span>            }
+<span class="line-numbers">103</span>
+<span class="line-numbers">104</span>            <span class="keyword">return</span> returnValue;
+<span class="line-numbers">105</span>        }
+<span class="line-numbers">106</span>    }
+<span class="line-numbers">107</span>}
+</span></code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Step_4_Add_Coverage by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

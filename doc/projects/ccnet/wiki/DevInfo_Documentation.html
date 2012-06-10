@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Documentation by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - DevInfo Documentation - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FDevInfo_Documentation" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Documentation/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Documentation"></a>
+<h1 >Documentation<a href="#Documentation" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>A task that is often considered as a <em>necessary evil</em>, but it's really needed to document how stuff works :-)</p>
+
+
+	<a name="User-documentation"></a>
+<h2 >User documentation<a href="#User-documentation" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Creating the documentation for the wiki is in fact easier as it may seem, we extract it from the source! <br />This means that you just create the documentation in the same editor where you the write code, using the same comment tags as in C# (or mostly the same comment tags). All elements with a <strong>Reflector</strong> attribute will be extracted, and used for the documentation. The <strong>docGenerator</strong> program in the Tools folder takes care of this.</p>
+
+
+	<p>The following elements are used :</p>
+
+
+	<table>
+		<tr>
+			<td> <strong>summary</strong> </td>
+			<td> This is the main explanation of the element, when on a class it will be displayed at the top of the page. This is the main explanation of the element. On a property it will be shown in the <em>Configuration Elements</em> table. </td>
+		</tr>
+		<tr>
+			<td> <strong>title</strong> </td>
+			<td> Used inside the summary element of the class, if not specified the class name will be used. This gives a more friendly name for the page. </td>
+		</tr>
+		<tr>
+			<td> <strong>version</strong> </td>
+			<td> Used to make clear from what version of CCNet the functionality is available. Can be used at class or property level. </td>
+		</tr>
+		<tr>
+			<td> <strong>code</strong> </td>
+			<td> To provide a code or config example of how things must be used, this <strong>must be escaped XML</strong>. Meaning do not type  <code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;exec</span> <span class="attribute-name">command</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span></code> but type it like so : <pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="entity">&amp;lt;</span>exec command=&quot;abc&quot; /<span class="entity">&amp;gt;</span> </span></pre></code> inside the <em>code</em> element. Indention is not needed, this is automatically done through the wiki. If there are multiple configs, you can give each of them a separate title via the <em>title</em> attribute. </td>
+		</tr>
+		<tr>
+			<td> <strong>para</strong> </td>
+			<td> Used to create paragraphs into the documentation. So use it as a child element of <em>summary</em> or <em>remarks</em> </td>
+		</tr>
+		<tr>
+			<td> <strong>heading</strong> </td>
+			<td> creates a sub heading in section, like para or summary </td>
+		</tr>
+		<tr>
+			<td> <strong>b</strong> </td>
+			<td> outputs the enclosed text as bold </td>
+		</tr>
+		<tr>
+			<td> <strong>link</strong> </td>
+			<td> provides a link to another wiki page. For example you could provide links to similare topics like <em>modification reader</em> and <em>modification writer</em> </td>
+		</tr>
+		<tr>
+			<td> <strong>showChildren</strong> </td>
+			<td> shows any childpages of the current page. This means that the class knows the wiki-layout, so use with caution. </td>
+		</tr>
+		<tr>
+			<td> <strong>includePage</strong> </td>
+			<td> includes the contents of the involved page into this page/ Most used example are the integration properties on each task or publisher. </td>
+		</tr>
+	</table>
+
+
+
+
+	<h3>Example</h3>
+
+
+	<p>This is the comment of the <a href="Executable_Task.html" class="external">Executable Task</a></p>
+
+
+<pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>    <span class="comment">/// &lt;summary&gt;</span>
+<span class="line-numbers"> 2</span>    <span class="comment">/// &lt;para&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="comment">/// The Executable Task lets you invoke any command line executable. It doesn't offer as much specific</span>
+<span class="line-numbers"> 4</span>    <span class="comment">/// integration as (for example) the &lt;link&gt;NAnt Task&lt;/link&gt;, but does allow you to hook almost anything</span>
+<span class="line-numbers"> 5</span>    <span class="comment">/// up as a build process to CCNet. CCNet will examine the exit code when the executable ends and act</span>
+<span class="line-numbers"> 6</span>    <span class="comment">/// accordingly.</span>
+<span class="line-numbers"> 7</span>    <span class="comment">/// &lt;/para&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="comment">/// &lt;/summary&gt;</span>
+<span class="line-numbers"> 9</span>    <span class="comment">/// &lt;title&gt;Executable Task&lt;/title&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="comment">/// &lt;version&gt;1.0&lt;/version&gt;</span>
+<span class="line-numbers">11</span>    <span class="comment">/// &lt;example&gt;</span>
+<span class="line-numbers">12</span>    <span class="comment">/// &amp;lt;code title=&quot;Minimalist example&quot;&amp;gt;</span>
+<span class="line-numbers">13</span>    <span class="comment">/// &amp;amp;lt;exec executable=&quot;c:\projects\myproject\build.bat&quot; /&amp;amp;gt;</span>
+<span class="line-numbers">14</span>    <span class="comment">/// &amp;lt;/code&amp;gt;</span>
+<span class="line-numbers">15</span>    <span class="comment">/// &amp;lt;code title=&quot;Full example&quot;&amp;gt;</span>
+<span class="line-numbers">16</span>    <span class="comment">/// &amp;amp;lt;exec&amp;amp;gt;</span>
+<span class="line-numbers">17</span>    <span class="comment">/// &amp;amp;lt;executable&amp;amp;gt;make&amp;amp;lt;/executable&amp;amp;gt;</span>
+<span class="line-numbers">18</span>    <span class="comment">/// &amp;amp;lt;baseDirectory&amp;amp;gt;D:\dev\MyProject&amp;amp;lt;/baseDirectory&amp;amp;gt;</span>
+<span class="line-numbers">19</span>    <span class="comment">/// &amp;amp;lt;buildArgs&amp;amp;gt;all&amp;amp;lt;/buildArgs&amp;amp;gt;</span>
+<span class="line-numbers"><strong>20</strong></span>    <span class="comment">/// &amp;amp;lt;buildTimeoutSeconds&amp;amp;gt;10&amp;amp;lt;/buildTimeoutSeconds&amp;amp;gt;</span>
+<span class="line-numbers">21</span>    <span class="comment">/// &amp;amp;lt;successExitCodes&amp;amp;gt;0,1,3,5&amp;amp;lt;/successExitCodes&amp;amp;gt;</span>
+<span class="line-numbers">22</span>    <span class="comment">/// &amp;amp;lt;environment&amp;amp;gt;</span>
+<span class="line-numbers">23</span>    <span class="comment">/// &amp;amp;lt;variable&amp;amp;gt;</span>
+<span class="line-numbers">24</span>    <span class="comment">/// &amp;amp;lt;name&amp;amp;gt;MyVar1&amp;amp;lt;/name&amp;amp;gt;</span>
+<span class="line-numbers">25</span>    <span class="comment">/// &amp;amp;lt;value&amp;amp;gt;Var1Value&amp;amp;lt;/value&amp;amp;gt;</span>
+<span class="line-numbers">26</span>    <span class="comment">/// &amp;amp;lt;/variable&amp;amp;gt;</span>
+<span class="line-numbers">27</span>    <span class="comment">/// &amp;amp;lt;variable name=&quot;MyVar2&quot; value=&quot;Var2Value&quot;/&amp;amp;gt;</span>
+<span class="line-numbers">28</span>    <span class="comment">/// &amp;amp;lt;/environment&amp;amp;gt;</span>
+<span class="line-numbers">29</span>    <span class="comment">/// &amp;amp;lt;/exec&amp;amp;gt;</span>
+<span class="line-numbers"><strong>30</strong></span>    <span class="comment">/// &amp;lt;/code&amp;gt;</span>
+<span class="line-numbers">31</span>    <span class="comment">/// &amp;lt;/example&amp;gt;</span>
+<span class="line-numbers">32</span>    <span class="comment">/// &amp;lt;remarks&amp;gt;</span>
+<span class="line-numbers">33</span>    <span class="comment">/// &amp;lt;para type=&quot;note&quot;&amp;gt;</span>
+<span class="line-numbers">34</span>    <span class="comment">/// An exit code of -1 is always treated as the operation has timed out. This will fail the build.</span>
+<span class="line-numbers">35</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">36</span>    <span class="comment">/// &amp;lt;para type=&quot;warning&quot;&amp;gt;</span>
+<span class="line-numbers">37</span>    <span class="comment">/// Windows seems to change the case of environment variables occasionally. If your task target doesn't</span>
+<span class="line-numbers">38</span>    <span class="comment">/// find one of these properties, try using all upper case or all lower case versions of these properties.</span>
+<span class="line-numbers">39</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers"><strong>40</strong></span>    <span class="comment">/// &amp;lt;heading&amp;gt;Frequently Asked Questions&amp;lt;/heading&amp;gt;</span>
+<span class="line-numbers">41</span>    <span class="comment">/// &amp;lt;para&amp;gt;</span>
+<span class="line-numbers">42</span>    <span class="comment">/// &amp;lt;b&amp;gt;Does the exec task pass the integration properties via the command line?&amp;lt;/b&amp;gt;</span>
+<span class="line-numbers">43</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">44</span>    <span class="comment">/// &amp;lt;para&amp;gt;</span>
+<span class="line-numbers">45</span>    <span class="comment">/// No. The integration properties are only available as environment variables. As there is no way of</span>
+<span class="line-numbers">46</span>    <span class="comment">/// knowing the way in which the external program expects these properties to be formatted as command line</span>
+<span class="line-numbers">47</span>    <span class="comment">/// arguments, environment variables are a simple, common medium for making these values accessible. To</span>
+<span class="line-numbers">48</span>    <span class="comment">/// pass these environment variables into an external program, have the exec task call a batch file instead</span>
+<span class="line-numbers">49</span>    <span class="comment">/// that will pick up the environment variables, format them and pass them as command line arguments to the</span>
+<span class="line-numbers"><strong>50</strong></span>    <span class="comment">/// external program.</span>
+<span class="line-numbers">51</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">52</span>    <span class="comment">/// &amp;lt;para&amp;gt;</span>
+<span class="line-numbers">53</span>    <span class="comment">/// &amp;lt;b&amp;gt;Using built in shell commands&amp;lt;/b&amp;gt;</span>
+<span class="line-numbers">54</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">55</span>    <span class="comment">/// &amp;lt;para&amp;gt;</span>
+<span class="line-numbers">56</span>    <span class="comment">/// In Windows use cmd.exe as the executable, and pass the wanted command as an argument, preceded with /c.</span>
+<span class="line-numbers">57</span>    <span class="comment">/// This allows to execute del *.* and the like. For example :</span>
+<span class="line-numbers">58</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">59</span>    <span class="comment">/// &amp;lt;code&amp;gt;</span>
+<span class="line-numbers"><strong>60</strong></span>    <span class="comment">/// &amp;amp;lt;exec&amp;amp;gt;</span>
+<span class="line-numbers">61</span>    <span class="comment">/// &amp;amp;lt;executable&amp;amp;gt;c:\Windows\System32\cmd.exe&amp;amp;lt;/executable&amp;amp;gt;</span>
+<span class="line-numbers">62</span>    <span class="comment">/// &amp;amp;lt;buildArgs&amp;amp;gt;/C NET STOP &quot;Service name&quot;&amp;amp;lt;/buildArgs&amp;amp;gt;</span>
+<span class="line-numbers">63</span>    <span class="comment">/// &amp;amp;lt;/exec&amp;amp;gt;</span>
+<span class="line-numbers">64</span>    <span class="comment">/// &amp;lt;/code&amp;gt;</span>
+<span class="line-numbers">65</span>    <span class="comment">/// &amp;lt;para&amp;gt;</span>
+<span class="line-numbers">66</span>    <span class="comment">/// The following parameters are passed to the external program using environment variables, in addition to those you specify in</span>
+<span class="line-numbers">67</span>    <span class="comment">/// the &amp;amp;lt;environment&amp;amp;gt; element.:</span>
+<span class="line-numbers">68</span>    <span class="comment">/// &amp;lt;/para&amp;gt;</span>
+<span class="line-numbers">69</span>    <span class="comment">/// &amp;lt;includePage&amp;gt;Integration_Properties&amp;lt;/includePage&amp;gt;</span>
+<span class="line-numbers"><strong>70</strong></span>    <span class="comment">/// &amp;lt;/remarks&amp;gt;</span>
+<span class="line-numbers">71</span>    [ReflectorType(<span class="string"><span class="delimiter">&quot;</span><span class="content">exec</span><span class="delimiter">&quot;</span></span>)]
+<span class="line-numbers">72</span>    <span class="directive">public</span> <span class="keyword">class</span> <span class="class">ExecutableTask</span>
+<span class="line-numbers">73</span>
+</span></code></pre>
+
+	<h2>Technical documentation</h2>
+
+
+	<p>When the methods, variables and the like have a meaningful name, there is no real need for extra comments.<br />Extra comment is always appreciated, and certainly in places with <em>'complex'</em> logic.</p></pre>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Documentation by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Configuring_the_Dashboard_(dashboardconfig) by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - ConfiguringTheDashboard - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FConfiguring_the_Dashboard_%28dashboardconfig%29" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/ConfiguringTheDashboard/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Configuring-the-Dashboard-dashboardconfig"></a>
+<h1 >Configuring the Dashboard (dashboard.config)<a href="#Configuring-the-Dashboard-dashboardconfig" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>The Web Dashboard is configured through the <strong>dashboard.config</strong> file, a set of <a href="XSL_Files.html" class="wiki-page new">XSL Files</a>, and a set of <a href="Style_sheets.html" class="wiki-page new">Web Dashboard Style Sheets</a> (CSS files). In most cases this file will be found in the root of the Web Dashboard application. The only deployment-specific configuration in the <strong>web.config</strong> file is an optional <strong>appSetting</strong> which can specify an alternative location for the <strong>dashboard.config</strong> file. If you want to use this behaviour, set the <strong>DashboardConfigLocation</strong> <strong>appSetting</strong> value to be the absolute path of your <strong>dashboard.config</strong> file.</p>
+
+
+	<p>The configuration file forms a tree of constructs, starting at the root element. The documentation for the rest of this section is reference documentation for each of the types of constructs you can use.</p>
+
+
+	<a name="Default-Configuration"></a>
+<h4 >Default Configuration<a href="#Default-Configuration" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>The <strong>dashboard.config</strong> file that ships with CruiseControl.NET will work with a default setup, i.e. one where you are using a build server on the same machine as the Web Dashboard and haven't changed any of the Remoting settings.</p>
+
+
+	<p><ins><strong>Attention</strong></ins><br />From CCNet 1.5 onwards, the <strong><a href="Dashboard_Administration_Plugin.html" class="wiki-page">Dashboard_Administration_Plugin</a></strong> is standard loaded, and the rest of dashboard.config file is as good as empty. On installation you must edit the dashboard.config once to set the password that will be used for this plugin.</p>
+
+
+	<a name="Pointers"></a>
+<h4 >Pointers<a href="#Pointers" class="wiki-anchor">&para;</a></h4>
+
+
+	<ul>
+	<li><strong>Language Configuration</strong><br />You can force the dashboard language via the appsettings section in Web.config<br />To force the english language : <pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;add</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">language</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">en-US</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span></code></pre></li>
+	</ul>
+
+
+	<ul>
+	<li><strong>IIS-Security</strong><br />Be sure that the dashboard.config file is editable by the IIS-user when you use the <a href="WebDashboard_Admin_plugin.html" class="wiki-page new">CCNET:Dashboard Administration Plugin</a></li>
+	</ul>
+
+
+	<ul>
+	<li><strong>Monitoring Multiple Servers</strong><br />It's easy to use a single IIS running the Web Dashboard to monitor multiple CruiseControl.Net build servers.  See the <a href="RemoteServices.html" class="wiki-page">Servers Configuration Block</a>.</li>
+	</ul>
+
+
+	<ul>
+	<li><strong>Upgrading from previous versions</strong><br />There is no longer any project-specific configuration required to use the Web Dashboard. However, you should set the [webURL|Project Configuration Block#webURL] element properly in your project's Build Server configuration to make sure CCTray and Email publishing work.</li>
+	</ul>
+
+
+	<a name="Configuration-elements"></a>
+<h3 >Configuration elements<a href="#Configuration-elements" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li><a href="Dashboard_Configuration_Block.html" class="wiki-page">Dashboard Configuration Block</a>
+	<ul>
+	<li><a href="Plugins.html" class="wiki-page">Plugins</a><br /><ul class="pages-hierarchy">
+<li><a href="Build_plugins.html">Build plugins</a>
+<ul class="pages-hierarchy">
+<li><a href="Build_Log_Build_Plugin.html">Build Log Build Plugin</a></li>
+<li><a href="Build_Report_Build_Plugin.html">Build Report Build Plugin</a></li>
+<li><a href="Final_Build_Status_Display_Plugin.html">Final Build Status Display Plugin</a></li>
+<li><a href="Multiple_XSL_Report_Build_Plugin.html">Multiple XSL Report Build Plugin</a></li>
+<li><a href="XSL_Report_Build_Plugin.html">XSL Report Build Plugin</a></li>
+</ul>
+</li>
+<li><a href="Farm_plugins.html">Farm plugins</a>
+<ul class="pages-hierarchy">
+<li><a href="CCTray_Download_Plugin.html">CCTray Download Plugin</a></li>
+<li><a href="Dashboard_Administration_Plugin.html">Dashboard Administration Plugin</a></li>
+<li><a href="Farm_Report_Farm_Plugin.html">Farm Report Farm Plugin</a></li>
+</ul>
+</li>
+<li><a href="Project_plugins.html">Project plugins</a>
+<ul class="pages-hierarchy">
+<li><a href="Audit_History_Project_Plugin.html">Audit History Project Plugin</a></li>
+<li><a href="Latest_Build_Report_Project_Plugin.html">Latest Build Report Project Plugin</a></li>
+<li><a href="Modification_History_Project_Plugin.html">Modification History Project Plugin</a></li>
+<li><a href="Ohloh_Stats_Display_Plugin.html">Ohloh Stats Display Plugin</a></li>
+<li><a href="Package_List_Plugin.html">Package List Plugin</a></li>
+<li><a href="Project_Report_Project_Plugin.html">Project Report Project Plugin</a></li>
+<li><a href="ProjectStatisticsPlugin.html">ProjectStatisticsPlugin</a></li>
+<li><a href="Project_Status_Plugin.html">Project Status Plugin</a></li>
+<li><a href="Project_Timeline_Plugin.html">Project Timeline Plugin</a></li>
+<li><a href="RSS_Feed_Project_Plugin.html">RSS Feed Project Plugin</a></li>
+<li><a href="Security_Configuration_Project_Plugin.html">Security Configuration Project Plugin</a></li>
+<li><a href="Server_Log_Project_Plugin.html">Server Log Project Plugin</a></li>
+<li><a href="User_List_Project_Plugin.html">User List Project Plugin</a></li>
+<li><a href="View_All_Builds_Project_Plugin.html">View All Builds Project Plugin</a></li>
+<li><a href="View_Configuration_Project_Plugin.html">View Configuration Project Plugin</a></li>
+</ul>
+</li>
+<li><a href="Server_plugins.html">Server plugins</a>
+<ul class="pages-hierarchy">
+<li><a href="Project_Configuration_Server_Plugin.html">Project Configuration Server Plugin</a></li>
+<li><a href="Server_Audit_History_Server_Plugin.html">Server Audit History Server Plugin</a></li>
+<li><a href="Server_Information_Server_Plugin.html">Server Information Server Plugin</a></li>
+<li><a href="Server_Log_Server_Plugin.html">Server Log Server Plugin</a></li>
+<li><a href="Server_Report_Server_Plugin.html">Server Report Server Plugin</a></li>
+<li><a href="User_List_Server_Plugin.html">User List Server Plugin</a></li>
+<li><a href="View_ServerQueue_Server_Plugin.html">View ServerQueue Server Plugin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+		<li><a href="RemoteServices.html" class="wiki-page">RemoteServices</a><br /><ul class="pages-hierarchy">
+<li><a href="Server.html">Server</a></li>
+</ul>
+</li>
+	</ul></li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Configuring_the_Dashboard_(dashboardconfig) by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

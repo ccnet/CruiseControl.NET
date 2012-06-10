@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-1-5 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Version-1-5 - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FVersion-1-5" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Version-1-5/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="About.html">About</a> &#187; <a href="VersionInfo.html">VersionInfo</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Highlights-of-the-CCNet-15-release"></a>
+<h1 >Highlights of the CCNet 1.5 release<a href="#Highlights-of-the-CCNet-15-release" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>It has taken a lot of time, but here it finally is : the final release of 1.5</p>
+
+
+	<p><strong>Keep in mind</strong> 
+
+	<ul>
+	<li>The email publisher config is NOT compatible with 1.4.4 if you used the group element, check the new configuration in the documentation.</li>
+		<li>Some internal interfaces are changed, so 3rd party plugins could be broken</li>
+	</ul>
+</p>
+
+
+	<p>For people coming from the 1.4.4, and not following up on the CTP and RC, here's a small list of the new items :</p>
+
+
+	<a name="Security"></a>
+<h2 >Security<a href="#Security" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>It is now possible to secure parts of CruiseControl.NET. Security is all based on the server-side, and is set in ccnet.config.<br />Currently it is possible to lock down the following items:</p>
+
+
+	<ul>
+	<li>Viewing projects</li>
+		<li>Forcing/aborting builds</li>
+		<li>Starting/stopping projects</li>
+		<li>Viewing security settings</li>
+		<li>Modifying security settings</li>
+		<li>Viewing configuration</li>
+		<li>Changing configuration</li>
+	</ul>
+
+
+	<p>Read <a href="Security.html" class="wiki-page">Security</a> for more info.</p>
+
+
+	<a name="Client-side-tables-for-the-dashboard"></a>
+<h2 >Client-side tables for the dashboard<a href="#Client-side-tables-for-the-dashboard" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The projects list in the web dashboard is now interactive - you can now sort on any column, even multi column sorting is possible.</p>
+
+
+	<a name="A-few-new-source-control-systems"></a>
+<h2 >A few new source control systems<a href="#A-few-new-source-control-systems" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>RoboCopy, VSTS, Ftp, Git and Mercurial. The last 2 are DVCS, so an entire new kind of source control!</p>
+
+
+	<a name="New-TasksPublishers"></a>
+<h2 >New Tasks/Publishers<a href="#New-TasksPublishers" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>A number of new tasks have been added:</p>
+
+
+	<ul>
+	<li>Parallel Task and Sequential Task - allow running tasks in parallel or in sequence, or any combination of the two. While this can speed things up, be careful of using too much parallelism as each parallel task uses its own thread and there is only a limited thread pool.</li>
+		<li>NCover tasks - perform NCover analysis and reporting within CC.NET itself (no need to run it in a build script).</li>
+		<li>PowerShell Task - run a PowerShell script.</li>
+		<li>Conditional Publisher - this provides a standard way of only running publishers for certain build states.</li>
+		<li>CruiseServer Control Task - send control commands to a local or remote instance of CruiseControl.NET.</li>
+		<li>Ftp task - Publisher- upload / download files from a server</li>
+	</ul>
+
+
+	<a name="Dynamic-Parameters"></a>
+<h2 >Dynamic Parameters<a href="#Dynamic-Parameters" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This allows to ask the user for input on forcing a build, so reducing the amount of CCNet projects.<br />eg.: ask which branch to build<br />See <a href="Parameters.html" class="wiki-page">Dynamic Parameters</a> for details.</p>
+
+
+	<a name="Time-Line-chart"></a>
+<h2 >Time Line chart<a href="#Time-Line-chart" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This shows the a build overview as a chart.</p>
+
+
+	<a name="Translation-of-the-webDashboard"></a>
+<h2 >Translation of the webDashboard<a href="#Translation-of-the-webDashboard" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Current translation involve French, German and Polish.</p>
+
+
+	<a name="A-duplicate-finder"></a>
+<h2 >A duplicate finder<a href="#A-duplicate-finder" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This task scans files for duplicates, just a task, no merging needed. Duplicate Finder Task</p>
+
+
+	<a name="Bug-fixes"></a>
+<h2 >Bug fixes<a href="#Bug-fixes" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>LdapHelper should recursivly search directory</li>
+		<li>Preprocessor: xml node in scope</li>
+		<li>error in vsts ssc : System.Exception: TF30076: The server name {0} <a class="external" href="http://lowapp7:8080/">http://lowapp7:8080</a> provided does not correspond to a server URI that can be found.</li>
+		<li>Reporting failed task in CruiseControl.NET -</li>
+		<li>Build Parameter Dialog does not call ParameterBase.Convert()</li>
+		<li>Synergy integrates tasks even when build failes</li>
+		<li>VSTS Source Control Provider</li>
+		<li>Git Source Control does not detect merge commits</li>
+		<li>Refresh Status button on web dashboard - ViewProjectReport.aspx puts build into loop after forcing build</li>
+		<li>Cannot open CVS/Entries for reading</li>
+		<li>preprocessor broken : cb:include does not work anymore</li>
+		<li>How to remove the following message "[CCNet Server:WARN] Configuration does not have any version information - assuming the configuration is for version 1.5" </li>
+		<li>Perforce Auto Get Source should not fail silently</li>
+		<li>There should be posibility to set Activity column style base on actual status of project</li>
+		<li>Hide passwords in email build notifications</li>
+		<li>VSS "Version not found" error</li>
+		<li>Error Message: ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:</li>
+		<li>StarTeam provider fails to parse dates for modified files</li>
+		<li>MSBuild XMLLogger outputs wrong build duration</li>
+		<li>Schedule trigger does not build at specified time</li>
+		<li>Modification set always empty for MKS source control</li>
+		<li>Xml publisher is throwing an exception</li>
+		<li>State file not created</li>
+		<li>Vault source control exception during checking modification does not result in a build failure</li>
+		<li>MSBuild task truncates output</li>
+		<li>Date String Format Exception with MKS</li>
+		<li>Build fails even though msbuild return 0 errors</li>
+		<li>WebDashboard gives FileIOPermission exception when handling requests</li>
+		<li>CVS checkout fails with "Server attempted to update a file via an invalid pathname" error</li>
+		<li>Projects with + in title produce invalid URLs in web dashboard</li>
+		<li>Source Control Operation Failed: cvs rlog: cannot find module 'ccnet'</li>
+		<li>Triggers is not working fully</li>
+		<li>Modifications to files in subprojects in MKS 2005 are not detected.</li>
+		<li>CCNet triggers builds when there are no build triggers</li>
+		<li>Dashboard Refresh</li>
+		<li>Problem MSBuild XML Logger</li>
+		<li>If ForceBuild is turned off CCTray circumvents this setting</li>
+		<li>No modifications detected. Could not detect modification by MKS. Hence IfModificationExists of intervalTrigger doesn't work for MKS source control</li>
+		<li>Changes are not detected</li>
+		<li>ForceBuild should not wait for the period specified in modification delay</li>
+		<li>Windows service hangs when console succeeds.</li>
+		<li>Unable to create autobuilds using TFS plugin and CCNet (latest release)</li>
+		<li>Out of memory exception in ccnet.exe still causes ccnet.exe to crash</li>
+		<li>cc.net chokes on a non-existent publisher with an obscure Exortech.NetReflector.NetReflectorException error</li>
+		<li>Wrong merging of NUnit-results.xml with &lt;![CDATA ....</li>
+		<li>Drop the P/Invoke for the TrayIcon support in CCTray App</li>
+		<li>VSTS Plugin</li>
+		<li>CCNet service throws error for notification node in Email publishers group node.</li>
+		<li>Team Foundation Server Plug-In no longer works with latest version of CCNet</li>
+		<li>sometimes a null reference exception is thrown on changing ccnet.config by a copying over a new one</li>
+		<li>Dashboard Administration: Fails to install packages 'Access to the path is denied'</li>
+		<li>CCService does not start when running as LOCALSYSTEM</li>
+		<li>Default packages done seem to be installed out the box.</li>
+		<li>SECURITY: LDAP user does not work.</li>
+		<li>RakeTask only a single entry in buildArgs is supported</li>
+		<li>CCTray is only connecting...</li>
+		<li>Build Parameters Window Property Grid</li>
+		<li>INTERNAL ERROR: Collection was modified; enumeration operation may not execute.</li>
+		<li>Error Message: ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation has timed out.</li>
+		<li>MsBuild task shows error about missing file</li>
+		<li>showing task execution failed in log, but build is ok</li>
+		<li>breakers are no longer exposed into the message in the dashboard, or in the xmlstatusreport, breaking bvc2</li>
+		<li>cctray shows wrong servername when having multiple buildservers</li>
+		<li>Race condition prevents lockqueues from guarenteed correct locking</li>
+		<li>ConditionalPublisher does not execute all tasks</li>
+		<li>Only last MSBuild task merged</li>
+		<li>CCTRay Server Column displays wrong build server name</li>
+		<li>Package download does not download the file complete.</li>
+		<li>Merging the build logs of multiple nant tasks results in a log containing the log of the last nant task multiple times</li>
+		<li>checkpointOnSucces is not available for MKS source contol</li>
+		<li>Specifying a user defined log file for the nant task does not work any more</li>
+		<li>Package Publisher: Empty package when the property baseDirectory is a relative path.</li>
+		<li>cnet.exe -noerrorpause -config:check.config -validate -nologging not behaving correctly</li>
+		<li>CLONE -CCTray showing the wrong server when the same project is on multiple servers.</li>
+		<li>CCTray showing the wrong server when the same project is on multiple servers</li>
+		<li>Page refresh should not trigger a forced build</li>
+		<li>Getting Error when i am doing Email publisher using Cruise Control.net 1.5 version</li>
+		<li>Exception when click on the project name in the dashboard</li>
+		<li>ScheduleTrigger introduces infinite loop</li>
+		<li>Assembly Version Labeller does not increment on a triggered build</li>
+		<li>CC.NET under Linux/Ubuntu with Mono: &lt;exec&gt; task does not return</li>
+		<li>LDAP authentication does not works</li>
+		<li>HTML Report Linking</li>
+		<li>Wrong filename when downloading from PackageList</li>
+		<li>when getting source from svn with externals; cannot read cached credentials</li>
+		<li>Exception on showing the build graph in german language</li>
+		<li>Svn does not save LastRepositoryRevision if not triggered by modification</li>
+		<li>Out of memory exception on viewing build summaries</li>
+		<li>Entering an invalid URL gives a runtime error.</li>
+		<li>ProjectGrid.vm percentage status bar is broken since revision 6287</li>
+		<li>CVS Set <span>HOME</span> environment variable on windows</li>
+		<li>CVS cvs.exe cannot find ".cvspass" </li>
+		<li>CVS cvs.exe checkout: cannot open CVS/Entries for reading: No such file or directory</li>
+		<li>SvnSource doesn't update and write to state the LastChangeNumber.</li>
+		<li>environment of the calling process is passed to a new process created instead of the current environment</li>
+		<li>XmlReader exception loses all nunit logging</li>
+		<li>svn's tagOnSuccess behavior is broken if &lt;trunkUrl&gt; is missing</li>
+		<li>Configuration problem : entering empty sourcecontrol tag in ccnet.config results into crash iso reporting an error that is meaningfull</li>
+		<li>Grouping by date failes on Summarised Data (statistics) tab on german system</li>
+		<li>Build server is not sensitive to changes in svn</li>
+		<li>Unit test exceptions when building 1.4.2 source code on Vista x64</li>
+		<li>Changing X10 settings for CM11 controller causes Access to COM port was denied exception</li>
+		<li>Communication with some CM11 controllers times out.</li>
+		<li>Pages not found when project names contain spaces</li>
+		<li>fix designer of mainform of cctraylib</li>
+		<li>ExternalSourceControlHistoryParser.Parse() is not locale aware</li>
+		<li>Hide sensitive data / plugins / messages</li>
+		<li>project with a space in the name gives an error in the dashboard (ViewProjectReport) when viewed with IIS7 (Visa)</li>
+		<li>Dynamic Parameters: Prompt for input not displayed</li>
+		<li>Propertyinjection in MergeFilesTask does not work</li>
+		<li>RetrieveFile.aspx throws a Socket time out exception</li>
+		<li>Documentation problem with Email Publisher</li>
+		<li>Preprocessor include file change not reloading projects</li>
+		<li>NDepend 2.12.1 results transformation broken</li>
+		<li>Configuration File will not reload after auto update with Team Foundation Server</li>
+		<li>Build detailed statistics shows incorrent FxCop warnings/errors count</li>
+		<li>package publisher failes sometimes due to a lock</li>
+		<li>Exceptions not serialising</li>
+		<li>dashboard in ccnet 1.5 does not work anymore with firefox</li>
+		<li>Program files has greater security in newer versions of Windows and doesn't allow modifications</li>
+		<li>Gendarme Task dies because of a PathTooLongException in gendarme.exe</li>
+		<li>1.5.0.4364: Unable to build email "XSL stylesheet file not found" </li>
+		<li>Git plugin repeats modifications in build log for each file</li>
+		<li>CCTray Balloon notification for broken build only shows Breakers, not which build is broken</li>
+		<li>Zips created by the package publisher can not be opened by Windows XP built in zip handling</li>
+		<li>After a fresh installation the Webdash does not work.</li>
+		<li>SECURITY: Logout functionality does not work.</li>
+		<li>SECURITY: Security blocks the Force Build Publisher</li>
+		<li>BUILD 1.5.0.4439: Server Error in '/ccnet' Application.</li>
+		<li>SECURITY (1.5.0.4439): Exception when trying to access project reports</li>
+		<li>NullReferenceException in CCValidator</li>
+		<li>EMAIL PUBLISHER: Attachement file remains locked after being sent.</li>
+		<li>Get the XmlFragmentWriter to work on Mono</li>
+		<li>Email Publishing error in CCNET v 1.5.0.6067</li>
+		<li>Crash when log file is big</li>
+		<li>(1.5.0.6092) Dynamic Parameters/Integration Properties - CCNetBuildDate &#38; CCNetBuildTime incorrect.</li>
+		<li>Publishers don't clean target directory prior to copy</li>
+		<li>Build failure due to loss of network connection to VSS does not clear away when network is restored</li>
+		<li>Bug in XslReportBuildPlugin, Parameters collection is not loaded properly</li>
+	</ul>
+
+
+	<a name="Improvements"></a>
+<h2 >Improvements<a href="#Improvements" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>    CCNET\-153 - better management when publishers are executed</li>
+		<li>    CCNET\-398 - Subversion should check for modifications by revision number instead of by date.</li>
+		<li>    CCNET\-452 - Improve Dashboard Project Grid Sorting</li>
+		<li>CCTray should allow definition of a default project</li>
+		<li>MsBuildTask: Read .NET Framework path from the registry by default</li>
+		<li>Authorised actions</li>
+		<li>API that will allow control remote File System from Dashboard.</li>
+		<li>RoboCopy source control system</li>
+		<li>Double clicking CCTray icon should toggle status window</li>
+		<li>&lt;merge&gt; task should support non-XML files cleanly</li>
+		<li>CCNET should support source control systems that have non-numeric change "numbers" </li>
+		<li>provide user name if forced build started by dashboard</li>
+		<li>CCTray should show Category in Detail view</li>
+		<li>Run CruiseControl.Net tests on mono (first Windows, then Linux)</li>
+		<li>"Source Control" code normalization</li>
+		<li>groups in the email publisher must be able to be set to multiple build types, like the modifiernotificationtype</li>
+		<li>move configuration of the xsl files used for the email publisher in the email publisher itself</li>
+		<li>update tests so that non english locals do not fail some tests</li>
+		<li>CCValidator must also support warnings, and not only exeptions to identify problems in the config</li>
+		<li>Make NAnt master build script platform independent</li>
+		<li>Implement messaging-type communications with the server</li>
+		<li>foresee overloaded method for processwarning and processerror in the validator, (string, args)</li>
+		<li>Dynamic Parameters: Suggest renaming range parameter.</li>
+		<li>Dynamic Parameters: Actual use of a retrieved value seems overly complex.</li>
+		<li>Package publisher should allow an output location</li>
+		<li>weird error when the / closing tag in the build publisher</li>
+		<li>urls should be case insensitive</li>
+		<li>Dynamic Parameters: Select Parameter when using &lt;sourceFile&gt; should update on every 'Force' build.</li>
+		<li>Add a new extension to allow throttling the total number of concurrent builds on a server</li>
+		<li>create an NCover task</li>
+		<li>Replace custom commadline arguments parsing code with Mono's Options.cs</li>
+		<li>add support for 3 light X10 systems.</li>
+		<li>speech enhancements cctray</li>
+		<li>refactor tasks to a common task base</li>
+		<li>null task should have a parameter for letting the build fail if desired</li>
+		<li>null source control should have settings for simulating failures in the different stages</li>
+		<li>add a LOT more debug logging :</li>
+		<li>add FTP publisher / task / source control</li>
+		<li>Implement support for getting process output line by line with an event from ProcessExecutor</li>
+		<li>Implement BuildProgressInformation support to Subversion Source Control Block</li>
+		<li>Implement BuildProgressInformation support to the Gendarme Task</li>
+		<li>Implement BuildProgressInformation support to the NAnt Task</li>
+		<li>Implement BuildProgressInformation support to the MSBuild Task</li>
+		<li>Implement BuildProgressInformation support to the BaseExecutableTask</li>
+		<li>Add support for "-listener" switch in NAnt task</li>
+		<li>Allow Dynamic Properties to be applied to Source Control Blocks</li>
+		<li>failed integration and exception during integration must be split in the email publisher</li>
+		<li>Implement BuildProgressInformation support to CVS Source Control Block</li>
+		<li>Implement BuildProgressInformation support to Mercurial Source Control Block</li>
+		<li>Exception thrown due to bad configuration is not indicative of such</li>
+		<li>Allow validation on triggers</li>
+	</ul>
+
+
+	<a name="New-features"></a>
+<h2 >New features<a href="#New-features" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Forced builds - adding comment to build results</li>
+		<li>Subversion should use LastChangeNumber of previous build when checking for modifications</li>
+		<li>CCNET Security</li>
+		<li>Add user input to dashboard</li>
+		<li>CCTray should automatically recognise and add new projects on a connected server</li>
+		<li>Report which task failed through CCTray</li>
+		<li>Default Labeller should allow an initial build number, so you don't have to start at 1</li>
+		<li>It would be nice to be able to have a drive letter mapped in Service environment</li>
+		<li>Parallel Execution of Tasks</li>
+		<li>Add User Rights Management To CCTray</li>
+		<li>Mercurial support</li>
+		<li>Command line interface to CruiseControl.Net server</li>
+		<li>PowerShell Task</li>
+		<li>Build Status Breakdown</li>
+		<li>Implement a File Merge Task for binary files like images</li>
+		<li>Dynamic Parameters: Range Parameter to allow initialisation from a file.</li>
+		<li>Dynamic Parameters: addition of Boolean parameter (Check Box)</li>
+		<li>Dynamic Parameter: Range parameter should allow for return values that are not equal to the display name.</li>
+		<li>Implement support for Git source control system</li>
+		<li>Added Growl Notifications to CCTray</li>
+		<li>Updating from more than one source</li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-1-5 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

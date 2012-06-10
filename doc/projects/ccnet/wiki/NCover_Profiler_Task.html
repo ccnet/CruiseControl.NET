@@ -1,0 +1,666 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/NCover_Profiler_Task by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - NCover Profiler Task - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FNCover_Profiler_Task" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/NCover_Profiler_Task/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; <a href="Project_Configuration_Block.html">Project Configuration Block</a> &#187; <a href="Task_And_Publisher_Blocks.html">Task And Publisher Blocks</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="NCover-Profiler-Task"></a>
+<h1 >NCover Profiler Task<a href="#NCover-Profiler-Task" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Perform a code coverage profile using NCover.</p>
+
+
+	<p><strong>tip</strong></p>
+
+
+	<p>NCover is a commerical application that will profile code while unit tests are running. The tool is available from <a class="external" href="http://www.ncover.com/">http://www.ncover.com/</a>.</p>
+
+
+	<p><strong>info</strong> : Supported Versions</p>
+
+
+	<p>CruiseControl.NET only supports NCover 3.x currently.</p>
+
+
+	<a name="Version"></a>
+<h2 >Version<a href="#Version" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Available from version 1.5</p>
+
+
+	<a name="Examples"></a>
+<h2 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h2>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;ncoverProfile&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;executable&gt;</span>C:\Program Files\NCover\NCover.Console.exe<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;program&gt;</span>tools\nunit\nunit-console.exe<span class="tag">&lt;/program&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;testProject&gt;</span>myproject.test.dll<span class="tag">&lt;/testProject&gt;</span>
+<span class="line-numbers">5</span>  <span class="tag">&lt;workingDir&gt;</span>build\unittests<span class="tag">&lt;/workingDir&gt;</span>
+<span class="line-numbers">6</span>  <span class="tag">&lt;includedAssemblies&gt;</span>myproject.*.dll<span class="tag">&lt;/includedAssemblies&gt;</span>
+<span class="line-numbers">7</span><span class="tag">&lt;/ncoverProfile&gt;</span></span></code></pre>
+
+	<a name="Configuration-Elements"></a>
+<h2 >Configuration Elements<a href="#Configuration-Elements" class="wiki-anchor">&para;</a></h2>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+			<td> <strong>Default</strong> </td>
+			<td> <strong>Version</strong> </td>
+		</tr>
+		<tr>
+			<td> applicationLoadWait </td>
+			<td> The amount of time that NCover will wait for the application to start up.  <br /> <strong>Maps to //wal</strong> </td>
+			<td> Int32 </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> baseDir </td>
+			<td> The base directory to use. All relative parameters will be relative to this parameter.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Project Working Directory </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> buildId </td>
+			<td> A custom build id to attach.  <br /> <strong>Maps to //bi</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> The build label </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> coverageFile </td>
+			<td> The location to write the coverage file to. If relative, this will be relative to baseDir.  <br /> <strong>Maps to //x</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Coverage.xml </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> coverageMetric </td>
+			<td> The coverage metric to use.  <br /> <strong>Maps to //ct</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> iis </td>
+			<td> Whether to cover IIS or not.  <br /> <strong>Maps to //iis</strong> </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> description </td>
+			<td> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> The task/publisher name. </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> disableAutoexclusion </td>
+			<td> Whether to turn off autoexclusion or not.  <br /> <strong>Maps to //na</strong> </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> dynamicValues </td>
+			<td> The dynamic values to use for the task.   </td>
+			<td> <a href="Dynamic_Values.html" class="wiki-page">Dynamic Values</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> environment </td>
+			<td>   A set of environment variables set for commands that are executed.  <br />  Each variable should be specified as <pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;variable</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span></code></pre><br />.   </td>
+			<td> <a href="Environment_Variable.html" class="wiki-page">Environment Variable</a> array </td>
+			<td> No </td>
+			<td>  </td>
+			<td>  </td>
+		</tr>
+		<tr>
+			<td> excludedAssemblies </td>
+			<td> The assemblies to exclude.  <br /> <strong>Maps to //eas</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> excludedAttributes </td>
+			<td> The attributes to exclude.  <br /> <strong>Maps to //ea</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> excludedFiles </td>
+			<td> The files to exclude.  <br /> <strong>Maps to //ef</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> excludedMethods </td>
+			<td> The methods to exclude.  <br /> <strong>Maps to //em</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> excludedTypes </td>
+			<td> The types to exclude.  <br /> <strong>Maps to //et</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> executable </td>
+			<td> The executable to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Ncover.Console </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> includedAssemblies </td>
+			<td> The assemblies to include.  <br /> <strong>Maps to //ias</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> includedAttributes </td>
+			<td> The attributes to include.  <br /> <strong>Maps to //ia</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> includedFiles </td>
+			<td> The files to include.  <br /> <strong>Maps to //if</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> includedTypes </td>
+			<td> The types to include.  <br /> <strong>Maps to //it</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> logFile </td>
+			<td> The location of the NCover log file. If relative, this will be relative to baseDir.  <br /> <strong>Maps to //l</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> logLevel </td>
+			<td> The profiler log level.  <br /> <strong>Maps to //ll</strong> </td>
+			<td> String - one of: <pre>
+* Default
+* None
+* Normal
+* Verbose</pre> </td>
+			<td> No </td>
+			<td> Default </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> priority </td>
+			<td> The priority class of the spawned process.   </td>
+			<td> String - one of: <pre>
+* Normal
+* Idle
+* High
+* RealTime
+* BelowNormal
+* AboveNormal</pre> </td>
+			<td> No </td>
+			<td> Normal </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> processModule </td>
+			<td> The module to process.  <br /> <strong>Maps to //pm</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> programParameters </td>
+			<td> The parameters to pass to the program.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> program </td>
+			<td> The program to execute and collect coverage stats from.   </td>
+			<td> String </td>
+			<td> Yes </td>
+			<td> <em>n/a</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> projectName </td>
+			<td> The name of the project (used in the HTML report).  <br /> <strong>Maps to //p</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> publish </td>
+			<td> Whether to publish the output files or not.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> true </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> register </td>
+			<td> Temporarily enable NCover.  <br /> <strong>Maps to //reg</strong> </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> serviceTimeout </td>
+			<td> The timeout period for covering a service.  <br /> <strong>Maps to //st</strong> </td>
+			<td> Int32 </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> settingsFile </td>
+			<td> The location to read the settings from. If relative, this will be relative to baseDir.  <br /> <strong>Maps to //cr</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> symbolSearch </td>
+			<td> The symbol search policy to use.  <br /> <strong>Maps to //ssp</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> testProject </td>
+			<td> The project that contains the tests. If relative, this will be relative to baseDir.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> timeout </td>
+			<td> The time-out period in seconds. If the task does no finish running in this time it will be terminated.   </td>
+			<td> Int32 </td>
+			<td> No </td>
+			<td> 600 </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> trendFile </td>
+			<td> The location to write the trend file to.  <br /> <strong>Maps to //at</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> windowsService </td>
+			<td> The windows service to cover.  <br /> <strong>Maps to //svc</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> workingDir </td>
+			<td> The working directory to use. If relative, this will be relative to baseDir.  <br /> <strong>Maps to //w</strong> </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Notes"></a>
+<h2 >Notes<a href="#Notes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This task calls NCover.Console to perform the profiling. Full details on this tool is available at <a class="external" href="http://docs.ncover.com/ref/3-0/ncover-console/">http://docs.ncover.com/ref/3-0/ncover-console/</a>. Additional details on the mapped arguments can be found there.</p>
+
+
+	<a name="Automatically-Generated"></a>
+<h4 >Automatically Generated<a href="#Automatically-Generated" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Documentation generated on Sunday, 10 Jun 2012 at 2:42:46 PM</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/NCover_Profiler_Task by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

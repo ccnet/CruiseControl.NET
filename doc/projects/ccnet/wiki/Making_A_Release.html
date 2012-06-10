@@ -1,0 +1,469 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Making A Release - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FMaking_A_Release" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release/history" class="icon icon-history">History</a>
+</div>
+
+
+
+
+
+<div class="wiki">
+  <a name="Making-A-Release"></a>
+<h1 >Making A Release<a href="#Making-A-Release" class="wiki-anchor">&para;</a></h1>
+
+
+	<fieldset class="header_collapsible collapsible toc right"><legend onclick="toggleFieldset(this);"><span>Contents</span></legend><div><ul class="toc"><li><a href="#Making-A-Release">Making A Release</a><ul><li><a href="#Choose-the-release-number">Choose the release number.</a><ul><li><a href="#Add-a-new-dev-version">Add a new dev version</a></li><li><a href="#Add-a-new-release-version">Add a new release version</a></li><li><a href="#Update-links">Update links</a></li></ul>
+</li><li><a href="#Issue-Management">Issue Management</a></li><li><a href="#Release-notes">Release notes</a></li><li><a href="#Help-pages">Help pages</a><ul><li><a href="#Update-the-wiki-pages">Update the wiki pages</a></li><li><a href="#Create-offline-docs">Create offline docs</a></li></ul>
+</li><li><a href="#Some-points-for-saving-time-">Some points for saving time :</a></li></ul></li></ul></div></fieldset>
+
+
+	<p>Below are the steps needed for making a release of CCNet.<br />Providing a checklist ensures that nothing is forgotten :-)</p>
+
+
+	<a name="Choose-the-release-number"></a>
+<h2 >Choose the release number.<a href="#Choose-the-release-number" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Version format is in the form : X.Y.&lt;buildnumber&gt;.&lt;fixedNumber&gt;<br />This is different than before, and comes from the switch to GIT.</p>
+
+
+	<p>In most cases, x will remain the same and y will increase by 2 from the previous release.<br />Even numbers for Y are stable releases, odd numbers are nightly / CI builds.</p>
+
+
+	<a name="Add-a-new-dev-version"></a>
+<h3 >Add a new dev version<a href="#Add-a-new-dev-version" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>This will normally be Y+2. Example : if we have a dev build of 1.7, the next dev build will be 1.9.<br />Settings - Versions - New Version</p>
+
+
+	<ul>
+	<li>Version : X.Y+2</li>
+		<li>Description : CruiseControl.NET Dev X.Y+2</li>
+		<li>Sharing : With subprojects</li>
+		<li>WikiPage : version X.Y+2</li>
+	</ul>
+
+
+	<a name="Add-a-new-release-version"></a>
+<h3 >Add a new release version<a href="#Add-a-new-release-version" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>This will be Y+1. Example : if we have a dev build of 1.7, the next release build will be 1.8.<br />Settings - Versions - New Version</p>
+
+
+	<ul>
+	<li>Version : X.Y+1</li>
+		<li>Description : CruiseControl.NET Dev X.Y+1</li>
+		<li>Sharing : With subprojects</li>
+		<li>WikiPage : version X.Y+1</li>
+	</ul>
+
+
+	<a name="Update-links"></a>
+<h3 >Update links<a href="#Update-links" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Update the <a href="VersionInfo.html" class="wiki-page">VersionInfo</a> page so it has links to the new version(s)</p>
+
+
+	<a name="Issue-Management"></a>
+<h2 >Issue Management<a href="#Issue-Management" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Move any remaining issues (if any) to the next dev build, or remove the target version of them.</p>
+
+
+	<ul>
+	<li>click on <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="external">Roadmap</a></li>
+		<li>expand it</li>
+		<li>click on the version of the dev build</li>
+		<li>click on the XXX open link beneath the progress bar</li>
+		<li>move each item to the next dev build, or clear the target version</li>
+	</ul>
+
+
+	<a name="Release-notes"></a>
+<h2 >Release notes<a href="#Release-notes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The <strong>dev</strong> build will normally not have much manually written release notes, but it is a good practice to note big items in dev release notes.<br />Like breaking changes, big refactorings, config changes, ...<br />This way people trying out the dev builds have a guide of what's being altered, and making release notes for the <strong>Release</strong> build is a lot easier.<br />Copy this information, and massage it in a more user friendly form for the release notes of the <strong>Release</strong> build</p>
+
+
+Also copy the list of changes (bugs fixed, features) and the like as a list into the release build.
+	<ul>
+	<li>click on Roadmap</li>
+		<li>expand it</li>
+		<li>click on the version of the dev build</li>
+		<li>click on the XXX closed link beneath the progress bar</li>
+		<li>Copy the list into excel(do not use the export to csv as it has all columns and multi line)</li>
+		<li>just keep the columns tracker and subject(just keep values)</li>
+		<li>sort on tracker and subject</li>
+		<li>paste it below the written release notes, with a heading per type, each type has a <em>h3</em> heading</li>
+	</ul>
+
+
+	<a name="Help-pages"></a>
+<h2 >Help pages<a href="#Help-pages" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This part describes on updating the generated help on the wiki, and generating the off-line help documentation.</p>
+
+
+	<a name="Update-the-wiki-pages"></a>
+<h3 >Update the wiki pages<a href="#Update-the-wiki-pages" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li>Compile the source</li>
+		<li>create the wiki pages by running the <strong>createDocs.bat</strong> </li>
+		<li>now you have the wiki files in the docgen folder</li>
+	</ul>
+
+
+	<p>Note : you can create and upload the docs by providing your wiki username and password as arguments like so :<br /><pre><code class="txt syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>     createDocs.bat John Wayne
+</span></code></pre></p>
+
+
+	<a name="Create-offline-docs"></a>
+<h3 >Create offline docs<a href="#Create-offline-docs" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>When you uploaded the wiki pages, it is up to date concerning the documentation of tasks, publishers, ...<br />What remains is to create offline docs, as long as ChiliProject does not have a descent export function yet,<br />we can use <em>HTTrack Website Copier</em>. Below are the needed settings :</p>
+
+
+	<p><strong>Web Adresses to download :</strong><br /><pre>
+http://www.cruisecontrolnet.org/projects/ccnet/wiki
+</pre></p>
+
+
+	<p><strong>Options - scan rules :</strong><br /><pre>
++*.png +*.gif +*.jpg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+-*ccnet/activity*
+-*ccnet/roadmap*
+-*ccnet/issues*
+-*ccnet/time_entries*
+-*ccnet/gantt*
+-*ccnet/news*
+-*ccnet/boards*
+-*ccnet/files*
+-*ccnet/repository*
+-*ccnet/settings*
+-*/edit
+-http://www.cruisecontrolnet.org/watchers/*
+-*/protect
+-*/rename
+-*/history
+</pre></p>
+
+
+	<p><strong>Options - links</strong><br />  also check : Get HTML files first</p>
+
+
+	<p><strong>Options - Build</strong><br />Site-structure - without <a class="external" href="http://www.domain.xxx/">www.domain.xxx</a></p>
+
+
+	<p>Download the site by ..., this will take about 10 minutes.</p>
+
+
+	<p>Copy the contents to the <strong>doc</strong> folder</p>
+
+
+	<a name="Some-points-for-saving-time-"></a>
+<h2 >Some points for saving time :<a href="#Some-points-for-saving-time-" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Create the release notes a few days before the actual release, giving other devs also the chance to complete it, read it over, ...</li>
+		<li>Prepare the mail to be sent to the dev and user list in advance, and save it as a draft. So you do not have to do a quick write on the release day itself</li>
+		<li>When the release is a RC, state in the mail that an RC means it has to be tested with as much users as possible, include the points below : 
+	<ul>
+	<li>use your existing config on a spare / virtual PC</li>
+		<li>test it with a couple of CCNet projects, one of every kind you have (CI, deploy, ...)</li>
+		<li>remove the labelling part of the scm so you do not interfere with the life/ production system </li>
+		<li>use the null task to simulate different build results (succeed, failed), eg.: for new publishers</li>
+		<li>use the null source control to simulate errors on source control operations, eg.: for new publishers</li>
+	</ul></li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Scenario_1_Small_In-house_Development_Team by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Scenario 1 Small In-house Development Team - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FScenario_1_Small_In-house_Development_Team" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Scenario_1_Small_In-house_Development_Team/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="Scenarios.html">Scenarios</a> &#187; <a href="Security_scenarios.html">Security scenarios</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Scenario-1-Small-In-house-Development-Team"></a>
+<h1 >Scenario 1 : Small In-house Development Team<a href="#Scenario-1-Small-In-house-Development-Team" class="wiki-anchor">&para;</a></h1>
+
+
+	<a name="Background"></a>
+<h2 >Background<a href="#Background" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The company is Acme Insurance, the company that provides development insurance for software houses. Bob leads a team of six people - three developers, a business analyst (BA) and a couple of testers. The systems they develop are in-house systems for the company - and consists of a couple of Windows applications plus an internal intranet web application.</p>
+
+
+	<p>Bob wants to secure their installation of CruiseControl.Net so he knows what is happening and to limit access to certain projects.</p>
+
+
+	<a name="The-Build-Setup"></a>
+<h2 >The Build Setup<a href="#The-Build-Setup" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Each application (two windows apps, plus one web app) has three projects in CruiseControl.Net. Additionally there are a few smaller projects for common libraries - which are used by the main applications - bringing the total number of projects to twelve.</p>
+
+
+	<p>Each application, plus the libraries, have a simple compile-and-test build project. This projects ensures that the code builds, the local unit tests run and the successful outputs are copied to a central "store" for the executables. These are triggered on an interval basis (when code is checked in) or via a force build.</p>
+
+
+	<p>The applications also have two deploy projects each - deploy to QA and deploy to PROD. These generate "production" builds, copy all the executables and related files into deployment packages and copy them to the staging area. Additionally the web application is automatically deployed to either the QA or pre-PROD servers. The QA versions run overnight, the PROD versions must be manually triggered.</p>
+
+
+	<p>So despite this being a small team, there are still a fair number of projects, plus some can potentially screw up processes (either QA or PROD).</p>
+
+
+	<a name="The-Goals"></a>
+<h2 >The Goals<a href="#The-Goals" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The twelve projects can be divided into three security zones: low, medium and high. The following table helps to define these three zones:</p>
+
+
+	<table>
+		<tr>
+			<td> <strong>Zone</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Projects</strong> </td>
+			<td> <strong>People</strong> </td>
+		</tr>
+		<tr>
+			<td> Low </td>
+			<td> Projects that everybody can access </td>
+			<td> Compile-and-test projects (six) </td>
+			<td> Everybody </td>
+		</tr>
+		<tr>
+			<td> Medium </td>
+			<td> Projects that need to limit access </td>
+			<td> Deploy to QA projects (three) </td>
+			<td> Team lead, BA and testers </td>
+		</tr>
+		<tr>
+			<td> High </td>
+			<td> Projects that can affect production </td>
+			<td> Deploy to PROD projects (three) </td>
+			<td> Team lead and BA </td>
+		</tr>
+	</table>
+
+
+
+
+	<p>For low security, they don't really care what happens to the projects - it is the entire responsibility of the team. While this can still lead to an abuse of trust, the consequences would be reasonably minor.</p>
+
+
+	<p>As the security needs increase, the consequences of someone screwing things up (either deliberately or by accident) increases. Damaging the QA environment could lead to a loss of one or more days work by the testers and the BA - not serious consequences but potentially a large waste of time and resources. Damaging PROD would lead to a serious waste of time, plus potentially damage the company's client-relationships.</p>
+
+
+	<a name="The-Plan"></a>
+<h2 >The Plan<a href="#The-Plan" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>With these goals in mind, this gives two actual levels of security. The first level is unsecured - anyone can do anything to the projects and there is no real need to audit anything. This is very similar to how CC.Net currently works.</p>
+
+
+	<p>The security level limits who can access and modify projects in CC.Net. Within this level there are two groups - testers and releasers. Membership to the testers group allows full access to the deploy to QA projects, while the releasers group allows access to all deployment projects.</p>
+
+
+	<p>This definition gives a very simple design - two roles with two users in each. Six projects need security, while the other six do not. Since the users need to be secured they will use passwords (to ensure the other people don't "use" their user name). Finally, all deployments will be audited to assess the effectiveness of security in the long run.</p>
+
+
+	<p>The following diagram shows how I'm going to implement the security:<br /><img src="http://www.cruisecontrolnet.org/attachments/download/6" title="Scenario1Overview.jpg" alt="Scenario1Overview.jpg" /></p>
+
+
+	<a name="The-Configuration"></a>
+<h2 >The Configuration<a href="#The-Configuration" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Since I'm looking at the security, not the actual projects, I'm going to use the following general configuration for each project:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WinApp1-QA</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;workingDirectory&gt;</span>C:\Build\WinApp1-QA<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;artifactDirectory&gt;</span>C:\Build\WinApp1-QA\Deploy<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;webURL&gt;</span>http://localhost/server/local/project/WinApp1-QA/ViewProjectReport.aspx<span class="tag">&lt;/webURL&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="comment">&lt;!-- Source control block defined here --&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;intervalTrigger</span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IfModificationExists</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">seconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">300</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="comment">&lt;!-- Tasks defined here --&gt;</span>
+<span class="line-numbers">11</span>  <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">13</span>    <span class="comment">&lt;!-- Publishers defined here --&gt;</span>
+<span class="line-numbers">14</span>  <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">15</span><span class="tag">&lt;/project&gt;</span>
+</span></code></pre></p>
+
+
+	<p>WinApp1 will be changed to the different project names. There are twelve projects in total - their names roughly match the names above (the arrows are changed to dashes). With this background, I can now begin to configure the security.</p>
+
+
+	<a name="Turning-On-Security"></a>
+<h2 >Turning On Security<a href="#Turning-On-Security" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>First, I'm going to turn on security for the server. This involves adding a security block to the config file. Since the security will be defined internally, I'm going to use the <a href="Internal_Server_Security.html" class="wiki-page"> internal security</a> definition:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers"> 7</span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="comment">&lt;!-- Projects defined here --&gt;</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<p>Running this config through the validator, I see that the security element needs an assertions element and a setting element, so I've added some blank instances of these. Now the config file passes validation and security has been turned on for the server. But, all this has done is completely lock down the server, so no one can do anything\!</p>
+
+
+	<a name="Adding-Some-Roles-and-Users"></a>
+<h2 >Adding Some Roles and Users<a href="#Adding-Some-Roles-and-Users" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>So the next thing to do is to add the users and roles. First, I've added the two roles - "Testers" and "Releasers". These are defined as follows:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="comment">&lt;!-- Roles --&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers">11</span>  <span class="comment">&lt;!-- Projects defined here --&gt;</span>
+<span class="line-numbers">12</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre><br />Each of the roles has force build rights only, all other rights are still denied. Before I can add some people to the roles, I first need to add the users to the security. So I'm going to add four users, each with their own password (which are hard-coded for the moment).
+
+	<p>So, now the security settings looks like this:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="comment">&lt;!-- Authenticated users --&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Bob (Team Lead)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Jane (BA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">John (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john3</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Joe (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe4</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers">11</span>      <span class="comment">&lt;!-- Roles --&gt;</span>
+<span class="line-numbers">12</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">13</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">14</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers">15</span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers">16</span>  <span class="comment">&lt;!-- Projects defined here --&gt;</span>
+<span class="line-numbers">17</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<p>Next step is to add the users to the roles, so now the roles look like this:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="comment">&lt;!-- Omitted for brevity --&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="comment">&lt;!-- Roles --&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 9</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">11</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">12</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">13</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers">14</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">15</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers">16</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">17</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">18</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers">21</span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers">22</span>  <span class="comment">&lt;!-- Projects defined here --&gt;</span>
+<span class="line-numbers">23</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<p>Finally, I added a generic role for all the other uses:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="comment">&lt;!-- Authenticated users --&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Bob (Team Lead)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Jane (BA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">John (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john3</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Joe (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe4</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="comment">&lt;!-- Generic role --&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;simpleUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">12</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers">13</span>      <span class="comment">&lt;!-- Roles --&gt;</span>
+<span class="line-numbers">14</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">15</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers">16</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">17</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">18</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">21</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers">22</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">23</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">24</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">25</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers">26</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers">27</span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers">28</span>  <span class="comment">&lt;!-- Projects defined here --&gt;</span>
+<span class="line-numbers">29</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<p>This now gives me the roles and users. But, until CCTray and the dashboard are configured, they still can't do anything\!</p>
+
+
+	<a name="Configuring-the-Clients"></a>
+<h2 >Configuring the Clients<a href="#Configuring-the-Clients" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Configuring CCTray is done on the client-side. The user needs to go to settings, click on the Build Projects tab, and then click on "Add...". This will open up the list of servers - from here the user clicks on the server to modify and then clicks on "Configure". This will finally open up the security configuration:<br /><img src="http://www.cruisecontrolnet.org/attachments/download/7" title="CCTrayConfiguration.jpg" alt="CCTrayConfiguration.jpg" /></p>
+
+
+	<p>Here the user will need to check the "Server is secure" checkbox and then choose the authentication mode. Once they have done this they need to click on the "Configure" button and enter their credentials. Finally click on "Ok" all the way back to the main screen and security is now configured for CCTray.</p>
+
+
+	<p>Configuring the dashboard needs to be done at the server level instead. This involves opening dashboard.config and adding the following section underneath &lt;plugins&gt;:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;securityPlugins&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;simpleSecurity</span><span class="tag">/&gt;</span>
+<span class="line-numbers">3</span><span class="tag">&lt;/securityPlugins&gt;</span>
+</span></code></pre>
+
+	<p>This adds a login section to the site, which allows the person to login with their username only. People with password secured accounts will fail to login. For this scenario this mode is fine for most people - the people in the other roles will need to use CCTray.</p>
+
+
+	<p>Now people can login and perform force builds, etc. However, the problem is everyone can force build any project\! The next step is to configure the projects.</p>
+
+
+	<a name="Locking-Down-Projects"></a>
+<h2 >Locking Down Projects<a href="#Locking-Down-Projects" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>For the projects that are in the low security zone, there is no need to change the configuration. These will continue to work as-is.</p>
+
+
+	<p>For the remaining projects, I need to lock them down. This is done by adding a &lt;security&gt; element to the project element. At the moment there is only one type of security - defaultProjectSecurity. So to start with I added the following XML to the project element:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WinApp1-QA</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="comment">&lt;!-- Omitted for brevity --&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;security</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultProjectSecurity</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span><span class="tag">&lt;/project&gt;</span>
+</span></code></pre>
+
+	<p>The defaultRight attribute is optional, but this changes the default permission so no-one can do anything on it. Of course, this isn't much use, so it's time to add in the permissions:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WinApp1-QA</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted for brevity --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;security</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultProjectSecurity</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="comment">&lt;!-- Grant permissions to this project --&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;/security&gt;</span>
+<span class="line-numbers"><strong>10</strong></span><span class="tag">&lt;/project&gt;</span>
+</span></code></pre>
+
+	<p>This is the definition for a medium security zone project, the high security zone is similar, but without the Testers role in it.</p>
+
+
+	<p>And that's it\! Security has now been configured for this scenario. <br />Here is the full configuration for the example. I have omitted the duplicate projects since this scenario is focusing on the security:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;internalSecurity&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="comment">&lt;!-- Authenticated users --&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Bob (Team Lead)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob1</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Jane (BA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane2</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">John (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john3</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;passwordUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">display</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Joe (QA)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe4</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="comment">&lt;!-- Generic role --&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;simpleUser</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">12</span>    <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers">13</span>      <span class="comment">&lt;!-- Roles --&gt;</span>
+<span class="line-numbers">14</span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">15</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers">16</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">john</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">17</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">joe</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">18</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>      <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">forceBuild</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">21</span>        <span class="tag">&lt;users&gt;</span>
+<span class="line-numbers">22</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bob</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">23</span>          <span class="tag">&lt;userName</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">jane</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">24</span>        <span class="tag">&lt;/users&gt;</span>
+<span class="line-numbers">25</span>      <span class="tag">&lt;/rolePermission&gt;</span>
+<span class="line-numbers">26</span>    <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers">27</span>  <span class="tag">&lt;/internalSecurity&gt;</span>
+<span class="line-numbers">28</span>  <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">WinApp1-QA</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">29</span>    <span class="tag">&lt;workingDirectory&gt;</span>C:\Build\WinApp1-QA<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>    <span class="tag">&lt;artifactDirectory&gt;</span>C:\Build\WinApp1-QA\Deploy<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers">31</span>    <span class="tag">&lt;webURL&gt;</span>http://localhost/server/local/project/WinApp1-QA/ViewProjectReport.aspx<span class="tag">&lt;/webURL&gt;</span>
+<span class="line-numbers">32</span>    <span class="comment">&lt;!-- Source control block defined here --&gt;</span>
+<span class="line-numbers">33</span>    <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers">34</span>      <span class="tag">&lt;intervalTrigger</span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IfModificationExists</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">seconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">300</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">35</span>    <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers">36</span>    <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">37</span>      <span class="comment">&lt;!-- Tasks defined here --&gt;</span>
+<span class="line-numbers">38</span>    <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">39</span>    <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers"><strong>40</strong></span>      <span class="comment">&lt;!-- Publishers defined here --&gt;</span>
+<span class="line-numbers">41</span>      <span class="tag">&lt;xmllogger</span><span class="tag">/&gt;</span>
+<span class="line-numbers">42</span>    <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">43</span>    <span class="tag">&lt;security</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">defaultProjectSecurity</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">defaultRight</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Deny</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">44</span>      <span class="tag">&lt;permissions&gt;</span>
+<span class="line-numbers">45</span>        <span class="comment">&lt;!-- Grant permissions to this project --&gt;</span>
+<span class="line-numbers">46</span>        <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Testers</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">47</span>        <span class="tag">&lt;rolePermission</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Releasers</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">48</span>      <span class="tag">&lt;/permissions&gt;</span>
+<span class="line-numbers">49</span>    <span class="tag">&lt;/security&gt;</span>
+<span class="line-numbers"><strong>50</strong></span>  <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">51</span>  <span class="comment">&lt;!-- Other projects defined here --&gt;</span>
+<span class="line-numbers">52</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<a name="Credits"></a>
+<h2 >Credits<a href="#Credits" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This scenario was originally posted on <a href="http://csut017.wordpress.com/" class="external">Automated Coder</a></p>
+</div>
+
+
+<div class="attachments">
+
+<p><a href="../../../attachments/6/Scenario1Overview.jpg" class="icon icon-attachment">Scenario1Overview.jpg</a> - Scenario1Overview.jpg
+  <span class="size">(41.5 kB)</span>
+  
+  
+    <span class="author">Ruben Willems, 10/01/2011 04:24 pm</span>
+  
+  </p>
+
+<p><a href="../../../attachments/7/CCTrayConfiguration.jpg" class="icon icon-attachment">CCTrayConfiguration.jpg</a> - CCTrayConfiguration.jpg
+  <span class="size">(16 kB)</span>
+  
+  
+    <span class="author">Ruben Willems, 10/01/2011 04:25 pm</span>
+  
+  </p>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Scenario_1_Small_In-house_Development_Team by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

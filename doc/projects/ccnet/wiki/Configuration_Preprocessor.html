@@ -1,0 +1,821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Configuration_Preprocessor by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Configuration Preprocessor - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FConfiguration_Preprocessor" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Configuration_Preprocessor/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Configuration-Pre-processor"></a>
+<h1 >Configuration Pre-processor<a href="#Configuration-Pre-processor" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>The CCNet configuration preprocessor acts on the ccnet.config file.  Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup.  Any markup not in the preprocessor's namespace are passed through unchanged.</p>
+
+
+	<a name="Preparing-to-Use-the-Preprocessor"></a>
+<h2 >Preparing to Use the Preprocessor<a href="#Preparing-to-Use-the-Preprocessor" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The configuration preprocessor is invoked by declaring an XML Namespace of "urn:ccnet.config.builder" on the root configuration element ("&lt;cruisecontrol&gt;").  The namespace abbreviation you choose must be specified on any preprocessor directives you use.  For the rest of this explanation, we will specify it as "cb", a mnemonic for "configuration builder".<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cruisecontrol</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span></span></code></pre></p>
+
+
+	<a name="Preprocessor-Elements"></a>
+<h2 >Preprocessor Elements<a href="#Preprocessor-Elements" class="wiki-anchor">&para;</a></h2>
+
+
+The configuration preprocessor has several elements that control its processing of your configuration.
+	<ul>
+	<li>The <strong>&lt;define&gt;</strong> element is used to define constants to be expanded later.</li>
+		<li>The <strong>&lt;include&gt;</strong> element is used to include the contents of another file.</li>
+		<li>The <strong>&lt;scope&gt;</strong> element is used to encapsulate sections that change the value of an existing constant.</li>
+	</ul>
+
+
+	<a name="Defining-Preprocessor-Constants"></a>
+<h2 >Defining Preprocessor Constants<a href="#Defining-Preprocessor-Constants" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The <strong>&lt;define&gt;</strong> element is used to define a preprocessor constant.  It can be used in several ways:</p>
+
+
+	<a name="Text-constants-values-are-strings"></a>
+<h3 >Text constants (values are strings):<a href="#Text-constants-values-are-strings" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Define a constant named "foo" with a value of "bar":<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">foo</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></span></code></pre><br />You can define more than one constant in the same define element:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">a</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">b</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">c</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">3</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></span></code></pre></p>
+
+
+	<a name="Nodeset-constants-values-are-XML-fragments"></a>
+<h3 >Nodeset constants (values are XML fragments):<a href="#Nodeset-constants-values-are-XML-fragments" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Define a constant named "baz" with a value of an xml fragment:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">baz</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;some_element&gt;</span>
+<span class="line-numbers">3</span>    <span class="tag">&lt;some_inner_element</span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;/some_element&gt;</span>
+<span class="line-numbers">5</span><span class="tag">&lt;/cb:define&gt;</span></span></code></pre></p>
+
+
+	<p>Any valid XML inside the define element is considered to be the constant's value.  This includes elements, attributes, text nodes, and comments.</p>
+
+
+	<a name="Expanding-Preprocessor-Constant-Values"></a>
+<h2 >Expanding Preprocessor Constant Values<a href="#Expanding-Preprocessor-Constant-Values" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Once defined, preprocessor constants can be expanded in two ways: as text references or as XML references.</p>
+
+
+	<a name="Text-References"></a>
+<h3 >Text References<a href="#Text-References" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>References of the form "$(const_name)" which are found in attribute values or text nodes will be expanded such that the text value replaces the reference.  If no constant exists with the given name and there exists a windows environment variable with the same name, that environment variable's value will be used.</p>
+
+
+	<a name="Examples"></a>
+<h4 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Use in an attribute:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">foo</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">2</span><span class="tag">&lt;somexml</span> <span class="attribute-name">attr1</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(foo)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;somexml</span> <span class="attribute-name">attr1</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+</span></code></pre><br />Use as text of an element:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">foo</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">2</span><span class="tag">&lt;somexml&gt;</span>$(foo)<span class="tag">&lt;/somexml&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;somexml&gt;</span>bar<span class="tag">&lt;/somexml&gt;</span>
+</span></code></pre><br />Use of Windows environment variables:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;env</span> <span class="attribute-name">dir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(PATH)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;env</span> <span class="attribute-name">dir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">... your PATH environment value ...</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="XML-References"></a>
+<h3 >XML References<a href="#XML-References" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>When the preprocessor encounters an element in the preprocessor namespace, and the element name is not one of the predefined keywords (define,scope,config-template, etc), the element will be replaced by the constant value associated with the element name.</p>
+
+
+	<a name="Examples"></a>
+<h4 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Use as text of an element:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">foo</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">2</span><span class="tag">&lt;sample&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;cb:foo</span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span><span class="tag">&lt;/sample&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;sample&gt;</span>
+<span class="line-numbers">2</span>  bar
+<span class="line-numbers">3</span><span class="tag">&lt;/sample&gt;</span>
+</span></code></pre><br />Uses as sub-element:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">baz</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;some_element&gt;</span>
+<span class="line-numbers">3</span>    <span class="tag">&lt;some_inner_element</span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;/some_element&gt;</span>
+<span class="line-numbers">5</span><span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">6</span><span class="tag">&lt;sample&gt;</span>
+<span class="line-numbers">7</span>  <span class="tag">&lt;cb:baz</span><span class="tag">/&gt;</span>
+<span class="line-numbers">8</span><span class="tag">&lt;/sample&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;sample&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;some_element&gt;</span>
+<span class="line-numbers">3</span>    <span class="tag">&lt;some_inner_element</span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;/some_element&gt;</span>
+<span class="line-numbers">5</span><span class="tag">&lt;/sample&gt;</span>
+</span></code></pre><br />If a constant reference refers to a constant which has not been defined and which does not exist as an OS environment variable, an error will occur.</p>
+
+
+	<a name="Nested-Expansions-and-Parameters"></a>
+<h2 >Nested Expansions and Parameters<a href="#Nested-Expansions-and-Parameters" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Constant references can be nested, <em>i.e.</em>, the value of constant "zed" can contain a reference to constant "alpha".<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">alpha</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">alphaval</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">2</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">zed</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">zedval/$(alpha)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">3</span>
+<span class="line-numbers">4</span><span class="tag">&lt;z&gt;</span>$(zed)<span class="tag">&lt;/z&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;z&gt;</span>zedval/alphaval<span class="tag">&lt;/z&gt;</span>
+</span></code></pre><br />In addition, using the cb:varname call syntax outlined above, constant values can be passed as part of the call element.  Consider the following definition, in which neither "gamma" nor "delta" have yet been defined:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">beta</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;hello&gt;</span>
+<span class="line-numbers">3</span>    <span class="tag">&lt;cb:gamma</span><span class="tag">/&gt;</span>
+<span class="line-numbers">4</span>    <span class="tag">&lt;hi</span> <span class="attribute-name">attr1</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(delta)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">5</span>  <span class="tag">&lt;/hello&gt;</span>
+<span class="line-numbers">6</span><span class="tag">&lt;/cb:define&gt;</span>
+</span></code></pre><br />Since gamma and delta have not been defined, they must be passed in with the reference to beta.  This is done as follows:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:beta</span> <span class="attribute-name">delta</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">deltaval</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">gamma</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">3</span>    <span class="tag">&lt;gamma_element&gt;</span>hi<span class="tag">&lt;/gamma_element&gt;</span>
+<span class="line-numbers">4</span>  <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">5</span><span class="tag">&lt;/cb:beta&gt;</span>
+</span></code></pre><br />This will expand to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;hello&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;gamma_element&gt;</span>hi<span class="tag">&lt;/gamma_element&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;hi</span> <span class="attribute-name">attr1</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">deltaval</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">4</span><span class="tag">&lt;/hello&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="Scopes"></a>
+<h2 >Scopes<a href="#Scopes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The <strong>&lt;scope&gt;</strong> element can be used to control the scope of a preprocessor definition.  You may not define the same constant twice within the same scope, however you may introduce a nested scope which redefines a particular value in an outer scope.  A scope is semantically equivalent to a stack frame in traditional programming terms.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:scope</span> <span class="attribute-name">a</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">a_val</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">b</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">b_val</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;test</span> <span class="attribute-name">attr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(a)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">attr2</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(b)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;cb:scope</span> <span class="attribute-name">a</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">a_val_redefined</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">4</span>    <span class="tag">&lt;test</span> <span class="attribute-name">attr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(a)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">attr2</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(b)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">5</span>  <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">6</span><span class="tag">&lt;/cb:scope&gt;</span>
+</span></code></pre><br />expands to:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;test</span> <span class="attribute-name">attr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">a_val</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">att2</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">b_val</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">2</span><span class="tag">&lt;test</span> <span class="attribute-name">attr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">a_val_redefined</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">att2</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">b_val</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+</span></code></pre><br />The scope can be used to set the projectname in a variable, making copy and paste of projects less error prone.<br />Changing a certain folder is also more easy / safe.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingMainDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C:\Integration\</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">\WorkingDirectory</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">ArtifactsDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">\Artifacts</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 5</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Alpha</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(WorkingDir)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">13</span>
+<span class="line-numbers">14</span>  <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Beta</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">15</span>    <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">16</span>      <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(WorkingDir)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers">17</span>      <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers">18</span>
+<span class="line-numbers">19</span>    <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>  <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">21</span>
+<span class="line-numbers">22</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre><br />expands to :<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Alpha</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="tag">&lt;workingDirectory&gt;</span>C:\Integration\Alpha\WorkingDirectory<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;artifactDirectory&gt;</span>C:\Integration\Alpha\Artifacts<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 6</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers"> 8</span>
+<span class="line-numbers"> 9</span>    <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Beta</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;workingDirectory&gt;</span>C:\Integration\Beta\WorkingDirectory<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers">11</span>      <span class="tag">&lt;artifactDirectory&gt;</span>C:\Integration\Beta\Artifacts<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers">12</span>
+<span class="line-numbers">13</span>    <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">14</span>
+<span class="line-numbers">15</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre><br />Or an even more advanced one (thanks to Arieh Schneier) :<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingMainDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">C:\Integration\</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">WorkingDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">\WorkingDirectory</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 4</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">ArtifactsDir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">\Artifacts</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 5</span>
+<span class="line-numbers"> 6</span> <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">OurProject</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 7</span>   <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(ProjectName)</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 8</span>     <span class="tag">&lt;workingDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(WorkingDir)<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 9</span>     <span class="tag">&lt;artifactDirectory&gt;</span>$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>   <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">11</span> <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">12</span>
+<span class="line-numbers">13</span> <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Alpha</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">14</span>   <span class="tag">&lt;cb:OurProject</span><span class="tag">/&gt;</span>
+<span class="line-numbers">15</span> <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers">16</span>
+<span class="line-numbers">17</span> <span class="tag">&lt;cb:scope</span> <span class="attribute-name">ProjectName</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Beta</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">18</span>   <span class="tag">&lt;cb:OurProject</span><span class="tag">/&gt;</span>
+<span class="line-numbers">19</span> <span class="tag">&lt;/cb:scope&gt;</span>
+<span class="line-numbers"><strong>20</strong></span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="Comments"></a>
+<h2 >Comments<a href="#Comments" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>XML Comments whose first character is '#' will not be copied to the output.  All other comments will.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">&lt;!-- This comment will appear in the output file--&gt;</span>
+<span class="line-numbers">2</span><span class="comment">&lt;!--# This comment will not --&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="Including-files"></a>
+<h2 >Including files<a href="#Including-files" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The <strong>&lt;include&gt;</strong> element is used to include the contents of another file.  The element is replaced with the contents of that file, which must be a valid XML document.  The file is specified as a URL, relative to the file that contains the <strong>&lt;include&gt;</strong> element.</p>
+
+
+	<p>Assuming that the CCNet configuration file "ccnet.config" includes the file "projects\project.config":<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>... lines before ...
+<span class="line-numbers">2</span><span class="tag">&lt;cb:include</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">projects/project.config</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">3</span>... lines after ...
+</span></code></pre><br />and that the "projects\project.config" file includes a file called "EmailConfig.xml" from the same directory as "ccnet.config":<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;project&gt;</span>
+<span class="line-numbers">2</span>  ... project definition ...
+<span class="line-numbers">3</span>  <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">4</span>    <span class="tag">&lt;cb:include</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">../EMailConfig.xml</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">5</span>    ... more publishers ...
+<span class="line-numbers">6</span>  <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">7</span><span class="tag">&lt;/project&gt;</span>
+</span></code></pre><br />and that the "EMailConfig.xml" file contains an [Email Publisher] definition:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;email&gt;</span>
+<span class="line-numbers">2</span>  ... email configuration info ...
+<span class="line-numbers">3</span><span class="tag">&lt;/email&gt;</span>
+</span></code></pre><br />the results would be:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>... lines before ...
+<span class="line-numbers"> 2</span><span class="tag">&lt;project&gt;</span>
+<span class="line-numbers"> 3</span>  ... project definition ...
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;email&gt;</span>
+<span class="line-numbers"> 6</span>      ... email configuration info ...
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/email&gt;</span>
+<span class="line-numbers"> 8</span>    ... more publishers ...
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers"><strong>10</strong></span><span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">11</span>... lines after ...
+</span></code></pre></p>
+
+
+	<a name="Including-files-with-multiple-elements"></a>
+<h4 >Including files with multiple elements<a href="#Including-files-with-multiple-elements" class="wiki-anchor">&para;</a></h4>
+
+
+A main ccnet.config file can easily contain dozens of project definitions, and to reduce the file size and so keeping the overview, it may be easy to group certain projects in separate files.
+	<ul>
+	<li>the main ccnet.config file grouping all includes, and small projects</li>
+		<li>a definition file, containing the global definitions</li>
+		<li>a CI_Projects file, containing all projects for the CI process</li>
+		<li>a DeployToQA file, containing all projects that will go to the QA environment,</li>
+		<li>....</li>
+	</ul>
+
+
+	<p>Setting this up :</p>
+
+
+The main ccnet.config file<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;cb:include</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Definitions.xml</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 4</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;cb:include</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">CI_Projects.xml</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>
+<span class="line-numbers"> 7</span>  <span class="tag">&lt;cb:include</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">QA_Projects.xml</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 8</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre><br />The Definitions.xml file<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cb:config-template</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;queue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">duplicates</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">UseFirst</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">lockqueues</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q2, Q4</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 4</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">EmailPublisher</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;email</span> <span class="attribute-name">from</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">buildmaster@mycompany.com</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 7</span>          <span class="attribute-name">mailhost</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 8</span>          <span class="attribute-name">mailhostUsername</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TheMailer</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 9</span>          <span class="attribute-name">mailhostPassword</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">JohnWayne</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"><strong>10</strong></span>          <span class="attribute-name">includeDetails</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">TRUE</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;users</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">12</span>        <span class="tag">&lt;groups</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">13</span>
+<span class="line-numbers">14</span>        <span class="tag">&lt;modifierNotificationTypes&gt;</span>
+<span class="line-numbers">15</span>          <span class="tag">&lt;NotificationType&gt;</span>Failed<span class="tag">&lt;/NotificationType&gt;</span>
+<span class="line-numbers">16</span>          <span class="tag">&lt;NotificationType&gt;</span>Fixed<span class="tag">&lt;/NotificationType&gt;</span>
+<span class="line-numbers">17</span>        <span class="tag">&lt;/modifierNotificationTypes&gt;</span>
+<span class="line-numbers">18</span>
+<span class="line-numbers">19</span>    <span class="tag">&lt;/email&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>  <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">21</span>
+<span class="line-numbers">22</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">common_publishers</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">23</span>    <span class="tag">&lt;artifactcleanup</span> <span class="attribute-name">cleanUpMethod</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">KeepMaximumXHistoryDataEntries</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">cleanUpValue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">500</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">24</span>    <span class="tag">&lt;xmllogger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">25</span>    <span class="tag">&lt;statistics</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">26</span>    <span class="tag">&lt;modificationHistory</span>  <span class="attribute-name">onlyLogWhenChangesFound</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">true</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">27</span>    <span class="tag">&lt;rss</span><span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>  <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">29</span>
+<span class="line-numbers"><strong>30</strong></span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">common_nant</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">31</span>       <span class="tag">&lt;executable&gt;</span>c:\nant\nant.exe<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers">32</span>       <span class="tag">&lt;nologo&gt;</span>true<span class="tag">&lt;/nologo&gt;</span>
+<span class="line-numbers">33</span>    <span class="tag">&lt;buildTimeoutSeconds&gt;</span>240<span class="tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="line-numbers">34</span>  <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">35</span>
+<span class="line-numbers">36</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nant_args_CI</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">37</span>      <span class="tag">&lt;buildArgs&gt;</span>clean compile<span class="tag">&lt;/buildArgs&gt;</span>
+<span class="line-numbers">38</span>  <span class="tag">&lt;/cb:define&gt;</span>
+<span class="line-numbers">39</span>
+<span class="line-numbers"><strong>40</strong></span><span class="tag">&lt;/cb:config-template&gt;</span>
+</span></code></pre><br />The CI_Projects.xml file<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cb:config-template</span> <span class="attribute-name">xmlns:cb</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">urn:ccnet.config.builder</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Preprocesser2</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>      <span class="tag">&lt;workingDirectory&gt;</span>C:\Integration\Preprocesser2\WorkingDirectory<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;artifactDirectory&gt;</span>C:\Integration\Preprocesser2\Artifacts<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 6</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers"> 8</span>        <span class="tag">&lt;intervalTrigger</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">continuous</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">seconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IfModificationExists</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>
+<span class="line-numbers">11</span>      <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nullSourceControl</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">12</span>
+<span class="line-numbers">13</span>      <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">14</span>         <span class="tag">&lt;cb:nant_local</span><span class="tag">/&gt;</span>
+<span class="line-numbers">15</span>      <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">16</span>
+<span class="line-numbers">17</span>      <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">18</span>         <span class="tag">&lt;cb:common_publishers</span><span class="tag">/&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>  <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">21</span>
+<span class="line-numbers">22</span>  <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">FtpTransfer2</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">102</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">23</span>     <span class="tag">&lt;workingDirectory&gt;</span>C:\Integration\FtpTransfer2\WorkingDirectory<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers">24</span>     <span class="tag">&lt;artifactDirectory&gt;</span>C:\Integration\FtpTransfer2\Artifacts<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers">25</span>
+<span class="line-numbers">26</span>     <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers">27</span>    <span class="tag">&lt;intervalTrigger</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">continuous</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">seconds</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">buildCondition</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">IfModificationExists</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>     <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers">29</span>
+<span class="line-numbers"><strong>30</strong></span>     <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">nullSourceControl</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">31</span>
+<span class="line-numbers">32</span>     <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">33</span>    <span class="tag">&lt;exec&gt;</span>
+<span class="line-numbers">34</span>       <span class="tag">&lt;executable&gt;</span>c:\tools\consolenok<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers">35</span>       <span class="tag">&lt;buildArgs&gt;</span>all<span class="tag">&lt;/buildArgs&gt;</span>
+<span class="line-numbers">36</span>       <span class="tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="line-numbers">37</span>       <span class="tag">&lt;/exec&gt;</span>
+<span class="line-numbers">38</span>
+<span class="line-numbers">39</span>    <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers"><strong>40</strong></span>
+<span class="line-numbers">41</span>    <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">42</span>       <span class="tag">&lt;cb:common_publishers</span><span class="tag">/&gt;</span>
+<span class="line-numbers">43</span>    <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">44</span>  <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">45</span>
+<span class="line-numbers">46</span><span class="tag">&lt;/cb:config-template&gt;</span>
+</span></code></pre><br />The same goes for the other included files, things to remember :
+	<ul>
+	<li>define a <strong>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder"&gt;</strong> root element in every included file</li>
+		<li>first include all definitions, and later the files containing the projects using them
+{note:title=Version 1.6 and higher only from now on}<br />The configuration options below are for CCNet 1.6 and higher only.
+{note}</li>
+	</ul>
+
+
+	<a name="Conditional-statements-"></a>
+<h2 >Conditional statements :<a href="#Conditional-statements-" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="IFDEF-IFNDEF-directives"></a>
+<h4 >IFDEF / IFNDEF directives<a href="#IFDEF-IFNDEF-directives" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>The <strong>&lt;cb:ifdef&gt;</strong> / <strong>&lt;cb:ifndef&gt;</strong> constructs are used during evaluation to conditionally include processing of their contained elements based on the existence/absence of a defined name.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">some_symbol_name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">some_symbol_value</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;cb:ifdef</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">some_symbol_name</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;output&gt;</span>Value of some_symbol_name is $(some_symbol_name)<span class="tag">&lt;/output&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;/cb:ifdef&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;cb:else&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;output&gt;</span>This will not appear because the symbol is defined<span class="tag">&lt;/output&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/cb:else&gt;</span>
+<span class="line-numbers"> 9</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;cb:ifndef</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">some_symbol_name</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;output&gt;</span>This will not appear in the output since some_symbol_name is defined<span class="tag">&lt;/output&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;/cb:ifndef&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;cb:else&gt;</span>
+<span class="line-numbers">14</span>    <span class="tag">&lt;output&gt;</span>This will appear because it is in the (optional) else clause<span class="tag">&lt;/output&gt;</span>
+<span class="line-numbers">15</span>  <span class="tag">&lt;/cb:else&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="IF-ELSE-directives"></a>
+<h4 >IF / ELSE directives<a href="#IF-ELSE-directives" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>The <strong>&lt;cb:if&gt;</strong> / <strong>&lt;cb:else&gt;</strong> constructs evaluate a JSCRIPT.NET boolean expression, and perform branching depending on the value of the expression.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">testval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">gibberish</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">testval2</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">40</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;cb:if</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">'$(testval)'=='gobbeldygook'</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    This will not appear, since the expression evaluates to false
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;/cb:if&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;cb:else&gt;</span>
+<span class="line-numbers"> 7</span>    This will appear in the output.
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/cb:else&gt;</span>
+<span class="line-numbers"> 9</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;cb:if</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(testval2) </span><span class="entity">&amp;lt;</span> <span class="content">50</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">11</span>    This will appear, since testval2 is less than 50
+<span class="line-numbers">12</span>  <span class="tag">&lt;/cb:if&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;cb:else&gt;</span>
+<span class="line-numbers">14</span>    This will not appear in the output.
+<span class="line-numbers">15</span>  <span class="tag">&lt;/cb:else&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="EVAL-directive"></a>
+<h4 >EVAL  directive<a href="#EVAL-directive" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Evaluates the given JSCRIPT.NET expression (of any type). The pp:eval tag is replaced with the result of the evaluation.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="comment">&lt;!-- outputs 54--&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;cb:eval</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">9*6</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span>
+<span class="line-numbers"> 4</span>  <span class="comment">&lt;!-- outputs 6. When referencing preprocessor variables in an expression, the value of</span>
+<span class="line-numbers"> 5</span><span class="comment">  the variables is substituted into the expression before it is submitted for evaluation.</span>
+<span class="line-numbers"> 6</span><span class="comment">  Therefore, the below expression is submitted to the JSCRIPT.NET runtime as &quot;18/3&quot; </span>
+<span class="line-numbers"> 7</span><span class="comment">  --&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">a</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">3</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">b</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">18</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;cb:eval</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(b)/$(a)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>
+<span class="line-numbers">11</span>  <span class="comment">&lt;!-- outputs the current date/time --&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;cb:eval</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">new Date()</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">13</span>
+<span class="line-numbers">14</span>  <span class="comment">&lt;!--</span>
+<span class="line-numbers">15</span><span class="comment">   Since the preprocessor replaces variable references with their values before submitting the expression</span>
+<span class="line-numbers">16</span><span class="comment">   to the JSCRIPT.NET engine, it is necessary take special steps to treat variables as strings. In the</span>
+<span class="line-numbers">17</span><span class="comment">   example below, the preprocessor will expand the value of $(str) before submitting the expression, therefore</span>
+<span class="line-numbers">18</span><span class="comment">   it is necessary to do two things:</span>
+<span class="line-numbers">19</span><span class="comment">    1. Enclose the variable reference in single quotes, making it a string literal in the JSCRIPT.NET language.</span>
+<span class="line-numbers"><strong>20</strong></span><span class="comment">       You need to do this yourself, as in the example below.</span>
+<span class="line-numbers">21</span><span class="comment">    2. Escape any funny characters (such as embedded single quotes) so that the string literal is properly-formed.</span>
+<span class="line-numbers">22</span><span class="comment">       You achieve this by adding a :js (for JSCRIPT) format specifier after the variable name. This causes</span>
+<span class="line-numbers">23</span><span class="comment">       the preprocessor to do the proper escaping for you.</span>
+<span class="line-numbers">24</span><span class="comment"></span>
+<span class="line-numbers">25</span><span class="comment">   This example outputs the value of str, converted to upper case. Literally, the JSCRIPT.NET expression</span>
+<span class="line-numbers">26</span><span class="comment">   which is evaluated is:</span>
+<span class="line-numbers">27</span><span class="comment">        'a string with \'things\' which may need to be &quot;escaped&quot;'.ToUpper()</span>
+<span class="line-numbers">28</span><span class="comment"></span>
+<span class="line-numbers">29</span><span class="comment">    Attributes:</span>
+<span class="line-numbers"><strong>30</strong></span><span class="comment">    expr: A JSCRIPT.NET expression</span>
+<span class="line-numbers">31</span><span class="comment">  --&gt;</span>
+<span class="line-numbers">32</span>
+<span class="line-numbers">33</span>  <span class="tag">&lt;cb:define</span> <span class="attribute-name">str</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">a string with 'things' which may need to be </span><span class="entity">&amp;quot;</span><span class="content">escaped</span><span class="entity">&amp;quot;</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">34</span>
+<span class="line-numbers">35</span>  <span class="tag">&lt;cb:eval</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">'$(str:js)'.ToUpper()</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="FOR-loop"></a>
+<h4 >FOR loop<a href="#FOR-loop" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Loops over a range of values and emits the loop body on each iteration.</p>
+
+
+	<p>Attributes:</p>
+
+
+	<p><strong>counter-name</strong>: The name for the counter variable. Within the body of the loop, this variable can be referenced just like any other preprocessor variable.<br /><strong>init-expr</strong>: JSCRIPT.NET expression whose value will be assigned to the counter variable before the first iteration.<br /><strong>test-expr</strong>: JSCRIPT.NET boolean expression which will determine whether the loop should terminate.
+{note}<br />Note in the example below that it is necessary to refer to the counter variable as $(i) rather than just i.
+{note}<br /><strong>count-expr</strong>: JSCRIPT.NET expression that is evaluated after every loop iteration. The value is assigned to the counter variable. In a typical counting loop, this would increment the counter by 1.
+{note}<br />Note that in the example below, it is necessary to refer to the counter variable as $(i) rather than just i. Note also that the value of count-expr is only the RIGHT HAND SIDE of<br />of the assignment (i.e. it does not say $(i) =(i+1))
+{note}<br /><strong>Scope</strong>:An implicit scope is introduced in the body of the loop, therefore any local definitions will only exist within the loop body.</p>
+
+
+	<p>This example will emit:<br />&lt;hello attr="0"/&gt;<br />&lt;hello attr="1"/&gt;<br />&lt;hello attr="2"/&gt;<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;cb:for</span> <span class="attribute-name">counter-name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">i</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">init-expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">test-expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(i)</span><span class="entity">&amp;lt;</span><span class="content">3</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">count-expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(i)+1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>    <span class="tag">&lt;hello</span> <span class="attribute-name">attr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(i)</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;/cb:for&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="ELEMENT-and-ATTRIBUTE-directives"></a>
+<h4 >ELEMENT and ATTRIBUTE directives<a href="#ELEMENT-and-ATTRIBUTE-directives" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>These emit XML elements, with (optional) attributes. This is just like the XSLT xsl:element/xsl:attribute mechanism. The only reason to use it rather than literal XML markup is if you wish for your element or attribute NAMES to be calculated.<br />Both &lt;cb:element&gt; and &lt;cb:attribute&gt; have two attributes:<br /><strong>name</strong>: Name of emitted element/attribute<br /><strong>namespace</strong> (optional): XML namespace of emitted element/attribute</p>
+
+
+	<p>This example will emit:<br />&lt;myel myattr1="myattrval1" myattr2="myattrval2"&gt;myelval&lt;/myel&gt;<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cb:define</span> <span class="attribute-name">elname</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">myel</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">elval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">myelval</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">attrname</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">myattr</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">attrval</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">myattrval</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 2</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;cb:element</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(elname)</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;cb:attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(attrname)1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>$(attrval)1<span class="tag">&lt;/pp:attribute&gt;</span>
+<span class="line-numbers"> 6</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;cb:attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">$(attrname)2</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>$(attrval)2<span class="tag">&lt;/pp:attribute&gt;</span>
+<span class="line-numbers"> 8</span>
+<span class="line-numbers"> 9</span>    $(elval)
+<span class="line-numbers"><strong>10</strong></span>
+<span class="line-numbers">11</span>  <span class="tag">&lt;/cb:element&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="Common-Problems"></a>
+<h2 >Common Problems<a href="#Common-Problems" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="XmlException-There-are-multiple-root-elements-when-including-another-file"></a>
+<h3 >XmlException: "There are multiple root elements" when including another file<a href="#XmlException-There-are-multiple-root-elements-when-including-another-file" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The <strong>&lt;include&gt;</strong> directive requires the included file to be a valid XML document.  All XML documents must have exactly one "root element" - <em>i.e.</em>, there <strong>must</strong> be an outermost pair of start/end XML tags.  The XML file being included in this case has more than one of these root elements (<em>e.g.</em>, &lt;project name="A"&gt;...&lt;/project&gt; &lt;project name="B"&gt;...&lt;/project&gt;).  The file must either be split apart so that each root element is in a separate file, or the group of root elements must be enclosed in a single outer element.</p>
+
+
+	<a name="Preprocessor-directives-dont-work-in-an-included-file"></a>
+<h3 >Preprocessor directives don't work in an included file<a href="#Preprocessor-directives-dont-work-in-an-included-file" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>XML requires that all "namespace" definitions (<em>i.e.</em>, <strong>xmlns:</strong>{*}{_}xxx{_}* attributes) must be declared in every file where they're used.  Every included file must have an <strong>xmlns:cb="urn:ccnet.config.builder"</strong> attribute on its root element, even if the namespace was defined in the file that included it.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Configuration_Preprocessor by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>
