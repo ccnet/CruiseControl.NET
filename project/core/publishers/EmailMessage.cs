@@ -272,7 +272,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 string email = username;
                 foreach (IEmailConverter converter in emailPublisher.Converters)
                 {
-                    email = converter.Convert(email);
+                    email = converter.Convert(username);
+                    if(email != null)
+                    {
+                        break;
+                    }
                 }
 
                 if (email != null)
