@@ -177,6 +177,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 var actualPath = this.SourceFile;
                 string baseFolder = string.IsNullOrEmpty(BaseDirectory) ? result.WorkingDirectory : BaseDirectory;
                 if (!Path.IsPathRooted(actualPath)) actualPath = Path.Combine(baseFolder, actualPath);
+                
 
                 // Check for **, if it exists, then split the search pattern and use the second half to find all
                 // matching files
