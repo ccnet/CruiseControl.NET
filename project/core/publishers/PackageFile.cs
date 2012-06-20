@@ -41,6 +41,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("sourceFile", Required = true)]
         public string SourceFile { get; set; }
 
+
+        #region BaseDirectory
+        /// <summary>
+        /// The directory to base all the file locations from.
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>Project working directory</default>
+        [ReflectorProperty("baseDirectory", Required = false)]
+        public string BaseDirectory { get; set; }
+        #endregion
+
+
         /// <summary>
         /// The name of the file that is to be saved. 
         /// </summary>
@@ -161,7 +173,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (this.SourceFile.Contains("*") || this.SourceFile.Contains("?"))
             {
                 var possibilities = new List<string>();
-                var actualPath = Path.IsPathRooted(this.SourceFile) ? this.SourceFile : result.BaseFromWorkingDirectory(this.SourceFile);
+                //var actualPath = Path.IsPathRooted(this.SourceFile) ? this.SourceFile : result.BaseFromWorkingDirectory(this.SourceFile);
+                var actualPath = this.SourceFile;
+                string baseFolder = string.IsNullOrEmpty(BaseDirectory) ? result.WorkingDirectory : BaseDirectory;
+                if (!Path.IsPathRooted(actualPath)) actualPath = Path.Combine(baseFolder, actualPath);
 
                 // Check for **, if it exists, then split the search pattern and use the second half to find all
                 // matching files
