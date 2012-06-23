@@ -1,3 +1,6 @@
+echo Compiling
+Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
+
 set outputfolder=docgen
 
 rmdir %outputfolder% /s /q

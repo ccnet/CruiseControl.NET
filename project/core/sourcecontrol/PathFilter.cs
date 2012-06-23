@@ -6,6 +6,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     /// <summary>
     /// The PathFilter can be used to filter modifications on the basis of their file path.
+    /// <code>
+    /// ** for any directory matching
+    /// *  means zero or more of any characters
+    /// ?  means one and only one of any character
+    /// </code>
     /// </summary>
     /// <title>PathFilter</title>
     /// <version>1.0</version>
@@ -17,7 +22,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </code>
     /// </example>
     /// <remarks>
-    /// <includePage> PathFilter Wildcards</includePage>
+    /// <code>
+    /// example             |    Matches     
+    /// --------------------+-----------------------------------------------------------------------------------------------
+    /// **/sources/**/*.*   | Matches any file in   /working/sources   /working/sources/CVS    /working/build/target/sources
+    /// *.*                 | any file that is in the root of the repository.
+    /// /theFolder/*.*      | any file that is in theFolder
+    /// **/theName.dat      | all file named 'theName.dat' in any folder of the repository
+    /// **/*.*              | matches all files in any folder 
+    /// **/the*.dat         | matches all files that start with 'the' and have a dat extention in any folder
+    /// **/the*Folder/*.*   | matches all files in folders that start with 'the' and end with 'Folder'
+    /// </code>
     /// </remarks>
 	[ReflectorType("pathFilter")]
 	public class PathFilter : IModificationFilter
