@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:43 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
 <link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
@@ -87,7 +87,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FMaking_A_Release" />
     <table>
       <tr>
@@ -146,7 +146,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="../versions/4.html" class="version-4">1.7</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -242,13 +242,14 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 
 
 <div class="wiki">
-  <a name="Making-A-Release"></a>
-<h1 >Making A Release<a href="#Making-A-Release" class="wiki-anchor">&para;</a></h1>
+  <a name="Making-a-Release"></a>
+<h1 >Making a Release<a href="#Making-a-Release" class="wiki-anchor">&para;</a></h1>
 
 
-	<fieldset class="header_collapsible collapsible toc right"><legend onclick="toggleFieldset(this);"><span>Contents</span></legend><div><ul class="toc"><li><a href="#Making-A-Release">Making A Release</a><ul><li><a href="#Choose-the-release-number">Choose the release number.</a><ul><li><a href="#Add-a-new-dev-version">Add a new dev version</a></li><li><a href="#Add-a-new-release-version">Add a new release version</a></li><li><a href="#Update-links">Update links</a></li></ul>
+	<fieldset class="header_collapsible collapsible toc right"><legend onclick="toggleFieldset(this);"><span>Contents</span></legend><div><ul class="toc"><li><a href="#Making-a-Release">Making a Release</a><ul><li><a href="#Choose-the-release-number">Choose the release number.</a><ul><li><a href="#Add-a-new-dev-version">Add a new dev version</a></li><li><a href="#Add-a-new-release-version">Add a new release version</a></li><li><a href="#Update-links">Update links</a></li></ul>
 </li><li><a href="#Issue-Management">Issue Management</a></li><li><a href="#Release-notes">Release notes</a></li><li><a href="#Help-pages">Help pages</a><ul><li><a href="#Update-the-wiki-pages">Update the wiki pages</a></li><li><a href="#Create-offline-docs">Create offline docs</a></li></ul>
-</li><li><a href="#Some-points-for-saving-time-">Some points for saving time :</a></li></ul></li></ul></div></fieldset>
+</li><li><a href="#Git-adjustments">Git adjustments</a></li><li><a href="#CCNet-live-adjustments">CCNet live adjustments</a></li><li><a href="#Upload-packages">Upload packages</a></li><li><a href="#Inform-the-world">Inform the world.</a><ul><li><a href="#SourceForge">SourceForge</a></li><li><a href="#Chili">Chili</a></li><li><a href="#Mailing-lists">Mailing lists</a></li></ul>
+</li><li><a href="#Upgrade-CCNet-live">Upgrade CCNet live</a></li><li><a href="#Some-points-for-saving-time-">Some points for saving time :</a></li></ul></li></ul></div></fieldset>
 
 
 	<p>Below are the steps needed for making a release of CCNet.<br />Providing a checklist ensures that nothing is forgotten :-)</p>
@@ -312,7 +313,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 	<li>click on <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="external">Roadmap</a></li>
 		<li>expand it</li>
 		<li>click on the version of the dev build</li>
-		<li>click on the XXX open link beneath the progress bar</li>
+		<li>click on the <em>XXX open</em> link beneath the progress bar</li>
 		<li>move each item to the next dev build, or clear the target version</li>
 	</ul>
 
@@ -394,13 +395,100 @@ http://www.cruisecontrolnet.org/projects/ccnet/wiki
 	<p><strong>Options - links</strong><br />  also check : Get HTML files first</p>
 
 
-	<p><strong>Options - Build</strong><br />Site-structure - without <a class="external" href="http://www.domain.xxx/">www.domain.xxx</a></p>
+	<p><strong>Options - Build</strong><br />Site-structure - without 'www.domain.xxx'</p>
 
 
-	<p>Download the site by ..., this will take about 10 minutes.</p>
+	<p>Download the site, this will take about 2 - 3 minutes.<br />Copy the downloaded contents to the <strong>doc</strong> folder.<br />Commit this to the trunk.</p>
 
 
-	<p>Copy the contents to the <strong>doc</strong> folder</p>
+	<p>Wait for CCNet live to pick up the changes.</p>
+
+
+	<a name="Git-adjustments"></a>
+<h2 >Git adjustments<a href="#Git-adjustments" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Create a new branch, with the version of the <strong>release</strong> number (the even one).<br /><pre>
+   todo : git statements
+</pre></p>
+
+
+	<a name="CCNet-live-adjustments"></a>
+<h2 >CCNet live adjustments<a href="#CCNet-live-adjustments" class="wiki-anchor">&para;</a></h2>
+
+
+Adjust the projects of CCNet Live :
+	<ul>
+	<li>The dev build must get the new <strong>dev</strong> build number.</li>
+		<li>the release project must point to release branch and get the new <strong>release</strong> number</li>
+	</ul>
+
+
+	<p>Force a build on the <strong>release</strong> project.</p>
+
+
+	<a name="Upload-packages"></a>
+<h2 >Upload packages<a href="#Upload-packages" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Get the latest build of the <strong>release</strong> project and upload it to SourceForge</p>
+
+
+	<ul>
+	<li>Login to the SourceForge.net website. <br />1. Click on Account on middle-top of the page.<br />2. Click on Projects<br />3. Select CruiseControl.Net (you should arrive at the SourceForge CCNet Project site)<br />4. Select Project Admin  -->   File Manager<br />5. You'll see a folder structure with 3 sub folders : <br /><pre>
+    1. CruiseControl.NET Examples
+    2. CruiseControl.NET Releases
+    3. OldFiles
+</pre></li>
+		<li>Create a new folder named according to the release (see other folders), by clicking on the cog wheel next to CruiseControl.NET Releases</li>
+		<li>Upload the files 1 by 1 by clicking on the cog wheel next to the newly created folder and select upload.</li>
+		<li>Make the setup exe te primary download for windows : click on the cog wheel next to the setup exe, and select properties.</li>
+		<li>On the window on the right side, check Windows, and press Save.</li>
+		<li>Go back to the main page of CCNet on Sourfeforge (SourceForge CCNet Project site)</li>
+		<li>edit the project settings , the second edit link you see.</li>
+		<li>Change the line <em>Latest release</em> to the correct number and mention the build number.</li>
+	</ul>
+
+
+	<a name="Inform-the-world"></a>
+<h2 >Inform the world.<a href="#Inform-the-world" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Add news of the release on <strong>SourceForge</strong> and the <strong>Chili</strong> news blog. <br />Inform the mailing lists.</p>
+
+
+	<a name="SourceForge"></a>
+<h3 >SourceForge<a href="#SourceForge" class="wiki-anchor">&para;</a></h3>
+
+
+	<ul>
+	<li>Login to the SourceForge.net website.</li>
+		<li>Select the project to administer from the My Projects listing on the My Page.</li>
+		<li>Select Develop - News from the pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
+		<li>Click on the Submit link near the top of the list.</li>
+		<li>Fill in the fields and submit the news item.<br />Summary : CruiseControl.NET x.y released<br />Details : paste the release Notes</li>
+	</ul>
+
+
+	<a name="Chili"></a>
+<h3 >Chili<a href="#Chili" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Click on News, expand it, and fill in the fields.</p>
+
+
+	<a name="Mailing-lists"></a>
+<h3 >Mailing lists<a href="#Mailing-lists" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Sent information in the way you normally do.</p>
+
+
+	<a name="Upgrade-CCNet-live"></a>
+<h2 >Upgrade CCNet live<a href="#Upgrade-CCNet-live" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Install the latest version on CCNet live, just to show that we trust the version.</p>
 
 
 	<a name="Some-points-for-saving-time-"></a>
@@ -464,6 +552,6 @@ http://www.cruisecontrolnet.org/projects/ccnet/wiki
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:57:40 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Making_A_Release by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:43 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 </html>

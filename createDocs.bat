@@ -11,6 +11,6 @@ Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\Server\\Th
 Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\WebDashboard\ThoughtWorks.CruiseControl.WebDashboard.dll -o=%outputfolder%
 
 IF "%2"=="" GOTO Continue
-docGenerator\Console\bin\Debug\Console.exe -c=publish -u=%1 -p=%2 -o=%outputfolder%
+Tools\docGenerator\Console\bin\Debug\Console.exe -c=publish -u=%1 -p=%2 -o=%outputfolder%
 :Continue
 pause
