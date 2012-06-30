@@ -307,7 +307,7 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("xmlFileAuditReader.wiki", "XML_File_Audit_Reader");
             //    FileName2ChiliPageNameMapping.Add("xmlFolderData.wiki", "");
             FileName2ChiliPageNameMapping.Add("xmllogger.wiki", "Xml_Log_Publisher");
-            FileName2ChiliPageNameMapping.Add("xslt.wiki", "Xml_Log_Publisher");
+            FileName2ChiliPageNameMapping.Add("xslt.wiki", "XsltTask");
 
 
             FileName2ChiliPageNameMapping.Add("booleanParameter.wiki", "BooleanParameter");

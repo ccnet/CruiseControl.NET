@@ -11,49 +11,72 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private readonly IExecutionEnvironment executionEnvironment = new ExecutionEnvironment();
 
         /// <summary>
-        /// Deletes the including read only objects.	
+        /// Deletes the path including read only objects.	
         /// </summary>
         /// <param name="path">The path.</param>
         /// <remarks></remarks>
         public void DeleteIncludingReadOnlyObjects(string path)
         {
-            try
+            const Int32 MaxTries = 20;
+
+            int failedAttempts = 0;
+            Exception tempException = null;
+            bool ok = false;
+
+            while (!ok && failedAttempts < MaxTries)
             {
-                // check whether path is a file or directory
-                if (File.Exists(path))
+                try
                 {
-                    File.SetAttributes(path, FileAttributes.Normal);
-                    File.Delete(path);
+                    // check whether path is a file or directory
+                    if (File.Exists(path))
+                    {
+                        File.SetAttributes(path, FileAttributes.Normal);
+                        File.Delete(path);
+                    }
+                    else if (Directory.Exists(path))
+                    {
+                        var dirInfo = new DirectoryInfo(path);
+                        SetReadOnlyRecursive(dirInfo);
+                        dirInfo.Delete(true);
+                    }
+                    else
+                    {
+                        Log.Warning("[IoService] File or directory not found: '{0}'", path);
+                    }
+
+                    ok = true;
                 }
-                else if (Directory.Exists(path))
+                catch (PathTooLongException pathTooLongEx)
                 {
-                    var dirInfo = new DirectoryInfo(path);
-                    SetReadOnlyRecursive(dirInfo);
-                    dirInfo.Delete(true);
+                    Log.Error("[IoService] Unable to delete path '{0}'.{1}{2}", path, Environment.NewLine, pathTooLongEx);
+
+                    if (executionEnvironment.IsRunningOnWindows)
+                    {
+                        DeleteDirectoryWithLongPath(path);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Log.Warning("[IoService] File or directory not found: '{0}'", path);
+                    /// general
+                    failedAttempts++;
+                    System.Threading.Thread.Sleep(250);
+                    tempException = ex;
                 }
             }
-            catch (PathTooLongException pathTooLongEx)
+
+            if (failedAttempts > 0)
             {
-                Log.Error("[IoService] Unable to delete path '{0}'.{1}{2}", path, Environment.NewLine, pathTooLongEx);
-                
-                if (executionEnvironment.IsRunningOnWindows)
+                Log.Error("Tried {0} times to delete {1}.",failedAttempts ,path);
+                if (failedAttempts == MaxTries)
                 {
-                    DeleteDirectoryWithLongPath(path);
-                }
-                else
-                {
-                    throw;
+                    throw tempException;
                 }
             }
-            catch (Exception ex)
-            {
-                Log.Error(ex);
-                throw;
-            }
+
         }
 
         /// <summary>
