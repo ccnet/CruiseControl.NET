@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/6 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:56:33 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/6 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:14:25 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
 <link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
@@ -84,7 +84,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fversions%2F6" />
     <table>
       <tr>
@@ -143,7 +143,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap selected">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="4.html" class="version-4">1.7</a></li><li><a href="5.html" class="version-5">1.9</a></li><li><a href="6.html" class="version-6">1.8</a></li></ul>
+<ul class="menu-children unattached"><li><a href="5.html" class="version-5">1.9</a></li><li><a href="6.html" class="version-6">1.8</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -249,7 +249,7 @@ jQuery.menu_expand({ menuItem: '.roadmap' });
 
 
 
-<p>Release version of the 1.7 branch</p>
+<p>CruiseControl.NET Release Version 1.8</p>
 <ul>
 	
 </ul>
@@ -258,6 +258,64 @@ jQuery.menu_expand({ menuItem: '.roadmap' });
     <p><em>No issues for this version</em></p>
 
 
+<div class="wiki">
+  <a name="CCNet-Version-18-release-notes"></a>
+<h1 >CCNet Version-1.8 release notes<a href="#CCNet-Version-18-release-notes" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>It's been a while, but we're back. The switch to the new infrastructure took some more time than anticipated, but it paid off.<br />Also choosing for Git as source control seems to be good choice, there are already some new contributors active, and it's a lot<br />easier to incorporate their work. A lot of the new features and bug fixes come from the contributors, so many thanks goes to them!<br />Also we start with a new numbering scheme for CCNet :<br />The odd versions are dev builds, like 1.7. The even numbers (like 1.8) are Release versions.</p>
+
+
+	<a name="Backwards-compatibility-issues"></a>
+<h2 >Backwards compatibility issues<a href="#Backwards-compatibility-issues" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>There were a few items that broke when upgrading to 1.5 or 1.6, sorry for that. <br />Here's a list of those that are known to be fixed</p>
+
+
+	<ul>
+	<li>Nant : newline in &lt;buildArgs&gt; causes "Target ' ' does not exist in this project." </li>
+		<li>Git : Merge Commits in GIT are being ignored by CCnet, causing "No modifications detected." </li>
+		<li>CCTray : Prevent Interval Trigger from modifying cctray detail column..</li>
+		<li>CCTray : app balloon shows always report builds even if it is set only to show warnings or errors.</li>
+		<li>BuildPublisher : KeepLastXBuilds broken in 1.7</li>
+	</ul>
+
+
+	<a name="Whats-different-needs-some-attention"></a>
+<h2 >What's different, needs some attention<a href="#Whats-different-needs-some-attention" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li><a href="../wiki/Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a>, it's best that you start every included file must with :<br />   <?xml version="1.0" encoding="utf-8"?>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder" xmlns="http://thoughtworks.org/ccnet/1/5"&gt;<br />   look at the bottom of the <a href="../wiki/Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a> page for the reason, <br />   and Skolima also made a nice post <a href="http://skolima.blogspot.com/2012/01/upgrading-from-cruisecontrolnet-15-to_18.html" class="external">about it</a></li>
+		<li>if you used GIT, the first build with CCNet 1.7 will list ALL changes done. This is due to the fix of the Git repository.<br />   Maybe it's best to delete the first build artifact, and clean up the history.xml file for each project with Git.<br />   Or take a backup of the history.xml files, upgrade to CCNet 1.7, and place the backup's back.</li>
+	</ul>
+
+
+	<a name="Main-new-features"></a>
+<h2 >Main new features<a href="#Main-new-features" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>xml highlighter for the BuildLog and ProjectConfiguration</li>
+		<li>Plastic SCM 4.0 plugin</li>
+		<li>Updating the dashboard activity status automatically (refreshinterval needs to be set in dashboard.config)</li>
+		<li>add xsl for ms-test and mstest coverage for vs2010</li>
+		<li>new modification filter : Multi filter</li>
+		<li>show description of the project in dashboard and CCtray</li>
+		<li>new xslt Task : allows to do XSL transformation during the build</li>
+		<li>Dashboard admin page has a better look, with tooltips and the packages divided in sections</li>
+		<li>added packages for existing xsl files, making it easier to use them.</li>
+		<li>added packages for existing plugins, making it easier to use them.</li>
+	</ul>
+
+
+	<a name="Changes"></a>
+<h2 >Changes<a href="#Changes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Lots of bugfixes and improvements, see below for details<br />todo : make final list on release of 1.8</p>
+</div>
 
 
 
@@ -297,6 +355,6 @@ jQuery.menu_expand({ menuItem: '.roadmap' });
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/6 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:56:34 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/6 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:14:25 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 </html>
