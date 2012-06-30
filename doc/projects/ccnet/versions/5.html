@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/5 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:56:33 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/5 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:16:33 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4="/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
 <link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
@@ -84,7 +84,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fversions%2F5" />
     <table>
       <tr>
@@ -143,7 +143,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap selected">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="4.html" class="version-4">1.7</a></li><li><a href="5.html" class="version-5">1.9</a></li><li><a href="6.html" class="version-6">1.8</a></li></ul>
+<ul class="menu-children unattached"><li><a href="5.html" class="version-5">1.9</a></li><li><a href="6.html" class="version-6">1.8</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -240,7 +240,7 @@ jQuery.menu_expand({ menuItem: '.roadmap' });
 <form id="status_by_form">
 <fieldset>
 <legend>
-Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Request('/projects/ccnet/versions/5/status_by', {asynchronous:true, evalScripts:true, parameters:Form.serialize('status_by_form') + '&amp;authenticity_token=' + encodeURIComponent('TuCSgo6KfC+CcuArU/F+CO2kXnzSpqJThOti0SP95e4=')})"><option value="category" selected="selected">Category</option>
+Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Request('/projects/ccnet/versions/5/status_by', {asynchronous:true, evalScripts:true, parameters:Form.serialize('status_by_form') + '&amp;authenticity_token=' + encodeURIComponent('bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=')})"><option value="category" selected="selected">Category</option>
 <option value="tracker">Tracker</option>
 <option value="status">Status</option>
 <option value="priority">Priority</option>
@@ -268,6 +268,24 @@ Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Requ
         </td>
     </tr>
     
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=9&amp;fixed_version_id=5&amp;set_filter=1&amp;status_id=%2A">Documentation</a>
+        </td>
+        <td width="240px">
+            <table class="progress" style="width: 200px;;"><tr><td class="todo" style="width: 100%;"></td></tr></table><p class="pourcent">0/1</p>
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=3&amp;fixed_version_id=5&amp;set_filter=1&amp;status_id=%2A">Source Control</a>
+        </td>
+        <td width="240px">
+            <table class="progress" style="width: 200px;;"><tr><td class="todo" style="width: 100%;"></td></tr></table><p class="pourcent">0/1</p>
+        </td>
+    </tr>
+    
     </table>
 
 </fieldset>
@@ -283,7 +301,7 @@ Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Requ
 </p>
 
 
-  <p><strong>Due in about 7 months</strong></p>
+  <p><strong>Due in about 6 months</strong></p>
 
 
 <p>CruiseControl.NET Dev 1.9 : mono compatible</p>
@@ -297,18 +315,33 @@ Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Requ
         0 closed
         (0%)
         &#160;
-        <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?fixed_version_id=5&amp;set_filter=1&amp;status_id=o">5 open</a>
+        <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?fixed_version_id=5&amp;set_filter=1&amp;status_id=o">10 open</a>
         (100%)
     </p>
 
 
+<div class="wiki">
+  <a name="Version-19"></a>
+<h1 >Version 1.9<a href="#Version-19" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>In this track we want to increase Mono Compatibility.<br />Console, service and dashboard must work out of the box.</p>
+
+
+	<p>Also the unit tests should work on mono, this means we must split the current test assembly into parts,<br />as it contains items that are Windows only.<br />The documentation also needs some polishing for installing and using under mono.<br />Initial work is here <a href="../wiki/DevInfo_Mono.html" class="wiki-page">DevInfo_Mono</a></p>
+</div>
 
 
 
 <fieldset class="related-issues"><legend>Related issues</legend>
 <ul>
+    <li><a href="http://www.cruisecontrolnet.org/issues/17" class="issue status-1 priority-1">Bug #17</a>: VSS Unittests are brocken on systems with german locale</li>
     <li><a href="http://www.cruisecontrolnet.org/issues/38" class="issue status-1 priority-2">Bug #38</a>: CCNet master fails to build on mono 2.10</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/77" class="issue status-1 priority-2">Bug #77</a>: Installer should reinstall on top and not skip all files</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/86" class="issue status-1 priority-2">Bug #86</a>: dynamic parameters problem with nunit</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/144" class="issue status-1 priority-2">Bug #144</a>: DTD Entities in 1.6 ccnet.config</li>
     <li><a href="http://www.cruisecontrolnet.org/issues/11" class="issue status-1 priority-2 overdue">Task #11</a>: Set build server language to english</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/15" class="issue status-1 priority-2 child">Task #15</a>: Auto lock automaticly generated wiki pages</li>
     <li><a href="http://www.cruisecontrolnet.org/issues/117" class="issue status-1 priority-2">Task #117</a>: refactor MakeBuildResult</li>
     <li><a href="http://www.cruisecontrolnet.org/issues/122" class="issue status-1 priority-2">Task #122</a>: run code analysis and find unused arguments / dead code</li>
     <li><a href="http://www.cruisecontrolnet.org/issues/126" class="issue status-1 priority-2">Task #126</a>: make the integration property names class autogen</li>
@@ -351,6 +384,6 @@ Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Requ
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/5 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 10 Jun 2012 14:56:33 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/5 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:16:33 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 </html>
