@@ -61,7 +61,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
                 catch (Exception ex)
                 {
-                    /// general
                     failedAttempts++;
                     System.Threading.Thread.Sleep(250);
                     tempException = ex;
