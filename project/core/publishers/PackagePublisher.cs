@@ -42,11 +42,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// &lt;name&gt;Example&lt;/name&gt;
     /// &lt;compression&gt;9&lt;/compression&gt;
     /// &lt;always&gt;true&lt;/always&gt;
-    /// &lt;flatten&gt;true&lt;/flatten&gt;
     /// &lt;manifest type="defaultManifestGenerator"/&gt;
     /// &lt;packageList&gt;
     /// &lt;packageFile&gt;
     /// &lt;sourceFile&gt;results.txt&lt;/sourceFile&gt;
+    /// &lt;packageFile sourceFile="icons\*.png" flatten="true"/&gt;
+    /// &lt;packageFile sourceFile="info\readme.txt" flatten="true"/&gt;
+    /// &lt;packageFolder baseFolder ="d:\tools" sourceFolder="d:\tools\Nant" fileFilter="*.*" includeSubFolders="true" /&gt;
     /// &lt;/packageFile&gt;
     /// &lt;/packageList&gt;
     /// &lt;/package&gt;
@@ -114,19 +116,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public bool AlwaysPackage { get; set; }
         #endregion
 
-        #region Flatten
-        /// <summary>
-        /// Should the file structure be flattened or not.
-        /// </summary>
-        /// <remarks>
-        /// By default, the folder structure will also be included in the package. Setting this property
-        /// to true will flatten (omit) the folder information.
-        /// </remarks>
-        /// <version>1.4.4</version>
-        /// <default>false</default>
-        [ReflectorProperty("flatten", Required = false)]
-        public bool Flatten { get; set; }
-        #endregion
+        //#region Flatten
+        ///// <summary>
+        ///// Should the file structure be flattened or not.
+        ///// </summary>
+        ///// <remarks>
+        ///// By default, the folder structure will also be included in the package. Setting this property
+        ///// to true will flatten (omit) the folder information.
+        ///// </remarks>
+        ///// <version>1.4.4</version>
+        ///// <default>false</default>
+        //[ReflectorProperty("flatten", Required = false)]
+        //public bool Flatten { get; set; }
+        //#endregion
 
         #region ManifestGenerator
         /// <summary>
