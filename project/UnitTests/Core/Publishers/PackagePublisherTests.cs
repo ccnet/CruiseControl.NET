@@ -54,8 +54,8 @@
             Assert.AreEqual(true, publisher.AlwaysPackage);
             publisher.CompressionLevel = 9;
             Assert.AreEqual(9, publisher.CompressionLevel);
-            publisher.Flatten = true;
-            Assert.AreEqual(true, publisher.Flatten);
+            //publisher.Flatten = true;
+            //Assert.AreEqual(true, publisher.Flatten);
             ManifestGenerator generator = new ManifestGenerator();
             publisher.ManifestGenerator = generator;
             Assert.AreSame(generator, publisher.ManifestGenerator);
@@ -156,7 +156,7 @@
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.Flatten = true;
+            //publisher.Flatten = true;
             publisher.PackageList = new IPackageItem[] { 
                 new PackageFile(dataFilePath) 
             };
