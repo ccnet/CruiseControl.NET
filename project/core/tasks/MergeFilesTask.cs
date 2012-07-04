@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The folder to copy the files to.
         /// </summary>
         /// <version>1.0</version>
-        /// <default>Project Artefact Directory</default>
+        /// <default>Project Artifact Directory</default>
         [ReflectorProperty("target", Required = false)]
         public string TargetFolder { get; set; }
 
