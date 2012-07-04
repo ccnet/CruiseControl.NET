@@ -855,7 +855,9 @@
     </EmbeddedResource>
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
-    <None Include="templates\AdministerDashboard.vm" />
+    <None Include="templates\AdministerDashboard.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\AdminLogin.vm" />
     <None Include="templates\AllBuilds.vm" />
     <None Include="templates\AuditHistory.vm" />
@@ -876,7 +878,9 @@
     <None Include="templates\LoggedOut.vm" />
     <None Include="templates\LoginAction.vm" />
     <None Include="templates\OhlohStats.vm" />
-    <None Include="templates\PackageList.vm" />
+    <None Include="templates\PackageList.vm">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="templates\ProjectGrid.vm" />
     <None Include="templates\ProjectParameters.vm">
       <SubType>Designer</SubType>

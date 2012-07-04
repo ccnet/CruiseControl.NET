@@ -100,7 +100,9 @@
 
 				<xsl:if test="string-length(modifications/modification/issueUrl)=0">
 				    <xsl:text>&#0160;&#0160;&#0160;&#0160; </xsl:text>
-		            <xsl:value-of select="(modifications/modification/comment)"  />
+					<xsl:for-each select="modifications/modification[ not (comment=preceding-sibling::modification/comment) ] /comment" >
+						<xsl:value-of select="."/><xsl:text>&#0160;--&#0160; </xsl:text>
+					</xsl:for-each>
                 </xsl:if>
 
                   </span>

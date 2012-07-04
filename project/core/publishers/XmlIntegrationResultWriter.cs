@@ -152,15 +152,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             writer.WriteStartElement(Elements.IntegrationProps);
             
-            //in alphabetical order
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory],
                                                             IntegrationPropertyNames.CCNetArtifactDirectory);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition],
                                                             IntegrationPropertyNames.CCNetBuildCondition);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate],
                                                             IntegrationPropertyNames.CCNetBuildDate);
-            WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildGuid],
-                                                            IntegrationPropertyNames.CCNetBuildGuid);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime],
                                                             IntegrationPropertyNames.CCNetBuildTime);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers],
@@ -189,7 +186,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                                                             IntegrationPropertyNames.CCNetWorkingDirectory);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetUser],
                                                             IntegrationPropertyNames.CCNetUser);
-
+            WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildId],
+                                                            IntegrationPropertyNames.CCNetBuildId);
             WriteIntegrationProperty(result.LastChangeNumber, "LastChangeNumber");
             WriteIntegrationProperty(result.LastIntegrationStatus, "LastIntegrationStatus");
             WriteIntegrationProperty(result.LastSuccessfulIntegrationLabel, "LastSuccessfulIntegrationLabel");
@@ -216,30 +214,37 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             writer.WriteStartElement(propertyName);
 
-            if ((value is string) || (value is int) || (value is Enum) || value is DateTime )
+            if ((value is string) || (value is int) || (value is Enum) || value is DateTime)
             {
                 writer.WriteString(value.ToString());
             }
             else
             {
-                var dummy = value as System.Collections.ArrayList;
-                if (dummy != null)
+                if (value is Guid)
                 {
-                    string[] tmp = (string[])dummy.ToArray(typeof(string));
-
-                    foreach (string s in tmp)
-                    {
-                        WriteIntegrationProperty(s, arrayElementName);
-                    }
+                    var x = (Guid)value;
+                    writer.WriteString(x.ToString("N"));
                 }
                 else
                 {
-                    throw new ArgumentException(
-                                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"The IntegrationProperty type {0} is not supported yet", value.GetType()));
-                }
-            
-            }
+                    var dummy = value as System.Collections.ArrayList;
+                    if (dummy != null)
+                    {
+                        string[] tmp = (string[])dummy.ToArray(typeof(string));
 
+                        foreach (string s in tmp)
+                        {
+                            WriteIntegrationProperty(s, arrayElementName);
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException(
+                                        string.Format(System.Globalization.CultureInfo.CurrentCulture, "The IntegrationProperty type {0} is not supported yet", value.GetType()));
+                    }
+
+                }
+            }
             writer.WriteEndElement();
         }
 

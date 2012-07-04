@@ -64,7 +64,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             Hashtable xsltArgs = new Hashtable();
-            xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+            if (cruiseRequest.Request.ApplicationPath == "/")
+                xsltArgs["applicationPath"] = string.Empty;
+            else
+                xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+
             xsltArgs["onlyShowBuildsWithModifications"] = OnlyShowBuildsWithModifications;
 
             string HistoryDocument = farmService.GetModificationHistoryDocument(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());

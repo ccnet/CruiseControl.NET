@@ -91,6 +91,43 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("incrementOnFailure", Required = false)]
         public bool IncrementOnFailure { get; set; }
 
+
+        /// <summary>
+        /// A format applied to the major part of the buildnumber. 
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>0</default>
+        [ReflectorProperty("majorLabelFormat", Required = false)]
+        public string MajorLabelFormat { get; set; }
+
+
+        /// <summary>
+        /// A format applied to the minor part of the buildnumber. 
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>0</default>
+        [ReflectorProperty("minorLabelFormat", Required = false)]
+        public string MinorLabelFormat { get; set; }
+
+
+        /// <summary>
+        /// A format applied to the build part of the buildnumber. 
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>0</default>
+        [ReflectorProperty("buildLabelFormat", Required = false)]
+        public string BuildLabelFormat { get; set; }
+
+
+        /// <summary>
+        /// A format applied to the revision part of the buildnumber. 
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>0</default>
+        [ReflectorProperty("revisionLabelFormat", Required = false)]
+        public string RevisionLabelFormat { get; set; }
+
+
 		#endregion
 
 		#region ILabeller Members
@@ -174,11 +211,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			Log.Debug(string.Format(System.Globalization.CultureInfo.InvariantCulture,
                                     "[assemblyVersionLabeller] Major: {0} Minor: {1} Build: {2} Revision: {3}", Major, Minor, currentBuild, currentRevision));
 
-			Version newVersion = new Version(Major, Minor, currentBuild, currentRevision);
-            Log.Debug(string.Concat("[assemblyVersionLabeller] New version is: ", newVersion.ToString()));
+            string result = string.Concat(Major.ToString(MajorLabelFormat), ".", Minor.ToString(MinorLabelFormat), ".", currentBuild.ToString(BuildLabelFormat), ".", currentRevision.ToString(RevisionLabelFormat));
+
+            Log.Debug(string.Concat("[assemblyVersionLabeller] New version is: ", result));
 
 			// return new version string
-			return newVersion.ToString();
+            return result;
 		}
 
 		#endregion

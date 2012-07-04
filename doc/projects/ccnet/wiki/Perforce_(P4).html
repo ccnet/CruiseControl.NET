@@ -1,0 +1,519 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Perforce_(P4) by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Perforce (P4) - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FPerforce_%28P4%29" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Perforce_(P4)/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; <a href="Project_Configuration_Block.html">Project Configuration Block</a> &#187; <a href="Source_Control_Blocks.html">Source Control Blocks</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Perforce-Source-Control-Block"></a>
+<h1 >Perforce Source Control Block<a href="#Perforce-Source-Control-Block" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Perforce source control block.</p>
+
+
+	<a name="Version"></a>
+<h2 >Version<a href="#Version" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Available from version 1.0</p>
+
+
+	<a name="Examples"></a>
+<h2 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h2>
+
+
+	<p><strong>Minimalist example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">p4</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;view&gt;</span>//projects/myproject/...<span class="tag">&lt;/view&gt;</span>
+<span class="line-numbers">3</span><span class="tag">&lt;/sourcecontrol&gt;</span></span></code></pre></p>
+
+
+	<p><strong>Full example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">p4</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;view&gt;</span>//projects/ccnet/...,//tools/nant/...<span class="tag">&lt;/view&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;executable&gt;</span>c:\perforce\p4.exe<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;client&gt;</span>ccnet-buildhost<span class="tag">&lt;/client&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;user&gt;</span>public<span class="tag">&lt;/user&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;password&gt;</span>mypassword<span class="tag">&lt;/password&gt;</span>
+<span class="line-numbers"> 7</span>  <span class="tag">&lt;port&gt;</span>perforce01.thoughtworks.net:1666<span class="tag">&lt;/port&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;timeZoneOffset&gt;</span>-5<span class="tag">&lt;/timeZoneOffset&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;applyLabel&gt;</span>true<span class="tag">&lt;/applyLabel&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;autoGetSource&gt;</span>true<span class="tag">&lt;/autoGetSource&gt;</span>
+<span class="line-numbers">11</span>  <span class="tag">&lt;forceSync&gt;</span>true<span class="tag">&lt;/forceSync&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;p4WebURLFormat&gt;</span>http://perforceWebServer:8080/@md=d<span class="entity">&amp;amp;</span>cd=//<span class="entity">&amp;amp;</span>c=3IB@/{0}?ac=10<span class="tag">&lt;/p4WebURLFormat&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;timeout</span> <span class="attribute-name">units</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">minutes</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>10<span class="tag">&lt;/timeout&gt;</span>
+<span class="line-numbers">14</span><span class="tag">&lt;/sourcecontrol&gt;</span></span></code></pre></p>
+
+
+	<a name="Configuration-Elements"></a>
+<h2 >Configuration Elements<a href="#Configuration-Elements" class="wiki-anchor">&para;</a></h2>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+			<td> <strong>Default</strong> </td>
+			<td> <strong>Version</strong> </td>
+		</tr>
+		<tr>
+			<td> type </td>
+			<td> The type of source control block. </td>
+			<td> String - must be p4 </td>
+			<td> Yes </td>
+			<td> <em>n/a</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> acceptableErrors </td>
+			<td> The acceptable errors.   </td>
+			<td> String array </td>
+			<td> No </td>
+			<td> file\(s\) up-to-date\. </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> applyLabel </td>
+			<td> Whether to apply a label on a successful build.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> autoGetSource </td>
+			<td> Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified client - the view has no effect on sycning.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> true </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> client </td>
+			<td> The perforce 'client' to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Performance environment setting </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> dynamicValues </td>
+			<td> The dynamic values to use for the source control block.   </td>
+			<td> <a href="Dynamic_Values.html" class="wiki-page">Dynamic Values</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> errorPattern </td>
+			<td> The error pattern to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> ^error: .\* </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> executable </td>
+			<td> The location of the Perforce command line client executable.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> p4 </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> forceSync </td>
+			<td> If autoGetSource is set to true, then whether to use the -f option to sync. See <a class="external" href="http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html">http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html</a> for more details.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> issueUrlBuilder </td>
+			<td> Converts the comment (or parts from it) into an url pointing to the issue for this build.   </td>
+			<td> <a href="IssueUrlBuilder.html" class="wiki-page">IssueUrlBuilder</a> </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> p4WebURLFormat </td>
+			<td> Creates a link to the P4Web change list page for each detected modification. The specified value is transformed using String.Format where the first argument will be the substituted change list number.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> password </td>
+			<td> The perforce password to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Performance environment setting </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> port </td>
+			<td> The perforce hostname and port to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Performance environment setting </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> timeZoneOffset </td>
+			<td> How many hours ahead your Perforce Server is from your build server. E.g. if your build server is in London, and your Perforce server is in New York, this value would be '-5'.   </td>
+			<td> Double </td>
+			<td> No </td>
+			<td> 0 </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> useExitCode </td>
+			<td> Whether to use exit codes.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> user </td>
+			<td> The perforce user to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Performance environment setting </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> view </td>
+			<td> The perforce 'view' to check for changes. For 'multi-line' views, use a comma-separated list. 'Exclusionary' view lines starting with - cannot be used. Use a <a href="Filtered_Source_Control_Block.html" class="wiki-page new">Filtered Source Control Block</a> to achieve this behaviour. Note that this view is not used for syncing (see below.)   </td>
+			<td> String </td>
+			<td> Yes </td>
+			<td> <em>n/a</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> workingDirectory </td>
+			<td> The working directory to use.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Project Working Directory </td>
+			<td> 1.0 </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Notes"></a>
+<h2 >Notes<a href="#Notes" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Client-User-Password-Port-usage"></a>
+<h4 >Client / User / Password / Port usage<a href="#Client-User-Password-Port-usage" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>You may specify any of the Perforce client, user, password and port (ie 'host:port' in Perforce standards) settings to use. If you don't specify them, then Cruise Control .NET will use the defaults in your registry (use 'p4 set' to view and edit these.)</p>
+
+
+	<p>Note that the client specification is only used for syncing and applying labels, it is not used when checking for changes. This is significant since it means that the view in the specified client does not effect the plugin's behaviour when checking for changes.</p>
+
+
+	<a name="Perforce-Issues"></a>
+<h4 >Perforce Issues<a href="#Perforce-Issues" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Perforce cannot apply purely numeric labels, which is what CCNet uses by default. Therefore, if you have 'applyLabel' set to true, you must also setup a custom Labeller in your project, e.g. by using the <a href="Default_Labeller.html" class="wiki-page">Default Labeller</a>.</p>
+
+
+	<a name="Automatically-Generated"></a>
+<h4 >Automatically Generated<a href="#Automatically-Generated" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Documentation generated on Saturday, 30 Jun 2012 at 6:00:13 AM</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Perforce_(P4) by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

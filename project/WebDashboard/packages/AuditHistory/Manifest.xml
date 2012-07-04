@@ -1,0 +1,15 @@
+﻿<package>
+  <name>Audit History</name>
+  <description>Displays the audit log of server and project</description>
+  <type>Plugin</type>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>serverAuditHistoryProjectPlugin</name>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>serverAuditHistoryServerPlugin</name>
+    </setting>
+	</configuration>
+</package>

@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MainFormController myController;
         private Dictionary<string, ParameterBase> myParameters;
         private object myParameterHolder;
+        private PersistWindowState windowState;
 
         public BuildParameters(MainFormController controller, List<ParameterBase> buildParameters)
         {
@@ -28,10 +29,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             myParameterHolder = GenerateParametersClass();
             ApplyParameters();
             parameters.SelectedObject = myParameterHolder;
+
+            this.Text = string.Format("Build parameters for {0}", myController.SelectedProject.Detail.ProjectName);
+            HookPersistentWindowState();               
+        }
+
+
+        private void HookPersistentWindowState()
+        {
+            windowState = new PersistWindowState();
+            windowState.Parent = this;
+            // set registry path in HKEY_CURRENT_USER
+            windowState.RegistryPath = @"Software\ThoughtWorks\CCTray\Windows\BuildParameter";      
         }
 
         private void buildButton_Click(object sender, EventArgs e)
-        {
+        {            
             myController.ForceBuild(RetrieveParameters());
             this.Close();
         }

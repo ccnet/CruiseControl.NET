@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-16 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Version-1-6 - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FVersion-16" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Version-1-6/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="VersionInfo.html">VersionInfo</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Highlights-of-the-16-release"></a>
+<h1 >Highlights of the 1.6 release<a href="#Highlights-of-the-16-release" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>This is mainly a bug fix release on the 1.5 version, that one had enough new features</p>
+
+
+	<a name="The-following-features-are-added"></a>
+<h2 >The following features are added<a href="#The-following-features-are-added" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Conditional Task</li>
+		<li>FAKE - F# Make Task</li>
+		<li>Queue section can have its own project definitions</li>
+		<li>Cron trigger</li>
+	</ul>
+
+
+	<a name="Bug-Fixes"></a>
+<h2 >Bug Fixes<a href="#Bug-Fixes" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>A lot.</p>
+
+
+	<p>The most important bugfixes are related to the VSTS and Mercurial source control block,<br />other big affected items are the dashboard and CCTray.<br />Off course there are bugfixes done on other items as well.</p>
+
+
+	<ul>
+	<li> VSS SourceControl GET command should use -I-Y</li>
+		<li> Exception when Vault workingDirectory doesn't exist during check for modifications</li>
+		<li> Configuration problem : entering empty labeller tag in ccnet.config results into crash iso reporting an error that is meaningfull</li>
+		<li> StopAllProjects never ends</li>
+		<li> NDepend report does not show images</li>
+		<li> Projects stay in Stopped state after a config update</li>
+		<li> CCValidator - .NET runtime error on Win2003 x64</li>
+		<li> program files folder locked down in windows 7 : move the log files to another folder : update config of log4net</li>
+		<li> "View Statistics" breaks with error "Missing/Invalid statistics reports" when statistics publisher saves malformed report.xml due to XML fragments in build error message</li>
+		<li> The new Team Foundation Server (vsts) source control solution in 1.5.0 CTP does not supply the login credentials for all calls resulting in 'not authorized' errors</li>
+		<li> VSTS doesn't pass credentials as specified in the sourcecontrol block</li>
+		<li> Receive an unauthorized access exception when connecting to TFS</li>
+		<li> VSTS Source Control is broken</li>
+		<li> scheduleTrigger often does not detect modifications</li>
+		<li> Incorrect filename when outputDir specified for package publisher</li>
+		<li> Vsts.GetSource Broken Due to Malformed Server Name</li>
+		<li> null pointer exception while loading config file with includes</li>
+		<li> Source control operation has timed out (v 1.5.0.6237)</li>
+		<li> display status window from tray icon not displayed the right way.</li>
+		<li> using a dynamic value for the password on the SVN source control block causes a cast exception</li>
+		<li> CCValidator crash on Windows 7 x64</li>
+		<li> Dashboard v1.5 homepage has a javascript error</li>
+		<li> FxCop 1.36 does not report file names correctly</li>
+		<li> Different information in the Web Dashboard, CCTray and the balloon notification about who is fixing the build.</li>
+		<li> Wrong path for checkout from cvs repository</li>
+		<li> build results XML get corrupted</li>
+		<li> GetWorkSpaceProcessInfo in vsts.cs does not handle the Force member</li>
+		<li> TFS Label does not specify scope</li>
+		<li> CCTray Window not displayed when double click on tray icon after started, not until you've clicked it twice. (patch included)</li>
+		<li> Problems with schedule trigger - calculation of the next build time</li>
+		<li> MSBuild task does not give console output error messages for report generators to use</li>
+		<li> Mercurial does not work with Vault - CruiseControlException: History Parsing Failed</li>
+		<li> CCValidator - Unexpected Error with missing directories</li>
+		<li> FTP Task always uploads all files</li>
+		<li> Crash due to invalid XML which CCValidator passes</li>
+		<li> PowerShell should display the description given in the configuration</li>
+		<li> CruiseControl.NET 1.5 TFS Server not found error</li>
+		<li> Filtered Source Control Fails to Find Modifications When Using Mercurial</li>
+		<li> MsTestReport.xsl and MsTestSummary.xsl do not work with MSTest 10</li>
+		<li> Directory does not exist: exception with vault clean build</li>
+		<li> UnitTests.xsl and UnitTestDetails.xsl don't count suite-level errors</li>
+		<li> IfModificationExists trigger setting not working correctly for the Mercurial Source Control Block.</li>
+		<li> Non-empty "buildlogs" folder becomes deleted by Artifacts Cleanup publisher when there was a problem writing a current xml log</li>
+		<li> missing CSS file reference in the Obsess theme</li>
+		<li> Mercurial uses -r switch for getting branch whilst the switch for getting a branch is -b</li>
+		<li> Wrong mercurial changesets non-english titles in project reports</li>
+		<li> Who forced the build?</li>
+		<li> Preprocessor and whitespace : breaking change in 1.5 and 1.6</li>
+		<li> package builder does not set filedate within the zipfile to the last changed date.</li>
+		<li> CCNET console doesn't see custom plugins in own folder</li>
+		<li> ProjectTrigger does not find project on local server</li>
+		<li> cctray null ref exception</li>
+		<li> "preCondition" attribute in Web.config is not supported by IIS 5.1 on Windows XP</li>
+		<li> "View Server Log" does not work anymore due to new log-file location</li>
+		<li> VSTS labeling breaks if there is a space in the project path</li>
+		<li> History Parser Tests should handle user-selected culture settings</li>
+		<li> Unable to connect to Team Foundation Server 2010</li>
+		<li> Delete workspace or workfold mapping in TFS.</li>
+	</ul>
+
+
+	<a name="New-Features"></a>
+<h2 >New Features<a href="#New-Features" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li> Ability to specify which user to run source control tasks and nant tasks as</li>
+		<li> Allow 'Server State Directory' to be configured</li>
+		<li> Make ccnet plugin name configurable</li>
+		<li> If build is aborted, build shows as failed for no reason</li>
+		<li> pre processor improvements</li>
+		<li> Configuratio validator should help user to report bugs</li>
+		<li> task build up should display task description iso taskname</li>
+		<li> Make integration properties available everywhere</li>
+		<li> Show user name when a build is aborted</li>
+		<li> new functionality in pre-processor and rework to using LINQ</li>
+		<li> Queue/QueuePriority Columns in CCTray</li>
+		<li> IOService do not support deleting paths longer then 260 chars</li>
+		<li> must be able to pass user and pasword to console runner when specifying a single project to build</li>
+		<li> Make tasks Name-able</li>
+		<li> VSTS plugin does not work when username/password/domain is specified in config and machine is not in domain</li>
+		<li> Force build should not work when project is stopped</li>
+		<li> include cccmd in the setup, just like cc console</li>
+		<li> Svn: TagOnSuccess TagWorkingCopy - save version number generated by ccnetLabel when tagged</li>
+		<li> better reporting of DevEnvTask, logfiles not displayed because logger not apply for task. (patch included)</li>
+		<li> Support git submodules in source control block</li>
+		<li> CCCmd Allow to specify the parameters for a forced build</li>
+		<li> CCCmd Allow to output XML when using the retrieve command</li>
+		<li> Stylesheet Tweak for FxCop 10.0 (.Net 4 / VS 2010)</li>
+		<li> TFS project build using CCNet and MSBuild</li>
+		<li> Add Modification Change Number Support to MKS Source Implementation</li>
+		<li> Sometimes nunit-agent.exe processes remain running after using &lt;nunit&gt; task</li>
+		<li> gewtting error ThoughtWorks.CruiseControl.Core.Tasks.BuilderException: Command Line Build timed out (after 600 seconds) while executing .xml through bat file</li>
+		<li> move Q related columns to the end of the list, and foresee a way to hide them</li>
+		<li> Add support for project hierarchies</li>
+		<li> Modifications by changelist</li>
+		<li> show test list name on mstest page</li>
+		<li> show timings in mstest page</li>
+		<li> Reworked Mercurial source control with some additional features</li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-16 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

@@ -346,46 +346,6 @@ label
 	</div>
 </div>
 #end
-<table id="adminFrame">
-    <tr valign="top">
-        <td>
-            <fieldset id="servers">
-                <legend>$translations.Translate("Remote Servers")</legend>
-                #foreach ($Server in $Servers)
-                #odd
-                <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
-                    $Server.Name [$Server.Url]
-                </div>
-                #even
-                <div class="evenRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
-                    $Server.Name [$Server.Url]
-                </div>
-                #end
-            </fieldset>
-        </td>
-        <td>
-            <fieldset id="packages">
-                <legend>$translations.Translate("Packages")</legend>
-                #foreach ($Package in $Packages)
-                #odd
-                <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName">
-                    $Package.Name 
-                    #if ($Package.IsInstalled)
-                    [Installed]
-                    #end
-                </div>
-                #even
-                <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName">
-                    $Package.Name 
-                    #if ($Package.IsInstalled)
-                    [Installed]
-                    #end
-                </div>
-                #end
-            </fieldset>
-        </td>
-    </tr>
-</table>
 <fieldset>
     <legend>$translations.Translate("Commands")</legend>
     <form method="post">
@@ -397,4 +357,108 @@ label
         </div>
     </form>
 </fieldset>
+<table id="adminFrame">
+    <tr valign="top">
+        <td>
+            <fieldset id="servers">
+                <legend title="All the servers defined in the dashboard">$translations.Translate("Remote Servers")</legend>
+                #foreach ($Server in $Servers)
+                #odd
+                <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible" title="Click to alter settings">
+                    $Server.Name [$Server.Url]
+                </div>
+                #even
+                <div class="evenRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible" title="Click to alter settings">
+                    $Server.Name [$Server.Url]
+                </div>
+                #end
+            </fieldset>
+        </td>
+        <td>
+            <fieldset id="packages">
+                <legend title="All the packages that can be installed.">$translations.Translate("Packages")</legend>
+                <fieldset id="dashboardpackages">
+                    <legend title="All the packages that have influence on the dashboard.">Dashboard Packages</legend>
+                    #foreach ($Package in $DashboardPackages)
+                    #odd
+                    <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #even
+                    <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #end
+              </fieldset>                
+
+                <fieldset id="serverpackages">
+                    <legend title="All the packages that give information about a certain server.">Server Packages</legend>
+                    #foreach ($Package in $ServerPackages)
+                    #odd
+                    <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #even
+                    <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #end
+              </fieldset>                
+
+              <fieldset id="projectpackages">
+                    <legend title="All the packages that give information about a certain project.">Project Packages</legend>
+                    #foreach ($Package in $ProjectPackages)
+                    #odd
+                    <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #even
+                    <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #end
+              </fieldset>                
+                           
+                <fieldset id="buildpackages">
+                    <legend title="All the packages that give information about a certain build.">Build Packages</legend>
+                    #foreach ($Package in $BuildPackages)
+                    #odd
+                    <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #even
+                    <div class="evenRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName" title="$Package.Description">
+                        $Package.Name 
+                        #if ($Package.IsInstalled)
+                        [Installed]
+                        #end
+                    </div>
+                    #end
+              </fieldset>                
+            </fieldset>
+        </td>
+    </tr>
+</table>
+
 <!-- AdministerDashboard.vm: End -->

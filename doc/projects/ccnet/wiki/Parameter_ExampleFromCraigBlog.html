@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Parameter_ExampleFromCraigBlog by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Parameter ExampleFromCraigBlog - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FParameter_ExampleFromCraigBlog" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Parameter_ExampleFromCraigBlog/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; <a href="Project_Configuration_Block.html">Project Configuration Block</a> &#187; <a href="Parameters.html">Parameters</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Parameter-Example-From-Craigs-Blog"></a>
+<h1 >Parameter Example From Craigs Blog<a href="#Parameter-Example-From-Craigs-Blog" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Taken from Craigs Blog (<a class="external" href="http://csut017.wordpress.com/2009/05/12/dynamic-build-parameters-some-examples">http://csut017.wordpress.com/2009/05/12/dynamic-build-parameters-some-examples</a>)<br />Copied here for reference and also because the layout on that page is for one reason or another very weird.</p>
+
+
+	<a name="A-Very-Basic-Configuration"></a>
+<h2 >A Very Basic Configuration<a href="#A-Very-Basic-Configuration" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>To keep things simple, I’m only going to work with a very simple configuration (ccnet.config). This is the base config:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Test Project</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;description&gt;</span>A demonstration project to show the features of the dynamic build parameters.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">svn</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/firstproject/trunk<span class="tag">&lt;/trunkUrl&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;workingDirectory&gt;</span>C:\SourceControl\FirstProject\<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/sourcecontrol&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;intervalTrigger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">12</span>      <span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers">13</span>        <span class="tag">&lt;buildFile&gt;</span>App.build<span class="tag">&lt;/buildFile&gt;</span>
+<span class="line-numbers">14</span>        <span class="tag">&lt;targetList&gt;</span>
+<span class="line-numbers">15</span>          <span class="tag">&lt;target&gt;</span>Dev<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers">16</span>        <span class="tag">&lt;/targetList&gt;</span>
+<span class="line-numbers">17</span>        <span class="tag">&lt;buildArgs&gt;</span>-D:reason=testing<span class="tag">&lt;/buildArgs&gt;</span>
+<span class="line-numbers">18</span>      <span class="tag">&lt;/nant&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;gendarme&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>        <span class="tag">&lt;assemblies&gt;</span>
+<span class="line-numbers">21</span>          <span class="tag">&lt;assemblyMatch</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">*.dll</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">22</span>        <span class="tag">&lt;/assemblies&gt;</span>
+<span class="line-numbers">23</span>        <span class="tag">&lt;limit&gt;</span>100<span class="tag">&lt;/limit&gt;</span>
+<span class="line-numbers">24</span>      <span class="tag">&lt;/gendarme&gt;</span>
+<span class="line-numbers">25</span>    <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">26</span>    <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">27</span>      <span class="tag">&lt;rss</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>      <span class="tag">&lt;xmllogger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">29</span>    <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>  <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">31</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre>
+
+	<p>This project uses Subversion as the source code repository, using a repository called firstproject. It has the default interval trigger (checks for modifications every 60 seconds). When a build is triggered it will run an NAnt build script called App.Build and then perform a Gendarme analysis. Finally it will generate an RSS feed and log the XML results (so the dashboard can use it.)</p>
+
+
+	<p>Basically I’m going to add three dynamic parameters:</p>
+
+
+	<pre><code>Define the target to build<br />    Change the reason for the build (a buildArg for the NAnt script)<br />    And vary the limit on the Gendarme analysis</code></pre>
+
+
+	<p>And to finish things off, I’ll show how the same project can be used to generate different builds via a schedule.</p>
+
+
+	<p>So, let’s get the show on the road.</p>
+
+
+	<a name="Defining-a-Target"></a>
+<h2 >Defining a Target<a href="#Defining-a-Target" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The first parameter I want to vary is the build type. This is a target in the NAnt script, and I’m going to allow three different targets: Dev, Test and Prod (this could also be done as a buildArg, but I want to leave that for later!)</p>
+
+
+	<p>The first thing to do is to add the parameter to the project. Parameters are defined at the project level for two reasons:</p>
+
+
+	<pre><code>It saves duplicates if the parameter needs to be used in multiple places<br />    It makes it simpler for the server to work out which parameters need to be sent to the client (thus it is faster)</code></pre>
+
+
+	<p>Since the build target can only be one of three values, I’m going to define a range parameter:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;rangeParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;description&gt;</span>The type of build to perform.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;allowedValues&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;value&gt;</span>Dev<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;value&gt;</span>Test<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;value&gt;</span>Prod<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="tag">&lt;/allowedValues&gt;</span>
+<span class="line-numbers"> 9</span>    <span class="tag">&lt;default&gt;</span>Dev<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;/rangeParameter&gt;</span>
+<span class="line-numbers">11</span><span class="tag">&lt;/parameters&gt;</span>
+</span></code></pre></p>
+
+
+	<p>All parameters must be defined within a parameters block within the project. As a minimum definition, each parameter must have a name – which is what is sent to the client.<br />This definition defines a parameter called “Type”, it is a range parameter with three possible values: “Dev”, “Test” and “Prod”. Finally, the default value is “Dev”. When a force build is triggered, the user will be displayed a combo box (or a drop down list depending on the client) with these three values in it, and “Dev” will be the initial selection.<br />The next step is to use the parameter in a task (currently they are limited to tasks and publishers, this may change if there is enough support for it.) The following shows how I would modify the &lt;nant&gt; task to use the parameter:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;dynamicValues&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;directValue</span> <span class="attribute-name">parameter</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 5</span>                 <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">targetList.target[0]</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;default&gt;</span>Dev<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/directValue&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/dynamicValues&gt;</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/nant&gt;</span>
+</span></code></pre>
+
+	<p>This simply says replace the first target in the targetList with the parameter value. This is a direct replacement – the entire value will be replaced with whatever value was selected for Type.</p>
+
+
+	<p>Note that there is also a default value here. This is used for when a value has not been selected (i.e. when the interval trigger detects changes).</p>
+
+
+	<p>This is a very simple example of a pre-defined value that entirely replaces the existing value. Now, let’s see some of the other parameter types.</p>
+
+
+	<a name="A-Numeric-Parameter-–-Gendarme-Limit"></a>
+<h2 >A Numeric Parameter – Gendarme Limit<a href="#A-Numeric-Parameter-–-Gendarme-Limit" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The next thing I’ll show is how to use a numeric parameter value. Again, this needs to be defined at the project level in the parameters block:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;numericParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;description&gt;</span>The limit of Gendarme errors.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;minimum&gt;</span>50<span class="tag">&lt;/minimum&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;maximum&gt;</span>500<span class="tag">&lt;/maximum&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;default&gt;</span>100<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/numericParameter&gt;</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/parameters&gt;</span>
+</span></code></pre>
+
+	<p>This says we want to also have a GendarmeLimit parameter, this is a numeric value and must be between 50 and 500. The default value will be 100.</p>
+
+
+	<p>To use this, it is the same as the target type, just add a direct replacement dynamic value:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;gendarme&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;dynamicValues&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;directValue</span> <span class="attribute-name">parameter</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 5</span>                 <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">limit</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;default&gt;</span>100<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/directValue&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/dynamicValues&gt;</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/gendarme&gt;</span>
+</span></code></pre>
+
+	<p>Note, the value will automatically be converted into the correct data type for use in the task. If there is a data type mismatch (e.g. a test value is put into a numeric property), then the build will fail with an error.</p>
+
+
+	<p>Now, let’s add one more parameter – one that doesn’t use direct replacement.</p>
+
+
+	<a name="A-Build-Reason"></a>
+<h2 >A Build Reason<a href="#A-Build-Reason" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This is a bit of a contrived example, but here we are going to pass a reason for the build into the NAnt task.</p>
+
+
+	<p>First, let’s define the parameter:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;textParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;description&gt;</span>Reason for the build being forced.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;minimum&gt;</span>10<span class="tag">&lt;/minimum&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;maximum&gt;</span>255<span class="tag">&lt;/maximum&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;required&gt;</span>true<span class="tag">&lt;/required&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;/textParameter&gt;</span>
+<span class="line-numbers"> 9</span><span class="tag">&lt;/parameters&gt;</span>
+</span></code></pre>
+
+	<p>This is a text parameter with a minimum length of 10 and a maximum length of 255.</p>
+
+
+	<p>This time, to use the parameter we are going to use a replacementValue:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;dynamicValues&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="comment">&lt;!-- Omitted to save space --&gt;</span>
+<span class="line-numbers"> 5</span>    <span class="tag">&lt;replacementValue</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">buildArgs</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;format&gt;</span>-D:&quot;{0}&quot;<span class="tag">&lt;/format&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"> 8</span>        <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"> 9</span>                    <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Triggered</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/replacementValue&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;/dynamicValues&gt;</span>
+<span class="line-numbers">13</span><span class="tag">&lt;/nant&gt;</span>
+</span></code></pre>
+
+	<p>This has the same property attribute, but otherwise is very different. A standard .NET format string is required (internally this is literally passed onto string.Format()!) And there is also a list of parameters to use. As you might have guessed, this dynamic value can use multiple parameters. If a property needs to use more than one parameter, then this is the syntax that is required.</p>
+
+
+	<p>Note for the parameters a namedValue is used. The name is the name of the parameter, while the value is the default value. This is needed because there can be multiple parameters, each with its own default value!</p>
+
+
+	<a name="Scheduling-A-Prod-Build"></a>
+<h2 >Scheduling A Prod Build<a href="#Scheduling-A-Prod-Build" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The final item I’ll cover is how to use parameters together with triggers. In this case, I’m going to schedule a build every night that uses the Prod target.</p>
+
+
+	<p>This is fairly easy to do, all we need to do is add a new parameterTrigger that contains the schedule trigger. The following shows how to do this:</p>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;intervalTrigger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;parameterTrigger&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;trigger</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">scheduleTrigger</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;time&gt;</span>1:00<span class="tag">&lt;/time&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;buildCondition&gt;</span>ForceBuild<span class="tag">&lt;/buildCondition&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/trigger&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers"><strong>10</strong></span>                  <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Prod</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">11</span>      <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">12</span>                  <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Scheduled</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">13</span>      <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">14</span>                  <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">500</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">15</span>    <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">16</span>  <span class="tag">&lt;/parameterTrigger&gt;</span>
+<span class="line-numbers">17</span><span class="tag">&lt;/triggers&gt;</span>
+</span></code></pre>
+
+	<p>This will schedule a build every night at 1am and pass in “Prod” for the Type, “Scheduled” for the Reason and 500 for the GendarmeLimit.<br />The Final Configuration</p>
+
+
+	<p>Hopefully this has provided a quick introduction to how parameters and dynamic values can be used. If you can think of how this can be improved, let me know and I’ll see what I can do.</p>
+
+
+	<p>And to finish up, here is the complete configuration:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;cruisecontrol&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Test Project</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 3</span>    <span class="tag">&lt;description&gt;</span>A demonstration project to show the features of the dynamic build parameters.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">svn</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/firstproject/trunk<span class="tag">&lt;/trunkUrl&gt;</span>
+<span class="line-numbers"> 6</span>      <span class="tag">&lt;workingDirectory&gt;</span>C:\SourceControl\FirstProject\<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;/sourcecontrol&gt;</span>
+<span class="line-numbers"> 8</span>    <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;intervalTrigger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;parameterTrigger&gt;</span>
+<span class="line-numbers">11</span>        <span class="tag">&lt;trigger</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">scheduleTrigger</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">12</span>          <span class="tag">&lt;time&gt;</span>1:00<span class="tag">&lt;/time&gt;</span>
+<span class="line-numbers">13</span>          <span class="tag">&lt;buildCondition&gt;</span>ForceBuild<span class="tag">&lt;/buildCondition&gt;</span>
+<span class="line-numbers">14</span>        <span class="tag">&lt;/trigger&gt;</span>
+<span class="line-numbers">15</span>        <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers">16</span>          <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">17</span>                      <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Prod</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">18</span>          <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">19</span>                      <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Scheduled</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>          <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">21</span>                      <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">500</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">22</span>        <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">23</span>      <span class="tag">&lt;/parameterTrigger&gt;</span>
+<span class="line-numbers">24</span>    <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers">25</span>    <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">26</span>      <span class="tag">&lt;nant&gt;</span>
+<span class="line-numbers">27</span>        <span class="tag">&lt;buildFile&gt;</span>App.build<span class="tag">&lt;/buildFile&gt;</span>
+<span class="line-numbers">28</span>        <span class="tag">&lt;targetList&gt;</span>
+<span class="line-numbers">29</span>          <span class="tag">&lt;target&gt;</span>Dev<span class="tag">&lt;/target&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>        <span class="tag">&lt;/targetList&gt;</span>
+<span class="line-numbers">31</span>        <span class="tag">&lt;buildArgs&gt;</span>-D:reason=testing<span class="tag">&lt;/buildArgs&gt;</span>
+<span class="line-numbers">32</span>        <span class="tag">&lt;dynamicValues&gt;</span>
+<span class="line-numbers">33</span>          <span class="tag">&lt;directValue</span> <span class="attribute-name">parameter</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">34</span>                       <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">targetList.target[0]</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">35</span>            <span class="tag">&lt;default&gt;</span>Dev<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers">36</span>          <span class="tag">&lt;/directValue&gt;</span>
+<span class="line-numbers">37</span>          <span class="tag">&lt;replacementValue</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">buildArgs</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">38</span>            <span class="tag">&lt;format&gt;</span>-D:&quot;{0}&quot;<span class="tag">&lt;/format&gt;</span>
+<span class="line-numbers">39</span>            <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers"><strong>40</strong></span>              <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">41</span>                          <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Triggered</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">42</span>            <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">43</span>          <span class="tag">&lt;/replacementValue&gt;</span>
+<span class="line-numbers">44</span>        <span class="tag">&lt;/dynamicValues&gt;</span>
+<span class="line-numbers">45</span>      <span class="tag">&lt;/nant&gt;</span>
+<span class="line-numbers">46</span>      <span class="tag">&lt;gendarme&gt;</span>
+<span class="line-numbers">47</span>        <span class="tag">&lt;assemblies&gt;</span>
+<span class="line-numbers">48</span>          <span class="tag">&lt;assemblyMatch</span> <span class="attribute-name">expr</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">*.dll</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">49</span>        <span class="tag">&lt;/assemblies&gt;</span>
+<span class="line-numbers"><strong>50</strong></span>        <span class="tag">&lt;limit&gt;</span>100<span class="tag">&lt;/limit&gt;</span>
+<span class="line-numbers">51</span>        <span class="tag">&lt;dynamicValues&gt;</span>
+<span class="line-numbers">52</span>          <span class="tag">&lt;directValue</span> <span class="attribute-name">parameter</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">53</span>                       <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">limit</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">54</span>            <span class="tag">&lt;default&gt;</span>100<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers">55</span>          <span class="tag">&lt;/directValue&gt;</span>
+<span class="line-numbers">56</span>        <span class="tag">&lt;/dynamicValues&gt;</span>
+<span class="line-numbers">57</span>      <span class="tag">&lt;/gendarme&gt;</span>
+<span class="line-numbers">58</span>    <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">59</span>    <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers"><strong>60</strong></span>      <span class="tag">&lt;rss</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">61</span>      <span class="tag">&lt;xmllogger</span> <span class="tag">/&gt;</span>
+<span class="line-numbers">62</span>    <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">63</span>    <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers">64</span>      <span class="tag">&lt;rangeParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Type</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">65</span>        <span class="tag">&lt;description&gt;</span>The type of build to perform.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers">66</span>        <span class="tag">&lt;allowedValues&gt;</span>
+<span class="line-numbers">67</span>          <span class="tag">&lt;value&gt;</span>Dev<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers">68</span>          <span class="tag">&lt;value&gt;</span>Test<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers">69</span>          <span class="tag">&lt;value&gt;</span>Prod<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers"><strong>70</strong></span>        <span class="tag">&lt;/allowedValues&gt;</span>
+<span class="line-numbers">71</span>        <span class="tag">&lt;default&gt;</span>Dev<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers">72</span>      <span class="tag">&lt;/rangeParameter&gt;</span>
+<span class="line-numbers">73</span>      <span class="tag">&lt;numericParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">GendarmeLimit</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">74</span>        <span class="tag">&lt;description&gt;</span>The limit of Gendarme errors.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers">75</span>        <span class="tag">&lt;minimum&gt;</span>50<span class="tag">&lt;/minimum&gt;</span>
+<span class="line-numbers">76</span>        <span class="tag">&lt;maximum&gt;</span>500<span class="tag">&lt;/maximum&gt;</span>
+<span class="line-numbers">77</span>        <span class="tag">&lt;default&gt;</span>100<span class="tag">&lt;/default&gt;</span>
+<span class="line-numbers">78</span>      <span class="tag">&lt;/numericParameter&gt;</span>
+<span class="line-numbers">79</span>      <span class="tag">&lt;textParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Reason</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"><strong>80</strong></span>        <span class="tag">&lt;description&gt;</span>Reason for the build being forced.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers">81</span>        <span class="tag">&lt;minimum&gt;</span>10<span class="tag">&lt;/minimum&gt;</span>
+<span class="line-numbers">82</span>        <span class="tag">&lt;maximum&gt;</span>255<span class="tag">&lt;/maximum&gt;</span>
+<span class="line-numbers">83</span>        <span class="tag">&lt;required&gt;</span>true<span class="tag">&lt;/required&gt;</span>
+<span class="line-numbers">84</span>      <span class="tag">&lt;/textParameter&gt;</span>
+<span class="line-numbers">85</span>    <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">86</span>  <span class="tag">&lt;/project&gt;</span>
+<span class="line-numbers">87</span><span class="tag">&lt;/cruisecontrol&gt;</span>
+</span></code></pre></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Parameter_ExampleFromCraigBlog by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

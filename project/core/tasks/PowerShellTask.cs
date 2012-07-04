@@ -27,8 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <code title="Full example">
     /// &lt;powershell&gt;
     /// &lt;script&gt;dosomething.ps&lt;/script&gt;
-    /// &lt;executable&gt;C:\program Files\PowerShell\PowerShell.exe&lt;/executable&gt;
-    /// &lt;scriptsDirectory&gt;C:\Scripts&lt;/scriptsDirectory&gt;
+    /// &lt;executable&gt;C:\program Files\PowerShell\PowerShell.exe &lt;/executable&gt;
+    /// &lt;scriptsDirectory&gt;C:\Scripts &lt;/scriptsDirectory &gt;
     /// &lt;buildArgs&gt;-level=1&lt;/buildArgs&gt;
     /// &lt;environment&gt;
     /// &lt;variable name="EnvVar1" value="Some data" /&gt;
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         MakeBuildResult(processResult.StandardError, "Error"),
                         processResult.ExitCode,
                         processResult.TimedOut,
-                        processResult.Failed);
+                        processResult.Failed || !StringUtil.IsWhitespace(processResult.StandardError));
 
                 processResult = newResult;
             }
@@ -251,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                                                     info.FileName,
                                                     info.Arguments,
                                                     info.TimeOut / 1000);
-            return StringUtil.MakeBuildResult(message, string.Empty);
+            return StringUtil.MakeBuildResult(message, "Error");
         }
 
 

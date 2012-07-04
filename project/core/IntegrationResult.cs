@@ -42,11 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core
         private ArrayList failureUsers = new ArrayList();
         private ArrayList failureTasks = new ArrayList();
         private string label = InitialLabel;
-        private Guid guid = Guid.NewGuid();
         private DateTime startTime;
         private DateTime endTime;
         private Modification[] modifications = new Modification[0];
         private Exception exception;
+        private Guid buildId = Guid.NewGuid();
 
         private readonly List<ITaskResult> taskResults = new List<ITaskResult>();
 
@@ -362,6 +362,16 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return EndTime - StartTime; }
         }
 
+        /// <summary>
+        /// Gets or sets the build id, an id that is unique for each build.
+        /// </summary>
+        public Guid BuildId
+        {
+            get { return buildId; }
+            set { buildId = value; }
+        }
+
+
         // Exceptions cannot be serialised because of permission attributes
         /// <summary>
         /// Gets or sets the exception result.	
@@ -592,27 +602,17 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetNumericLabel] = NumericLabel;
                 fullProps[IntegrationPropertyNames.CCNetBuildDate] = StartTime.ToString("yyyy-MM-dd", null);
                 fullProps[IntegrationPropertyNames.CCNetBuildTime] = StartTime.ToString("HH:mm:ss", null);
-                fullProps[IntegrationPropertyNames.CCNetBuildGuid] = Guid.ToString("N"); //32 hexadecimal characters, no dashes or braces
                 fullProps[IntegrationPropertyNames.CCNetLastIntegrationStatus] = LastIntegrationStatus;
                 fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
                 fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;
                 fullProps[IntegrationPropertyNames.CCNetFailureTasks] = FailureTasks;
                 fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
                 fullProps[IntegrationPropertyNames.CCNetUser] = request.UserName;
+                fullProps[IntegrationPropertyNames.CCNetBuildId] = BuildId.ToString("N"); //32 hexadecimal characters, no dashes or braces
+
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the build Guid.	
-        /// </summary>
-        /// <value>The build Guid.</value>
-        /// <remarks></remarks>
-        public Guid Guid
-        {
-            get { return guid; }
-            set { guid = value; }
         }
 
         /// <summary>

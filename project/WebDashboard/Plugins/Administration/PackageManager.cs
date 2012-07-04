@@ -13,6 +13,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
     /// </summary>
     public class PackageManager
     {
+        public enum PackageGroup
+        {
+            Server,
+            Dashboard,
+            Project,
+            Build
+        }
+
+
+
         #region Private constants
         private const int blockSize = 16384;
         #endregion
@@ -223,6 +233,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 manifest.Type = (PackageType)Enum.Parse(typeof(PackageType), packageElement.GetAttribute("type"));
                 manifest.FileName = packageElement.GetAttribute("file");
                 manifest.IsInstalled = (packageElement.GetAttribute("installed") == "yes");
+                manifest.Group = packageElement.GetAttribute("group");
                 packages.Add(manifest);
             }
 

@@ -1,0 +1,753 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_MakingPackages by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - DevInfo MakingPackages - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FDevInfo_MakingPackages" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_MakingPackages/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Making-Packages"></a>
+<h1 >Making Packages<a href="#Making-Packages" class="wiki-anchor">&para;</a></h1>
+
+
+	<a name="Introduction"></a>
+<h2 >Introduction<a href="#Introduction" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>As part of the 1.4.4 release the concept of packages was introduced to the web dashboard. A package is a ZIP file that contains all the necessary files for a plug-in, plus instructions on installing the files.</p>
+
+
+Examples of files that can be in a package are:
+	<ul>
+	<li>NVelocity templates</li>
+		<li>XSL-T definitions</li>
+		<li>Images</li>
+		<li>Javascript</li>
+		<li>Binaries</li>
+	</ul>
+
+
+	<p>As well as the content files, every package must contain a manifest file. This file contains the instructions for how to install the package. Generally a manifest will contain two sections: where to copy the files and the configuration changes to make.</p>
+
+
+	<a name="Writing-a-Manifest"></a>
+<h2 >Writing a Manifest<a href="#Writing-a-Manifest" class="wiki-anchor">&para;</a></h2>
+
+
+A manifest consists of three parts:
+	<ol>
+	<li>Information about the package</li>
+		<li>Included files and their destination</li>
+		<li>Configuration changes</li>
+	</ol>
+
+
+	<a name="Package-Information"></a>
+<h3 >Package Information<a href="#Package-Information" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The package information consists of a name, description and type. These are displayed in the admin plug-in to provide additional details on package.</p>
+
+
+	<a name="Example"></a>
+<h4 >Example:<a href="#Example" class="wiki-anchor">&para;</a></h4>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers">2</span>   <span class="tag">&lt;name&gt;</span>Package name<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">3</span>   <span class="tag">&lt;description&gt;</span>Package description<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers">4</span>   <span class="tag">&lt;type&gt;</span>Plugin<span class="tag">&lt;/type&gt;</span>
+<span class="line-numbers">5</span>   <span class="comment">&lt;!-- Other elements omitted --&gt;</span>
+<span class="line-numbers">6</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre>
+
+	<a name="Elements"></a>
+<h4 >Elements<a href="#Elements" class="wiki-anchor">&para;</a></h4>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+		</tr>
+		<tr>
+			<td> name </td>
+			<td> The name of the package. </td>
+			<td> string </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> description </td>
+			<td> A description of the package and what it contains. </td>
+			<td> string </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> type </td>
+			<td> The type of contents of the package. Currently this is only for informational purposes. </td>
+			<td> enum <pre>
+* Plugin
+* Theme</pre> </td>
+			<td> Yes </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Included-Files"></a>
+<h3 >Included Files<a href="#Included-Files" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The ZIP file can contain one or more files that need to be copied to the dashboard. This section in the manifest provides the instructions to where to copy the folders.</p>
+
+
+	<p><strong>Note:_</strong> <em>The ZIP file can contain files that are not referenced by the manifest. If there are non-referenced files, they will be ignored (i.e. not installed).</em></p>
+
+
+	<a name="Example"></a>
+<h4 >Example<a href="#Example" class="wiki-anchor">&para;</a></h4>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>   <span class="tag">&lt;folders&gt;</span>
+<span class="line-numbers"> 3</span>      <span class="tag">&lt;folder&gt;</span>
+<span class="line-numbers"> 4</span>         <span class="tag">&lt;location&gt;</span>relativePath<span class="tag">&lt;/location&gt;</span>
+<span class="line-numbers"> 5</span>         <span class="tag">&lt;files&gt;</span>
+<span class="line-numbers"> 6</span>            <span class="tag">&lt;file&gt;</span>nameInPackage<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers"> 7</span>         <span class="tag">&lt;/files&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;/folder&gt;</span>
+<span class="line-numbers"> 9</span>   <span class="tag">&lt;/folders&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>   <span class="comment">&lt;!-- Other elements omitted --&gt;</span>
+<span class="line-numbers">11</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre>
+
+	<a name="Elements"></a>
+<h4 >Elements<a href="#Elements" class="wiki-anchor">&para;</a></h4>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+		</tr>
+		<tr>
+			<td> folders </td>
+			<td> Root element for the file references. </td>
+			<td> container </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> folder </td>
+			<td> Defines a folder. Each file to be copied must be copied to a folder (files can be copied to multiple folders). This element defines the target folder for one or more files. There can be multiple folder elements under a folders element. \\  <strong>Note:_</strong> <em>Unlike a file system, this element cannot contain sub-folders. If sub-folders are required, they must have their own folder element.</em> </td>
+			<td> container </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> location </td>
+			<td> The location of the folder. Each folder must be a relative path. If the folder does not exist, then it will be created automatically by the installation process. </td>
+			<td> string </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> files </td>
+			<td> The files to be copied into the folder. </td>
+			<td> container </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> file </td>
+			<td> The name of the file to be copied. This must be the name of the file within the package, the target file will have the same file name. There can be multiple file elements under a files element. </td>
+			<td> string </td>
+			<td> No </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Configuration"></a>
+<h3 >Configuration<a href="#Configuration" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>The final section of the manifest contains the configuration elements to add.</p>
+
+
+	<a name="Example"></a>
+<h4 >Example<a href="#Example" class="wiki-anchor">&para;</a></h4>
+
+
+<pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>   <span class="tag">&lt;configuration&gt;</span>
+<span class="line-numbers"> 3</span>      <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers"> 4</span>         <span class="tag">&lt;path&gt;</span>xPath<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers"> 5</span>         <span class="tag">&lt;name&gt;</span>settingName<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"> 6</span>         <span class="tag">&lt;filter&gt;</span>xPathFilter<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers"> 7</span>         <span class="tag">&lt;value&gt;</span>configValue<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers"> 8</span>         <span class="tag">&lt;attributes&gt;</span>
+<span class="line-numbers"> 9</span>            <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">attribName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">attribValue</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>         <span class="tag">&lt;/attributes&gt;</span>
+<span class="line-numbers">11</span>      <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">12</span>   <span class="tag">&lt;/configuration&gt;</span>
+<span class="line-numbers">13</span>   <span class="comment">&lt;!-- Other elements omitted --&gt;</span>
+<span class="line-numbers">14</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre>
+
+	<a name="Elements"></a>
+<h4 >Elements<a href="#Elements" class="wiki-anchor">&para;</a></h4>
+
+
+	<table>
+		<tr>
+			<td>  <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+		</tr>
+		<tr>
+			<td> configuration </td>
+			<td> The root element for the configuration. </td>
+			<td> container </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> setting </td>
+			<td> A configuration setting. This will map to a single configuration element in dashboard.config. \\<br />There can be multiple setting elements under a configuration element. </td>
+			<td> container </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> path </td>
+			<td> An XPath statement to locate the configuration setting. This will be used to find the parent of the setting. </td>
+			<td> string </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> name </td>
+			<td> The name of the configuration element. This is the name of the element that will be added to dashboard.config. </td>
+			<td> string </td>
+			<td> Yes </td>
+		</tr>
+		<tr>
+			<td> filter </td>
+			<td> An optional filter to find an existing occurrence of the element. This is needed for elements that can have the same name (e.g. xslReportBuildPlugin, xslFile, etc.) Otherwise it is assumed that there will only be one element with the name in the parent. \\<br />If used, this is a standard XPath where statement (i.e. the value between \[ and \]). </td>
+			<td> string </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> value </td>
+			<td> The value to set. </td>
+			<td> string </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> attributes </td>
+			<td> The root element for the attribute definitions. </td>
+			<td> container </td>
+			<td> No </td>
+		</tr>
+		<tr>
+			<td> attribute </td>
+			<td> An attribute to add to the element. There can be multiple attribute elements under the attributes element. This element has two required attributes: <pre>
+* name: the name of the attribute
+* value: the value to set for the attribute </pre> </td>
+			<td> element </td>
+			<td> No </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Testing-a-Package"></a>
+<h2 >Testing a Package<a href="#Testing-a-Package" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Currently the only way to test a package and ensure that it works is to install it.</p>
+
+
+	<p><strong>Note:_</strong> <em>Before installing, make sure you back up dashboard.config and any other important files. Alternately use a fresh install of the web dashboard.</em></p>
+
+
+	<p>Once the package has been built (including the manifest), go to the administrative plug-in and attempt to load and install the plug-in. If the plug-in installs without any problem, check the log to ensure everything occurred as planned. Then check to make sure the packaged contents are working as expected.</p>
+
+
+	<p>Finally, try to uninstall the package. In theory a package should cleanly uninstall, reverting the dashboard back to its previous state. However, in reality all an uninstall does is remove the new entries (either files or configuration settings or both.)</p>
+
+
+	<a name="Including-a-Package-in-the-Build"></a>
+<h2 >Including a Package in the Build<a href="#Including-a-Package-in-the-Build" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>This section covers the process to add a new package to the CruiseControl.NET distribution. If the package will be distributed by an alternate route, then this section is not relevant.</p>
+
+
+	<p>Since the package will contain files that are normally included in the dashboard, there is no point in building the packages independently. Instead the best approach is to modify the build script to also generate the package.</p>
+
+
+To modify the script for a new package, use the following steps:
+	<ol>
+	<li>Under the packages folder in the dashboard project add a folder for the new package</li>
+		<li>Add an XML called Manifest.xml to this folder</li>
+		<li>Add the configuration details (as above) to this file and save it</li>
+		<li>Open ccnet.build and add a target for the new package</li>
+		<li>In this target, use the &lt;zip&gt; command to compress all the required files (including the manifest)</li>
+		<li>The &lt;zip&gt; command should output the file to $\{build.dir\}\WebDashboard\Packages folder</li>
+		<li>Include the new target name in the depends attribute of the "build.packages" target</li>
+		<li>Save the file and test the build</li>
+	</ol>
+
+
+	<p>To modify an existing package just apply the relevant steps from the above process.</p>
+
+
+	<p>The following is an example of a target for generating a package:<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;target</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">build.serverLog.package</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">description</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Generates the server log package</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;mkdir</span> <span class="attribute-name">dir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${build.dir}\WebDashboard\Packages\</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">verbose</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${verbosity}</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;zip</span> <span class="attribute-name">zipfile</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${build.dir}\WebDashboard\Packages\ServerLog.zip</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 4</span>    <span class="tag">&lt;fileset</span> <span class="attribute-name">basedir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${src.dir}\WebDashboard\Packages\ServerLog</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 5</span>      <span class="tag">&lt;include</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">*.*</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;/fileset&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;fileset</span> <span class="attribute-name">basedir</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">${src.dir}\WebDashboard\Templates</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;include</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ServerLog.vm</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"> 9</span>    <span class="tag">&lt;/fileset&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;/zip&gt;</span>
+<span class="line-numbers">11</span><span class="tag">&lt;/target&gt;</span>
+</span></code></pre></p>
+
+
+	<p>Make sure the relevant files are checked into source control, otherwise the package will build incorrectly.</p>
+
+
+	<a name="Update-packagesxml"></a>
+<h3 >Update packages.xml<a href="#Update-packagesxml" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>Adjust <em>project\WebDashboard\packages\packages.xml</em> so that it knows about the new package.<br />The zip file name is the one specified in the build script.<br />Also make sure that the names are the same in the manifest files as in the packages.xml file. (attribute <em>name</em>)<br />The <em>description</em> attribute of packages.xml is used in the dashboard, not the description of the manifest file.<br />When changes are done to <em>dashboard.config</em>, standard inclusion of a package, be sure to set the <em>installed</em> to <em>yes</em> in this file.</p>
+
+
+	<a name="Examples"></a>
+<h2 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The following are examples of manifest that have already been written:</p>
+
+
+	<a name="Queue-Status-Display"></a>
+<h3 >Queue Status Display<a href="#Queue-Status-Display" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>This is a very simple package. It contains a single template (ServerQueueStatus.vm) and a single configuration change (adds the plug-in to the server plug-in list).<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;name&gt;</span>Queue Status Display<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;description&gt;</span>Display the status of the queues.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;type&gt;</span>Plugin<span class="tag">&lt;/type&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;folders&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;folder&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;location&gt;</span>Templates<span class="tag">&lt;/location&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;files&gt;</span>
+<span class="line-numbers"> 9</span>        <span class="tag">&lt;file&gt;</span>ServerQueueStatus.vm<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;/files&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/folder&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;/folders&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;configuration&gt;</span>
+<span class="line-numbers">14</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">15</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/serverPlugins<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">16</span>      <span class="tag">&lt;name&gt;</span>queueStatusServerPlugin<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">17</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">18</span>  <span class="tag">&lt;/configuration&gt;</span>
+<span class="line-numbers">19</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="Modification-History"></a>
+<h3 >Modification History<a href="#Modification-History" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>This example shows that a package does not always need to include files. Instead the package can just define configuration changes. In this example the manifest defines a single new plug-in.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;name&gt;</span>Modification History<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;description&gt;</span>Modification history for a project.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;type&gt;</span>Plugin<span class="tag">&lt;/type&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;folders</span> <span class="tag">/&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;configuration&gt;</span>
+<span class="line-numbers"> 7</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/projectPlugins<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers"> 9</span>      <span class="tag">&lt;name&gt;</span>modificationHistoryProjectPlugin<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">11</span>  <span class="tag">&lt;/configuration&gt;</span>
+<span class="line-numbers">12</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="NDepend-Results"></a>
+<h3 >NDepend Results<a href="#NDepend-Results" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>In this example, the package contains a single file that is used in multiple places. Additionally, the configuration changes involve both a filter and multiple attributes. The filter condition on each setting allows the installer to identify which element to modify out of several possibilities.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;name&gt;</span>NDepend Results<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;description&gt;</span>Display the results of a NDepend run.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;type&gt;</span>Plugin<span class="tag">&lt;/type&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;folders&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;folder&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;location&gt;</span>Xsl<span class="tag">&lt;/location&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;files&gt;</span>
+<span class="line-numbers"> 9</span>        <span class="tag">&lt;file&gt;</span>ndependreport-ccnet.v2.xsl<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>      <span class="tag">&lt;/files&gt;</span>
+<span class="line-numbers">11</span>    <span class="tag">&lt;/folder&gt;</span>
+<span class="line-numbers">12</span>  <span class="tag">&lt;/folders&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;configuration&gt;</span>
+<span class="line-numbers">14</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">15</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">16</span>      <span class="tag">&lt;filter&gt;</span>.='xsl\ndependreport-ccnet.v2.xsl'<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers">17</span>      <span class="tag">&lt;name&gt;</span>xslFile<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">18</span>      <span class="tag">&lt;value&gt;</span>xsl\ndependreport-ccnet.v2.xsl<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers">19</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">21</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">22</span>      <span class="tag">&lt;filter&gt;</span>@xslFileName='xsl\ndependreport-ccnet.v2.xsl'<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers">23</span>      <span class="tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">24</span>      <span class="tag">&lt;attributes&gt;</span>
+<span class="line-numbers">25</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NDepend Details</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">26</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">actionName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NDependDetailsBuildReport</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">27</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xslFileName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsl\ndependreport-ccnet.v2.xsl</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>      <span class="tag">&lt;/attributes&gt;</span>
+<span class="line-numbers">29</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>  <span class="tag">&lt;/configuration&gt;</span>
+<span class="line-numbers">31</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre></p>
+
+
+	<a name="NUnit-Results"></a>
+<h3 >NUnit Results<a href="#NUnit-Results" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>This is a fairly complex example. Not only does it make multiple configuration changes, it also installs multiple files (although all to the same place). Again, the settings use filters to correctly identify the right element to modify and some of the settings have multiple attributes.<br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;package&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;name&gt;</span>NUnit Results<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;description&gt;</span>Display the results of a NUnit run.<span class="tag">&lt;/description&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;type&gt;</span>Plugin<span class="tag">&lt;/type&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;folders&gt;</span>
+<span class="line-numbers"> 6</span>    <span class="tag">&lt;folder&gt;</span>
+<span class="line-numbers"> 7</span>      <span class="tag">&lt;location&gt;</span>Xsl<span class="tag">&lt;/location&gt;</span>
+<span class="line-numbers"> 8</span>      <span class="tag">&lt;files&gt;</span>
+<span class="line-numbers"> 9</span>        <span class="tag">&lt;file&gt;</span>unittests.xsl<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>        <span class="tag">&lt;file&gt;</span>tests.xsl<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers">11</span>        <span class="tag">&lt;file&gt;</span>timing.xsl<span class="tag">&lt;/file&gt;</span>
+<span class="line-numbers">12</span>      <span class="tag">&lt;/files&gt;</span>
+<span class="line-numbers">13</span>    <span class="tag">&lt;/folder&gt;</span>
+<span class="line-numbers">14</span>  <span class="tag">&lt;/folders&gt;</span>
+<span class="line-numbers">15</span>  <span class="tag">&lt;configuration&gt;</span>
+<span class="line-numbers">16</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">17</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">18</span>      <span class="tag">&lt;filter&gt;</span>.='xsl\unittests.xsl'<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers">19</span>      <span class="tag">&lt;name&gt;</span>xslFile<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>      <span class="tag">&lt;value&gt;</span>xsl\unittests.xsl<span class="tag">&lt;/value&gt;</span>
+<span class="line-numbers">21</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">22</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">23</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">24</span>      <span class="tag">&lt;filter&gt;</span>@xslFileName='xsl\tests.xsl'<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers">25</span>      <span class="tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">26</span>      <span class="tag">&lt;attributes&gt;</span>
+<span class="line-numbers">27</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NUnit Details</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">28</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">actionName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NUnitDetailsBuildReport</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">29</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xslFileName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsl\tests.xsl</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>      <span class="tag">&lt;/attributes&gt;</span>
+<span class="line-numbers">31</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">32</span>    <span class="tag">&lt;setting&gt;</span>
+<span class="line-numbers">33</span>      <span class="tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="tag">&lt;/path&gt;</span>
+<span class="line-numbers">34</span>      <span class="tag">&lt;filter&gt;</span>@xslFileName='xsl\timing.xsl'<span class="tag">&lt;/filter&gt;</span>
+<span class="line-numbers">35</span>      <span class="tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="tag">&lt;/name&gt;</span>
+<span class="line-numbers">36</span>      <span class="tag">&lt;attributes&gt;</span>
+<span class="line-numbers">37</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NUnit Timings</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">38</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">actionName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">NUnitTimingsBuildReport</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers">39</span>        <span class="tag">&lt;attribute</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xslFileName</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">xsl\timing.xsl</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="line-numbers"><strong>40</strong></span>      <span class="tag">&lt;/attributes&gt;</span>
+<span class="line-numbers">41</span>    <span class="tag">&lt;/setting&gt;</span>
+<span class="line-numbers">42</span>  <span class="tag">&lt;/configuration&gt;</span>
+<span class="line-numbers">43</span><span class="tag">&lt;/package&gt;</span>
+</span></code></pre></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_MakingPackages by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

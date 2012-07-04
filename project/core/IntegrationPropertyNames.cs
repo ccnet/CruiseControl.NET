@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -51,10 +52,6 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public const string CCNetBuildTime = "CCNetBuildTime";
         /// <summary>
-        /// A unique GUID for the build (in 0123456789abcdef0123456789abcdef format)
-        /// </summary>
-        public const string CCNetBuildGuid = "CCNetBuildGuid";
-        /// <summary>
         /// The status of the previous integration. Could be Success, Failure, Exception or Unknown 
         /// </summary>
         public const string CCNetLastIntegrationStatus = "CCNetLastIntegrationStatus";
@@ -83,6 +80,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// The user who forced the build. If security is off, or the build is not forced, then this will not be set. 
         /// </summary>
         public const string CCNetUser = "CCNetUser";
+
+        /// <summary>
+        /// A unique GUID for the build (in 0123456789abcdef0123456789abcdef format)
+        /// so no curly braces or minus symbols
+        /// </summary>
+        public const string CCNetBuildId = "CCNetBuildId";
 
     }
 }

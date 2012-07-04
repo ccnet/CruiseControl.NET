@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/A_bit_of_General_background_information by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - A bit of General background information - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FA_bit_of_General_background_information" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/A_bit_of_General_background_information/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="Scenarios.html">Scenarios</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="General-background-information"></a>
+<h1 >General background information<a href="#General-background-information" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>In order to get the best of these post, we'll need to explain some <em>basic</em> stuff.</p>
+
+
+The following services/roles are needed for a Continuous Integration System:
+	<ul>
+	<li>developer PC (duh)</li>
+		<li>source control server</li>
+		<li>build server</li>
+		<li>build server visualizer</li>
+		<li>issue/bug tracker</li>
+	</ul>
+
+
+	<p>Before you start screaming : this costs a lot to set up, remind that these are roles, it does <strong>not</strong> mean that each role/service has to be on its own server.<br />That is advised for best performance, but does not have to be. It depends a lot on how many people are working at the same time, the size of the project, ....<br />For smaller projects you can easily set all this up on 1 server. Hey, I even set this all up once on my developer laptop ( a machine with 4 gig memory).</p>
+
+
+	<a name="Developer-PC"></a>
+<h4 >Developer PC<a href="#Developer-PC" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Get the one you need, specs change so fast these days that providing numbers is not meaningful.<br />As long as you're comfy with it, it'll do the job :-)<br />Visual Studio Express and MonoDevelop are great free editors for writing .Net code.</p>
+
+
+	<a name="Source-Control"></a>
+<h4 >Source Control<a href="#Source-Control" class="wiki-anchor">&para;</a></h4>
+
+
+Source control systems come in a lot of variety, and CCNet supports a lot of them : for a list look at <a href="Source_Control_Blocks.html" class="wiki-page">Source Control Blocks</a>.<br />Free and very good ones are svn and git, there are also free providers of these source control systems, so you do not have to maintain these servers/services yourself. <br />Examples : 
+	<ul>
+	<li><a href="http://www.sourceforge.net/" class="external">SourceForge</a> (Subversion, Git, Mercurial, Bazaar, CVS) </li>
+		<li><a href="http://www.github.com/" class="external">GitHub</a> (Git).</li>
+	</ul>
+
+
+	<p>There are probably others as well. Or you can setup the source control system of your choice yourself on a system you choose.</p>
+
+
+	<a name="Build-Server"></a>
+<h4 >Build Server<a href="#Build-Server" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>This would be CCNet :-), installed on a server/machine of your choice. Depending on the amount of projects, the size, activity or the kind of actions you do,<br />one or more build servers can be needed.</p>
+
+
+	<a name="Build-Server-Visualizer"></a>
+<h4 >Build Server Visualizer<a href="#Build-Server-Visualizer" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>This would be CCNet: CCTray and the webDashboard, both can visualize multiple CCNet build servers. <br />Another nice one is <a href="http://cradiator.codeplex.com/" class="external">Cradiator</a> This is a WPF-frontend that shows the state of CCNet projects on a <strong>big</strong> screen, making it ideal to give an overview for a team in the same room.</p>
+
+
+	<a name="Issuebug-tracker"></a>
+<h4 >Issue/bug tracker<a href="#Issuebug-tracker" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Even a piece of paper can do this trick, or an excel sheet, but a real issue tracking system is always neat. CCNet has some integration with issue-tracking systems see <a href="IssueUrlBuilder.html" class="wiki-page">IssueUrlBuilder</a><br /><a href="http://www.sourceforge.net/" class="external">SourceForge</a> also offers issue tracking like Trac and DotProject.</p>
+
+
+	<a name="Usages-for-CCNet"></a>
+<h2 >Usages for CCNet<a href="#Usages-for-CCNet" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>CCNet can be used in a variety of setups, I'll list some up that I've setup or heard about, and will provide (detailed) steps to set some up.</p>
+
+
+	<a name="Build-server"></a>
+<h4 >Build server<a href="#Build-server" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>This will be the most used setup: get the source from a SourceControl and compile it.<br />Benefits : you know that the source in your source control is complete (think of 3rd party components)<br />You can also include testing, source analysis, package creation and so on in CCNet.<br />And of course you'll have full control on when stuff should be done : on every check in, on set times, nightly builds, ....</p>
+
+
+	<a name="Staging-Server"></a>
+<h4 >Staging Server<a href="#Staging-Server" class="wiki-anchor">&para;</a></h4>
+
+
+Once you have a setup package, it is <strong>very</strong> handy that one can install it on a test server. Depending on the type of software and the needed components to update,<br />this can go from a simple folder to copy (xcopy) to something like :
+	<ul>
+	<li>create/update a database</li>
+		<li>install/update click once apps</li>
+		<li>install/update wcf services</li>
+		<li>install/update web-sites</li>
+		<li>install/update windows services</li>
+		<li>install/update SQL-Reports services</li>
+		<li>...</li>
+	</ul>
+
+
+	<p>and no, I did not make the last one up, this is what CCNet actually does for me (and it does even more).<br />For the interested ones, you can read more about that in the posts at <a href="http://rubenwillems.blogspot.com/search/label/CI" class="external">RuWi</a><br />Also you want this to be automated and repeatable, so no manual actions should be needed, hey with the build in security, <br />you can even configure it that developers can stage it to a test environment, where testers do some visual tests, and from there on it goes to final QA,<br />where a product owner can give it's final approval, before it goes to production.  Developers can not put a package into the QA environment, this has to be done by a tester.</p>
+
+
+	<a name="Scheduler"></a>
+<h4 >Scheduler<a href="#Scheduler" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Suppose you do not want to compile source, but do actions at certain times, even here CCNet can help out. There are a lot of <a href="Trigger_Blocks.html" class="wiki-page">triggers</a> built into CCNet.<br />You can compare this usage with <em>Scheduled Tasks</em>, or the CRON daemon in Linux.</p>
+
+
+I use CCNet to watch 100 servers (CPU usage, memory usage, disk usage, needed services, ....) Something like <a href="http://www.nagios.org/" class="external">Nagios</a> does.<br />Other cool usages :
+	<ul>
+	<li><a href="http://www.stevetrefethen.com/blog/CCNETbasedEDIInvoicingProjectGoesintoProduction.aspx" class="external">Continuous Invoicing</a></li>
+		<li><a href="http://rubenwillems.blogspot.com/2009/08/continous-installation-how-it-works.html" class="external">Continuous Installation</a></li>
+	</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/A_bit_of_General_background_information by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

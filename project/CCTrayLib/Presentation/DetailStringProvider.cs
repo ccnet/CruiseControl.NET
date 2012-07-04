@@ -88,7 +88,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 }
             }
 
-            if (projectStatus.CurrentMessage.Length > 0) message += " - " + projectStatus.CurrentMessage;
+            if (!string.IsNullOrEmpty(projectStatus.CurrentMessage))
+            {
+                message += " - " + projectStatus.CurrentMessage;
+            }
 
 			return message;
 		}

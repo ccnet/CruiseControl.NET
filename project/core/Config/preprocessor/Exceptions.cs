@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// Exception factory delegate
     /// </summary>
-    /// <param name="msg"></param>
+    /// <param name="message"></param>
     /// <param name="args"></param>
     /// <returns></returns>
     internal delegate Exception ExceptionFactory(string message, params object[] args);
