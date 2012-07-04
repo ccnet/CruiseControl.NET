@@ -1,0 +1,32 @@
+﻿<package>
+  <name>SandCastle Help Builder</name>
+  <description>Display the results of a SandCastle Help Builder run.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>ShfbReport.xsl</file>
+        <file>ShfbSummary.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\ShfbSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\ShfbSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\ShfbReport.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value=">SandCastle"/>
+        <attribute name="actionName" value=">SandCastleDetailsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\ShfbReport.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

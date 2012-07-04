@@ -41,6 +41,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("sourceFile", Required = true)]
         public string SourceFile { get; set; }
 
+
+        #region BaseDirectory
+        /// <summary>
+        /// The directory to base all the file locations from.
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>Project working directory</default>
+        [ReflectorProperty("baseDirectory", Required = false)]
+        public string BaseDirectory { get; set; }
+        #endregion
+
+
         /// <summary>
         /// The name of the file that is to be saved. 
         /// </summary>
@@ -60,6 +72,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         [ReflectorProperty("targetFolder", Required = false)]
         public string TargetFolder { get; set; }
+
+
+        #region Flatten
+        /// <summary>
+        /// Should the file structure be flattened or not.
+        /// </summary>
+        /// <remarks>
+        /// By default, the folder structure will also be included in the package. Setting this property
+        /// to true will flatten (omit) the folder information.
+        /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
+        [ReflectorProperty("flatten", Required = false)]
+        public bool Flatten { get; set; }
+        #endregion
 
         /// <summary>
         /// Gets or sets the file system.
@@ -107,8 +134,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         targetPath = targetPath.Substring(1);
                     }
 
+                    string fileName;
+                    if (Flatten)
+                    {
+                        fileName = targetFileName;
+                    }
+                    else
+                    {
+                        fileName = Path.Combine(targetPath, targetFileName);
+                    }
+
                     // Add the entry to the file file
-                    var entry = new ZipEntry(ZipEntry.CleanName(Path.Combine(targetPath, targetFileName)));
+                    var entry = new ZipEntry(ZipEntry.CleanName(fileName));
                     entry.Size = fileSystem.GetFileLength(fullName);
 										// zipentry date set to last changedate, other it contains not the right filedate.
 										// added 10.11.2010 by rolf eisenhut
@@ -161,8 +198,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (this.SourceFile.Contains("*") || this.SourceFile.Contains("?"))
             {
                 var possibilities = new List<string>();
-                var actualPath = Path.IsPathRooted(this.SourceFile) ? this.SourceFile : result.BaseFromWorkingDirectory(this.SourceFile);
-
+                //var actualPath = Path.IsPathRooted(this.SourceFile) ? this.SourceFile : result.BaseFromWorkingDirectory(this.SourceFile);
+                var actualPath = this.SourceFile;
+                string baseFolder = string.IsNullOrEmpty(BaseDirectory) ? result.WorkingDirectory : BaseDirectory;
+                if (!Path.IsPathRooted(actualPath)) actualPath = Path.Combine(baseFolder, actualPath);
+                
                 // Check for **, if it exists, then split the search pattern and use the second half to find all
                 // matching files
                 if (actualPath.Contains(allDirsWildcard))

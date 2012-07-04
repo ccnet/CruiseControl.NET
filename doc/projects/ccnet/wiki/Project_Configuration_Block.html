@@ -1,0 +1,664 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Project_Configuration_Block by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - Project Configuration Block - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FProject_Configuration_Block" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/Project_Configuration_Block/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Project-Configuration-Block"></a>
+<h1 >Project Configuration Block<a href="#Project-Configuration-Block" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.</p>
+
+
+	<a name="Version"></a>
+<h2 >Version<a href="#Version" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Available from version 1.0</p>
+
+
+	<a name="Examples"></a>
+<h2 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h2>
+
+
+	<p><strong>Minimalist example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Project 1</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></span></code></pre></p>
+
+
+	<p><strong>Full Example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;project</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Project 1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queue</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Q1</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">queuePriority</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="tag">&lt;/workingDirectory&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;artifactDirectory&gt;</span>yourArtifactDirectory<span class="tag">&lt;/artifactDirectory&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;category&gt;</span>Category 1<span class="tag">&lt;/category&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;webURL&gt;</span>http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx<span class="tag">&lt;/webURL&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;modificationDelaySeconds&gt;</span>2<span class="tag">&lt;/modificationDelaySeconds&gt;</span>
+<span class="line-numbers"> 7</span>  <span class="tag">&lt;maxSourceControlRetries&gt;</span>5<span class="tag">&lt;/maxSourceControlRetries&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;initialState&gt;</span>Stopped<span class="tag">&lt;/initialState&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;startupMode&gt;</span>UseInitialState<span class="tag">&lt;/startupMode&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;triggers&gt;</span>
+<span class="line-numbers">11</span>    <span class="comment">&lt;!--yourFirstTriggerType .. --&gt;</span>
+<span class="line-numbers">12</span>    <span class="comment">&lt;!--yourOtherTriggerType .. --&gt;</span>
+<span class="line-numbers">13</span>  <span class="tag">&lt;/triggers&gt;</span>
+<span class="line-numbers">14</span>  <span class="comment">&lt;!-- state type=&quot;yourStateManagerType&quot; .. --&gt;</span>
+<span class="line-numbers">15</span>  <span class="comment">&lt;!-- sourcecontrol type=&quot;yourSourceControlType&quot; .. --&gt;</span>
+<span class="line-numbers">16</span>  <span class="comment">&lt;!-- labeller type=&quot;yourLabellerType&quot; .. --&gt;</span>
+<span class="line-numbers">17</span>  <span class="tag">&lt;prebuild&gt;</span>
+<span class="line-numbers">18</span>    <span class="comment">&lt;!-- yourFirstPrebuildTask .. --&gt;</span>
+<span class="line-numbers">19</span>    <span class="comment">&lt;!-- yourOtherPrebuildTask .. --&gt;</span>
+<span class="line-numbers"><strong>20</strong></span>  <span class="tag">&lt;/prebuild&gt;</span>
+<span class="line-numbers">21</span>  <span class="tag">&lt;tasks&gt;</span>
+<span class="line-numbers">22</span>    <span class="comment">&lt;!-- yourFirstTask .. --&gt;</span>
+<span class="line-numbers">23</span>    <span class="comment">&lt;!-- yourOtherTask .. --&gt;</span>
+<span class="line-numbers">24</span>  <span class="tag">&lt;/tasks&gt;</span>
+<span class="line-numbers">25</span>  <span class="tag">&lt;publishers&gt;</span>
+<span class="line-numbers">26</span>    <span class="comment">&lt;!-- yourFirstPublisherTask .. --&gt;</span>
+<span class="line-numbers">27</span>    <span class="comment">&lt;!-- yourOtherPublisherTask .. --&gt;</span>
+<span class="line-numbers">28</span>  <span class="tag">&lt;/publishers&gt;</span>
+<span class="line-numbers">29</span>  <span class="tag">&lt;externalLinks&gt;</span>
+<span class="line-numbers"><strong>30</strong></span>    <span class="tag">&lt;externalLink</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">My First Link</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://somewhere/</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">31</span>    <span class="tag">&lt;externalLink</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">My Other Link</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">url</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://somewhere.else/</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">32</span>  <span class="tag">&lt;/externalLinks&gt;</span>
+<span class="line-numbers">33</span>  <span class="tag">&lt;parameters&gt;</span>
+<span class="line-numbers">34</span>    <span class="tag">&lt;textParameter</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Build Name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">default</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Unknown</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">35</span>  <span class="tag">&lt;/parameters&gt;</span>
+<span class="line-numbers">36</span>  <span class="tag">&lt;linkedSites&gt;</span>
+<span class="line-numbers">37</span>    <span class="tag">&lt;namedValue</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">ohloh</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">5623</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="line-numbers">38</span>  <span class="tag">&lt;/linkedSites&gt;</span>
+<span class="line-numbers">39</span><span class="tag">&lt;/project&gt;</span></span></code></pre></p>
+
+
+	<a name="Configuration-Elements"></a>
+<h2 >Configuration Elements<a href="#Configuration-Elements" class="wiki-anchor">&para;</a></h2>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+			<td> <strong>Default</strong> </td>
+			<td> <strong>Version</strong> </td>
+		</tr>
+		<tr>
+			<td> askForForceBuildReason </td>
+			<td> Should a reason be requested when a force build is triggered.   </td>
+			<td> String - one of: <pre>
+* None
+* Optional
+* Required</pre> </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> category </td>
+			<td> A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> artifactDirectory </td>
+			<td> The Artifact Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Artifacts </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> workingDirectory </td>
+			<td> The Working Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> WorkingDirectory </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> data </td>
+			<td> A data store for project information.   </td>
+			<td> IDataStore </td>
+			<td> No </td>
+			<td> <em>none</em> </td>
+			<td> 1.6 </td>
+		</tr>
+		<tr>
+			<td> description </td>
+			<td> An optional description of the project.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> externalLinks </td>
+			<td> Each of these are used to display project related links on the project report page of the Web Dashboard, and are meant as a convenient shortcut to project-related web sites outside of CruiseControl.NET.   </td>
+			<td> <a href="External_Links.html" class="wiki-page">External Links</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> impersonation </td>
+			<td> An optional impersonation account.  <br />This is only available on Windows OSs.   </td>
+			<td> <a href="Impersonation.html" class="wiki-page">Impersonation</a> </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> initialState </td>
+			<td> Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. This value is only used when startupMode is set to UseInitialState.   </td>
+			<td> String - one of: <pre>
+* Started
+* Stopped</pre> </td>
+			<td> No </td>
+			<td> Started </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> labeller </td>
+			<td> Labellers are used to generate the label that CCNet uses to identify the specific build. The label generated by CCNet can be used to version your assemblies or label your version control system with each build.   </td>
+			<td> <a href="Labeller_Blocks.html" class="wiki-page">Labeller Blocks</a> </td>
+			<td> No </td>
+			<td> <a href="Default_Labeller.html" class="wiki-page">Default Labeller</a> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> linkedSites </td>
+			<td> Links for this project to other sites.  Example for the Ohloh Project plugin&lt;linkedSites&gt;&lt;namedValue name="ohloh" value="5623"/&gt;&lt;/linkedSites&gt;   </td>
+			<td> <a href="Named_Value.html" class="wiki-page">Named Value</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> maxSourceControlRetries </td>
+			<td> The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when StopProjectOnReachingMaxSourceControlRetries is set to true).   </td>
+			<td> Int32 </td>
+			<td> No </td>
+			<td> 5 </td>
+			<td> 1.4 </td>
+		</tr>
+		<tr>
+			<td> modificationDelaySeconds </td>
+			<td> The minimum number of seconds allowed between the last check in and the start of a valid build.  <br />If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window. This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').   </td>
+			<td> Double </td>
+			<td> No </td>
+			<td> 0 </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> name </td>
+			<td> The name of your project - this must be unique for any given CruiseControl.NET server.   </td>
+			<td> String </td>
+			<td> Yes </td>
+			<td> <em>n/a</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> parameters </td>
+			<td> Dynamic build parameters - these are parameters that are set at build time instead of being hard-coded within the configuration file   </td>
+			<td> <a href="Parameters.html" class="wiki-page">Parameters</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> prebuild </td>
+			<td> A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.   </td>
+			<td> <a href="Task_And_Publisher_Blocks.html" class="wiki-page">Task And Publisher Blocks</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.1 </td>
+		</tr>
+		<tr>
+			<td> publishers </td>
+			<td> The list of build-completed publishers used by this project.   </td>
+			<td> <a href="Task_And_Publisher_Blocks.html" class="wiki-page">Task And Publisher Blocks</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> <a href="Xml_Log_Publisher.html" class="wiki-page">Xml Log Publisher</a> </td>
+		</tr>
+		<tr>
+			<td> queue </td>
+			<td> The name of the integration queue that this project will use. By default, each project runs in its own queue.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> Project name </td>
+			<td> 1.3 </td>
+		</tr>
+		<tr>
+			<td> queuePriority </td>
+			<td> The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non-zero priorities in the same queue.   </td>
+			<td> Int32 </td>
+			<td> No </td>
+			<td> 0 </td>
+			<td> 1.3 </td>
+		</tr>
+		<tr>
+			<td> remoteTargets </td>
+			<td> The remote machines that this project can build on.   </td>
+			<td> String array </td>
+			<td> No </td>
+			<td> <em>none</em> </td>
+			<td> 1.6 </td>
+		</tr>
+		<tr>
+			<td> security </td>
+			<td> Any security for the project.   </td>
+			<td> <a href="Project_Level_Security.html" class="wiki-page">Project Level Security</a> </td>
+			<td> No </td>
+			<td> <a href="Inherited_Project_Security.html" class="wiki-page">Inherited Project Security</a> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> showForceBuildButton </td>
+			<td> (Should) show or hide the ForceBuildButton in UI programs. This is an extra setting on top of security. This is setting is mainly meant to disable the possibility to force a project via a UI. (dashboard and cctray) Forcing a build via other tools : ccmd, ... will work if you have the rights to do so. For example there is a project GatherErrorsDuringWeekend which is scheduled to run at Saturday and Sunday. Forcing this project on a weekday could mess up statistics or so.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> True </td>
+			<td> 1.6 </td>
+		</tr>
+		<tr>
+			<td> showStartStopButton </td>
+			<td> (Should) show or hide the Start - Stop Button in UI programs. This is an extra setting on top of security. This is setting is mainly meant to disable the possibility to start or stop a project via a UI. (dashboard and cctray) Starting - Stopping a build via other tools : ccmd, ... will work if you have the rights to do so. For example there is a project GatherErrorsDuringWeekend which is scheduled to run at Saturday and Sunday. Stopping this project on a weekday could mess up statistics or so.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> True </td>
+			<td> 1.6 </td>
+		</tr>
+		<tr>
+			<td> sourcecontrol </td>
+			<td> The source control block to use.   </td>
+			<td> <a href="Source_Control_Blocks.html" class="wiki-page">Source Control Blocks</a> </td>
+			<td> No </td>
+			<td> <a href="Null_Source_Control.html" class="wiki-page">Null_Source_Control</a> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> sourceControlErrorHandling </td>
+			<td> What action to take when a source control error occurs (during GetModifications).  <br />These are the possible values :  <pre>
+* ReportEveryFailure : runs the publisher section whenever there is an error.  
+* ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, the publisher section will only be run once.  
+* ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. When maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.  </pre> </td>
+			<td> String - one of: <pre>
+* ReportEveryFailure
+* ReportOnRetryAmount
+* ReportOnEveryRetryAmount</pre> </td>
+			<td> No </td>
+			<td> ReportEveryFailure </td>
+			<td> 1.4 </td>
+		</tr>
+		<tr>
+			<td> startupMode </td>
+			<td> The start-up mode for this project.   </td>
+			<td> String - one of: <pre>
+* UseLastState
+* UseInitialState</pre> </td>
+			<td> No </td>
+			<td> UseLastState </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> state </td>
+			<td> A state manager for the project.   </td>
+			<td> <a href="State_Manager_Blocks.html" class="wiki-page">State Manager Blocks</a> </td>
+			<td> No </td>
+			<td> <a href="File_State_Manager.html" class="wiki-page">File State Manager</a> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> stopProjectOnReachingMaxSourceControlRetries </td>
+			<td> Stops the project on reaching maxSourceControlRetries or not. When set to true, the project will be stopped when the amount of consecutive source control errors is equal to maxSourceControlRetries.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.4 </td>
+		</tr>
+		<tr>
+			<td> tasks </td>
+			<td> A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.   </td>
+			<td> <a href="Task_And_Publisher_Blocks.html" class="wiki-page">Task And Publisher Blocks</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> triggers </td>
+			<td> Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.  <br />Specifying an empty element (&lt;triggers /&gt;) means integrations are only ever forced manually (for example using CCTray or the Web Dashboard.) Not including a &lt;triggers&gt; element at all means the project will behave like a &lt;triggers /&gt; element (before 1.4.3 the default when not including a &lt;triggers&gt; was a single <a href="Interval_Trigger.html" class="wiki-page">Interval Trigger</a> with default configuration).   </td>
+			<td> <a href="Trigger_Blocks.html" class="wiki-page">Trigger Blocks</a> </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> webURL </td>
+			<td> A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.  <br />The default URL contains the machine name of the server.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <a class="external" href="http://machinename/ccnet">http://machineName/ccnet</a> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> writeSummaryFile </td>
+			<td> Write a small summary file that can be retrieved by clients, this contains very minimalistic info.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.7 </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Notes"></a>
+<h2 >Notes<a href="#Notes" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Setting-the-WebURL"></a>
+<h4 >Setting the WebURL<a href="#Setting-the-WebURL" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:</p>
+
+
+<pre><code class="None syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>http://{dashboardserver}/{vdir}/server/{ccnetserver}/project/{projectname}/ViewLatestBuildReport.aspx</span></code></pre>
+
+	<p>For example, if the dashboard was deployed on the server  <strong>webserver</strong> to virtual directory   <strong>ccnet</strong>, and if the project to monitor is called  <strong>test</strong> on server cruise, the URL would be:</p>
+
+
+<pre><code class="None syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>http://webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</span></code></pre>
+
+	<a name="Automatically-Generated"></a>
+<h4 >Automatically Generated<a href="#Automatically-Generated" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Documentation generated on Saturday, 30 Jun 2012 at 6:00:11 AM</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Project_Configuration_Block by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

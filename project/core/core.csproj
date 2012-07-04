@@ -918,6 +918,7 @@
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\UpdateConfigurationTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="tasks\XslTransformationTask.cs" />
     <Compile Include="Triggers\CronTrigger.cs" />
     <Compile Include="Triggers\NCrontab\CrontabException.cs" />
     <Compile Include="Triggers\NCrontab\CrontabField.cs" />

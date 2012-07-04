@@ -144,11 +144,13 @@
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerHttpClient.cs" />
     <Compile Include="DefaultWebClient.cs" />
+    <Compile Include="DefaultWebFunctions.cs" />
     <Compile Include="EncryptingConnection.cs" />
     <Compile Include="ICruiseServerClientFactory.cs" />
     <Compile Include="IWebClient.cs" />
     <Compile Include="IWebClientFactory.cs" />
     <Compile Include="BuildSummary.cs" />
+    <Compile Include="IWebFunctions.cs" />
     <Compile Include="Messages\CommunicationsMessage.cs" />
     <Compile Include="Messages\EncryptedRequest.cs" />
     <Compile Include="Messages\EncryptedResponse.cs" />

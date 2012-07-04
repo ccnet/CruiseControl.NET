@@ -1,0 +1,520 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/ClearCase by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>CruiseControl.NET - ClearCase - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
+<link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicatione33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printe33a.css?1333543211" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1333543211" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mine33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expande33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/prototypee33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/effectse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/dragdrope33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/controlse33a.js?1333543211" type="text/javascript"></script>
+<script src="../../../javascripts/applicatione33a.js?1333543211" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_ads405e.css?1336487114" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scme33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbare33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilee33a.js?1333543211" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ene33a.js?1333543211" type="text/javascript"></script><link href="../../../stylesheets/jstoolbare33a.css?1333543211" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+
+      
+      <ul id="account-nav">
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+          <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FClearCase" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+      
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/ClearCase/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="Configuration.html">Configuration</a> &#187; <a href="ConfiguringTheServer.html">ConfiguringTheServer</a> &#187; <a href="Project_Configuration_Block.html">Project Configuration Block</a> &#187; <a href="Source_Control_Blocks.html">Source Control Blocks</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="Rational-ClearCase-Source-Control-Block"></a>
+<h1 >Rational ClearCase Source Control Block<a href="#Rational-ClearCase-Source-Control-Block" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Rational ClearCase source control block.</p>
+
+
+	<a name="Version"></a>
+<h2 >Version<a href="#Version" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Available from version 1.0</p>
+
+
+	<a name="Examples"></a>
+<h2 >Examples<a href="#Examples" class="wiki-anchor">&para;</a></h2>
+
+
+	<p><strong>Minimalist example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">clearCase</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">2</span>  <span class="tag">&lt;viewPath&gt;</span>C:\PATH\TO\SOURCE<span class="tag">&lt;/viewPath&gt;</span>
+<span class="line-numbers">3</span>  <span class="tag">&lt;autoGetSource&gt;</span>true<span class="tag">&lt;/autoGetSource&gt;</span>
+<span class="line-numbers">4</span><span class="tag">&lt;/sourcecontrol&gt;</span></span></code></pre></p>
+
+
+	<p><strong>Full example</strong><br /><pre><code class="xml syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;sourcecontrol</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">clearCase</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 2</span>  <span class="tag">&lt;viewPath&gt;</span>C:\PATH\TO\SOURCE<span class="tag">&lt;/viewPath&gt;</span>
+<span class="line-numbers"> 3</span>  <span class="tag">&lt;branch&gt;</span>main<span class="tag">&lt;/branch&gt;</span>
+<span class="line-numbers"> 4</span>  <span class="tag">&lt;autoGetSource&gt;</span>false<span class="tag">&lt;/autoGetSource&gt;</span>
+<span class="line-numbers"> 5</span>  <span class="tag">&lt;useLabel&gt;</span>true<span class="tag">&lt;/useLabel&gt;</span>
+<span class="line-numbers"> 6</span>  <span class="tag">&lt;useBaseline&gt;</span>false<span class="tag">&lt;/useBaseline&gt;</span>
+<span class="line-numbers"> 7</span>  <span class="tag">&lt;projectVobName&gt;</span>PROJECT_VOB_NAME<span class="tag">&lt;/projectVobName&gt;</span>
+<span class="line-numbers"> 8</span>  <span class="tag">&lt;viewName&gt;</span>PROJECT_VIEW_NAME<span class="tag">&lt;/viewName&gt;</span>
+<span class="line-numbers"> 9</span>  <span class="tag">&lt;executable&gt;</span>cleartool.exe<span class="tag">&lt;/executable&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>  <span class="tag">&lt;timeout&gt;</span>50000<span class="tag">&lt;/timeout&gt;</span>
+<span class="line-numbers">11</span><span class="tag">&lt;/sourcecontrol&gt;</span></span></code></pre></p>
+
+
+	<a name="Configuration-Elements"></a>
+<h2 >Configuration Elements<a href="#Configuration-Elements" class="wiki-anchor">&para;</a></h2>
+
+
+	<table>
+		<tr>
+			<td> <strong>Element</strong> </td>
+			<td> <strong>Description</strong> </td>
+			<td> <strong>Type</strong> </td>
+			<td> <strong>Required</strong> </td>
+			<td> <strong>Default</strong> </td>
+			<td> <strong>Version</strong> </td>
+		</tr>
+		<tr>
+			<td> type </td>
+			<td> The type of source control block. </td>
+			<td> String - must be clearCase </td>
+			<td> Yes </td>
+			<td> <em>n/a</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> autoGetSource </td>
+			<td> Specifies whether the current version of the source should be retrieved from ClearCase.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> true </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> branch </td>
+			<td> The name of the branch that CCNet will monitor for modifications. Note that the config spec of the view being built from must also be set up to reference this branch.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> dynamicValues </td>
+			<td> The dynamic values to use for the source control block.   </td>
+			<td> <a href="Dynamic_Values.html" class="wiki-page">Dynamic Values</a> array </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.5 </td>
+		</tr>
+		<tr>
+			<td> executable </td>
+			<td> Specifies the path to the ClearCase command line tool. You should only have to include this element if the tool isn't in your path. By default, the ClearCase client installation puts cleartool in your path.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> cleartool.exe </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> issueUrlBuilder </td>
+			<td> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" class="wiki-page">IssueUrlBuilder</a> for more details.   </td>
+			<td> <a href="IssueUrlBuilder.html" class="wiki-page">IssueUrlBuilder</a> </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.4 </td>
+		</tr>
+		<tr>
+			<td> projectVobName </td>
+			<td> The name of the project VOB that the view path uses.  <br />This is required if useBaseline="true".   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> timeout </td>
+			<td> Sets the timeout period for the source control operation. See <a href="Timeout_Configuration.html" class="wiki-page">Timeout Configuration</a> for details.   </td>
+			<td> <a href="Timeout_Configuration.html" class="wiki-page">Timeout Configuration</a> </td>
+			<td> No </td>
+			<td> 10 minutes </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> useBaseline </td>
+			<td> Specifies whether a baseline should be applied when the build is successful. Requires the VOB your view references to be a UCM VOB.  <br />Requires that you specify viewName and projectVobName.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> false </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> useLabel </td>
+			<td> Specifies whether a label should be applied when the build is successful.   </td>
+			<td> Boolean </td>
+			<td> No </td>
+			<td> true </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> viewName </td>
+			<td> The name of the view that you're using.  <br />This is required if useBaseline="true".   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+		<tr>
+			<td> viewPath </td>
+			<td> The path that CCNet will check for modifications and use to apply the label.  <br />Specifies a directory on your filesystem that CCNet monitors for changes. The path must be a versioned object. CCNet checks the actual VOB for changes, not the local filesystem. This doesn't have to be the root of the local ClearCase view. It may be any of the root's children or even a single object.   </td>
+			<td> String </td>
+			<td> No </td>
+			<td> <em>None</em> </td>
+			<td> 1.0 </td>
+		</tr>
+	</table>
+
+
+
+
+	<a name="Notes"></a>
+<h2 >Notes<a href="#Notes" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="Common-Problems"></a>
+<h4 >Common Problems<a href="#Common-Problems" class="wiki-anchor">&para;</a></h4>
+
+
+	<p> <strong>The build is initiated when users check in on private branches</strong></p>
+
+
+	<p>By default, ClearCase returns a history for every file in every branch, even if the config spec limits to a single branch. You must specify &lt;branch&gt; in order to limit which changes CCNet can see.</p>
+
+
+	<p> <strong>After the build is successful I get a "Baseline not found" error message.</strong></p>
+
+
+	<p>An example of this message is:</p>
+
+
+<pre><code class="None syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>            ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:
+<span class="line-numbers">2</span>            cleartool: Error: Baseline not found: &quot;CruiseControl.NETTemporaryBaseline_05-06-2004-16-34-15&quot;.
+<span class="line-numbers">3</span>            </span></code></pre>
+
+	<p>This happens when &lt;projectVobName&gt; is not set to the project VOB. Typically this happens when the user specifies the UCM VOB instead of the project VOB.</p>
+
+
+	<p>To correct the problem, change the value in that element to the name of the project VOB.</p>
+
+
+	<a name="Known-Bugs"></a>
+<h4 >Known Bugs<a href="#Known-Bugs" class="wiki-anchor">&para;</a></h4>
+
+
+	<p> <strong>When I view my baselines, I see that they're called CruiseControl.NET\[something\] instead of v1.0.0.4.</strong></p>
+
+
+	<p>This is a bug in ClearCase; Rational is aware of it. It only occurs if you're using baselines.</p>
+
+
+	<p>CCNet creates a temporary baseline with the prefix CruiseControl.NET before renaming it to the final value, such as v1.5.2.3. Depending on how you view baselines in ClearCase, you may see the temporary or real name.</p>
+
+
+	<p>For example, if you use the admin console, you'll see the old, temporary value. If use use cleartool lsbl, you'll see the correct one:</p>
+
+
+<pre><code class="None syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>            M:\gsmith_GS_Project_int\GS_UCM_VOB&gt;cleartool lsbl
+<span class="line-numbers"> 2</span>            06-May-04.16:28:27  v1.0.0.1  gsmith   &quot;CruiseControlTemporaryBaseline_05-06-200
+<span class="line-numbers"> 3</span>            4-16-28-26&quot; 
+<span class="line-numbers"> 4</span>              stream: GS_Project_Integration@\GS_PVOB
+<span class="line-numbers"> 5</span>              component: GS_UCM_VOB@\GS_PVOB
+<span class="line-numbers"> 6</span>            06-May-04.16:34:16  v1.0.0.2  gsmith   &quot;CruiseControl.NETTemporaryBaseline_05-06
+<span class="line-numbers"> 7</span>            -2004-16-34-15&quot; 
+<span class="line-numbers"> 8</span>              stream: GS_Project_Integration@\GS_PVOB
+<span class="line-numbers"> 9</span>              component: GS_UCM_VOB@\GS_PVOB
+<span class="line-numbers"><strong>10</strong></span>            </span></code></pre>
+
+	<p> <strong>CruiseControl.NET sees checkins on all branches, not just the one specified in my config spec</strong></p>
+
+
+	<p>This is due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not just the history that can be seen by the config spec.</p>
+
+
+	<p>The workaround is to make sure you include a &lt;branch&gt; element in your configuration. This will force ccnet to just see changes on that branch.</p>
+
+
+	<p> <strong>CruiseControl.NET doesn't see my changes</strong></p>
+
+
+	<p>Make sure the clock of your build server is synchronised to the clock of your ClearCase server.</p>
+
+
+	<a name="Automatically-Generated"></a>
+<h4 >Automatically Generated<a href="#Automatically-Generated" class="wiki-anchor">&para;</a></h4>
+
+
+	<p>Documentation generated on Saturday, 30 Jun 2012 at 6:00:12 AM</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/ClearCase by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+</html>

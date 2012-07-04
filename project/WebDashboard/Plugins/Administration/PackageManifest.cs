@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         private PackageType type;
         private List<FileLocation> fileLocations = new List<FileLocation>();
         private List<ConfigurationSetting> configSettings = new List<ConfigurationSetting>();
+        private string group;
         #endregion
 
         #region Public properties
@@ -57,6 +58,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             set { type = value; }
         }
         #endregion
+
+        #region Group
+        /// <summary>
+        /// The description of the package.
+        /// </summary>
+        [XmlElement("group")]
+        public string Group
+        {
+            get { return group; }
+            set { group = value; }
+        }
+        #endregion
+
 
         #region FileName
         /// <summary>

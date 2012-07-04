@@ -12,6 +12,7 @@ using System.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using System.Xml;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+using System.Linq;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
 {
@@ -142,7 +143,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 velocityContext["Servers"] = servicesConfiguration.Servers;
                 List<PackageManifest> packages = manager.ListPackages();
                 packages.Sort();
-                velocityContext["Packages"] = packages;
+                velocityContext["BuildPackages"] = packages.Where(p => p.Group == PackageManager.PackageGroup.Build.ToString());
+                velocityContext["DashboardPackages"] = packages.Where(p => p.Group == PackageManager.PackageGroup.Dashboard.ToString());
+                velocityContext["ProjectPackages"] = packages.Where(p => p.Group == PackageManager.PackageGroup.Project.ToString());
+                velocityContext["ServerPackages"] = packages.Where(p => p.Group == PackageManager.PackageGroup.Server.ToString());
+
 
                 // Generate the view
                 if (action == "Logout")

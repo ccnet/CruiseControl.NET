@@ -13,8 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     /// <title>Server Audit History Project Plugin</title>
     /// <version>1.5</version>
     /// <summary>
-    /// The Server Audit History Project Plugin displays the audit log from the server.
-    /// server is running.
+    /// The Server Audit History Project Plugin displays the audit log from the project.
     /// </summary>
     /// <example>
     /// <code>

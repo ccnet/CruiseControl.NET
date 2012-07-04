@@ -12,15 +12,26 @@
     {
         #region Private fields
         private WebClient innerClient;
+        private IWebFunctions webFunctions;
+
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultWebClient"/> class
+        /// </summary>
+        public DefaultWebClient() : this(new WebClient())
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultWebClient"/> class.
         /// </summary>
-        public DefaultWebClient()
+        /// <param name="webClient">instance of <see cref="WebClient"/> to use</param>
+        public DefaultWebClient(WebClient webClient)
         {
-            this.innerClient = new WebClient();
+            this.innerClient = webClient;
             this.innerClient.UploadValuesCompleted += (o, e) =>
             {
                 // Pass on the event
@@ -29,6 +40,7 @@
                     this.UploadValuesCompleted(this, new BinaryDataEventArgs(e.Result, e.Error, e.Cancelled, e.UserState));
                 }
             };
+            this.webFunctions = new DefaultWebFunctions();
         }
         #endregion
 
@@ -43,8 +55,10 @@
         /// <returns>The response data.</returns>
         public byte[] UploadValues(Uri address, string method, NameValueCollection data)
         {
+            this.webFunctions.SetCredentials(this.innerClient, address, false);
             return this.innerClient.UploadValues(address, method, data);
         }
+
         #endregion
 
         #region
@@ -56,6 +70,7 @@
         /// <param name="data">The data.</param>
         public void UploadValuesAsync(Uri address, string method, NameValueCollection data)
         {
+            this.webFunctions.SetCredentials(this.innerClient, address, false);
             this.innerClient.UploadValuesAsync(address, method, data);
         }
         #endregion

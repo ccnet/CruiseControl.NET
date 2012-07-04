@@ -18,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         private readonly string serverUri;
         private string targetServer;
         private WebClient client;
+        private IWebFunctions webFunctions;
+
         #endregion
 
         #region Constructors
@@ -39,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             this.serverUri = serverUri.EndsWith("/", StringComparison.CurrentCulture) ? serverUri.Substring(0, serverUri.Length - 1) : serverUri;
             this.client = client;
+            this.webFunctions = new DefaultWebFunctions();
         }
         #endregion
 
@@ -87,7 +90,27 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 // Retrieve the XML from the server
                 var url = GenerateUrl("XmlStatusReport.aspx");
-                var response = client.DownloadString(url);
+                var uri = new Uri(url);
+                webFunctions.SetCredentials(client, uri, false);
+                string response;
+                try
+                {
+                    response = client.DownloadString(url);
+                }
+                catch (WebException error)
+                {
+                    if (error.Message.Contains("(403) Forbidden"))
+                    {
+                        // Jenkins doesn't give a challenge for HTTP Authentication
+                        // So we need to force an Authorization header
+                        webFunctions.SetCredentials(client, uri, true);
+                        response = client.DownloadString(url);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 if (string.IsNullOrEmpty(response)) throw new CommunicationsException("No data retrieved");
 
                 // Load the XML and parse it
@@ -183,6 +206,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                 {
                     // Retrieve the XML from the server - 1.3 or later
                     var url = GenerateUrl("XmlServerReport.aspx");
+                    webFunctions.SetCredentials(client, new Uri(url), false);
                     response = client.DownloadString(url);
                 }
                 catch (Exception)
@@ -382,6 +406,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             values.Add("serverName", TargetServer);
             try
             {
+                webFunctions.SetCredentials(client, new Uri(url), false);
                 client.UploadValues(url, values);
             }
             catch (Exception error)

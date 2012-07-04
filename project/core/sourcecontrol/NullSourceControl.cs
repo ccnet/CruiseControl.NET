@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <remarks>
     /// Strictly speaking, this element isn't required. The build server will behave the same way if there are no Source Control Blocks. Still,
     /// it's useful to include this in configuration files to make it clear.
+    /// This source control is mostly used for simulating or test purposes.
     /// </remarks>
     /// <example>
     /// <code>
@@ -25,6 +26,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("nullSourceControl")]
 	public class NullSourceControl : ISourceControl
 	{
+        private Int32 revisionNumber = 3400;
+
+
         /// <summary>
         /// Defines wheter or not to fail the checking for modifications.
         /// </summary>
@@ -57,6 +61,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("alwaysModified", Required = false)]
         public bool AlwaysModified { get; set; }
 
+
+        /// <summary>
+        /// What kind of type is the changenumber (revision number) of the sourcecontrol
+        /// Possible values : guid, integer, empty
+        /// </summary>
+        /// <version>1.7</version>
+        /// <default>empty</default>
+        [ReflectorProperty("changeNumberType", Required = false)]
+        public string ChangeNumberType { get; set; }
+
+
         /// <summary>
         /// Gets the modifications from the source control provider
         /// </summary>
@@ -71,12 +86,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
             else if (AlwaysModified)
             {
+                revisionNumber += 1;
+
                 Modification[] mods = new Modification[1];
                 Modification mod = new Modification();
                 mod.FileName = "AlwaysModified";
                 mod.FolderName = "NullSourceControl";
                 mod.ModifiedTime = DateTime.Now;
                 mod.UserName = "JohnWayne";
+                mod.Comment = "Making a change";
+                mod.Type = "modified";
+
+
+                if (string.Equals(ChangeNumberType, "guid", StringComparison.CurrentCultureIgnoreCase))
+                { mod.ChangeNumber = Guid.NewGuid().ToString("N"); }
+
+                if (string.Equals(ChangeNumberType, "integer", StringComparison.CurrentCultureIgnoreCase))
+                { mod.ChangeNumber = revisionNumber.ToString(); }
+                
                 mods[0] = mod;
                 return mods;
             }
