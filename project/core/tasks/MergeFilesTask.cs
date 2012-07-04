@@ -34,6 +34,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;/merge&gt;
     /// </code>
     /// </example>
+    /// <example>
+    /// <code>
+    /// &lt;merge&gt;   
+    /// &lt;files&gt;
+    /// &lt;file&gt;Nunit*.xml&lt;/file&gt;
+    /// &lt;file&gt;FXCop.xml&lt;/file&gt;
+    /// &lt;file&gt;resources\**\*.xml&lt;/file&gt;
+    /// &lt;file&gt;E:\CruiseControl\BuildRoot\ProjectX\**\coderesults.xml&lt;/file&gt;
+    /// &lt;file&gt;E:\CruiseControl\BuildRoot\Project*\**\Business*.xml&lt;/file&gt;
+    /// &lt;/files&gt;
+    /// &lt;/merge&gt; 
+    /// </code>
+    /// </example>
     /// <remarks>
     /// <heading>Merge actions</heading>
     /// <para>
@@ -119,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The folder to copy the files to.
         /// </summary>
         /// <version>1.0</version>
-        /// <default>Project Artefact Directory</default>
+        /// <default>Project Artifact Directory</default>
         [ReflectorProperty("target", Required = false)]
         public string TargetFolder { get; set; }
 
