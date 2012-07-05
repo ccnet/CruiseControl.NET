@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
     /// <remarks>
     /// <heading>HTML Source Location</heading>
     /// <para>
-    /// This plug-in can display any file that is in the build folder under artefacts folder for the 
+    /// This plug-in can display any file that is in the build folder under artifacts folder for the 
     /// project. It cannot display files from any other location (for security reasons).
     /// </para>
     /// <para>
