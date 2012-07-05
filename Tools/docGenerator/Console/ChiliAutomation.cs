@@ -327,7 +327,7 @@ namespace Console
             FileName2ChiliPageNameMapping.Add("cookieStore.wiki", "");
             FileName2ChiliPageNameMapping.Add("farmReportFarmPlugin.wiki", "Farm_Report_Farm_Plugin");
             FileName2ChiliPageNameMapping.Add("finalBuildStatusPlugin.wiki", "Final_Build_Status_Display_Plugin");
-            FileName2ChiliPageNameMapping.Add("htmlReportPlugin.wiki", "");
+            FileName2ChiliPageNameMapping.Add("htmlReportPlugin.wiki", "htmlReportPlugin");
             FileName2ChiliPageNameMapping.Add("latestBuildReportProjectPlugin.wiki", "latestBuildReportProjectPlugin.wiki");
             FileName2ChiliPageNameMapping.Add("multipleXslReportAction.wiki", "Multiple_XSL_Report_Build_Plugin");
             FileName2ChiliPageNameMapping.Add("namedAction.wiki", "");
