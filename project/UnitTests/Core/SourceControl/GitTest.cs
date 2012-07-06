@@ -193,6 +193,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
 
+        [Test]
+        public void ShouldApplyTagNameFormatWithJustBuildLabelAsCustomFormatTagOnSuccessTrue()
+        {
+            git.TagOnSuccess = true;
+            git.TagNameFormat = "{0}";
+            git.TagCommitMessage = "{0}";
+
+            ExpectToExecuteArguments(@"tag -a -m foo foo");
+            ExpectToExecuteArguments(@"push origin tag foo");
+
+            git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+        }
+
+
+
 		[Test]
 		public void ShouldCloneIfDirectoryDoesNotExist()
 		{
