@@ -183,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 targetFolder = Path.Combine(result.ArtifactDirectory, result.Label);
             }
 
-			foreach (var mergeFile in MergeFiles)
+			foreach (MergeFileInfo mergeFile in MergeFiles)
 			{
                 // Get the name of the file
 				string fullMergeFile = mergeFile.FileName;
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                 // Merge each file
 				WildCardPath path = new WildCardPath(fullMergeFile);
-                foreach (var fileInfo in path.GetFiles())
+                foreach (FileInfo fileInfo in path.GetFiles())
                 {
                     if (actualFileSystem.FileExists(fileInfo.FullName))
                     {
