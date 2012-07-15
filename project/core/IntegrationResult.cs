@@ -609,6 +609,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
                 fullProps[IntegrationPropertyNames.CCNetUser] = request.UserName;
                 fullProps[IntegrationPropertyNames.CCNetBuildId] = BuildId.ToString("N"); //32 hexadecimal characters, no dashes or braces
+                if (!string.IsNullOrEmpty(LastChangeNumber)) fullProps["LastChangeNumber"] = LastChangeNumber;
 
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
