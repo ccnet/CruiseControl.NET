@@ -5,7 +5,7 @@
 !define PRODUCT_NAME_NOSPACE "CruiseControl.NET-Tools"
 !define PRODUCT_VERSION "@VERSION@"
 !define PRODUCT_PUBLISHER "ThoughtWorks"
-!define PRODUCT_WEB_SITE "http://ccnet.thoughtworks.com/"
+!define PRODUCT_WEB_SITE "http://www.cruisecontrolnet.org/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\cccmd.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

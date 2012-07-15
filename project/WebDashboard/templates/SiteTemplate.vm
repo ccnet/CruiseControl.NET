@@ -19,7 +19,7 @@
 		<table class="main-panel" border="0" width="100%">
 			<tr>
 				<td valign="middle" align="left">
-					<a href="http://ccnet.thoughtworks.com"><img src="$applicationPath/images/ccnet_logo.gif" border="0" alt="$translations.Translate("CruiseControlNETLogo")" /></a>
+					<a href="http://www.cruisecontrolnet.org"><img src="$applicationPath/images/ccnet_logo.gif" border="0" alt="$translations.Translate("CruiseControlNETLogo")" /></a>
 				</td>
 				<td align="right" valign="bottom">
 					$loginView
