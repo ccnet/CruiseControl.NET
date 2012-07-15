@@ -38,7 +38,7 @@
 	<property name="assembly.trademark"		readonly="true"		value="" />
 	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
 	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}" />    
-	<property name="assembly.informationalversion"         unless="${property::exists('LastChangeNumber')}"  value="0000000000000000000000000000000000000000"      />     
+	<property name="LastChangeNumber"       unless="${property::exists('LastChangeNumber')}"  value="0000000000000000000000000000000000000000"      />     
  	
 
 	<!-- Framework Support
@@ -99,7 +99,7 @@
 				<attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
 				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 				<attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
-				<attribute type="AssemblyInformationalVersionAttribute" value="Git hash : ${assembly.informationalversion}" />			
+				<attribute type="AssemblyInformationalVersionAttribute" value="Git hash : ${LastChangeNumber}" />			
 			</attributes>
 		</asminfo>
 	</target>
