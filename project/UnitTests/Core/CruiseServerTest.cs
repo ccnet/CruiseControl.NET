@@ -919,21 +919,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        public void GetRSSFeedRequiresViewProjectPermission()
-        {
-            var securityManagerMock = this.InitialiaseSecurityManagerMock(false, false);
-            var request = new ProjectRequest("1234", "Project 1");
-            this.mocks.ReplayAll();
-
-            server.SecurityManager = securityManagerMock;
-            var actual = server.GetRSSFeed(request);
-
-            this.mocks.VerifyAll();
-            Assert.AreEqual(ResponseResult.Failure, actual.Result);
-            Assert.AreEqual("Permission to execute 'ViewProject' has been denied.", actual.ErrorMessages[0].Message);
-        }
-
-        [Test]
         public void GetRSSFeedReturnsStatus()
         {
             var securityManagerMock = this.InitialiaseSecurityManagerMock(true, false);
