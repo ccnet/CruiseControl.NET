@@ -907,7 +907,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string data = null;
             DataResponse response = new DataResponse(RunProjectRequest(request,
-                SecurityPermission.ViewProject,
+                null, /* no permission required, RSS feed is opened*/
                 null,
                 delegate(ProjectRequest arg, Response resp)
                 {
@@ -1438,7 +1438,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Encapsulates the code to process a request.
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="permission"></param>
+        /// <param name="permission">Permission required to process given request. If null, security is not checked thus access is granted.</param>
         /// <param name="eventType"></param>
         /// <param name="action"></param>
         /// <returns></returns>
