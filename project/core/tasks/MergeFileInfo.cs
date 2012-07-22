@@ -19,7 +19,7 @@
     /// &lt;/file&gt;
     /// </code>
     /// </example>
-    [ReflectorType("fileToMerge")]
+    [ReflectorType("file")]
     public class MergeFileInfo
     {
         #region Public properties

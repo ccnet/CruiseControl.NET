@@ -51,16 +51,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         				if (fileElement.Name == "file")
         				{
         					// Make sure there are no child elements
-        					var fileSubNodes = fileElement.SelectNodes("*");
+        					XmlNodeList fileSubNodes = fileElement.SelectNodes("*");
 							if (fileSubNodes != null && fileSubNodes.Count > 0)
 								throw new NetReflectorException(string.Concat("file cannot contain any sub-items.", Environment.NewLine, "XML: ", fileElement.OuterXml));
 
         					// Load the filename
-        					var newFile = new MergeFileInfo();
+                            MergeFileInfo newFile = new MergeFileInfo();
         					newFile.FileName = fileElement.InnerText;
 
         					// Load the merge action
-        					var typeAttribute = fileElement.GetAttribute("action");
+        					string typeAttribute = fileElement.GetAttribute("action");
         					if (string.IsNullOrEmpty(typeAttribute))
         					{
         						newFile.MergeAction = MergeFileInfo.MergeActionType.Merge;

@@ -952,11 +952,11 @@ namespace ThoughtWorks.CruiseControl.Core
             var mergeFailed = false;
             foreach (ITask publisher in publishers)
             {
-                var isMergeTask = publisher is IMergeTask;
+                bool isMergeTask = publisher is IMergeTask;
                 try
                 {
                     merged |= isMergeTask;
-                    var dummy = publisher as IParamatisedItem;
+                    IParamatisedItem dummy = publisher as IParamatisedItem;
                     if (dummy != null)
                     {
                         dummy.ApplyParameters(parameterValues, parameters);
@@ -1058,7 +1058,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 // Run the actual task
                 // publishers do not get the overall status, as they are also ran for failed builds
-                // a pulisher must have the failed status if itself failed, not if a build failed
+                // a publisher must have the failed status if itself failed, not if a build failed
                 task.Run(result);
                 if (status != null && !isPublisher)
                 {
