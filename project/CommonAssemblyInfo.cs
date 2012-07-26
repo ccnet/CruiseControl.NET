@@ -16,4 +16,5 @@ using System.Reflection;
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyVersionAttribute("0.0.0.0")]
 [assembly: AssemblyFileVersionAttribute("0.0.0.0")]
+[assembly: AssemblyInformationalVersionAttribute("Git hash : 0000000000000000000000000000000000000000")]
 
