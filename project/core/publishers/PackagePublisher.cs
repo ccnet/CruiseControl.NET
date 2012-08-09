@@ -355,7 +355,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <param name="tempFile"></param>
         /// <returns></returns>
         /// <remarks>
-        /// This method will also generate the correct name of the file.
+        /// This method will also generate the correct name of the file and ensure
+        /// the output directory exists.
         /// </remarks>
         private string MoveFile(IIntegrationResult result, string tempFile)
         {
@@ -376,18 +377,26 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             if (!string.IsNullOrEmpty(OutputDirectory))
             {
-                // Copy the file to the output directory (so it can be used by other tasks)
                 var basePath = OutputDirectory;
                 if (!Path.IsPathRooted(basePath))
                 {
                     basePath = Path.Combine(result.ArtifactDirectory, basePath);
                 }
 
+                // Create output directory if it doesn't exist
+                if (!Directory.Exists(basePath))
+                {
+                    Log.Info(string.Format(
+                        CultureInfo.CurrentCulture, "Creating output directory '{0}'", basePath));
+                    Directory.CreateDirectory(basePath);
+                }
+
+                // Copy the file to the output directory (so it can be used by other tasks)
                 Log.Info(string.Format(
-                    CultureInfo.CurrentCulture,"Copying file to '{0}'", basePath));
+                    CultureInfo.CurrentCulture, "Copying file to '{0}'", basePath));
                 File.Copy(
-                    actualFile, 
-                    EnsureFileExtension(Path.Combine(basePath, PackageName), ".zip"), 
+                    actualFile,
+                    EnsureFileExtension(Path.Combine(basePath, PackageName), ".zip"),
                     true);
             }
 
