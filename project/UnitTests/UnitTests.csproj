@@ -423,6 +423,7 @@
     <Compile Include="IntegrationTests\EmbeddedData.cs" />
     <Compile Include="IntegrationTests\HarnessException.cs" />
     <Compile Include="IntegrationTests\PreprocessorTest.cs" />
+    <Compile Include="IntegrationTests\PublisherTests.cs" />
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\SpacesInBuildArgsOfTask.cs" />
@@ -1379,6 +1380,8 @@
     <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
+    <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
     <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
