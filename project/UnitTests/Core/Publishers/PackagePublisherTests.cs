@@ -355,7 +355,6 @@
             this.AssertFilesAreTheSame(new PackageFile("fileToLoad.2"), packagePublisher.PackageList[1]);
         }
 
-
         #endregion
 
         #region Private methods
