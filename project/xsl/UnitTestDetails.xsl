@@ -37,24 +37,7 @@
   <xsl:variable name="total.run.count" select="$nunit2.case.count + $junit.case.count - $total.notrun.count"/>
   <xsl:variable name="total.failure.count" select="$nunit2.failure.count + $junit.failure.count + $junit.error.count + $junit.suite.error.count"/>
 
-    <xsl:template match="/">
-      <head>
-        <style>
-          body, tr { color: #000000; background-color: white; font-family: Verdana; font-size: 10pt; }
-          .header-title { font-size:12px; color:#000; font-weight:bold; padding-bottom:10pt; }
-          .header-label { font-weight:bold; }
-          .header-data { color:#000; }
-          .header-data-error { color:#000; white-space:pre; }
-          .section-table { margin-top:10px; }
-          .sectionheader { background-color:#006; color:#FFF; }
-          .section-data { font-size:9px; color:#000; }
-          .section-oddrow { background-color:#F0F7FF; }
-          .section-evenrow { background-color:#FFF; }
-          .section-error { font-size:9px; color:#F30; white-space:pre; }
-          .warning { color: darkorange; }
-          .error { color:red }
-        </style>        
-      </head>
+    <xsl:template match="/">      
         <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 
             <!-- Unit Tests -->
