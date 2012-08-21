@@ -112,64 +112,98 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 // If base is relative, make it relative to working directory and ensure we convert to absolute path
                 effectiveBaseFolder = Path.IsPathRooted(this.BaseFolder) ? this.BaseFolder : Path.GetFullPath(result.BaseFromWorkingDirectory(this.BaseFolder));
             }
-            
+
             var fullName = Path.IsPathRooted(this.SourceFolder) ? this.SourceFolder : result.BaseFromWorkingDirectory(this.SourceFolder);
             var folderInfo = new DirectoryInfo(fullName);
             if (folderInfo.Exists)
             {
-                foreach (FileInfo file in folderInfo.GetFiles(string.IsNullOrEmpty(this.FileFilter) ? "*.*" : this.FileFilter, this.IncludeSubFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
-                {
-                    // Generate the name of the file to store in the package
-                    string fileName = file.FullName;
-                    if (this.Flatten)
-                    {
-                        // store the file at the root of the package
-                        fileName = file.Name;
-                    }
-                    else if (!string.IsNullOrEmpty(this.TargetFolder))
-                    {
-                        // store the file with the new path
-                        fileName = Path.Combine(this.TargetFolder, file.Name);
-                    }
-                    else
-                    {
-                        // store the file with the path minus the baseFolder
-                        if (fileName.StartsWith(effectiveBaseFolder, StringComparison.OrdinalIgnoreCase))
-                            fileName = fileName.Substring(effectiveBaseFolder.Length);
-                    }
-                    if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);
-
-                    // Add the entry to the file file
-                    var entry = new ZipEntry(ZipEntry.CleanName(fileName));
-                    entry.Size = file.Length;
-										// zipentry date set to last changedate, other it contains not the right filedate.
-										// added 10.11.2010 by rolf eisenhut
-										entry.DateTime = file.LastWriteTime;
-                    zipStream.PutNextEntry(entry);
-                    var buffer = new byte[8182];
-
-                    // Add the actual file - just tranfer the data from one stream to another
-                    var inputStream = file.OpenRead();
-                    try
-                    {
-                        var dataLength = 1;
-                        while (dataLength > 0)
-                        {
-                            dataLength = inputStream.Read(buffer, 0, buffer.Length);
-                            zipStream.Write(buffer, 0, dataLength);
-                        }
-                    }
-                    finally
-                    {
-                        inputStream.Close();
-                    }
-
-                    // Finish up and return the file name so it can be used in the manifest
-                    zipStream.CloseEntry();
-                    filesAdded.Add(fileName);
-                }
+                // Process files in the directory
+                ProcessFolder(effectiveBaseFolder, this.TargetFolder, folderInfo, ref filesAdded, ref zipStream);
             }
             return filesAdded;
         }
+
+        /// <summary>
+        /// Rursive function to process a directory tree, adding found files to an output zip stream.
+        /// </summary>
+        /// <param name="effectiveBaseFolder">Base folder in which package files are built from.</param>
+        /// <param name="folder">Folder in which files will be added to zip.</param>
+        /// <param name="filesAdded">List of files added to zip.</param>
+        /// <param name="zipStream">The zip stream.</param>
+        /// <returns>The name of the files that were packaged.</returns>
+        void ProcessFolder(string effectiveBaseFolder, string effectiveTargetFolder, DirectoryInfo folder, ref List<string> filesAdded, ref ZipOutputStream zipStream)
+        {
+            // Recursively process sub folders if requested
+            if (this.IncludeSubFolders)
+            {
+                foreach (DirectoryInfo currentFolder in folder.GetDirectories())
+                {
+                    string subTargetFolder = string.Empty;
+                    if (!string.IsNullOrEmpty(effectiveTargetFolder))
+                    {
+                        subTargetFolder = Path.Combine(effectiveTargetFolder, currentFolder.Name);
+                    }
+                    ProcessFolder(effectiveBaseFolder, subTargetFolder, currentFolder, ref filesAdded, ref zipStream);
+                }
+            }
+
+            foreach (FileInfo file in folder.GetFiles(string.IsNullOrEmpty(this.FileFilter) ? "*.*" : this.FileFilter, SearchOption.TopDirectoryOnly))
+            {
+                // Generate the name of the file to store in the package
+                string fileName = file.FullName;
+                if (this.Flatten)
+                {
+                    // store the file at the root of the package
+                    fileName = file.Name;
+                }
+                else if (!string.IsNullOrEmpty(effectiveTargetFolder))
+                {
+                    // store the file with the new path
+                    fileName = Path.Combine(effectiveTargetFolder, file.Name);
+                }
+                else
+                {
+                    // store the file with the path minus the baseFolder
+                    if (fileName.StartsWith(effectiveBaseFolder, StringComparison.OrdinalIgnoreCase))
+                    {
+                        fileName = fileName.Substring(effectiveBaseFolder.Length);
+                    }
+                }
+                if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty))
+                {
+                    fileName = fileName.Substring(1);
+                }
+
+                // Add the entry to the file file
+                var entry = new ZipEntry(ZipEntry.CleanName(fileName));
+                entry.Size = file.Length;
+                // zipentry date set to last changedate, other it contains not the right filedate.
+                // added 10.11.2010 by rolf eisenhut
+                entry.DateTime = file.LastWriteTime;
+                zipStream.PutNextEntry(entry);
+                var buffer = new byte[8182];
+
+                // Add the actual file - just tranfer the data from one stream to another
+                var inputStream = file.OpenRead();
+                try
+                {
+                    var dataLength = 1;
+                    while (dataLength > 0)
+                    {
+                        dataLength = inputStream.Read(buffer, 0, buffer.Length);
+                        zipStream.Write(buffer, 0, dataLength);
+                    }
+                }
+                finally
+                {
+                    inputStream.Close();
+                }
+
+                // Finish up and return the file name so it can be used in the manifest
+                zipStream.CloseEntry();
+                filesAdded.Add(fileName);
+            }
+        }
     }
 }
+
