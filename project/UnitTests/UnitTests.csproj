@@ -427,6 +427,7 @@
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\SpacesInBuildArgsOfTask.cs" />
+    <Compile Include="IntegrationTests\TaskTests.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
@@ -1383,6 +1384,9 @@
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest03.xml" />
+    <Content Include="resources\IntegrationScenarios\ParallelTaskTest01.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
