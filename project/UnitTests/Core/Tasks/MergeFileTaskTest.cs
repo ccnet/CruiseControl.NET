@@ -220,6 +220,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                                 result.AddTaskResult((ITaskResult) null);
                             }).IgnoreArguments();
             Expect.Call(result.Status).PropertyBehavior();
+            Expect.Call(result.Succeeded).Return(true);
 
             var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
             SetupResult.For(result.BuildProgressInformation)
