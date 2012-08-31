@@ -167,6 +167,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var actualFileSystem = FileSystem ?? new SystemIoFileSystem();
             var actualLogger = Logger ?? new DefaultLogger();
 
+            var targetSubFolder = result.Label;
+            if (!result.Succeeded) targetSubFolder = new LogFile(result).FilenameFormattedDateString;
+                       
             // Make sure the target folder is rooted
             var targetFolder = TargetFolder;
             if (!string.IsNullOrEmpty(targetFolder))
@@ -174,13 +177,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 if (!Path.IsPathRooted(targetFolder))
                 {
                     targetFolder = Path.Combine(
-                        Path.Combine(result.ArtifactDirectory, result.Label),
+                        Path.Combine(result.ArtifactDirectory, targetSubFolder),
                         targetFolder);
                 }
             }
             else
             {
-                targetFolder = Path.Combine(result.ArtifactDirectory, result.Label);
+                targetFolder = Path.Combine(result.ArtifactDirectory, targetSubFolder);
             }
 
 			foreach (var mergeFile in MergeFiles)
