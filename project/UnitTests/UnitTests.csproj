@@ -1385,7 +1385,7 @@
     <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\IntegrationScenarios\NantTest01.xml">
+    <Content Include="resources\IntegrationScenarios\NantAndExecTestMultiLineBuildArgs.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />

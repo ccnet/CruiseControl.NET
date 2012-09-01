@@ -101,12 +101,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
         }
 
         [Test]
-        public void RunNantTaskWithArgumentsOnSingleAndMultiLines()
+        public void RunNantAndExecTaskWithArgumentsOnSingleAndMultiLines()
         {
             const string ProjectName1 = "NantTest01";
 
             string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
-            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "NantTest01.xml");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "NantAndExecTestMultiLineBuildArgs.xml");
             string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
 
             IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();

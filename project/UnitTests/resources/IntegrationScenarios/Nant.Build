@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<project name="CruiseControl.NET" default="showHelp">
+    
+  <property name="solution"                  value="Source/Finance.sln"        />    
+  <property name="CreateInstallZips"         value="False" />    
+  <property name="isCi"                      value="True" />    
+
+  
+  <property name="CCNetBuildCondition"       unless="${property::exists('CCNetBuildCondition')}"      value="ForceBuild"  />    
+  <property name="CCNetLabel"                unless="${property::exists('CCNetLabel')}"               value="0.0.0.0"  />    
+  <property name="CCNetRequestSource"        unless="${property::exists('CCNetRequestSource')}"       value="Finance_ArtifactDirectory"  />    
+  <property name="CCNetWorkingDirectory"     unless="${property::exists('CCNetWorkingDirectory')}"    value=""  />    
+
+  
+  <target name="showHelp" >
+		<echo message="helping ... " />
+  </target>
+  
+  <target name="showProperties" >
+		<echo message="CCNetBuildCondition   : ${CCNetBuildCondition}  " />
+		<echo message="CCNetLabel            : ${CCNetLabel}  " />
+		<echo message="CCNetRequestSource    : ${CCNetRequestSource}  " />
+		<echo message="CCNetWorkingDirectory : ${CCNetWorkingDirectory}  " />
+		<echo message="CreateInstallZips     : ${CreateInstallZips}  " />
+		<echo message="isCi                  : ${isCi}  " />    
+  </target>
+    
+</project>
