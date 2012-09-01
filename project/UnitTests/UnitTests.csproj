@@ -1390,6 +1390,9 @@
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest03.xml" />
+    <Content Include="resources\IntegrationScenarios\ParallelTaskTest01.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

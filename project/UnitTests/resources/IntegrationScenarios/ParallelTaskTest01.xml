@@ -1,0 +1,43 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  <project name="Task01"
+           workingDirectory="TaskTest01">
+    <triggers />
+
+    <tasks>
+
+      <parallel>
+        <tasks>
+          <sequential>
+            <description>Build Linux</description>
+            <tasks>
+              <exec>
+                <executable>ping.exe</executable>
+                <buildArgs>localhost</buildArgs>
+                <buildTimeoutSeconds>15</buildTimeoutSeconds>
+                <description>Pinging linux build server</description>
+              </exec>
+            </tasks>
+          </sequential>
+          <sequential>
+            <description>Build Windows</description>
+            <tasks>
+              <exec>
+                <executable>ping.exe</executable>
+                <buildArgs>127.0.0.1</buildArgs>
+                <buildTimeoutSeconds>15</buildTimeoutSeconds>
+                <description>Pinging Windows build server</description>
+              </exec>
+            </tasks>
+          </sequential>
+        </tasks>
+      </parallel>
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+  </project>
+
+
+</cruisecontrol>
