@@ -266,7 +266,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <remarks></remarks>
         protected override string GetProcessArguments(IIntegrationResult result)
         {
-            return BuildArgs;
+           //return BuildArgs;
+            System.Text.StringBuilder buffer = new System.Text.StringBuilder();
+
+            var args = System.Text.RegularExpressions.Regex.Split(BuildArgs, @"\n");
+            foreach (string t in args)
+            {
+                if (!string.IsNullOrEmpty(t.Trim())) buffer.Append(t);
+            }
+
+            return buffer.ToString();
         }
 
         /// <summary>

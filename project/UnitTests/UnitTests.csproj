@@ -1263,6 +1263,10 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Core\Config\TestAssets\TestMissingIncludeFile.xml" />
+    <None Include="resources\IntegrationScenarios\Nant.Build">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
     <None Include="test.config">
@@ -1381,6 +1385,9 @@
     <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\NantAndExecTestMultiLineBuildArgs.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest03.xml" />
@@ -1393,6 +1400,7 @@
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="resources\IntegrationScenarios\Simple02.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
