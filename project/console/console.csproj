@@ -143,6 +143,7 @@
     </None>
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="Help.txt" />
     <Content Include="App.ico" />
