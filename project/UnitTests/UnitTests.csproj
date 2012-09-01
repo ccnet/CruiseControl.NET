@@ -427,6 +427,7 @@
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\SpacesInBuildArgsOfTask.cs" />
+    <Compile Include="IntegrationTests\TaskTests.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
@@ -1262,6 +1263,9 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Core\Config\TestAssets\TestMissingIncludeFile.xml" />
+    <None Include="resources\IntegrationScenarios\Nant.Build">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
     <None Include="test.config">
@@ -1378,6 +1382,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\NantAndExecTestMultiLineBuildArgs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
