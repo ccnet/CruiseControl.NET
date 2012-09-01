@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process urlLink = new Process();
-            urlLink.StartInfo = new ProcessStartInfo("http://confluence.public.thoughtworks.org/display/CCNET/Welcome+to+CruiseControl.NET");
+            urlLink.StartInfo = new ProcessStartInfo("http://www.cruisecontrolnet.org/projects/ccnet");
             urlLink.Start();
         }
 
