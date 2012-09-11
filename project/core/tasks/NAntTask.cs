@@ -395,7 +395,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)
-					buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-D:{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
+					buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-D:{0}={1}", key, StringUtil.StripThenEncodeParameterArgument(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
 			}
 		}
 
