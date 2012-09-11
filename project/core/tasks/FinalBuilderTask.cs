@@ -239,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				object obj1 = result.IntegrationProperties[varName];
 				if ((obj1 != null) && !info.EnvironmentVariables.ContainsKey(varName))
 				{
-				  info.EnvironmentVariables.Add(varName, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(obj1))));
+				  info.EnvironmentVariables.Add(varName, StringUtil.StripThenEncodeParameterArgument(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(obj1))));
 				}
 			}           
 			return info;

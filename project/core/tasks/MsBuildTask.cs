@@ -302,7 +302,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string key in properties.Keys)
 			{
 				if (count > 0) builder.Append(";");
-				builder.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.IntegrationPropertyToString(result.IntegrationProperties[key]))));
+				builder.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}={1}", key, StringUtil.StripThenEncodeParameterArgument(StringUtil.IntegrationPropertyToString(result.IntegrationProperties[key]))));
 				count++;
 			}
 
