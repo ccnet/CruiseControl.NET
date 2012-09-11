@@ -132,6 +132,41 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
+		public void TestStripThenEncodeParameterArgument()
+		{
+			string[][] tests = new string[][] {
+				new string[] { "foo", "foo"}
+				,
+				new string[] { "\"foo\"", "foo"}
+				,
+				new string[] { "\"foo", "foo"}
+				,
+				new string[] { "f o o", "\"f o o\""}
+				,
+				new string[] { @"\foo\", @"\foo\"}
+				,
+				new string[] { @"\\fo\o\\\", @"\\fo\o\\\"}
+				,
+				new string[] { " ", "\" \""}
+				,
+				new string[] { "fo\"o", "fo\\\"o"}
+				,
+				new string[] { "fo\\\"o", "fo\\\\\\\"o"}
+				,
+				new string[] { "foo \"something\" bar", "\"foo \\\"something\\\" bar\""}
+				,
+				new string[] { "fo o\\", "\"fo o\\\\\""}
+				,
+				new string[] { "foo\\ ", "\"foo\\ \""}
+			};
+
+			foreach (string[] test in tests)
+			{
+				Assert.AreEqual(StringUtil.StripThenEncodeParameterArgument(test[0]), test[1]);
+			}
+		}
+
+		[Test]
 		public void TestRemoveTrailingPathDelimiter()
 		{			
 			const string actual = "foo";
