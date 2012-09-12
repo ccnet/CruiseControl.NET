@@ -243,6 +243,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
+        public void PreprocessParametersAddsDirectValueForValidNestedNodesDynamicValueWithoutDefaultWithComment()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItems><subItem>$[value]</subItem><!-- this is a comment --><subItem>$[value2]</subItem></subItems></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItems><subItem></subItem><!-- this is a comment --><subItem></subItem></subItems>" +
+                "<dynamicValues>" +
+                    "<directValue>" +
+                        "<parameter>value</parameter>" +
+                        "<property>subItems[0]</property>" +
+                    "</directValue>" +
+                    "<directValue>" +
+                        "<parameter>value2</parameter>" +
+                        "<property>subItems[1]</property>" +
+                    "</directValue>" +
+                "</dynamicValues></item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
         public void PreprocessParametersAddsDirectValueForValidDoublyNestedNodesDynamicValueWithoutDefault()
         {
             var document = new XmlDocument();
@@ -256,6 +281,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             typeTable.Add(typeof(subSubItem));
             var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItems><subItem><subSubItems><subSubItem><value></value></subSubItem><subSubItem><value></value></subSubItem></subSubItems></subItem></subItems>" +
+                "<dynamicValues>" +
+                    "<directValue>" +
+                        "<parameter>value</parameter>" +
+                        "<property>subItems[0].subSubItems[0].value</property>" +
+                    "</directValue>" +
+                    "<directValue>" +
+                        "<parameter>value2</parameter>" +
+                        "<property>subItems[0].subSubItems[1].value</property>" +
+                    "</directValue>" +
+                "</dynamicValues></item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
+        public void PreprocessParametersAddsDirectValueForValidDoublyNestedNodesDynamicValueWithoutDefaultWithComment()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItems><subItem><subSubItems><subSubItem><value>$[value]</value></subSubItem><!-- this is a comment --><subSubItem><value>$[value2]</value></subSubItem></subSubItems></subItem></subItems></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(SubItem));
+            typeTable.Add(typeof(subSubItem));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItems><subItem><subSubItems><subSubItem><value></value></subSubItem><!-- this is a comment --><subSubItem><value></value></subSubItem></subSubItems></subItem></subItems>" +
                 "<dynamicValues>" +
                     "<directValue>" +
                         "<parameter>value</parameter>" +
