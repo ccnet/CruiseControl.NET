@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
+    using System;
     using System.Collections.Generic;
     using CruiseControl.Core;
     using CruiseControl.Core.Config;
@@ -161,6 +162,204 @@
             Assert.IsFalse(passRan);
             Assert.IsTrue(failRan);
         }
+
+        [Test]
+        public void ExecuteRunsAllTasksWhenConditionsPassAndContinueOnFailure()
+        {
+            var firstPassRan = false;
+            var secondPassRan = false;
+            var thirdPassRan = false;
+            var failRan = false;
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => true
+            };
+            var firstPassTask = new MockTask
+            {
+                RunAction = ir => firstPassRan = true
+            };
+            var secondPassTask = new MockTask
+            {
+                RunAction = ir => { secondPassRan = true; ir.Status = IntegrationStatus.Failure; }
+            };
+            var thirdPassTask = new MockTask
+            {
+                RunAction = ir => thirdPassRan = true
+            };
+            var failTask = new MockTask
+            {
+                RunAction = ir => failRan = true
+            };
+            var task = new ConditionalTask
+            {
+                Tasks = new[] { firstPassTask, secondPassTask, thirdPassTask },
+                ElseTasks = new[] { failTask },
+                TaskConditions = new[] { mockCondition }
+            };
+            var resultMock = this.GenerateResultMock();
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.IsTrue(firstPassRan);
+            Assert.IsTrue(secondPassRan);
+            Assert.IsTrue(thirdPassRan);
+            Assert.IsFalse(failRan);
+        }
+
+        [Test]
+        public void ExecuteRunsAllTasksWhenConditionsFailAndContinueOnFailure()
+        {
+            var passRan = false;
+            var firstFailRan = false;
+            var secondFailRan = false;
+            var thirdFailRan = false;
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => false
+            };
+            var passTask = new MockTask
+            {
+                RunAction = ir => passRan = true
+            };
+            var firstFailTask = new MockTask
+            {
+                RunAction = ir => firstFailRan = true
+            };
+            var secondFailTask = new MockTask
+            {
+                RunAction = ir => { secondFailRan = true; ir.Status = IntegrationStatus.Failure; }
+            };
+            var thirdFailTask = new MockTask
+            {
+                RunAction = ir => thirdFailRan = true
+            };
+            var task = new ConditionalTask
+            {
+                Tasks = new[] { passTask },
+                ElseTasks = new[] { firstFailTask, secondFailTask, thirdFailTask },
+                TaskConditions = new[] { mockCondition }
+            };
+            var resultMock = this.GenerateResultMock();
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.IsFalse(passRan);
+            Assert.IsTrue(firstFailRan);
+            Assert.IsTrue(secondFailRan);
+            Assert.IsTrue(thirdFailRan);
+        }
+
+        [Test]
+        public void ExecuteRunsAllTasksWhenConditionsPassAndNotContinueOnFailure()
+        {
+            var firstPassRan = false;
+            var secondPassRan = false;
+            var thirdPassRan = false;
+            var failRan = false;
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => true
+            };
+            var firstPassTask = new MockTask
+            {
+                RunAction = ir => firstPassRan = true
+            };
+            var secondPassTask = new MockTask
+            {
+                RunAction = ir => { secondPassRan = true; ir.Status = IntegrationStatus.Failure; }
+            };
+            var thirdPassTask = new MockTask
+            {
+                RunAction = ir => thirdPassRan = true
+            };
+            var failTask = new MockTask
+            {
+                RunAction = ir => failRan = true
+            };
+            var task = new ConditionalTask
+            {
+                Tasks = new[] { firstPassTask, secondPassTask, thirdPassTask },
+                ElseTasks = new[] { failTask },
+                TaskConditions = new[] { mockCondition },
+                ContinueOnFailure = false
+            };
+            var resultMock = this.GenerateResultMock();
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.IsTrue(firstPassRan);
+            Assert.IsTrue(secondPassRan);
+            Assert.IsFalse(thirdPassRan);
+            Assert.IsFalse(failRan);
+        }
+
+        [Test]
+        public void ExecuteRunsAllTasksWhenConditionsFailAndNotContinueOnFailure()
+        {
+            var passRan = false;
+            var firstFailRan = false;
+            var secondFailRan = false;
+            var thirdFailRan = false;
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => false
+            };
+            var passTask = new MockTask
+            {
+                RunAction = ir => passRan = true
+            };
+            var firstFailTask = new MockTask
+            {
+                RunAction = ir => firstFailRan = true
+            };
+            var secondFailTask = new MockTask
+            {
+                RunAction = ir => { secondFailRan = true; ir.Status = IntegrationStatus.Failure; }
+            };
+            var thirdFailTask = new MockTask
+            {
+                RunAction = ir => thirdFailRan = true
+            };
+            var task = new ConditionalTask
+            {
+                Tasks = new[] { passTask },
+                ElseTasks = new[] { firstFailTask, secondFailTask, thirdFailTask },
+                TaskConditions = new[] { mockCondition },
+                ContinueOnFailure = false
+            };
+            var resultMock = this.GenerateResultMock();
+            AddResultMockExpectedClone(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.IsFalse(passRan);
+            Assert.IsTrue(firstFailRan);
+            Assert.IsTrue(secondFailRan);
+            Assert.IsFalse(thirdFailRan);
+        }
         #endregion
 
         private IIntegrationResult GenerateResultMock()
@@ -169,9 +368,35 @@
             var result = mocks.StrictMock<IIntegrationResult>();
             SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
             SetupResult.For(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(null);
-            Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.Anything));
+            SetupResult.For(result.ExceptionResult).PropertyBehavior();
+            result.Status = IntegrationStatus.Success;
+            AddResultMockExpectedClone(result);
+            AddResultMockExpectedMerge(result);
             return result;
+        }
+
+        private void AddResultMockExpectedClone(IIntegrationResult result)
+        {
+            Expect.Call(result.Clone()).
+                Do((Func<IIntegrationResult>)(() =>
+                {
+                    var clone = mocks.StrictMock<IIntegrationResult>();
+                    SetupResult.For(clone.BuildProgressInformation).Return(result.BuildProgressInformation);
+                    SetupResult.For(clone.Status).PropertyBehavior();
+                    SetupResult.For(clone.ExceptionResult).PropertyBehavior();
+                    clone.Status = result.Status;
+                    clone.Replay();
+                    return clone;
+                }));
+        }
+
+        private void AddResultMockExpectedMerge(IIntegrationResult result)
+        {
+            Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.NotNull)).
+                Do((Action<IIntegrationResult>)((otherResult) =>
+                {
+                    result.Status = otherResult.Status;
+                }));
         }
     }
 }
