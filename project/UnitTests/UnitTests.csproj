@@ -423,9 +423,11 @@
     <Compile Include="IntegrationTests\EmbeddedData.cs" />
     <Compile Include="IntegrationTests\HarnessException.cs" />
     <Compile Include="IntegrationTests\PreprocessorTest.cs" />
+    <Compile Include="IntegrationTests\PublisherTests.cs" />
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\SpacesInBuildArgsOfTask.cs" />
+    <Compile Include="IntegrationTests\TaskTests.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\CruiseServerClientBaseTests.cs" />
@@ -1261,6 +1263,10 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Core\Config\TestAssets\TestMissingIncludeFile.xml" />
+    <None Include="resources\IntegrationScenarios\Nant.Build">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
     <None Include="test.config">
@@ -1379,12 +1385,22 @@
     <Content Include="resources\IntegrationScenarios\MultiLineInclude.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\NantAndExecTestMultiLineBuildArgs.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
+    <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
+    <Content Include="resources\IntegrationScenarios\PackagePublisherTest03.xml" />
+    <Content Include="resources\IntegrationScenarios\ParallelTaskTest01.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\PowerShellConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="resources\IntegrationScenarios\Simple02.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

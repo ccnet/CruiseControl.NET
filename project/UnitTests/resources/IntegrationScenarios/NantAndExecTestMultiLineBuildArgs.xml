@@ -1,0 +1,58 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  <!-- ensure that multi line buildargs work  -->
+  <project name="NantTest01"
+           workingDirectory="Nant01">
+    <triggers />
+
+    <tasks>
+      <nant description="running Nant with buildargs on multiple lines">
+        <executable>WillBeReplacedViaTheTest</executable>
+        <buildArgs>
+          -D:CreateInstallZips=true
+          -D:isCi=false
+        </buildArgs>
+        <buildFile>Nant.build</buildFile>
+        <targetList>
+          <target>showProperties</target>
+        </targetList>
+        <buildTimeoutSeconds>600</buildTimeoutSeconds>
+      </nant>
+
+      <nant description="running Nant with buildargs on single lines">
+        <executable>WillBeReplacedViaTheTest</executable>
+        <buildArgs>-D:CreateInstallZips=true -D:isCi=false</buildArgs>
+        <buildFile>Nant.build</buildFile>
+        <targetList>
+          <target>showProperties</target>
+        </targetList>
+        <buildTimeoutSeconds>600</buildTimeoutSeconds>
+      </nant>
+
+
+      <exec>
+        <executable>ping</executable>
+        <buildArgs>localhost -4</buildArgs>
+      </exec>
+
+
+      <exec>
+        <executable>ping</executable>
+        <buildArgs>
+          localhost
+          -4
+        </buildArgs>
+      </exec>
+
+
+    </tasks>
+
+
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+  </project>
+
+
+</cruisecontrol>

@@ -394,6 +394,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             builder.AppendArgument("-nologo");
             builder.AppendArgument("-NoProfile");
             builder.AppendArgument("-NonInteractive");
+
             builder.AppendArgument("-file");
 
             if (!string.IsNullOrEmpty(Script))
@@ -419,6 +420,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 
             if (!string.IsNullOrEmpty(BuildArgs)) builder.AppendArgument(BuildArgs);
+
             return builder.ToString();
         }
 
