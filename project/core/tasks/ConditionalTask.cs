@@ -59,6 +59,7 @@
         {
             this.Tasks = new ITask[0];
             this.ElseTasks = new ITask[0];
+            this.ContinueOnFailure = true;
         }
         #endregion
 
@@ -103,6 +104,16 @@
         /// </summary>
         /// <value>The logger.</value>
         public ILogger Logger { get; set; }
+        #endregion
+
+        #region ContinueOnFailure
+        /// <summary>
+        /// Should the tasks continue to run, even if there is a failure?
+        /// </summary>
+        /// <version>1.9</version>
+        /// <default>true</default>
+        [ReflectorProperty("continueOnFailure", Required = false)]
+        public bool ContinueOnFailure { get; set; }
         #endregion
         #endregion
 
@@ -433,6 +444,8 @@
                 else
                 {
                     failureCount++;
+                    if (!ContinueOnFailure)
+                        break;
                 }
             }
 
