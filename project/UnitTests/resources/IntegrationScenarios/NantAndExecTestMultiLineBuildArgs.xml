@@ -4,7 +4,7 @@
   <project name="NantTest01"
            workingDirectory="Nant01">
     <triggers />
-
+    
     <tasks>
       <nant description="running Nant with buildargs on multiple lines">
         <executable>WillBeReplacedViaTheTest</executable>

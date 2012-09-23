@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 mod.FileName = "AlwaysModified";
                 mod.FolderName = "NullSourceControl";
                 mod.ModifiedTime = DateTime.Now;
-                mod.UserName = "JohnWayne";
+                mod.UserName = "John \"The Duke\" Wayne";
                 mod.Comment = "Making a change";
                 mod.Type = "modified";
 
