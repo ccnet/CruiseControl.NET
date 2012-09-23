@@ -204,6 +204,137 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
         }
 
 
+        [Test]
+        public void RunNantWhenFailureUsersHaveQuoutesInTheirNames()
+        {
+            const string ProjectName1 = "NantTest02";
+
+            string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "NantFailureUsersWithQuote.xml");
+            string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
+
+            IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
+
+            string workingDirectory = "Nant02";
+
+            var ios = new CCNet.Core.Util.IoService();
+            ios.DeleteIncludingReadOnlyObjects(workingDirectory);
+            System.IO.Directory.CreateDirectory(workingDirectory);
+
+            System.IO.File.Delete(ProjectStateFile);
+
+            string NantBuildFile = @"IntegrationScenarios\Nant.Build";
+            var NantExeLocation = "";
+
+#if DEBUG
+            NantExeLocation = @"..\..\..\..\Tools\Nant\nant.exe";
+#else
+            NantExeLocation = @"..\..\Tools\Nant\nant.exe";
+#endif
+            var configFileData = System.IO.File.ReadAllText(CCNetConfigFile);
+            configFileData = configFileData.Replace("WillBeReplacedViaTheTest", NantExeLocation);
+            System.IO.File.WriteAllText(CCNetConfigFile, configFileData);
+
+            System.IO.File.Copy(NantBuildFile, System.IO.Path.Combine(workingDirectory, new System.IO.FileInfo(NantBuildFile).Name));
+
+
+
+            IntegrationCompleted.Add(ProjectName1, false);
+
+            Log("Clear existing state file, to simulate first run : " + ProjectStateFile);
+            System.IO.File.Delete(ProjectStateFile);
+
+            Log("Clear integration folder to simulate first run");
+            if (System.IO.Directory.Exists(IntegrationFolder)) System.IO.Directory.Delete(IntegrationFolder, true);
+
+            string FailureFileLocation =  System.IO.Path.Combine(workingDirectory, "FailBuild.txt");
+
+            Log("Creating failure file so the build will fail the nant task");
+            var ff = new System.IO.FileStream(FailureFileLocation, System.IO.FileMode.CreateNew);
+            ff.Close();
+            ff.Dispose();
+
+
+            CCNet.Remote.Messages.ProjectStatusResponse psr;
+            CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+
+
+            Log("Making CruiseServerFactory");
+            CCNet.Core.CruiseServerFactory csf = new CCNet.Core.CruiseServerFactory();
+
+            Log("Making cruiseServer with config from :" + CCNetConfigFile);
+            using (var cruiseServer = csf.Create(true, CCNetConfigFile))
+            {
+
+                // subscribe to integration complete to be able to wait for completion of a build
+                cruiseServer.IntegrationCompleted += new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(CruiseServerIntegrationCompleted);
+
+                Log("Starting cruiseServer");
+                cruiseServer.Start();
+
+                System.Threading.Thread.Sleep(250); // give time to start
+
+                Log("Forcing build to fail the build");
+                CheckResponse(cruiseServer.ForceBuild(pr1));
+
+                System.Threading.Thread.Sleep(250); // give time to start the build
+
+                Log("Waiting for integration to complete");
+                while (!IntegrationCompleted[ProjectName1])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+
+                Log("Forcing build so it will pass now");
+
+                IntegrationCompleted[ProjectName1] = false;
+                System.IO.File.Delete(FailureFileLocation);
+                CheckResponse(cruiseServer.ForceBuild(pr1));
+
+
+                System.Threading.Thread.Sleep(250); // give time to start the build
+
+                Log("Waiting for integration to complete");
+                while (!IntegrationCompleted[ProjectName1])
+                {
+                    for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
+                    Log(" waiting ...");
+                }
+
+
+
+                // un-subscribe to integration complete 
+                cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(CruiseServerIntegrationCompleted);
+
+                Log("getting project status");
+                psr = cruiseServer.GetProjectStatus(pr1);
+                CheckResponse(psr);
+
+                Log("Stopping cruiseServer");
+                cruiseServer.Stop();
+
+                Log("waiting for cruiseServer to stop");
+                cruiseServer.WaitForExit(pr1);
+                Log("cruiseServer stopped");
+
+            }
+
+            Log("Checking the data");
+            CCNet.Remote.ProjectStatus ps = null;
+
+            // checking data of project 1
+            foreach (var p in psr.Projects)
+            {
+                if (p.Name == ProjectName1) ps = p;
+            }
+
+            Assert.AreEqual(ProjectName1, ps.Name);
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus, "wrong build state for project " + ProjectName1);
+
+        }
+
 
 
 

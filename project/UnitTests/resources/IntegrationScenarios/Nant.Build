@@ -4,12 +4,15 @@
   <property name="solution"                  value="Source/Finance.sln"        />    
   <property name="CreateInstallZips"         value="False" />    
   <property name="isCi"                      value="True" />    
+  <property name="FileToCheckToFail"         value="FailBuild.txt" />    
+
 
   
   <property name="CCNetBuildCondition"       unless="${property::exists('CCNetBuildCondition')}"      value="ForceBuild"  />    
   <property name="CCNetLabel"                unless="${property::exists('CCNetLabel')}"               value="0.0.0.0"  />    
   <property name="CCNetRequestSource"        unless="${property::exists('CCNetRequestSource')}"       value="Finance_ArtifactDirectory"  />    
   <property name="CCNetWorkingDirectory"     unless="${property::exists('CCNetWorkingDirectory')}"    value=""  />    
+  <property name="CCNetFailureUsers"         unless="${property::exists('CCNetFailureUsers')}"        value=""  />    
 
   
   <target name="showHelp" >
@@ -21,8 +24,13 @@
 		<echo message="CCNetLabel            : ${CCNetLabel}  " />
 		<echo message="CCNetRequestSource    : ${CCNetRequestSource}  " />
 		<echo message="CCNetWorkingDirectory : ${CCNetWorkingDirectory}  " />
-		<echo message="CreateInstallZips     : ${CreateInstallZips}  " />
+		<echo message="CCNetFailureUsers     : ${CCNetFailureUsers}  " />
+    <echo message="CreateInstallZips     : ${CreateInstallZips}  " />
 		<echo message="isCi                  : ${isCi}  " />    
   </target>
-    
+
+  <target name="FailBuildIfFileExists" >
+		<fail message="Failure file found" if="${file::exists(FileToCheckToFail)}" />
+  </target>
+  
 </project>

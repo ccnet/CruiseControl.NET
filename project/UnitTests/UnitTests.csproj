@@ -1387,6 +1387,9 @@
     <Content Include="resources\IntegrationScenarios\NantAndExecTestMultiLineBuildArgs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\NantFailureUsersWithQuote.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest01.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest02.xml" />
     <Content Include="resources\IntegrationScenarios\PackagePublisherTest03.xml" />

@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
 
         /// <summary>
-        /// Encodes an argument for passing into a program, removes double quotes from begging and end if it doesn't require them.
+        /// Encodes an argument for passing into a program, removes double quotes from begining and end, if it doesn't require them.
         /// </summary>
         /// <param name="original">The value that should be received by the program</param>
         /// <returns>The value which needs to be passed to the program for the original value to come through</returns>
