@@ -1,0 +1,33 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  <!-- ensure that multi line buildargs work  -->
+  <project name="NantTest02"
+           workingDirectory="Nant02">
+    <triggers />
+    
+    <sourcecontrol type="nullSourceControl" alwaysModified="true">  
+    </sourcecontrol>
+      
+    <tasks>
+
+      <nant description="running Nant">
+        <executable>WillBeReplacedViaTheTest</executable>
+        <buildFile>Nant.build</buildFile>
+        <targetList>
+          <target>showProperties</target>
+          <target>FailBuildIfFileExists</target>
+        </targetList>
+        <buildTimeoutSeconds>600</buildTimeoutSeconds>
+      </nant>
+
+    </tasks>
+
+
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+  </project>
+
+
+</cruisecontrol>

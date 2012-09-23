@@ -117,19 +117,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </remarks>
 
     [ReflectorType("nant")]
-	public class NAntTask
+    public class NAntTask
         : BaseExecutableTask
-	{
+    {
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const int DefaultBuildTimeout = 600;
+        public const int DefaultBuildTimeout = 600;
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const string logFilename = "nant-results-{0}.xml";
+        public const string logFilename = "nant-results-{0}.xml";
         /// <summary>
         /// 	
         /// </summary>
@@ -139,45 +139,45 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const string defaultExecutable = "nant";
+        public const string defaultExecutable = "nant";
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const string DefaultLogger = "NAnt.Core.XmlLogger";
+        public const string DefaultLogger = "NAnt.Core.XmlLogger";
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const string DefaultListener = "NAnt.Core.DefaultLogger";
+        public const string DefaultListener = "NAnt.Core.DefaultLogger";
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const bool DefaultNoLogo = true;
+        public const bool DefaultNoLogo = true;
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
-	    private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
+        private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NAntTask" /> class.	
         /// </summary>
         /// <remarks></remarks>
-		public NAntTask(): 
-			this(new ProcessExecutor()){}
+        public NAntTask() :
+            this(new ProcessExecutor()) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NAntTask" /> class.	
         /// </summary>
         /// <param name="executor">The executor.</param>
         /// <remarks></remarks>
-		public NAntTask(ProcessExecutor executor)
-		{
-			this.executor = executor;
+        public NAntTask(ProcessExecutor executor)
+        {
+            this.executor = executor;
             this.Targets = new string[0];
             this.Executable = defaultExecutable;
             this.Priority = DefaultPriority;
@@ -286,9 +286,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region BuildTimeoutSeconds
         /// <summary>
-		/// The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.
+        /// The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.
         /// Specify this value as zero to disable process timeouts.
-		/// </summary>
+        /// </summary>
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
@@ -297,53 +297,53 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         /// <summary>
-		/// Runs the integration using NAnt.  The build number is provided for labelling, build
-		/// timeouts are enforced.  The specified targets are used for the specified NAnt build file.
-		/// StdOut from nant.exe is redirected and stored.
-		/// </summary>
-		/// <param name="result">For storing build output.</param>
-				protected override bool Execute(IIntegrationResult result)
-				{
-					string nantOutputFile = GetNantOutputFile(result);
-					//delete old nant output logfile, if exist
-					fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
+        /// Runs the integration using NAnt.  The build number is provided for labelling, build
+        /// timeouts are enforced.  The specified targets are used for the specified NAnt build file.
+        /// StdOut from nant.exe is redirected and stored.
+        /// </summary>
+        /// <param name="result">For storing build output.</param>
+        protected override bool Execute(IIntegrationResult result)
+        {
+            string nantOutputFile = GetNantOutputFile(result);
+            //delete old nant output logfile, if exist
+            fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
 
-					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-							string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
-					var info = CreateProcessInfo(result);
-					ProcessResult processResult = TryToRun(info, result);
+            var info = CreateProcessInfo(result);
+            ProcessResult processResult = TryToRun(info, result);
 
-					if (File.Exists(nantOutputFile))
-						result.AddTaskResult(new FileTaskResult(nantOutputFile));
+            if (File.Exists(nantOutputFile))
+                result.AddTaskResult(new FileTaskResult(nantOutputFile));
 
-					result.AddTaskResult(new ProcessTaskResult(processResult, true));
+            result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-					if (processResult.TimedOut)
-						result.AddTaskResult(MakeTimeoutBuildResult(info));
+            if (processResult.TimedOut)
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
 
-					return processResult.Succeeded;
-				}
+            return processResult.Succeeded;
+        }
 
         /// <summary>
         /// Gets the process filename.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessFilename()
-		{
-			return Executable;
-		}
+        protected override string GetProcessFilename()
+        {
+            return Executable;
+        }
 
         /// <summary>
         /// Gets the process timeout.	
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override int GetProcessTimeout()
-		{
-			return BuildTimeoutSeconds * 1000;
-		}
+        protected override int GetProcessTimeout()
+        {
+            return BuildTimeoutSeconds * 1000;
+        }
 
         /// <summary>
         /// Gets the process arguments.	
@@ -351,19 +351,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessArguments(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendIf(NoLogo, "-nologo");
-			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
-			buffer.AppendArgument("-logger:{0}", Logger);
-			buffer.AppendArgument("-logfile:{0}", StringUtil.AutoDoubleQuoteString(GetNantOutputFile(result)));
-			buffer.AppendArgument("-listener:{0}", Listener);
+        protected override string GetProcessArguments(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AppendIf(NoLogo, "-nologo");
+            buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
+            buffer.AppendArgument("-logger:{0}", Logger);
+            buffer.AppendArgument("-logfile:{0}", StringUtil.AutoDoubleQuoteString(GetNantOutputFile(result)));
+            buffer.AppendArgument("-listener:{0}", Listener);
             AppendBuildArguments(buffer);
-			AppendIntegrationResultProperties(buffer, result);
-			AppendTargets(buffer);
-			return buffer.ToString();
-		}
+            AppendIntegrationResultProperties(buffer, result);
+            AppendTargets(buffer);
+            return buffer.ToString();
+        }
 
         /// <summary>
         /// Gets the process base directory.	
@@ -371,10 +371,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override string GetProcessBaseDirectory(IIntegrationResult result)
-		{
-			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
-		}
+        protected override string GetProcessBaseDirectory(IIntegrationResult result)
+        {
+            return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
+        }
 
         /// <summary>
         /// Gets the process priority class.	
@@ -386,33 +386,33 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return this.Priority;
         }
 
-		private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
-		{
-			// We have to sort this alphabetically, else the unit tests
-			// that expect args in a certain order are unpredictable
-			IDictionary properties = result.IntegrationProperties;
-			foreach (string key in properties.Keys)
-			{
-				object value = result.IntegrationProperties[key];
-				if (value != null)
-					buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-D:{0}={1}", key, StringUtil.StripThenEncodeParameterArgument(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
-			}
-		}
+        private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
+        {
+            // We have to sort this alphabetically, else the unit tests
+            // that expect args in a certain order are unpredictable
+            IDictionary properties = result.IntegrationProperties;
+            foreach (string key in properties.Keys)
+            {
+                object value = result.IntegrationProperties[key];
+                if (value != null)
+                    buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-D:{0}={1}", key, StringUtil.StripThenEncodeParameterArgument(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
+            }
+        }
 
-		private void AppendTargets(ProcessArgumentBuilder buffer)
-		{
-			foreach(string t in Targets)
-			{
-				buffer.AppendArgument(t);
-			}
-		}
+        private void AppendTargets(ProcessArgumentBuilder buffer)
+        {
+            foreach (string t in Targets)
+            {
+                buffer.AppendArgument(t);
+            }
+        }
 
         private void AppendBuildArguments(ProcessArgumentBuilder buffer)
         {
             var args = System.Text.RegularExpressions.Regex.Split(BuildArgs, @"\n");
             foreach (string t in args)
             {
-                if (! string.IsNullOrEmpty(t.Trim())) buffer.AppendArgument(t);
+                if (!string.IsNullOrEmpty(t.Trim())) buffer.AppendArgument(t);
             }
         }
 
@@ -421,32 +421,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <returns></returns>
         /// <remarks></remarks>
-		public override string ToString()
-		{
-			string baseDirectory = ConfiguredBaseDirectory ??string.Empty;
-			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
-		}
+        public override string ToString()
+        {
+            string baseDirectory = ConfiguredBaseDirectory ?? string.Empty;
+            return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
+        }
 
         /// <summary>
         /// Gets or sets the targets for presentation.	
         /// </summary>
         /// <value>The targets for presentation.</value>
         /// <remarks></remarks>
-		public string TargetsForPresentation
-		{
-			get
-			{
-				return StringUtil.ArrayToNewLineSeparatedString(Targets);
-			}
-			set
-			{
-				Targets = StringUtil.NewLineSeparatedStringToArray(value);
-			}
-		}
+        public string TargetsForPresentation
+        {
+            get
+            {
+                return StringUtil.ArrayToNewLineSeparatedString(Targets);
+            }
+            set
+            {
+                Targets = StringUtil.NewLineSeparatedStringToArray(value);
+            }
+        }
 
-		private string GetNantOutputFile(IIntegrationResult result)
-		{
+        private string GetNantOutputFile(IIntegrationResult result)
+        {
             return Path.Combine(result.ArtifactDirectory, string.Format(CultureInfo.CurrentCulture, logFilename, LogFileId));
-		}
-	}
+        }
+    }
 }
