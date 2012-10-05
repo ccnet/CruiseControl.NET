@@ -27,6 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// &lt;sourcecontrol type="git"&gt;
     /// &lt;repository&gt;git://github.com/rails/rails.git&lt;/repository&gt;
     /// &lt;branch&gt;master&lt;/branch&gt;
+    /// &lt;revision&gt;v1.0.2.0&lt;/revision&gt;
     /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
     /// &lt;fetchSubmodules&gt;true&lt;/fetchSubmodules&gt;
     /// &lt;executable&gt;git&lt;/executable&gt;
@@ -65,9 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <para>
     /// Once the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. Next,
     /// "git log $LastIntegrationCommit..origin/$BranchName --name-status -c",
+    /// or "git log $LastIntegrationCommit..$Revision --name-status -c" (if 'revision' property was specified)
     /// is issued to get a list of commits and their changes, where $LastIntegrationCommit is the commit which was
     /// checked out the last time an integration was run. If the project has not yet been integrated, a
     /// "git log origin/$BranchName --name-status -c"
+    /// or "git log origin/$BranchName --name-status -c" (if 'revision' property was specified)
     /// command is issued instead.
     /// </para>
     /// <para>
@@ -75,7 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </para>
     /// <para>
     /// Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout -f
-    /// origin/$NameOfTheBranch" command is issued. Also the "git clean -f -d -x" command to get a clean working copy to start a new build.
+    /// origin/$BranchName" (or "git checkout -f $Revision") command is issued. 
+    /// Also the "git clean -f -d -x" command to get a clean working copy to start a new build.
     /// If 'fetchSubmodules' is set to 'true' git submodules will be fetched and updated.
     /// </para>
     /// <para>
@@ -131,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private BuildProgressInformation _buildProgressInformation;
 
         /// <summary>
-        /// Whether to fetch the updates from the repository and checkout the branch for a particular build. 
+        /// Whether to fetch the updates from the repository and checkout the branch / revision for a particular build. 
         /// </summary>
         /// <version>1.5</version>
         /// <default>true</default>
@@ -238,6 +242,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public string WorkingDirectory { get; set; }
 
         /// <summary>
+        /// Repository revision (commit hash or tag name) to checkout and build.
+        /// </summary>
+        /// <version>1.9</version>
+        /// <default>none</default>
+        [ReflectorProperty("revision", Required = false)]
+        public string Revision { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Git" /> class.	
         /// </summary>
         /// <remarks></remarks>
@@ -280,17 +292,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string lastCommit;
 			if (revisionData.TryGetValue(COMMIT_KEY, out lastCommit))
 			{
-				logResult = GitLogHistory(Branch, lastCommit, to);
+				logResult = GitLogHistory(GetBranchNameOrRevision(Branch, Revision), lastCommit, to);
 			}
 			else
 			{
-				Log.Debug(string.Concat("[Git] last integrated commit not found, using all ancestors of origin/",
-					Branch, " as the set of modifications."));
-				logResult = GitLogHistory(Branch, to);
+				Log.Debug(string.Concat("[Git] last integrated commit not found, using all ancestors of ",
+					GetBranchNameOrRevision(Branch, Revision), " as the set of modifications."));
+				logResult = GitLogHistory(GetBranchNameOrRevision(Branch, Revision), to);
 			}
 
 			// Get the hash of the origin head, and store it against the integration result.
-			string originHeadHash = GitLogOriginHash(Branch, to);
+			string originHeadHash = GitLogOriginHash(GetBranchNameOrRevision(Branch, Revision), to);
 			revisionData[COMMIT_KEY] = originHeadHash;
 			to.SourceControlData.Clear();
 			NameValuePair.Copy(revisionData, to.SourceControlData);
@@ -308,8 +320,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (!AutoGetSource)
 				return;
 
-			// checkout remote branch
-			GitCheckoutRemoteBranch(Branch, result);
+			// checkout revision or remote branch
+            GitCheckoutRemoteBranch(GetBranchNameOrRevision(Branch, Revision), result);
 
             // update submodules
             if (FetchSubmodules)
@@ -470,39 +482,39 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Get the hash of the latest commit in the remote repository.
 		/// </summary>
-		/// <param name="branchName">Name of the branch.</param>
+		/// <param name="branchNameOrRevision">Name of the branch or revision</param>
 		/// <param name="result">IIntegrationResult of the current build.</param>
-		private string GitLogOriginHash(string branchName, IIntegrationResult result)
+		private string GitLogOriginHash(string branchNameOrRevision, IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat("origin/", branchName));
+			buffer.AddArgument(branchNameOrRevision);
 			buffer.AddArgument("-1");
 			buffer.AddArgument("--pretty=format:\"%H\"");
 			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
 		}
 
 		/// <summary>
-		/// Get the commit history including changes between <paramref name="from"/> and origin/<paramref name="branchName"/>
+		/// Get the commit history including changes between <paramref name="from"/> and <paramref name="branchNameOrRevision"/>
 		/// </summary>
-		/// <param name="branchName">Name of the branch.</param>
+		/// <param name="branchNameOrRevision">Name of the branch or revision</param>
 		/// <param name="from">The commit from which to start logging.</param>
 		/// <param name="to">IIntegrationResult of the current build.</param>
 		/// <returns>Result of the "git log" command.</returns>
-		private ProcessResult GitLogHistory(string branchName, string from, IIntegrationResult to)
+		private ProcessResult GitLogHistory(string branchNameOrRevision, string from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat(from, "..origin/", branchName));
+			buffer.AddArgument(branchNameOrRevision);
 			AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
 
-		private ProcessResult GitLogHistory(string branchName, IIntegrationResult to)
+		private ProcessResult GitLogHistory(string branchNameOrRevision, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat("origin/", branchName));
+			buffer.AddArgument(branchNameOrRevision);
 			AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
@@ -603,18 +615,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
+        /// <summary>
+        /// Get the target name, either a revision or a remote branch name
+        /// </summary>
+        /// <param name="branchName">remote branch name</param>
+        /// <param name="revision">optional revision (may be null or empty)</param>
+        /// <returns></returns>
+        private string GetBranchNameOrRevision(string branchName, string revision)
+        {
+            return string.IsNullOrEmpty(revision) ? string.Concat("origin/", branchName) : revision;
+        }
+
 		/// <summary>
-		/// Checkout a remote branch with the "git checkout -q -f 'origin/branchName'" command.
+        /// Checkout a remote branch or revision with the "git checkout -q -f 'origin/branchName'" or "git checkout -q -f 'revision'" command.
 		/// </summary>
-		/// <param name="branchName">Name of the branch to checkout.</param>
+		/// <param name="branchOrRevision">Name of the branch to checkout.</param>
 		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitCheckoutRemoteBranch(string branchName, IIntegrationResult result)
+		private void GitCheckoutRemoteBranch(string branchOrRevision, IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("checkout");
 			buffer.AddArgument("-q");
 			buffer.AddArgument("-f");
-			buffer.AddArgument(string.Concat("origin/", branchName));
+			buffer.AddArgument(branchOrRevision);
 
 			// initialize progress information
 			var bpi = GetBuildProgressInformation(result);

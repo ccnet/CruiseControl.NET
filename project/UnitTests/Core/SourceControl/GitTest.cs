@@ -76,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<tagNameFormat>{0}</tagNameFormat>
 	<committerName>Max Mustermann</committerName>
 	<committerEMail>max.mustermann@gmx.de</committerEMail>
+	<revision>v1.0.2.0</revision>
 </git>";
 
 			git = (Git)NetReflector.Read(xml);
@@ -92,7 +93,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("max.mustermann@gmx.de", git.CommitterEMail, "#B11");
 			Assert.AreEqual(true, git.CommitBuildModifications, "#B12");
 			Assert.AreEqual(true, git.CommitUntrackedFiles, "#B13");
-		}
+            Assert.AreEqual("v1.0.2.0", git.Revision, "#B14");
+        }
 
 		[Test]
 		public void PopulateFromMinimallySpecifiedXml()
@@ -115,7 +117,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(null, git.CommitterEMail, "#C11");
 			Assert.AreEqual(false, git.CommitBuildModifications, "#C12");
 			Assert.AreEqual(false, git.CommitUntrackedFiles, "#C13");
-		}
+            Assert.AreEqual(null, git.Revision, "#C14");
+        }
 
 		[Test]
 		public void ShouldApplyLabelIfTagOnSuccessTrue()
