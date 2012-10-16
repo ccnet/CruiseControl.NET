@@ -348,7 +348,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         }
 
-
         void cruiseServer_IntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
             Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete. Project {0} ", e.ProjectName));
