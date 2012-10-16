@@ -187,6 +187,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
             state.SaveState(result);
         }
 
+        [Test]
+        public void SaveProjectWithManySpacesInName()
+        {
+            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().
+                Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
+            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+            Expect.Call(delegate { fileSystem.AtomicSave(string.Empty, string.Empty); }).IgnoreArguments().Constraints(
+                Rhino.Mocks.Constraints.Is.NotNull(), Rhino.Mocks.Constraints.Is.Anything());
+            mocks.ReplayAll();
+
+            result = IntegrationResultMother.CreateSuccessful();
+            result.ProjectName = "my    project     with   many    spaces";
+            state = new FileStateManager(fileSystem, executionEnvironment);
+            state.SaveState(result);
+        }
+
+
 	    [Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
