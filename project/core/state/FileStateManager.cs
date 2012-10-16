@@ -169,12 +169,15 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
         /// <summary>
         /// Generates the state filename for a project.
+        /// Camel cases the project name, first character after a space is converted to upper case
         /// </summary>
         /// <param name="project">The name of project.</param>
         /// <returns>The name of the state file for the project.</returns>
 		private string StateFilename(string project)
 		{
 			StringBuilder strBuilder = new StringBuilder();
+            project = System.Text.RegularExpressions.Regex.Replace(project, @"\s+", " ");
+
 			foreach (string token in project.Split(' '))
 			{
 				strBuilder.Append(token.Substring(0, 1).ToUpper());
