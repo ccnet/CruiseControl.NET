@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </key>
     /// <example>
     /// <code>
-    /// &lt;sourcecontrol type="repositoryRoot"&gt;
+    /// &lt;sourcecontrol type="robocopy"&gt;
     /// &lt;repositoryRoot&gt;C:\Somewhere&lt;/repositoryRoot&gt;
     /// &lt;/sourcecontrol&gt;
     /// </code>
