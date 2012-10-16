@@ -1131,7 +1131,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         // Implements the manual sorting of items by columns.
         private class ListViewItemComparer : IComparer
         {
-            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "int", "datetime", "string",  "datetime","string", "string", "string" };
+            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "string", "string", "datetime", "string",  "string", "int" };
             private int col;
             private bool ascendingOrder;
 
