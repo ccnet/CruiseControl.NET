@@ -70,8 +70,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";
-			expectedContext["logUrl"] = "myUrl";
-
+            expectedContext["ShowHighLight"] = false;
+            expectedContext["logUrl"] = "myUrl";
+            
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "BuildLog.vm", new HashtableConstraint(expectedContext));
 
 			// Execute & Verify
