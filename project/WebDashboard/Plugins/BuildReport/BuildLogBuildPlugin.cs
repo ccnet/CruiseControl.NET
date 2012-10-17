@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
     public class BuildLogBuildPlugin : ProjectConfigurableBuildPlugin
     {
         private readonly IActionInstantiator actionInstantiator;
-        private int disableHighlightingWhenLogExceedsKB;
+        private int disableHighlightingWhenLogExceedsKB=50; 
 
 
         public BuildLogBuildPlugin(IActionInstantiator actionInstantiator)
