@@ -13,6 +13,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	public class HtmlBuildLogAction : ICruiseAction, IConditionalGetFingerprintProvider
 	{
 		public static readonly string ACTION_NAME = "ViewBuildLog";
+
+        public static int DisableHighlightingWhenLogExceedsKB = 0;
+
         private const string TEMPLATE_NAME = @"BuildLog.vm";
 
 		private readonly IBuildRetriever buildRetriever;
@@ -37,7 +40,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			Hashtable velocityContext = new Hashtable();
 			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
 			Build build = buildRetriever.GetBuild(buildSpecifier, cruiseRequest.RetrieveSessionToken());
-			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
+            string xmliFiedLog = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
+            velocityContext["log"] = xmliFiedLog;
+            velocityContext["ShowHighLight"] = xmliFiedLog.Length < ( DisableHighlightingWhenLogExceedsKB * 1024);
 
 			// TODO - urk, this is a hack, need a better way of setting extensions
 			string oldExtension = urlBuilder.Extension;
