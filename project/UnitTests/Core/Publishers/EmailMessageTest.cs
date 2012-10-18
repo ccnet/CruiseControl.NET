@@ -5,28 +5,28 @@ using ThoughtWorks.CruiseControl.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
-	/// <summary>
-	/// Tests the messages required by email publisher
-	/// </summary>
-	[TestFixture]
-	public class EmailMessageTest : CustomAssertion
-	{
-		private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Always} );
-		private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", new EmailGroup.NotificationType[] {EmailGroup.NotificationType.Failed } );
-		private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", new EmailGroup.NotificationType[] {EmailGroup.NotificationType.Change} );
-        private static readonly EmailGroup successGroup = new EmailGroup("successGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success } );
+    /// <summary>
+    /// Tests the messages required by email publisher
+    /// </summary>
+    [TestFixture]
+    public class EmailMessageTest : CustomAssertion
+    {
+        private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Always });
+        private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed });
+        private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change });
+        private static readonly EmailGroup successGroup = new EmailGroup("successGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success });
         private static readonly EmailUser always = new EmailUser("always", alwaysGroup.Name, "always@thoughtworks.com");
-		private static readonly EmailUser failed = new EmailUser("failed", failedGroup.Name, "failed@thoughtworks.com");
-		private static readonly EmailUser changed = new EmailUser("changed", changedGroup.Name, "changed@thoughtworks.com");
+        private static readonly EmailUser failed = new EmailUser("failed", failedGroup.Name, "failed@thoughtworks.com");
+        private static readonly EmailUser changed = new EmailUser("changed", changedGroup.Name, "changed@thoughtworks.com");
         private static readonly EmailUser success = new EmailUser("success", successGroup.Name, "success@thoughtworks.com");
         private static readonly EmailUser modifier = new EmailUser("modifier", changedGroup.Name, "modifier@thoughtworks.com");
 
-		private EmailPublisher publisher;
+        private EmailPublisher publisher;
 
-		[SetUp]
-		protected void CreatePublisher()
-		{
-			publisher = new EmailPublisher();
+        [SetUp]
+        protected void CreatePublisher()
+        {
+            publisher = new EmailPublisher();
             publisher.IndexedEmailGroups.Add(alwaysGroup.Name, alwaysGroup);
             publisher.IndexedEmailGroups.Add(changedGroup.Name, changedGroup);
             publisher.IndexedEmailGroups.Add(failedGroup.Name, failedGroup);
@@ -36,28 +36,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.IndexedEmailUsers.Add(changed.Name, changed);
             publisher.IndexedEmailUsers.Add(success.Name, success);
             publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
-		}
-
-		[Test]
-		public void VerifyRecipientListForFixedBuild()
-		{
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFixed());
-			Assert.AreEqual(ExpectedRecipients(always, changed, modifier, success), new EmailMessage(result, publisher).Recipients);
-		}
-
-		[Test]
-		public void VerifyRecipientListForFailedBuild()
-		{
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-            Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
-		}
+        }
 
         [Test]
-		public void VerifyRecipientListForStillFailingBuild()
-		{
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillFailing());
-			Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
-		}
+        public void VerifyRecipientListForFixedBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFixed());
+            Assert.AreEqual(ExpectedRecipients(always, changed, modifier, success), new EmailMessage(result, publisher).Recipients);
+        }
+
+        [Test]
+        public void VerifyRecipientListForFailedBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+            Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
+        }
+
+        [Test]
+        public void VerifyRecipientListForStillFailingBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillFailing());
+            Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
+        }
 
         [Test]
         public void VerifyRecipientListForExceptionBuild()
@@ -88,45 +88,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         }
 
         [Test]
-		public void CreateRecipientListWithNoRecipients()
-		{
-			EmailMessage emailMessage = new EmailMessage(IntegrationResultMother.CreateFixed(), new EmailPublisher());
-			Assert.AreEqual(string.Empty, emailMessage.Recipients);
-		}
+        public void CreateRecipientListWithNoRecipients()
+        {
+            EmailMessage emailMessage = new EmailMessage(IntegrationResultMother.CreateFixed(), new EmailPublisher());
+            Assert.AreEqual(string.Empty, emailMessage.Recipients);
+        }
 
-		[Test]
-		public void CreateModifiersListForUnknownUser()
-		{
+        [Test]
+        public void CreateModifiersListForUnknownUser()
+        {
             publisher.IndexedEmailUsers.Remove(modifier.Name);
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
-			Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
-		}
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+            Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
+        }
 
-		[Test]
-		public void CreateModifiersListWithUnspecifiedUser()
-		{
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
-			result.Modifications[0].UserName = null;
-			Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
-		}
+        [Test]
+        public void CreateModifiersListWithUnspecifiedUser()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+            result.Modifications[0].UserName = null;
+            Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
+        }
 
-		[Test]
-		public void EmailSubject()
-		{
+        [Test]
+        public void EmailSubject()
+        {
             IntegrationResult ir = IntegrationResultMother.CreateStillSuccessful();
             EmailMessage em = GetEmailMessage(ir, true);
 
 
-			string subject = em.Subject;
-			Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
-		}
+            string subject = em.Subject;
+            Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
+        }
 
-		[Test]
-		public void EmailSubjectForFailedBuild()
-		{
-			string subject = GetEmailMessage(IntegrationResultMother.CreateFailed(), true).Subject;
+        [Test]
+        public void EmailSubjectForFailedBuild()
+        {
+            string subject = GetEmailMessage(IntegrationResultMother.CreateFailed(), true).Subject;
             Assert.AreEqual("CCNET: Project#9 Build Failed", subject);
-		}
+        }
 
         [Test]
         public void EmailSubjectForSuccessfulBuild()
@@ -136,18 +136,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         }
 
         [Test]
-		public void EmailSubjectForFixedBuild()
-		{
-			string subject = GetEmailMessage(IntegrationResultMother.CreateFixed(), true).Subject;
+        public void EmailSubjectForFixedBuild()
+        {
+            string subject = GetEmailMessage(IntegrationResultMother.CreateFixed(), true).Subject;
             Assert.AreEqual("CCNET: Project#9 Build Fixed: Build 0", subject);
-		}
+        }
 
-		[Test]
-		public void EmailSubjectForExceptionedBuild()
-		{
-			string subject = GetEmailMessage(IntegrationResultMother.CreateExceptioned(), true).Subject;
+        [Test]
+        public void EmailSubjectForExceptionedBuild()
+        {
+            string subject = GetEmailMessage(IntegrationResultMother.CreateExceptioned(), true).Subject;
             Assert.AreEqual("CCNET: Project#9 Exception in Build !", subject);
-		}
+        }
 
 
         [Test]
@@ -173,58 +173,58 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         }
 
 
-		[Test]
-		public void OnlyEmailModifierRecipientsOnBuildFailure()
-		{
-			publisher = new EmailPublisher();
+        [Test]
+        public void OnlyEmailModifierRecipientsOnBuildFailure()
+        {
+            publisher = new EmailPublisher();
             publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
             publisher.IndexedEmailUsers.Add(changed.Name, changed);
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
-		}
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+            Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
+        }
 
-		[Test]
-		public void HandleEmailUserWithUnspecifiedGroup()
-		{
-			publisher = new EmailPublisher();
+        [Test]
+        public void HandleEmailUserWithUnspecifiedGroup()
+        {
+            publisher = new EmailPublisher();
             publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
             publisher.IndexedEmailUsers.Add("foo", new EmailUser("foo", null, "x@x.com"));
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
-		}
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+            Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
+        }
 
-		private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
-		{
-			EmailPublisher publisher = EmailPublisherMother.Create();
-			publisher.IncludeDetails = includeDetails;
-			return new EmailMessage(DecorateIntegrationResult(result), publisher);
-		}
+        private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
+        {
+            EmailPublisher publisher = EmailPublisherMother.Create();
+            publisher.IncludeDetails = includeDetails;
+            return new EmailMessage(DecorateIntegrationResult(result), publisher);
+        }
 
-		private static IntegrationResult DecorateIntegrationResult(IntegrationResult result)
-		{
-			result.ProjectName = "Project#9";
-			result.Label = "0";
-			return result;
-		}
+        private static IntegrationResult DecorateIntegrationResult(IntegrationResult result)
+        {
+            result.ProjectName = "Project#9";
+            result.Label = "0";
+            return result;
+        }
 
-		private static IIntegrationResult AddModification(IIntegrationResult result)
-		{
-			Modification mod = new Modification();
-			mod.UserName = modifier.Name;
-			result.Modifications = new Modification[1] {mod};
-			return result;
-		}
+        private static IIntegrationResult AddModification(IIntegrationResult result)
+        {
+            Modification mod = new Modification();
+            mod.UserName = modifier.Name;
+            result.Modifications = new Modification[1] { mod };
+            return result;
+        }
 
-		private static string ExpectedRecipients(params EmailUser[] users)
-		{
-			StringBuilder builder = new StringBuilder();
-			foreach (EmailUser user in users)
-			{
-				if (builder.Length > 0) builder.Append(", ");
-				builder.Append(user.Address);
-			}
-			return builder.ToString();
-		}
+        private static string ExpectedRecipients(params EmailUser[] users)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (EmailUser user in users)
+            {
+                if (builder.Length > 0) builder.Append(", ");
+                builder.Append(user.Address);
+            }
+            return builder.ToString();
+        }
 
         /// <summary>
         /// Verify that EmailMessage runs the specified username-to-address converters.
@@ -247,5 +247,157 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
         }
 
-	}
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// running through all specified converters, and not stopping on first hit
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses2()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new IEmailConverter[3];
+            myPublisher.Converters[0] = new LowerCaseEmailConverter();
+            myPublisher.Converters[1] = new UpperCaseEmailConverter();
+            myPublisher.Converters[2] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
+
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "UserName";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("USERNAME@example.com", message.Recipients);
+
+        }
+
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// running through all specified converters, and not stopping on first hit
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses3()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new IEmailConverter[3];
+            myPublisher.Converters[0] = new UpperCaseEmailConverter();
+            myPublisher.Converters[1] = new LowerCaseEmailConverter();
+            myPublisher.Converters[2] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
+
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "UserName";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("username@example.com", message.Recipients);
+
+        }
+
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// running through all specified converters, and not stopping on first hit
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses4()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new IEmailConverter[3];
+            myPublisher.Converters[0] = new UpperCaseEmailConverter();
+            myPublisher.Converters[1] = new NotFoundEmailConverter();
+            myPublisher.Converters[2] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
+
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "UserName";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("USERNAME@example.com", message.Recipients);
+        }
+
+
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// running through all specified converters, and not stopping on first hit
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses5()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new IEmailConverter[3];
+            myPublisher.Converters[0] = new UpperCaseEmailConverter();
+            myPublisher.Converters[1] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
+            myPublisher.Converters[2] = new NotFoundEmailConverter();
+            
+
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "UserName";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("USERNAME@example.com", message.Recipients);
+        }
+
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// running through all specified converters, and not stopping on first hit
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses6()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new IEmailConverter[3];
+            myPublisher.Converters[0] = new NotFoundEmailConverter();
+            myPublisher.Converters[1] = new UpperCaseEmailConverter();
+            myPublisher.Converters[2] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
+            
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "UserName";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("USERNAME@example.com", message.Recipients);
+        }
+
+
+        private class LowerCaseEmailConverter : IEmailConverter
+        {
+            public string Convert(string userName)
+            {
+                return userName.ToLower();
+            }
+        }
+
+
+        private class UpperCaseEmailConverter : IEmailConverter
+        {
+            public string Convert(string userName)
+            {
+                return userName.ToUpper();
+            }
+        }
+
+        private class NotFoundEmailConverter : IEmailConverter
+        {
+            public string Convert(string userName)
+            {
+                return null;
+            }
+        }
+
+
+
+    }
 }
