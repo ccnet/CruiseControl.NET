@@ -505,8 +505,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument(branchNameOrRevision);
-			AppendLogOptions(buffer);
+            buffer.AddArgument(from + ".." + branchNameOrRevision);
+            AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
 
