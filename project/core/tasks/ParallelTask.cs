@@ -173,15 +173,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var events = new ManualResetEvent[numberOfTasks];
             var results = new IIntegrationResult[numberOfTasks];
 
+            for (var loop = 0; loop < numberOfTasks; loop++)
+            {
+                events[loop] = new ManualResetEvent(false);
+                results[loop] = result.Clone();
+                tasksDetails[loop] = new ParallelRunningSubTaskDetails(loop, result);
+            }
+
             // Launch each task using the ThreadPool
             var countLock = new object();
             var successCount = 0;
             var failureCount = 0;
             for (var loop = 0; loop < numberOfTasks; loop++)
             {
-                events[loop] = new ManualResetEvent(false);
-                results[loop] = result.Clone();
-                tasksDetails[loop] = new ParallelRunningSubTaskDetails(loop, result);
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
                     var taskNumber = (int)state;
