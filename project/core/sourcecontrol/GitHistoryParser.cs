@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				mod.Type = GetModificationType(change.Groups["Type"].Value);
 
-				string fullFilePath = change.Groups["FileName"].Value.TrimEnd('\r', '\n');
+				string fullFilePath = change.Groups["FileName"].Value.TrimEnd('\r', '\n').Trim('\"');
 				mod.FileName = GetFileFromPath(fullFilePath);
 				mod.FolderName = GetFolderFromPath(fullFilePath);
 
