@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 return original;
 
             string value = Regex.Replace(original, @"(\\*)" + "\"", @"$1\$0");
-            value = Regex.Replace(value, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
+            value = Regex.Replace(value, @"^(.*(?:\s|,).*?)(\\*)$", "\"$1$2$2\"");
             return value;
         }
 
