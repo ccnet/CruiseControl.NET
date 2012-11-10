@@ -158,11 +158,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				new string[] { "fo o\\", "\"fo o\\\\\""}
 				,
 				new string[] { "foo\\ ", "\"foo\\ \""}
+				,
+				new string[] { "foo,bar", "\"foo,bar\""}
+				,
+				new string[] { "foo \"something\" bar,baz", "\"foo \\\"something\\\" bar,baz\""}
 			};
 
 			foreach (string[] test in tests)
 			{
-				Assert.AreEqual(StringUtil.StripThenEncodeParameterArgument(test[0]), test[1]);
+                Assert.AreEqual(test[1], StringUtil.StripThenEncodeParameterArgument(test[0]));
 			}
 		}
 
