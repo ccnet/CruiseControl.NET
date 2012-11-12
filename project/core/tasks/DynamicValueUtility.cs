@@ -417,7 +417,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             // Find the index of the node
                             while (indexNode.PreviousSibling != null)
                             {
-                                if (indexNode.NodeType != XmlNodeType.Comment)
+                                if (indexNode.PreviousSibling.NodeType != XmlNodeType.Comment)
                                     position++;
                                 indexNode = indexNode.PreviousSibling;
                             }
