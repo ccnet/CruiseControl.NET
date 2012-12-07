@@ -199,6 +199,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             [ReflectorProperty("subItems", Required = true)]
             public SubItemBase[] SubItems { get; set; }
+
+            [ReflectorProperty("subItemsDV", Required = true)]
+            public SubItemDV[] SubItemsDV { get; set; }
         }
 
         [ReflectorType("subItem")]
@@ -206,6 +209,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             [ReflectorProperty("subSubItems", Required = false)]
             public SubItemBase[] SubSubItems { get; set; }
+
+            [ReflectorProperty("subSubItemsDV", Required = false)]
+            public SubItemDV[] SubSubItemsDV { get; set; }
         }
 
         private class subSubItem : SubItemBase
@@ -215,6 +221,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
         private class SubItemBase
         {
+            public string prop { get; set; }
+        }
+
+        private class ItemDV : Item, IWithDynamicValuesItem
+        {
+            public IDynamicValue[] DynamicValues { get; set; }
+        }
+
+        [ReflectorType("subItemDV")]
+        private class SubItemDV : SubItem, IWithDynamicValuesItem
+        {
+            [ReflectorProperty("dynamicValues", Required = false)]
+            public IDynamicValue[] DynamicValues { get; set; }
+        }
+
+        [ReflectorType("subSubItemDV")]
+        private class subSubItemDV : subSubItem, IWithDynamicValuesItem
+        {
+            [ReflectorProperty("dynamicValues", Required = false)]
+            public IDynamicValue[] DynamicValues { get; set; }
         }
 
         [Test]
@@ -318,6 +344,153 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                         "<property>subItems[0].subSubItems[1].value</property>" +
                     "</directValue>" +
                 "</dynamicValues></item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
+        public void PreprocessParametersAddsDirectValueForValidNestedDynamicValuesNodes()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItemsDV><subItemDV><prop>$[value]</prop></subItemDV><subItemDV><prop>$[value2]</prop></subItemDV></subItemsDV></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(SubItemDV));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItemsDV>" +
+                "<subItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subItemDV>" +
+                "<subItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value2</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subItemDV>" +
+                "</subItemsDV>" +
+                "</item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
+        public void PreprocessParametersAddsDirectValueForValidNestedDynamicValuesNodesInBaseParent()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItems><subItemDV><prop>$[value]</prop></subItemDV><subItemDV><prop>$[value2]</prop></subItemDV></subItems></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(SubItemDV));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItems>" +
+                "<subItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subItemDV>" +
+                "<subItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value2</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subItemDV>" +
+                "</subItems>" +
+                "</item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
+        public void PreprocessParametersAddsDirectValueForValidDoublyNestedDynamicValuesNodes()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItems><subItem><subSubItemsDV><subSubItemDV><prop>$[value]</prop></subSubItemDV><subSubItemDV><prop>$[value2]</prop></subSubItemDV></subSubItemsDV></subItem></subItems></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(SubItem));
+            typeTable.Add(typeof(SubItemDV));
+            typeTable.Add(typeof(subSubItemDV));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItems><subItem><subSubItemsDV>" +
+                "<subSubItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subSubItemDV>" +
+                "<subSubItemDV>" +
+                    "<prop></prop>" +
+                    "<dynamicValues>" +
+                        "<directValue>" +
+                            "<parameter>value2</parameter>" +
+                            "<property>prop</property>" +
+                        "</directValue>" +
+                    "</dynamicValues>" +
+                "</subSubItemDV>" +
+                "</subSubItemsDV>" +
+                "</subItem></subItems></item>";
+            Assert.AreEqual(expected, actual.OuterXml);
+        }
+
+        [Test]
+        public void PreprocessParametersAddsDirectValueForValidDoublyNestedMixedDynamicValuesNodes()
+        {
+            var document = new XmlDocument();
+            var xml = "<item attrib=\"value\"><subItems><subItem><subSubItemsDV><subSubItemDV><prop>$[value]</prop></subSubItemDV></subSubItemsDV><prop>$[value2]</prop></subItem></subItems></item>";
+            document.LoadXml(xml);
+
+            var task = new TestTask();
+            NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+            typeTable.Add(typeof(Item));
+            typeTable.Add(typeof(SubItem));
+            typeTable.Add(typeof(SubItemDV));
+            typeTable.Add(typeof(subSubItemDV));
+            var actual = task.PreprocessParameters(typeTable, document.DocumentElement);
+            var expected = "<item attrib=\"value\"><subItems><subItem><subSubItemsDV>" +
+                    "<subSubItemDV>" +
+                        "<prop></prop>" +
+                        "<dynamicValues>" +
+                            "<directValue>" +
+                                "<parameter>value</parameter>" +
+                                "<property>prop</property>" +
+                            "</directValue>" +
+                        "</dynamicValues>" +
+                    "</subSubItemDV>" +
+                "</subSubItemsDV>" +
+                "<prop></prop>" +
+                "</subItem></subItems>" +
+                "<dynamicValues>" +
+                    "<directValue>" +
+                        "<parameter>value2</parameter>" +
+                        "<property>subItems[0].prop</property>" +
+                    "</directValue>" +
+                "</dynamicValues>" +
+                "</item>";
             Assert.AreEqual(expected, actual.OuterXml);
         }
 
