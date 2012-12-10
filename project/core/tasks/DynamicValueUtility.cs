@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote.Parameters;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
     using System.ComponentModel;
 
     /// <summary>
@@ -305,24 +306,61 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region ConvertXmlToDynamicValues()
-        private static void buildImputMembers(ref Dictionary<string, XmlMemberSerialiser> inputMembers, NetReflectorTypeTable typeTable, XmlNode inputNode)
+        private static void buildMembers(ref Dictionary<string, XmlMemberSerialiser> members, NetReflectorTypeTable typeTable, XmlNode node)
         {
-            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
-            if (inputNodeType != null)
+            if (node == null)
+                return;
+
+            var nodeType = typeTable.ContainsType(node.Name) ? typeTable[node.Name] : null;
+            if (nodeType != null)
             {
-                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
+                foreach (XmlMemberSerialiser value in nodeType.MemberSerialisers)
                 {
                     if (value != null)
                     {
-                        if (!inputMembers.ContainsKey(value.Attribute.Name))
-                            inputMembers.Add(value.Attribute.Name, value);
+                        if (!members.ContainsKey(value.Attribute.Name))
+                            members.Add(value.Attribute.Name, value);
                     }
                 }
             }
 
-            foreach (XmlNode childNode in inputNode.ChildNodes)
+            foreach (XmlNode childNode in node.ChildNodes)
             {
-                buildImputMembers(ref inputMembers, typeTable, childNode);
+                buildMembers(ref members, typeTable, childNode);
+            }
+        }
+
+        private static void addParameters(List<XmlElement> parameters, XmlNode node)
+        {
+            var doc = node.OwnerDocument;
+            if (parameters.Count > 0)
+            {
+                var parametersEl = node.SelectSingleNode("dynamicValues");
+                if (parametersEl == null)
+                {
+                    parametersEl = doc.CreateElement("dynamicValues");
+                    node.AppendChild(parametersEl);
+                }
+
+                foreach (var element in parameters)
+                {
+                    parametersEl.AppendChild(element);
+                }
+
+                parameters.Clear();
+            }
+        }
+
+        private static XmlNode getParentNode(XmlNode node)
+        {
+            var nodeAsAttribute = node as XmlAttribute;
+            if (nodeAsAttribute != null)
+            {
+                return nodeAsAttribute.OwnerElement;
+            }
+            else
+            {
+                return node.ParentNode;
             }
         }
 
@@ -341,7 +379,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Initialise the values from the reflection
             var inputMembers = new Dictionary<string, XmlMemberSerialiser>();
-            buildImputMembers(ref inputMembers, typeTable, inputNode);
+            buildMembers(ref inputMembers, typeTable, inputNode);
 
             var nodes = inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*");
             foreach (XmlNode nodeWithParam in nodes)
@@ -403,45 +441,47 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var currentNode = nodeWithParam is XmlAttribute ? nodeWithParam : nodeWithParam.ParentNode;
                     var previousNode = currentNode;
                     var lastName = string.Empty;
-                    while ((currentNode != inputNode) && (currentNode != null))
+                    bool hasDynamicValues = false;
+                    while ((currentNode != inputNode) && (currentNode != null) && !hasDynamicValues)
                     {
-                        // Check if we are dealing with an array
                         var nodeName = currentNode.Name;
-                        if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
-                        {
-                            // Do some convoluted processing to handle array items
-                            propertyName.Remove(0, lastName.Length + 1);    // Remove the previous name, since this is now an index position
-                            var position = 0;
-                            var indexNode = previousNode;
 
-                            // Find the index of the node
-                            while (indexNode.PreviousSibling != null)
+                        var currentNodeType = typeTable.ContainsType(nodeName) ? typeTable[nodeName] : null;
+                        if (currentNodeType != null)
+                            hasDynamicValues = currentNodeType.Type.
+                                GetInterface(typeof(IWithDynamicValuesItem).Name) != null;
+
+                        if (!hasDynamicValues)
+                        {
+                            // Check if we are dealing with an array
+                            if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
                             {
-                                if (indexNode.NodeType != XmlNodeType.Comment)
-                                    position++;
-                                indexNode = indexNode.PreviousSibling;
+                                // Do some convoluted processing to handle array items
+                                propertyName.Remove(0, lastName.Length + 1);    // Remove the previous name, since this is now an index position
+                                var position = 0;
+                                var indexNode = previousNode;
+
+                                // Find the index of the node
+                                while (indexNode.PreviousSibling != null)
+                                {
+                                    if (indexNode.NodeType != XmlNodeType.Comment)
+                                        position++;
+                                    indexNode = indexNode.PreviousSibling;
+                                }
+
+                                // Add the node as an indexed node
+                                propertyName.Insert(0, "." + nodeName + "[" + position.ToString(CultureInfo.CurrentCulture) + "]");
+                            }
+                            else
+                            {
+                                // Just add the node name
+                                propertyName.Insert(0, "." + nodeName);
                             }
 
-                            // Add the node as an indexed node
-                            propertyName.Insert(0, "." + nodeName + "[" + position.ToString(CultureInfo.CurrentCulture) + "]");
-                        }
-                        else
-                        {
-                            // Just add the node name
-                            propertyName.Insert(0, "." + nodeName);
-                        }
-
-                        // Move to the parent
-                        lastName = nodeName;
-                        previousNode = currentNode;
-                        var curNode = currentNode as XmlAttribute;
-                        if (curNode != null)
-                        {
-                            currentNode = curNode.OwnerElement;
-                        }
-                        else
-                        {
-                            currentNode = currentNode.ParentNode;
+                            // Move to the parent
+                            lastName = nodeName;
+                            previousNode = currentNode;
+                            currentNode = getParentNode(currentNode);
                         }
                     }
                     propertyName.Remove(0, 1);
@@ -449,24 +489,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                     // Set a replacement value
                     nodeWithParam.Value = replacementValue;
+
+                    // add the parameters already there if the current node has dynamic values
+                    if (hasDynamicValues)
+                        addParameters(parameters, currentNode);
                 }
             }
 
-            // Add the parameters to the element
-            if (parameters.Count > 0)
-            {
-                var parametersEl = inputNode.SelectSingleNode("dynamicValues");
-                if (parametersEl == null)
-                {
-                    parametersEl = doc.CreateElement("dynamicValues");
-                    inputNode.AppendChild(parametersEl);
-                }
-
-                foreach (var element in parameters)
-                {
-                    parametersEl.AppendChild(element);
-                }
-            }
+            // Add the remaining parameters to the root element
+            addParameters(parameters, inputNode);
 
             return resultNode;
         }
