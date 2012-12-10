@@ -330,7 +330,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
 
-        private static void addParameters(ref List<XmlElement> parameters, XmlNode node)
+        private static void addParameters(List<XmlElement> parameters, XmlNode node)
         {
             var doc = node.OwnerDocument;
             if (parameters.Count > 0)
@@ -442,48 +442,47 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var previousNode = currentNode;
                     var lastName = string.Empty;
                     bool hasDynamicValues = false;
-                    while ((currentNode != inputNode) && (currentNode != null))
+                    while ((currentNode != inputNode) && (currentNode != null) && !hasDynamicValues)
                     {
                         var nodeName = currentNode.Name;
 
                         var currentNodeType = typeTable.ContainsType(nodeName) ? typeTable[nodeName] : null;
                         if (currentNodeType != null)
-                        {
                             hasDynamicValues = currentNodeType.Type.
                                 GetInterface(typeof(IWithDynamicValuesItem).Name) != null;
-                            if (hasDynamicValues)
-                                break;
-                        }
 
-                        // Check if we are dealing with an array
-                        if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
+                        if (!hasDynamicValues)
                         {
-                            // Do some convoluted processing to handle array items
-                            propertyName.Remove(0, lastName.Length + 1);    // Remove the previous name, since this is now an index position
-                            var position = 0;
-                            var indexNode = previousNode;
-
-                            // Find the index of the node
-                            while (indexNode.PreviousSibling != null)
+                            // Check if we are dealing with an array
+                            if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
                             {
-                                if (indexNode.NodeType != XmlNodeType.Comment)
-                                    position++;
-                                indexNode = indexNode.PreviousSibling;
+                                // Do some convoluted processing to handle array items
+                                propertyName.Remove(0, lastName.Length + 1);    // Remove the previous name, since this is now an index position
+                                var position = 0;
+                                var indexNode = previousNode;
+
+                                // Find the index of the node
+                                while (indexNode.PreviousSibling != null)
+                                {
+                                    if (indexNode.NodeType != XmlNodeType.Comment)
+                                        position++;
+                                    indexNode = indexNode.PreviousSibling;
+                                }
+
+                                // Add the node as an indexed node
+                                propertyName.Insert(0, "." + nodeName + "[" + position.ToString(CultureInfo.CurrentCulture) + "]");
+                            }
+                            else
+                            {
+                                // Just add the node name
+                                propertyName.Insert(0, "." + nodeName);
                             }
 
-                            // Add the node as an indexed node
-                            propertyName.Insert(0, "." + nodeName + "[" + position.ToString(CultureInfo.CurrentCulture) + "]");
+                            // Move to the parent
+                            lastName = nodeName;
+                            previousNode = currentNode;
+                            currentNode = getParentNode(currentNode);
                         }
-                        else
-                        {
-                            // Just add the node name
-                            propertyName.Insert(0, "." + nodeName);
-                        }
-
-                        // Move to the parent
-                        lastName = nodeName;
-                        previousNode = currentNode;
-                        currentNode = getParentNode(currentNode);
                     }
                     propertyName.Remove(0, 1);
                     AddElement(replacementEl, "property", propertyName.ToString());
@@ -493,12 +492,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                     // add the parameters already there if the current node has dynamic values
                     if (hasDynamicValues)
-                        addParameters(ref parameters, currentNode);
+                        addParameters(parameters, currentNode);
                 }
             }
 
             // Add the remaining parameters to the root element
-            addParameters(ref parameters, inputNode);
+            addParameters(parameters, inputNode);
 
             return resultNode;
         }
