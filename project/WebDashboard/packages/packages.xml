@@ -16,6 +16,7 @@
   <package name="FxCop Results" description="Display the results of a FxCop build." type="Plugin" file="FxCop.zip" installed="no" group="Build"/>
   <package name="Fitnesse Results" description="Display the results of a Fitnesse report." type="Plugin" file="Fitnesse.zip" installed="no" group="Build"/>
   <package name="NCover Results" description="Display the results of a NCover report." type="Plugin" file="NCover.zip" installed="no" group="Build"/>
+  <package name="ReportGenerator Results" description="Display the code coverage results produced by ReportGenerator." type="Plugin" file="ReportGenerator.zip" installed="no" group="Build" />
   <package name="Simian Results" description="Display the results of a Simian report." type="Plugin" file="Simian.zip" installed="no" group="Build"/>
   <package name="Gendarme Results" description="Display the results of a Gendarme report." type="Plugin" file="Gendarme.zip" installed="no" group="Build"/>
   <package name="Security Configuration Display" description="Display the security configuration a server." type="Plugin" file="SecurityConfig.zip" installed="no" group="Server"/>

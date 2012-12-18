@@ -1,0 +1,44 @@
+﻿<package>
+  <name>ReportGenerator Results</name>
+  <description>Display the code coverage results produced by ReportGenerator.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>ReportGenerator.xsl</file>
+        <file>ReportGeneratorSummary.xsl</file>
+      </files>
+    </folder>
+    <folder>
+      <location>javascript</location>
+      <files>
+        <file>ReportGenerator.js</file>
+      </files>
+    </folder>
+    <folder>
+      <location>.</location>
+      <files>
+        <file>ReportGenerator.css</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\ReportGeneratorSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\ReportGeneratorSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\ReportGenerator.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Code Coverage"/>
+        <attribute name="actionName" value="ReportGeneratorReport"/>
+        <attribute name="xslFileName" value="xsl\ReportGenerator.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>
