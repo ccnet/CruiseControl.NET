@@ -62,82 +62,67 @@
                 select="$nunit2.case.count + $junit.case.count - $total.notrun.count" />
   <xsl:variable name="total.failure.count"
                 select="$nunit2.failure.count + $junit.failure.count + $junit.error.count + $junit.suite.error.count" />
+
   <xsl:template match="/">
-    <table cellpadding="2"
-           cellspacing="0"
-           border="0">
-      <!-- Unit Tests -->
-      <tr>
-        <td class="headernote"
-            colspan="2">Suites run: 
-        <xsl:value-of select="$total.suite.count" />, Tests run: 
-        <xsl:value-of select="$total.run.count" />, Failures: 
-        <xsl:value-of select="$total.failure.count" />, Not run: 
-        <xsl:value-of select="$total.notrun.count" />, Time: 
-        <xsl:value-of select="$total.time" />seconds</td>
-      </tr>
-      <xsl:choose>
-        <xsl:when test="$total.run.count = 0">
+    <xsl:if test="$total.run.count &gt; 0">
+      <table class="sectionheader" width="98%">
+        <tr>
+          <td>Unit Tests</td>
+        </tr>
+      </table>
+      <table cellpadding="2" cellspacing="0" border="0">
+        <tr>
+          <td class="headernote" colspan="2">
+            Suites run: <xsl:value-of select="$total.suite.count" />, Tests run: <xsl:value-of select="$total.run.count" />, Failures: <xsl:value-of select="$total.failure.count" />, Not run: <xsl:value-of select="$total.notrun.count" />, Time: <xsl:value-of select="$total.time" /> seconds
+          </td>
+        </tr>
+        <xsl:if test="$total.failure.count = 0">
           <tr>
-            <td colspan="2"
-                class="note">No Tests Run</td>
+            <td colspan="2" class="successnote" background-color="green">
+              All Tests Passed
+            </td>
           </tr>
-          <tr>
-            <td colspan="2"
-                class="failurenote">This project doesn't have any tests</td>
-          </tr>
-        </xsl:when>
-        <xsl:when test="$total.failure.count = 0">
-          <tr>
-            <td colspan="2"
-                class="successnote">All Tests Passed</td>
-          </tr>
-        </xsl:when>
-      </xsl:choose>
-      <xsl:apply-templates select="$junit.success.list | $nunit2.success.list" />
-      <xsl:apply-templates select="$junit.suite.error.list" />
-      <xsl:apply-templates select="$junit.error.list" />
-      <xsl:apply-templates select="$junit.failure.list | $nunit2.failure.list" />
-      <xsl:apply-templates select="$nunit2.notrun.list" />
-    </table>
+        </xsl:if>
+        <xsl:apply-templates select="$junit.success.list | $nunit2.success.list" />
+        <xsl:apply-templates select="$junit.suite.error.list" />
+        <xsl:apply-templates select="$junit.error.list" />
+        <xsl:apply-templates select="$junit.failure.list | $nunit2.failure.list" />
+        <xsl:apply-templates select="$nunit2.notrun.list" />
+      </table>
+    </xsl:if>
   </xsl:template>
+
   <!-- Unit Test Errors -->
   <xsl:template match="error">
     <tr>
       <td class="errornote">
-        <xsl:value-of select="../@name" />
+        <span style="color:red">
+          <xsl:value-of select="../@name" />
+        </span>
       </td>
       <td class="errornote">Error</td>
     </tr>
   </xsl:template>
+
   <!-- Unit Test Failures -->
   <xsl:template match="failure">
     <tr>
       <td class="failurenote">
-        <xsl:value-of select="../@name" />
+        <span style="color:red">
+          <xsl:value-of select="../@name" />
+        </span>
       </td>
       <td class="failurenote">Failure</td>
     </tr>
   </xsl:template>
-  <!-- Unit Test Successes -->
-<!-- no need to show hundreds of ok, focus on the not ok ones
-  <xsl:template match="test-case[@success='True']">
-    <tr>
-      <xsl:if test="($junit.success.count + position()) mod 2 = 0">
-        <xsl:attribute name="class">oddrow</xsl:attribute>
-      </xsl:if>
-      <td class="successnote">
-        <xsl:value-of select="@name" />
-      </td>
-      <td class="successnote">Success</td>
-    </tr>
-  </xsl:template>
-  -->
+
   <!-- Unit Test Warnings -->
   <xsl:template match="reason">
     <tr>
       <td class="warningnote">
-        <xsl:value-of select="../@name" />
+        <span style="color:yellow">
+          <xsl:value-of select="../@name" />
+        </span>
       </td>
       <td class="warningnote">Warning</td>
     </tr>
