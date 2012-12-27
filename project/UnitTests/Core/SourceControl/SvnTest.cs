@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()
 		{
 			ExpectSvnDirectoryExists(true);
-            ExpectToExecuteArguments(string.Format(@"update {0} --revision 10 --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            ExpectToExecuteArguments(string.Format(@"switch {0} {1} --revision 10 --no-auth-cache --non-interactive", svn.TrunkUrl, StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 
 			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
@@ -271,7 +271,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithoutRevisionNumberIfTagOnSuccessTrueAndModificationsNotFound()
 		{
 			ExpectSvnDirectoryExists(true);
-            ExpectToExecuteArguments(string.Format(@"update {0} --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            ExpectToExecuteArguments(string.Format(@"switch {0} {1} --no-auth-cache --non-interactive", svn.TrunkUrl, StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.AutoGetSource = true;
 			svn.GetSource(IntegrationResult());
 		}
@@ -280,7 +280,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
 			ExpectSvnDirectoryExists(true);
-            ExpectToExecuteArguments(string.Format(@"update {0} --username ""Buck Rogers"" --password ""My Password"" --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            ExpectToExecuteArguments(string.Format(@"switch {0} {1} --username ""Buck Rogers"" --password ""My Password"" --no-auth-cache --non-interactive", svn.TrunkUrl, StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
 			svn.AutoGetSource = true;
@@ -292,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectoryWithSpaces, ".svn"));
 
-            ExpectToExecuteArguments(string.Format(@"update {0} --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
+            ExpectToExecuteArguments(string.Format(@"switch {0} {1} --no-auth-cache --non-interactive", svn.TrunkUrl, StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 			svn.GetSource(IntegrationResult());
@@ -336,7 +336,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectSvnDirectoryExists(false);
 			ExpectUnderscoreSvnDirectoryExists(true);
-            ExpectToExecuteArguments(string.Format(@"update {0} --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            ExpectToExecuteArguments(string.Format(@"switch {0} {1} --no-auth-cache --non-interactive", svn.TrunkUrl, StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectory;

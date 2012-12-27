@@ -735,7 +735,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
         {
-            var buffer = new PrivateArguments("update");
+            var buffer = new PrivateArguments("switch");
+            buffer.Add(string.Empty, TrunkUrl, true);
             buffer.Add(null, Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)), true);
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
