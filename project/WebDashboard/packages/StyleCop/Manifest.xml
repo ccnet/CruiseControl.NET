@@ -7,10 +7,17 @@
       <location>Xsl</location>
       <files>
         <file>StyleCopReport.xsl</file>
+        <file>StyleCopSummary.xsl</file>
       </files>
     </folder>
   </folders>
   <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\StyleCopSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\StyleCopSummary.xsl</value>
+    </setting>
     <setting>
       <path>/dashboard/plugins/buildPlugins</path>
       <filter>@xslFileName='xsl\StyleCopReport.xsl'</filter>
