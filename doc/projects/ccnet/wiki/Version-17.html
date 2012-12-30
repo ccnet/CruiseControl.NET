@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-17 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-17 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 30 Dec 2012 14:38:02 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<meta name="csrf-token" content="xQI867K6x56yVqCt5cVplO177ckDE7QF3Y4bB+bDnFA="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
 <link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
@@ -87,7 +87,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="xQI867K6x56yVqCt5cVplO177ckDE7QF3Y4bB+bDnFA=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FVersion-17" />
     <table>
       <tr>
@@ -146,7 +146,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+<ul class="menu-children unattached"><li><a href="../versions/9.html" class="version-9">1.8.3</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -243,7 +243,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 
 <div class="wiki">
   <a name="CCNet-Version-17-release-notes"></a>
-<h1 >CCNet Version-1.7 release notes<a href="#CCNet-Version-17-release-notes" class="wiki-anchor">&para;</a></h1>
+<h1 >CCNet Version 1.7 release notes<a href="#CCNet-Version-17-release-notes" class="wiki-anchor">&para;</a></h1>
 
 
 	<p>It's been a while, but we're back. The switch to the new infrastructure took some more time than anticipated, but it paid off.<br />Also choosing for Git as source control seems to be good choice, there are already some new contributors active, and it's a lot<br />easier to incorporate their work. A lot of the new features and bug fixes come from the contributors, so many thanks goes to them!</p>
@@ -263,6 +263,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 		<li>CCTray : app balloon shows always report builds even if it is set only to show warnings or errors.</li>
 		<li>BuildPublisher : KeepLastXBuilds broken in 1.7</li>
 		<li>Summary files are no longer created by default, and the artifact publisher cleans up any existing remaining.</li>
+		<li>Package publisher has the options <strong>flatten</strong> and <strong>baseFolder</strong> again, but these are moved to <a href="PackageFile.html" class="wiki-page">packageFile</a> , <a href="PackageFolder.html" class="wiki-page">packageFolder</a> sub-elements</li>
 	</ul>
 
 
@@ -271,7 +272,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 
 
 	<ul>
-	<li><a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a>, it's best that you start every included file must with :<br />   <?xml version="1.0" encoding="utf-8"?>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder" xmlns="http://thoughtworks.org/ccnet/1/5"&gt;<br />   look at the bottom of the <a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a> page for the reason, <br />   and Skolima also made a nice post <a href="http://skolima.blogspot.com/2012/01/upgrading-from-cruisecontrolnet-15-to_18.html" class="external">about it</a></li>
+	<li><a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a>, it's best that you start every included file with :<br />   <?xml version="1.0" encoding="utf-8"?>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder" xmlns="http://thoughtworks.org/ccnet/1/5"&gt;<br />   look at the bottom of the <a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a> page for the reason, <br />   and Skolima also made a nice post <a href="http://skolima.blogspot.com/2012/01/upgrading-from-cruisecontrolnet-15-to_18.html" class="external">about it</a></li>
 		<li>if you used GIT, the first build with CCNet 1.7 will list ALL changes done. This is due to the fix of the Git repository.<br />   Maybe it's best to delete the first build artifact, and clean up the history.xml file for each project with Git.<br />   Or take a backup of the history.xml files, upgrade to CCNet 1.7, and place the backup's back.</li>
 	</ul>
 
@@ -345,6 +346,6 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-17 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version-17 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 30 Dec 2012 14:38:02 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 </html>
