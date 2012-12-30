@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version_18 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version_18 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 30 Dec 2012 14:38:02 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q="/>
+<meta name="csrf-token" content="xQI867K6x56yVqCt5cVplO177ckDE7QF3Y4bB+bDnFA="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1333543208' />
 <link href="../../../stylesheets/resete33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uie33a.css?1333543211" media="all" rel="stylesheet" type="text/css" />
@@ -87,7 +87,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="bVxDUqOBj0mcDiaLV3wc0W7xsI+8fQv5wGMxDwXqw/Q=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="xQI867K6x56yVqCt5cVplO177ckDE7QF3Y4bB+bDnFA=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FVersion_18" />
     <table>
       <tr>
@@ -146,7 +146,7 @@ Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current pa
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li><li><a href="../versions/6.html" class="version-6">1.8</a></li></ul>
+<ul class="menu-children unattached"><li><a href="../versions/9.html" class="version-9">1.8.3</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -242,8 +242,8 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 
 
 <div class="wiki">
-  <a name="CCNet-Version-18-release-notes"></a>
-<h1 >CCNet Version-1.8 release notes<a href="#CCNet-Version-18-release-notes" class="wiki-anchor">&para;</a></h1>
+  <a name="CCNet-Version-180-release-notes"></a>
+<h1 >CCNet Version 1.8.0 release notes<a href="#CCNet-Version-180-release-notes" class="wiki-anchor">&para;</a></h1>
 
 
 	<p>It's been a while, but we're back. The switch to the new infrastructure took some more time than anticipated, but it paid off.<br />Also choosing for Git as source control seems to be good choice, there are already some new contributors active, and it's a lot<br />easier to incorporate their work. A lot of the new features and bug fixes come from the contributors, so many thanks goes to them!<br />Also we start with a new numbering scheme for CCNet :<br />The odd versions are dev builds, like 1.7. The even numbers (like 1.8) are Release versions.</p>
@@ -262,6 +262,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 		<li>CCTray : Prevent Interval Trigger from modifying cctray detail column..</li>
 		<li>CCTray : app balloon shows always report builds even if it is set only to show warnings or errors.</li>
 		<li>BuildPublisher : KeepLastXBuilds broken in 1.7</li>
+		<li>Package publisher has the options <strong>flatten</strong> and <strong>baseFolder</strong> again, but these are moved to <a href="PackageFile.html" class="wiki-page">packageFile</a> , <a href="PackageFolder.html" class="wiki-page">packageFolder</a> sub-elements</li>
 	</ul>
 
 
@@ -270,7 +271,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 
 
 	<ul>
-	<li><a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a>, it's best that you start every included file must with :<br />   <?xml version="1.0" encoding="utf-8"?>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder" xmlns="http://thoughtworks.org/ccnet/1/5"&gt;<br />   look at the bottom of the <a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a> page for the reason, <br />   and Skolima also made a nice post <a href="http://skolima.blogspot.com/2012/01/upgrading-from-cruisecontrolnet-15-to_18.html" class="external">about it</a></li>
+	<li><a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a>, it's best that you start every included file with :<br />   <?xml version="1.0" encoding="utf-8"?>&lt;cb:config-template xmlns:cb="urn:ccnet.config.builder" xmlns="http://thoughtworks.org/ccnet/1/5"&gt;<br />   look at the bottom of the <a href="Configuration_Preprocessor.html" class="wiki-page">Configuration_Preprocessor</a> page for the reason, <br />   and Skolima also made a nice post <a href="http://skolima.blogspot.com/2012/01/upgrading-from-cruisecontrolnet-15-to_18.html" class="external">about it</a></li>
 		<li>if you used GIT, the first build with CCNet 1.7 will list ALL changes done. This is due to the fix of the Git repository.<br />   Maybe it's best to delete the first build artifact, and clean up the history.xml file for each project with Git.<br />   Or take a backup of the history.xml files, upgrade to CCNet 1.7, and place the backup's back.</li>
 	</ul>
 
@@ -290,6 +291,7 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 		<li>Dashboard admin page has a better look, with tooltips and the packages divided in sections</li>
 		<li>added packages for existing xsl files, making it easier to use them.</li>
 		<li>added packages for existing plugins, making it easier to use them.</li>
+		<li>Folder wildcards like \**\ for the <a href="File_Merge_Task.html" class="wiki-page">File_Merge_Task</a></li>
 	</ul>
 
 
@@ -297,7 +299,100 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 <h2 >Changes<a href="#Changes" class="wiki-anchor">&para;</a></h2>
 
 
-	<p>Lots of bugfixes and improvements, see below for details<br />todo : make final list on release of 1.8</p>
+	<p>Lots of bugfixes and improvements, see below for details</p>
+
+
+	<a name="Bug-Fixes"></a>
+<h2 >Bug Fixes<a href="#Bug-Fixes" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Git Source Control thinks that time is linear</li>
+		<li>AssemblyVersionLabeller requires a commit trigger to start labelling builds</li>
+		<li>vtsts source control does not seem to work in multi source control block</li>
+		<li>Statistics Publisher does NOT handle xpath epression, that points to an attribute, correctly</li>
+		<li>nant - newline in &lt;buildArgs&gt; causes "Target ' ' does not exist in this project." </li>
+		<li>PowerShellTask will error out with spaces in the scritpsDirectory value</li>
+		<li>RSS publisher using wrong pubDate</li>
+		<li>Thread safe XMLLogger</li>
+		<li>Finalbuilder task is unable to find Finalbuilder 7 task when running on Windows 7 x64.</li>
+		<li>allow force build and stop project button remain enabled in context menu</li>
+		<li>Visual Studio detection fails on 64-bit windows</li>
+		<li>Multile projects config, requires restart of ccservice to pickup changes</li>
+		<li>Merge Commits in GIT are being ignored by CCnet, causing "No modifications detected." </li>
+		<li>namespaces node for stats not recognized</li>
+		<li>powershelltask does not fail build</li>
+		<li>Prevent Interval Trigger from modifying cctray detail column..</li>
+		<li>state folder is not automatically created</li>
+		<li>Sequential task, preprocessor and array property do not mix well</li>
+		<li>selectParameter does not get properly streamed to XML</li>
+		<li>Email publisher group doc is bogus</li>
+		<li>Validator does not properly close configuration files</li>
+		<li>CCValidator crash</li>
+		<li>FailureTasks seems to be always empty (Issue 50 follow up)</li>
+		<li>document the new ApplyForceBuildsReAddTop</li>
+		<li>Unable to give arguments to logger in a msbuild task</li>
+		<li>devenv task does not pick up environment sets</li>
+		<li>All tasks with subtasks should display their subtasks statuses when building</li>
+		<li>Package publisher does not allow to select which folder to strip from file names</li>
+		<li>cctray throws NullReferenceException when a non-running project is aborted</li>
+		<li>log time outs as an error</li>
+		<li>KeepLastXBuilds broken in 1.7</li>
+		<li>The CCTray app balloon shows always report builds even if it is set only to show warnings or errors.</li>
+		<li>Wire up load Transport Extension event handles</li>
+		<li>StateDirectory is still not created</li>
+		<li>email publisher with gmail seems broken</li>
+		<li>WebDashboard - ModificationHistoryProjectPlugin - ApplicationPath is wrong</li>
+		<li>CCNet throws error on .Net 4.0 site</li>
+		<li>flatten doesn't work in ccnet 1.6</li>
+		<li>dashboard has text 'Toggle display of changes...' , replace with an icon</li>
+		<li>modification history must show all unique comments of a checkin</li>
+		<li>there are 2 modification sections in the build report</li>
+		<li>Unused node detected: xmlns:cb="urn:ccnet.config.builder" </li>
+		<li>When more than one LDAP converter is used for multiple domains, app crashes</li>
+		<li>verify if possible to make the package publisher backwards compatible (Task <a href="http://www.cruisecontrolnet.org/issues/119" class="issue status-6 priority-2 closed" title="verify if possible to make the build publisher backwards compatible (Rejected)">#119</a>)</li>
+		<li>Wrong/Broken link for Xml Log Publisher task</li>
+		<li>SVN Exception on DeleteSource</li>
+		<li>Git tagCommitMessage doesn't work with "naked tag"</li>
+	</ul>
+
+
+	<a name="Features"></a>
+<h2 >Features<a href="#Features" class="wiki-anchor">&para;</a></h2>
+
+
+	<ul>
+	<li>Updating the dashboard activity status automatically</li>
+		<li>Sequential Task should display its subtasks statuts when building</li>
+		<li>Parallel Task should display its subtasks statuts when building</li>
+		<li>Have the failed tasks in the build report</li>
+		<li>exec task should put more details in the build log</li>
+		<li>Disable cb:for implicit scope</li>
+		<li>FileSourceControl should be capable of not being recursive</li>
+		<li>Plastic SCM 4.0 plugin</li>
+		<li>The null source control could always return a modification to always build</li>
+		<li>show description of the project in dashboard and CCtray</li>
+		<li>new modification filter : Multi filter</li>
+		<li>add xsl for ms-test and mstest coverage for vs2010</li>
+		<li>The last build time is a link to the last build report</li>
+		<li>add option CheckRecursively to file source control</li>
+		<li>DumpValue task to dump values into an XML file</li>
+		<li>add option to add custom parameters to the msbuild logger</li>
+		<li>For DumpValue task: Possibility to deactivate cdata usage in the dumped value</li>
+		<li>CCCmd does not give the parameter list for a project</li>
+		<li>baseFolder relative to working directory for PackageFolder</li>
+		<li>Add xml highlighter for the BuildLog and ProjectConfiguration</li>
+		<li>Put project name into the title of web build report</li>
+		<li>replacing ':' (colon) characters in CCNetBuildTime with '_' (underscore) within ccnet.config</li>
+		<li>working with packages in the dashboard needs some polishing</li>
+		<li>Add a task that allows to do XSL transformations</li>
+		<li>allow others to adjust prefix of default labeler</li>
+		<li>add properties for formatting the parts of the assembly version labeller</li>
+		<li>get the git short hash for the assembly version labeller</li>
+		<li>Save window settings for Build Parameters in CCTray</li>
+		<li>Basic HTTP Authentication for DefaultWebClient</li>
+		<li>Folder wildcards like \**\</li>
+	</ul>
 </div>
 
 
@@ -343,6 +438,6 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version_18 by HTTrack Website Copier/3.x [XR&CO'2010], Sat, 30 Jun 2012 18:15:54 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/Version_18 by HTTrack Website Copier/3.x [XR&CO'2010], Sun, 30 Dec 2012 14:38:02 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
 </html>
