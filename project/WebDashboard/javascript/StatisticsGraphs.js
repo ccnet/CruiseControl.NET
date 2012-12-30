@@ -52,7 +52,7 @@ function convertTimeIntoSeconds(time)
 /// </summary>
 {
     var timeParts = time.split(":");
-    return timeParts[0] * 3600 + timeParts[1] * 60 + parseInt(timeParts[2]);
+    return timeParts[0] * 3600 + timeParts[1] * 60 + parseInt(timeParts[2], 10);
 }
 
 function summariseStatistics()
