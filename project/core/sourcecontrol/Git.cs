@@ -669,6 +669,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("-f");
             buffer.AddArgument("-x");
             Execute(NewProcessInfo(buffer.ToString(), result));
+
+            if (FetchSubmodules)
+            {
+                buffer = new ProcessArgumentBuilder();
+                buffer.AddArgument("submodule");
+                buffer.AddArgument("foreach");
+                buffer.AddArgument("--recursive");
+                buffer.AddArgument("\"git clean -d -f -x\"");
+                Execute(NewProcessInfo(buffer.ToString(), result));
+            }
         }
 
         /// <summary>
