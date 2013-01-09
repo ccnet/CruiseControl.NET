@@ -216,7 +216,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package,build.emmacover.package,build.mbunit.package,build.msTest2010.package,build.sandcastle.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package,build.emmacover.package,build.mbunit.package,build.msTest2010.package,build.sandcastle.package,build.ReportGenerator.package">
 	</target>
 
 	
@@ -404,6 +404,19 @@
     </zip>
   </target>
 
+  <target name="build.ReportGenerator.package" description="Generates the ReportGenerator package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ReportGenerator.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ReportGenerator">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="ReportGenerator.xsl"/>
+        <include name="ReportGeneratorSummary.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+  
   <target name="build.simian.package" description="Generates the Simian package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/Simian.zip">
