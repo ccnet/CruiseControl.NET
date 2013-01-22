@@ -120,7 +120,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Initializes a new instance of the <see cref="ClearCase" /> class.	
         /// </summary>
         /// <remarks></remarks>
-		public ClearCase() : base(new ClearCaseHistoryParser())
+		public ClearCase()
+            : this(new ProcessExecutor())
 		{}
 
         /// <summary>
