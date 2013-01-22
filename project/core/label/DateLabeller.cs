@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             this.MonthFormat = "00";
             this.DayFormat = "00";
             RevisionFormat = "000";
+            IncrementOnFailed = false;
         }
         #endregion
 
@@ -85,6 +86,16 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         public string RevisionFormat { get; set; }
 
         /// <summary>
+        /// Determines if the build should be labeled even if it fails.
+        /// So you can examine previous failed builds to determine why
+        /// it failed.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+		[ReflectorProperty("incrementOnFailure", Required = false)]
+		public bool IncrementOnFailed { get; set; }
+
+        /// <summary>
         /// Generates the specified integration result.	
         /// </summary>
         /// <param name="integrationResult">The integration result.</param>
@@ -113,7 +124,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		{
 			try
 			{
-				return new Version(lastIntegrationSummary.LastSuccessfulIntegrationLabel);
+				if (IncrementOnFailed)
+					return new Version(lastIntegrationSummary.Label);
+				else
+					return new Version(lastIntegrationSummary.LastSuccessfulIntegrationLabel);
 			}
 			catch (SystemException)
 			{
