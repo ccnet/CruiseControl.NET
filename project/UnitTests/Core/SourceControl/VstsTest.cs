@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         private class RegistryStub: IRegistry
         {
-            public const string DEFAULT_VS2010_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\10.0";
+            public const string DEFAULT_VS2010_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\11.0";
 
             public string GetLocalMachineSubKeyValue(string path, string name)
             {
