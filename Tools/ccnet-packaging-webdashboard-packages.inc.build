@@ -216,8 +216,21 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package,build.emmacover.package,build.mbunit.package,build.msTest2010.package,build.sandcastle.package,build.ReportGenerator.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package,build.emmacover.package,build.mbunit.package,build.msTest2010.package,build.sandcastle.package,build.ReportGenerator.package,build.consoleout.package">
 	</target>
+
+
+  <target name="build.consoleout.package" description="Generates the console output package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ConsoleOut.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ConsoleOut">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="console.xsl"/>
+      </fileset>
+    </zip>
+  </target>
 
 	
   <target name="build.emmacover.package" description="Generates the emma coverage package">
