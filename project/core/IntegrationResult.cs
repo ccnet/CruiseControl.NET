@@ -714,6 +714,7 @@ namespace ThoughtWorks.CruiseControl.Core
             clone.parameters = new List<NameValuePair>(parameters);
             clone.label = label;
             clone.modifications = (Modification[])modifications.Clone();
+            clone.status = status;            
             return clone;
         }
         #endregion

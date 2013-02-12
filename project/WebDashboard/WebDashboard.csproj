@@ -850,6 +850,7 @@
     <None Include="dashboard.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Resources\Languages.es.resx" />
     <EmbeddedResource Include="Resources\Languages.fr.resx">
       <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>

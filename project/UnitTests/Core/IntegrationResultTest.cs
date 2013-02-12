@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             result.ProjectUrl = "http://localhost/ccnet2";
             result.BuildId = new Guid(IntegrationResultMother.DefaultBuildId);
             result.FailureUsers.Add("user");
-            result.FailureTasks.Add("task");
+            result.FailureTasks.Add("task" );
 
             Modification mods = new Modification();
             mods.UserName = "John";
@@ -230,6 +230,73 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(1, Modifiers.Count);
             Assert.AreEqual("John", Modifiers[0]);
         }
+
+
+        [Test]
+        public void CloneShouldWork()
+        {
+            string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+            string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
+            result = new IntegrationResult("project", workingDir, artifactDir,
+                                           new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger", "John Doe"),
+                                           new IntegrationSummary(IntegrationStatus.Failure, "label23", "label22",
+                                                                  new DateTime(2005, 06, 06, 08, 45, 00)));
+            result.StartTime = new DateTime(2005, 06, 06, 08, 45, 00);
+            result.ProjectUrl = "http://localhost/ccnet2";
+            result.BuildId = new Guid(IntegrationResultMother.DefaultBuildId);
+
+            result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateNonZeroExitCodeResult()));
+            result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
+
+            Modification mods = new Modification();
+            mods.UserName = "John";
+            result.Modifications = new Modification[] { mods };
+
+
+            var TheClone = result.Clone();
+
+
+            Assert.AreEqual(result.IntegrationProperties.Count, TheClone.IntegrationProperties.Count);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetProject], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetProject]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetNumericLabel], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetNumericLabel]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetBuildCondition]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetLastIntegrationStatus], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetLastIntegrationStatus]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetRequestSource], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetRequestSource]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetUser], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetUser]);
+            Assert.AreEqual(result.IntegrationProperties[IntegrationPropertyNames.CCNetListenerFile], TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetListenerFile]);
+            
+            ArrayList failureUsers = TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers] as ArrayList;
+            Assert.IsNotNull(failureUsers);
+            ArrayList failureTasks = TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetFailureTasks] as ArrayList;
+            Assert.IsNotNull(failureTasks);
+            ArrayList Modifiers = TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetModifyingUsers] as ArrayList;
+            Assert.IsNotNull(Modifiers);
+            Assert.AreEqual(1, Modifiers.Count);
+            Assert.AreEqual("John", Modifiers[0]);
+            
+            Assert.AreEqual(result.Status, TheClone.Status);
+            
+            //below are the ones that are not cloned, should these be cloned also, see bug 240
+            //http://www.cruisecontrolnet.org/issues/240
+
+            // We purposefully use culture-independent string formats
+            //Assert.AreEqual("2005-06-06", TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate]);
+            //Assert.AreEqual(IntegrationResultMother.DefaultBuildId, TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetBuildId]);
+            //Assert.AreEqual("08:45:00", TheClone.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime]);
+            //Assert.AreEqual(1, failureUsers.Count);
+            //Assert.AreEqual("user", failureUsers[0]);
+            //Assert.AreEqual(1, failureTasks.Count);
+            //Assert.AreEqual("task", failureTasks[0]);
+
+        
+        }
+
 
 
         [Test]
