@@ -39,5 +39,5 @@
   <package name="Latest build" description="Provides a link to the latest build of a project" type="Plugin" file="ProjectLatestBuild.zip" installed="yes" group="Project"/>
   <package name="All builds" description="Provides a section with an overview of all the builds" type="Plugin" file="ProjectAllBuilds.zip" installed="yes" group="Project"/>
   <package name="SandCastle Help Builder" description="Display the results of a SandCastle Help Builder run." type="Plugin" file="SandCastle.zip" installed="no" group="Build" />
-    
+  <package name="Console Output" description="Displays the output of a build like the console (no-xml)" type="Plugin" file="ConsoleOut.zip" installed="no" group="Build"/>
  </packages>
