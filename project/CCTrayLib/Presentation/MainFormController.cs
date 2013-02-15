@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			for (int i = 0; i < serverMonitors.Length; i++)
 			{
 				serverMonitors[i] = new SynchronizedServerMonitor(serverMonitors[i], owner);
+                serverMonitors[i].Start();
 			}
 			aggregatedServerMonitor = new AggregatingServerMonitor(serverMonitors);
 			queueIconProvider = new ResourceIntegrationQueueIconProvider();
