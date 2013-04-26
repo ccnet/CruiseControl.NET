@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				FormatCommandDate(from.StartTime));
 			ProcessInfo histCommand = PrepCommand(args, from);
 
-            Modification[] mods = base.GetModifications(histCommand, from.StartTime, to.StartTime);
+            mods = base.GetModifications(histCommand, from.StartTime, to.StartTime);
             base.FillIssueUrl(mods);
             return mods;
 		}
