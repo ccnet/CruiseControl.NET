@@ -105,6 +105,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(IntegrationStatus.Failure, result.Status);
         }
 
+        [Test]
+        public void RunFailsIfTaskFailsButContinueOnFailure()
+        {
+            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
+            var result = mocks.Stub<IIntegrationResult>();
+            result.Status = IntegrationStatus.Success;
+            SetupResult.For(result.Clone()).Return(result);
+            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
+            var logger = mocks.DynamicMock<ILogger>();
+            var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
+            var childTask2 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Failure };
+            var childTask3 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
+            var task = new SynchronisationTask
+            {
+                Logger = logger,
+                Tasks = new ITask[] {
+                    childTask1,
+                    childTask2,
+                    childTask3
+                },
+                ContinueOnFailure = true
+            };
+
+            this.mocks.ReplayAll();
+            task.Run(result);
+            this.mocks.VerifyAll();
+
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+        }
+
         /// <summary>
         /// Run() should run all tasks in sequence.
         /// </summary>
@@ -126,6 +156,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     childTask1,
                     childTask2
                 }
+            };
+
+            this.mocks.ReplayAll();
+            task.Run(result);
+            this.mocks.VerifyAll();
+
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+            Assert.IsNotNull(result.ExceptionResult);
+            Assert.AreEqual("Task failed!", result.ExceptionResult.Message);
+        }
+
+        [Test]
+        public void RunFailsIfTaskErrorsButContinueOnFailure()
+        {
+            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
+            var result = mocks.Stub<IIntegrationResult>();
+            result.Status = IntegrationStatus.Success;
+            SetupResult.For(result.Clone()).Return(result);
+            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
+            var logger = mocks.DynamicMock<ILogger>();
+            var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
+            var childTask2 = new FailingTask();
+            var childTask3 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
+            var task = new SynchronisationTask
+            {
+                Logger = logger,
+                Tasks = new ITask[] {
+                    childTask1,
+                    childTask2,
+                    childTask3
+                },
+                ContinueOnFailure = true
             };
 
             this.mocks.ReplayAll();
