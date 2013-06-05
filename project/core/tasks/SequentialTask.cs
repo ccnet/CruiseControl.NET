@@ -106,10 +106,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", Tasks[loop].GetType().Name, loop);
                 logger.Debug("Starting task '{0}'", taskName);
+
+                var taskResult = result.Clone();
                 try
                 {
+                    // must reset the status so that we check for the current task failure and not a previous one
+                    taskResult.Status = IntegrationStatus.Unknown;
+
                     // Start the actual task
-                    var taskResult = result.Clone();
                     var task = Tasks[loop];
                     RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
                     result.Merge(taskResult);
@@ -117,13 +121,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 catch (Exception error)
                 {
                     // Handle any error details
-                    result.ExceptionResult = error;
-                    result.Status = IntegrationStatus.Failure;
+                    taskResult.ExceptionResult = error;
+                    taskResult.Status = IntegrationStatus.Failure;
                     logger.Warning("Task '{0}' failed!", taskName);
                 }
 
                 // Record the results
-                if (result.Status == IntegrationStatus.Success)
+                if (taskResult.Status == IntegrationStatus.Success)
                 {
                     successCount++;
                 }
