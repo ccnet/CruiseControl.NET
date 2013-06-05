@@ -258,13 +258,8 @@ namespace ThoughtWorks.CruiseControl.MSBuild
             }
             else if (t == typeof(TimeSpan))
             {
-                // format TimeSpan to show only integral seconds
-                double seconds = ((TimeSpan)obj).Seconds;
+                double seconds = ((TimeSpan)obj).TotalSeconds;
                 TimeSpan whole = TimeSpan.FromSeconds(Math.Truncate(seconds));
-                //int rest = (int)(Math.Round(seconds - Math.Truncate(seconds), 2) * 100.0);
-                //if (rest!=0)
-                //    element.SetAttribute(name, whole.ToString()+"."+rest.ToString(NumberFormatInfo.InvariantInfo));
-                //else
                 element.SetAttribute(name, whole.ToString());
             }
             else if (t == typeof(Boolean))
