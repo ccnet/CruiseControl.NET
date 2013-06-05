@@ -422,8 +422,12 @@
                 logger.Debug("Starting task '{0}'", taskName);
                 try
                 {
-                    // Start the actual task
                     var taskResult = result.Clone();
+
+                    // must reset the status so that we check for the current task failure and not a previous one
+                    taskResult.Status = IntegrationStatus.Unknown;
+
+                    // Start the actual task
                     var task = tasks[loop];
                     this.RunTask(task, taskResult, new RunningSubTaskDetails(loop, runningIfTasks, result));
                     result.Merge(taskResult);
