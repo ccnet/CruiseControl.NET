@@ -310,6 +310,69 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 Assert.AreEqual(IntegrationStatus.Failure, result2.Status);
             }
         }
+
+        [Test]
+        public void RunContinueOnFaillureStillRunsInnerTasks()
+        {
+            var logger = mocks.DynamicMock<ILogger>();
+
+            // We cannot use a mock object here because having Clone return the original result means the test 
+            // will not be able to catch the error we are after.
+            var result = new IntegrationResult();
+            result.ProjectName = ""; // must set to an empty string because the null default value makes Clone crash
+            mocks.ReplayAll();
+
+            const int innerCount = 3;
+            const int leafCount = 2;
+
+            int taskRunCount = 0;
+
+            // Initialise the task
+            var innerTasks = new List<SynchronisationTask>();
+            for (var innerLoop = 1; innerLoop <= innerCount; innerLoop++)
+            {
+                var leafTasks = new List<MockTask>();
+                for (var leafLoop = 1; leafLoop <= leafCount; leafLoop++)
+                    leafTasks.Add(((innerLoop == 2) && (leafLoop == 2)) ?
+                        new MockTask
+                        {
+                            RunAction = ir =>
+                            {
+                                Thread.Sleep(10);
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Failure;
+                            }
+                        }
+                        :
+                        new MockTask
+                        {
+                            RunAction = ir =>
+                            {
+                                Thread.Sleep(10);
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Success;
+                            }
+                        }
+                        );
+
+                innerTasks.Add(new SynchronisationTask { Logger = logger, ContinueOnFailure = false, Tasks = leafTasks.ToArray() });
+            }
+            
+            var task = new SynchronisationTask
+            {
+                Logger = logger,
+                Tasks = innerTasks.ToArray(),
+                ContinueOnFailure = true
+            };
+
+            this.mocks.ReplayAll();
+            task.Run(result);
+            this.mocks.VerifyAll();
+
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
+            Assert.AreEqual(innerCount * leafCount, taskRunCount, "Bad task run count");
+        }
+
         #endregion
         #endregion
 
