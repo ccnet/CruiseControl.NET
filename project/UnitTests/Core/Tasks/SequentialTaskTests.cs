@@ -124,6 +124,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
+        [Test]
+        public void ExecuteIgnoreFailureStillRunInnerSequentialTasks()
+        {
+            const int innerCount = 3;
+            const int leafCount = 2;
+
+            // Initialise the task
+            var innerTasks = new List<SequentialTask>();
+            for (var innerLoop = 1; innerLoop <= innerCount; innerLoop++)
+            {
+                var leafTasks = new List<SequentialTestTask>();
+                for (var leafLoop = 1; leafLoop <= leafCount; leafLoop++)
+                    leafTasks.Add(new SequentialTestTask { TaskNumber = innerLoop * 10 + leafLoop, Result = (innerLoop == 2) && (leafLoop == 2) ? IntegrationStatus.Failure : IntegrationStatus.Success });
+
+                innerTasks.Add(new SequentialTask { ContinueOnFailure = false, Tasks = leafTasks.ToArray() });
+            }
+            var task = new SequentialTask
+            {
+                Tasks = innerTasks.ToArray(),
+                ContinueOnFailure = true
+            };
+
+            // Setup the mocks
+            var logger = mocks.DynamicMock<ILogger>();
+
+            // We cannot use a mock object here because having Clone return the original result means the test 
+            // will not be able to catch the error we are after.
+            var result = new IntegrationResult();
+            result.ProjectName = ""; // must set to an empty string because the null default value makes Clone crash
+            mocks.ReplayAll();
+
+            // Run the actual task
+            task.Run(result);
+
+            // Verify the results
+            mocks.VerifyAll();
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
+            Assert.AreEqual(innerCount * leafCount, result.TaskResults.Count, "Bad task results count");
+        }
+
         private IIntegrationResult GenerateResultMock(int runCount)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
