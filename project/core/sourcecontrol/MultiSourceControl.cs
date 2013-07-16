@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Xml;
 
@@ -115,10 +116,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
+            List<NameValuePair> originalSourceControlData = new List<NameValuePair>();
+            List<NameValuePair> finalSourceControlData = new List<NameValuePair>();
+            originalSourceControlData.AddRange(from.SourceControlData);
+
             var modificationSet = new Dictionary<Modification, bool>();
+            int sourceControlDataIndex = 0;
             foreach (ISourceControl sourceControl in SourceControls)
             {
+                from.SourceControlData.Clear();
+                if (sourceControlDataIndex < originalSourceControlData.Count)
+                    from.SourceControlData.AddRange((List<NameValuePair>)(XmlConversionUtil.ConvertXmlToObject(from.SourceControlData.GetType(), originalSourceControlData[sourceControlDataIndex].Value)));
+                to.SourceControlData.Clear();
+
                 Modification[] mods = sourceControl.GetModifications(from, to);
+
+                finalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", sourceControlDataIndex), XmlConversionUtil.ConvertObjectToXml(to.SourceControlData)));
+
                 if (mods != null && mods.Length > 0)
                 {
                     foreach (var mod in mods)
@@ -131,7 +145,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     modificationSet.Clear();
                     break;
                 }
+
+                sourceControlDataIndex++;
             }
+
+            to.SourceControlData.Clear();
+            to.SourceControlData.AddRange(finalSourceControlData);
 
             var modArray = new Modification[modificationSet.Count];
             modificationSet.Keys.CopyTo(modArray, 0);
