@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -136,6 +138,68 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return mock;
 		}
 
+        private class MockSourceControl : ISourceControl
+        {
+            public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+            {
+                Assert.AreEqual("first", from.SourceControlData[0].Value, "SourceControlData[0].Value");
+
+                to.SourceControlData.Clear();
+                to.SourceControlData.Add(from.SourceControlData[0]);
+
+                return new Modification[] { };
+            }
+
+            public void LabelSourceControl(IIntegrationResult result) { }
+            public void GetSource(IIntegrationResult result) { }
+            public void Initialize(IProject project) { }
+            public void Purge(IProject project) { }
+        }
+
+
+        [Test]
+        public void PassesIndividualSourceDataAndCombines()
+        {
+            IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+            IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+            string scValue = null;
+            List<NameValuePair> list = new List<NameValuePair>();
+
+            list.Add(new NameValuePair("name0", "first"));
+            scValue = XmlConversionUtil.ConvertObjectToXml(list);
+            from.SourceControlData.Add(new NameValuePair("sc0", scValue));
+            list.Clear();
+
+            list.Add(new NameValuePair("name1", "first"));
+            list.Add(new NameValuePair("name2", "first"));
+            scValue = XmlConversionUtil.ConvertObjectToXml(list);
+            from.SourceControlData.Add(new NameValuePair("sc1", scValue));
+            list.Clear();
+
+            List<ISourceControl> sourceControls = new List<ISourceControl>();
+            sourceControls.Add(new MockSourceControl());
+            sourceControls.Add(new MockSourceControl());
+
+            MultiSourceControl multiSourceControl = new MultiSourceControl();
+            multiSourceControl.SourceControls = sourceControls.ToArray();
+
+            //// EXECUTE
+            ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+
+            //// VERIFY
+            Assert.AreEqual(from.SourceControlData.Count, to.SourceControlData.Count, "SourceControlData.Count");
+
+            list.Add(new NameValuePair("name0", "first"));
+            Assert.AreEqual(XmlConversionUtil.ConvertObjectToXml(list), to.SourceControlData[0].Value, "SourceControlData[0].Value");
+            list.Clear();
+            Assert.AreEqual("sc0", to.SourceControlData[0].Name, "SourceControlData[0].Name");
+
+            list.Add(new NameValuePair("name1", "first"));
+            Assert.AreEqual(XmlConversionUtil.ConvertObjectToXml(list), to.SourceControlData[1].Value, "SourceControlData[1].Value");
+            list.Clear();
+            Assert.AreEqual("sc1", to.SourceControlData[1].Name, "SourceControlData[1].Name");
+        }
 		
 		[Test]
 		public void IfRequireChangesFromAllTrueAndAllSourceControlHasModificationsThenReturnMods()
