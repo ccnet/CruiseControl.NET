@@ -119,19 +119,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             List<NameValuePair> originalSourceControlData = new List<NameValuePair>();
             List<NameValuePair> finalSourceControlData = new List<NameValuePair>();
             originalSourceControlData.AddRange(from.SourceControlData);
+            var originalSourceControlDataCount = originalSourceControlData.Count;
+
+            var sourceControlDataType = from.SourceControlData.GetType();
 
             var modificationSet = new Dictionary<Modification, bool>();
-            int sourceControlDataIndex = 0;
+            int sourceControlIndex = 0;
             foreach (ISourceControl sourceControl in SourceControls)
             {
                 from.SourceControlData.Clear();
-                if (sourceControlDataIndex < originalSourceControlData.Count)
-                    from.SourceControlData.AddRange((List<NameValuePair>)(XmlConversionUtil.ConvertXmlToObject(from.SourceControlData.GetType(), originalSourceControlData[sourceControlDataIndex].Value)));
+
+                if (originalSourceControlDataCount > 1 || 
+                    (originalSourceControlDataCount == 1 && 
+                     sourceControlIndex == 0 && 
+                     XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, originalSourceControlData[0].Value)
+                    )
+                   )
+                    from.SourceControlData.AddRange((List<NameValuePair>)(XmlConversionUtil.ConvertXmlToObject(sourceControlDataType, originalSourceControlData[sourceControlIndex].Value)));
+                else if ((originalSourceControlDataCount == 1) && (sourceControlIndex == SourceControls.Length - 1))
+                    from.SourceControlData.Add(originalSourceControlData[0]);
+
                 to.SourceControlData.Clear();
 
                 Modification[] mods = sourceControl.GetModifications(from, to);
 
-                finalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", sourceControlDataIndex), XmlConversionUtil.ConvertObjectToXml(to.SourceControlData)));
+                finalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", sourceControlIndex), XmlConversionUtil.ConvertObjectToXml(to.SourceControlData)));
 
                 if (mods != null && mods.Length > 0)
                 {
@@ -146,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     break;
                 }
 
-                sourceControlDataIndex++;
+                sourceControlIndex++;
             }
 
             to.SourceControlData.Clear();
