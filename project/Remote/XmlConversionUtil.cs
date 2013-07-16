@@ -121,6 +121,33 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             return messageObj;
         }
+
+        /// <summary>
+        /// Indicates whether or not a message string can be converted into an object.
+        /// </summary>
+        /// <param name="messageType">The type of message.</param>
+        /// <param name="message">The XML of the message.</param>
+        /// <returns>true if the message can be deserialized to the given message type.</returns>
+        public static bool CanConvertXmlToObject(Type messageType, string message)
+        {
+            // Make sure the serialiser has been loaded
+            if (!messageSerialisers.ContainsKey(messageType))
+            {
+                messageSerialisers[messageType] = new XmlSerializer(messageType);
+            }
+
+            // Perform the test
+            try
+            {
+                using (StringReader reader = new StringReader(message))
+                using (XmlReader xmlReader = XmlReader.Create(reader))
+                    return messageSerialisers[messageType].CanDeserialize(xmlReader);
+            }
+            catch (XmlException)
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region ConvertObjectToXml()
