@@ -123,6 +123,42 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
+        #region ConvertObjectToXml()
+        /// <summary>
+        /// Converts an object into a message string
+        /// </summary>
+        /// <param name="anObject">The object of the message.</param>
+        /// <returns>The XML of the message.</returns>
+        public static string ConvertObjectToXml(object anObject)
+        {
+            string result = null;
+
+            Type messageType = anObject.GetType();
+
+            // Make sure the serialiser has been loaded
+            if (!messageSerialisers.ContainsKey(messageType))
+            {
+                messageSerialisers[messageType] = new XmlSerializer(messageType);
+            }
+
+            // Perform the actual conversion
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            
+            using (StringWriter stringWriter = new StringWriter())
+            using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, settings))
+            {
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add("", "");
+
+                messageSerialisers[messageType].Serialize(xmlWriter, anObject, namespaces);
+                result = stringWriter.ToString();
+            }
+
+            return result;
+        }
+        #endregion
+
         #region ConvertXmlToRequest()
         /// <summary>
         /// Converts a message string into a request.
