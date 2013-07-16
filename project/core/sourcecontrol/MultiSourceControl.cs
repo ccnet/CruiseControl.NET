@@ -118,26 +118,51 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
             List<NameValuePair> originalSourceControlData = new List<NameValuePair>();
             List<NameValuePair> finalSourceControlData = new List<NameValuePair>();
-            originalSourceControlData.AddRange(from.SourceControlData);
-            var originalSourceControlDataCount = originalSourceControlData.Count;
 
             var sourceControlDataType = from.SourceControlData.GetType();
 
+            // check that the source control data given to us is in the list of list format
+            // if not, then convert it now
+            var fromSourceControlDataCount = from.SourceControlData.Count;
+            if (fromSourceControlDataCount > 0 &&
+                (fromSourceControlDataCount != SourceControls.Length ||
+                 !XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, from.SourceControlData[0].Value)
+                )
+               )
+            {
+                var conversionList = new List<NameValuePair>();
+
+                for (int i = 0; i < SourceControls.Length; i++)
+                    originalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", i), ""));
+
+                int scdIndex = fromSourceControlDataCount - 1;
+                for (int i = originalSourceControlData.Count - 1; i >= 0; i--)
+                {
+                    conversionList.Clear();
+
+                    if (scdIndex >= 0)
+                        if (!XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, from.SourceControlData[scdIndex].Value))
+                            conversionList.Add(from.SourceControlData[scdIndex]);
+
+                    originalSourceControlData[i].Value = XmlConversionUtil.ConvertObjectToXml(conversionList);
+
+                    scdIndex--;
+                }
+
+            }
+            else
+            {
+                originalSourceControlData.AddRange(from.SourceControlData);
+            }
+
+            var originalSourceControlDataCount = originalSourceControlData.Count;
             var modificationSet = new Dictionary<Modification, bool>();
             int sourceControlIndex = 0;
             foreach (ISourceControl sourceControl in SourceControls)
             {
                 from.SourceControlData.Clear();
-
-                if (originalSourceControlDataCount > 1 || 
-                    (originalSourceControlDataCount == 1 && 
-                     sourceControlIndex == 0 && 
-                     XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, originalSourceControlData[0].Value)
-                    )
-                   )
+                if (sourceControlIndex < originalSourceControlDataCount)
                     from.SourceControlData.AddRange((List<NameValuePair>)(XmlConversionUtil.ConvertXmlToObject(sourceControlDataType, originalSourceControlData[sourceControlIndex].Value)));
-                else if ((originalSourceControlDataCount == 1) && (sourceControlIndex == SourceControls.Length - 1))
-                    from.SourceControlData.Add(originalSourceControlData[0]);
 
                 to.SourceControlData.Clear();
 
