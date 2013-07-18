@@ -614,7 +614,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("checkout");
 			buffer.AddArgument("-q");
 			buffer.AddArgument("-f");
-			buffer.AddArgument(string.Concat("origin/", branchName));
+			buffer.AddArgument(branchName);
 
 			// initialize progress information
 			var bpi = GetBuildProgressInformation(result);
