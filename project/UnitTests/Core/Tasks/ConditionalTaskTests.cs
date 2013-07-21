@@ -360,9 +360,156 @@
             Assert.IsTrue(secondFailRan);
             Assert.IsFalse(thirdFailRan);
         }
+        [Test]
+        public void ExecuteRunsAllInnerTasksWhenConditionsPassAndContinueOnFailure()
+        {
+            const int innerCount = 3;
+            const int leafCount = 2;
+
+            bool failRan = false;
+            int taskRunCount = 0;
+
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => true
+            };
+            var failTask = new MockTask
+            {
+                RunAction = ir => failRan = true
+            };
+
+            var innerTasks = new List<ConditionalTask>();
+            for (var innerLoop = 1; innerLoop <= innerCount; innerLoop++)
+            {
+                var leafTasks = new List<MockTask>();
+                for (var leafLoop = 1; leafLoop <= leafCount; leafLoop++)
+                    leafTasks.Add(((innerLoop == 2) && (leafLoop == 2)) ?
+                        new MockTask 
+                        { 
+                            RunAction = ir =>
+                            {
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Failure;
+                            }
+                        }
+                        :
+                        new MockTask
+                        {
+                            RunAction = ir =>
+                            {
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Success;
+                            }
+                        }
+                        );
+
+                innerTasks.Add(new ConditionalTask 
+                    { 
+                        ContinueOnFailure = false, 
+                        Tasks = leafTasks.ToArray(),
+                        TaskConditions = new[] { mockCondition }
+                    });
+            }
+
+            var task = new ConditionalTask
+            {
+                Tasks = innerTasks.ToArray(),
+                ElseTasks = new[] { failTask },
+                TaskConditions = new[] { mockCondition },
+                ContinueOnFailure = true
+            };
+            var resultMock = this.GenerateResultMock(leafCount, leafCount);
+            AddResultMockExpectedClone(resultMock, leafCount, leafCount);
+            AddResultMockExpectedClone(resultMock, leafCount, leafCount);
+            AddResultMockExpectedMerge(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(innerCount * leafCount, taskRunCount, "Bad task run count");
+            Assert.IsFalse(failRan);
+        }
+
+        [Test]
+        public void ExecuteRunsAllInnerTasksWhenConditionsFailAndContinueOnFailure()
+        {
+            const int innerCount = 3;
+            const int leafCount = 2;
+
+            var passRan = false;
+            int taskRunCount = 0;
+
+            var mockCondition = new MockCondition
+            {
+                EvalFunction = ir => false
+            };
+            var passTask = new MockTask
+            {
+                RunAction = ir => passRan = true
+            };
+
+
+            var innerTasks = new List<ConditionalTask>();
+            for (var innerLoop = 1; innerLoop <= innerCount; innerLoop++)
+            {
+                var leafTasks = new List<MockTask>();
+                for (var leafLoop = 1; leafLoop <= leafCount; leafLoop++)
+                    leafTasks.Add(((innerLoop == 2) && (leafLoop == 2)) ?
+                        new MockTask 
+                        { 
+                            RunAction = ir =>
+                            {
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Failure;
+                            }
+                        }
+                        :
+                        new MockTask
+                        {
+                            RunAction = ir =>
+                            {
+                                taskRunCount++;
+                                ir.Status = IntegrationStatus.Success;
+                            }
+                        }
+                    );
+
+                innerTasks.Add(new ConditionalTask 
+                    { 
+                        ContinueOnFailure = false,
+                        ElseTasks = leafTasks.ToArray(),
+                        TaskConditions = new[] { mockCondition }
+                    });
+            }
+
+            var task = new ConditionalTask
+            {
+                Tasks = new[] { passTask },
+                ElseTasks = innerTasks.ToArray(),
+                TaskConditions = new[] { mockCondition },
+                ContinueOnFailure = true
+            };
+            var resultMock = this.GenerateResultMock(leafCount, leafCount);
+            AddResultMockExpectedClone(resultMock, leafCount, leafCount);
+            AddResultMockExpectedClone(resultMock, leafCount, leafCount);
+            AddResultMockExpectedMerge(resultMock);
+            AddResultMockExpectedMerge(resultMock);
+
+            this.mocks.ReplayAll();
+            resultMock.Status = IntegrationStatus.Success;
+            task.Run(resultMock);
+
+            this.mocks.VerifyAll();
+            Assert.IsFalse(passRan);
+            Assert.AreEqual(innerCount * leafCount, taskRunCount, "Bad task run count");
+        }
+
         #endregion
 
-        private IIntegrationResult GenerateResultMock()
+        private IIntegrationResult GenerateResultMock(int cloneCloneCount, int cloneMergeCount)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
             var result = mocks.StrictMock<IIntegrationResult>();
@@ -370,12 +517,22 @@
             SetupResult.For(result.Status).PropertyBehavior();
             SetupResult.For(result.ExceptionResult).PropertyBehavior();
             result.Status = IntegrationStatus.Success;
-            AddResultMockExpectedClone(result);
+            AddResultMockExpectedClone(result, cloneCloneCount, cloneMergeCount);
             AddResultMockExpectedMerge(result);
             return result;
         }
 
-        private void AddResultMockExpectedClone(IIntegrationResult result)
+        private IIntegrationResult GenerateResultMock(int cloneCloneCount)
+        {
+            return GenerateResultMock(cloneCloneCount, 0);
+        }
+
+        private IIntegrationResult GenerateResultMock()
+        {
+            return GenerateResultMock(0);
+        }
+
+        private void AddResultMockExpectedClone(IIntegrationResult result, int cloneCloneCount, int cloneMergeCount)
         {
             Expect.Call(result.Clone()).
                 Do((Func<IIntegrationResult>)(() =>
@@ -384,10 +541,24 @@
                     SetupResult.For(clone.BuildProgressInformation).Return(result.BuildProgressInformation);
                     SetupResult.For(clone.Status).PropertyBehavior();
                     SetupResult.For(clone.ExceptionResult).PropertyBehavior();
+                    for (int i = 0; i < cloneCloneCount; i++)
+                        AddResultMockExpectedClone(clone);
+                    for (int i = 0; i < cloneMergeCount; i++)
+                        AddResultMockExpectedMerge(clone);
                     clone.Status = result.Status;
                     clone.Replay();
                     return clone;
                 }));
+        }
+
+        private void AddResultMockExpectedClone(IIntegrationResult result, int cloneCloneCount)
+        {
+            AddResultMockExpectedClone(result, cloneCloneCount, 0);
+        }
+
+        private void AddResultMockExpectedClone(IIntegrationResult result)
+        {
+            AddResultMockExpectedClone(result, 0);
         }
 
         private void AddResultMockExpectedMerge(IIntegrationResult result)
@@ -395,7 +566,17 @@
             Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.NotNull)).
                 Do((Action<IIntegrationResult>)((otherResult) =>
                 {
-                    result.Status = otherResult.Status;
+                    // Apply some rules to the status merging - basically apply a hierachy of status codes
+                    if ((otherResult.Status == IntegrationStatus.Exception) || (result.Status == IntegrationStatus.Unknown))
+                    {
+                        result.Status = otherResult.Status;
+                    }
+                    else if (((otherResult.Status == IntegrationStatus.Failure) ||
+                        (otherResult.Status == IntegrationStatus.Cancelled)) &&
+                        (result.Status != IntegrationStatus.Exception))
+                    {
+                        result.Status = otherResult.Status;
+                    }
                 }));
         }
     }
