@@ -7,7 +7,7 @@
       <location>Xsl</location>
       <files>
         <file>unittests.xsl</file>
-        <file>tests.xsl</file>
+        <file>nunitv2.xsl</file>
         <file>timing.xsl</file>
       </files>
     </folder>
@@ -21,12 +21,12 @@
     </setting>
     <setting>
       <path>/dashboard/plugins/buildPlugins</path>
-      <filter>@xslFileName='xsl\tests.xsl'</filter>
+      <filter>@xslFileName='xsl\nunitv2.xsl'</filter>
       <name>xslReportBuildPlugin</name>
       <attributes>
         <attribute name="description" value="NUnit Details"/>
         <attribute name="actionName" value="NUnitDetailsBuildReport"/>
-        <attribute name="xslFileName" value="xsl\tests.xsl"/>
+        <attribute name="xslFileName" value="xsl\nunitv2.xsl"/>
       </attributes>
     </setting>
     <setting>
