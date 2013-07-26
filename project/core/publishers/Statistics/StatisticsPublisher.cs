@@ -212,7 +212,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 if (statisticResult.Value == null)
                     result = string.Empty;
                 else
-                    result = System.Security.SecurityElement.Escape(statisticResult.Value.ToString());
+                    result = System.Security.SecurityElement.Escape(Convert.ToString(statisticResult.Value, CultureInfo.InvariantCulture));
 
                 el.AppendLine();
                 el.AppendFormat("  <statistic name=\"{0}\">{1}</statistic>",

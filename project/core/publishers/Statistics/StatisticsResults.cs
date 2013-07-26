@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             {
                 StatisticResult statistic = this[i];
                 if (i > 0) writer.Write(", ");
-                writer.Write(statistic.Value);
+                writer.Write(Convert.ToString(statistic.Value, CultureInfo.InvariantCulture));
             }
             writer.WriteLine();
         }
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                         {
                             writer.WriteStartElement("statistic");
                             writer.WriteAttributeString("name", statisticResult.StatName);
-                            writer.WriteString(Convert.ToString(statisticResult.Value, CultureInfo.CurrentCulture));
+                            writer.WriteString(Convert.ToString(statisticResult.Value, CultureInfo.InvariantCulture));
                             writer.WriteEndElement();
                         });
             writer.WriteEndElement();
