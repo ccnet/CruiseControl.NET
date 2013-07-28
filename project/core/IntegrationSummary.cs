@@ -145,5 +145,9 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return failureTasks; }
             set { failureTasks = value; }
         }
+
+
+        public System.Collections.Generic.List<NameValuePair> CustomIntegrationProperties { get; set; }
+
     }
 }
