@@ -495,6 +495,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public NameValuePair GetCustomIntegrationProperty(string name)
         {
+            NameValuePair nv = new NameValuePair(name, string.Empty);
             int ms_index = this.CustomIntegrationProperties.IndexOf(nv);
             if (ms_index < 0)
             {
@@ -647,6 +648,19 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (!string.IsNullOrEmpty(LastChangeNumber)) fullProps["LastChangeNumber"] = LastChangeNumber;
 
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
+
+
+
+                if (this.CustomIntegrationProperties != null)
+                {
+                    // add the custom integration properties to the to the normal ones
+                    // these must always be passed as last, because the integration properties of CCNet have priority
+                    foreach (NameValuePair nv in this.CustomIntegrationProperties)
+                    {
+                        fullProps[nv.Name] = nv.Value;
+                    }
+                }
+                
                 return fullProps;
             }
         }
