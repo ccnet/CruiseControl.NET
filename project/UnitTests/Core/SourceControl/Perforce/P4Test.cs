@@ -429,38 +429,38 @@ exit: 0
 			VerifyAll();
 		}
 
-		[Test]
-		public void GetSourceIfGetSourceTrue()
-		{
-			P4 p4 = CreateP4();
-			p4.View = "//depot/myproject/...";
-			p4.AutoGetSource = true;
+        [Test]
+        public void GetSourceIfGetSourceTrue()
+        {
+            P4 p4 = CreateP4();
+            p4.View = "//depot/myproject/...";
+            p4.AutoGetSource = true;
 
             DateTime modificationsToDate = new DateTime(2002, 10, 31, 5, 5, 0);
-			ProcessInfo processInfo = new ProcessInfo("getSource");
-            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync @2002/10/31:05:05:00");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+            ProcessInfo processInfo = new ProcessInfo("getSource");
+            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync //depot/myproject/...@2002/10/31:05:05:00");
+            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
             p4.GetSource(IntegrationResultMother.CreateSuccessful(modificationsToDate));
 
-			VerifyAll();
-		}
+            VerifyAll();
+        }
 
-		[Test]
-		public void GetForceSourceIfGetSourceTrue()
-		{
-			P4 p4 = CreateP4();
-			p4.View = "//depot/myproject/...";
-			p4.AutoGetSource = true;
-			p4.ForceSync = true;
+        [Test]
+        public void GetForceSourceIfGetSourceTrue()
+        {
+            P4 p4 = CreateP4();
+            p4.View = "//depot/myproject/...";
+            p4.AutoGetSource = true;
+            p4.ForceSync = true;
 
             DateTime modificationsToDate = new DateTime(2002, 10, 31, 5, 5, 0);
-			ProcessInfo processInfo = new ProcessInfo("getSource");
-            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync -f @2002/10/31:05:05:00");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+            ProcessInfo processInfo = new ProcessInfo("getSource");
+            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync -f //depot/myproject/...@2002/10/31:05:05:00");
+            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
             p4.GetSource(IntegrationResultMother.CreateSuccessful(modificationsToDate));
 
-			VerifyAll();
-		}
+            VerifyAll();
+        }
 
 		[Test]
 		public void DontGetSourceIfGetSourceFalse()
