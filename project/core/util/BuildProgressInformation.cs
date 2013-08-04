@@ -89,9 +89,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public void UpdateStartupInformation(string information)
         {
-            Progress[0] = new BuildProgressInformationData(information);
-
-            DoStartupInformationUpdated(information);
+            lock (lockObject)
+            {
+                Progress[0] = new BuildProgressInformationData(information);
+                DoStartupInformationUpdated(information);
+            }
         }
 
         /// <summary>
