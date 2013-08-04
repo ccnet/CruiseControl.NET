@@ -173,6 +173,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         public string Port { get; set; }
 
         /// <summary>
+        /// The perforce character set to use.
+        /// </summary>
+        /// <version>1.8</version>
+        /// <default>Performance environment setting</default>
+        [ReflectorProperty("charset", Required = false)]
+        public string CharSet { get; set; }
+
+        /// <summary>
+        /// The perforce command character set to use.
+        /// </summary>
+        /// <version>1.8</version>
+        /// <default>Performance environment setting</default>
+        [ReflectorProperty("commandcharset", Required = false)]
+        public string CommandCharSet { get; set; }
+
+        /// <summary>
+        /// Encoding Code page to use for communicating with perforce
+        /// </summary>
+        /// <version>1.8</version>
+        /// <default>CurrentEmpty String, will default to an encoding for the operating system's current ANSI code page.</default>
+        [ReflectorProperty("codepage", Required = false)]
+        public int CodePage { get; set; }
+
+        /// <summary>
         /// The working directory to use.
         /// </summary>
         /// <version>1.0</version>
@@ -509,15 +533,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
         private string CreateSyncCommandLine(DateTime modificationsToDate)
 		{
-			string commandline = "sync";
-			if (ForceSync)
-			{
-				commandline += " -f";
-			}
+            StringBuilder commandline = new StringBuilder("sync");
+            if (ForceSync)
+            {
+                commandline.Append(" -f");
+            }
 
-            commandline += " @" + FormatDate(modificationsToDate);
+            foreach (string viewline in View.Split(','))
+            {
+                commandline.Append(' ').Append(viewline).Append('@').Append(FormatDate(modificationsToDate));
+            }
 
-			return commandline;
+			return commandline.ToString();
 		}
 
         /// <summary>
