@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Xml;
 
@@ -115,10 +116,60 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
+            List<NameValuePair> originalSourceControlData = new List<NameValuePair>();
+            List<NameValuePair> finalSourceControlData = new List<NameValuePair>();
+
+            var sourceControlDataType = from.SourceControlData.GetType();
+
+            // check that the source control data given to us is in the list of list format
+            // if not, then convert it now
+            var fromSourceControlDataCount = from.SourceControlData.Count;
+            if (fromSourceControlDataCount > 0 &&
+                (fromSourceControlDataCount != SourceControls.Length ||
+                 !XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, from.SourceControlData[0].Value)
+                )
+               )
+            {
+                var conversionList = new List<NameValuePair>();
+
+                for (int i = 0; i < SourceControls.Length; i++)
+                    originalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", i), ""));
+
+                int scdIndex = fromSourceControlDataCount - 1;
+                for (int i = originalSourceControlData.Count - 1; i >= 0; i--)
+                {
+                    conversionList.Clear();
+
+                    if (scdIndex >= 0)
+                        if (!XmlConversionUtil.CanConvertXmlToObject(sourceControlDataType, from.SourceControlData[scdIndex].Value))
+                            conversionList.Add(from.SourceControlData[scdIndex]);
+
+                    originalSourceControlData[i].Value = XmlConversionUtil.ConvertObjectToXml(conversionList);
+
+                    scdIndex--;
+                }
+
+            }
+            else
+            {
+                originalSourceControlData.AddRange(from.SourceControlData);
+            }
+
+            var originalSourceControlDataCount = originalSourceControlData.Count;
             var modificationSet = new Dictionary<Modification, bool>();
+            int sourceControlIndex = 0;
             foreach (ISourceControl sourceControl in SourceControls)
             {
+                from.SourceControlData.Clear();
+                if (sourceControlIndex < originalSourceControlDataCount)
+                    from.SourceControlData.AddRange((List<NameValuePair>)(XmlConversionUtil.ConvertXmlToObject(sourceControlDataType, originalSourceControlData[sourceControlIndex].Value)));
+
+                to.SourceControlData.Clear();
+
                 Modification[] mods = sourceControl.GetModifications(from, to);
+
+                finalSourceControlData.Add(new NameValuePair(string.Format("sc{0:d}", sourceControlIndex), XmlConversionUtil.ConvertObjectToXml(to.SourceControlData)));
+
                 if (mods != null && mods.Length > 0)
                 {
                     foreach (var mod in mods)
@@ -131,7 +182,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     modificationSet.Clear();
                     break;
                 }
+
+                sourceControlIndex++;
             }
+
+            to.SourceControlData.Clear();
+            to.SourceControlData.AddRange(finalSourceControlData);
 
             var modArray = new Modification[modificationSet.Count];
             modificationSet.Keys.CopyTo(modArray, 0);
