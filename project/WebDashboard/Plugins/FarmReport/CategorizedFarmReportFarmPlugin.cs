@@ -12,6 +12,12 @@
     using ThoughtWorks.CruiseControl.WebDashboard.Resources;
     using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using System;
+    using ThoughtWorks.CruiseControl.Core;
+    using System.Web;
+
+
     [ReflectorType("categorizedFarmReportFarmPlugin")]
     public class CategorizedFarmReportFarmPlugin : IPlugin, ICruiseAction
     {
@@ -41,7 +47,7 @@
         public INamedAction[] NamedActions
         {
             get
-            {                
+            {
                 return new INamedAction[] { this.baseAction };
             }
         }
@@ -62,12 +68,15 @@
             var urlBuilder = request.UrlBuilder;
             var category = request.Request.GetText("Category");
 
-            var gridRows = this.projectGrid.GenerateProjectGridRows(projectStatus.StatusAndServerList, BaseActionName, 
-                                                                    ProjectGridSortColumn.Category, true, 
-                                                                    category, urlBuilder,this.translations);
+            var sessionToken = request.RetrieveSessionToken();
+            velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request.Request, sessionToken);
+
+            var gridRows = this.projectGrid.GenerateProjectGridRows(projectStatus.StatusAndServerList, BaseActionName,
+                                                                    ProjectGridSortColumn.Category, true,
+                                                                    category, urlBuilder, this.translations);
 
             var categories = new SortedDictionary<string, CategoryInformation>();
-           
+
             foreach (var row in gridRows)
             {
                 var rowCategory = row.Category;
@@ -75,13 +84,22 @@
                 if (!categories.TryGetValue(rowCategory, out categoryRows))
                 {
                     categoryRows = new CategoryInformation(rowCategory);
-                    categories.Add(rowCategory, categoryRows);                    
+                    categories.Add(rowCategory, categoryRows);
                 }
 
-                categoryRows.AddRow(row);                
+                categoryRows.AddRow(row);
             }
 
-            velocityContext["categories"] = categories.Values;          
+            // there is a category specified via a link, so expand that category by default
+            // it's annoying to specify a category and still have to press the show link
+            if (!string.IsNullOrEmpty(category))
+            {
+                    categories[category].Display = true;
+            }
+
+
+
+            velocityContext["categories"] = categories.Values;
 
             return viewGenerator.GenerateView("CategorizedFarmReport.vm", velocityContext);
         }
@@ -116,5 +134,53 @@
                 }
             }
         }
+
+        private string ForceBuildIfNecessary(IRequest request, string sessionToken)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            foreach (string parameterName in HttpContext.Current.Request.Form.AllKeys)
+            {
+                if (parameterName.StartsWith("param_"))
+                {
+                    parameters.Add(parameterName.Substring(6), HttpContext.Current.Request.Form[parameterName]);
+                }
+            }
+            // Make the actual call
+            if (request.FindParameterStartingWith("StopBuild") != string.Empty)
+            {
+                farmService.Stop(ProjectSpecifier(request), sessionToken);
+                return this.translations.Translate("Stopping project {0}", SelectedProject(request));
+            }
+            else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
+            {
+                farmService.Start(ProjectSpecifier(request), sessionToken);
+                return this.translations.Translate("Starting project {0}", SelectedProject(request));
+            }
+            else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
+            {
+                farmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
+                return this.translations.Translate("Build successfully forced for {0}", SelectedProject(request));
+            }
+            else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
+            {
+                farmService.AbortBuild(ProjectSpecifier(request), sessionToken);
+                return this.translations.Translate("Abort successfully forced for {0}", SelectedProject(request));
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
+        {
+            return new DefaultProjectSpecifier(
+                farmService.GetServerConfiguration(request.GetText("serverName")), SelectedProject(request));
+        }
+        private static string SelectedProject(IRequest request)
+        {
+            return request.GetText("projectName");
+        }
+
     }
+
 }
