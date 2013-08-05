@@ -61,6 +61,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(ProcessResultOutput, _result.TaskOutput);
 		}
 
+
+        [Test]
+        public void BuildCommandLineOn64BitOs()
+        {
+            string expectedArgs = @"/B /S /Vvar1=value1;var2=""value 2"" /P" + StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5"));
+            ExpectToExecuteArguments(expectedArgs);
+
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location");
+
+            _task.FBVariables = new FBVariable[2];
+            _task.FBVariables[0] = new FBVariable("var1", "value1");
+            _task.FBVariables[1] = new FBVariable("var2", "value 2");
+            _task.ProjectFile = Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5");
+            _task.ShowBanner = false;
+            _task.DontWriteToLog = true;
+            _task.Timeout = 600;
+            _task.Run(_result);
+
+            Assert.AreEqual(1, _result.TaskResults.Count);
+            Assert.AreEqual(IntegrationStatus.Success, _result.Status);
+            Assert.AreEqual(ProcessResultOutput, _result.TaskOutput);
+        }
+
+
 		[Test]
 		public void DoubleQuoteSpacesinPaths()
 		{
@@ -166,6 +191,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             ExpectThatExecuteWillNotBeCalled();
             _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location");
+
             _task.ProjectFile = @"C:\Dummy\Project.fbz5";
             Assert.That(delegate { _task.Run(_result); },
                         Throws.TypeOf<BuilderException>().With.Message.EqualTo("Path to Finalbuilder 5 command line executable could not be found."));
