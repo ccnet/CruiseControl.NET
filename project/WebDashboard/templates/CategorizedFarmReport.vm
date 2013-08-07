@@ -67,6 +67,7 @@
 			   style="color: white; text-decoration: underline; cursor: pointer; #if( !$category.Display) display: none; #end"
 			   onclick="$('#showGrid$categoryId').show(); $('#hideGrid$categoryId').hide(); $('#statusGrid$categoryId').hide()">$translations.Translate("hide")</a>
 		</span>
+		<span>&nbsp;&nbsp;&nbsp;<i>($category.Rows.Count projects)</i></span>
 	</div>
 
 	<table id="statusGrid$categoryId" class="SortableGrid statusTable"
