@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/11 by HTTrack Website Copier/3.x [XR&CO'2013], Sun, 01 Sep 2013 07:37:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8" />
+<title>CruiseControl.NET - 1.8.5 - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="lppizRP5BY2snLg9SPsQMwHpmX1YZgA1JpRnRNpo4J8="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1360787056' />
+<link href="../../../stylesheets/reseta77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uia77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicationa77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printa77a.css?1360787056" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1360787056" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1360787056" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expanda77a.js?1360787056" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/modernizr.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/prototypea77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/effectsa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/dragdropa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/controlsa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/applicationa77a.js?1360787056" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var datepickerSettings = {showOn: 'both', buttonImage: '/images/calendar.png?1360787056', buttonImageOnly: true, showButtonPanel: true, dateFormat: 'yy-mm-dd' }
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbara77a.css?1360787056" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_adsb58c.css?1361628765" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+<script src="../../../javascripts/jstoolbar/jstoolbara77a.js?1360787056" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilea77a.js?1360787056" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ena77a.js?1360787056" type="text/javascript"></script><link href="../../../stylesheets/jstoolbara77a.css?1360787056" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="project-1 controller-versions action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+      
+
+      <ul id="account-nav">
+        
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+        <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+        
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="lppizRP5BY2snLg9SPsQMwHpmX1YZgA1JpRnRNpo4J8=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fversions%2F11" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap selected">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="11.html" class="version-11">1.8.5</a></li><li><a href="5.html" class="version-5">1.9</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki">Wiki</a>
+<ul class="menu-children"><li><a href="../wiki/index.html" class="wiki-by-title">Index by title</a></li><li><a href="../wiki/date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/show_ads.js">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.roadmap' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+</div>
+
+<h2>1.8.5</h2>
+
+<div id="version-summary">
+
+<fieldset><legend>Time tracking</legend>
+<table>
+<tr>
+    <td width="130px" align="right">Estimated time</td>
+    <td width="240px" class="total-hours"width="130px" align="right"><span class="hours hours-int">0</span><span class="hours hours-dec">.00</span> hour</td>
+</tr>
+
+<tr>
+    <td width="130px" align="right">Spent time</td>
+    <td width="240px" class="total-hours"><span class="hours hours-int">0</span><span class="hours hours-dec">.00</span> hour</td>
+</tr>
+
+</table>
+</fieldset>
+
+
+<div id="status_by">
+<form id="status_by_form">
+<fieldset>
+<legend>
+Issues by <select id="status_by_select" name="status_by" onchange="new Ajax.Request(&#39;/projects/ccnet/versions/11/status_by&#39;, {asynchronous:true, evalScripts:true, parameters:Form.serialize(&#39;status_by_form&#39;) + &#39;&amp;authenticity_token=&#39; + encodeURIComponent(&#39;lppizRP5BY2snLg9SPsQMwHpmX1YZgA1JpRnRNpo4J8=&#39;)})"><option value="category" selected="selected">Category</option>
+<option value="tracker">Tracker</option>
+<option value="status">Status</option>
+<option value="priority">Priority</option>
+<option value="author">Author</option>
+<option value="assigned_to">Assignee</option></select>
+</legend>
+
+    <table>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=7&amp;fixed_version_id=11&amp;set_filter=1&amp;status_id=%2A">CCNet - Build Server</a>
+        </td>
+        <td width="240px">
+            <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 133px;;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0/2</p>
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=4&amp;fixed_version_id=11&amp;set_filter=1&amp;status_id=%2A">General</a>
+        </td>
+        <td width="240px">
+            <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 133px;;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0/2</p>
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=10&amp;fixed_version_id=11&amp;set_filter=1&amp;status_id=%2A">Publisher</a>
+        </td>
+        <td width="240px">
+            <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 200px;;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0/3</p>
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=3&amp;fixed_version_id=11&amp;set_filter=1&amp;status_id=%2A">Source Control</a>
+        </td>
+        <td width="240px">
+            <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 200px;;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0/3</p>
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="130px" align="right" >
+            <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?category_id=8&amp;fixed_version_id=11&amp;set_filter=1&amp;status_id=%2A">Task</a>
+        </td>
+        <td width="240px">
+            <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 66px;;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0/1</p>
+        </td>
+    </tr>
+    
+    </table>
+
+</fieldset>
+</form>
+
+</div>
+</div>
+
+<div id="roadmap">
+<p>
+  Start date 09/01/2013
+  Due date 11/01/2013
+</p>
+
+
+  <p><strong>Due in about 2 months</strong></p>
+
+
+<p>Fix pack 5 of 1.8</p>
+<ul>
+	
+</ul>
+
+
+    <div class="progress ui-progressbar ui-widget ui-widget-content ui-corner-all" style="width: 40em;"><div class="closed ui-progressbar-value ui-widget-header ui-corner-left" style="width: 0%;"></div><div class="done ui-progressbar-value ui-widget-header" style="width: 0%;"></div></div><p class="pourcent">0%</p>
+    <p class="progress-info">
+        0 closed
+        (0%)
+        &#160;
+        <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?fixed_version_id=11&amp;set_filter=1&amp;status_id=o">16 open</a>
+        (100%)
+    </p>
+
+
+<div class="wiki">
+  <a name="Version-185"></a>
+<h1 >Version 1.8.5<a href="#Version-185" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>Fixes some more issues of 1.8 as reported by users.<br />No breaking changes in terms of configuration or classes for custom tasks, publishers, ....</p>
+
+
+	<p>These fixes did not make it for the 1.8.4 release.</p>
+</div>
+
+
+
+<fieldset class="related-issues"><legend>Related issues</legend>
+<ul>
+    <li><a href="http://www.cruisecontrolnet.org/issues/204" class="issue status-1 priority-3">Bug #204</a>: [Encrypt communications] An item with the same key has already been added.</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/209" class="issue status-1 priority-2">Bug #209</a>: Projects with same priority needs to build in the order they were entered into pending build queue.</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/219" class="issue status-1 priority-1">Bug #219</a>: git &quot;checking for modifications&quot; checks on first build on large repository</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/243" class="issue status-4 priority-2">Bug #243</a>: subjectSettings for email publisher uses Exception instead of Success on successful builds</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/245" class="issue status-1 priority-1">Bug #245</a>: Support SVN Switch (rather than clean checkout)</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/261" class="issue status-1 priority-2">Bug #261</a>: PowerShell Task: Parameters not passed to PowerShell script</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/269" class="issue status-1 priority-2">Bug #269</a>: PowerShell task fails if there is any output to standard error</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/272" class="issue status-1 priority-2">Bug #272</a>: Subversion externals with relative paths</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/277" class="issue status-1 priority-3">Bug #277</a>: Some info for #276 Something starange with CCTray with login password auth</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/279" class="issue status-1 priority-2">Bug #279</a>: Team Foundation Server source control not working correctly with saved credentials</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/294" class="issue status-1 priority-2">Bug #294</a>: Package publisher leaves a copy of the package in the artifacts folder</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/297" class="issue status-1 priority-3">Bug #297</a>: powershell tasks arguments are not passed correctly</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/265" class="issue status-1 priority-2">Feature #265</a>: Allow to start custom program when killing a frozen task</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/270" class="issue status-4 priority-2">Feature #270</a>: PowerShell output lines wrap at 83 characters</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/278" class="issue status-1 priority-2">Support #278</a>: Crypted connectin with CCTray to server</li>
+    <li><a href="http://www.cruisecontrolnet.org/issues/285" class="issue status-1 priority-5">Support #285</a>: RSS feed item cannot be opened</li>
+</ul>
+</fieldset>
+
+</div>
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/versions/11 by HTTrack Website Copier/3.x [XR&CO'2013], Sun, 01 Sep 2013 07:37:43 GMT -->
+</html>
