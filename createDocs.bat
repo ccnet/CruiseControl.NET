@@ -7,7 +7,7 @@ rmdir %outputfolder% /s /q
 mkdir %outputfolder%
 
 Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\Server\ThoughtWorks.CruiseControl.Remote.dll -o=%outputfolder%
-Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\Server\\ThoughtWorks.CruiseControl.Core.dll -o=%outputfolder% 
+Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\Server\ThoughtWorks.CruiseControl.Core.dll -o=%outputfolder% 
 Tools\docGenerator\Console\bin\Debug\Console.exe -c=generate -s=Build\WebDashboard\ThoughtWorks.CruiseControl.WebDashboard.dll -o=%outputfolder%
 
 IF "%2"=="" GOTO Continue
