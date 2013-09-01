@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using Message = System.Windows.Forms.Message;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -779,7 +780,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             { return string.Empty; }
 
 
-            
+
 
             if (controller.SelectedProject.ProjectState != ProjectState.Building &&
                 controller.SelectedProject.ProjectState != ProjectState.BrokenAndBuilding)
@@ -787,7 +788,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
             String currentBuildStage = controller.SelectedProject.Detail.CurrentBuildStage;
             if (currentBuildStage == null || currentBuildStage.Length == 0)
-            { return string.Empty ; }
+            { return string.Empty; }
 
             System.Text.StringBuilder SB = new System.Text.StringBuilder();
             System.IO.StringWriter BuildStage = new System.IO.StringWriter(SB);
@@ -1028,7 +1029,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 }
                 else
                 {
-                    compare.SortAscending = false;
+                    compare.SortAscending = true;
                     compare.SortColumn = e.Column;
                 }
             }
@@ -1131,9 +1132,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         // Implements the manual sorting of items by columns.
         private class ListViewItemComparer : IComparer
         {
-            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "string", "string", "datetime", "string",  "string", "int" };
+            private static int _columnToSortAsDateTime = 6;
             private int col;
             private bool ascendingOrder;
+
+            private Dictionary<string, string[]> naturalSortTable;
+            private static Regex partRegex;
 
             public int SortColumn
             {
@@ -1166,43 +1170,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             public int Compare(object x, object y)
             {
                 int compare = 0;
-                switch (_columnSortTypes[col])
+                if (col == _columnToSortAsDateTime)
                 {
-                    case "int":
-                        int xValue = 0;
-                        int yValue = 0;
+                    DateTime xDateTime = DateTime.MinValue;
+                    DateTime yDateTime = DateTime.MinValue;
 
-                        if (int.TryParse(((ListViewItem)x).SubItems[SortColumn].Text, out xValue) && int.TryParse(((ListViewItem)y).SubItems[SortColumn].Text, out yValue))
-                        {
-                            if (xValue < yValue)
-                            {
-                                compare = -1;
-                            }
-                            else
-                            {
-                                if (xValue > yValue)
-                                {
-                                    compare = 1;
-                                }
-                                else
-                                {
-                                    compare = 0;
-                                }
-                            }
-                        }
-                        break;
-                    case "datetime":
-                        DateTime xDateTime = DateTime.MinValue;
-                        DateTime yDateTime = DateTime.MinValue;
-
-                        if (DateTime.TryParse(((ListViewItem)x).SubItems[SortColumn].Text, out xDateTime) && DateTime.TryParse(((ListViewItem)y).SubItems[SortColumn].Text, out yDateTime))
-                        {
-                            compare = DateTime.Compare(xDateTime, yDateTime);
-                        }
-                        break;
-                    default: // assume string
-                        compare = string.Compare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
-                        break;
+                    if (DateTime.TryParse(((ListViewItem)x).SubItems[SortColumn].Text, out xDateTime) && DateTime.TryParse(((ListViewItem)y).SubItems[SortColumn].Text, out yDateTime))
+                    {
+                        compare = DateTime.Compare(xDateTime, yDateTime);
+                    }
+                }
+                else
+                {
+                    compare = NaturalCompare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
                 }
 
                 if (!ascendingOrder)
@@ -1210,8 +1190,79 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     compare = -compare;
                 }
 
+                // always sort column 0 in ascending order if value of other (higher) column is equal
+                if (compare == 0 && SortColumn != 0)
+                {
+                    compare = NaturalCompare(((ListViewItem)x).SubItems[0].Text, ((ListViewItem)y).SubItems[0].Text);
+                }
+
                 return compare;
             }
+
+            // NaturalCompare() is taken from Code Project Article "Natural Sort Comparer"
+            // see http://www.codeproject.com/Articles/22517/Natural-Sort-Comparer
+            private int NaturalCompare(string x, string y)
+            {
+                if (x == y)
+                {
+                    return 0;
+                }
+
+                if (naturalSortTable == null)
+                {
+                    naturalSortTable = new Dictionary<string, string[]>();
+                }
+                if (partRegex == null)
+                {
+                    partRegex = new Regex("([0-9]+)");
+                }
+
+                string[] x1, y1;
+                if (!naturalSortTable.TryGetValue(x, out x1))
+                {
+                    x1 = partRegex.Split(x.Replace(" ", ""));
+                    naturalSortTable.Add(x, x1);
+                }
+                if (!naturalSortTable.TryGetValue(y, out y1))
+                {
+                    y1 = partRegex.Split(y.Replace(" ", ""));
+                    naturalSortTable.Add(y, y1);
+                }
+
+                for (int i = 0; i < x1.Length && i < y1.Length; i++)
+                {
+                    if (x1[i] != y1[i])
+                    {
+                        return NaturalComparePart(x1[i], y1[i]);
+                    }
+                }
+                if (y1.Length > x1.Length)
+                {
+                    return 1;
+                }
+                if (x1.Length > y1.Length)
+                {
+                    return -1;
+                }
+                return 0;
+            }
+
+            private static int NaturalComparePart(string left, string right)
+            {
+                int x, y;
+                if (!int.TryParse(left, out x))
+                {
+                    return left.CompareTo(right);
+                }
+
+                if (!int.TryParse(right, out y))
+                {
+                    return left.CompareTo(right);
+                }
+
+                return x.CompareTo(y);
+            }
+
         }
 
         private void currentStatusMenu_Click(object sender, EventArgs e)
