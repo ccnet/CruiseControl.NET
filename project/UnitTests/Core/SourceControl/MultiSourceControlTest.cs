@@ -142,10 +142,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         {
             public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
             {
-                Assert.AreEqual("first", from.SourceControlData[0].Value, "SourceControlData[0].Value");
-
                 to.SourceControlData.Clear();
-                to.SourceControlData.Add(from.SourceControlData[0]);
+                to.SourceControlData.AddRange(from.SourceControlData);
 
                 return new Modification[] { };
             }
@@ -155,7 +153,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             public void Initialize(IProject project) { }
             public void Purge(IProject project) { }
         }
+        
+        [Test]
+        public void HandlesNullSourceControlDataValue()
+        {
+            var from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+            var to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
 
+            from.SourceControlData.Add(new NameValuePair("SVN:LastRevision:svn://myserver/mypath", null));
+
+            var sourceControls = new List<ISourceControl> { new MockSourceControl(), new MockSourceControl() };
+            var multiSourceControl = new MultiSourceControl { SourceControls = sourceControls.ToArray() };
+
+            //// EXECUTE
+            var returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+
+            //// VERIFY
+            Assert.AreEqual(0, returnedMods.Count, "SourceControlData.Count");
+
+            Assert.AreEqual(2, to.SourceControlData.Count, "SourceControlData.Count");
+
+            Assert.AreEqual("<ArrayOfNameValuePair />", to.SourceControlData[0].Value, "SourceControlData[0].Value");
+            Assert.AreEqual("sc0", to.SourceControlData[0].Name, "SourceControlData[0].Name");
+
+            Assert.AreEqual("<ArrayOfNameValuePair><NameValuePair name=\"SVN:LastRevision:svn://myserver/mypath\" /></ArrayOfNameValuePair>", to.SourceControlData[1].Value, "SourceControlData[1].Value");
+            Assert.AreEqual("sc1", to.SourceControlData[1].Name, "SourceControlData[1].Name");
+        }
 
         [Test]
         public void PassesIndividualSourceDataAndCombines()
@@ -196,6 +219,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("sc0", to.SourceControlData[0].Name, "SourceControlData[0].Name");
 
             list.Add(new NameValuePair("name1", "first"));
+            list.Add(new NameValuePair("name2", "first"));
             Assert.AreEqual(XmlConversionUtil.ConvertObjectToXml(list), to.SourceControlData[1].Value, "SourceControlData[1].Value");
             list.Clear();
             Assert.AreEqual("sc1", to.SourceControlData[1].Name, "SourceControlData[1].Name");

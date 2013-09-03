@@ -130,6 +130,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>true if the message can be deserialized to the given message type.</returns>
         public static bool CanConvertXmlToObject(Type messageType, string message)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return false;
+            }
+
             // Make sure the serialiser has been loaded
             if (!messageSerialisers.ContainsKey(messageType))
             {
