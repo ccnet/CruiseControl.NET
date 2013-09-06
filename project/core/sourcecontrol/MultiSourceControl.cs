@@ -189,6 +189,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             to.SourceControlData.Clear();
             to.SourceControlData.AddRange(finalSourceControlData);
 
+            // reset the from.SourceControlData to its original contents
+            from.SourceControlData.Clear();
+            from.SourceControlData.AddRange(originalSourceControlData);
+
             var modArray = new Modification[modificationSet.Count];
             modificationSet.Keys.CopyTo(modArray, 0);
             return modArray; 
