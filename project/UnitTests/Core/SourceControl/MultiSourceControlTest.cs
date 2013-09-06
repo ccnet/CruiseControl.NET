@@ -202,6 +202,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         }
 
         [Test]
+        public void GetModificationsRepeatedlyShouldReturnSameResult()
+        {
+            IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+            IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+            string scValue = null;
+            List<NameValuePair> list = new List<NameValuePair>();
+
+            list.Add(new NameValuePair("name0", "first"));
+            scValue = XmlConversionUtil.ConvertObjectToXml(list);
+            from.SourceControlData.Add(new NameValuePair("sc0", scValue));
+            list.Clear();
+
+            list.Add(new NameValuePair("name1", "first"));
+            list.Add(new NameValuePair("name2", "first"));
+            scValue = XmlConversionUtil.ConvertObjectToXml(list);
+            from.SourceControlData.Add(new NameValuePair("sc1", scValue));
+            list.Clear();
+
+            List<ISourceControl> sourceControls = new List<ISourceControl>();
+            sourceControls.Add(new MockSourceControl());
+            sourceControls.Add(new MockSourceControl());
+
+            MultiSourceControl multiSourceControl = new MultiSourceControl();
+            multiSourceControl.SourceControls = sourceControls.ToArray();
+
+            //// EXECUTE
+            try
+            {
+                ArrayList firstReturnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+                ArrayList secondReturnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+                ArrayList thirdReturnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+                
+                Assert.AreEqual(secondReturnedMods.Count, thirdReturnedMods.Count);
+            } catch (Exception e)
+            {
+                Assert.Fail("GetModifications threw Exception:" + e.Message);
+            }
+        }
+
+        [Test]
         public void PassesIndividualSourceDataAndCombinesSingleSourceControl()
         {
             IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
