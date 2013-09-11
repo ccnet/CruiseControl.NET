@@ -2,6 +2,7 @@
   <name>Duplicate Finder Results</name>
   <description>Display the results of a duplicate finder analysis.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

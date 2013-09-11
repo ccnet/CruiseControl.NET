@@ -2,6 +2,7 @@
   <name>Project Configuration Display</name>
   <description>Show the project configuration.</description>
   <type>Plugin</type>
+  <group>Project</group>    
   <folders />
   <configuration>
     <setting>

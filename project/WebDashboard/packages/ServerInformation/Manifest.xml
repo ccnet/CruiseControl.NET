@@ -2,6 +2,7 @@
   <name>Server Information Display</name>
   <description>Display the information on the server.</description>
   <type>Plugin</type>
+  <group>Server</group>  
   <folders>
     <folder>
       <location>Templates</location>

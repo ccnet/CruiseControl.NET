@@ -2,6 +2,7 @@
   <name>FxCop Results</name>
   <description>Display the results of a FxCop report.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

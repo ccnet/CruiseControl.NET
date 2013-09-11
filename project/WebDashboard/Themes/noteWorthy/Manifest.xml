@@ -2,6 +2,7 @@
   <name>Note worthy Theme</name>
   <description>The note worthy theme.</description>
   <type>Plugin</type>
+  <group>Dashboard</group>
   <folders>
     <folder>
       <location>Themes\noteWorthy</location>

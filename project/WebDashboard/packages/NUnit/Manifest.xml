@@ -2,6 +2,7 @@
   <name>NUnit Results</name>
   <description>Display the results of a NUnit run.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

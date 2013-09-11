@@ -2,6 +2,7 @@
   <name>Gendarme Results</name>
   <description>Display the results of a Gendarme report.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

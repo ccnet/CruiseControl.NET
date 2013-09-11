@@ -2,6 +2,7 @@
   <name>Console Output</name>
   <description>Displays the output of a build like the console (no-xml)</description>
   <type>Plugin</type>
+  <group>Build</group>    
   <folders>
     <folder>
       <location>Xsl</location>

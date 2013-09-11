@@ -2,6 +2,7 @@
   <name>Simian Results</name>
   <description>Display the results of a Simian report.</description>
   <type>Plugin</type>
+  <group>Build</group>    
   <folders>
     <folder>
       <location>Xsl</location>
