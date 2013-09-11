@@ -43,15 +43,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// &lt;/sourceControlProvider&gt;
     /// &lt;inclusionFilters&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/**/*.*&lt;/pattern&gt;
+    /// &lt;pattern&gt;/Kunigunda/ServiceLocator/Sources/**/*.*&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;/inclusionFilters&gt;
     /// &lt;exclusionFilters&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
+    /// &lt;pattern&gt;/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/**/*.vssscc&lt;/pattern&gt;
+    /// &lt;pattern&gt;/**/*.vssscc&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;userFilter&gt;
     /// &lt;names&gt;&lt;name&gt;Perry&lt;/name&gt;&lt;name&gt;Joe&lt;/name&gt;&lt;/names&gt;
