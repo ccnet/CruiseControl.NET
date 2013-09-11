@@ -2,6 +2,7 @@
   <name>MBUnit Results</name>
   <description>Display the results of a MBUnit run.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

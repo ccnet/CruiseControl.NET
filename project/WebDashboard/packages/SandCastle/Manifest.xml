@@ -2,6 +2,7 @@
   <name>SandCastle Help Builder</name>
   <description>Display the results of a SandCastle Help Builder run.</description>
   <type>Plugin</type>
+  <group>Build</group>    
   <folders>
     <folder>
       <location>Xsl</location>

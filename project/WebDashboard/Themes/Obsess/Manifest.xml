@@ -2,6 +2,7 @@
   <name>Obsess Theme</name>
   <description>The Obsess theme.</description>
   <type>Plugin</type>
+  <group>Dashboard</group>
   <folders>
     <folder>
       <location>Themes\Obsess</location>

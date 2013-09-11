@@ -2,6 +2,7 @@
   <name>Web Dashboard Administration</name>
   <description>An administration console for the web dashboard.</description>
   <type>Plugin</type>
+  <group>Dashboard</group>  
   <folders>
     <folder>
       <location>Templates</location>

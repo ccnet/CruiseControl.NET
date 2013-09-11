@@ -2,6 +2,7 @@
   <name>ModificationsByChangeNumber</name>
   <description>Display the modifications done in the build, grouped by the changenumber of your source control</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

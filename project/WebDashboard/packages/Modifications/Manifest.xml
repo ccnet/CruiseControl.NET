@@ -2,6 +2,7 @@
   <name>Modifications</name>
   <description>Display the modifications done in the build.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>
