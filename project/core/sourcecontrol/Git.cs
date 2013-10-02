@@ -736,6 +736,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("submodule");
             buffer.AddArgument("update");
+            buffer.AddArgument("--init");
 
             // initialize progress information
             var bpi = GetBuildProgressInformation(result);
