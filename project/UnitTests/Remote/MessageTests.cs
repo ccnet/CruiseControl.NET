@@ -52,6 +52,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         }
 
         [Test]
+        public void GetHashCodeWithNullMessage()
+        {
+            var msg = new Message(null, Message.MessageKind.BuildAbortedBy);
+            Assert.AreEqual(msg.ToString().GetHashCode(), msg.GetHashCode());
+        }
+
+        [Test]
         public void EqualsReturnsTrueWhenBothMessageAndKindAreSame()
         {
             var msg1 = new Message("The message", Message.MessageKind.NotDefined);
