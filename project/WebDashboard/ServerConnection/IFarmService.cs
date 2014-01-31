@@ -35,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         void Logout(string server, string sessionToken);
         void ChangePassword(string server, string sessionToken, string oldPassword, string newPassword);
         void ResetPassword(string server, string sessionToken, string userName, string newPassword);
+        string GetDisplayName(string server, string sessionToken);
 
         /// <summary>
         /// Retrieves the configuration for security on a server.

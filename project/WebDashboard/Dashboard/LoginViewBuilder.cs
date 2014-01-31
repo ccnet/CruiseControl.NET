@@ -63,7 +63,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                         "Change Password",
                         ChangePasswordSecurityAction.ActionName);
 
-                    userName = sessionToken;
+                    string displayName = retriever.RetrieveDisplayName(request.Request);
+
+                    if (string.IsNullOrEmpty(displayName))
+                        userName = sessionToken;
+                    else
+                        userName = displayName;
                 }
 
                 velocityContext["userName"] = userName;
