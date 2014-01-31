@@ -323,6 +323,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             GetCruiseManager(GetServerConfiguration(server), sessionToken).Logout();
 		}
 
+        public string GetDisplayName(string server, string sessionToken)
+        {
+            return GetCruiseManager(GetServerConfiguration(server), sessionToken).DisplayName;
+        }
+
         /// <summary>
         /// Changes the current user's password.
         /// </summary>
