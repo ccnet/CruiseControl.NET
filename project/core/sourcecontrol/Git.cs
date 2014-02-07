@@ -139,6 +139,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public bool AutoGetSource { get; set; }
 
         /// <summary>
+        /// Remove untracked files from the working tree
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
+        [ReflectorProperty("cleanUntrackedFiles", Required = false)]
+        public bool CleanUntrackedFiles { get; set; }
+
+        /// <summary>
         /// The location of the Git executable. 
         /// </summary>
         /// <version>1.5</version>
@@ -267,6 +275,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             _fileSystem = fileSystem;
             _fileDirectoryDeleter = fileDirectoryDeleter;
             this.AutoGetSource = true;
+            this.CleanUntrackedFiles = true;
             this.Executable = "git";
             this.Branch = "master";
             this.TagCommitMessage = "CCNet Build {0}";
@@ -327,7 +336,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 GitUpdateSubmodules(result);
 
             // clean up the local working copy
-            GitClean(result);
+      if (CleanUntrackedFiles)
+			  GitClean(result);
         }
 
         /// <summary>
