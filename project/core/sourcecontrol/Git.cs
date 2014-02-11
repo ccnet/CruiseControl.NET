@@ -331,13 +331,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // checkout remote branch
             GitCheckoutRemoteBranch(Branch, result);
 
-            // update submodules
-            if (FetchSubmodules)
-                GitUpdateSubmodules(result);
+			// update submodules
+			if (FetchSubmodules)
+				GitUpdateSubmodules(result);
 
             // clean up the local working copy
-      if (CleanUntrackedFiles)
-			  GitClean(result);
+			if (CleanUntrackedFiles)
+				GitClean(result);
         }
 
         /// <summary>
