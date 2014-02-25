@@ -461,7 +461,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             Log.Info(string.Concat("[Git] Calling git ", args));
             var processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result), priority,
                                                       successExitCodes);
-            //processInfo.StreamEncoding = Encoding.UTF8;
+            processInfo.StreamEncoding = Encoding.UTF8;
             return processInfo;
         }
 
