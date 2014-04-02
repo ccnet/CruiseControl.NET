@@ -204,6 +204,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 		public bool TagOnSuccess { get; set; }
 
 		/// <summary>
+		/// Indicates that the tag should be created locally.
+		/// </summary>
+		/// <version>1.8</version>
+		/// <default>false</default>
+		[ReflectorProperty("tagLocal", Required = false)]
+		public bool TagLocal { get; set; }
+
+		/// <summary>
 		/// String format for tags in your repository.
 		/// </summary>
 		/// <version>1.6</version>
@@ -749,6 +757,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 			if(!string.IsNullOrEmpty(CommitterName))
 			{
 				buffer.AddArgument("-u", CommitterName);
+			}
+			if( TagLocal ) 
+			{
+				buffer.AddArgument( "-l" );
 			}
 
 			buffer.AddArgument("-f");
