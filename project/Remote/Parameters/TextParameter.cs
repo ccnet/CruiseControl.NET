@@ -151,6 +151,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             get { return typeof(string); }
         }
 
+        #region ParameterType
+        /// <summary>
+        /// The type of the parameter.
+        /// </summary>
+        public override string ParameterType
+        {
+            get { return "Text"; }
+        }
+        #endregion
+
         /// <summary>
         /// An array of allowed values.
         /// </summary>
