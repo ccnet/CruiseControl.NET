@@ -141,12 +141,22 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         }
 
         /// <summary>
-        /// The type of the parameter.
+        /// The data type of the parameter.
         /// </summary>
         public override Type DataType
         {
             get { return typeof(double); }
         }
+
+        #region ParameterType
+        /// <summary>
+        /// The type of the parameter.
+        /// </summary>
+        public override string ParameterType
+        {
+            get { return "Numeric"; }
+        }
+        #endregion
 
         /// <summary>
         /// An array of allowed values.
