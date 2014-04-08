@@ -1,4 +1,4 @@
-﻿#if !NoReflector
+#if !NoReflector
 using Exortech.NetReflector;
 #endif
 using System;
@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     {
         #region Private fields
         private string myName;
+        private string myParameterType = null;
         private string myDisplayName = null;
         private string myDescription = null;
         private string myDefault = null;
@@ -125,9 +126,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
         #region DataType
         /// <summary>
-        /// The type of the parameter.
+        /// The data type of the parameter.
         /// </summary>
         public abstract Type DataType { get; }
+        #endregion
+
+        #region ParameterType
+        /// <summary>
+        /// The type of the parameter.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+#if !NoReflector
+        [ReflectorProperty("type", Required = false)]
+#endif
+        [XmlAttribute("type")]
+        public virtual string ParameterType
+        {
+            get { return myParameterType; }
+            set { myParameterType = value; }
+        }
         #endregion
 
         #region AllowedValues
