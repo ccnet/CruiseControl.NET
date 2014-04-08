@@ -162,6 +162,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         }
         #endregion
 
+        #region ParameterType
+        /// <summary>
+        /// The type of the parameter.
+        /// </summary>
+        public override string ParameterType
+        {
+            get { return "Date"; }
+        }
+        #endregion
+
         #region AllowedValues
         /// <summary>
         /// An array of allowed values.
