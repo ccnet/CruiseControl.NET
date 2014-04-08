@@ -19,10 +19,18 @@
             #end
           </select>
         #else
-          #if ($parameter.ClientDefaultValue.Length > 0)
-          <input type="text" name="param_$parameter.Name" value="$parameter.ClientDefaultValue"/>
+          #if ($parameter.ParameterType == "Password")
+            #if ($parameter.ClientDefaultValue.Length > 0)
+            <input type="password" name="param_$parameter.Name" value="$parameter.ClientDefaultValue"/>
+            #else
+            <input type="password" name="param_$parameter.Name"/>
+            #end
           #else
-          <input type="text" name="param_$parameter.Name"/>
+            #if ($parameter.ClientDefaultValue.Length > 0)
+              <input type="text" name="param_$parameter.Name" value="$parameter.ClientDefaultValue"/>
+            #else
+            <input type="text" name="param_$parameter.Name"/>
+            #end
           #end
         #end
       </td>
