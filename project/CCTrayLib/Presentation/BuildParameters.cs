@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
@@ -142,6 +141,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             getGenerator.Emit(OpCodes.Ldarg_0);
             getGenerator.Emit(OpCodes.Ldfld, fieldBuilder);
             getGenerator.Emit(OpCodes.Ret);
+            
             MethodBuilder propertySetBuilder = typeBuilder.DefineMethod("get_" + parameter.Name,
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig,
                 null,
@@ -153,6 +153,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             setGenerator.Emit(OpCodes.Ret);
             AssociateAttribute(propertyBuilder, typeof(DescriptionAttribute), parameter.Description);
             AssociateAttribute(propertyBuilder, typeof(DisplayNameAttribute), parameter.DisplayName);
+
+            if (parameter.ParameterType == "Password")
+            {
+                AssociateAttribute(propertyBuilder, typeof(PasswordPropertyTextAttribute), true);
+            }
+            
             propertyBuilder.SetGetMethod(propertyGetBuilder);
             propertyBuilder.SetSetMethod(propertySetBuilder);
         }
@@ -172,6 +178,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             CustomAttributeBuilder attributeBuilder = new CustomAttributeBuilder(
                 attributeType.GetConstructor(new Type[] { typeof(string) }),
+                new object[] { value });
+            propertyBuilder.SetCustomAttribute(attributeBuilder);
+        }
+
+        private void AssociateAttribute(PropertyBuilder propertyBuilder, Type attributeType, bool value)
+        {
+            CustomAttributeBuilder attributeBuilder = new CustomAttributeBuilder(
+                attributeType.GetConstructor(new Type[] { typeof(bool) }),
                 new object[] { value });
             propertyBuilder.SetCustomAttribute(attributeBuilder);
         }
