@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
         #region DataType
         /// <summary>
-        /// The type of the parameter.
+        /// The data type of the parameter.
         /// </summary>
         public override Type DataType
         {
