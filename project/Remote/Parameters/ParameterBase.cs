@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     [XmlInclude(typeof(NumericParameter))]
     [XmlInclude(typeof(DateParameter))]
     [XmlInclude(typeof(BooleanParameter))]
+    [XmlInclude(typeof(PasswordParameter))]
     public abstract class ParameterBase
     {
         #region Private fields
