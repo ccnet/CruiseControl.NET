@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xs:schema targetNamespace="http://thoughtworks.org/ccnet/1/6"
            elementFormDefault="qualified"
            xmlns="http://thoughtworks.org/ccnet/1/6"
@@ -674,6 +674,14 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="passwordParameter" type="passwordParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to enter a masked text value when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:choice>
   </xs:complexType>
 
@@ -947,6 +955,59 @@
     </xs:attribute>
   </xs:complexType>
 
+  <xs:complexType name="passwordParameter">
+    <xs:all>
+      <xs:element name="minimum" type="xs:int" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum allowed length.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="maximum" type="xs:int" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum allowed length of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
   <xs:complexType name="Labeller" abstract="true"/>
 
   <xs:complexType name="assemblyVersionLabeller">
