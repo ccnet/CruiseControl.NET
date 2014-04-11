@@ -542,6 +542,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             if (!string.IsNullOrEmpty(resp.SessionToken))
             {
                 SessionToken = resp.SessionToken;
+                DisplayName = resp.DisplayName;
                 return true;
             }
             else

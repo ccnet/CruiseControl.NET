@@ -1121,13 +1121,16 @@ namespace ThoughtWorks.CruiseControl.Core
         public virtual LoginResponse Login(LoginRequest request)
         {
             string sessionToken = null;
+            string displayName = null;
             LoginResponse response = new LoginResponse(RunServerRequest(request,
                 null,
                 null,
                 delegate {
                     sessionToken = securityManager.Login(request);
+                    displayName = securityManager.GetDisplayName(sessionToken, null);
                 }));
             response.SessionToken = sessionToken;
+            response.DisplayName = displayName;
             return response;
         }
         #endregion

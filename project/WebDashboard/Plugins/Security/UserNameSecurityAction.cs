@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
                     string sessionToken = farmService.Login(cruiseRequest.ServerName, credentials);
                     if (string.IsNullOrEmpty(sessionToken)) throw new CruiseControlException("Login failed!");
                     storer.StoreSessionToken(sessionToken);
+                    storer.StoreDisplayName(farmService.GetDisplayName(cruiseRequest.ServerName, sessionToken));
                     template = "LoggedIn.vm";
                 }
                 catch (Exception error)
