@@ -13,5 +13,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <param name="request"></param>
         /// <returns></returns>
         string RetrieveSessionToken(IRequest request);
+
+        /// <summary>
+        /// Retrieves the display name from a request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        string RetrieveDisplayName(IRequest request);
     }
 }

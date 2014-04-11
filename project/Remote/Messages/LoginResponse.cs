@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
     {
         #region Private fields
         private string sessionToken;
+        private string displayName;
         #endregion
 
         #region Constructors
@@ -55,6 +56,18 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         {
             get { return sessionToken; }
             set { sessionToken = value; }
+        }
+        #endregion
+
+        #region DisplayName
+        /// <summary>
+        /// The display name of the user.
+        /// </summary>
+        [XmlAttribute("displayName")]
+        public string DisplayName
+        {
+            get { return displayName; }
+            set { displayName = value; }
         }
         #endregion
         #endregion
