@@ -4,6 +4,50 @@
   <xsl:output method="html"/>
 
   <xsl:template match="/">
+      <style>
+td
+{
+text-align: left;
+}
+
+.tst_dur
+{
+text-align: right;
+}
+
+.tst_nok
+{   
+	text-align: center; 
+	font-weight: bold; 
+	background-color: fireBrick; 
+	color: white;
+}
+
+.tst_ok
+{   
+    text-align: center; 
+    font-weight: bold; 
+    background-color: forestGreen; 
+    color: white;
+}
+
+.tst_inc
+{   
+	text-align: center; 
+	font-weight: bold; 
+	background-color: yellow; 
+	color: black;
+}
+
+.tst_unk
+{   
+	text-align: center; 
+	font-weight: bold; 
+	background-color: lightblue; 
+	color: black;
+}
+      </style>
+
     <xsl:apply-templates select="/cruisecontrol/build/*[local-name()='TestRun']" />
   </xsl:template>
 
@@ -39,8 +83,9 @@
         <td style="background-color: yellow; color:black;">Inconclusive</td>
         <td style="background-color: red; color: black;">Aborted</td>
         <td style="background-color: darkblue; color: white;">Timeout</td>
-        <td style="background-color: darkblue; color: white;">Started at</td>
-        <td style="background-color: darkblue; color: white;">Stopped at</td>
+        <td style="background-color: darkorange; color: white;">Unknown</td>
+        <td style="background-color: DarkSlateGray; color: white;">Started at</td>
+        <td style="background-color: DimGrey; color: white;">Stopped at</td>
       </thead>
       <tr style="text-align: center;">
         <td>
@@ -61,6 +106,9 @@
         <td>
           <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@timeout" />
         </td>
+        <td>
+          <xsl:value-of select="count(*[local-name()='Results']/*[local-name()='UnitTestResult'][not(@outcome)] )" />
+        </td>		
         <td>
           <xsl:call-template name="formatDateTime">
             <xsl:with-param name="dateTime"
@@ -88,7 +136,55 @@
       </table>
     </xsl:if>
 
+  <!-- bad ones  *[local-name()='ResultSummary']/@outcome ='Passed'      -->
 
+	<xsl:variable name="count_badones"
+                  select="count(*[local-name()='Results']/*[local-name()='UnitTestResult'][@outcome !=  'Passed'])" />
+	<xsl:variable name="count_badones2"
+                  select="count(*[local-name()='Results']/*[local-name()='UnitTestResult'][not(@outcome)] )  " />     
+   <xsl:if test="$count_badones + $count_badones2 > 0">
+  
+       <h2>Failed tests </h2>
+	    <table border="1"
+	           cellPadding="2"
+	           cellSpacing="0"
+	           >
+	      <thead style="text-align: center; font-size: large; font-weight:bold;background-color:#FF4000">
+	        <td>Test List Name</td>
+	        <td>Test Name</td>
+	        <td>Test Result</td>
+	        <td>Test Duration</td>
+	        <td>Class Name</td>
+	        <td>Category</td>	        
+	      </thead>
+	        <tr>
+	             <xsl:apply-templates select="*[local-name()='Results']/*[local-name()='UnitTestResult'][@outcome='Failed']" >
+		         </xsl:apply-templates>
+	         </tr>
+	         <tr>
+	             <xsl:apply-templates select="*[local-name()='Results']/*[local-name()='UnitTestResult'][not(@outcome)]" >
+		         </xsl:apply-templates>	         
+	         </tr>			 
+	    </table>
+    </xsl:if>
+
+
+	<h3>Longest running tests</h3>
+	<!--
+		<xsl:apply-templates select="*[local-name()='Results']/*[local-name()='UnitTestResult'] " >
+		
+		 </xsl:apply-templates>
+-->
+     <ol>
+     <xsl:for-each select="*[local-name()='Results']/*[local-name()='UnitTestResult']">
+			      <xsl:sort select="@duration"  order="descending"/>
+			      <xsl:if test="position() &lt; 21">
+				      <li><xsl:value-of select= "@duration"/> - <xsl:value-of select= "@testName"/></li> 
+			       </xsl:if>
+     </xsl:for-each>
+     </ol>
+    
+ <!-- full test overview -->
     <xsl:apply-templates select="*[local-name()='Results']">
     </xsl:apply-templates>
 
@@ -97,9 +193,7 @@
   <xsl:template match="*[local-name()='RunInfo']">
     <tr>
       <td>
-        <pre>
           <xsl:apply-templates select="*" />
-        </pre>
       </td>
     </tr>
   </xsl:template>
@@ -120,6 +214,7 @@
        <td>Test End</td>
 -->
         <td>Class Name</td>
+		<td>Test Categories</td>
       </thead>
       <tr>
         <xsl:apply-templates select="./*" />
@@ -189,6 +284,13 @@
                   select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='TestDefinitions']/*[local-name()='UnitTest'][@id=$testid]/*[local-name()='TestMethod']/@className" />
     <xsl:variable name="cn"
                   select="substring-before($tstClassname,',')" />
+				  
+	<xsl:variable name="tstCategories">
+		<xsl:for-each select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='TestDefinitions']/*[local-name()='UnitTest'][@id=$testid]/*[local-name()='TestCategory']/*[local-name()='TestCategoryItem']">
+			<xsl:value-of select="@TestCategory" />
+			<xsl:if test="position()!=last()">, </xsl:if>
+		</xsl:for-each>
+	</xsl:variable>				  
 
     <tr>
       <td>
@@ -199,27 +301,21 @@
       </td>
       <xsl:choose>
         <xsl:when test="@outcome = 'Passed'">
-          <td style="text-align: center; font-weight: bold; background-color: forestGreen; color: white;">
-            <xsl:value-of select="@outcome"/>
-          </td>
+          <td class="tst_ok">Passed</td>
         </xsl:when>
         <xsl:when test="@outcome = 'Failed'">
-          <td style="text-align: center; font-weight: bold; background-color: fireBrick; color: white;">
-            <xsl:value-of select="@outcome"/>
-          </td>
+          <td class="tst_nok">Failed</td>
         </xsl:when>
         <xsl:when test="@outcome = 'Inconclusive'">
-          <td style="text-align: center; font-weight: bold; background-color: yellow; color: black;">
-            <xsl:value-of select="@outcome"/>
-          </td>
+          <td class="tst_inc">Inconclusive</td>
         </xsl:when>
         <xsl:otherwise>
-          <td style="text-align: center; font-weight: bold; background-color: lightblue; color: black; ">
+          <td class="tst_unk ">
             <xsl:value-of select="@outcome"/>
           </td>
         </xsl:otherwise>
       </xsl:choose>
-      <td style="text-align: right;">
+      <td class="tst_dur">
         <xsl:value-of select="@duration"/>
       </td>
       <!--
@@ -231,17 +327,21 @@
        <xsl:value-of select="@endTime"/>
      </td>
 -->
-      <td style="text-align: left;">
+      <td >
         <xsl:value-of select="$cn"/>
       </td>
 
+		<td >
+			<xsl:value-of select="$tstCategories"/>
+		</td>
+	
     </tr>
     <xsl:apply-templates select="./*[local-name()='Output']/*[local-name()='ErrorInfo']" />
   </xsl:template>
 
   <xsl:template match="*[local-name()='ErrorInfo']">
     <tr>
-      <td colspan="5"
+      <td colspan="6"
           bgcolor="#FF9900">
         <b>
           <xsl:value-of select="./*[local-name()='Message']" />
@@ -252,6 +352,7 @@
     </tr>
   </xsl:template>
 
+<!--
   <xsl:template match="*[local-name()='TestResult']">
     <xsl:variable name="tstid"
                   select="@testListId" />
@@ -291,7 +392,7 @@
       </td>
     </tr>
   </xsl:template>
-
+-->
 
   <xsl:template name="formatDateTime">
     <xsl:param name="dateTime" />
@@ -313,3 +414,4 @@
   </xsl:template>
 
 </xsl:stylesheet>
+

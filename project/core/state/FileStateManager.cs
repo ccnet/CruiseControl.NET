@@ -52,6 +52,9 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
         /// <summary>
         /// The directory to save the state file to.
+        /// Defaults to the directory CCNet is launched from/
+        /// On Windows this is C:\program files\CruiseControl.Net\Server
+        /// It is advised to specify another folder.
         /// </summary>
         /// <version>1.0</version>
         /// <default>The directory CCNet was launched from.</default>

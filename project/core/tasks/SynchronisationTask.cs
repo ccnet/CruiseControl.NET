@@ -155,21 +155,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             // Attempt to enter the synchronisation context
+            var successCount = 0;
+            var failureCount = 0;
+
             if (Monitor.TryEnter(contexts[contextToUse], TimeoutPeriod * 1000))
             {
                 try
                 {
                     // Launch each task
-                    var successCount = 0;
-                    var failureCount = 0;
                     for (var loop = 0; loop < numberOfTasks; loop++)
                     {
                         var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} [{1}]", Tasks[loop].GetType().Name, loop);
                         logger.Debug("Starting task '{0}'", taskName);
                         try
                         {
-                            // Start the actual task
                             var taskResult = result.Clone();
+
+                            // must reset the status so that we check for the current task failure and not a previous one
+                            taskResult.Status = IntegrationStatus.Unknown;
+
+                            // Start the actual task
                             var task = Tasks[loop];
                             RunTask(task, taskResult, new RunningSubTaskDetails(loop, result));
                             result.Merge(taskResult);
@@ -209,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Clean up
             this.CancelTasks();
-            return (result.Status == IntegrationStatus.Success);
+            return ((result.Status == IntegrationStatus.Success) && (failureCount == 0));
         }
         #endregion
 

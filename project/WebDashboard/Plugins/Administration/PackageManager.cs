@@ -310,6 +310,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                     packageElement.SetAttribute("name", manifest.Name);
                     packageElement.SetAttribute("description", manifest.Description);
                     packageElement.SetAttribute("type", manifest.Type.ToString());
+                    packageElement.SetAttribute("group", manifest.Group);
                     packageElement.SetAttribute("file", manifest.FileName);
                     packageList.DocumentElement.AppendChild(packageElement);
                 }

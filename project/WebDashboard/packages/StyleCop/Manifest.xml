@@ -2,6 +2,7 @@
   <name>StyleCop Results</name>
   <description>Display the results of a StyleCop report.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

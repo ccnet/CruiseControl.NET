@@ -96,7 +96,9 @@ namespace ThoughtWorks.CruiseControl.Core
                 failureUsers = lastIntegration.FailureUsers;       // Inherit the previous build's failureUser list if it failed.
 
             buildProgressInformation = new BuildProgressInformation(artifactDirectory, projectName);
-            
+
+            CustomIntegrationProperties = lastIntegration.CustomIntegrationProperties;
+
             this.label = this.LastIntegration.Label;
         }
 
@@ -467,8 +469,42 @@ namespace ThoughtWorks.CruiseControl.Core
             IntegrationResult result = new IntegrationResult(project, workingDirectory, artifactDirectory, initialRequest, IntegrationSummary.Initial);
             result.StartTime = DateTime.Now.AddDays(-1);
             result.EndTime = DateTime.Now;
+
+            result.CustomIntegrationProperties = new List<NameValuePair>();
+
             return result;
         }
+
+
+        public List<NameValuePair> CustomIntegrationProperties { get; set; }
+
+
+        public void UpsertCustomIntegrationProperty(NameValuePair nv)
+        {
+            int ms_index = this.CustomIntegrationProperties.IndexOf(nv);
+
+            if (ms_index < 0)
+            {
+                this.CustomIntegrationProperties.Add(nv);
+            }
+            else
+            {
+                this.CustomIntegrationProperties[ms_index] = nv;
+            }
+        }
+
+        public NameValuePair GetCustomIntegrationProperty(string name)
+        {
+            NameValuePair nv = new NameValuePair(name, string.Empty);
+            int ms_index = this.CustomIntegrationProperties.IndexOf(nv);
+            if (ms_index < 0)
+            {
+                return null;
+            }
+
+            return CustomIntegrationProperties[ms_index];
+        }
+
 
         /// <summary>
         /// Determines whether a build should run.  A build should run if there
@@ -612,6 +648,19 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (!string.IsNullOrEmpty(LastChangeNumber)) fullProps["LastChangeNumber"] = LastChangeNumber;
 
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
+
+
+
+                if (this.CustomIntegrationProperties != null)
+                {
+                    // add the custom integration properties to the to the normal ones
+                    // these must always be passed as last, because the integration properties of CCNet have priority
+                    foreach (NameValuePair nv in this.CustomIntegrationProperties)
+                    {
+                        fullProps[nv.Name] = nv.Value;
+                    }
+                }
+                
                 return fullProps;
             }
         }
@@ -651,7 +700,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public override string ToString()
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
         }
 
         /// <summary>
@@ -714,7 +763,7 @@ namespace ThoughtWorks.CruiseControl.Core
             clone.parameters = new List<NameValuePair>(parameters);
             clone.label = label;
             clone.modifications = (Modification[])modifications.Clone();
-            clone.status = status;            
+            clone.status = status;
             return clone;
         }
         #endregion

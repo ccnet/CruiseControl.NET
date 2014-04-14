@@ -2,6 +2,7 @@
   <name>NDepend Results</name>
   <description>Display the results of a NDepend run.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

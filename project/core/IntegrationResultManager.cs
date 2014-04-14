@@ -139,6 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core
             IntegrationSummary newSummary = new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);
             newSummary.FailureUsers = integration.FailureUsers;
             newSummary.FailureTasks = integration.FailureTasks;
+            newSummary.CustomIntegrationProperties = integration.CustomIntegrationProperties;
             return newSummary;
         }
     }

@@ -2,6 +2,7 @@
   <name>Queue Status Display</name>
   <description>Display the status of the queues.</description>
   <type>Plugin</type>
+  <group>Server</group>
   <folders>
     <folder>
       <location>Templates</location>

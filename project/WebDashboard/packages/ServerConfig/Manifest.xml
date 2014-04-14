@@ -2,6 +2,7 @@
   <name>Server Configuration Display</name>
   <description>Display the configuration for all the projects on a server.</description>
   <type>Plugin</type>
+  <group>Server</group>  
   <folders>
     <folder>
       <location>Templates</location>

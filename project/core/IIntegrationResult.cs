@@ -271,6 +271,29 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <value></value>
         /// <remarks></remarks>
         IDictionary IntegrationProperties { get; }
+
+        /// <summary>
+        /// Gets or sets the custom integration properties.
+        /// CCNet code should NOT use this.
+        /// These can be used by custom tasks to pass variables around tasks / publishers ...
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
+        List<NameValuePair> CustomIntegrationProperties { get; set; }
+
+        /// <summary>
+        /// Adds or updates the CustomIntegrationProperties with the passed value
+        /// </summary>
+        /// <param name="nv"></param>
+        void UpsertCustomIntegrationProperty(NameValuePair nv);
+
+        /// <summary>
+        /// Retrieves the NameValuePair with the passed name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        NameValuePair GetCustomIntegrationProperty(string name);
+
         /// <summary>
         /// Gets the build progress information.	
         /// </summary>

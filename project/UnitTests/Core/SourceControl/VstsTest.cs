@@ -26,11 +26,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         private class RegistryStub: IRegistry
         {
-            public const string DEFAULT_VS2010_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\11.0";
+            private const string DEFAULT_VS2013_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\12.0";
 
             public string GetLocalMachineSubKeyValue(string path, string name)
             {
-                if(path == DEFAULT_VS2010_EXE_PATH && name == "InstallDir")
+                if(path == DEFAULT_VS2013_EXE_PATH && name == "InstallDir")
                 {
                     return "mockPath";
                 }

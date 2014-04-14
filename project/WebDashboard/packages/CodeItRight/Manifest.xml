@@ -2,6 +2,7 @@
   <name>CodeIt.Right Analysis</name>
   <description>Display the results of a CodeIt.Right Analysis.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

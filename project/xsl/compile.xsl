@@ -15,33 +15,21 @@
 
 	        <xsl:if test="$error.messages.count > 0">
 	            <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
-	                <tr>
-	                    <td class="sectionheader">
-	                        Errors: (<xsl:value-of select="$error.messages.count"/>)
-	                    </td>
-	                </tr>
-	                <tr>
-						<td>
-							<xsl:apply-templates select="$error.messages"/>
-						</td>
-					</tr>
+	                <tr><td class="sectionheader">Errors: (<xsl:value-of select="$error.messages.count"/>)</td></tr>
+					<xsl:apply-templates select="$error.messages"/>
 	            </table>
 	        </xsl:if>
 	        <xsl:if test="$warning.messages.count > 0">
-	            <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
-	                <tr>
-	                    <td class="sectionheader">
-	                        Warnings: (<xsl:value-of select="$warning.messages.count"/>)
-	                    </td>
-	                </tr>
-	                <tr><td><xsl:apply-templates select="$warning.messages"/></td></tr>
+	            <table class="section-table" cellpadding="2" cellspacing="0" border="1" width="98%">
+	                <tr><td class="sectionheader">Warnings: (<xsl:value-of select="$warning.messages.count"/>)</td></tr>
+	                <xsl:apply-templates select="$warning.messages"/>
 	            </table>
 	        </xsl:if>
       </xsl:if>
     </xsl:template>
 
     <xsl:template match="message">
-        <pre class="section-error"><xsl:value-of select="text()"/></pre>
+        <tr class="error"><td><xsl:value-of select="substring(text(),1,1024)"/></td></tr>
     </xsl:template>
 
 </xsl:stylesheet>

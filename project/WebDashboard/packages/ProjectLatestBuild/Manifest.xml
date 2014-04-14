@@ -2,6 +2,7 @@
   <name>Latest build</name>
   <description>Provides a link to the latest build of a project</description>
   <type>Plugin</type>
+  <group>Project</group>  
   <configuration>
     <setting>
       <path>/dashboard/plugins/projectPlugins</path>

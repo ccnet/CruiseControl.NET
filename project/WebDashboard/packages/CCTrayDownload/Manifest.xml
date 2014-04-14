@@ -2,6 +2,7 @@
   <name>CCTray Download</name>
   <description>Download the CCTray client</description>
   <type>Plugin</type>
+  <group>Dashboard</group>
   <configuration>
     <setting>
       <path>/dashboard/plugins/farmPlugins</path>

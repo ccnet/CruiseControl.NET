@@ -728,10 +728,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool DoesSvnDirectoryExist(IIntegrationResult result)
         {
-            string svnDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), ".svn");
-            string underscoreSvnDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), "_svn");
-            return fileSystem.DirectoryExists(svnDirectory) || fileSystem.DirectoryExists(underscoreSvnDirectory);
+            return SvnFolderFound(result.BaseFromWorkingDirectory(WorkingDirectory));
         }
+
+        /// <summary>
+        /// Searches for a svn working copy from folder upwards
+        /// SVN1.7 has 1 svn folder at the top level : issue 244 and 234
+        /// http://subversion.apache.org/docs/release-notes/1.7.html
+        /// section Working Copy Metadata Storage Improvements
+        /// </summary>
+        /// <param name="fld"></param>
+        /// <returns></returns>
+        private bool SvnFolderFound(string fld)
+        {
+            string svnDirectory = Path.Combine(fld, ".svn");
+            string underscoreSvnDirectory = Path.Combine(fld, "_svn");
+            
+            Console.WriteLine(svnDirectory);
+            Console.WriteLine(underscoreSvnDirectory);
+            
+            
+            if (fileSystem.DirectoryExists(svnDirectory) || fileSystem.DirectoryExists(underscoreSvnDirectory))
+            {
+                return true;
+            }
+            var parent = System.IO.Directory.GetParent(fld);
+
+            if (parent == null) return false;
+
+            return SvnFolderFound(parent.FullName);
+        }
+
 
         private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
         {
@@ -788,9 +815,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             using (StringReader reader = new StringReader(result.StandardOutput))
             {
                 string externalsDefinition;
+                string rootUrl = "";
 
                 while ((externalsDefinition = reader.ReadLine()) != null)
                 {
+
+                    const string svnScheme = @"svn://";
+                    //Get repo root
+                    if (externalsDefinition.Contains(svnScheme))
+                    {
+                        int index = externalsDefinition.IndexOf(svnScheme, 0);
+                        rootUrl = externalsDefinition.Substring(index);
+                        index = rootUrl.IndexOf('/', svnScheme.Length + 1);
+                        index = rootUrl.IndexOf('/', index + 1);
+                        rootUrl = rootUrl.Substring(0, index);
+                    }
+                    
+                    
                     // If this external is not a specific revision and is not an empty string
                     if (!externalsDefinition.Contains("-r") && !(externalsDefinition.Length == 0))
                     {
@@ -810,6 +851,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                         if (!externalDirectories.Contains(externalsDefinition))
                         {
+                            if (externalsDefinition.StartsWith("^"))
+                            {
+                                externalsDefinition = rootUrl + externalsDefinition.TrimStart('^');
+                            }
                             externalDirectories.Add(externalsDefinition);
                         }
                     }
