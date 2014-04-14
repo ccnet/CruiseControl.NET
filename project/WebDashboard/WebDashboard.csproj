@@ -954,7 +954,6 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
-  </ProjectExtensions>
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  </ProjectExtensions>  
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 </Project>
