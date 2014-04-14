@@ -655,8 +655,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 IV = Convert.FromBase64String(decryptedIv),
                 Key = Convert.FromBase64String(decryptedKey)
             };
-            connections.Add(request.SourceName, 
-                connection);
+            connections[request.SourceName] = connection;
 
             // Generate a response
             var response = new Response(request);
