@@ -55,6 +55,8 @@ namespace ThoughtWorks.CruiseControl.Core
         private Exception sourceControlError;
 
 
+
+
         /// <summary>
         /// Gets the build progress information.	
         /// </summary>
@@ -99,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             CustomIntegrationProperties = lastIntegration.CustomIntegrationProperties;
 
-            this.label = this.LastIntegration.Label;
+            this.Label = this.LastIntegration.Label;
         }
 
         /// <summary>
@@ -110,7 +112,11 @@ namespace ThoughtWorks.CruiseControl.Core
         public string ProjectName
         {
             get { return projectName; }
-            set { projectName = value; }
+            set
+            {
+                projectName = value;
+                UpdateEqualsCompareValue();
+            }
         }
 
         /// <summary>
@@ -143,7 +149,11 @@ namespace ThoughtWorks.CruiseControl.Core
         public string Label
         {
             get { return label; }
-            set { label = value; }
+            set
+            {
+                label = value;
+                UpdateEqualsCompareValue();
+            }
         }
 
         /// <summary>
@@ -256,7 +266,11 @@ namespace ThoughtWorks.CruiseControl.Core
         public DateTime StartTime
         {
             get { return startTime; }
-            set { startTime = value; }
+            set
+            {
+                startTime = value;
+                UpdateEqualsCompareValue();
+            }
         }
 
         /// <summary>
@@ -660,7 +674,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         fullProps[nv.Name] = nv.Value;
                     }
                 }
-                
+
                 return fullProps;
             }
         }
@@ -677,10 +691,7 @@ namespace ThoughtWorks.CruiseControl.Core
             if (other == null)
                 return false;
 
-            return ProjectName == other.ProjectName &&
-                   Status == other.Status &&
-                   Label == other.Label &&
-                   StartTime == other.StartTime;
+            return string.Equals(EqualsCompareValue, other.EqualsCompareValue);
         }
 
         /// <summary>
@@ -690,8 +701,28 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public override int GetHashCode()
         {
-            return (ProjectName + Label + StartTime.Ticks).GetHashCode();
+            return EqualsCompareValue.GetHashCode();
         }
+
+
+
+        string equalsCompareValue;
+
+        /// <summary>
+        /// Updates equalsCompareValue so the GetHashCode and Equals function do not have to compute the value on each call
+        /// Value consists of : ProjectName + Label + StartTime.Ticks
+        /// </summary>
+        private void UpdateEqualsCompareValue()
+        {
+            equalsCompareValue = ProjectName + Label + StartTime.Ticks;
+        }
+
+
+        internal string EqualsCompareValue
+        {
+            get { return equalsCompareValue; }
+        }
+
 
         /// <summary>
         /// Toes the string.	
@@ -761,7 +792,7 @@ namespace ThoughtWorks.CruiseControl.Core
             clone.projectUrl = projectUrl;
             clone.buildLogDirectory = buildLogDirectory;
             clone.parameters = new List<NameValuePair>(parameters);
-            clone.label = label;
+            clone.Label = label;
             clone.modifications = (Modification[])modifications.Clone();
             clone.status = status;
             return clone;
