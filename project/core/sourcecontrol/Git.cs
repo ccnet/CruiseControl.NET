@@ -494,6 +494,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(string.Concat(from, "..origin/", branchName));
+			buffer.AddArgument("-100"); // The history may be very long. It may lead to timeout. That's why we need to limit it
 			AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
@@ -503,6 +504,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(string.Concat("origin/", branchName));
+			buffer.AddArgument("-100"); // The history may be very long. It may lead to timeout. That's why we need to limit it
 			AppendLogOptions(buffer);
 			return Execute(NewProcessInfo(buffer.ToString(), to));
 		}
