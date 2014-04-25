@@ -8,9 +8,9 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	///   Source Control Plugin for CruiseControl.NET that talks to git.
-	/// </summary>
+    /// <summary>
+    ///   Source Control Plugin for CruiseControl.NET that talks to git.
+    /// </summary>
     /// <title>Git Source Control Block</title>
     /// <version>1.5</version>
     /// <key name="type">
@@ -116,19 +116,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// The default port git uses is 9418. Git over SSH uses port 22 by default. Make sure that your firewall is set up to handle this.
     /// </para>
     /// </remarks>
-	[ReflectorType("git")]
-	public class Git : ProcessSourceControl
-	{
+    [ReflectorType("git")]
+    public class Git : ProcessSourceControl
+    {
         /// <summary>
         /// Used as the key for storing the most recently integrated commit within
         /// <see cref="IIntegrationResult.SourceControlData"/>.
         /// </summary>
         private const string COMMIT_KEY = "commit";
-		private const string historyFormat = "Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:";
+        private const string historyFormat = "Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:";
 
-		private readonly IFileSystem _fileSystem;
-		private readonly IFileDirectoryDeleter _fileDirectoryDeleter;
-		private BuildProgressInformation _buildProgressInformation;
+        private readonly IFileSystem _fileSystem;
+        private readonly IFileDirectoryDeleter _fileDirectoryDeleter;
+        private BuildProgressInformation _buildProgressInformation;
 
         /// <summary>
         /// Whether to fetch the updates from the repository and checkout the branch for a particular build. 
@@ -169,6 +169,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>false</default>
         [ReflectorProperty("fetchSubmodules", Required = false)]
         public bool FetchSubmodules { get; set; }
+
+
+        /// <summary>
+        /// Maximum amount of commit logs to fetch when checking the history. 
+        /// 0 Means no limit, X means limit to that number
+        /// </summary>
+        /// <version>1.8.5</version>
+        /// <default>100</default>
+        [ReflectorProperty("maxAmountOfModificationsToFetch", Required = false)]
+        public int MaxAmountOfModificationsToFetch { get; set; }
 
         /// <summary>
         /// Format string for the commit message of each tag. \{0\} is the placeholder for the current build label. 
@@ -241,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Initializes a new instance of the <see cref="Git" /> class.	
         /// </summary>
         /// <remarks></remarks>
-		public Git() : this(new GitHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new IoService()) { }
+        public Git() : this(new GitHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new IoService()) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Git" /> class.	
@@ -251,17 +261,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="fileSystem">The file system.</param>
         /// <param name="fileDirectoryDeleter">The file directory deleter.</param>
         /// <remarks></remarks>
-		public Git(IHistoryParser historyParser, ProcessExecutor executor, IFileSystem fileSystem, IFileDirectoryDeleter fileDirectoryDeleter)
-			: base(historyParser, executor)
-		{
-			_fileSystem = fileSystem;
-			_fileDirectoryDeleter = fileDirectoryDeleter;
+        public Git(IHistoryParser historyParser, ProcessExecutor executor, IFileSystem fileSystem, IFileDirectoryDeleter fileDirectoryDeleter)
+            : base(historyParser, executor)
+        {
+            _fileSystem = fileSystem;
+            _fileDirectoryDeleter = fileDirectoryDeleter;
             this.AutoGetSource = true;
             this.Executable = "git";
             this.Branch = "master";
             this.TagCommitMessage = "CCNet Build {0}";
             this.TagNameFormat = "CCNet-Build-{0}";
-		}
+            this.MaxAmountOfModificationsToFetch = 100;
+        }
 
         /// <summary>
         /// Gets the modifications.	
@@ -270,191 +281,191 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="to">To.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
-		{
-			// fetch latest changes from the remote repository
-			RepositoryAction result = CreateUpateLocalRepository(to);
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        {
+            // fetch latest changes from the remote repository
+            RepositoryAction result = CreateUpateLocalRepository(to);
 
-			Dictionary<string, string> revisionData = NameValuePair.ToDictionary(from.SourceControlData);
-			ProcessResult logResult;
-			string lastCommit;
-			if (revisionData.TryGetValue(COMMIT_KEY, out lastCommit))
-			{
-				logResult = GitLogHistory(Branch, lastCommit, to);
-			}
-			else
-			{
-				Log.Debug(string.Concat("[Git] last integrated commit not found, using all ancestors of origin/",
-					Branch, " as the set of modifications."));
-				logResult = GitLogHistory(Branch, to);
-			}
+            Dictionary<string, string> revisionData = NameValuePair.ToDictionary(from.SourceControlData);
+            ProcessResult logResult;
+            string lastCommit;
+            if (revisionData.TryGetValue(COMMIT_KEY, out lastCommit))
+            {
+                logResult = GitLogHistory(Branch, lastCommit, to);
+            }
+            else
+            {
+                Log.Debug(string.Concat("[Git] last integrated commit not found, using all ancestors of origin/",
+                    Branch, " as the set of modifications."));
+                logResult = GitLogHistory(Branch, to);
+            }
 
-			// Get the hash of the origin head, and store it against the integration result.
-			string originHeadHash = GitLogOriginHash(Branch, to);
-			revisionData[COMMIT_KEY] = originHeadHash;
-			to.SourceControlData.Clear();
-			NameValuePair.Copy(revisionData, to.SourceControlData);
+            // Get the hash of the origin head, and store it against the integration result.
+            string originHeadHash = GitLogOriginHash(Branch, to);
+            revisionData[COMMIT_KEY] = originHeadHash;
+            to.SourceControlData.Clear();
+            NameValuePair.Copy(revisionData, to.SourceControlData);
 
-			return ParseModifications(logResult, lastCommit);
-		}
+            return ParseModifications(logResult, lastCommit);
+        }
 
         /// <summary>
         /// Gets the source.	
         /// </summary>
         /// <param name="result">The result.</param>
         /// <remarks></remarks>
-		public override void GetSource(IIntegrationResult result)
-		{
-			if (!AutoGetSource)
-				return;
+        public override void GetSource(IIntegrationResult result)
+        {
+            if (!AutoGetSource)
+                return;
 
-			// checkout remote branch
-			GitCheckoutRemoteBranch(Branch, result);
+            // checkout remote branch
+            GitCheckoutRemoteBranch(Branch, result);
 
             // update submodules
             if (FetchSubmodules)
                 GitUpdateSubmodules(result);
 
-			// clean up the local working copy
-			GitClean(result);
-		}
+            // clean up the local working copy
+            GitClean(result);
+        }
 
         /// <summary>
         /// Labels the source control.	
         /// </summary>
         /// <param name="result">The result.</param>
         /// <remarks></remarks>
-		public override void LabelSourceControl(IIntegrationResult result)
-		{
-			if (!TagOnSuccess || result.Failed)
-				return;
+        public override void LabelSourceControl(IIntegrationResult result)
+        {
+            if (!TagOnSuccess || result.Failed)
+                return;
 
-			string tagName = string.Format(CultureInfo.CurrentCulture, TagNameFormat, result.Label);
-			string commitMessage = string.Format(CultureInfo.CurrentCulture, TagCommitMessage, result.Label);
+            string tagName = string.Format(CultureInfo.CurrentCulture, TagNameFormat, result.Label);
+            string commitMessage = string.Format(CultureInfo.CurrentCulture, TagCommitMessage, result.Label);
 
-			if (CommitBuildModifications)
-			{
-				// add all modified and all untracked files to the git index.
-				if (CommitUntrackedFiles)
-					GitAddAll(result);
+            if (CommitBuildModifications)
+            {
+                // add all modified and all untracked files to the git index.
+                if (CommitUntrackedFiles)
+                    GitAddAll(result);
 
-				// commit all modifications during build before tagging.
-				GitCommitAll(commitMessage, result);
-			}
+                // commit all modifications during build before tagging.
+                GitCommitAll(commitMessage, result);
+            }
 
-			// create a tag and push it.
-			GitCreateTag(tagName, commitMessage, result);
-			GitPushTag(tagName, result);
-		}
+            // create a tag and push it.
+            GitCreateTag(tagName, commitMessage, result);
+            GitPushTag(tagName, result);
+        }
 
-		#region private methods
+        #region private methods
 
-		private string BaseWorkingDirectory(IIntegrationResult result)
-		{
-			return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
-		}
+        private string BaseWorkingDirectory(IIntegrationResult result)
+        {
+            return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
+        }
 
-		private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
-		{
-			if (_buildProgressInformation == null)
+        private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
+        {
+            if (_buildProgressInformation == null)
                 _buildProgressInformation = result.BuildProgressInformation;
 
-			return _buildProgressInformation;
-		}
+            return _buildProgressInformation;
+        }
 
-		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
-		{
-			if (_buildProgressInformation == null)
-				return;
+        private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+        {
+            if (_buildProgressInformation == null)
+                return;
 
-			// ignore error output in the progress information
-			if (e.OutputType == ProcessOutputType.ErrorOutput)
-				return;
+            // ignore error output in the progress information
+            if (e.OutputType == ProcessOutputType.ErrorOutput)
+                return;
 
-			_buildProgressInformation.AddTaskInformation(e.Data);
-		}
+            _buildProgressInformation.AddTaskInformation(e.Data);
+        }
 
-		/// <summary>
-		/// Fetches a git repository.
-		/// 
-		/// If the working directory doesn't exist then a 'git clone' is issued to
-		/// initialize the local repo and fetch changes from the remote repo.
-		/// Also setup the local repository with some required configuration settings.
-		/// 
-		/// Else if the .git directory doesn't exist then delete the working directory
-		/// and call the method recursive again.
-		/// 
-		/// Else if the working directory is already a git repository then a 'git fetch'
-		/// is issued to fetch changes from the remote repo.
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		/// <returns>The action that was done, repository created or updated.</returns>
-		private RepositoryAction CreateUpateLocalRepository(IIntegrationResult result)
-		{
-			string workingDirectory = BaseWorkingDirectory(result);
-			string gitRepositoryDirectory = Path.Combine(workingDirectory, ".git");
+        /// <summary>
+        /// Fetches a git repository.
+        /// 
+        /// If the working directory doesn't exist then a 'git clone' is issued to
+        /// initialize the local repo and fetch changes from the remote repo.
+        /// Also setup the local repository with some required configuration settings.
+        /// 
+        /// Else if the .git directory doesn't exist then delete the working directory
+        /// and call the method recursive again.
+        /// 
+        /// Else if the working directory is already a git repository then a 'git fetch'
+        /// is issued to fetch changes from the remote repo.
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        /// <returns>The action that was done, repository created or updated.</returns>
+        private RepositoryAction CreateUpateLocalRepository(IIntegrationResult result)
+        {
+            string workingDirectory = BaseWorkingDirectory(result);
+            string gitRepositoryDirectory = Path.Combine(workingDirectory, ".git");
 
-			// check whether the working directory exist
-			if (!_fileSystem.DirectoryExists(workingDirectory))
-			{
-				Log.Debug(string.Concat("[Git] Working directory '", workingDirectory, "' does not exist."));
+            // check whether the working directory exist
+            if (!_fileSystem.DirectoryExists(workingDirectory))
+            {
+                Log.Debug(string.Concat("[Git] Working directory '", workingDirectory, "' does not exist."));
 
-				// if the working does not exist, call git clone
-				GitClone(result);
+                // if the working does not exist, call git clone
+                GitClone(result);
 
                 // init submodules
                 if (FetchSubmodules)
                     GitInitSubmodules(result);
 
-				// setup some required configuration settings for the local repository
-				SetupLocalRepository(result);
+                // setup some required configuration settings for the local repository
+                SetupLocalRepository(result);
 
-				return RepositoryAction.Created;
-			}
+                return RepositoryAction.Created;
+            }
 
 
             // check whether this is a local git repository or just an existing folder
-			if (!_fileSystem.DirectoryExists(gitRepositoryDirectory))
-			{
-				Log.Debug(string.Concat("[Git] Working directory '", workingDirectory,
-										"' already exists, but it is not a git repository. Try deleting it and starting again."));
+            if (!_fileSystem.DirectoryExists(gitRepositoryDirectory))
+            {
+                Log.Debug(string.Concat("[Git] Working directory '", workingDirectory,
+                                        "' already exists, but it is not a git repository. Try deleting it and starting again."));
 
-				// delete working directory and call CreateUpateLocalRepository recursive
-				_fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(workingDirectory);
-				return CreateUpateLocalRepository(result);
-			}
+                // delete working directory and call CreateUpateLocalRepository recursive
+                _fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(workingDirectory);
+                return CreateUpateLocalRepository(result);
+            }
 
-			// we are in a local git repository, fetch the latest remote changes
-			GitFetch(result);
+            // we are in a local git repository, fetch the latest remote changes
+            GitFetch(result);
 
-			return RepositoryAction.Updated;
-		}
+            return RepositoryAction.Updated;
+        }
 
-		/// <summary>
-		/// Setup the local repository with some required config settings.
-		/// 
-		/// For tagging:
-		/// - User name
-		/// - User e-mail
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void SetupLocalRepository(IIntegrationResult result)
-		{
-			if (!string.IsNullOrEmpty(CommitterName) && !string.IsNullOrEmpty(CommitterEMail))
-			{
-				GitConfigSet("user.name", CommitterName, result);
-				GitConfigSet("user.email", CommitterEMail, result);
-			}
-			else if (string.IsNullOrEmpty(GitConfigGet("user.name", result)) || string.IsNullOrEmpty(GitConfigGet("user.email", result)))
-			{
-				Log.Warning("[Git] Properties 'committerName' and 'committerEMail' are not provided. They're required to use the 'TagOnSuccess' feature.");
-			}
-		}
+        /// <summary>
+        /// Setup the local repository with some required config settings.
+        /// 
+        /// For tagging:
+        /// - User name
+        /// - User e-mail
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void SetupLocalRepository(IIntegrationResult result)
+        {
+            if (!string.IsNullOrEmpty(CommitterName) && !string.IsNullOrEmpty(CommitterEMail))
+            {
+                GitConfigSet("user.name", CommitterName, result);
+                GitConfigSet("user.email", CommitterEMail, result);
+            }
+            else if (string.IsNullOrEmpty(GitConfigGet("user.name", result)) || string.IsNullOrEmpty(GitConfigGet("user.email", result)))
+            {
+                Log.Warning("[Git] Properties 'committerName' and 'committerEMail' are not provided. They're required to use the 'TagOnSuccess' feature.");
+            }
+        }
 
-		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
-		{
-		    return NewProcessInfo(args, result, ProcessPriorityClass.Normal, new int[] {0});
-		}
+        private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
+        {
+            return NewProcessInfo(args, result, ProcessPriorityClass.Normal, new int[] { 0 });
+        }
 
         private ProcessInfo NewProcessInfo(string args, IIntegrationResult result, ProcessPriorityClass priority, int[] successExitCodes)
         {
@@ -465,257 +476,262 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return processInfo;
         }
 
-		#region "git commands"
+        #region "git commands"
 
-		/// <summary>
-		/// Get the hash of the latest commit in the remote repository.
-		/// </summary>
-		/// <param name="branchName">Name of the branch.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private string GitLogOriginHash(string branchName, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat("origin/", branchName));
-			buffer.AddArgument("-1");
-			buffer.AddArgument("--pretty=format:\"%H\"");
-			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
-		}
+        /// <summary>
+        /// Get the hash of the latest commit in the remote repository.
+        /// </summary>
+        /// <param name="branchName">Name of the branch.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private string GitLogOriginHash(string branchName, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("log");
+            buffer.AddArgument(string.Concat("origin/", branchName));
+            buffer.AddArgument("-1");
+            buffer.AddArgument("--pretty=format:\"%H\"");
+            return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
+        }
 
-		/// <summary>
-		/// Get the commit history including changes between <paramref name="from"/> and origin/<paramref name="branchName"/>
-		/// </summary>
-		/// <param name="branchName">Name of the branch.</param>
-		/// <param name="from">The commit from which to start logging.</param>
-		/// <param name="to">IIntegrationResult of the current build.</param>
-		/// <returns>Result of the "git log" command.</returns>
-		private ProcessResult GitLogHistory(string branchName, string from, IIntegrationResult to)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat(from, "..origin/", branchName));
-			buffer.AddArgument("-100"); // The history may be very long. It may lead to timeout. That's why we need to limit it
-			AppendLogOptions(buffer);
-			return Execute(NewProcessInfo(buffer.ToString(), to));
-		}
+        /// <summary>
+        /// Get the commit history including changes between <paramref name="from"/> and origin/<paramref name="branchName"/>
+        /// </summary>
+        /// <param name="branchName">Name of the branch.</param>
+        /// <param name="from">The commit from which to start logging.</param>
+        /// <param name="to">IIntegrationResult of the current build.</param>
+        /// <returns>Result of the "git log" command.</returns>
+        private ProcessResult GitLogHistory(string branchName, string from, IIntegrationResult to)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("log");
+            buffer.AddArgument(string.Concat(from, "..origin/", branchName));
+            AppendLogOptions(buffer);
+            return Execute(NewProcessInfo(buffer.ToString(), to));
+        }
 
-		private ProcessResult GitLogHistory(string branchName, IIntegrationResult to)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("log");
-			buffer.AddArgument(string.Concat("origin/", branchName));
-			buffer.AddArgument("-100"); // The history may be very long. It may lead to timeout. That's why we need to limit it
-			AppendLogOptions(buffer);
-			return Execute(NewProcessInfo(buffer.ToString(), to));
-		}
+        private ProcessResult GitLogHistory(string branchName, IIntegrationResult to)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("log");
+            buffer.AddArgument(string.Concat("origin/", branchName));
+            AppendLogOptions(buffer);
+            return Execute(NewProcessInfo(buffer.ToString(), to));
+        }
 
-		private void AppendLogOptions(ProcessArgumentBuilder buffer)
-		{
-			buffer.AddArgument("--name-status");
-			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
+        private void AppendLogOptions(ProcessArgumentBuilder buffer)
+        {
+            if (MaxAmountOfModificationsToFetch > 0)
+            {
+                buffer.AddArgument(string.Concat("-", MaxAmountOfModificationsToFetch.ToString())); // The history may be very long. It may lead to timeout. That's why we need to limit it
+            }
+
+            buffer.AddArgument("--name-status");
+            buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
             buffer.AddArgument("-m"); // for getting the commits seen via merges
-		}
 
-		/// <summary>
-		/// Clone a repository into a new directory with "git clone 'repository' 'working directory'".
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitClone(IIntegrationResult result)
-		{
-			string wd = BaseWorkingDirectory(result);
 
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("clone");
-			buffer.AddArgument(Repository);
-			buffer.AddArgument(wd);
+        }
 
-			// initialize progress information
-			var bpi = GetBuildProgressInformation(result);
-			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+        /// <summary>
+        /// Clone a repository into a new directory with "git clone 'repository' 'working directory'".
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitClone(IIntegrationResult result)
+        {
+            string wd = BaseWorkingDirectory(result);
 
-			// enable Stdout monitoring
-			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("clone");
+            buffer.AddArgument(Repository);
+            buffer.AddArgument(wd);
 
-			ProcessInfo pi = NewProcessInfo(buffer.ToString(), result);
-			// Use upper level of the working directory, because the
-			// working directory currently does not exist and
-			// will be created by "git clone". "git clone" will fail if
-			// the working directory already exist.
-			pi.WorkingDirectory = Path.GetDirectoryName(wd.Trim().TrimEnd(Path.DirectorySeparatorChar));
-			Execute(pi);
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
 
-			// remove Stdout monitoring
-			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
-		}
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
-		/// <summary>
-		/// Call "git config 'name' 'value'" to set local repository properties.
-		/// </summary>
-		/// <param name="name">Name of the config parameter.</param>
-		/// <param name="value">Value of the config parameter.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitConfigSet(string name, string value, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("config");
-			buffer.AddArgument(name);
-			buffer.AddArgument(value);
-			Execute(NewProcessInfo(buffer.ToString(), result));
-		}
+            ProcessInfo pi = NewProcessInfo(buffer.ToString(), result);
+            // Use upper level of the working directory, because the
+            // working directory currently does not exist and
+            // will be created by "git clone". "git clone" will fail if
+            // the working directory already exist.
+            pi.WorkingDirectory = Path.GetDirectoryName(wd.Trim().TrimEnd(Path.DirectorySeparatorChar));
+            Execute(pi);
 
-		/// <summary>
-		/// Call "git config --get 'name'" to get the value of a local repository property.
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
+
+        /// <summary>
+        /// Call "git config 'name' 'value'" to set local repository properties.
+        /// </summary>
+        /// <param name="name">Name of the config parameter.</param>
+        /// <param name="value">Value of the config parameter.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitConfigSet(string name, string value, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("config");
+            buffer.AddArgument(name);
+            buffer.AddArgument(value);
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
+
+        /// <summary>
+        /// Call "git config --get 'name'" to get the value of a local repository property.
         /// The command returns error code 1 if the key was not found and error code 2 if multiple key values were found. 
-		/// </summary>
-		/// <param name="name">Name of the config parameter.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		/// <returns>Result of the "git config --get 'name'" command.</returns>
+        /// </summary>
+        /// <param name="name">Name of the config parameter.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        /// <returns>Result of the "git config --get 'name'" command.</returns>
         private string GitConfigGet(string name, IIntegrationResult result)
-		{
-		    ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-		    buffer.AddArgument("config");
-		    buffer.AddArgument("--get");
-		    buffer.AddArgument(name);
-		    return
-		        Execute(NewProcessInfo(buffer.ToString(), result, ProcessPriorityClass.Normal, new int[] {0, 1, 2})).
-		            StandardOutput.Trim();
-		}
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("config");
+            buffer.AddArgument("--get");
+            buffer.AddArgument(name);
+            return
+                Execute(NewProcessInfo(buffer.ToString(), result, ProcessPriorityClass.Normal, new int[] { 0, 1, 2 })).
+                    StandardOutput.Trim();
+        }
 
-	    /// <summary>
-		/// Download objects and refs from another repository via the
-		/// "git fetch origin" command.
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitFetch(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("fetch");
-			buffer.AddArgument("origin");
+        /// <summary>
+        /// Download objects and refs from another repository via the
+        /// "git fetch origin" command.
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitFetch(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("fetch");
+            buffer.AddArgument("origin");
 
-			// initialize progress information
-			var bpi = GetBuildProgressInformation(result);
-			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
 
-			// enable Stdout monitoring
-			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
-			Execute(NewProcessInfo(buffer.ToString(), result));
+            Execute(NewProcessInfo(buffer.ToString(), result));
 
-			// remove Stdout monitoring
-			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
-		}
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
 
-		/// <summary>
-		/// Checkout a remote branch with the "git checkout -q -f 'origin/branchName'" command.
-		/// </summary>
-		/// <param name="branchName">Name of the branch to checkout.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitCheckoutRemoteBranch(string branchName, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("checkout");
-			buffer.AddArgument("-q");
-			buffer.AddArgument("-f");
-			buffer.AddArgument(string.Concat("origin/", branchName));
+        /// <summary>
+        /// Checkout a remote branch with the "git checkout -q -f 'origin/branchName'" command.
+        /// </summary>
+        /// <param name="branchName">Name of the branch to checkout.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitCheckoutRemoteBranch(string branchName, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("checkout");
+            buffer.AddArgument("-q");
+            buffer.AddArgument("-f");
+            buffer.AddArgument(string.Concat("origin/", branchName));
 
-			// initialize progress information
-			var bpi = GetBuildProgressInformation(result);
-			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
 
-			// enable Stdout monitoring
-			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
-			Execute(NewProcessInfo(buffer.ToString(), result));
+            Execute(NewProcessInfo(buffer.ToString(), result));
 
-			// remove Stdout monitoring
-			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
-		}
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
 
-		/// <summary>
-		/// Clean the working tree with "git clean -d -f -x".
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitClean(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("clean");
-			buffer.AddArgument("-d");
-			buffer.AddArgument("-f");
-			buffer.AddArgument("-x");
-			Execute(NewProcessInfo(buffer.ToString(), result));
-		}
+        /// <summary>
+        /// Clean the working tree with "git clean -d -f -x".
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitClean(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("clean");
+            buffer.AddArgument("-d");
+            buffer.AddArgument("-f");
+            buffer.AddArgument("-x");
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
 
-		/// <summary>
-		/// Automatically stage files that have been modified and deleted
-		/// and commit them with the "git commit --all --allow-empty -m 'message'"
-		/// command.
-		/// </summary>
-		/// <param name="commitMessage">Commit message.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitCommitAll(string commitMessage, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("commit");
-			buffer.AddArgument("--all");
-			buffer.AddArgument("--allow-empty");
-			buffer.AddArgument("-m", commitMessage);
-			Execute(NewProcessInfo(buffer.ToString(), result));
-		}
+        /// <summary>
+        /// Automatically stage files that have been modified and deleted
+        /// and commit them with the "git commit --all --allow-empty -m 'message'"
+        /// command.
+        /// </summary>
+        /// <param name="commitMessage">Commit message.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitCommitAll(string commitMessage, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("commit");
+            buffer.AddArgument("--all");
+            buffer.AddArgument("--allow-empty");
+            buffer.AddArgument("-m", commitMessage);
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
 
-		/// <summary>
-		/// Add all modified and all untracked files that are not ignored by .gitignore
-		/// to the git index with the "git add --all" command.
-		/// </summary>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitAddAll(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("add");
-			buffer.AddArgument("--all");
-			Execute(NewProcessInfo(buffer.ToString(), result));
-		}
+        /// <summary>
+        /// Add all modified and all untracked files that are not ignored by .gitignore
+        /// to the git index with the "git add --all" command.
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitAddAll(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("add");
+            buffer.AddArgument("--all");
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
 
-		/// <summary>
-		/// Create a unsigned tag with "git tag -a -m 'message' 'tag name'".
-		/// </summary>
-		/// <param name="tagName">Name of the tag.</param>
-		/// <param name="tagMessage">Tag commit message.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitCreateTag(string tagName, string tagMessage, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("tag");
-			buffer.AddArgument("-a");
-			buffer.AddArgument("-m", tagMessage);
-			buffer.AddArgument(tagName);
-			Execute(NewProcessInfo(buffer.ToString(), result));
-		}
+        /// <summary>
+        /// Create a unsigned tag with "git tag -a -m 'message' 'tag name'".
+        /// </summary>
+        /// <param name="tagName">Name of the tag.</param>
+        /// <param name="tagMessage">Tag commit message.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitCreateTag(string tagName, string tagMessage, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("tag");
+            buffer.AddArgument("-a");
+            buffer.AddArgument("-m", tagMessage);
+            buffer.AddArgument(tagName);
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
 
-		/// <summary>
-		/// Push a specific tag with "git push origin tag 'tag name'".
-		/// </summary>
-		/// <param name="tagName">Naem of the tag to push.</param>
-		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitPushTag(string tagName, IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("push");
-			buffer.AddArgument("origin");
-			buffer.AddArgument("tag");
-			buffer.AddArgument(tagName);
+        /// <summary>
+        /// Push a specific tag with "git push origin tag 'tag name'".
+        /// </summary>
+        /// <param name="tagName">Naem of the tag to push.</param>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitPushTag(string tagName, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("push");
+            buffer.AddArgument("origin");
+            buffer.AddArgument("tag");
+            buffer.AddArgument(tagName);
 
-			// initialize progress information
-			var bpi = GetBuildProgressInformation(result);
-			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
 
-			// enable Stdout monitoring
-			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
-			Execute(NewProcessInfo(buffer.ToString(), result));
+            Execute(NewProcessInfo(buffer.ToString(), result));
 
-			// remove Stdout monitoring
-			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
-		}
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
 
         /// <summary>
         /// Initialize the git submodules.
@@ -752,19 +768,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
-		#endregion
+        #endregion
 
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Private enum that is used to determine the action done
-		/// by the CreateUpateLocalRepository() method.
-		/// </summary>
-		private enum RepositoryAction
-		{
-			Unknown = 0,
-			Created = 1,
-			Updated = 2
-		}
-	}
+        /// <summary>
+        /// Private enum that is used to determine the action done
+        /// by the CreateUpateLocalRepository() method.
+        /// </summary>
+        private enum RepositoryAction
+        {
+            Unknown = 0,
+            Created = 1,
+            Updated = 2
+        }
+    }
 }
