@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_COMMIT_KEY = "commit";
 		const string FROM_COMMIT = "0123456789abcdef";
 		const string TO_COMMIT = "fedcba9876543210";
-		const string GIT_LOG_OPTIONS = "--name-status --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\" -m";
+		const string GIT_LOG_OPTIONS = "-100 --name-status --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\" -m";
 		const string GIT_LOG_REMOTE_COMMITS = "log " + FROM_COMMIT + "..origin/master " + GIT_LOG_OPTIONS;
 		const string GIT_LOG_ALL = "log origin/master " + GIT_LOG_OPTIONS;
 
@@ -71,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<tagOnSuccess>true</tagOnSuccess>
 	<commitBuildModifications>true</commitBuildModifications>
 	<commitUntrackedFiles>true</commitUntrackedFiles>
+    <maxAmountOfModificationsToFetch>500</maxAmountOfModificationsToFetch>
 	<autoGetSource>true</autoGetSource>
 	<tagCommitMessage>CCNet Test Build {0}</tagCommitMessage>
 	<tagNameFormat>{0}</tagNameFormat>
@@ -92,6 +93,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("max.mustermann@gmx.de", git.CommitterEMail, "#B11");
 			Assert.AreEqual(true, git.CommitBuildModifications, "#B12");
 			Assert.AreEqual(true, git.CommitUntrackedFiles, "#B13");
+            Assert.AreEqual(500, git.MaxAmountOfModificationsToFetch,  "#B14");
+
 		}
 
 		[Test]
@@ -115,6 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(null, git.CommitterEMail, "#C11");
 			Assert.AreEqual(false, git.CommitBuildModifications, "#C12");
 			Assert.AreEqual(false, git.CommitUntrackedFiles, "#C13");
+            Assert.AreEqual(100, git.MaxAmountOfModificationsToFetch, "#C14");
 		}
 
 		[Test]
