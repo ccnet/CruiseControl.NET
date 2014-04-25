@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <summary>
         /// Remove untracked files from the working tree
         /// </summary>
-        /// <version>1.5</version>
+        /// <version>1.8.5</version>
         /// <default>true</default>
         [ReflectorProperty("cleanUntrackedFiles", Required = false)]
         public bool CleanUntrackedFiles { get; set; }
