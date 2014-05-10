@@ -31,7 +31,7 @@
 		
 		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
 			<fileset defaultexcludes="true">
-				<include name="*/**" />
+				<include name="*/**" />				
 				<exclude name="nant*.log*" />
 				<exclude name="*.nsi" />
 				<exclude name="${build.dir}/**" />
@@ -47,6 +47,7 @@
 				<exclude name="${src.dir}/**/*.suo"/>
 				<exclude name="${src.dir}/*.sln.cache"/>
 				<exclude name="${src.dir}/*.sln.proj"/>
+				<exclude name="**/.git/**"/> 
 			</fileset>
 		</zip>
 	</target>
