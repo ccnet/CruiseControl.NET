@@ -167,6 +167,10 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <ProjectReference Include="..\objection\objection.csproj">
+      <Project>{1c0b8046-fe79-4845-84b9-369a76f817a3}</Project>
+      <Name>objection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Remote\Remote.csproj">
       <Name>Remote</Name>
       <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
