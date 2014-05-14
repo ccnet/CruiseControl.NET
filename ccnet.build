@@ -7,7 +7,7 @@
 	<property name="build.configuration"	 overwrite="false"	value="Build" />
 	<property name="build.target"			 overwrite="false"	value="Build" />
 	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
-	<property name="build.target.framework"  overwrite="false"	value="4.0"  />
+	<property name="build.target.framework"  overwrite="false"	value="4.5"  />
 	<property name="CCNetLabel"				 overwrite="false"	value="0.0.0.0" />
 	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
 
@@ -28,7 +28,7 @@
 	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
 	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
-	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console.exe')}" />
+	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console-x86.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
 
 	<!-- common assembly info properties -->
@@ -195,16 +195,27 @@
 			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
 		</if>
 
+<!--				
 		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="-" showLabels="true" verbose="${nant.verbosity}">
 			<assemblies>
 				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
 			</assemblies>
 
-			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			
 			<environment>
 				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
 			</environment>
 		</nunitTest>
+-->
+		<exec program="${nunit.executable}" >
+                        <arg value="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
+                        <arg value="/result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
+                        <arg value="/exclude=Integration" />
+						<arg value="/framework:v4.0" />
+        </exec>
+ 
+		
+				
 	</target>
 
 	<!-- Code analyze metric targets -->
