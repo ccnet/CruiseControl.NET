@@ -278,22 +278,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     "          <buildArgs></buildArgs>" +
                     "          <buildTimeoutSeconds>15</buildTimeoutSeconds>" +
                     "          <description>Pinging a server</description>" +
+                    "          <dynamicValues>" +
+                    "            <directValue>" +
+                    "              <parameter>TagVersion</parameter>" +
+                    "              <property>buildArgs</property>" +
+                    "            </directValue>" +
+                    "          </dynamicValues>" +
                     "        </exec>" +
                     "      </tasks>" +
+                    "      <dynamicValues>" +
+                    "        <directValue>" +
+                    "          <parameter>TagBuild</parameter>" +
+                    "          <property>conditions[0].value1</property>" +
+                    "        </directValue>" +
+                    "      </dynamicValues>" +
                     "    </conditional>" +
                     "  </tasks>" +
                     "  <dynamicValues>" +
                     "    <directValue>" +
                     "      <parameter>CommitBuild</parameter>" +
                     "      <property>conditions[1].value1</property>" +
-                    "    </directValue>" +
-                    "    <directValue>" +
-                    "      <parameter>TagBuild</parameter>" +
-                    "      <property>tasks[1].conditions[0].value1</property>" +
-                    "    </directValue>" +
-                    "    <directValue>" +
-                    "      <parameter>TagVersion</parameter>" +
-                    "      <property>tasks[1].tasks[0].buildArgs</property>" +
                     "    </directValue>" +
                     "  </dynamicValues>" +
                     "</conditional>";
