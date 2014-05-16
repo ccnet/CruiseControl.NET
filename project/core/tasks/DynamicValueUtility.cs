@@ -442,7 +442,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var previousNode = currentNode;
                     var lastName = string.Empty;
                     bool hasDynamicValues = false;
-                    while ((currentNode != inputNode) && (currentNode != null))
+                    while ((currentNode != null) && (currentNode.NodeType != XmlNodeType.Document))
                     {
                         var nodeName = currentNode.Name;
 
@@ -454,6 +454,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             if (hasDynamicValues)
                                 break;
                         }
+                        
+                        // we don't want to take into account the input node, but we need to know if it has
+                        // dynamic values, hence the break here and not in the while loop
+                        if (currentNode == inputNode)
+                            break;
 
                         // Check if we are dealing with an array
                         if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
