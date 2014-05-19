@@ -17,4 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="parameterDefinitions">The original parameter definitions.</param>
         void ApplyTo(object value, Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions);
     }
+
+    /// <summary>
+    /// Defines an item that has dynamic values.
+    /// </summary>
+    /// <title>Dynamic Values Item</title>
+    public interface IWithDynamicValuesItem
+    {
+        /// <summary>
+        /// The array of dynamic values for the item
+        /// </summary>
+        IDynamicValue[] DynamicValues { get; set; }
+    }
+
 }

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// A base class to provide some common functionality for source control providers.
     /// </summary>
     public abstract class SourceControlBase
-        : ISourceControl, IParamatisedItem
+        : ISourceControl, IParamatisedItem, IWithDynamicValuesItem
     {
         #region Private fields
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
