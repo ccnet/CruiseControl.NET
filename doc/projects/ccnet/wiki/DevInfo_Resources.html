@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Resources by HTTrack Website Copier/3.x [XR&CO'2013], Sun, 01 Sep 2013 07:36:35 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Resources by HTTrack Website Copier/3.x [XR&CO'2013], Mon, 26 May 2014 07:52:45 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
 <meta charset="utf-8" />
@@ -9,7 +9,7 @@
 <meta name="description" content="ChiliProject" />
 <meta name="keywords" content="issue,bug,tracker" />
 <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="lppizRP5BY2snLg9SPsQMwHpmX1YZgA1JpRnRNpo4J8="/>
+<meta name="csrf-token" content="EDpkCORIrV4IVlbMUhZw1q31U6s83FIHTf3lU59lLtI="/>
 <link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1360787056' />
 <link href="../../../stylesheets/reseta77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
 <link href="../../../stylesheets/smoothness/jquery-uia77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
@@ -95,7 +95,7 @@ var datepickerSettings = {showOn: 'both', buttonImage: '/images/calendar.png?136
               <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
               <div id="nav-login" style="display:none;">
                 <div id="nav-login-content">
-  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="lppizRP5BY2snLg9SPsQMwHpmX1YZgA1JpRnRNpo4J8=" /></div>
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="EDpkCORIrV4IVlbMUhZw1q31U6s83FIHTf3lU59lLtI=" /></div>
     <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FDevInfo_Resources" />
     <table>
       <tr>
@@ -153,7 +153,7 @@ var datepickerSettings = {showOn: 'both', buttonImage: '/images/calendar.png?136
 <li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
-<ul class="menu-children unattached"><li><a href="../versions/11.html" class="version-11">1.8.5</a></li><li><a href="../versions/5.html" class="version-5">1.9</a></li></ul>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li></ul>
 </li>
 <li>
 <a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
@@ -217,7 +217,7 @@ google_ad_height = 240;
 //-->
 </script>
 <script type="text/javascript"
-src="../../../pagead/show_ads.js">
+src="../../../pagead/f.txt">
 </script></div>
         </div>
       
@@ -251,6 +251,10 @@ jQuery.menu_expand({ menuItem: '.wiki' });
 <div class="wiki">
   <a name="General-development-information"></a>
 <h1 >General development information<a href="#General-development-information" class="wiki-anchor">&para;</a></h1>
+
+
+	<fieldset class="header_collapsible collapsible toc right"><legend onclick="toggleFieldset(this);"><span>Contents</span></legend><div><ul class="toc"><li><a href="#General-development-information">General development information</a><ul><li><a href="#Registration-Process">Registration Process</a></li><li><a href="#Starting-development">Starting development</a></li><li><a href="#Getting-information">Getting information</a></li><li><a href="#Developer-Guidelines">Developer Guidelines</a><ul><li><a href="#Development-Practices">Development Practices</a></li><li><a href="#TDD-Standards-Unit-Testing-and-Design">TDD Standards (Unit Testing and Design)</a></li><li><a href="#Coding-Standards">Coding Standards</a></li><li><a href="#Comment-tags-in-Code">Comment tags in Code</a></li></ul>
+</li><li><a href="#Other-Development-information">Other Development information</a><ul><li><a href="#NVelocity">NVelocity</a></li></ul></li></ul></li></ul></div></fieldset>
 
 
 	<p>If you are interested in becoming a committer on the CCNet project, please contact the CCNet project administrators <a class="external" href="http://sourceforge.net/projects/ccnet">http://sourceforge.net/projects/ccnet</a> . Bestowing of commit rights is generally contingent on having a number of contributed patches accepted, participation in the CCNet community, and a demonstrated knowledge of the codebase and of how to do test-driven development.</p>
@@ -290,6 +294,9 @@ You can always ask for help via the <a class="external" href="http://groups.goog
 		<li><a href="http://csut017.wordpress.com/" class="external">Automated Coder</a></li>
 		<li>the forums</li>
 	</ul>
+
+
+	<p>Craig Sutherland made an excellent pdf on various sections of the code, this is a <em><strong>great resource</strong></em> to get to know the inner workings :<br /><a href="http://www.cruisecontrolnet.org/attachments/download/10/customisingcruisecontrol-net.pdf" class="external">Customizing CCNet</a></p>
 
 
 	<a name="Developer-Guidelines"></a>
@@ -351,6 +358,24 @@ You can always ask for help via the <a class="external" href="http://groups.goog
 		<li>Use spaces after punctuation such as commas and spaces, in accordance with standard written grammar. For example, please include spaces after semi-colons, between equals signs and after keywords<br /><pre><code class="cpp syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="keyword">for</span> (<span class="predefined-type">int</span> i = <span class="integer">0</span>; i &lt; array.Count; i++):
 </span></code></pre></li>
 	</ul>
+
+
+	<a name="Comment-tags-in-Code"></a>
+<h3 >Comment tags in Code<a href="#Comment-tags-in-Code" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>When the methods, variables and the like have a meaningful name, there is no real need for extra comments.<br />Extra comment is always appreciated, and certainly in places with <em>'complex'</em> logic. <br />Classes should preferably have comment, the creator of the class knows what it does, but after X years, <br />another dev should be able to know what the reason for the class is, and how it works.</p>
+
+
+	<a name="Other-Development-information"></a>
+<h2 >Other Development information<a href="#Other-Development-information" class="wiki-anchor">&para;</a></h2>
+
+
+	<a name="NVelocity"></a>
+<h3 >NVelocity<a href="#NVelocity" class="wiki-anchor">&para;</a></h3>
+
+
+	<p>NVelocity is used in the dashboard for templating the html pages.<br /><a href="NvelocityDocs.html" class="wiki-page">This</a> is a copy of the documentation at <a href="http://docs.castleproject.org/" class="external">CastleProject</a> . For the moment the last place where NVelocity is maintained.<br />The copy is to ensure that the <a href="NvelocityDocs.html" class="wiki-page">documentation</a> is not lost in time.</p>
 </div>
 
 
@@ -396,5 +421,5 @@ You can always ask for help via the <a class="external" href="http://groups.goog
 </script>
 </body>
 
-<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Resources by HTTrack Website Copier/3.x [XR&CO'2013], Sun, 01 Sep 2013 07:36:36 GMT -->
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/DevInfo_Resources by HTTrack Website Copier/3.x [XR&CO'2013], Mon, 26 May 2014 07:52:45 GMT -->
 </html>
