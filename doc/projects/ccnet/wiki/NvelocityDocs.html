@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/NvelocityDocs by HTTrack Website Copier/3.x [XR&CO'2013], Mon, 26 May 2014 07:54:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8" />
+<title>CruiseControl.NET - NvelocityDocs - CruiseControl.NET</title>
+<meta name="description" content="ChiliProject" />
+<meta name="keywords" content="issue,bug,tracker" />
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="EDpkCORIrV4IVlbMUhZw1q31U6s83FIHTf3lU59lLtI="/>
+<link rel='shortcut icon' href='http://www.cruisecontrolnet.org/favicon.ico?1360787056' />
+<link href="../../../stylesheets/reseta77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/smoothness/jquery-uia77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/applicationa77a.css?1360787056" media="all" rel="stylesheet" type="text/css" />
+<link href="../../../stylesheets/printa77a.css?1360787056" media="print" rel="stylesheet" type="text/css" />
+
+<!--[if lte IE 6]><link href="/stylesheets/ie6.css?1360787056" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if lte IE 7]><link href="/stylesheets/ie7.css?1360787056" media="all" rel="stylesheet" type="text/css" /><![endif]-->
+<!--[if gte IE 8]><![endif]-->
+
+<script src="../../../javascripts/jquery.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/jquery-ui.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/jquery.menu_expanda77a.js?1360787056" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery.noConflict();
+//]]>
+</script>
+<script src="../../../javascripts/modernizr.mina77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/prototypea77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/effectsa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/dragdropa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/controlsa77a.js?1360787056" type="text/javascript"></script>
+<script src="../../../javascripts/applicationa77a.js?1360787056" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+Event.observe(window, 'load', function(){ new WarnLeavingUnsaved('The current page contains unsaved text that will be lost if you leave this page.'); });
+//]]>
+</script><script type="text/javascript">
+//<![CDATA[
+var datepickerSettings = {showOn: 'both', buttonImage: '/images/calendar.png?1360787056', buttonImageOnly: true, showButtonPanel: true, dateFormat: 'yy-mm-dd' }
+//]]>
+</script>
+<link href="../../../stylesheets/jstoolbara77a.css?1360787056" media="screen" rel="stylesheet" type="text/css" />
+
+
+<link href="../../../plugin_assets/redmine_ads/stylesheets/redmine_adsb58c.css?1361628765" media="screen" rel="stylesheet" type="text/css" />
+<!-- page specific tags -->
+
+  <link href="../../../stylesheets/scma77a.css?1360787056" media="screen" rel="stylesheet" type="text/css" />
+  <link href="http://www.cruisecontrolnet.org/projects/ccnet/activity.atom?show_wiki_edits=1" rel="alternate" title="ATOM" type="application/atom+xml" />
+<script src="../../../javascripts/jstoolbar/jstoolbara77a.js?1360787056" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/textilea77a.js?1360787056" type="text/javascript"></script><script src="../../../javascripts/jstoolbar/lang/jstoolbar-ena77a.js?1360787056" type="text/javascript"></script><link href="../../../stylesheets/jstoolbara77a.css?1360787056" media="screen" rel="stylesheet" type="text/css" /></head>
+<body class="project-1 controller-wiki action-show">
+<div id="wrapper">
+  <div id="top-menu">
+    <div id="header">
+      <div id="logo"><a href="http://www.cruisecontrolnet.org/">CruiseControl.NET</a></div>
+      <div id="top-menu-items">
+      
+      <div id="search">
+                <label class="hidden-for-sighted" for="q">Search</label>
+        <form action="http://www.cruisecontrolnet.org/search/index/ccnet" method="get">
+          <input name="wiki_pages" type="hidden" value="1" />
+          <input accesskey="f" class="search_field" id="q" name="q" placeholder="search ..." size="20" type="text" />
+        </form>
+
+      </div>
+      
+
+      <ul id="account-nav">
+        
+        
+            <li><a href="http://www.cruisecontrolnet.org/" class="home">Home</a></li>
+        
+        <li class="drop-down">
+          <a href="http://www.cruisecontrolnet.org/projects" class="projects">Projects</a>
+          <ul style="display:none;">
+            <li><a href="http://www.cruisecontrolnet.org/projects" class="projects separator">All Projects</a></li>
+            
+            
+          </ul>
+        </li>
+        
+        <li><a href="https://www.chiliproject.org/help/v3" class="help">?</a></li>
+        
+          
+            
+            <li>
+              <a href="http://www.cruisecontrolnet.org/account/register">Register</a>
+            </li>
+            
+            <li id="login-menu" class="drop-down last-child">
+              <a href="http://www.cruisecontrolnet.org/login" class="login">Sign in</a>
+              <div id="nav-login" style="display:none;">
+                <div id="nav-login-content">
+  <form action="http://www.cruisecontrolnet.org/login" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="EDpkCORIrV4IVlbMUhZw1q31U6s83FIHTf3lU59lLtI=" /></div>
+    <input name="back_url" type="hidden" value="http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fwiki%2FNvelocityDocs" />
+    <table>
+      <tr>
+        <td><label for="username-pulldown">Login</label></td>
+        <td><label for="password-pulldown">Password</label></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input id="username-pulldown" name="username" tabindex="1" type="text" /></td>
+        <td><input id="password-pulldown" name="password" tabindex="1" type="password" /></td>
+        <td><input type="submit" name="login" value="Login" tabindex="1"/></td>
+      </tr>
+    </table>
+    <div id = "optional_login_fields" style = "top = 10px; white-space:nowrap">
+      
+        <input id="openid_url" name="openid_url" placeholder="OpenID URL" tabindex="1" type="text" />
+      
+
+      
+        <label for="autologin"><input id="autologin" name="autologin" tabindex="1" type="checkbox" value="1" /> Stay logged in</label>
+      
+
+      
+        <a href="http://www.cruisecontrolnet.org/account/lost_password" tabindex="1">Lost password</a>
+      
+
+      
+        |
+         <a href="http://www.cruisecontrolnet.org/account/register" tabindex="1">Register</a>
+      
+    </div>
+  </form>
+</div>
+
+              </div>
+            </li>
+          
+      </ul>
+    </div>
+    </div>
+    <div id="breadcrumb">
+      CruiseControl.NET
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <div id="main" class="">
+    
+      <div id="side-container">
+        <div id="main-menu">
+          <ul><li><a href="http://www.cruisecontrolnet.org/projects/ccnet" class="overview">Overview</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/activity" class="activity">Activity</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/roadmap" class="roadmap">Roadmap</a>
+<ul class="menu-children unattached"><li><a href="../versions/5.html" class="version-5">1.9</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/issues" class="issues">Issues</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/new" accesskey="7" class="new-issue">New issue</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues?set_filter=1" class="all-open-issues">View all open issues</a></li><li><a href="http://www.cruisecontrolnet.org/queries/new?project_id=ccnet" class="new-query">New saved query</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/report" class="issue-summary">Issue summary</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries" class="time-entries">Time entries</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/new" class="new-time-entry">New time entry</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/time_entries/report" class="time-entry-report">Time entry report</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/gantt" class="gantt">Gantt</a></li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/issues/calendar" class="calendar">Calendar</a></li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/news" class="news">News</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/news/new" class="new-news">Add news</a></li></ul>
+</li>
+<li>
+<a href="../documents.html" class="documents">Documents</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/login?back_url=http%3A%2F%2Fwww.cruisecontrolnet.org%2Fprojects%2Fccnet%2Fdocuments%2Fnew" class="new-document">New document</a></li></ul>
+</li>
+<li>
+<a href="../wiki.html" class="wiki selected">Wiki</a>
+<ul class="menu-children"><li><a href="index.html" class="wiki-by-title">Index by title</a></li><li><a href="date_index.html" class="wiki-by-date">Index by date</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/boards" class="boards">Forums</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/new" class="new-board">New forum</a></li></ul>
+<ul class="menu-children unattached"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/1" class="board-1">General Discussion</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/2" class="board-2">Help</a></li><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/boards/3" class="board-3">Coding</a></li></ul>
+</li>
+<li>
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/files" class="files">Files</a>
+<ul class="menu-children"><li><a href="http://www.cruisecontrolnet.org/projects/ccnet/files/new" class="new-file">New file</a></li></ul>
+</li>
+<li><a href="http://www.cruisecontrolnet.org/projects/ccnet/repository" class="repository">Repository</a></li></ul>
+          
+        </div>
+
+      
+        <!-- Sidebar -->
+        <div id="sidebar">
+          
+  
+<h3>Wiki</h3>
+
+<a href="../wiki.html">Start page</a><br />
+<a href="index.html">Index by title</a><br />
+<a href="date_index.html">Index by date</a><br />
+
+
+  
+
+
+          <div class="redmine_ads"><script type="text/javascript">
+window.google_analytics_uacct = "UA-371146-15";
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-8921736128672887";
+/* www.cruisecontrolnet.org */
+google_ad_slot = "1762967545";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="../../../pagead/f.txt">
+</script></div>
+        </div>
+      
+      </div>
+
+      <script type="text/javascript">
+//<![CDATA[
+jQuery.menu_expand({ menuItem: '.wiki' });
+//]]>
+</script>
+    
+    <div class="" id="content">
+      
+      <div class="contextual">
+
+
+
+
+
+
+
+
+
+<a href="http://www.cruisecontrolnet.org/projects/ccnet/wiki/NvelocityDocs/history" class="icon icon-history">History</a>
+</div>
+
+<p class="breadcrumb"><a href="Wiki.html">Wiki</a> &#187; <a href="DevInfo_Documentation.html">DevInfo Documentation</a> &#187; </p>
+
+
+
+<div class="wiki">
+  <a name="NVelocity-Documentation"></a>
+<h1 >NVelocity Documentation<a href="#NVelocity-Documentation" class="wiki-anchor">&para;</a></h1>
+
+
+	<p>This is a copy of the documentation at CastleProject . For the moment the last place where NVelocity is maintained.<br />The copy is to ensure that the documentation is not lost in time.</p>
+
+
+	<a name="Introduction"></a>
+<h2 >Introduction<a href="#Introduction" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>The NVelocity View Engine uses NVelocity.</p>
+
+
+	<p>NVelocity is a port of the excellent Apache Jakarta Velocity project. It is a very simple, easy to learn and extensible template engine. Due to the lack of releases, support and bug fixes on the original port, the Castle Team decided to fork the project, bringing it to our code repository, fixing the bugs and improving it with more features.</p>
+
+
+	<p>The first thing you need to read about NVelocity is not even on this web site. You can find on the original <a href="http://velocity.apache.org/engine/devel/user-guide.html" class="external">Velocity web site</a></p>
+
+
+	<p>Frequently Asked Questions on NVelocity View Engine can be found on the standard <a href="http://www.castleproject.org/monorail/faq.html" class="external">MonoRail FAQ</a></p>
+
+
+	<p>To use NVelocity View Engine inform the type on the customEngine on the configuration file:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>&lt;viewEngine
+<span class="line-numbers">2</span>    viewPathRoot=<span class="string"><span class="delimiter">&quot;</span><span class="content">views</span><span class="delimiter">&quot;</span></span> 
+<span class="line-numbers">3</span>    customEngine=<span class="string"><span class="delimiter">&quot;</span><span class="content">Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine, Castle.MonoRail.Framework.Views.NVelocity</span><span class="delimiter">&quot;</span></span> /&gt;
+</span></code></pre>    
+
+	<a name="NVelocity-files"></a>
+<h2 >NVelocity files<a href="#NVelocity-files" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>NVelocity uses the extension <strong>.vm</strong> so just create your views with that extension. Remember that from your controller you should not reference file extensions when defining views to render.</p>
+
+
+	<a name="Layouts"></a>
+<h2 >Layouts<a href="#Layouts" class="wiki-anchor">&para;</a></h2>
+
+
+	<p>Use the <em>$childContent</em> context variable to render the content of the view on the layout template. The following is a simple layout using NVelocity:</p>
+
+
+<pre><code class="html syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="tag">&lt;html&gt;</span>
+<span class="line-numbers">2</span>Welcome
+<span class="line-numbers">3</span>
+<span class="line-numbers">4</span>$childContent
+<span class="line-numbers">5</span>
+<span class="line-numbers">6</span>Footer
+<span class="line-numbers">7</span><span class="tag">&lt;/html&gt;</span></span></pre></code>
+
+	<p><strong><em>Order of execution</em></strong><br />The view template selected by the controller is executed before the layout template. In fact the layout template is merged with the result of the view template execution.</p>
+
+
+	<h2>Configuration</h2>
+
+
+	<p>The NVelocity View Engine looks for a file nvelocity.properties in the root of the view folder. You can use this file to configure how NVelocity should behave.</p>
+
+
+	<p>For example, to configure NVelocity to support Chinese encoding create a text file named nvelocity.properties, save it to your views folder and add the following content:</p>
+
+
+<pre><code class="txt syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>input.encoding=GB2312
+<span class="line-numbers">2</span>output.encoding=GB2312
+</span></pre></code>
+
+	<p>More information on the entries can be found on the original Velocity documentation.</p>
+
+
+	<h2>Macros</h2>
+
+
+	<p>NVelocity supports macros, but keep in mind that they have problems. If you want to use macros you can create a folder macros under your views root folder.</p>
+
+
+	<p>All <strong>.vm</strong> files in this folder will be loaded as a NVelocity Macro library so the macros will be available to all templates.</p>
+
+
+	<h2>Fancy foreach Loops</h2>
+
+
+	<p>Inspired on <a href="http://www.fogcreek.com/CityDesk/2.0/help/Scripting_With_CityScript/FancyLoops.html" class="external">FrogCreek's fancy loops</a>. The following code should be self-explanatory:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="comment">#foreach($i in $items)</span>
+<span class="line-numbers"> 2</span><span class="comment">#each (this is optional since it's the default section)</span>
+<span class="line-numbers"> 3</span>       text which appears <span class="keyword">for</span> each item
+<span class="line-numbers"> 4</span><span class="comment">#before</span>
+<span class="line-numbers"> 5</span>       text which appears before each item
+<span class="line-numbers"> 6</span><span class="comment">#after</span>
+<span class="line-numbers"> 7</span>       text which appears after each item
+<span class="line-numbers"> 8</span><span class="comment">#between</span>
+<span class="line-numbers"> 9</span>       text which appears between each two items
+<span class="line-numbers"><strong>10</strong></span><span class="comment">#odd</span>
+<span class="line-numbers">11</span>       text which appears <span class="keyword">for</span> every other item, including the first
+<span class="line-numbers">12</span><span class="comment">#even</span>
+<span class="line-numbers">13</span>       text which appears <span class="keyword">for</span> every other item, starting with the second
+<span class="line-numbers">14</span><span class="comment">#nodata</span>
+<span class="line-numbers">15</span>       <span class="constant">Content</span> rendered <span class="keyword">if</span> <span class="global-variable">$items</span> evaluated to null <span class="keyword">or</span> empty
+<span class="line-numbers">16</span><span class="comment">#beforeall</span>
+<span class="line-numbers">17</span>       text which appears before the loop, only <span class="keyword">if</span> there are items
+<span class="line-numbers">18</span>       matching condition
+<span class="line-numbers">19</span><span class="comment">#afterall</span>
+<span class="line-numbers"><strong>20</strong></span>       text which appears after the loop, only of there are items
+<span class="line-numbers">21</span>       matching condition
+<span class="line-numbers">22</span><span class="comment">#end</span>
+</span></pre></code>
+
+	<p>All sections are optional, and they can appear in any order multiple times (sections with same name will have their content appended). So for example you can use it to create table contents with alternating styles:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="comment">#foreach($person in $people)</span>
+<span class="line-numbers"> 2</span><span class="comment">#beforeall</span>
+<span class="line-numbers"> 3</span>       &lt;table&gt;
+<span class="line-numbers"> 4</span>               &lt;tr&gt;
+<span class="line-numbers"> 5</span>               &lt;th&gt;<span class="constant">Name</span>&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">th&gt;</span></span>
+<span class="line-numbers"> 6</span><span class="regexp"><span class="content">               &lt;th&gt;Age&lt;</span><span class="delimiter">/</span></span>th&gt;
+<span class="line-numbers"> 7</span>               &lt;<span class="regexp"><span class="delimiter">/</span><span class="content">tr&gt;</span></span>
+<span class="line-numbers"> 8</span><span class="regexp"><span class="content">#before</span></span>
+<span class="line-numbers"> 9</span><span class="regexp"><span class="content">       &lt;tr</span></span>
+<span class="line-numbers"><strong>10</strong></span><span class="regexp"><span class="content">#odd</span></span>
+<span class="line-numbers">11</span><span class="regexp"><span class="content">       Style='color:gray'&gt;</span></span>
+<span class="line-numbers">12</span><span class="regexp"><span class="content">#even</span></span>
+<span class="line-numbers">13</span><span class="regexp"><span class="content">       Style='color:white'&gt;</span></span>
+<span class="line-numbers">14</span><span class="regexp"><span class="content"></span></span>
+<span class="line-numbers">15</span><span class="regexp"><span class="content">#each</span></span>
+<span class="line-numbers">16</span><span class="regexp"><span class="content">       &lt;td&gt;$person.Name&lt;</span><span class="delimiter">/</span></span>td&gt;
+<span class="line-numbers">17</span>       &lt;td&gt;<span class="global-variable">$person</span>.Age&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">td&gt;</span></span>
+<span class="line-numbers">18</span><span class="regexp"><span class="content"></span></span>
+<span class="line-numbers">19</span><span class="regexp"><span class="content">#after</span></span>
+<span class="line-numbers"><strong>20</strong></span><span class="regexp"><span class="content">       &lt;</span><span class="delimiter">/</span></span>tr&gt;
+<span class="line-numbers">21</span>
+<span class="line-numbers">22</span><span class="comment">#between</span>
+<span class="line-numbers">23</span>       &lt;tr&gt;&lt;td colspan=<span class="string"><span class="delimiter">'</span><span class="content">2</span><span class="delimiter">'</span></span>&gt;<span class="global-variable">$person</span>.bio&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">td&gt;&lt;</span><span class="delimiter">/</span></span>tr&gt;
+<span class="line-numbers">24</span>
+<span class="line-numbers">25</span><span class="comment">#afterall</span>
+<span class="line-numbers">26</span>       &lt;<span class="regexp"><span class="delimiter">/</span><span class="content">table&gt;</span></span>
+<span class="line-numbers">27</span><span class="regexp"><span class="content"></span></span>
+<span class="line-numbers">28</span><span class="regexp"><span class="content">#nodata</span></span>
+<span class="line-numbers">29</span><span class="regexp"><span class="content">       Sorry No Person Found</span></span>
+<span class="line-numbers"><strong>30</strong></span><span class="regexp"><span class="content">#end</span></span>
+<span class="line-numbers">31</span><span class="regexp"><span class="content"></span></span></span></pre></code>
+
+	<p>Which will output something like:</p>
+
+
+<pre><code class="html syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="tag">&lt;table&gt;</span>
+<span class="line-numbers"> 2</span>       <span class="tag">&lt;tr&gt;</span>
+<span class="line-numbers"> 3</span>       <span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span>
+<span class="line-numbers"> 4</span>       <span class="tag">&lt;th&gt;</span>Age<span class="tag">&lt;/th&gt;</span>
+<span class="line-numbers"> 5</span>       <span class="tag">&lt;/tr&gt;</span>
+<span class="line-numbers"> 6</span>       <span class="tag">&lt;tr</span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">'</span><span class="content">color:white</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
+<span class="line-numbers"> 7</span>               <span class="tag">&lt;td&gt;</span>John<span class="tag">&lt;/td&gt;</span>
+<span class="line-numbers"> 8</span>               <span class="tag">&lt;td&gt;</span>32<span class="tag">&lt;/td&gt;</span>
+<span class="line-numbers"> 9</span>       <span class="tag">&lt;/tr&gt;</span>
+<span class="line-numbers"><strong>10</strong></span>       <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td</span> <span class="attribute-name">colspan</span>=<span class="string"><span class="delimiter">'</span><span class="content">2</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>Monorail programmer<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+<span class="line-numbers">11</span>       <span class="tag">&lt;tr</span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">'</span><span class="content">color:gray</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
+<span class="line-numbers">12</span>               <span class="tag">&lt;td&gt;</span>Jin<span class="tag">&lt;/td&gt;</span>
+<span class="line-numbers">13</span>               <span class="tag">&lt;td&gt;</span>12<span class="tag">&lt;/td&gt;</span>
+<span class="line-numbers">14</span>       <span class="tag">&lt;/tr&gt;</span>
+<span class="line-numbers">15</span>       <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td</span> <span class="attribute-name">colspan</span>=<span class="string"><span class="delimiter">'</span><span class="content">2</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>Castle guru<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+<span class="line-numbers">16</span><span class="tag">&lt;/table&gt;</span>
+</span></pre></code>
+
+	<p>If the $people variable was null the output will be:</p>
+
+
+<pre><code class="html syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>Sorry No Person Found
+</span></pre></code>
+
+	<h2>NVelocityViewEngine Variables</h2>
+
+
+	<p>The NVelocityViewEngine is responsible for making "useful" variables available to your view. Here's the list of variables added to the context by the NVelocityViewEngine:</p>
+
+
+	<table>
+		<tr>
+			<td><strong>Context Variable</strong></td>
+			<td><strong>Description</strong></td>
+		</tr>
+		<tr>
+			<td>$controller</td>
+			<td>The controller being executed.</td>
+		</tr>
+		<tr>
+			<td>$context</td>
+			<td>The IRailsEngineContext.</td>
+		</tr>
+		<tr>
+			<td>$request</td>
+			<td>context.Request</td>
+		</tr>
+		<tr>
+			<td>$response</td>
+			<td>context.Response</td>
+		</tr>
+		<tr>
+			<td>$session</td>
+			<td>context.Session</td>
+		</tr>
+		<tr>
+			<td>$childContent</td>
+			<td>Used inside Layouts. It defines the content rendered by a View.</td>
+		</tr>
+		<tr>
+			<td>$page</td>
+			<td>Available in *<strong>.njs</strong> views and is added in the <em>GenerateJS</em> method.</td>
+		</tr>
+		<tr>
+			<td>$siteroot</td>
+			<td> <em>context.ApplicationPath</em> </td>
+		</tr>
+	</table>
+
+
+
+
+	<p>Additionally - the contents of the following collections are merged into the context:</p>
+
+
+	<ul>
+	<li>controller.Resources</li>
+		<li>context.Params</li>
+		<li>controller.Helpers</li>
+		<li>context.Flash</li>
+		<li>controller.PropertyBag</li>
+	</ul>
+
+
+	<p>Each key in each of the collections becomes a <em>$variable</em>. For example:</p>
+
+
+<pre><code class="c syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>class MyController
+<span class="line-numbers"> 2</span>{
+<span class="line-numbers"> 3</span>    public <span class="directive">void</span> Index()
+<span class="line-numbers"> 4</span>    {
+<span class="line-numbers"> 5</span>       PropertyBag[<span class="string"><span class="delimiter">&quot;</span><span class="content">myvariable</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">some value</span><span class="delimiter">&quot;</span></span>;
+<span class="line-numbers"> 6</span>       Context.Params[<span class="string"><span class="delimiter">&quot;</span><span class="content">othervariable</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">some other value value</span><span class="delimiter">&quot;</span></span>;
+<span class="line-numbers"> 7</span>       Context.Flash[<span class="string"><span class="delimiter">&quot;</span><span class="content">anothervariable</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">yet one more</span><span class="delimiter">&quot;</span></span>;
+<span class="line-numbers"> 8</span>    }
+<span class="line-numbers"> 9</span>}
+</span></pre></code>
+
+In your view you will have the following variables:
+	<ul>
+	<li>myvariable</li>
+		<li>othervariable</li>
+		<li>anothervariable</li>
+	</ul>
+
+
+	<p>Helpers are also added to allow you to invoke static members on some common types:</p>
+
+
+	<ul>
+	<li>Byte</li>
+		<li>SByte</li>
+		<li>Int16</li>
+		<li>Int32</li>
+		<li>Int64</li>
+		<li>UInt16</li>
+		<li>UInt32</li>
+		<li>UInt64</li>
+		<li>Single</li>
+		<li>Double</li>
+		<li>Boolean</li>
+		<li>Char</li>
+		<li>Decimal</li>
+		<li>String</li>
+		<li>Guid</li>
+		<li>DateTime</li>
+	</ul>
+
+
+	<p>This allows you to do useful things like:</p>
+
+
+<pre><code class="c syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>The Current time is: $DateTime.Now
+</span></pre></code>
+
+	<p>Accessing the PropertyBag¶<br />If you want to list the variables in the property bag - then add a reference to the PropertyBag:</p>
+
+
+<pre><code class="c syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span>class MyController
+<span class="line-numbers">2</span>{
+<span class="line-numbers">3</span>    public <span class="directive">void</span> Index()
+<span class="line-numbers">4</span>    {
+<span class="line-numbers">5</span>        PropertyBag[<span class="string"><span class="delimiter">&quot;</span><span class="content">PropertyBag</span><span class="delimiter">&quot;</span></span>] = PropertyBag;
+<span class="line-numbers">6</span>    }
+<span class="line-numbers">7</span>}
+</span></pre></code>
+
+	<p>then in your view <em>$PropertyBag</em> is what you want:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span><span class="constant">Property</span> bag variables
+<span class="line-numbers"> 2</span><span class="comment">#foreach($key in $PropertyBag)</span>
+<span class="line-numbers"> 3</span><span class="comment">#beforeall</span>
+<span class="line-numbers"> 4</span>
+<span class="line-numbers"> 5</span>    <span class="constant">Name</span>
+<span class="line-numbers"> 6</span>    value
+<span class="line-numbers"> 7</span>
+<span class="line-numbers"> 8</span><span class="comment">#each</span>
+<span class="line-numbers"> 9</span>
+<span class="line-numbers"><strong>10</strong></span>    <span class="global-variable">$key</span>
+<span class="line-numbers">11</span>    <span class="global-variable">$PropertyBag</span>.get_Item(<span class="global-variable">$key</span>)
+<span class="line-numbers">12</span>
+<span class="line-numbers">13</span><span class="comment">#afterall</span>
+<span class="line-numbers">14</span>
+<span class="line-numbers">15</span><span class="comment">#end</span>
+</span></pre></code>
+
+	<h2>ViewComponent Support</h2>
+
+
+	<p>NVelocity allows you to create your own directives, so that's how we introduced components to it. Basically you can use:</p>
+
+
+	<ul>
+	<li>For inline components:<br />   <pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#component(ComponentName)</span></span></pre></code></li>
+		<li>For components with body content (aka block components):<br /><pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#blockcomponent(ComponentName)</span>
+<span class="line-numbers">2</span>  some content
+<span class="line-numbers">3</span><span class="comment">#end</span>
+</span></pre></code></li>
+	</ul>
+
+
+	<p>ViewComponents have access to the <em>IRailsContext</em> so you can access form parameters, session, etc. Sometimes however it's important to specify some parameters.</p>
+
+
+	<h3>Passing Parameters in a Dictionary</h3>
+
+
+	<p>Use the name of the component followed by a dictionary string.</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#component(MyFirstComponent &quot;%{firstParam='some value',anotherParam='other value'}&quot;)</span></span></pre></code>
+
+	<p>You can then access the parameters from the component code:</p>
+
+
+<pre><code class="c syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>public class MyFirstComponent: ViewComponent
+<span class="line-numbers"> 2</span>{
+<span class="line-numbers"> 3</span>    public override <span class="directive">void</span> Render()
+<span class="line-numbers"> 4</span>    {
+<span class="line-numbers"> 5</span>        object param1 = Context.ComponentParameters[<span class="string"><span class="delimiter">&quot;</span><span class="content">firstParam</span><span class="delimiter">&quot;</span></span>];
+<span class="line-numbers"> 6</span>        object param2 = Context.ComponentParameters[<span class="string"><span class="delimiter">&quot;</span><span class="content">anotherParam</span><span class="delimiter">&quot;</span></span>];
+<span class="line-numbers"> 7</span>
+<span class="line-numbers"> 8</span>        ...
+<span class="line-numbers"> 9</span>    }
+<span class="line-numbers"><strong>10</strong></span>}
+</span></pre></code>
+
+	<h3>Key/Value Pairs</h3>
+
+
+	<p>In this case you need to use the keyword with followed by a sequence of key/value pairs:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#component(ComponentName with &quot;name=john&quot; &quot;address=some address&quot;)</span></span></pre></code>
+
+	<p>You're free to use interpolation as well</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#component(ComponentName with &quot;name=${customer.name}&quot;)</span></span></pre></code>
+
+	<p>You can gain access to the component parameters using the Context.ComponentParameters too.</p>
+
+
+	<h3>Data Type Handling</h3>
+
+
+	<p>Every data type is supported. However literal values will be automatically converted to text. If you want to specify a different type, create a varible on NVelocity or use some structure data available on the view.</p>
+
+
+	<p>The parameter value below will be converted to string</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#component(ComponentName with &quot;age=1&quot;)</span></span></pre></code>
+
+	<p>The parameter value below will remain an Int32</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#set($age = 27)</span>
+<span class="line-numbers">2</span><span class="comment">#component(ComponentName with &quot;age=${age}&quot;)</span>
+</span></pre></code>
+
+	<h3>A Simple Example</h3>
+
+
+	<p>The view snippet:</p>
+
+
+<pre><code class="ruby syntaxhl"><span class="CodeRay"><span class="line-numbers">1</span><span class="comment">#blockcomponent(SecurityComponent with &quot;role=admin&quot;)</span>
+<span class="line-numbers">2</span>  this will only be rendered <span class="keyword">if</span> the current user is <span class="keyword">in</span> the specified role
+<span class="line-numbers">3</span><span class="comment">#end</span>
+</span></pre></code>
+
+	<p>The component code:</p>
+
+
+<pre><code class="c syntaxhl"><span class="CodeRay"><span class="line-numbers"> 1</span>   
+<span class="line-numbers"> 2</span>using Castle.MonoRail.Framework;
+<span class="line-numbers"> 3</span>
+<span class="line-numbers"> 4</span>namespace WebApp
+<span class="line-numbers"> 5</span>{
+<span class="line-numbers"> 6</span>    public class SecurityComponent : ViewComponent
+<span class="line-numbers"> 7</span>    {
+<span class="line-numbers"> 8</span>        <span class="predefined-type">bool</span> shouldRender;
+<span class="line-numbers"> 9</span>
+<span class="line-numbers"><strong>10</strong></span>        public override <span class="directive">void</span> Initialize()
+<span class="line-numbers">11</span>        {
+<span class="line-numbers">12</span>            String role = ComponentParameter[<span class="string"><span class="delimiter">&quot;</span><span class="content">role</span><span class="delimiter">&quot;</span></span>] as String;
+<span class="line-numbers">13</span>            shouldRender = RailsContext.User.IsInRole( role );
+<span class="line-numbers">14</span>        }
+<span class="line-numbers">15</span>
+<span class="line-numbers">16</span>        public override <span class="directive">void</span> Render()
+<span class="line-numbers">17</span>        {
+<span class="line-numbers">18</span>            <span class="keyword">if</span> (shouldRender) Context.RenderBody();
+<span class="line-numbers">19</span>        }
+<span class="line-numbers"><strong>20</strong></span>    }
+<span class="line-numbers">21</span>}
+</span></pre></code></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre></pre>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div style="clear:both;">&nbsp;</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="bgl"><div class="bgr">
+        Powered by <a href="https://www.chiliproject.org/">ChiliProject</a>
+      </div></div>
+  </div>
+
+  <div id="ajax-indicator" style="display:none;"><span>Loading...</span></div>
+  <div id="dialog-window" style="display:none;"></div>
+
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-371146-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+
+<!-- Mirrored from www.cruisecontrolnet.org/projects/ccnet/wiki/NvelocityDocs by HTTrack Website Copier/3.x [XR&CO'2013], Mon, 26 May 2014 07:54:04 GMT -->
+</html>
