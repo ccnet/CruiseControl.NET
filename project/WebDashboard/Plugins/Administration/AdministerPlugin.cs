@@ -12,11 +12,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
     /// This plugin is enabled by default. The admin password must be entered into the Dashboard.config once, there is no default password, and this plugin does not work with a blank password.
     /// <para>
     /// The plugin also allows for adding and removing build servers, and maintainting their properties : see <link>remoteServices</link> of the <link>Dashboard Configuration Block</link>.
-    /// Like the ability to enable or disable the start/stop buttons and the force build button.
-    /// </para>  
-    /// <para>
-    /// LinkDescription : Administer Dashboard.
     /// </para>
+    /// <para>Like the ability to enable or disable the start/stop buttons and the force build button.</para>
+    /// <heading>Attention</heading>
+    ///  Be sure that CCNet server (service) can write to the following files : 
+    ///  <para> ° webdashboard\dashboard.config</para>
+    ///  <para> ° webdashboard\Packages\packages.xml</para>
+    ///    
+    /// Adjust security if needed    
     /// </summary>
     [ReflectorType("administrationPlugin")]
     public class AdministerPlugin
