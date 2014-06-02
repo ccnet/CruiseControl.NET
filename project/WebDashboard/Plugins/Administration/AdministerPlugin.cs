@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
     ///  <para> ° webdashboard\dashboard.config</para>
     ///  <para> ° webdashboard\Packages\packages.xml</para>
     ///    
-    /// Adjust security if needed    
+    /// Adjust the security of these files if needed.
     /// </summary>
     [ReflectorType("administrationPlugin")]
     public class AdministerPlugin
