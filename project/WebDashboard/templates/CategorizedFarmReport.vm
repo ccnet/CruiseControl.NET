@@ -75,6 +75,7 @@
 		<thead>
 		   <tr class="ProjectGridHeader">
 			  <th class="left">$translations.Translate("Server")</th>
+			  <th class="{sorter:false}">$translations.Translate("Admin")</th>
 			  <th class="left">$translations.Translate("Project Name")</th>
 			  <th>$translations.Translate("Last Build Status")</th>
 			  <th>$translations.Translate("Last Build Time")</th>
@@ -83,32 +84,12 @@
 			  <th>$translations.Translate("CCNet Status")</th>
 			  <th>$translations.Translate("Activity")</th>
 			  <th class="{sorter:false}">$translations.Translate("Messages")</th>
-			  <th class="{sorter:false}">$translations.Translate("Admin")</th>
+			  
 			</tr>	
 		</thead>    
 		#foreach ($row in $category.Rows)
 			<tr>
 				<td>$row.ServerName</td>
-				<td><a href="$row.Url" title="$row.Description">$row.Name</a></td>
-				<td class="$row.BuildStatusHtmlColor">$translations.Translate($row.BuildStatus)</td>
-				<td>$translations.Translate($row.LastBuildDate)</td>
-				<td>$translations.Translate($row.NextBuildTime)</td>
-				<td>$row.LastBuildLabel</td>
-				<td class="status$row.Status">$translations.Translate($row.Status)</td>
-				<td class="activity$row.Activity">$translations.Translate($row.Activity.ToString())</td>
-				<td>
-				  <ul>
-					#if ($row.Breakers.Length > 0)
-						<li>$translations.Translate("Breakers : {0}", $row.Breakers)</li>
-					#end
-					#if ($row.Fixer.Length > 0)
-						<li>$row.Fixer</li>
-					#end
-					#if ($row.FailingTasks.Length > 0)
-						<li>$translations.Translate("Failing Tasks : {0}", $row.FailingTasks)</li>
-					#end
-				  </ul>
-				</td>
 				<td>
 				  <form method="post" style="margin-bottom:0px;">
 					<input type="hidden" name="projectName" value="$row.Name" />
@@ -133,7 +114,28 @@
 					  #end
 					</font>
 				  </form>
+				</td>				
+				<td><a href="$row.Url" title="$row.Description">$row.Name</a></td>
+				<td class="$row.BuildStatusHtmlColor">$translations.Translate($row.BuildStatus)</td>
+				<td>$translations.Translate($row.LastBuildDate)</td>
+				<td>$translations.Translate($row.NextBuildTime)</td>
+				<td>$row.LastBuildLabel</td>
+				<td class="status$row.Status">$translations.Translate($row.Status)</td>
+				<td class="activity$row.Activity">$translations.Translate($row.Activity.ToString())</td>
+				<td>
+				  <ul>
+					#if ($row.Breakers.Length > 0)
+						<li>$translations.Translate("Breakers : {0}", $row.Breakers)</li>
+					#end
+					#if ($row.Fixer.Length > 0)
+						<li>$row.Fixer</li>
+					#end
+					#if ($row.FailingTasks.Length > 0)
+						<li>$translations.Translate("Failing Tasks : {0}", $row.FailingTasks)</li>
+					#end
+				  </ul>
 				</td>
+				
 		  </tr>
 		#end
 	</table> 
