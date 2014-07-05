@@ -234,7 +234,13 @@
 			</if>
 
 			<!-- Run FxCop -->
+			<!-- 
+			      commented because of upgrade to .Net 4.5
+			      fxcop is part of visual studio, and not sure if distributing that included version is legal
+				  maybe a better way is to use fxcop cmd id the exe is found on machine
 			<call target="runFxCop" cascade="false" />
+		    -->
+		
 		</if>
 	</target>
 
