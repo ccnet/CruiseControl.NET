@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
         [Test]
         public void NotAvailableNotEvenEqualToItself()
         {
-            Assert.AreNotEqual(ConditionalGetFingerprint.NOT_AVAILABLE, ConditionalGetFingerprint.NOT_AVAILABLE);
+            Assert.IsFalse(ConditionalGetFingerprint.NOT_AVAILABLE.Equals(ConditionalGetFingerprint.NOT_AVAILABLE));
             Assert.AreSame(ConditionalGetFingerprint.NOT_AVAILABLE, ConditionalGetFingerprint.NOT_AVAILABLE);
         }
 

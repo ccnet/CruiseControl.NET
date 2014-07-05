@@ -27,8 +27,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
         public override bool Equals(object obj)
         {
-            if (this == NOT_AVAILABLE || obj == NOT_AVAILABLE) return false;
-            if (this == obj) return true;
+            System.Diagnostics.Debug.WriteLine("Equals obj");
+
+            if (ReferenceEquals(this,NOT_AVAILABLE)) return false;
+            if (ReferenceEquals(obj, NOT_AVAILABLE)) return false;
+            
+            if (ReferenceEquals(this, obj)) return true;
+            
             ConditionalGetFingerprint conditionalGetFingerprint = obj as ConditionalGetFingerprint;
             if (conditionalGetFingerprint == null) return false;
         	
@@ -51,5 +56,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
         {
             get { return eTag; }
         }
+
     }
 }
