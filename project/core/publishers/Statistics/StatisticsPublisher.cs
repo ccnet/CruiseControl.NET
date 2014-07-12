@@ -66,6 +66,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
     /// metric on y-axis in the artifacts directory named as &lt;statistic name&gt;.png. This chart would still be a very basic representation.
     /// For now at least, exporting the report to Excel for charting/analyis might be a better option.
     /// </para>
+    /// <para>
+    /// The following are default provided :
+    /// <code>
+    /// &lt;FirstMatch name="StartTime" xpath= "/cruisecontrol/build/@date")&gt;
+    /// &lt;FirstMatch name="Duration" xpath= "/cruisecontrol/build/@buildtime")&gt;
+    /// 
+    /// &lt;Statistic name="TestCount" xpath= "sum name =//test-results/@total)")&gt;
+    /// &lt;Statistic name="TestFailures" xpath= "sum name =//test-results/@failures)")&gt;
+    /// &lt;Statistic name="TestIgnored" xpath= "sum name =//test-results/@not-run)")&gt;
+    /// 
+    /// &lt;Statistic name="GendarmeDefects" xpath= "count name =//gendarme-output//rule/target/defect)")&gt;
+    /// 
+    /// &lt;Statistic name="FxCop Warnings" xpath= "count name =//FxCopReport//Message[Issue/@Level='Warning' or Issue/@Level='CriticalWarning'])")&gt;
+    /// &lt;Statistic name="FxCop Errors" xpath= "count name =//FxCopReport//Message[Issue/@Level='Error' or Issue/@Level='CriticalError'])")&gt;
+    /// 
+    /// &lt;FirstMatch name="BuildErrorType" xpath= "//failure/builderror/type")&gt;
+    /// &lt;FirstMatch name="BuildErrorMessage" xpath= "//failure/builderror/message")&gt;
+    /// </code>
+    /// </para>
     /// </remarks>
     /// <example>
     /// <code title="Minimalist example">
