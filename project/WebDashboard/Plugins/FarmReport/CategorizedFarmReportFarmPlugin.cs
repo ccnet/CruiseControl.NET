@@ -16,6 +16,7 @@
     using System;
     using ThoughtWorks.CruiseControl.Core;
     using System.Web;
+    using System.Linq;
 
 
     [ReflectorType("categorizedFarmReportFarmPlugin")]
@@ -77,7 +78,7 @@
 
             var categories = new SortedDictionary<string, CategoryInformation>();
 
-            foreach (var row in gridRows)
+            foreach (var row in gridRows.OrderBy( s=> s.ServerName).ThenBy( p => p.Name))
             {
                 var rowCategory = row.Category;
                 CategoryInformation categoryRows;
