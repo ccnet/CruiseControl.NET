@@ -29,7 +29,7 @@
       method="post">
   <table width="100%">
     <tr>
-      <td align="right">
+      <td align="left">
         <input type="submit"
                align="right"
                name="Refresh"

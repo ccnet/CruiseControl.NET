@@ -28,7 +28,7 @@
       method="post">
   <table width="100%">
     <tr>
-      <td align="right">
+      <td align="left">
         <input type="submit"
                align="right"
                name="Refresh"
@@ -49,7 +49,7 @@
 #end
 
 <span>
-  <div style="margin-bottom: 5px; text-align: right">
+  <div style="margin-bottom: 5px; text-align: left">
      <a id="showAll" style="cursor:pointer;color:blue; text-decoration:underline;" onclick="$('.showLink').hide(); $('.hideLink').show(); $('.statusTable').show()">$translations.Translate("Show All")</a>
      <a id="hideAll" style="margin-right:25px;cursor:pointer;color:blue; text-decoration:underline;" onclick="$('.showLink').show(); $('.hideLink').hide(); $('.statusTable').hide()">$translations.Translate("Hide All")</a>
   </div>
