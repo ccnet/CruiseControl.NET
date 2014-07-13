@@ -354,6 +354,8 @@ label
             <input type="button" id="loadPackageButton" value="$translations.Translate("Load Package")" />
             <input type="submit" value="$translations.Translate("Reload dashboard")" name="Action" />
             <input type="submit" value="$translations.Translate("Logout")" name="Action" />
+            <input type="submit" value="$translations.Translate("Restart dashboard")" name="Action" style="margin-left: 50px;" />
+
         </div>
     </form>
 </fieldset>

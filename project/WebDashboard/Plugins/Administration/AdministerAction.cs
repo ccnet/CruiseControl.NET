@@ -134,6 +134,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 {
                     Logout();
                 }
+                else if (action == this.translations.Translate("Restart dashboard"))
+                {
+                    HttpRuntime.UnloadAppDomain();
+                }
                 else
                 {
                     velocityContext["Error"] = this.translations.Translate("Unknown action '{0}'", action);
