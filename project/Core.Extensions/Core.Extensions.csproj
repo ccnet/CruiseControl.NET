@@ -133,6 +133,13 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if not "$(ConfigurationName)" == "Build" xcopy /Y "$(TargetPath)" "$(SolutionDir)console\bin\$(ConfigurationName)\"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">
+      if not "$(ConfigurationName)" == "Build" xcopy /Y "$(TargetPath)" "$(SolutionDir)console/bin/$(ConfigurationName)/"
+    </PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">
+      if [ "$(ConfigurationName)" != "Build" ]; then
+          cp "$(TargetPath)" "$(SolutionDir)console/bin/$(ConfigurationName)/"
+      fi
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -933,8 +933,10 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>mkdir "$(ProjectDir)\xsl"
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(ProjectDir)\xsl"
 xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(ProjectDir)xsl"
+cp "$(SolutionDir)xsl"/* "$(ProjectDir)xsl"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
