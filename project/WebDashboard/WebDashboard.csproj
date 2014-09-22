@@ -826,6 +826,15 @@
     <Content Include="packages\ServerConfig\Manifest.xml" />
     <Content Include="packages\ServerInformation\Manifest.xml" />
     <Content Include="packages\ServerLog\Manifest.xml" />
+    <Content Include="Styles\css\dashboard.min.css" />
+    <Content Include="Styles\fonts\fontawesome-webfont.svg" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Styles\fonts\montserrat-regular-webfont.svg" />
+    <Content Include="Styles\img\avatar.jpg" />
+    <Content Include="Styles\index.html" />
+    <Content Include="Styles\js\dashboard.min.js" />
+    <Content Include="Styles\js\templates.min.js" />
+    <Content Include="Styles\js\vendors.min.js" />
     <Content Include="Themes\liquidBlue\cruisecontrol.css" />
     <Content Include="Themes\liquidBlue\images\arrow.gif" />
     <Content Include="Themes\liquidBlue\images\bullet_black.png" />
@@ -855,6 +864,13 @@
       <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="Styles\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Styles\fonts\fontawesome-webfont.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\fonts\montserrat-regular-webfont.eot" />
+    <Content Include="Styles\fonts\montserrat-regular-webfont.ttf" />
+    <Content Include="Styles\fonts\montserrat-regular-webfont.woff" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
     <None Include="templates\AdministerDashboard.vm">
@@ -954,6 +970,6 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
-  </ProjectExtensions>  
+  </ProjectExtensions>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
 </Project>
