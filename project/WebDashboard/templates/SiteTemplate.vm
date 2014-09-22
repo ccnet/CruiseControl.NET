@@ -1,70 +1,90 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
 <html>
 	<head>
-		<title>CCNet $headersuffix</title>
-		<link type="text/css" rel="stylesheet" href="$applicationPath/cruisecontrol.css" />
-		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/theme/ui.all.css" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CCNet $headersuffix</title>
+		<link rel="stylesheet" href="$applicationPath/Styles/css/dashboard.min.css" />
 		<link rel="shortcut icon" href="$applicationPath/AppIcon.ico" />
-		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/highlight/styles/github.css">
-		<meta http-equiv="refresh" content="$refreshinterval" > 		
-		<script src="$applicationPath/javascript/highlight/highlight.pack.js"></script>		
-		<script src="$applicationPath/javascript/ccnet.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jquery.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jquery-ui.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jquery.metadata.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jquery.tablesorter.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jQuery.ccnet.js" type="text/javascript"></script>
 	</head>
-	<body class="wholepage">
-		<table class="main-panel" border="0" width="100%">
-			<tr>
-				<td valign="middle" align="left">
-					<a href="http://www.cruisecontrolnet.org"><img src="$applicationPath/images/ccnet_logo.gif" border="0" alt="$translations.Translate("CruiseControlNETLogo")" /></a>
-				</td>
-				<td align="right" valign="bottom">
-					$loginView
-					<a href="$applicationPath/doc/index.html">$translations.Translate("Documentation")</a>
-				</td>
-			</tr>
-		</table>
-		<table class="TopControls" border="0" width="100%" cellpadding="3" cellspacing="0">
-			<tr>
-				<td valign="middle" align="left">$breadcrumbs</td>
-				<td valign="middle" align="right"><p>$translations.Translate("Version") : $dashboardversion</p></td>
-			</tr>
-		</table>
-		<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
-			<tr>
-				<td valign="top" id="LeftHandSide" bgcolor="#eeeedd" width="180">
-					<table id="Plugins" cellpadding="3" cellspacing="0" border="0">
-						<tr><td><img src="$applicationPath/images/shim.gif" width="180" height="1" alt="" /></td></tr>
-						<tr><td>$sidebar</td></tr>
-					</table>
-				</td>
-				<td width="2"><img src="$applicationPath/images/shim.gif" alt="" width="2"/></td>
-				<td valign="top" bgcolor="#ffffff">
-					<table border="0" align="center" cellpadding="3" cellspacing="0" width="100%">
-						<tr><td>
-						<!-- Main content: Start -->
-						$mainContent
-						<!-- Main content: End -->
-						</td></tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td height="2" colspan="3"></td>
-			</tr>
-		</table>
-		<table class="Footer" width="100%">
-			<tr valign="top">
-				<td>
-					<p>$translations.Translate("PageRendered", $renderedAt)</p>
-				</td>
-				<td align="right">
-					<a href="http://opensource.thoughtworks.com/"><img src="$applicationPath/images/tw_open_source_small.png" border="0" alt="ThoughtWorks Open Source"/></a>
-				</td>
-			</tr>
-		</table>
+	<body>
+        <div id="page-wrapper" class="active"> <!-- TODO: include JS to toggle the active class -->
+
+            <!-- *** SIDEBAR *** -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar">
+                    <li class="sidebar-main">
+                        <a href="#0">
+                            CCNet
+                            <span class="menu-icon glyphicon glyphicon-transfer"></span>
+                        </a>
+                    </li>
+                    $sidebar
+                    <li class="sidebar-title separator"><span>QUICK LINKS</span></li>
+                    <li class="sidebar-list">
+                        <a href="$applicationPath/doc/index.html">$translations.Translate("Documentation") <span class="menu-icon fa fa-book"></span></a>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="col-xs-4">
+                        <a href="https://github.com/ccnet/CruiseControl.NET">
+                            Github
+                        </a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="#0">
+                            About
+                        </a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a href="#0">
+                            Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- *** END SIDEBAR *** -->
+
+            <div id="content-wrapper">
+                <div class="page-content">
+
+                    <!-- *** HEADER *** -->
+
+                    <div class="row header">
+                        <div class="col-xs-12">
+                            <div class="user pull-right" style="margin: 10px;">
+                                <div class="item">
+                                    <button class="btn btn-primary">Login</button>
+                                </div>
+                            </div>
+                            <div class="meta">
+                                <div class="page">
+                                    Cruise Control .NET
+                                    <small>$translations.Translate("Version") : $dashboardversion</small>
+                                </div>
+                                <div class="breadcrumb-links">
+                                    $breadcrumbs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- *** MAIN CONTENT *** -->
+                    $mainContent
+
+                    <!-- *** FOOTER *** -->
+
+                    <!-- TODO: align and style the footer properly -->
+                    <footer>
+                        <!-- TODO: how useful is the page rendered time? Get rid of it? -->
+                        <p>$translations.Translate("PageRendered", $renderedAt)</p>
+
+                        <!-- TODO: the background colour on this image is wrong:  -->
+                        <a href="http://opensource.thoughtworks.com/"><img src="$applicationPath/images/tw_open_source_small.png" border="0" alt="ThoughtWorks Open Source" /></a>
+                    </footer>
+
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
