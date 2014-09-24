@@ -1,0 +1,3 @@
+[submodule "project/WebDashboard/Responsive-Dashboard"]
+	path = project/WebDashboard/Responsive-Dashboard
+	url = https://github.com/ccnet/Responsive-Dashboard.git
