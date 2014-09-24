@@ -1455,11 +1455,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>mkdir "$(TargetDir)xsl"
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(TargetDir)xsl"
 copy "$(ProjectDir)test.config" "$(TargetPath).config"
 xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"
 xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q
 copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(TargetDir)xsl"
+cp "$(ProjectDir)test.config" "$(TargetPath).config"
+cp "$(SolutionDir)xsl"/* "$(TargetDir)xsl"
+cp -R "$(ProjectDir)resources"/* "$(TargetDir)"
+cp "$(ProjectDir)../../Tools/sleeper.exe" "$(TargetDir)"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>

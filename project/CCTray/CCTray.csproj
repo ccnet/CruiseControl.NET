@@ -182,8 +182,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>copy "$(ProjectDir)..\..\tools\cm17a\cm17a.exe" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">
+      copy "$(ProjectDir)..\..\Tools\cm17a\cm17a.exe" "$(TargetDir)"
+    </PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">
+      cp "$(ProjectDir)../../Tools/cm17a/cm17a.exe" "$(TargetDir)"
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

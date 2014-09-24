@@ -188,34 +188,34 @@
     </Compile>
     <Compile Include="Config\ConfigurationTrace.cs" />
     <Compile Include="Config\ConfigurationValidationUtils.cs" />
-    <Compile Include="Config\Preprocessor\Evaluator.cs" />
-    <Compile Include="Config\Preprocessor\DebuggingWriter.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ConditionalProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\CountProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\CreateElementProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\DefaultProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\DefineProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ElementProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\EvalProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ExpandSymbolProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ForEachProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ForProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\IfDefProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\IfNDefProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\IfProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\IgnoreProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ImportProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\IncludeProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ProcessingInstructionProcessor.cs" />
-    <Compile Include="Config\Preprocessor\ElementProcessors\ScopeProcessor.cs" />
-    <Compile Include="Config\Preprocessor\Exceptions.cs" />
-    <Compile Include="Config\Preprocessor\ConfigPreprocessor.cs" />
-    <Compile Include="Config\Preprocessor\PreprocessorEnvironment.cs" />
-    <Compile Include="Config\Preprocessor\PreprocessorSettings.cs" />
-    <Compile Include="Config\Preprocessor\SymbolicDef.cs" />
-    <Compile Include="Config\Preprocessor\Validation.cs" />
-    <Compile Include="Config\Preprocessor\XHelpers.cs" />
+    <Compile Include="Config\preprocessor\Evaluator.cs" />
+    <Compile Include="Config\preprocessor\DebuggingWriter.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ConditionalProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\CountProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\CreateElementProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\DefaultProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\DefineProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ElementProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\EvalProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ExpandSymbolProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ForEachProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ForProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\IfDefProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\IfNDefProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\IfProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\IgnoreProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ImportProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\IncludeProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ProcessingInstructionProcessor.cs" />
+    <Compile Include="Config\preprocessor\ElementProcessors\ScopeProcessor.cs" />
+    <Compile Include="Config\preprocessor\Exceptions.cs" />
+    <Compile Include="Config\preprocessor\ConfigPreprocessor.cs" />
+    <Compile Include="Config\preprocessor\PreprocessorEnvironment.cs" />
+    <Compile Include="Config\preprocessor\PreprocessorSettings.cs" />
+    <Compile Include="Config\preprocessor\SymbolicDef.cs" />
+    <Compile Include="Config\preprocessor\Validation.cs" />
+    <Compile Include="Config\preprocessor\XHelpers.cs" />
     <Compile Include="ConsoleRunnerArguments.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -269,7 +269,7 @@
     <Compile Include="Config\NetReflectorConfigurationReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Config\Preprocessor\Utils.cs" />
+    <Compile Include="Config\preprocessor\Utils.cs" />
     <Compile Include="Config\ServerConfiguration.cs" />
     <Compile Include="Config\ServerConfigurationHandler.cs" />
     <Compile Include="Config\XmlValidatingLoader.cs">
@@ -1215,7 +1215,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>mkdir "$(TargetDir)xsl"
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(TargetDir)xsl"
 xcopy /q /y "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(TargetDir)xsl"
+cp "$(SolutionDir)xsl"/* "$(TargetDir)xsl"</PostBuildEvent>
   </PropertyGroup>
 </Project>
