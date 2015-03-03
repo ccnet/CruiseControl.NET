@@ -28,12 +28,36 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// &lt;/converters&gt;
     /// </code>
     /// </example>
+    /// <para>
+    /// Take the following ldap setup : 
+    /// <code>
+    /// domain name       : FortKnox
+    /// sAMAccountName    : JB
+    /// givenName         : James
+    /// sn                : Bond
+    /// displayName       : James Bond
+    /// mail              : James.Bond@fortKnox.com
+    /// </code>
+    /// Suppose the source control displays the modifying user as 'jb', you need the following in the ldapConverter
+    /// <code>
+    /// DomainName = FortKnox
+    /// LdapQueryField = mail
+    /// SourceControlFieldToLdapMapper = SAMAccountName
+    /// </code>
+    /// Suppose the source control displays the modifying user as 'james bond', you need the following in the ldapConverter
+    /// <code>
+    /// DomainName = FortKnox
+    /// LdapQueryField = mail
+    /// SourceControlFieldToLdapMapper = displayName
+    /// </code>
+    /// </para>
     [ReflectorType("ldapConverter")]
     public class EmailLDAPConverter : IEmailConverter
     {
         private string domainName = string.Empty;
         private string ldap_Mail = "mail";
         private string ldap_QueryField = "MailNickName";
+        private string sourceControlFieldToLdapMapper = "SAMAccountName";
         private string ldap_LogOnUser = string.Empty;
         private PrivateString ldap_LogOnPassword = string.Empty;
 
@@ -61,6 +85,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             get { return ldap_QueryField; }
             set { ldap_QueryField = value; }
         }
+
+
+
+        /// <summary>
+        /// The field in LDAP to use as lookup reference for the user name of the source control.
+        /// </summary>
+        /// <version>1.9</version>
+        /// <default>SAMAccountName</default>
+        [ReflectorProperty("SourceControlFieldToLdapMapper", Required = false)]
+        public string SourceControlFieldToLdapMapper
+        {
+            get { return sourceControlFieldToLdapMapper; }
+            set { sourceControlFieldToLdapMapper = value; }
+
+        }
+
 
         /// <summary>
         /// Username for logging into the LDAP service.
@@ -102,28 +142,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <param name="username">The username.</param>
         /// <returns>The email address.</returns>
         public string Convert(string username)
-        {           
+        {
             string ldapPath = @"LDAP://" + domainName;
-            string ldapFilter = @"(&(objectClass=user)(SAMAccountName=" + username + "))";
+            string ldapFilter = @"(&(objectClass=user)(" + sourceControlFieldToLdapMapper + "=" + username + "))";
             string[] ldapProperties = { ldap_Mail, ldap_QueryField };
 
             System.DirectoryServices.DirectoryEntry domain;
-            if (ldap_LogOnUser.Length > 0 )
+            if (ldap_LogOnUser.Length > 0)
             {
-                domain = new System.DirectoryServices.DirectoryEntry(ldapPath,ldap_LogOnUser,ldap_LogOnPassword.PrivateValue);
+                domain = new System.DirectoryServices.DirectoryEntry(ldapPath, ldap_LogOnUser, ldap_LogOnPassword.PrivateValue);
             }
             else
             {
                 domain = new System.DirectoryServices.DirectoryEntry(ldapPath);
             }
-            
+
 
             System.DirectoryServices.DirectorySearcher searcher = new System.DirectoryServices.DirectorySearcher(domain);
             System.DirectoryServices.SearchResult result;
 
             searcher.Filter = ldapFilter;
             searcher.PropertiesToLoad.AddRange(ldapProperties);
-            
+
             result = searcher.FindOne();
 
             searcher.Dispose();
@@ -135,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
             else
             {
-                Core.Util.Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"No email adress found for user {0} in domain {1}",username,domainName));
+                Core.Util.Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture, "No email adress found for user {0} in domain {1}", username, domainName));
                 return null;
             }
         }
