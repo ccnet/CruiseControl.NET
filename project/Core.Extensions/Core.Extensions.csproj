@@ -142,4 +142,9 @@
       fi
     </PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      if not "$(ConfigurationName)" == "Build" xcopy /Y "$(TargetPath)" "$(SolutionDir)console\bin\$(ConfigurationName)\"
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
