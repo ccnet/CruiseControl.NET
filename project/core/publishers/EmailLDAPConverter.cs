@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.9</version>
         /// <default>SAMAccountName</default>
-        [ReflectorProperty("SourceControlFieldToLdapMapper", Required = false)]
+        [ReflectorProperty("sourceControlFieldToLdapMapper", Required = false)]
         public string SourceControlFieldToLdapMapper
         {
             get { return sourceControlFieldToLdapMapper; }
