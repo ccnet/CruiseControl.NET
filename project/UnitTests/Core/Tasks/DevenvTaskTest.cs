@@ -15,6 +15,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	{
 		private const string DEVENV_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com";
 
+        private const string DEVENV_2013_PATH = @"C:\Program Files\Microsoft Visual Studio 12\Common7\IDE\";
+        private const string DEVENV_2012_PATH = @"C:\Program Files\Microsoft Visual Studio 11\Common7\IDE\";
         private const string DEVENV_2010_PATH = @"C:\Program Files\Microsoft Visual Studio 10\Common7\IDE\";
         private const string DEVENV_2008_PATH = @"C:\Program Files\Microsoft Visual Studio 9\Common7\IDE\";
 		private const string DEVENV_2005_PATH = @"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\";
@@ -91,8 +93,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
 
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2010_PATH,
-                                         DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2013_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2010_PATH,DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
             Assert.AreEqual(DEVENV_2010_PATH + "devenv.com", task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
@@ -104,10 +108,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
            
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null,
-                                         DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2008_PATH,
-                                         DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2013_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null,DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2008_PATH,DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
@@ -183,6 +187,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
 
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2013_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2005_PATH,
@@ -230,6 +236,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
             
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2013_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
@@ -278,6 +286,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
            
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2013_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
