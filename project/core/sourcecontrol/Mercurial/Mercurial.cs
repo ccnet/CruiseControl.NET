@@ -156,6 +156,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 		public string Branch { get; set; }
 
 		/// <summary>
+		/// Repository bookmark.
+		/// </summary>
+		/// <version>1.8</version>
+		/// <default>None</default>
+		[ReflectorProperty("bookmark", Required = false)]
+		public string Bookmark { get; set; }
+
+		/// <summary>
 		/// User name used for commits.
 		/// </summary>
 		/// <version>1.6</version>
@@ -568,6 +576,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 				buffer.AddArgument("-b", Branch);
 				buffer.AddArgument("-r", Branch);
 			}
+			else if(!string.IsNullOrEmpty(Bookmark))
+			{
+				buffer.AddArgument("-r", Bookmark);
+			}
 			else
 			{
 				buffer.AddArgument("-r", "tip");
@@ -636,6 +648,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 			{
 				buffer.AddArgument("-b", Branch);
 			}
+			if(!string.IsNullOrEmpty(Bookmark))
+			{
+				buffer.AddArgument("-B", Bookmark);
+			}
 
 			buffer.AddArgument(Repository);
 
@@ -662,7 +678,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("update");
 
-			if(!string.IsNullOrEmpty(Branch))
+			if(!string.IsNullOrEmpty(Bookmark))
+			{
+				buffer.AddArgument(Bookmark);
+			}
+			else if(!string.IsNullOrEmpty(Branch))
 			{
 				buffer.AddArgument(Branch);
 			}
@@ -792,6 +812,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 			if(!string.IsNullOrEmpty(Branch))
 			{
 				buffer.AddArgument("-b", Branch);
+			}
+			if(!string.IsNullOrEmpty(Bookmark))
+			{
+				buffer.AddArgument("-B", Bookmark);
 			}
 
 			buffer.AddArgument("-f");
