@@ -723,9 +723,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.Controls.Add(this.pnlButtons);
             this.Controls.Add(this.serverChangedPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MaximizeBox = true;
             this.Menu = this.mainMenu;
-            this.MinimizeBox = false;
+            this.MinimizeBox = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "CCTray ";
