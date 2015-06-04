@@ -36,14 +36,14 @@
 					Total
 				</td>
 				<td class="header-label">
-					<xsl:value-of select="Summary/Coverage"/>
+					<xsl:value-of select="format-number(Summary/Coveredlines div Summary/Coverablelines, '0.0%')"/>
 				</td>
 				<td class="header-label">
 					95%
 				</td>
 				<td class="header-label">
           <xsl:choose>
-            <xsl:when test="substring-before(Summary/Coverage,'%') &lt; 95">
+            <xsl:when test="(Summary/Coveredlines div Summary/Coverablelines) &lt; 0.95">
               <span style="color:red">FAIL</span>
             </xsl:when>
             <xsl:otherwise>

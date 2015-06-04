@@ -52,7 +52,7 @@
           Coverage:
         </td>
         <td>
-          <xsl:value-of select="Summary/Coverage"/>
+          <xsl:value-of select="format-number(Summary/Coveredlines div Summary/Coverablelines, '0.0%')"/>
         </td>
       </tr>
       <tr>
