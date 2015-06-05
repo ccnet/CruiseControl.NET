@@ -90,6 +90,10 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					// We can start integration straight away as first in first served
 					AddToQueue(integrationQueueItem);
 				}
+				else if ( Count >= configuration.MaxSize )
+				{
+					throw new ConfigurationException(string.Format("Project '{0}' cannot be added to queue '{1}' as the queue is full", integrationQueueItem.Project.Name, Name));
+				}
 				else
 				{
 					// We need to see if we already have a integration request for this project on the queue

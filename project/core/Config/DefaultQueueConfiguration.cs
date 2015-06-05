@@ -92,6 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         private string name;
         private QueueDuplicateHandlingMode handlingMode = QueueDuplicateHandlingMode.UseFirst;
         private string lockQueueNames;
+		private int maxSize = int.MaxValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultQueueConfiguration"/> class.
@@ -142,6 +143,18 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         {
             get { return lockQueueNames; }
             set { lockQueueNames = value; }
+        }
+		
+		/// <summary>
+        /// The maximum number of items that can be exist in the queue.
+        /// </summary>
+        /// <default>none</default>
+        /// <version>1.4.2</version>
+        [ReflectorProperty("maxsize", Required = false)]
+        public virtual int MaxSize
+        {
+            get { return maxSize; }
+            set { maxSize = value; }
         }
 
         /// <summary>

@@ -21,6 +21,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// A list of the names of any other queues which should be locked when a project in this queue is building.
         /// </summary>
         string LockQueueNames { get; set; }
+		
+		/// <summary>
+        /// The maximum size of the the queue
+        /// </summary>
+        int MaxSize { get; set; }
 
         /// <summary>
         /// Gets or sets the projects.
