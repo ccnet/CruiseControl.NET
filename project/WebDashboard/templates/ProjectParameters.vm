@@ -9,7 +9,11 @@
       <th>$parameter.DisplayName:</th>
       <td>
         #if ($parameter.AllowedValues.Length > 0)
+          #if ($parameter.MultiSelect > 0)
+          <select name="param_$parameter.Name" multiple="true" size="$parameter.MultiSelect">
+          #else
           <select name="param_$parameter.Name">
+          #end
             #foreach ($value in $parameter.AllowedValues)
             #if ($parameter.ClientDefaultValue == $value)
             <option value="$value" selected>$value</option>
