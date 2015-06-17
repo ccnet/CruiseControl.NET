@@ -85,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         private bool myIsRequired/* = false*/;
         private NameValuePair[] myAllowedValues = { };
         private string myClientDefault;
-        private int multiSelect = 0;
         #endregion
 
         #region Constructors
@@ -132,24 +131,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         public override Type DataType
         {
             get { return typeof(string); }
-        }
-        #endregion
-
-        #region MultiSelect
-        /// <summary>
-        /// Allow for multiple selections?  If so, how many should be shown?
-        /// </summary>
-        /// <version>1.8.5</version>
-        /// <default>0</default>
-#if !NoReflector
-        [ReflectorProperty("multiselect", Required = false)]
-#endif
-        [XmlAttribute("multiselect")]
-        [DefaultValue(0)]
-        public virtual int MultiSelect
-        {
-            get { return multiSelect; }
-            set { multiSelect = value; }
         }
         #endregion
 

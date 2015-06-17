@@ -23,7 +23,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         private string myDisplayName = null;
         private string myDescription = null;
         private string myDefault = null;
-        private int multiSelect = 0;
         #endregion
 
         #region Constructors
@@ -130,24 +129,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// </summary>
         public abstract Type DataType { get; }
         #endregion
-
-        #region MultiSelect
-        /// <summary>
-        /// MultiSelect value for select lists, with size attribute
-        /// </summary>
-        /// <version>1.8.5</version>
-        /// <default>0</default>
-#if !NoReflector
-        [ReflectorProperty("multiselect", Required = false)]
-#endif
-        [XmlAttribute("multiselect")]
-        public virtual int MultiSelect
-        {
-            get { return multiSelect; }
-            set { multiSelect = value; }
-        }
-        #endregion
-
 
         #region AllowedValues
         /// <summary>
