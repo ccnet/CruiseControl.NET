@@ -483,6 +483,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result), priority,
                                                       successExitCodes);
             //processInfo.StreamEncoding = Encoding.UTF8;
+            processInfo.StandardInputContent = "";
             return processInfo;
         }
 

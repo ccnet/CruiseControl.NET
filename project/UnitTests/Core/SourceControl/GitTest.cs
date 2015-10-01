@@ -265,7 +265,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, NewProcessInfo(args, DefaultWorkingDirectory));
+			var processInfo = NewProcessInfo(args, DefaultWorkingDirectory);
+			processInfo.StandardInputContent = "";
+			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, processInfo);
+		}
+
+		private new void ExpectToExecuteArguments(string args)
+		{
+			ExpectToExecuteArguments(args, DefaultWorkingDirectory);
+		}
+
+		protected new void ExpectToExecuteArguments(string args, string workingDirectory)
+		{
+			ProcessInfo processInfo = NewProcessInfo(args, workingDirectory);
+			processInfo.StandardInputContent = "";
+			ExpectToExecute(processInfo);
 		}
 
 		[Test]
