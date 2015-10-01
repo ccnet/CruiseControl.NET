@@ -644,8 +644,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Verify
 			Assert.AreEqual(3, rows.Length);
-			Assert.AreEqual("C", rows[0].Name);
-			Assert.AreEqual("A", rows[1].Name);
+			Assert.AreEqual("A", rows[0].Name);
+			Assert.AreEqual("C", rows[1].Name);
 			Assert.AreEqual("B", rows[2].Name);
 
 			// Setup
@@ -659,8 +659,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Verify
 			Assert.AreEqual(3, rows.Length);
 			Assert.AreEqual("B", rows[0].Name);
-			Assert.AreEqual("C", rows[1].Name);
-			Assert.AreEqual("A", rows[2].Name);
+			Assert.AreEqual("A", rows[1].Name);
+			Assert.AreEqual("C", rows[2].Name);
 
 			VerifyAll();
 		}
