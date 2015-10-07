@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 07, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jun 18, 2015 by <font color="#0050B2">Atavuli</font>.
 				    </div>
 
 				    <h1><a name="SelectParameter-SelectParameter"></a>Select Parameter</h1>
@@ -42,13 +42,11 @@ This parameter can then be used by a dynamic value in a task.  </p>
 <span class="code-tag">&lt;/selectParameter&gt;</span></pre>
 </div></div>
 <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;selectParameter&gt;</span>
+<pre class="code-xml"><span class="code-tag">&lt;selectParameter mulitSelect=&quot;3&quot;&gt;</span>
   <span class="code-tag">&lt;name&gt;</span>Target<span class="code-tag">&lt;/name&gt;</span>
   <span class="code-tag">&lt;display&gt;</span>Target to Build<span class="code-tag">&lt;/display&gt;</span>
   <span class="code-tag">&lt;description&gt;</span>Which target do you want to build?<span class="code-tag">&lt;/description&gt;</span>
   <span class="code-tag">&lt;default&gt;</span>DEV<span class="code-tag">&lt;/default&gt;</span>
-  <span class="code-tag">&lt;minimum&gt;</span>3<span class="code-tag">&lt;/minimum&gt;</span>
-  <span class="code-tag">&lt;maximum&gt;</span>10<span class="code-tag">&lt;/maximum&gt;</span>
   <span class="code-tag">&lt;required&gt;</span>false<span class="code-tag">&lt;/required&gt;</span>
   <span class="code-tag">&lt;sourceFile&gt;</span>C:\Builds\Values.txt<span class="code-tag">&lt;/sourceFile&gt;</span>
 <span class="code-tag">&lt;/selectParameter&gt;</span></pre>
@@ -68,12 +66,18 @@ This parameter can then be used by a dynamic value in a task.  </p>
     <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
   <span class="code-tag">&lt;/publishers&gt;</span>
   <span class="code-tag">&lt;parameters&gt;</span>
-    <span class="code-tag">&lt;selectParameter&gt;</span>
-      <span class="code-tag">&lt;name&gt;</span>Target<span class="code-tag">&lt;/name&gt;</span>
+    <span class="code-tag">&lt;selectParameter multiSelect=&quot;3&quot;&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>TargetServerList<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;display&gt;</span>Target Server(s)<span class="code-tag">&lt;/display&gt;</span>
+      <span class="code-tag">&lt;description&gt;</span>Select one or more servers to deploy to.  Use the <strong>ctrl</strong> or <strong>cmd</strong> key to select more than one.<span class="code-tag">&lt;/description&gt;</span>
       <span class="code-tag">&lt;allowedValues&gt;</span>
-        <span class="code-tag">&lt;value name=<span class="code-quote">"Development"</span>&gt;</span>DEV<span class="code-tag">&lt;/value&gt;</span>
-        <span class="code-tag">&lt;value name=<span class="code-quote">"Test"</span>&gt;</span>TEST<span class="code-tag">&lt;/value&gt;</span>
-        <span class="code-tag">&lt;value name=<span class="code-quote">"Production"</span>&gt;</span>PROD<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer01.MyDomain.com"</span>&gt;</span>MyWebServer01<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer02.MyDomain.com"</span>&gt;</span>MyWebServer02<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer03.MyDomain.com"</span>&gt;</span>MyWebServer03<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer04.MyDomain.com"</span>&gt;</span>MyWebServer04<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer05.MyDomain.com"</span>&gt;</span>MyWebServer05<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer06.MyDomain.com"</span>&gt;</span>MyWebServer06<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"MyWebServer07.MyDomain.com"</span>&gt;</span>MyWebServer07<span class="code-tag">&lt;/value&gt;</span>
       <span class="code-tag">&lt;/allowedValues&gt;</span>
     <span class="code-tag">&lt;/selectParameter&gt;</span>
   <span class="code-tag">&lt;/parameters&gt;</span>
@@ -133,6 +137,14 @@ This parameter can then be used by a dynamic value in a task.  </p>
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> multiSelect </td>
+<td class='confluenceTd'> The number of items to show in the select box, allowing for multiple selections.   </td>
+<td class='confluenceTd'> Integer </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.8.5 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> name </td>
 <td class='confluenceTd'> The name of the parameter.   </td>
 <td class='confluenceTd'> String </td>
@@ -153,6 +165,7 @@ This parameter can then be used by a dynamic value in a task.  </p>
 <h2><a name="SelectParameter-Notes"></a>Notes</h2>
 
 <p>In order for this parameter to work, either the allowed values or a source file must be set. If both are set, the source file will be used.  </p>
+<p>In order to allow for multiple selections to be accepted, the multiSelect option must have a value greater than 1.  The resulting value will be a comma seperated list of selected items.</p>
 
 <div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
 <p>Documentation generated on Monday, 7 Dec 2009 at 3:22:47 AM</p></td></tr></table></div>
