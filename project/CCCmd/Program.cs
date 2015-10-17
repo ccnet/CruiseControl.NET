@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })             
  				.Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
-                .Add("pwd=", "the password to use for the user", v => { password = v;});        	
+                .Add("pwd=", "the password to use for the user", v => { password = v;});
         	try
         	{
         		extra = opts.Parse(args);
@@ -85,6 +85,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         break;
                     case CommandType.StopProject:
                         RunStopProject();
+                        break;
+                    case CommandType.Volunteer:
+                        RunVolunteer();
                         break;
                     default:
                         throw new CruiseControlException("Unknown action: " + command.ToString());
@@ -269,6 +272,29 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 catch (Exception error)
                 {
                     WriteError("ERROR: Unable to send ForceBuild request", error);
+                }
+            }
+        }
+
+        private static void RunVolunteer()
+        {
+            if (ValidateParameter(server, "--server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "--project"))
+            {
+                try
+                {
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Volunteering to fix '{0}'", project), ConsoleColor.White);
+                        string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} is fixing the build.", Environment.UserName);
+                        client.SendMessage(project, new Message(message, Message.MessageKind.Fixer));
+                        if (!quiet) WriteLine("Volunteer message sent", ConsoleColor.White);
+                    }
+                }
+                catch (Exception error)
+                {
+                    WriteError("ERROR: Unable to volunteer", error);
                 }
             }
         }
