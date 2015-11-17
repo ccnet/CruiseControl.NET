@@ -26,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static string userName;
         private static string password;
         private static bool xml;
+        private static string volunteer_name = Environment.UserName;
         private static BuildCondition condition = BuildCondition.ForceBuild;
 
         static void Main(string[] args)
@@ -42,7 +43,8 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })             
  				.Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
-                .Add("pwd=", "the password to use for the user", v => { password = v;});
+                .Add("pwd=", "the password to use for the user", v => { password = v;})
+                .Add("volunteer_name=", "the name to use when volunteering (defaults to Environment.UserName)", v => { volunteer_name = v; });
         	try
         	{
         		extra = opts.Parse(args);
@@ -287,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                     using (var client = GenerateClient())
                     {
                         if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Volunteering to fix '{0}'", project), ConsoleColor.White);
-                        string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} is fixing the build.", Environment.UserName);
+                        string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} is fixing the build.", volunteer_name);
                         client.SendMessage(project, new Message(message, Message.MessageKind.Fixer));
                         if (!quiet) WriteLine("Volunteer message sent", ConsoleColor.White);
                     }
