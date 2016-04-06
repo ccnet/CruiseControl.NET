@@ -50,7 +50,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
         }
 
-
         public string ServerName
         {
             get { return serverSpecifier.ServerName; }
@@ -145,12 +144,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             get { return url; }
         }
 
-
         public string Queue
         {
             get { return status.Queue; }
         }
-
 
         public int QueuePriority
         {
@@ -233,7 +230,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         {
             get { return parametersUrl; }
         }
-
 
         private string GetMessageText(Message.MessageKind messageType)
         {
