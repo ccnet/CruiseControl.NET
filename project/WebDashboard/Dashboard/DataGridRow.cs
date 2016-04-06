@@ -7,7 +7,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-
     public class DataGridRow
     {
         private readonly string buildStatus;
