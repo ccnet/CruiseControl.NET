@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
             catch (Exception e)
             {
-                throw new System.ArgumentException("File not found", "Argument");
+                throw new System.ArgumentException("File not found or corrupted. Error: " + e, "Argument");
             }
         }
 
