@@ -116,13 +116,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 foreach (IBuildSpecifier buildSpecifier in mostRecentBuildSpecifiers)
                 {
-                    lastFiveDataList = getData(serverSpecifier, projectSpecifier, dir); 
+                    lastFiveDataList = getBuildData(serverSpecifier, projectSpecifier, dir); 
                 }
             }
             return lastFiveDataList;
         }
 
-        private List<string> getData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir)
+        private List<string> getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir)
         {
             var dataToReturn = new List<string>();
             var file = String.Format(dir + @"{0}\ccnet\{1}\Artifacts\buildlogs\{2}", serverSpecifier.ServerName, projectSpecifier.ProjectName, buildSpecifier.BuildName);
