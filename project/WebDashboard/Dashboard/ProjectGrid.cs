@@ -45,7 +45,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     }
                 }
 
-                var lastFiveDataGridRows = getLastFiveDataGridRows(serverSpecifier, projectSpecifier, dir, farmService);
+                List<DataGridrow> lastFiveDataGridRows = getLastFiveDataGridRows(serverSpecifier, projectSpecifier, dir, farmService);
+                if(lastFiveDataGirRows.count == 0)
+                {
+                    MessageBox.Show("Data of the last 5 builds is missing!", "Error finding data", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                int queuePosition = getQueuePosition(status);
 
                 rows.Add(
                     new ProjectGridRow(status,
@@ -54,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                                        parameters.UrlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier),
                                        statistics,
                                        lastFiveDataGridRows,
+                                       queuePosition,
                                        parameters.Translation));
             }
 
@@ -111,7 +117,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         {
             var lastFiveDataList = new List<DataGridRow>();
             IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 5, BuildReportBuildPlugin.ACTION_NAME);
-
             if (Directory.Exists(dir))
             {
                 foreach (IBuildSpecifier buildSpecifier in mostRecentBuildSpecifiers)
@@ -156,9 +161,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
             catch (Exception e)
             {
-                //TODO: Return a good exception
+                throw new System.ArgumentException("File not found or corrupted. Error: " + e, "Argument");
             }
         }
-        
+
+        private int getQueuePosition(ProjectStatus status)
+        {
+            if(status.Activity.ToString().equals("Pending"))
+            {
+                return getPositionInQueueList();  
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        private int getPositionInQueueList()
+        {
+            int positionInQueue;
+            QueueSnapshot queueSnapshot = new QueueSnapshot(status.Queue);
+            var queueList = queueSnapshot.Request;
+            int count = 1; //Position 0 would be the building project
+            foreach (QueuedRequestSnapshot queueRequestSnapshot in queueList)
+            {
+                if (projectSpecifier.ProjectName == queueRequestSnapshot.ProjectName)
+                {
+                    positionInQueue = count;
+                }
+                count++;
+            }
+            return positionInQueue;
+        }
     }
 }
