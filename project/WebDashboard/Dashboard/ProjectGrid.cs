@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                                        parameters.UrlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier),
                                        parameters.UrlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier),
                                        statistics,
-                                       lastFiveDataGridRows,
+                                       lastFiveDataGridRows.ToArray,
                                        queuePosition,
                                        parameters.Translation));
             }
