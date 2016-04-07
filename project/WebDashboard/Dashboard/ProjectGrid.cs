@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     }
                 }
 
-                var lastFiveDataGridRows = getLastFiveDataGridrows(serverSpecifier, projectSpecifier, dir, farmService);
+                var lastFiveDataGridRows = getLastFiveDataGridRows(serverSpecifier, projectSpecifier, dir, farmService);
 
                 rows.Add(
                     new ProjectGridRow(status,
