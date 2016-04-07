@@ -133,163 +133,150 @@
 	  <tbody>
 
 		#set ($RowId = 0)
-		#set ($lastsFive = [])
-		#set ($lastsSpan = [])
-		#set ($lastsDates = [])
-		#set ($lastsLinks = [])
-		#set ($lastsRunningTime = [])
 		#foreach ($projectGridRow in $projectGrid)
-		#set ($RowId = $RowId + 1)
-		#set($cont=0)			
-		<tr id="projectData$RowId">
+			#set ($RowId = $RowId + 1)
+			#set($cont=0)			
+			
+			<tr id="projectData$RowId">
+				#set($add=$lastsFive.add("red"))
+				#set($add=$lastsFive.add("blue"))
 
-			#foreach($dataGridRow in $projectGridRow.LastFiveData)
-				#if ($translations.Translate($dataGridRow.BuildStatus) == "Failure" )
-					#set($color="red")
-					#set($span="Failure: ")
-				#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Exception" )
-					#set($color="orange")
-					#set($span="Exception: ")
-				#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Unknown" )
-					#set($color="blue")
-					#set($span="Unknown: ")
-				#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Success" )
-					#set($color="green")
-					#set($span="Success: ")
+				<td class="$color left project--name">
+					<a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
+				</td>
+				<td class="$color project--name">
+				#set($cont = 0)
+				#foreach($dataGridRow in $projectGridRow.LastFiveData)
+					#if ($translations.Translate($dataGridRow.BuildStatus) == "Failure" )
+						#set($color = "red")
+						#set($span = "Failure: ")
+					#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Exception" )
+						#set($color = "orange")
+						#set($span = "Exception: ")
+					#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Unknown" )
+						#set($color = "blue")
+						#set($span = "Unknown: ")
+					#elseif ($translations.Translate($dataGridRow.BuildStatus) == "Success" )
+						#set($color = "green")
+						#set($span = "Success: ")
+					#end
+					#set($date = $dataGridrow.Date)
+					#set($link = $dataGridRow.Link)
+					#set($runningTime = $dataGridRow.RunningTime)
+					<span id="spStatus" title="$span $date $runningTime">
+						<a href="$link">
+							<img src="http://contxpm5/ccnet/images/${color}circle.png" class="icon$cont">
+						</a>
+					</span>
+					#set($cont = $cont + 1)
 				#end
-				#set($add=$lastsFive.add($color))
-				#set($add=$lastsSpan.add($span))
-				#set($add=$lastsDates.add($dataGridrow.Date))
-				#set($add=$lastsLinks.add($dataGridRow.Link))
-				#set($add=$lastsRunningTime.add($dataGridRow.RunningTime))
-			#end
-			
-			<td class="$color left project--name">
-				<a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
+				</td>
+				
+				<td class="$color left project--name">$projectGridRow.Statistics</td>
+				#if ($projectGridRow.Breakers.Length == 0)
+					<td class="left width--content">
+				#else
+					<td class="left scroll--content">
+				#end
+						<ul>
+							#if ($projectGridRow.Fixer.Length > 0)
+								<li class="content--fixer">$projectGridRow.Fixer</li>
+							#end
+							#if (($projectGridRow.Breakers.Length > 0) && ($translations.Translate($projectGridRow.BuildStatus) == "Failure"))
+								<li class="content--breaker">
+									$translations.Translate("Breakers :<br>{0}",$projectGridRow.Breakers)
+								</li>
+							#end
+						</ul>
+					</td>
+			<td>
+				<a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.LastBuildDate</a>
 			</td>
-			
-			<td class="$color project--name">
-			#set($cont=0)
-			#foreach($last in $lastsFive)
-				#set($curSpan = $lastsSpan.get($cont))
-				#set($curDate = $lastsDates.get($cont)) 
-				#set($curRunningTime = $lastsRunningTime.get($cont))
-				#set($curLink = $lastsLinks.get($cont))
-				#set($curColor = $lastsFive.get($cont))
-				<span id="spStatus" title="$curSpan $curDate $curRunningTime">
-					<a href="$curLink">
-						<img src="http://contxpm5/ccnet/images/${curColor}circle.png" class="icon$cont">
-					</a>
-				</span>
-				#set($cont=$cont+1)
-			#end
-			#set ($lastFive = [])
-			#set ($lastSpan = [])
-			#set ($lastsDates = [])
-			#set ($lastsLinks = [])
-			#set ($lastsRunningTime = [])
-			</td>
-			
-			<td class="$color left project--name">$projectGridRow.Statistics</td>
-		  #if ($projectGridRow.Breakers.Length == 0)
-			<td class="left width--content">
-		  #else
-			<td class="left scroll--content">
-		  #end
-			<ul>
-				#if ($projectGridRow.Fixer.Length > 0)
-					<li class="content--fixer">$projectGridRow.Fixer</li>
-				#end
-				#if (($projectGridRow.Breakers.Length > 0) && ($translations.Translate($projectGridRow.BuildStatus) == "Failure"))
-					<li class="content--breaker">
-						$translations.Translate("Breakers :<br>{0}",$projectGridRow.Breakers)
-					</li>
-				#end
-			</ul>
-		</td>
-		<td>
-			<a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.LastBuildDate</a>
-		</td>
 
-		<td>
-		    <a id= "demo" href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$curRunningTime</a>
-		</td>
-			
-		<td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
-		<td class="status$projectGridRow.Status">$projectGridRow.QueuePriority</td>
-		<td class="activity$projectGridRow.Activity">$translations.Translate($projectGridRow.Activity.ToString())($projectGridRow.QueuePriority)</td>
-		<td class="admin--icon">
-		  <form method="post"
-				style="margin-bottom:0px;">
-			<input type="hidden"
-				   name="projectName"
-				   value="$projectGridRow.Name" />
-			<input type="hidden"
-				   name="serverName"
-				   value="$projectGridRow.ServerName" />
-			<font color="Black">
-			<!-- Action's Icons -->
-			  #if ($projectGridRow.allowForceBuild)
-				  #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
-				  <span title="Force run">
-					<input type="image"
-						 name="$projectGridRow.ForceAbortBuildButtonName"
-						 src="http://contxpm5/ccnet/images/force.png"
-						 onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"
-						 class="action--icon"/>
-				  </span>
-				  #else
-				  <span title="Abort">
-					<input type="image"
-						 name="$projectGridRow.ForceAbortBuildButtonName"
-						 src="http://contxpm5/ccnet/images/abort.png"
-						 class="action--icon"/>
-				  </span>
-				  #end
-			  #end
-			  #if ($projectGridRow.AllowStartStopBuild)
-				  #if ($translations.Translate($projectGridRow.Status) == "Running")
-				  <span title="Stop">
-					<input type="image"
-						 name="$projectGridRow.StartStopButtonName"
-						 src="http://contxpm5/ccnet/images/stopsmall.png" 
-						 class="action--iconSmall"/>
-				  </span>
-				  #else
-				  <span title="Launch">
-					<input type="image"
-						   name="$projectGridRow.StartStopButtonName"
-						   src="http://contxpm5/ccnet/images/playsmall.png" 
-						   class="action--iconSmall"/>
-				  </span>
-				  #end
-				  #if ($translations.Translate($projectGridRow.Activity.ToString()) == "Pending")
-					  <!-- Right now cancel pending acts like stop activity-->
-					  <span title="Cancel pending">
+			<td>
+				<a id= "demo" href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$curRunningTime</a>
+			</td>
+				
+			<td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
+			<td class="status$projectGridRow.Status">$projectGridRow.QueuePriority</td>
+			<td class="activity$projectGridRow.Activity">
+				$translations.Translate($projectGridRow.Activity.ToString())($projectGridRow.QueuePriority)
+				#if($translations.Translate($projectGridRow.Activity.ToString()) == "Pending")
+					($projectGridRow.QueuePosition)
+				#end
+			</td>
+			<td class="admin--icon">
+			  <form method="post"
+					style="margin-bottom:0px;">
+				<input type="hidden"
+					   name="projectName"
+					   value="$projectGridRow.Name" />
+				<input type="hidden"
+					   name="serverName"
+					   value="$projectGridRow.ServerName" />
+				<font color="Black">
+				<!-- Action's Icons -->
+				  #if ($projectGridRow.allowForceBuild)
+					  #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+					  <span title="Force run">
 						<input type="image"
-							 name="$projectGridRow.StartStopButtonName"
-							 src="http://contxpm5/ccnet/images/out.png"
+							 name="$projectGridRow.ForceAbortBuildButtonName"
+							 src="http://contxpm5/ccnet/images/force.png"
+							 onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"
 							 class="action--icon"/>
 					  </span>
+					  #else
+					  <span title="Abort">
+						<input type="image"
+							 name="$projectGridRow.ForceAbortBuildButtonName"
+							 src="http://contxpm5/ccnet/images/abort.png"
+							 class="action--icon"/>
+					  </span>
+					  #end
 				  #end
+				  #if ($projectGridRow.AllowStartStopBuild)
+					  #if ($translations.Translate($projectGridRow.Status) == "Running")
+					  <span title="Stop">
+						<input type="image"
+							 name="$projectGridRow.StartStopButtonName"
+							 src="http://contxpm5/ccnet/images/stopsmall.png" 
+							 class="action--iconSmall"/>
+					  </span>
+					  #else
+					  <span title="Launch">
+						<input type="image"
+							   name="$projectGridRow.StartStopButtonName"
+							   src="http://contxpm5/ccnet/images/playsmall.png" 
+							   class="action--iconSmall"/>
+					  </span>
+					  #end
+					  #if ($translations.Translate($projectGridRow.Activity.ToString()) == "Pending")
+						  <!-- Right now cancel pending acts like stop activity-->
+						  <span title="Cancel pending">
+							<input type="image"
+								 name="$projectGridRow.StartStopButtonName"
+								 src="http://contxpm5/ccnet/images/out.png"
+								 class="action--icon"/>
+						  </span>
+					  #end
+				  #end
+				  #if ($translations.Translate($projectGridRow.BuildStatus) != "Success")
+					<button>Volunteer to fix</button>
+				  #end
+				</font>
+			  </form>
+			</td>
+		  </tr>
+		  #if ($projectGridRow.BuildStage.Length > 0)
+			<tr id="link$RowId" class="buildStatus">
+			  #if ($wholeFarm)
+				<td colspan="10">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
+			  #else
+				<td colspan="9">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
 			  #end
-			  #if ($translations.Translate($projectGridRow.BuildStatus) == "Failure" || $translations.Translate($projectGridRow.BuildStatus) == "Exception" || $translations.Translate($projectGridRow.BuildStatus) == "Unknown" )
-				<button>Volunteer to fix</button>
-			  #end
-			</font>
-		  </form>
-		</td>
-	  </tr>
-	  #if ($projectGridRow.BuildStage.Length > 0)
-		<tr id="link$RowId" class="buildStatus">
-		  #if ($wholeFarm)
-			<td colspan="10">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
-		  #else
-			<td colspan="9">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
+			</tr>
 		  #end
-		</tr>
-	  #end
-		#end
+			#end
 	  </tbody>
 	  #if ($barAtBottom)
 	  <tfoot>
