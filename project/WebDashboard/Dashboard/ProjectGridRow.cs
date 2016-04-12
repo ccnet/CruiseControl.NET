@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,6 +14,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly IServerSpecifier serverSpecifier;
         private readonly string url;
         private readonly string parametersUrl;
+        private readonly string statistics;
+        private readonly List<DataGridRow> lastFiveData;
+        private readonly int queuePosition;
+        private Translations translations;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
             string url, string parametersUrl, Translations translations)
@@ -23,10 +28,66 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             this.parametersUrl = parametersUrl;
         }
 
-        public string Name
+        public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
+            string url, string parametersUrl, string statistics, List<DataGridRow> lastFiveData, int queuePosition, Translations translations)
+            : this(status, serverSpecifier, url, parametersUrl, translations)
         {
-            get { return status.Name; }
+            this.statistics = statistics;
+            this.lastFiveData = lastFiveData;
+            this.queuePosition = queuePosition;
         }
+
+        public string Name { get { return status.Name; } private set; }
+
+        public string ServerName { get { return serverSpecifier.ServerName; } private set; }
+
+        public string Category { get { return status.Category; } private set; }
+
+        public string BuildStatus { get { return status.BuildStatus.ToString(); } private set; }
+
+        public List<DataGridRow> LastFiveData { get { return lastFiveData; } private set; }
+
+        public string BuildStatusHtmlColor { get { return CalculateHtmlColor(status.BuildStatus); } private set; }
+
+        public string LastBuildDate { get { return DateUtil.FormatDate(status.LastBuildDate); } private set; }
+
+        public string LastBuildLabel { get { return (status.LastBuildLabel != null ? status.LastBuildLabel : "no build available"); } private set; }
+
+        public string Status { get { return status.Status.ToString(); } private set; }
+
+        public string Activity { get { return status.Activity.ToString(); } private set; }
+
+        public string CurrentMessage { get { return status.CurrentMessage; } private set; }
+
+        public string Breakers { get { return GetMessageText(Message.MessageKind.Breakers); } private set; }
+
+        public string FailingTasks { get { return GetMessageText(Message.MessageKind.FailingTasks); } private set; }
+
+        public string Fixer { get { return GetMessageText(Message.MessageKind.Fixer); } private set; }
+
+        public string Url { get { return url; } private set; }
+
+        public string Queue { get { return status.Queue; } private set; }
+
+        public int QueuePriority { get { return status.QueuePriority; } private set; }
+
+        public int QueuePosition { get { return queuePosition; } private set; }
+
+        public string StartStopButtonName { get { return (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; } private set; }
+
+        public string StartStopButtonValue { get { return (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start"; } private set; }
+
+        public string ForceAbortBuildButtonName { get { return (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild"; } private set; }
+
+        public string ForceAbortBuildButtonValue { get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; } private set; }
+
+        public bool AllowForceBuild { get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; } private set; }
+
+        public bool AllowStartStopBuild { get { return serverSpecifier.AllowStartStopBuild && status.ShowStartStopButton; } private set; }
+
+        public string Statistics { get { return this.statistics; } private set; }
+
+        public string ParametersUrl { get { return parametersUrl; } private set; }
 
         public string Description
         {
@@ -36,32 +97,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
                 return status.Description;
             }
-        }
 
-
-        public string ServerName
-        {
-            get { return serverSpecifier.ServerName; }
-        }
-
-        public string Category
-        {
-            get { return status.Category; }
-        }
-
-        public string BuildStatus
-        {
-            get { return status.BuildStatus.ToString(); }
-        }
-
-        public string BuildStatusHtmlColor
-        {
-            get { return CalculateHtmlColor(status.BuildStatus); }
-        }
-
-        public string LastBuildDate
-        {
-            get { return DateUtil.FormatDate(status.LastBuildDate); }
+            private set;
         }
 
         public string NextBuildTime
@@ -77,98 +114,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     return DateUtil.FormatDate(status.NextBuildTime);
                 }
             }
+
+            private set;
         }
 
-        public string LastBuildLabel
-        {
-            get { return (status.LastBuildLabel != null ? status.LastBuildLabel : "no build available"); }
-        }
-
-        public string Status
-        {
-            get { return status.Status.ToString(); }
-        }
-
-        public string Activity
-        {
-            get { return status.Activity.ToString(); }
-        }
-
-        public string CurrentMessage
-        {
-            get { return status.CurrentMessage; }
-        }
-
-        public string Breakers
+        public string BuildStage
         {
             get
             {
-                return GetMessageText(Message.MessageKind.Breakers);
+                string CurrentBuildStage = status.BuildStage;
+
+                if (CurrentBuildStage.Length == 0)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return CurrentBuildStage;
+                }
             }
-        }
-
-        public string FailingTasks
-        {
-            get
-            {
-                return GetMessageText(Message.MessageKind.FailingTasks);
-            }
-        }
-
-        public string Fixer
-        {
-            get
-            {
-                return GetMessageText(Message.MessageKind.Fixer);
-            }
-        }
-
-        public string Url
-        {
-            get { return url; }
-        }
-
-
-        public string Queue
-        {
-            get { return status.Queue; }
-        }
-
-
-        public int QueuePriority
-        {
-            get { return status.QueuePriority; }
-        }
-
-
-        public string StartStopButtonName
-        {
-            get { return (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; }
-        }
-
-        public string StartStopButtonValue
-        {
-            get { return (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start"; }
-        }
-
-        public string ForceAbortBuildButtonName
-        {
-            get { return (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild"; }
-        }
-
-        public string ForceAbortBuildButtonValue
-        {
-            get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; }
-        }
-
-        public bool AllowForceBuild
-        {
-            get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; }
-        }
-
-        public bool AllowStartStopBuild
-        {
-            get { return serverSpecifier.AllowStartStopBuild && status.ShowStartStopButton; }
+            private set;
         }
 
         private string CalculateHtmlColor(IntegrationStatus integrationStatus)
@@ -187,29 +152,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
         }
 
-        public string BuildStage
-        {
-            get
-            {
-                string CurrentBuildStage = status.BuildStage;
-
-                if (CurrentBuildStage.Length == 0)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return CurrentBuildStage;
-                }
-            }
-        }
-
-        public string ParametersUrl
-        {
-            get { return parametersUrl; }
-        }
-
-
         private string GetMessageText(Message.MessageKind messageType)
         {
             foreach (Message m in status.Messages)
@@ -220,7 +162,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
             }
             return string.Empty;
-
         }
     }
 }
