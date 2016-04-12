@@ -21,12 +21,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             this.link = link;
         }
 
-        public string BuildStatus { get { return buildStatus; } private set; }
+        public string BuildStatus { get { return buildStatus; } }
 
-        public string Date { get { return date; } private set;  }
+        public string Date { get { return date; } }
 
-        public string RunningTime { get { return runningTime; } private set; }
+        public string RunningTime { get { return runningTime; } }
 
-        public string Link { get { return link; } private set; }
+        public string Link { get { return link; } }
     }
 }
