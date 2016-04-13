@@ -82,25 +82,6 @@
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"> : Abort |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run <b>}</b>
 	</div>
-	<!-- coment the code above and uncomment this to make hidden the legend and it will show up if you hover over it-->
-	<!--<button 
-		id="legend"
-		class="legend">
-			$translations.Translate('Legend')
-			<span id="grow" class="measuringWrapper">
-				<b> Build state { </b>
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/greencircle.png"> : Succes |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/redcircle.png"> : Failure |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/orangecircle.png"> : Exception |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/bluecircle.png"> : Unknown <b>}
-				/ Actions {</b>
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"> : Start |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"> : Stop |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"> : Abort |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run |
-				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"> : Cancel pending <b>}</b>
-			</span>
-	</button>-->
 	
 	#if ($projectGrid.Length > 0)
 	<table id="StatusGrid"
@@ -176,6 +157,9 @@
 					#set($date = $dataGridRow.Date)
 					#set($link = $dataGridRow.Link)
 					#set($runningTime = $dataGridRow.RunningTime)
+					#if($cont == 0)
+						#set($lastRunningTime = $runningTime)
+					#end
 					<span id="spStatus" title="$span $date Duration: $runningTime">
 						<a href="$link">
 							<img src="http://${projectGridRow.ServerName}/ccnet/images/${color}circle.png" class="icon$cont">
@@ -207,7 +191,7 @@
 			</td>
 
 			<td>
-				<a id= "demo" href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$runningTime</a>
+				<a id= "demo" href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$lastRunningTime</a>
 			</td>
 				
 			<td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
