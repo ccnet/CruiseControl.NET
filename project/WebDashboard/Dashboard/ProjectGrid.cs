@@ -182,40 +182,32 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 return getPositionInQueueList(status, serverSpecifier, projectSpecifier, farmService);  
             }
-            else
-            {
-                return -1;
-            }
+            return -1; 
         }
 
         private int getPositionInQueueList(ProjectStatus status, IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, IFarmService farmService)
         {
-            CruiseServerSnapshotListAndExceptions snapshot = farmService.GetCruiseServerSnapshotListAndExceptions(serverSpecifier, "");
-
+            CruiseServerSnapshotListAndExceptions snapshot = farmService.GetCruiseServerSnapshotListAndExceptions(serverSpecifier, string.Empty);
             List<QueueSnapshot> queues = new List<QueueSnapshot>();
 
-            for (int snapshotLoop = 0; snapshotLoop < snapshot.Snapshots.Length; snapshotLoop++)
+            foreach (CruiseServerSnapshot cruiseServerSnapshot in snapshot.Snapshots)
             {
-                QueueSetSnapshot queueSnapshot = snapshot.Snapshots[snapshotLoop].QueueSetSnapshot;
-                for (int queueLoop = 0; queueLoop < queueSnapshot.Queues.Count; queueLoop++)
-                {
-                    if(checkPositionQueue(queueLoop, queueSnapshot, projectSpecifier) > -1)
-                        return checkPositionQueue(queueLoop, queueSnapshot, projectSpecifier);
+                QueueSetSnapshot queueSnapshot = cruiseServerSnapshot.QueueSetSnapshot;
+                foreach (QueueSnapshot queueSnapshotItem in queueSnapshot.Queues) {
+                    var index = checkPositionQueue(queueSnapshotItem, projectSpecifier);
+                    if (index > -1) { return index; }
                 }
             }
             return -1;
         }
-
-        private int checkPositionQueue(int queueLoop, QueueSetSnapshot queueSnapshot, DefaultProjectSpecifier projectSpecifier)
+        private int checkPositionQueue(QueueSnapshot queueSnapshotItem, DefaultProjectSpecifier projectSpecifier)
         {
-            int cont = 0;
-            foreach (QueuedRequestSnapshot queuedRequestedSnaphot in queueSnapshot.Queues[queueLoop].Requests)
+            for (int i = 0; i<queueSnapshotItem.Requests.Count; i++)
             {
-                if (queuedRequestedSnaphot.ProjectName == projectSpecifier.ProjectName)
+                if (queueSnapshotItem.Requests[i].ProjectName == projectSpecifier.ProjectName)
                 {
-                    return cont;
+                    return i;
                 }
-                cont++;
             }
             return -1;
         }
