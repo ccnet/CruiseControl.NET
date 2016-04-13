@@ -39,40 +39,7 @@
 		  </td>
 		</tr>
 	  </table>
-	</form>
-	<meta charset="UTF-8">
-	<div id="legend" class="legend">
-		<b> Build state { </b>
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/greencircle.png"> : Succes |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/redcircle.png"> : Failure |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/orangecircle.png"> : Exception |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/bluecircle.png"> : Unknown <b>}
-		/ Actions {</b>
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/playsmall.png"> : Start |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/stopsmall.png"> : Stop |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/abort.png"> : Abort |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/force.png"> : Force run |
-		<img class="iconLegend" src="http://contxpm5/ccnet/images/out.png"> : Cancel pending <b>}</b>
-	</div>
-	<!-- coment the code above and uncomment this to make hidden the legend and it will show up if you hover over it-->
-	<!--<button 
-		id="legend"
-		class="legend">
-			$translations.Translate('Legend')
-			<span id="grow" class="measuringWrapper">
-				<b> Build state { </b>
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/greencircle.png"> : Succes |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/redcircle.png"> : Failure |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/orangecircle.png"> : Exception |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/bluecircle.png"> : Unknown <b>}
-				/ Actions {</b>
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/playsmall.png"> : Start |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/stopsmall.png"> : Stop |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/abort.png"> : Abort |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/force.png"> : Force run |
-				<img class="iconLegend" src="http://contxpm5/ccnet/images/out.png"> : Cancel pending <b>}</b>
-			</span>
-	</button>-->	
+	</form>	
 	#if ($forceBuildMessage.Length > 0)
 	<P>
 	  <span id="StatusLabel">
@@ -86,6 +53,7 @@
 	#set ($ProjectOKCounter = 0)
 	#set ($ProjectNOKCounter = 0)
 	#foreach ($projectGridRow in $projectGrid)
+		#set($ProjectServer = $projectGridRow.ServerName)
 		#if ($projectGridRow.BuildStatus == "Success")
 			#set ($ProjectOKCounter = $ProjectOKCounter + 1)
 		#else
@@ -102,6 +70,40 @@
 	#end
 	#set ($OKPercentToolTip = $OKPercent * 2)
 
+	#set($projectGrifRow = $projectGrid.get(0))
+	<meta charset="UTF-8">
+	<div id="legend" class="legend">
+		<b> Build state { </b>
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/greencircle.png"> : Succes |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/redcircle.png"> : Failure |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/orangecircle.png"> : Exception |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/bluecircle.png"> : Unknown <b>}
+		/ Actions {</b>
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"> : Start |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"> : Stop |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"> : Abort |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run <b>}</b>
+	</div>
+	<!-- coment the code above and uncomment this to make hidden the legend and it will show up if you hover over it-->
+	<!--<button 
+		id="legend"
+		class="legend">
+			$translations.Translate('Legend')
+			<span id="grow" class="measuringWrapper">
+				<b> Build state { </b>
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/greencircle.png"> : Succes |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/redcircle.png"> : Failure |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/orangecircle.png"> : Exception |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/bluecircle.png"> : Unknown <b>}
+				/ Actions {</b>
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"> : Start |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"> : Stop |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"> : Abort |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run |
+				<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"> : Cancel pending <b>}</b>
+			</span>
+	</button>-->
+	
 	#if ($projectGrid.Length > 0)
 	<table id="StatusGrid"
 		   class="SortableGrid">
@@ -178,7 +180,7 @@
 					#set($runningTime = $dataGridRow.RunningTime)
 					<span id="spStatus" title="$span $date Duration: $runningTime">
 						<a href="$link">
-							<img src="http://contxpm5/ccnet/images/${color}circle.png" class="icon$cont">
+							<img src="http://${projectGridRow.ServerName}/ccnet/images/${color}circle.png" class="icon$cont">
 						</a>
 					</span>
 					#set($cont = $cont + 1)
@@ -241,7 +243,7 @@
 					  <span title="Force run">
 						<input type="image"
 							 name="$projectGridRow.ForceAbortBuildButtonName"
-							 src="http://contxpm5/ccnet/images/force.png"
+							 src="http://${projectGridRow.ServerName}/ccnet/images/force.png"
 							 onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"
 							 class="action--icon"/>
 					  </span>
@@ -249,7 +251,7 @@
 					  <span title="Abort">
 						<input type="image"
 							 name="$projectGridRow.ForceAbortBuildButtonName"
-							 src="http://contxpm5/ccnet/images/abort.png"
+							 src="http://${projectGridRow.ServerName}/ccnet/images/abort.png"
 							 class="action--icon"/>
 					  </span>
 					  #end
@@ -259,25 +261,16 @@
 					  <span title="Stop">
 						<input type="image"
 							 name="$projectGridRow.StartStopButtonName"
-							 src="http://contxpm5/ccnet/images/stopsmall.png" 
+							 src="http://${projectGridRow.ServerName}/ccnet/images/stopsmall.png" 
 							 class="action--iconSmall"/>
 					  </span>
 					  #else
 					  <span title="Launch">
 						<input type="image"
 							   name="$projectGridRow.StartStopButtonName"
-							   src="http://contxpm5/ccnet/images/playsmall.png" 
+							   src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png" 
 							   class="action--iconSmall"/>
 					  </span>
-					  #end
-					  #if ($projectGridRow.Activity.ToString() == "Pending")
-						  <!-- Right now cancel pending acts like stop activity-->
-						  <span title="Cancel pending">
-							<input type="image"
-								 name="$projectGridRow.StartStopButtonName"
-								 src="http://contxpm5/ccnet/images/out.png"
-								 class="action--icon"/>
-						  </span>
 					  #end
 				  #end
 				</font>
