@@ -70,8 +70,6 @@
 	#end
 	#set ($OKPercentToolTip = $OKPercent * 2)
 
-	#set($projectGrifRow = $projectGrid.get(0))
-	<meta charset="UTF-8">
 	<div id="legend" class="legend">
 		<b> Build state { </b>
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/greencircle.png"> : Succes |
