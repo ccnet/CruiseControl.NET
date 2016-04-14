@@ -204,7 +204,11 @@
 			#end	
 					$translations.Translate($projectGridRow.Activity.ToString()) (P$projectGridRow.QueuePriority)
 				#if($projectGridRow.Activity.ToString() == "Pending")
-					(Q$projectGridRow.QueuePosition)
+					#if($projectGridRow.QueuePosition < 10)
+						(Q0$projectGridRow.QueuePosition)
+					#else
+						(Q$projectGridRow.QueuePosition)
+					#end
 				#end
 			</span>
 			
