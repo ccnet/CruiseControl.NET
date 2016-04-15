@@ -80,7 +80,8 @@
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"> : Start |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"> : Stop |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"> : Abort |
-		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run <b>}</b>
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"> : Force run |
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"> : Cancel Pending <b>}</b>
 	</div>
 	
 	#if ($projectGrid.Length > 0)
@@ -224,45 +225,53 @@
 					   value="$projectGridRow.ServerName" />
 				<font color="Black">
 				<!-- Action's Icons -->
-				  #if ($projectGridRow.allowForceBuild)
-					  #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
-					  <span title="Force run">
+				#if ($projectGridRow.allowForceBuild)
+					#if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+						<span title="Force run">
 						<input type="image"
 							 name="$projectGridRow.ForceAbortBuildButtonName"
 							 src="http://${projectGridRow.ServerName}/ccnet/images/force.png"
 							 onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"
 							 class="action--icon"/>
-					  </span>
-					  #else
-					  <span title="Abort">
+						</span>
+					#else
+						<span title="Abort">
+							<input type="image"
+								 name="$projectGridRow.ForceAbortBuildButtonName"
+								 src="http://${projectGridRow.ServerName}/ccnet/images/abort.png"
+								 class="action--icon"/>
+						</span>
+					#end
+				#end
+				#if($projectGridRow.Activity.ToString() == "Pending")
+					<span title="Cancel Pending">
 						<input type="image"
 							 name="$projectGridRow.ForceAbortBuildButtonName"
-							 src="http://${projectGridRow.ServerName}/ccnet/images/abort.png"
+							 src="http://${projectGridRow.ServerName}/ccnet/images/out.png"
 							 class="action--icon"/>
-					  </span>
-					  #end
-				  #end
-				  #if ($projectGridRow.AllowStartStopBuild)
-					  #if ($projectGridRow.Status == "Running")
-					  <span title="Stop">
-						<input type="image"
-							 name="$projectGridRow.StartStopButtonName"
-							 src="http://${projectGridRow.ServerName}/ccnet/images/stopsmall.png" 
-							 class="action--iconSmall"/>
-					  </span>
-					  #else
-					  <span title="Launch">
-						<input type="image"
-							   name="$projectGridRow.StartStopButtonName"
-							   src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png" 
-							   class="action--iconSmall"/>
-					  </span>
-					  #end
-				  #end
+					</span>
+				#end
+				#if ($projectGridRow.AllowStartStopBuild)
+					#if ($projectGridRow.Status == "Running")
+						<span title="Stop">
+							<input type="image"
+								 name="$projectGridRow.StartStopButtonName"
+								 src="http://${projectGridRow.ServerName}/ccnet/images/stopsmall.png" 
+								 class="action--iconSmall"/>
+						</span>
+					#else
+						<span title="Launch">
+							<input type="image"
+								   name="$projectGridRow.StartStopButtonName"
+								   src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png" 
+								   class="action--iconSmall"/>
+						</span>
+					#end
+				#end
 				</font>
-			  </form>
-			</td>
-		  </tr>
+			</form>
+		</td>
+		</tr>
 		  #if ($projectGridRow.BuildStage.Length > 0)
 			<tr id="link$RowId" class="buildStatus">
 			  #if ($wholeFarm)
