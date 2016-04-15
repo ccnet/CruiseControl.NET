@@ -243,14 +243,6 @@
 						</span>
 					#end
 				#end
-				#if($projectGridRow.Activity.ToString() == "Pending")
-					<span title="Cancel Pending">
-						<input type="image"
-							 name="$projectGridRow.ForceAbortBuildButtonName"
-							 src="http://${projectGridRow.ServerName}/ccnet/images/out.png"
-							 class="action--icon"/>
-					</span>
-				#end
 				#if ($projectGridRow.AllowStartStopBuild)
 					#if ($projectGridRow.Status == "Running")
 						<span title="Stop">
