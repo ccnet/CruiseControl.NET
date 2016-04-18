@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public string ForceAbortBuildButtonValue { get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; } }
 
-        public string CancelPendingButtonName { get { return (status.Activity == ProjectActivity.Pending) ? "CancelPending" :  string.Empty;; } }
+        public string CancelPendingButtonName { get { return (status.Activity == ProjectActivity.Pending) ? "CancelPending" :  string.Empty; } }
 
         public bool AllowForceBuild { get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; } }
 
