@@ -258,7 +258,7 @@
               #if($projectGridRow.Activity.ToString() == "Pending")
               <span title="Cancel Pending">
                 <input type="image"
-                   name="projectGridRow.CancelPendingButtonName"
+                   name="$projectGridRow.CancelPendingButtonName"
                    src="http://${projectGridRow.ServerName}/ccnet/images/out.png"
                    class="action--icon"/>
               </span>
