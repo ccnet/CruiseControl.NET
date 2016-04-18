@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly string statistics;
         private readonly List<DataGridRow> lastFiveData;
         private readonly int queuePosition;
-        private Translations translations;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
             string url, string parametersUrl, Translations translations)
@@ -80,6 +79,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public string ForceAbortBuildButtonName { get { return (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild"; } }
 
         public string ForceAbortBuildButtonValue { get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; } }
+
+        public string CancelPendingButtonName { get { return (status.Activity == ProjectActivity.Pending) ? "CancelPending" : ""; } }
 
         public bool AllowForceBuild { get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; } }
 
