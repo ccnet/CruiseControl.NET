@@ -104,6 +104,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			
             Array categoryList = this.GenerateCategoryList(projectGridRows);
             velocityContext["categoryList"] = categoryList;
+
             velocityContext["barAtTop"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Top) ||
                 (this.SuccessIndicatorBarLocation == IndicatorBarLocation.TopAndBottom);
             velocityContext["barAtBottom"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Bottom) ||
@@ -216,6 +217,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 FarmService.AbortBuild(ProjectSpecifier(request), sessionToken);
                 return this.translation.Translate("Abort successfully forced for {0}", SelectedProject(request));
 			}
+            else if (request.FindParameterStartingWith("CancelPending") != string.Empty)
+            {
+                FarmService.CancelPendingRequest(ProjectSpecifier(request), sessionToken);
+                return this.translation.Translate("Cancel pending successfully forced for {0}", SelectedProject(request));
+            }
 			else
 			{
 				return string.Empty;
