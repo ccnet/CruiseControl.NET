@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken);
         void Start(IProjectSpecifier projectSpecifier, string sessionToken);
         void Stop(IProjectSpecifier projectSpecifier, string sessionToken);
+        void CancelPendingRequest(IProjectSpecifier projectSpecifier, string sessionToken);
         void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, Dictionary<string, string> parameters);
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken);
         ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken);
