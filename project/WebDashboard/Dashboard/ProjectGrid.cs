@@ -39,32 +39,42 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
                 string dir = disk + server + @"\";
                 string statistics = "<!-- UNABLE TO FIND HEARTBEAT FOLDER -->";
+                string runningTime = String.Empty;
 
                 if (Directory.Exists(dir))
                 {
                     var file = String.Format(dir + @"{0}\ccnet\{1}\TestResults.html", serverSpecifier.ServerName, projectSpecifier.ProjectName);
+                    var fileRunningTime = String.Format(dir + @"{0}\ccnet\{1}\RunningTime.html", serverSpecifier.ServerName, projectSpecifier.ProjectName);
                     try
                     {
-                        statistics = File.ReadAllText(file);
+                        if(File.Exists(file))
+                            statistics = File.ReadAllText(file);
+
+                        if (File.Exists(fileRunningTime))
+                            runningTime = File.ReadAllText(fileRunningTime);
+
+                        if (!File.Exists(fileRunningTime) || runningTime.Length < 1)
+                            runningTime = readRunningTimeIfFileEmpty(farmService, projectSpecifier, serverSpecifier, dir); 
                     }
                     catch (Exception e)
                     {
                         statistics = String.Format("<!-- UNABLE TO GET STATISTICS: {0} -->", e.Message.Replace("-->", "- - >"));
+                        runningTime = String.Format("<!-- UNABLE TO GET RUNNING TIME: {0} -->", e.Message.Replace("-->", "- - >"));
                     }
                 }
 
                 List<DataGridRow> lastFiveDataGridRows = getLastFiveDataGridRows(serverSpecifier, projectSpecifier, dir, farmService, status);
                 int queuePosition = getQueuePosition(status, serverSpecifier, projectSpecifier, farmService);
-
-                rows.Add(
-                    new ProjectGridRow(status,
+                ProjectGridRow test = new ProjectGridRow(status,
                                        serverSpecifier,
                                        parameters.UrlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier),
                                        parameters.UrlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier),
                                        statistics,
+                                       runningTime,
                                        lastFiveDataGridRows,
                                        queuePosition,
-                                       parameters.Translation));
+                                       parameters.Translation);
+                rows.Add(test);
             }
 
             rows.Sort(GetComparer(parameters.SortColumn, parameters.SortIsAscending));
@@ -117,6 +127,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
         }
 
+        private string readRunningTimeIfFileEmpty(IFarmService farmService, DefaultProjectSpecifier projectSpecifier, IServerSpecifier serverSpecifier, string dir)
+        {
+            IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1, BuildReportBuildPlugin.ACTION_NAME);
+            var buildFile = String.Format(dir + @"{0}\ccnet\{1}\Artifacts\buildlogs\{2}", serverSpecifier.ServerName, projectSpecifier.ProjectName, mostRecentBuildSpecifiers[0].BuildName);
+            var doc = XDocument.Load(buildFile);
+            IEnumerable<XElement> elemList = doc.Descendants("build");
+            foreach (var node in elemList)
+            {
+                return (string)node.Attribute("buildtime");
+            }
+            return String.Empty;
+        }
+
         private List<DataGridRow> getLastFiveDataGridRows(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, IFarmService farmService, ProjectStatus status)
         {
             var lastFiveDataList = new List<DataGridRow>();
@@ -156,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     lastDate = (string)node.Attribute("date");
 
                     lastRunningTime = (string)node.Attribute("buildtime");
-                    if (status.BuildStatus.ToString() == "Success")
+                    if (status.BuildStatus.ToString() != "Unknown")
                     {
                         lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
                                                     serverSpecifier.ServerName, projectSpecifier.ProjectName, buildSpecifier.BuildName);
@@ -200,6 +223,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
             return -1;
         }
+
         private int checkPositionQueue(QueueSnapshot queueSnapshotItem, DefaultProjectSpecifier projectSpecifier)
         {
             for (int i = 0; i<queueSnapshotItem.Requests.Count; i++)
