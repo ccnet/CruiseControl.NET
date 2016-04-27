@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly string url;
         private readonly string parametersUrl;
         private readonly string statistics;
+        private readonly string runningTime;
         private readonly List<DataGridRow> lastFiveData;
         private readonly int queuePosition;
 
@@ -28,10 +29,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         }
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
-            string url, string parametersUrl, string statistics, List<DataGridRow> lastFiveData, int queuePosition, Translations translations)
+            string url, string parametersUrl, string statistics, string runningTime, List<DataGridRow> lastFiveData, int queuePosition, Translations translations)
             : this(status, serverSpecifier, url, parametersUrl, translations)
         {
             this.statistics = statistics;
+            this.runningTime = runningTime;
             this.lastFiveData = lastFiveData;
             this.queuePosition = queuePosition;
         }
@@ -80,13 +82,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public string ForceAbortBuildButtonValue { get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; } }
 
-        public string CancelPendingButtonName { get { return (status.Activity == ProjectActivity.Pending) ? "CancelPending" :  string.Empty; } }
+        public string CancelPendingButtonName { get { return (status.Activity == ProjectActivity.Pending) ? "CancelPending" : string.Empty; } }
 
         public bool AllowForceBuild { get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; } }
 
         public bool AllowStartStopBuild { get { return serverSpecifier.AllowStartStopBuild && status.ShowStartStopButton; } }
 
         public string Statistics { get { return this.statistics; } }
+
+        public string RunningTime { get { return this.runningTime; } }
 
         public string ParametersUrl { get { return parametersUrl; } }
 
