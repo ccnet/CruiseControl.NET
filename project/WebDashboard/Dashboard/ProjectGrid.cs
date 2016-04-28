@@ -157,45 +157,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, IBuildSpecifier buildSpecifier)
         {
             DataGridRow dataToReturn;
+            string buildName = buildSpecifier.BuildName;
+            string lastStatus = "";
             string localserver = new AppSettingsReader().GetValue("servername", typeof(System.String)).ToString();
-
-            var file = String.Format(dir + @"{0}\ccnet\{1}\Artifacts\buildlogs\{2}", localserver, projectSpecifier.ProjectName,buildSpecifier.BuildName);
-            try
-            {
-                var doc = XDocument.Load(file);
-                string lastStatus = "";
-                string lastDate = "";
-                string lastRunningTime = "";
-                string lastLink = "";
-                var tests = doc.Descendants("CCNetIntegrationStatus");
-                foreach (var test in tests)
-                {
-                    lastStatus = test.Value;
-                }
-
-                var elemList = doc.Descendants("build");
-                foreach (var node in elemList)
-                {
-                    lastDate = (string)node.Attribute("date");
-
-                    lastRunningTime = (string)node.Attribute("buildtime");
-                    if (status.BuildStatus.ToString() != "Unknown")
-                    {
-                        lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
-                                                    serverSpecifier.ServerName, projectSpecifier.ProjectName, buildSpecifier.BuildName);
-                    }
-                    else
-                    {
-                        lastLink = "";
-                    }
-                }
-                DataGridRow aux = new DataGridRow(lastStatus, lastDate, lastRunningTime, lastLink);
-                dataToReturn = aux;
-            }
-            catch (Exception e)
-            {
-                throw new System.ArgumentException("File not found or corrupted. Error: " + e, "Argument");
-            }
+            if (buildName.Contains("Lbuild")) 
+            { lastStatus = "Success"; }
+            else
+            { lastStatus = "Failure"; }
+            string lastDate = String.Format("{0}-{1}-{2} {3}:{4}:{5}", buildName.Substring(3, 4), buildName.Substring(7, 2), buildName.Substring(9, 2),
+                                                                        buildName.Substring(11, 2), buildName.Substring(13, 2), buildName.Substring(15, 2));
+            string lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
+                                                    serverSpecifier.ServerName, projectSpecifier.ProjectName, buildName);
+            DataGridRow aux = new DataGridRow(lastStatus, lastDate, lastLink);
+            dataToReturn = aux;
             return dataToReturn;
         }
 
