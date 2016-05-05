@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using ThoughtWorks.CruiseControl.Core;
@@ -9,6 +9,8 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -109,6 +111,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		{
             GetCruiseManager(projectSpecifier, sessionToken).AbortBuild(projectSpecifier.ProjectName);
 		}
+
+        public void CancelPendingRequest(IProjectSpecifier projectSpecifier, string sessionToken)
+        {
+            GetCruiseManager(projectSpecifier.ServerSpecifier, sessionToken)
+                .CancelPendingRequest(projectSpecifier.ProjectName);
+        }
+
+        public void VolunteerFixer(IProjectSpecifier projectSpecifier, string sessionToken, string fixingUserName)
+        {
+            string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is fixing the build.", fixingUserName);
+            GetCruiseManager(projectSpecifier.ServerSpecifier, sessionToken).SendMessage(projectSpecifier.ProjectName, new Message(message, Message.MessageKind.Fixer));
+        }
 
         private ServerLocation GetServerUrl(IServerSpecifier serverSpecifier)
         {
