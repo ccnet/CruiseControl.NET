@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         void Stop(IProjectSpecifier projectSpecifier, string sessionToken);
         void CancelPendingRequest(IProjectSpecifier projectSpecifier, string sessionToken);
         void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, Dictionary<string, string> parameters);
+        void VolunteerFixer(IProjectSpecifier projectSpecifier, string sessionToken, string fixingUserName);
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken);
         ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken);
         ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier, string sessionToken);
