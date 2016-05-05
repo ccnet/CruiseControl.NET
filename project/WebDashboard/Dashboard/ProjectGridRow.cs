@@ -94,6 +94,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public string ParametersUrl { get { return parametersUrl; } }
 
+        public string[] BreakersNames
+        {
+            get
+            {
+                string text = GetMessageText(Message.MessageKind.Breakers);
+                text = System.Text.RegularExpressions.Regex.Replace(text, ",.", "/", System.Text.RegularExpressions.RegexOptions.None);
+                string[] users = text.Split('/');
+                return users;
+            }
+        }
+
         public string Description
         {
             get
