@@ -244,6 +244,9 @@ td>a.selected:hover { color:#2E8A2E; }
 	align:left;
 }
 
+.legend h3{
+	display:inline;
+}
 .legend  span { 
     font-size: 13px;
     height: 30px;
@@ -264,6 +267,11 @@ td>a.selected:hover { color:#2E8A2E; }
 	margin-top:-5px;
 	margin-bottom:-3px;
 	padding: 0px 5px;
+}
+
+.StatusLabel{
+	margin-left: 6px;
+	margin-top:-10px;
 }
 
 .nav--main {
@@ -377,6 +385,32 @@ input.stop--task:hover {
 	background: #ee4040;
 }
 
+.forceAbort{
+	display:inline;
+	width:30px;
+}
+
+.cancelPending{
+	
+	display:inline;
+}
+
+.action--icon{
+	padding-left: 10px;
+}
+
+.cancelPendingIcon{
+	padding-left: 5px;
+	padding-bottom:4px;
+}
+
+.playSmallIcon{
+	margin-left:4px;
+	padding-left:2px;
+	margin-right:4px;
+	margin-bottom:4px;
+}
+
 .action--iconSmall{
 	padding: 5px 10px;
 }
@@ -413,7 +447,7 @@ input.stop--task:hover {
 {
 	border-top: solid 1px #ccc;
 	border-bottom: solid 1px #ccc;
-	padding:3px 0;
+	padding:1px 0;
 	text-align:center;
 }
 
@@ -468,6 +502,15 @@ input.stop--task:hover {
 	font-weight:bold;
 	color:blue;
 }
+
+.content--fixer
+{
+	margin-top:2px;
+	list-style-type: none;
+	font-weight:bold;
+	color:blue;
+}
+
 
 .SortableGrid .left.scroll--content ul li.content--task__fail
 {
@@ -560,14 +603,55 @@ input.stop--task:hover {
 	border: none !important;
 	text-align:left !important;
 }
+
 .SortableGrid thead tr .header 
 {
-	padding-right:16px;
+	padding:0 8px;
 	background-image: url(images/bg.gif);
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 }
+
+.messageTh{
+	width:350px;
+}
+
+.volunteerFixForm{
+	width:100%;
+	border:0;
+	padding:5px 10px;
+	background-color:red;
+	display:inline;
+}
+
+.volunteerFix{
+	margin-top:5px;
+	padding-top:5px;
+	border:0;
+	width:40%;
+	background-color:red;
+	padding: 3px 5px;
+	color:white;
+	font-weight: bold;
+	display:inline;
+}
+
+.volunteerFixText{
+	margin-top:5px;
+	padding-top:5px;
+	border:0;
+	width:45%;
+	padding: 3px 5px;
+	margin-right: 29px;
+	font-weight: bold;
+	display:inline;
+}
+
+.hiddenSubmit{
+	display:none;
+}
+
 .SortableGrid thead tr .headerSortUp {
 	background-image: url(images/asc.gif);
 }
@@ -646,15 +730,15 @@ tr.buildStatus td
 
 /* ICONS */
 .icon0{
-	height:20px;
+	height:22px;
 }
 
 .icon1{
-	height:18px;
+	height:14px;
 }
 
 .icon2{
-	height:16px;
+	height:14px;
 }
 
 .icon3{
@@ -662,7 +746,7 @@ tr.buildStatus td
 }
 
 .icon4{
-	height:12px;
+	height:14px;
 }
 
 .ico  {
@@ -703,3 +787,9 @@ tr.buildStatus td
 	transform:scale(1.3);
 	background-image: url(images/UNIT4info.png);
 }
+
+
+
+
+
+
