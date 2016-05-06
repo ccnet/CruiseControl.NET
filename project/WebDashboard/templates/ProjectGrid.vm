@@ -217,16 +217,19 @@
 										name="Volunteer"/>
 								</form>
 							#end
+							#if($projectGridRow.ForceBuildPublisher.Length > 0)
+								<li class="content--force__fail">$projectGridRow.ForceBuildPublisher</li>
+							#end
 							#if (($projectGridRow.Fixer.Length > 0) && ($projectGridRow.Activity != "Building"))
 								<li class="content--fixer">$projectGridRow.Fixer</li>
 							#end
-							<ul>
-								#if ($projectGridRow.Breakers.Length > 0)
+							#if ($projectGridRow.Breakers.Length > 0)
+								<ul>
 									<li class="content--breaker">
 										$translations.Translate("Breakers :<br>{0}",$projectGridRow.Breakers)
 									</li>
-								#end
-							</ul>
+								</ul>
+							#end
 						#end
 					</td>
 					<td>
