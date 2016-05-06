@@ -266,7 +266,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         {
             if (userName.Equals("nobody", StringComparison.InvariantCultureIgnoreCase))
             {
-                FarmService.RemoveFixer(ProjectSpecifier(request), sessionToken, userName);
+                FarmService.RemoveFixer(ProjectSpecifier(request), sessionToken);
                 System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("{0} removed as fixer for {1}", userName, SelectedProject(request));
             }
