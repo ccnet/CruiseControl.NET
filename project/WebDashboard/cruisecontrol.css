@@ -505,12 +505,18 @@ input.stop--task:hover {
 
 .content--fixer
 {
-	margin-top:2px;
+	margin-top:5px;
 	list-style-type: none;
 	font-weight:bold;
 	color:blue;
 }
 
+.content--force__fail
+{
+	list-style-type: none;
+	font-weight:bold;
+	color:#F88017;
+}
 
 .SortableGrid .left.scroll--content ul li.content--task__fail
 {
@@ -614,7 +620,7 @@ input.stop--task:hover {
 }
 
 .messageTh{
-	width:350px;
+	width:350px;	
 }
 
 .volunteerFixForm{
