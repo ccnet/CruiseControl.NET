@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             GetCruiseManager(projectSpecifier.ServerSpecifier, sessionToken).SendMessage(projectSpecifier.ProjectName, new Message(message, Message.MessageKind.Fixer));
         }
 
-        public void RemoveFixer(IProjectSpecifier projectSpecifier, string sessionToken, string fixingUserName)
+        public void RemoveFixer(IProjectSpecifier projectSpecifier, string sessionToken)
         {
             GetCruiseManager(projectSpecifier.ServerSpecifier, sessionToken).SendMessage(projectSpecifier.ProjectName, new Message(string.Empty, Message.MessageKind.Fixer));
         }
