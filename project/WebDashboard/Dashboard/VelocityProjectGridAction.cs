@@ -235,11 +235,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
             else if (request.FindParameterStartingWith("Volunteer") != string.Empty)
             {
-                if (request.GetText("FixerName") != string.Empty)
+                string userName = request.GetText("FixerName");
+                if (userName != string.Empty)
                 {
-                    FarmService.VolunteerFixer(ProjectSpecifier(request), sessionToken, request.GetText("FixerName"));
-                    System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
-                    return this.translation.Translate("You succesfully offered as a fixer for {0}", SelectedProject(request));
+                    return SendFixerMessage(userName, request, sessionToken);
                 }
                 else
                 {
@@ -262,5 +261,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			return request.GetText("projectName");
 		}
+
+        private string SendFixerMessage(string userName, IRequest request, string sessionToken)
+        {
+            if (userName.Equals("nobody", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FarmService.RemoveFixer(ProjectSpecifier(request), sessionToken, userName);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
+                return this.translation.Translate("{0} removed as fixer for {1}", userName, SelectedProject(request));
+            }
+            else
+            {
+                FarmService.VolunteerFixer(ProjectSpecifier(request), sessionToken, userName);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
+                return this.translation.Translate("{0} succesfully selected as a fixer for {1}", userName, SelectedProject(request));
+            }
+        }
 	}
 }
