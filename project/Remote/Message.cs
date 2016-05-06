@@ -45,7 +45,12 @@ namespace ThoughtWorks.CruiseControl.Remote
             /// 	
             /// </summary>
             /// <remarks></remarks>
-            BuildAbortedBy = 5
+            BuildAbortedBy = 5,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            ForceBuildPublisherFailed = 6
         }
 
         private string message;
