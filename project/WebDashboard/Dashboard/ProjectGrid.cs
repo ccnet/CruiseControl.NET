@@ -133,9 +133,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             var buildFile = String.Format(dir + @"{0}\ccnet\{1}\Artifacts\buildlogs\{2}", serverSpecifier.ServerName, projectSpecifier.ProjectName, mostRecentBuildSpecifiers[0].BuildName);
             var doc = XDocument.Load(buildFile);
             IEnumerable<XElement> elemList = doc.Descendants("build");
-            foreach (var node in elemList)
+            if (Directory.Exists(buildFile))
             {
-                return (string)node.Attribute("buildtime");
+                foreach (var node in elemList)
+                {
+                    return (string)node.Attribute("buildtime");
+                }
             }
             return String.Empty;
         }
@@ -143,27 +146,40 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private List<DataGridRow> getLastFiveDataGridRows(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, IFarmService farmService, ProjectStatus status)
         {
             var lastFiveDataList = new List<DataGridRow>();
-            IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 5, BuildReportBuildPlugin.ACTION_NAME);
-            if (Directory.Exists(dir))
+            int cont = 0;
+            if (Directory.Exists(String.Format(dir + @"{0}\ccnet\{1}\Artifacts\buildlogs", serverSpecifier.ServerName, projectSpecifier.ProjectName)))
             {
-                foreach (IBuildSpecifier buildSpecifier in mostRecentBuildSpecifiers)
+                IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 5, BuildReportBuildPlugin.ACTION_NAME);
+                if (Directory.Exists(dir))
                 {
-                    lastFiveDataList.Add(getBuildData(serverSpecifier, projectSpecifier, dir, status, buildSpecifier)); 
+                    foreach (IBuildSpecifier buildSpecifier in mostRecentBuildSpecifiers)
+                    {
+                        lastFiveDataList.Add(getBuildData(serverSpecifier, projectSpecifier, dir, status, buildSpecifier, cont));
+                        cont = 1;
+                    }
                 }
+                return lastFiveDataList;
             }
-            return lastFiveDataList;
+            return null;
         }
 
-        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, IBuildSpecifier buildSpecifier)
+        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, IBuildSpecifier buildSpecifier, int cont)
         {
             DataGridRow dataToReturn;
             string buildName = buildSpecifier.BuildName;
             string lastStatus = "";
             string localserver = new AppSettingsReader().GetValue("servername", typeof(System.String)).ToString();
-            if (buildName.Contains("Lbuild")) 
-            { lastStatus = "Success"; }
+            if (cont == 0)
+            {
+                lastStatus = status.BuildStatus.ToString();
+            }
             else
-            { lastStatus = "Failure"; }
+            {
+                if (buildName.Contains("Lbuild"))
+                { lastStatus = "Success"; }
+                else
+                { lastStatus = "Failure"; }
+            }
             string lastDate = String.Format("{0}-{1}-{2} {3}:{4}:{5}", buildName.Substring(3, 4), buildName.Substring(7, 2), buildName.Substring(9, 2),
                                                                         buildName.Substring(11, 2), buildName.Substring(13, 2), buildName.Substring(15, 2));
             string lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
