@@ -66,6 +66,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public string Fixer { get { return GetMessageText(Message.MessageKind.Fixer); } }
 
+        public string ForceBuildPublisher { get { return GetMessageText(Message.MessageKind.ForceBuildPublisherFailed); } }
+
         public string Url { get { return url; } }
 
         public string Queue { get { return status.Queue; } }
@@ -93,6 +95,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public string RunningTime { get { return this.runningTime; } }
 
         public string ParametersUrl { get { return parametersUrl; } }
+
+        public string[] BreakersNames
+        {
+            get
+            {
+                string text = GetMessageText(Message.MessageKind.Breakers);
+                text = System.Text.RegularExpressions.Regex.Replace(text, ",.", "/", System.Text.RegularExpressions.RegexOptions.None);
+                string[] users = text.Split('/');
+                return users;
+            }
+        }
 
         public string Description
         {
