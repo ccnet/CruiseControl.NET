@@ -1066,6 +1066,14 @@ namespace ThoughtWorks.CruiseControl.Core
                     if (baseTask != null)
                     {
                         wasSuccessful = baseTask.WasSuccessful;
+                        if (!wasSuccessful && baseTask.Name.Equals("ForceBuildPublisher"))
+                        {
+                            messages.Add(new Message("ForceBuildPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                        }
+                        else if (wasSuccessful && baseTask.Name.Equals("ForceBuildPublisher"))
+                        {
+                            messages.Add(new Message(string.Empty, Message.MessageKind.ForceBuildPublisherFailed));
+                        }
                     }
 
                     // Only need to update the status if it is not already set
