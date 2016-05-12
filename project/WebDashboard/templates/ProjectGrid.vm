@@ -65,27 +65,17 @@
 	#set ($OKPercentToolTip = $OKPercent * 2)
 <!-- <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/orangecircle.png"/> : Exception | -->
 	<div id="legend" class="legend">
-		<h3>Caption [</h3> Build state ( 
-		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/greencircle.png"/>
-		: Succes |
-		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/redcircle.png"/>
-		: Failure |
-		
-		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/bluecircle.png"/>
-		: Unknown 
-		)
-		<h3>|</h3> Actions (
-		
+		<h3>Caption [</h3> 
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"/>
 		: Start |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"/>
 		: Stop |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"/>
 		: Abort |
-		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/force.png"/>
+		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/forcesmall.png"/>
 		: Force run |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"/>
-		: Cancel Pending )<h3>]</h3>
+		: Cancel Pending <h3>]</h3>
 	</div>
 
 	#if ($forceBuildMessage.Length > 0)
@@ -192,8 +182,8 @@
 					<td class="left scroll--content">
 				#end
 						#if($projectGridRow.BuildStatus == "Failure")
-							#if(($projectGridRow.Breakers.Length > 0) && !($projectGridRow.Fixer.Length > 0))
-								<form method="post" style="margin-bottom:0px;" class="volunteerFixForm">
+							#if(!($projectGridRow.Fixer.Length > 0))
+								<form method="post" class="volunteerFixForm">
 									<input type="hidden"
 										name="projectName"
 										value="$projectGridRow.Name" />
@@ -201,27 +191,49 @@
 										name="serverName"
 										value="$projectGridRow.ServerName" />
 										
-									<label for="FixerName" class="volunteerFix">Volunteer as a fixer :</label>
-									
+									<label for="FixerName" class="volunteerFix">Volunteer :</label>
 									<input list="users"
 										class="volunteerFixText"
 										name="FixerName">
-
 									<datalist id="users">
 										#foreach($UserName in $projectGridRow.BreakersNames)
 											<option value="${UserName}"/>
 										#end
 									</datalist>
-									<input type="submit"
-										class="hiddenSubmit"
-										name="Volunteer"/>
+									<span title="Enter a fixer">
+										<input type="image"
+											name="Volunteer"
+											src="http://${projectGridRow.ServerName}/ccnet/images/enterFixer.png"
+											class="iconFixer"/>
+									</span>
 								</form>
 							#end
 							#if($projectGridRow.ForceBuildPublisher.Length > 0)
 								<li class="content--force__fail">$projectGridRow.ForceBuildPublisher</li>
 							#end
-							#if (($projectGridRow.Fixer.Length > 0) && ($projectGridRow.Activity != "Building"))
-								<li class="content--fixer">$projectGridRow.Fixer</li>
+							#if ($projectGridRow.Fixer.Length > 0)
+								#if($projectGridRow.Breakers.Length > 0)
+								<form method="post" class="removeFixerForm">
+								#else
+								<form method="post" class="removeFixerFormNoBreakers">
+								#end
+									<li class="content--fixer">$projectGridRow.Fixer</li>
+									<input type="hidden"
+										name="projectName"
+										value="$projectGridRow.Name" />
+									<input type="hidden"
+										name="serverName"
+										value="$projectGridRow.ServerName" />
+									<input type="hidden"
+										name="FixerName"
+										value="nobody"/>
+									<span title="Remove the fixer">
+										<input type="image"
+											name="Volunteer"
+											src="http://${projectGridRow.ServerName}/ccnet/images/removeFixer.png"
+											class="iconRemoveFixer"/>
+									</span>
+								</form>
 							#end
 							#if ($projectGridRow.Breakers.Length > 0)
 								<ul>
@@ -272,14 +284,27 @@
 								<!-- Action's Icons -->
 								#if ($projectGridRow.allowForceBuild)
 									#if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+									#if($projectGridRow.Activity == "Pending")
 										<span title="Force run">
+											<img src="http://${projectGridRow.ServerName}/ccnet/images/forceDisabled.png" class="action--icon action--iconSmall"/>
+										</span>
+									#else
+										<span title="Force run">
+											#if($projectGridRow.Name == "ZZ - Admin Projects")
 											<input type="image"
 												name="$projectGridRow.ForceAbortBuildButtonName"
 												src="http://${projectGridRow.ServerName}/ccnet/images/forceSmall.png"
-												onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"
-												class="action--iconSmall"
-											/>
+												onclick="checkForParams(this, '$projectGridRow.ParametersUrl');return false;"
+												class="action--iconSmall"/>
+											#else
+											<input type="image"
+												name="$projectGridRow.ForceAbortBuildButtonName"
+												src="http://${projectGridRow.ServerName}/ccnet/images/forceSmall.png"
+												onclick="checkForParams(this, '$projectGridRow.ParametersUrl');"
+												class="action--iconSmall"/>
+											#end
 										</span>
+									#end
 									#else
 										<span title="Abort">
 											<input type="image"
@@ -296,7 +321,7 @@
 											   src="http://${projectGridRow.ServerName}/ccnet/images/out.png"
 											   class="action--icon cancelPendingIcon"/>
 										#else 
-											<img src="http://${projectGridRow.ServerName}/ccnet/images/cancelDisabled.png" class="action--icon cancelPendingIcon"/>
+											<img src="http://${projectGridRow.ServerName}/ccnet/images/outDisabled.png" class="action--icon cancelPendingIcon"/>
 										#end
 									</span>
 								#if ($projectGridRow.AllowStartStopBuild)
@@ -308,7 +333,7 @@
 												class="action--iconSmall"/>
 										</span>
 									#else
-										<span title="Launch">
+										<span title="Start">
 											<input type="image"
 												name="$projectGridRow.StartStopButtonName"
 												src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png"
