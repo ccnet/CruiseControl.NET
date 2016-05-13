@@ -15,6 +15,7 @@ using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -160,7 +161,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 return lastFiveDataList;
             }
-            return null;
+            lastFiveDataList.Add(new DataGridRow("Unknown", string.Empty, string.Empty));
+            return lastFiveDataList;
         }
 
         private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, IBuildSpecifier buildSpecifier, int cont)
@@ -184,8 +186,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                                                                         buildName.Substring(11, 2), buildName.Substring(13, 2), buildName.Substring(15, 2));
             string lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
                                                     serverSpecifier.ServerName, projectSpecifier.ProjectName, buildName);
-            DataGridRow aux = new DataGridRow(lastStatus, lastDate, lastLink);
-            dataToReturn = aux;
+            dataToReturn = new DataGridRow(lastStatus, lastDate, lastLink);
             return dataToReturn;
         }
 
