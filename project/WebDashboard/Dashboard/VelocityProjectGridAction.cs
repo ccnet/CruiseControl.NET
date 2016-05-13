@@ -11,10 +11,15 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+using System.Net;
+using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Remote.Security;
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Server;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	// ToDo - Test!
+	// ToDo - Test
 	public class VelocityProjectGridAction : IProjectGridAction
 	{
 		private readonly IFarmService FarmService;
@@ -97,7 +102,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
 			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
             velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-
             ProjectGridParameters parameters = new ProjectGridParameters(projectStatusListAndExceptions.StatusAndServerList, sortColumn, sortReverse, category, CruiseUrlBuilder, FarmService, this.translation);
             ProjectGridRow[] projectGridRows = ProjectGrid.GenerateProjectGridRows(parameters);
             velocityContext["projectGrid"] = projectGridRows;
@@ -105,6 +109,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             Array categoryList = this.GenerateCategoryList(projectGridRows);
             velocityContext["categoryList"] = categoryList;
 
+            var username = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString();
             velocityContext["barAtTop"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Top) ||
                 (this.SuccessIndicatorBarLocation == IndicatorBarLocation.TopAndBottom);
             velocityContext["barAtBottom"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Bottom) ||
@@ -197,35 +202,53 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
 
             // Make the actual call
+            // Right now the message returned is not used, but it will in a future
 			if (request.FindParameterStartingWith("StopBuild") != string.Empty)
 			{
                 FarmService.Stop(ProjectSpecifier(request), sessionToken);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Stopping project {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
 			{
                 FarmService.Start(ProjectSpecifier(request), sessionToken);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Starting project {0}", SelectedProject(request));				
 			}
 			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
                 FarmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
 			{
                 FarmService.AbortBuild(ProjectSpecifier(request), sessionToken);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Abort successfully forced for {0}", SelectedProject(request));
 			}
             else if (request.FindParameterStartingWith("CancelPending") != string.Empty)
             {
                 FarmService.CancelPendingRequest(ProjectSpecifier(request), sessionToken);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Cancel pending successfully forced for {0}", SelectedProject(request));
             }
-			else
-			{
-				return string.Empty;
-			}
+            else if (request.FindParameterStartingWith("Volunteer") != string.Empty)
+            {
+                string userName = request.GetText("FixerName");
+                if (userName != string.Empty)
+                {
+                    return SendFixerMessage(userName, request, sessionToken);
+                }
+                else
+                {
+                    return this.translation.Translate("Fixer's name cannot be empty");
+                }
+            }
+            else
+            {
+                return string.Empty;
+            }
 		}
 
 		private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
@@ -238,5 +261,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			return request.GetText("projectName");
 		}
+
+        private string SendFixerMessage(string userName, IRequest request, string sessionToken)
+        {
+            if (userName.Equals("nobody", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FarmService.RemoveFixer(ProjectSpecifier(request), sessionToken);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
+                return this.translation.Translate("{0} removed as fixer for {1}", userName, SelectedProject(request));
+            }
+            else
+            {
+                FarmService.VolunteerFixer(ProjectSpecifier(request), sessionToken, userName);
+                System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
+                return this.translation.Translate("{0} succesfully selected as a fixer for {1}", userName, SelectedProject(request));
+            }
+        }
 	}
 }
