@@ -4,6 +4,7 @@ using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -17,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly string statistics;
         private readonly string runningTime;
         private readonly List<DataGridRow> lastFiveData;
+        private readonly List<ParameterBase> buildParameters;
         private readonly int queuePosition;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
@@ -29,13 +31,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         }
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
-            string url, string parametersUrl, string statistics, string runningTime, List<DataGridRow> lastFiveData, int queuePosition, Translations translations)
+            string url, string parametersUrl, string statistics, string runningTime,
+            List<DataGridRow> lastFiveData, int queuePosition, List<ParameterBase> buildParameters, Translations translations)
             : this(status, serverSpecifier, url, parametersUrl, translations)
         {
             this.statistics = statistics;
             this.runningTime = runningTime;
             this.lastFiveData = lastFiveData;
             this.queuePosition = queuePosition;
+            this.buildParameters = buildParameters;
         }
 
         public string Name { get { return status.Name; } }
@@ -96,13 +100,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public string ParametersUrl { get { return parametersUrl; } }
 
+        public List<ParameterBase> BuildParameters { get { return buildParameters; } }
+
+        public int BuildParametersCount { get { return buildParameters.Count; } }
+
         public string[] BreakersNames
         {
             get
             {
                 string text = GetMessageText(Message.MessageKind.Breakers);
                 text = System.Text.RegularExpressions.Regex.Replace(text, ",.", "/", System.Text.RegularExpressions.RegexOptions.None);
-                string[] users = text.Split('/');
+                var users = text.Split('/');
                 return users;
             }
         }
