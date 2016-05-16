@@ -1,4 +1,4 @@
-﻿CruiseControl.Net Command-Line Utility
+CruiseControl.Net Command-Line Utility
 Provides command-line access to a CruiseControl.Net server
 
 CCCmd <command> [options]
@@ -7,6 +7,7 @@ command: one of the following actions
   help:         display this help screen
   retrieve:     retrieve details on a project or server
   forcebuild:   forces a build on a project
+  cancelpending: remove a build from the queue
   abortbuild:   aborts a build on a project
   startproject: starts a project integrator
   stopproject:  stops a project integrator
