@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -76,6 +76,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         break;
                     case CommandType.ForceBuild:
                         RunForceBuild();
+                        break;
+                    case CommandType.CancelPending:
+                        RunCancelPending();
                         break;
                     case CommandType.AbortBuild:
                         RunAbortBuild();
@@ -203,6 +206,28 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 catch (Exception error)
                 {
                     WriteError("ERROR: Unable to send ForceBuild request", error);
+                }
+            }
+        }
+
+        private static void RunCancelPending()
+        {
+            if (ValidateParameter(server, "--server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "--project"))
+            {
+                try
+                {
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending CancelPending request for '{0}'", project), ConsoleColor.White);
+                        client.CancelPendingRequest(project);
+                        if (!quiet) WriteLine("CancelPending request sent", ConsoleColor.White);
+                    }
+                }
+                catch (Exception error)
+                {
+                    WriteError("ERROR: Unable to send CancelPending request", error);
                 }
             }
         }
