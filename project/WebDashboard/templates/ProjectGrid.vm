@@ -63,19 +63,19 @@
 		#set ($NOKPercent = 50 - $OKPercent)
 	#end
 	#set ($OKPercentToolTip = $OKPercent * 2)
-<!-- <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/orangecircle.png"/> : Exception | -->
+
 	<div id="legend" class="legend">
 		<h3>Caption [</h3> 
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"/>
-		: Start |
+		 Start |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"/>
-		: Stop |
+		 Stop |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"/>
-		: Abort |
+		 Abort |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/forcesmall.png"/>
-		: Force run |
+		 Force run |
 		<img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"/>
-		: Cancel Pending <h3>]</h3>
+		 Cancel Pending <h3>]</h3>
 	</div>
 
 	#if ($forceBuildMessage.Length > 0)
@@ -118,11 +118,11 @@
 
 		<tr class="ProjectGridHeader">
 		  <th class="nameTh">$translations.Translate("Project Name")</th>
-		  <th>$translations.Translate("Last 5 Builds")</th>
+		  <th class="lastBuild">$translations.Translate("Last Build")</th>
 		  <th class="statisticsTh">$translations.Translate("Statistics")</th>
 		  <th class="{sorter:false} messageTh">$translations.Translate("Messages")</th>
 		  <th class="dateTh">$translations.Translate("Last Build Time")</th>
-		  <th class="runningTh">$translations.Translate("Running Time")</th>
+		  <th class="runningTh">$translations.Translate("Run Time")</th>
 		  <th class="statusTh">$translations.Translate("Status")</th>
 		  <th class="activityTh">$translations.Translate("Activity")</th>
 		  <th class="{sorter:false}">$translations.Translate("Admin")</th>
@@ -148,31 +148,25 @@
 				<td class="$colorText left project--name">
 					<a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
 				</td>
-				<td class="$color project--name">
-					#set($cont = 0)
-					#foreach($dataGridRow in $projectGridRow.LastFiveData)
-						#if ($dataGridRow.BuildStatus == "Failure" )
-							#set($color = "red")
-							#set($span = "Failure: ")
-						#elseif ($dataGridRow.BuildStatus == "Exception" )
-							#set($color = "orange")
-							#set($span = "Exception: ")
-						#elseif ($dataGridRow.BuildStatus == "Unknown" )
-							#set($color = "blue")
-							#set($span = "Unknown: ")
-						#else
-							#set($color = "green")
-							#set($span = "Success: ")
-						#end
-						#set($date = $dataGridRow.Date)
-						#set($link = $dataGridRow.Link)
-						<span id="spStatus" title="$span $date">
-							<a href="$link">
-								<img src="http://${projectGridRow.ServerName}/ccnet/images/${color}circle.png" class="icon$cont">
-							</a>
-						</span>
-						#set($cont = $cont + 1)
-					#end
+				<td class="$colorText ">
+				#if($projectGridRow.BuildStatus == "Failure")
+				<div class="statusIconTd">
+				#else
+				<div>
+				#end
+					<span id="spStatus" title="$projectGridRow.BuildStatus $projectGridRow.LastBuildDate">
+						<a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">
+							<img src="http://${projectGridRow.ServerName}/ccnet/images/${colorText}circle.png" class="icon0">
+							#if($projectGridRow.BuildStatus == "Failure")
+								#if($projectGridRow.BrokenTime.Length > 0)
+								<span title="This project has been failing for ${projectGridRow.BrokenTime}">
+									<div class="brokenDays">$projectGridRow.BrokenTime</div>
+								</span>
+								#end
+							#end
+						</a>
+					</span>		
+					</div>
 				</td>
 				<td class="$colorText left project--name">$projectGridRow.Statistics</td>
 				
@@ -192,12 +186,12 @@
 										value="$projectGridRow.ServerName" />
 										
 									<label for="FixerName" class="volunteerFix">Volunteer :</label>
-									<input list="users"
+									<input list="users${RowId}"
 										class="volunteerFixText"
 										name="FixerName">
-									<datalist id="users">
-										#foreach($UserName in $projectGridRow.BreakersNames)
-											<option value="${UserName}"/>
+									<datalist id="users${RowId}">
+										#foreach($userName in $projectGridRow.BreakersNames)
+											<option value="${userName}"/>
 										#end
 									</datalist>
 									<span title="Enter a fixer">
@@ -208,8 +202,10 @@
 									</span>
 								</form>
 							#end
-							#if($projectGridRow.ForceBuildPublisher.Length > 0)
+							#if($projectGridRow.ForceBuildPublisher.Length > 0 && $projectGridRow.Breakers.Length == 0)
 								<li class="content--force__fail">$projectGridRow.ForceBuildPublisher</li>
+							#elseif($projectGridRow.ForceBuildPublisher.Length > 0)
+								<li class="content--force__fail__WithBreakers">$projectGridRow.ForceBuildPublisher</li>
 							#end
 							#if ($projectGridRow.Fixer.Length > 0)
 								#if($projectGridRow.Breakers.Length > 0)
@@ -337,7 +333,7 @@
 											<input type="image"
 												name="$projectGridRow.StartStopButtonName"
 												src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png"
-												class="action--iconSmall playSmallIcon"/>
+												class="playSmallIcon"/>
 										</span>
 									#end
 								#end
