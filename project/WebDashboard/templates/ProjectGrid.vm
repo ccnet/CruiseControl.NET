@@ -290,7 +290,7 @@
 										</span>
 									#else
 										<span title="Force run">
-											#if($projectGridRow.Name == "ZZ - Admin Projects")
+											#if($projectGridRow.BuildParametersCount > 0)
 											<input type="image"
 												name="$projectGridRow.ForceAbortBuildButtonName"
 												src="http://${projectGridRow.ServerName}/ccnet/images/forceSmall.png"
