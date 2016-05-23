@@ -144,12 +144,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return String.Empty;
         }
 
-        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, IBuildSpecifier buildSpecifier, int cont)
+        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, 
+                                                                                                                    IBuildSpecifier buildSpecifier, bool first)
         {
             DataGridRow dataToReturn;
             string buildName = buildSpecifier.BuildName;
             string lastStatus = "";
-            if (cont == 0)
+            if (first)
             {
                 lastStatus = status.BuildStatus.ToString();
             }
@@ -208,14 +209,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             DataGridRow helper;
             DateTime dateFailure = DateTime.Now;
             DateTime today = DateTime.Now;
-            int cont = 0;
+            bool first = true;
             string dirPath = String.Format(@"{0}{1}\ccnet\{2}\Artifacts\buildlogs", dir, serverSpecifier.ServerName, projectSpecifier.ProjectName);
             if (Directory.Exists(dirPath))
             {
                 var mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, Directory.GetFiles(dirPath).Length, BuildReportBuildPlugin.ACTION_NAME);
                 foreach (IBuildSpecifier buildSpecifier in mostRecentBuildSpecifiers)
                 {
-                    helper = getBuildData(serverSpecifier, projectSpecifier, dir, status, buildSpecifier, cont);
+                    helper = getBuildData(serverSpecifier, projectSpecifier, dir, status, buildSpecifier, first);
                     if (helper.BuildStatus.Equals("Failure"))
                     {
                         dateFailure = DateTime.ParseExact(helper.Date, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
@@ -224,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     {
                         break;
                     }
-                    cont = 1;
+                    first = false;
                 }
             }
             if (Math.Floor((today - dateFailure).TotalDays) < 1)
