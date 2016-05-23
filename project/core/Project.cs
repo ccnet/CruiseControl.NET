@@ -1066,13 +1066,9 @@ namespace ThoughtWorks.CruiseControl.Core
                     if (baseTask != null)
                     {
                         wasSuccessful = baseTask.WasSuccessful;
-                        if (!wasSuccessful && baseTask.Name.Equals("ForceBuildPublisher"))
+                        if (!wasSuccessful)
                         {
-                            messages.Add(new Message("ForceBuildPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
-                        }
-                        else if (wasSuccessful && baseTask.Name.Equals("ForceBuildPublisher"))
-                        {
-                            messages.Add(new Message(string.Empty, Message.MessageKind.ForceBuildPublisherFailed));
+                            DetectWhatPublisherFailed(baseTask.Name);
                         }
                     }
 
@@ -1106,6 +1102,27 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        private void DetectWhatPublisherFailed(string taskName)
+        {
+            switch (taskName)
+            {
+                case "ForceBuildPublisher":
+                    messages.Add(new Message("ForceBuildPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "PowerShellTask":
+                    messages.Add(new Message("PowerShellTask Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "XmlLogPublisher":
+                    messages.Add(new Message("XmlLogPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "StatisticsPublisher":
+                    messages.Add(new Message("StatisticsPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "ArtifactCleanUpTask":
+                    messages.Add(new Message("ArtifactCleanUp Task Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+            }
+        }
         /// <summary>
         /// Cancels any tasks that have not been run.
         /// </summary>
