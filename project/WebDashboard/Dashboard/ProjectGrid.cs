@@ -43,18 +43,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
                 if (Directory.Exists(dir))
                 {
-                    var file = String.Format( @"{0}{1}\ccnet\{2}\TestResults.html", dir, serverSpecifier.ServerName, projectSpecifier.ProjectName);
-                    var fileRunningTime = String.Format( @"{0}{1}\ccnet\{2}\RunningTime.html", dir, serverSpecifier.ServerName, projectSpecifier.ProjectName);
+                    var file = String.Format(@"{0}{1}\ccnet\{2}\TestResults.html", dir, serverSpecifier.ServerName, projectSpecifier.ProjectName);
+                    var fileRunningTime = String.Format(@"{0}{1}\ccnet\{2}\RunningTime.html", dir, serverSpecifier.ServerName, projectSpecifier.ProjectName);
                     try
                     {
-                        if(File.Exists(file))
+                        if (File.Exists(file))
                             statistics = File.ReadAllText(file);
 
                         if (File.Exists(fileRunningTime))
                             runningTime = File.ReadAllText(fileRunningTime);
 
                         if (!File.Exists(fileRunningTime) || runningTime.Length < 1)
-                            runningTime = readRunningTimeIfFileEmpty(farmService, projectSpecifier, serverSpecifier, dir); 
+                            runningTime = readRunningTimeIfFileEmpty(farmService, projectSpecifier, serverSpecifier, dir);
                     }
                     catch (Exception e)
                     {
@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return String.Empty;
         }
 
-        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status, 
+        private DataGridRow getBuildData(IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, string dir, ProjectStatus status,
                                                                                                                     IBuildSpecifier buildSpecifier, bool first)
         {
             DataGridRow dataToReturn;
@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
             string lastDate = String.Format("{0}-{1}-{2} {3}:{4}:{5}", buildName.Substring(3, 4), buildName.Substring(7, 2), buildName.Substring(9, 2),
                                                                         buildName.Substring(11, 2), buildName.Substring(13, 2), buildName.Substring(15, 2));
-            string lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx", 
+            string lastLink = String.Format("http://{0}/ccnet/server/{0}/project/{1}/build/{2}/ViewBuildReport.aspx",
                                                     serverSpecifier.ServerName, projectSpecifier.ProjectName, buildName);
             dataToReturn = new DataGridRow(lastStatus, lastDate, lastLink);
             return dataToReturn;
@@ -169,11 +169,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         private int getQueuePosition(ProjectStatus status, IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, IFarmService farmService)
         {
-            if(status.Activity.ToString().Equals("Pending"))
+            if (status.Activity.ToString().Equals("Pending"))
             {
-                return getPositionInQueueList(status, serverSpecifier, projectSpecifier, farmService);  
+                return getPositionInQueueList(status, serverSpecifier, projectSpecifier, farmService);
             }
-            return -1; 
+            return -1;
         }
 
         private int getPositionInQueueList(ProjectStatus status, IServerSpecifier serverSpecifier, DefaultProjectSpecifier projectSpecifier, IFarmService farmService)
@@ -184,7 +184,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             foreach (CruiseServerSnapshot cruiseServerSnapshot in snapshot.Snapshots)
             {
                 QueueSetSnapshot queueSnapshot = cruiseServerSnapshot.QueueSetSnapshot;
-                foreach (QueueSnapshot queueSnapshotItem in queueSnapshot.Queues) {
+                foreach (QueueSnapshot queueSnapshotItem in queueSnapshot.Queues)
+                {
                     var index = checkPositionQueue(queueSnapshotItem, projectSpecifier);
                     if (index > -1) { return index; }
                 }
@@ -194,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         private int checkPositionQueue(QueueSnapshot queueSnapshotItem, DefaultProjectSpecifier projectSpecifier)
         {
-            for (int i = 0; i<queueSnapshotItem.Requests.Count; i++)
+            for (int i = 0; i < queueSnapshotItem.Requests.Count; i++)
             {
                 if (queueSnapshotItem.Requests[i].ProjectName == projectSpecifier.ProjectName)
                 {
@@ -221,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     {
                         dateFailure = DateTime.ParseExact(helper.Date, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
                     }
-                    else if (helper.BuildStatus.Equals("Success"))
+                    else
                     {
                         break;
                     }
@@ -243,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     return "1 Day";
                 else
                     return String.Format("{0} Days", Math.Floor((today - dateFailure).TotalDays));
-            } 
+            }
         }
     }
 }
