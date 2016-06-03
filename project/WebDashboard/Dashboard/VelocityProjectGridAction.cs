@@ -19,27 +19,27 @@ using Microsoft.TeamFoundation.Server;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	// ToDo - Test
-	public class VelocityProjectGridAction : IProjectGridAction
-	{
-		private readonly IFarmService FarmService;
-		private  IUrlBuilder UrlBuilder;
-		private  ICruiseUrlBuilder CruiseUrlBuilder;
-		private readonly IVelocityViewGenerator ViewGenerator;
-		private readonly IProjectGrid ProjectGrid;
+    // ToDo - Test
+    public class VelocityProjectGridAction : IProjectGridAction
+    {
+        private readonly IFarmService FarmService;
+        private IUrlBuilder UrlBuilder;
+        private ICruiseUrlBuilder CruiseUrlBuilder;
+        private readonly IVelocityViewGenerator ViewGenerator;
+        private readonly IProjectGrid ProjectGrid;
         private readonly ISessionRetriever SessionRetriever;
         private ProjectGridSortColumn SortColumn = ProjectGridSortColumn.Name;
         private Translations translation;
 
-		public VelocityProjectGridAction(IFarmService farmServices, IVelocityViewGenerator viewGenerator, 
+        public VelocityProjectGridAction(IFarmService farmServices, IVelocityViewGenerator viewGenerator,
             IProjectGrid projectGrid,
             ISessionRetriever sessionRetriever)
-		{
-			this.FarmService = farmServices;
-			this.ViewGenerator = viewGenerator;
-			this.ProjectGrid = projectGrid;
+        {
+            this.FarmService = farmServices;
+            this.ViewGenerator = viewGenerator;
+            this.ProjectGrid = projectGrid;
             this.SessionRetriever = sessionRetriever;
-		}
+        }
 
         #region Properties
         #region DefaultSortColumn
@@ -63,13 +63,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         #endregion
 
         public IResponse Execute(string actionName, ICruiseRequest request)
-		{
+        {
             return GenerateView(FarmService.GetProjectStatusListAndCaptureExceptions(request.RetrieveSessionToken()), actionName, request, null);
-		}
+        }
 
         public IResponse Execute(string actionName, IServerSpecifier serverSpecifier, ICruiseRequest request)
-		{
-			//Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
+        {
+            //Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
             var serverName = serverSpecifier.ServerName;
             serverSpecifier = FarmService.GetServerConfiguration(serverName);
             if (serverSpecifier == null)
@@ -80,32 +80,33 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 return GenerateView(FarmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken()), actionName, request, serverSpecifier);
             }
-		}
+        }
 
-		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions,
+        private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions,
             string actionName, ICruiseRequest request, IServerSpecifier serverSpecifier)
-		{
+        {
             this.translation = Translations.RetrieveCurrent();
             bool sortReverse = SortAscending(request.Request);
             string category = request.Request.GetText("Category");
             CruiseUrlBuilder = request.UrlBuilder;
             UrlBuilder = request.UrlBuilder.InnerBuilder;
             ProjectGridSortColumn sortColumn = GetSortColumn(request.Request);
-			Hashtable velocityContext = new Hashtable();
+            Hashtable velocityContext = new Hashtable();
             velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request.Request);
             velocityContext["parametersCall"] = new ServerLink(CruiseUrlBuilder, new DefaultServerSpecifier("null"), string.Empty, ProjectParametersAction.ActionName).Url;
-			velocityContext["wholeFarm"] = serverSpecifier == null ?  true : false;
-			velocityContext["showCategoryColumn"] = string.IsNullOrEmpty(category) ? true : false;
-			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Name, sortColumn, sortReverse);
-			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
-			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
-			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
-			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
+            velocityContext["wholeFarm"] = serverSpecifier == null ? true : false;
+            velocityContext["showCategoryColumn"] = string.IsNullOrEmpty(category) ? true : false;
+            velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Name, sortColumn, sortReverse);
+            velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
+            velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
+            velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
+            velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
             velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-            ProjectGridParameters parameters = new ProjectGridParameters(projectStatusListAndExceptions.StatusAndServerList, sortColumn, sortReverse, category, CruiseUrlBuilder, FarmService, this.translation);
+            ProjectGridParameters parameters = new ProjectGridParameters(projectStatusListAndExceptions.StatusAndServerList, sortColumn, sortReverse,
+                                                                            category, CruiseUrlBuilder, FarmService, this.translation);
             ProjectGridRow[] projectGridRows = ProjectGrid.GenerateProjectGridRows(parameters);
             velocityContext["projectGrid"] = projectGridRows;
-			
+
             Array categoryList = this.GenerateCategoryList(projectGridRows);
             velocityContext["categoryList"] = categoryList;
 
@@ -115,8 +116,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             velocityContext["barAtBottom"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Bottom) ||
                 (this.SuccessIndicatorBarLocation == IndicatorBarLocation.TopAndBottom);
 
-			return ViewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
-		}
+            return ViewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
+        }
 
         private Array GenerateCategoryList(ProjectGridRow[] projectGridRows)
         {
@@ -141,14 +142,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return categories.ToArray();
         }
 
-		private bool SortAscending(IRequest request)
-		{
-			return request.FindParameterStartingWith("ReverseSort") == string.Empty;
-		}
+        private bool SortAscending(IRequest request)
+        {
+            return request.FindParameterStartingWith("ReverseSort") == string.Empty;
+        }
 
-		private ProjectGridSortColumn GetSortColumn(IRequest request)
-		{
-			string columnName = request.GetText("SortColumn");
+        private ProjectGridSortColumn GetSortColumn(IRequest request)
+        {
+            string columnName = request.GetText("SortColumn");
             if (string.IsNullOrEmpty(columnName))
             {
                 return SortColumn;
@@ -161,37 +162,36 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 catch (Exception)
                 {
-                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
+                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
                 }
             }
-		}
+        }
 
-		private object GenerateSortLink(IServerSpecifier serverSpecifier, string action, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
-		{
-			string queryString = "SortColumn=" + column.ToString();
-			if (column == currentColumn && !currentReverse)
-			{
-				queryString += "&ReverseSort=ReverseSort";
-			}
-			if (serverSpecifier == null)
-			{
-				return UrlBuilder.BuildUrl(action, queryString);
-			}
-			else
-			{
-				return CruiseUrlBuilder.BuildServerUrl(action, serverSpecifier, queryString);
-			}
-		}
+        private object GenerateSortLink(IServerSpecifier serverSpecifier, string action, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
+        {
+            string queryString = "SortColumn=" + column.ToString();
+            if (column == currentColumn && !currentReverse)
+            {
+                queryString += "&ReverseSort=ReverseSort";
+            }
+            if (serverSpecifier == null)
+            {
+                return UrlBuilder.BuildUrl(action, queryString);
+            }
+            else
+            {
+                return CruiseUrlBuilder.BuildServerUrl(action, serverSpecifier, queryString);
+            }
+        }
 
-		private string ForceBuildIfNecessary(IRequest request)
-		{
+        private string ForceBuildIfNecessary(IRequest request)
+        {
             // Attempt to find a session token
             string sessionToken = request.GetText("sessionToken");
             if (string.IsNullOrEmpty(sessionToken) && (SessionRetriever != null))
             {
                 sessionToken = SessionRetriever.RetrieveSessionToken(request);
             }
-
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             foreach (string parameterName in HttpContext.Current.Request.Form.AllKeys)
             {
@@ -203,30 +203,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
             // Make the actual call
             // Right now the message returned is not used, but it will in a future
-			if (request.FindParameterStartingWith("StopBuild") != string.Empty)
-			{
+            if (request.FindParameterStartingWith("StopBuild") != string.Empty)
+            {
                 FarmService.Stop(ProjectSpecifier(request), sessionToken);
                 System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Stopping project {0}", SelectedProject(request));
-			}
-			else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
-			{
+            }
+            else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
+            {
                 FarmService.Start(ProjectSpecifier(request), sessionToken);
                 System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
-                return this.translation.Translate("Starting project {0}", SelectedProject(request));				
-			}
-			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
-			{
+                return this.translation.Translate("Starting project {0}", SelectedProject(request));
+            }
+            else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
+            {
                 FarmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
                 System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Build successfully forced for {0}", SelectedProject(request));
-			}
-			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
-			{
+            }
+            else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
+            {
                 FarmService.AbortBuild(ProjectSpecifier(request), sessionToken);
                 System.Web.HttpContext.Current.Response.Redirect(request.RawUrl, false);
                 return this.translation.Translate("Abort successfully forced for {0}", SelectedProject(request));
-			}
+            }
             else if (request.FindParameterStartingWith("CancelPending") != string.Empty)
             {
                 FarmService.CancelPendingRequest(ProjectSpecifier(request), sessionToken);
@@ -249,18 +249,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 return string.Empty;
             }
-		}
+        }
 
-		private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
-		{
-			return new DefaultProjectSpecifier(
+        private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
+        {
+            return new DefaultProjectSpecifier(
                 FarmService.GetServerConfiguration(request.GetText("serverName")), SelectedProject(request));
-		}
+        }
 
-		private static string SelectedProject(IRequest request)
-		{
-			return request.GetText("projectName");
-		}
+        private static string SelectedProject(IRequest request)
+        {
+            return request.GetText("projectName");
+        }
 
         private string SendFixerMessage(string userName, IRequest request, string sessionToken)
         {
@@ -277,5 +277,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 return this.translation.Translate("{0} succesfully selected as a fixer for {1}", userName, SelectedProject(request));
             }
         }
-	}
+    }
 }
