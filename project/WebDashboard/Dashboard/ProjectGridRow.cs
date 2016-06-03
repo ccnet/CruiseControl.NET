@@ -17,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly string parametersUrl;
         private readonly string statistics;
         private readonly string runningTime;
-        private readonly List<DataGridRow> lastFiveData;
         private readonly List<ParameterBase> buildParameters;
         private readonly int queuePosition;
+        private readonly string brokenTime;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
             string url, string parametersUrl, Translations translations)
@@ -32,14 +32,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
             string url, string parametersUrl, string statistics, string runningTime,
-            List<DataGridRow> lastFiveData, int queuePosition, List<ParameterBase> buildParameters, Translations translations)
+            int queuePosition, List<ParameterBase> buildParameters, string brokenTime, Translations translations)
             : this(status, serverSpecifier, url, parametersUrl, translations)
         {
             this.statistics = statistics;
             this.runningTime = runningTime;
-            this.lastFiveData = lastFiveData;
             this.queuePosition = queuePosition;
             this.buildParameters = buildParameters;
+            this.brokenTime = brokenTime;
         }
 
         public string Name { get { return status.Name; } }
@@ -49,8 +49,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public string Category { get { return status.Category; } }
 
         public string BuildStatus { get { return status.BuildStatus.ToString(); } }
-
-        public List<DataGridRow> LastFiveData { get { return lastFiveData; } }
 
         public string BuildStatusHtmlColor { get { return CalculateHtmlColor(status.BuildStatus); } }
 
@@ -103,6 +101,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public List<ParameterBase> BuildParameters { get { return buildParameters; } }
 
         public int BuildParametersCount { get { return buildParameters.Count; } }
+
+        public string BrokenTime { get { return brokenTime; } }
 
         public string[] BreakersNames
         {
