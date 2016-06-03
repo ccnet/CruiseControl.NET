@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         AbortBuild,
         StartProject,
         StopProject,
+        Volunteer,
+        CancelVolunteer,
         Help
     }
 }
