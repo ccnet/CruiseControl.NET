@@ -1,4 +1,4 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -17,6 +17,7 @@
     using ThoughtWorks.CruiseControl.Core;
     using System.Web;
     using System.Linq;
+    using System.Diagnostics;
 
 
     [ReflectorType("categorizedFarmReportFarmPlugin")]
@@ -72,13 +73,21 @@
             var sessionToken = request.RetrieveSessionToken();
             velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request.Request, sessionToken);
 
-            var gridRows = this.projectGrid.GenerateProjectGridRows(projectStatus.StatusAndServerList, BaseActionName,
-                                                                    ProjectGridSortColumn.Category, true,
-                                                                    category, urlBuilder, this.translations);
+            ProjectGridParameters parameters =
+                new ProjectGridParameters(
+                    projectStatus.StatusAndServerList,
+                    ProjectGridSortColumn.Category,
+                    true,
+                    BaseActionName,
+                    urlBuilder,
+                    farmService,
+                    this.translations);
+
+            var gridRows = this.projectGrid.GenerateProjectGridRows(parameters);
 
             var categories = new SortedDictionary<string, CategoryInformation>();
 
-            foreach (var row in gridRows.OrderBy( s=> s.ServerName).ThenBy( p => p.Name))
+            foreach (var row in gridRows.OrderBy(s => s.ServerName).ThenBy(p => p.Name))
             {
                 var rowCategory = row.Category;
                 CategoryInformation categoryRows;
@@ -95,7 +104,7 @@
             // it's annoying to specify a category and still have to press the show link
             if (!string.IsNullOrEmpty(category))
             {
-                    categories[category].Display = true;
+                categories[category].Display = true;
             }
 
 
@@ -166,6 +175,11 @@
             {
                 farmService.AbortBuild(ProjectSpecifier(request), sessionToken);
                 return this.translations.Translate("Abort successfully forced for {0}", SelectedProject(request));
+            }
+            else if (request.FindParameterStartingWith("CancelPending") != string.Empty)
+            {
+                farmService.CancelPendingRequest(ProjectSpecifier(request), sessionToken);
+                return this.translations.Translate("Cancel pending successfully forced for {0}", SelectedProject(request));
             }
             else
             {
