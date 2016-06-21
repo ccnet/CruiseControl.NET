@@ -1,13 +1,13 @@
-﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
     using System;
     using System.Xml;
     using Moq;
     using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Core.Util;
+    using CruiseControl.Remote;
+    using CruiseControl.Remote.Events;
 
     /// <summary>
     /// Test the disk space monitor.
@@ -30,7 +30,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Gb", 100, "C:\\")
+                this.CreateSizeElement("Gb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(107374182400, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -43,7 +43,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 100, "C:\\")
+                this.CreateSizeElement("Mb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -56,7 +56,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Kb", 100, "C:\\")
+                this.CreateSizeElement("Kb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(102400, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -69,7 +69,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("b", 100, "C:\\")
+                this.CreateSizeElement("b", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(100, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -82,7 +82,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement(null, 100, "C:\\")
+                this.CreateSizeElement(null, 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -95,7 +95,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("garbage", 100, "C:\\")
+                this.CreateSizeElement("garbage", 100, "C:\\")
             };
             Assert.That(delegate { extension.Initialise(server, configuration); },
                         Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -134,8 +134,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 100, "C:\\"),
-                CreateSizeElement("Kb", 100, "D:\\")
+                this.CreateSizeElement("Mb", 100, "C:\\"), this.CreateSizeElement("Kb", 100, "D:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -159,7 +158,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 1, "C:\\")
+                this.CreateSizeElement("Mb", 1, "C:\\")
             };
 
             // Run the actual test
@@ -186,7 +185,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 1, "C:\\")
+                this.CreateSizeElement("Mb", 1, "C:\\")
             };
 
             // Run the actual test
@@ -201,7 +200,6 @@
         {
             var extension = new DiskSpaceMonitorExtension();
             var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
-            var config = new ExtensionConfiguration();
 
             extension.Start();
             extension.Stop();
@@ -214,7 +212,6 @@
         {
             var extension = new DiskSpaceMonitorExtension();
             var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
-            var config = new ExtensionConfiguration();
 
             extension.Start();
             extension.Abort();
