@@ -15,14 +15,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
     {
     	private static readonly string FAKE_ROOT = Path.DirectorySeparatorChar == '\\' ? "c:\\temp folder\\" : "/tmp/";
 
-        private readonly XmlUrlResolver _resolver =
-            new XmlUrlResolver();
+        private readonly XmlUrlResolver _resolver = new XmlUrlResolver();
 
         [Test]
         public void TestDocType()
         {
-            var doc = _Preprocess("TestDocType.xml");            
+            _Preprocess("TestDocType.xml");            
         }
+
         [Test]
         public void TestAttrNodesetDefine()
         {
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         [Test]
         public void TestRedefineBug()
         {
-            var doc = _Preprocess("TestRedefineBug.xml");            
+            _Preprocess("TestRedefineBug.xml");            
         }
 
         [Test]
@@ -190,7 +190,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             XmlDocument doc = _Preprocess("TestImport.xml");
             AssertNodeValue(doc, "/root/test", "Hello From TestElementProcessor!");
         }
-
         
         [Test]
         public void TestInitialDefine()
@@ -223,7 +222,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             _Preprocess("TestInvalidAttribute.xml");
         }
-        
 
         [Test]
         public void TestProcessingInstruction()
@@ -232,11 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             XPathNavigator nav = doc.CreateNavigator();
             AssertNodeValue(nav, "/processing-instruction('mypi')", "mypival");
         }
-
-
-
-
-
+        
         #region existing
 
         [Test]
@@ -307,19 +301,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             using (XmlReader input = GetInput("TestIncluder.xml"))
             {
                 PreprocessorEnvironment env;
+
                 using ( XmlWriter output = GetOutput() )
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
                     env = preprocessor.PreProcess( input, output, new TestResolver( FAKE_ROOT + "TestIncluder.xml" ), new Uri(FAKE_ROOT + "TestIncluder.xml" ) );
                 }
-                AssertNodeExists( ReadOutputDoc().CreateNavigator(),
-                                  "/includer/included/included2" );
+
+                AssertNodeExists( ReadOutputDoc().CreateNavigator(), "/includer/included/included2" );
 
                 Assert.AreEqual( env.Fileset.Length, 3 );
                 Assert.AreEqual( GetTestPath( "TestIncluder.xml" ), env.Fileset[ 0 ].LocalPath );
                 Assert.AreEqual(
-                    GetTestPath( String.Format( "Subfolder{0}TestIncluded.xml",
-                                                Path.DirectorySeparatorChar ) ),
+                    GetTestPath( String.Format( "Subfolder{0}TestIncluded.xml", Path.DirectorySeparatorChar ) ),
                     env.Fileset[ 1 ].LocalPath );
                 Assert.AreEqual( GetTestPath( "TestIncluded2.xml" ), env.Fileset[ 2 ].LocalPath );
             }
@@ -331,6 +325,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             using (XmlReader input = GetInput("TestIncludeStack1.xml"))
             {
                 PreprocessorEnvironment env;
+
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -338,6 +333,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                         new TestResolver(FAKE_ROOT + "TestIncludeStack1.xml"),
                         new Uri(FAKE_ROOT + "TestIncludeStack1.xml"));
                 }
+
                 AssertNodeExists(ReadOutputDoc().CreateNavigator(), "/TestIncludeStack1/TestIncludeStack2/TestIncludeStack3");
                 AssertNodeExists(ReadOutputDoc().CreateNavigator(), "/TestIncludeStack1/TestIncludeStack4");
 
@@ -355,6 +351,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         public void TestMissingIncludeFile()
         {
             string filename = "TestMissingIncludeFile.xml";
+
             using (XmlReader input = GetInput(filename))
             {
                 using (XmlWriter output = GetOutput())
@@ -408,6 +405,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             using (XmlReader input = GetInput("Test Include File With Spaces.xml"))
             {
                 PreprocessorEnvironment env;
+
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -415,8 +413,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                         new TestResolver(FAKE_ROOT + "Test Include File With Spaces.xml"),
                         new Uri(FAKE_ROOT + "Test Include File With Spaces.xml"));
                 }
+
                 XmlDocument doc = ReadOutputDoc();
                 AssertNodeValue(doc, "/element", "value");
+
                 Assert.AreEqual(env.Fileset.Length, 1);
                 Assert.AreEqual( new Uri(GetTestPath("Test Include File With Spaces.xml")), env.Fileset[0]);
             }
@@ -428,6 +428,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             using (XmlReader input = GetInput("TestIncludeVariable.xml"))
             {
                 PreprocessorEnvironment env;
+
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -435,6 +436,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                         new TestResolver(FAKE_ROOT + "TestIncludeVariable.xml"),
                         new Uri(FAKE_ROOT + "TestIncludeVariable.xml"));
                 }
+
                 AssertNodeExists(ReadOutputDoc().CreateNavigator(),
                                   "/includeVariable/included/included2");
 
@@ -459,6 +461,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             return _Preprocess( filename, new PreprocessorSettings() );
         }
+
         private static XmlDocument _Preprocess(string filename, PreprocessorSettings settings )
         {
             using( XmlReader input = GetInput( filename ) )
@@ -492,23 +495,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             Assert.AreEqual( node.Value.Trim(), expected_val);
         }
 
-        private static void AssertNodeValue(XPathNavigator nav,
-                                             string xpath, string expected_val)
+        private static void AssertNodeValue(XPathNavigator nav, string xpath, string expected_val)
         {
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNotNull(node, "Node '{0}' not found", xpath);
             Assert.AreEqual( node.Value.Trim(), expected_val);
         }
 
-        private static void AssertNodeExists(XPathNavigator nav,
-                                             string xpath)
+        private static void AssertNodeExists(XPathNavigator nav, string xpath)
         {
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNotNull(node, "Node '{0}' not found", xpath);
         }
 
-        private static void AssertNodeDoesNotExist(XPathNavigator nav,
-                                                   string xpath)
+        private static void AssertNodeDoesNotExist(XPathNavigator nav, string xpath)
         {
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNull(node, "Node '{0}' found when it should not exist", xpath);
@@ -546,8 +546,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             doc.Load(OutPath);            
             return doc;
         }
-
-
+        
         private static XmlWriter GetOutput()
         {
             return Utils.CreateWriter(OutPath);
@@ -565,8 +564,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
         public TestResolver(string base_path) : base()
         {
-            _original_base_path = Path.GetDirectoryName( base_path ) +
-                                  Path.DirectorySeparatorChar;
+            _original_base_path = Path.GetDirectoryName( base_path ) + Path.DirectorySeparatorChar;
         }
 
         public override ICredentials Credentials
@@ -574,8 +572,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             set { }
         }
 
-        public override object GetEntity(
-            Uri absolute_uri, string role, Type of_object_to_return)
+        public override object GetEntity(Uri absolute_uri, string role, Type of_object_to_return)
         {
             string relative_uri = Resolve( absolute_uri );
             // Ignore the path and load the file from the manifest resources.
@@ -588,27 +585,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
         protected string Resolve(Uri absolute_uri)
         {
-            return absolute_uri.LocalPath.Substring( _original_base_path.Length ).Replace( '\\',
-                                                                                             '.' );
+            return absolute_uri.LocalPath.Substring( _original_base_path.Length ).Replace( '\\', '.' );
         }
     }
 
     internal class FileNotFoundTestResolver : TestResolver
     {
-        public FileNotFoundTestResolver(string base_path)
-            : base(base_path)
+        public FileNotFoundTestResolver(string base_path) : base(base_path)
         {
         }
 
-        public override object GetEntity(
-            Uri absolute_uri, string role, Type of_object_to_return)
+        public override object GetEntity(Uri absolute_uri, string role, Type of_object_to_return)
         {
             string relative_uri = Resolve(absolute_uri);
             // Ignore the path and load the file from the manifest resources.
             // Don't assert that the resource exists, we need that to fall through
             // for testing purposes.
-            Stream stream = PreprocessorTest.GetManifestResourceStream(
-                relative_uri, false);
+            Stream stream = PreprocessorTest.GetManifestResourceStream(relative_uri, false);
             if (stream == null)
                 throw new FileNotFoundException("Test resource not found.", absolute_uri.OriginalString);
             return stream;

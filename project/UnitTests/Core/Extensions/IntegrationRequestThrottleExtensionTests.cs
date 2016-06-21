@@ -3,9 +3,9 @@
     using System.Xml;
     using NUnit.Framework;
     using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Remote;
+    using CruiseControl.Remote.Events;
 
     [TestFixture]
     public class IntegrationRequestThrottleExtensionTests

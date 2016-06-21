@@ -4,10 +4,10 @@
     using System.Xml;
     using NUnit.Framework;
     using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Core.Util;
+    using CruiseControl.Remote;
+    using CruiseControl.Remote.Events;
 
     /// <summary>
     /// Test the disk space monitor.
@@ -26,11 +26,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForGb()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Gb", 100, "C:\\")
+                this.CreateSizeElement("Gb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(107374182400, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -39,11 +39,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForMb()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 100, "C:\\")
+                this.CreateSizeElement("Mb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -52,11 +52,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForKb()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Kb", 100, "C:\\")
+                this.CreateSizeElement("Kb", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(102400, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -65,11 +65,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForB()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("b", 100, "C:\\")
+                this.CreateSizeElement("b", 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(100, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -78,11 +78,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForMissing()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement(null, 100, "C:\\")
+                this.CreateSizeElement(null, 100, "C:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -91,11 +91,11 @@
         [Test]
         public void InitialiseThrowsAnErrorForUnknownUnit()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("garbage", 100, "C:\\")
+                this.CreateSizeElement("garbage", 100, "C:\\")
             };
             Assert.That(delegate { extension.Initialise(server, configuration); },
                         Throws.TypeOf<ArgumentOutOfRangeException>());
@@ -104,7 +104,7 @@
         [Test]
         public void InitialiseThrowsAnErrorForUnknownElement()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             var document = new XmlDocument();
@@ -118,7 +118,7 @@
         [Test]
         public void InitialiseThrowsAnErrorWithNoDrives()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
@@ -130,12 +130,11 @@
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForMultipleDrives()
         {
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 100, "C:\\"),
-                CreateSizeElement("Kb", 100, "D:\\")
+                this.CreateSizeElement("Mb", 100, "C:\\"), this.CreateSizeElement("Kb", 100, "D:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -146,12 +145,12 @@
         public void IntegrationIsSuccessfulWhenSufficientSpace()
         {
             // Initialise the file system
-            var fileSystem = mocks.DynamicMock<IFileSystem>();
+            var fileSystem = this.mocks.DynamicMock<IFileSystem>();
             SetupResult.For(fileSystem.GetFreeDiskSpace("c:\\"))
                 .Return(104857600);
 
             // Initialise the server
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             SetupResult.For(server.RetrieveService(typeof(IFileSystem)))
                 .Return(fileSystem);
             server.IntegrationStarted += null;
@@ -162,9 +161,9 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 1, "C:\\")
+                this.CreateSizeElement("Mb", 1, "C:\\")
             };
-            mocks.ReplayAll();
+            this.mocks.ReplayAll();
 
             // Run the actual test
             extension.Initialise(server, configuration);
@@ -177,12 +176,12 @@
         public void IntegrationIsStoppedWhenInsufficientSpace()
         {
             // Initialise the file system
-            var fileSystem = mocks.DynamicMock<IFileSystem>();
+            var fileSystem = this.mocks.DynamicMock<IFileSystem>();
             SetupResult.For(fileSystem.GetFreeDiskSpace("c:\\"))
                 .Return(102400);
 
             // Initialise the server
-            var server = mocks.DynamicMock<ICruiseServer>();
+            var server = this.mocks.DynamicMock<ICruiseServer>();
             SetupResult.For(server.RetrieveService(typeof(IFileSystem)))
                 .Return(fileSystem);
             server.IntegrationStarted += null;
@@ -193,9 +192,9 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 1, "C:\\")
+                this.CreateSizeElement("Mb", 1, "C:\\")
             };
-            mocks.ReplayAll();
+            this.mocks.ReplayAll();
 
             // Run the actual test
             extension.Initialise(server, configuration);
@@ -208,8 +207,6 @@
         public void StartAndStopDoesNothing()
         {
             var extension = new DiskSpaceMonitorExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
-            var config = new ExtensionConfiguration();
 
             this.mocks.ReplayAll();
             extension.Start();
@@ -222,8 +219,6 @@
         public void StartAndAbortDoesNothing()
         {
             var extension = new DiskSpaceMonitorExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
-            var config = new ExtensionConfiguration();
 
             this.mocks.ReplayAll();
             extension.Start();

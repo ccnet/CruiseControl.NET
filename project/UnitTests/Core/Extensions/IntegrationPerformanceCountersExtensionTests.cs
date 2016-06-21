@@ -1,12 +1,11 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
-    using System.Xml;
     using NUnit.Framework;
     using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Remote;
+    using CruiseControl.Core.Util;
+    using CruiseControl.Remote.Events;
 
     [TestFixture]
     public class IntegrationPerformanceCountersExtensionTests

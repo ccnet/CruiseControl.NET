@@ -28,7 +28,7 @@ namespace CCNet.CSharpDemos.Plugin.Tasks
             {
                 result.AddTaskResult("Hello " + this.PersonsName +
                     " from " + result.ProjectName +
-                    "(build started " + result.StartTime.ToString() + ")");
+                    "(build started " + result.StartTime + ")");
             }
 
             result.Status = IntegrationStatus.Success;
