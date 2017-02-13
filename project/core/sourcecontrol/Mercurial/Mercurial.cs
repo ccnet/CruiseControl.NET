@@ -530,6 +530,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("heads");
+			if (string.IsNullOrEmpty(Branch))
+			{
+				buffer.AddArgument(".");
+			}
+			else
+			{
+				buffer.AddArgument(Branch);
+			}
 			buffer.AddArgument("--template", "{rev}:");
 
 			var bpi = GetBuildProgressInformation(result);
