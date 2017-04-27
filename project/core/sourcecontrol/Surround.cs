@@ -41,15 +41,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </para>
     /// </remarks>
     [ReflectorType("surround")]
-	public class Surround : ProcessSourceControl
-	{
+   public class Surround : ProcessSourceControl
+   {
         /// <summary>
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public const string TO_SSCM_DATE_FORMAT = "yyyyMMddHHmmss";
-		private const string DefaultServerConnection = "127.0.0.1:4900";
-		private const string DefaultServerLogin = "Administrator:";
+      public const string TO_SSCM_DATE_FORMAT = "yyyyMMddHHmmss";
+      private const string DefaultServerConnection = "127.0.0.1:4900";
+      private const string DefaultServerLogin = "Administrator:";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Surround"/> class.
@@ -145,65 +145,65 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="to">To.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
-		{
-			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc {0} -d{1}:{2} {3} -b{4} -p{5} {6} -z{7} -y{8}",
-			                               File,
-			                               from.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
-			                               to.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
-			                               (Recursive == 0) ?string.Empty : "-r",
-			                               Branch,
-			                               Repository,
-			                               (SearchRegExp == 0) ? "-x-" : "-x",
-			                               ServerConnect,
-			                               ServerLogin);
+      public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+      {
+         string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc '{0}' -d{1}:{2} {3} -b'{4}' -p'{5}' {6} -z'{7}' -y'{8}'",
+                                        File,
+                                        from.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
+                                        to.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
+                                        (Recursive == 0) ?string.Empty : "-r",
+                                        Branch,
+                                        Repository,
+                                        (SearchRegExp == 0) ? "-x-" : "-x",
+                                        ServerConnect,
+                                        ServerLogin);
 
             Modification[] modifications = GetModifications(CreateSSCMProcessInfo(command), from.StartTime, to.StartTime);
             base.FillIssueUrl(modifications);
             return modifications;
         }
 
-		private ProcessInfo CreateSSCMProcessInfo(string command)
-		{
-			return new ProcessInfo(Executable, command);
-		}
+      private ProcessInfo CreateSSCMProcessInfo(string command)
+      {
+         return new ProcessInfo(Executable, command);
+      }
 
         /// <summary>
         /// Labels the source control.	
         /// </summary>
         /// <param name="result">The result.</param>
         /// <remarks></remarks>
-		public override void LabelSourceControl(IIntegrationResult result)
-		{}
+      public override void LabelSourceControl(IIntegrationResult result)
+      {}
 
         /// <summary>
         /// Initializes the specified project.	
         /// </summary>
         /// <param name="project">The project.</param>
         /// <remarks></remarks>
-		public override void Initialize(IProject project)
-		{
-			Execute(CreateSSCMProcessInfo("workdir " + WorkingDirectory + " " + Repository + " -z" + ServerConnect + " -y" + ServerLogin));
-		}
+      public override void Initialize(IProject project)
+      {
+         Execute(CreateSSCMProcessInfo("workdir " + WorkingDirectory + " " + Repository + " -z" + ServerConnect + " -y" + ServerLogin));
+      }
 
         /// <summary>
         /// Gets the source.	
         /// </summary>
         /// <param name="result">The result.</param>
         /// <remarks></remarks>
-		public override void GetSource(IIntegrationResult result)
-		{
-			Log.Info("Getting source from Surround SCM");
+      public override void GetSource(IIntegrationResult result)
+      {
+         Log.Info("Getting source from Surround SCM");
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Surround SCM");
 
-			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get * -q -tcheckin -wreplace {0} -d{1} -b{2} -p{3} -z{4} -y{5}",
-			                               (Recursive == 0) ?string.Empty : "-r",
-			                               WorkingDirectory,
-										   Branch,
-			                               Repository,
-			                               ServerConnect,
-			                               ServerLogin);
-			Execute(CreateSSCMProcessInfo(command));
-		}
-	}
+         string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get * -q -tcheckin -wreplace {0} -d'{1}' -b'{2}' -p'{3}' -z'{4}' -y'{5}'",
+                                        (Recursive == 0) ?string.Empty : "-r",
+                                        WorkingDirectory,
+                                 Branch,
+                                        Repository,
+                                        ServerConnect,
+                                        ServerLogin);
+         Execute(CreateSSCMProcessInfo(command));
+      }
+   }
 }
