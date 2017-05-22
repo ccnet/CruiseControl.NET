@@ -120,7 +120,7 @@
   <xsl:template match="reason">
     <tr>
       <td class="warningnote">
-        <span style="color:yellow">
+        <span style="color:#B2B200">
           <xsl:value-of select="../@name" />
         </span>
       </td>

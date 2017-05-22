@@ -42,7 +42,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             string serverName = request.ServerName;
             if (!string.IsNullOrEmpty(serverName) && (configuration.PluginConfiguration.SecurityPlugins.Length > 0))
             {
-                if (string.IsNullOrEmpty(retriever.RetrieveSessionToken(request.Request)))
+                string sessionToken = retriever.RetrieveSessionToken(request.Request);
+
+                string userName = string.Empty;
+
+
+                if (string.IsNullOrEmpty(sessionToken))
                 {
                     velocityContext["action"] = linkFactory.CreateServerLink(request.ServerSpecifier,
                         "Login",
@@ -57,7 +62,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     velocityContext["changePassword"] = linkFactory.CreateServerLink(request.ServerSpecifier,
                         "Change Password",
                         ChangePasswordSecurityAction.ActionName);
+
+                    string displayName = retriever.RetrieveDisplayName(request.Request);
+
+                    if (string.IsNullOrEmpty(displayName))
+                        userName = sessionToken;
+                    else
+                        userName = displayName;
                 }
+
+                velocityContext["userName"] = userName;
+
             }
             else
             {

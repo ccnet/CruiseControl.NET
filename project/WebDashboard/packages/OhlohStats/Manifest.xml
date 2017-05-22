@@ -2,6 +2,7 @@
   <name>Ohloh</name>
   <description>Display the statistics from Ohloh.</description>
   <type>Plugin</type>
+  <group>Project</group>    
   <folders>
     <folder>
       <location>Templates</location>

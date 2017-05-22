@@ -2,6 +2,7 @@
   <name>Project Statistics</name>
   <description>Statistics for a project.</description>
   <type>Plugin</type>
+  <group>Project</group>    
   <folders>
     <folder>
       <location>Xsl</location>

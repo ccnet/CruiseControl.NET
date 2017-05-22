@@ -2,6 +2,7 @@
   <name>Package List</name>
   <description>Display the list of packages that were generated.</description>
   <type>Plugin</type>
+  <group>Project</group>    
   <folders>
     <folder>
       <location>Templates</location>

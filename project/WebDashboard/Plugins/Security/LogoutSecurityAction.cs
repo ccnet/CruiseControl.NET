@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 			if (!string.IsNullOrEmpty(sessionToken))
 				farmService.Logout(cruiseRequest.ServerName, sessionToken);
 			storer.StoreSessionToken(null);
+			storer.StoreDisplayName(null);
 			return viewGenerator.GenerateView("LoggedOut.vm", velocityContext);
 		}
 		#endregion

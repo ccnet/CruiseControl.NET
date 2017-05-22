@@ -2,6 +2,7 @@
   <name>Security Configuration Display</name>
   <description>Display the security configuration a server.</description>
   <type>Plugin</type>
+  <group>Server</group>
   <folders>
     <folder>
       <location>Templates</location>

@@ -10,19 +10,75 @@
              select="40" />
 
   <xsl:template match="/">
+      <style>
+
+.mhc
+{  #method  high coverage
+   text-align: left;
+   background-color:#86ed60;
+}
+
+.mmc
+{  #method medium coverage
+   text-align: left;
+   background-color:#ffff99;
+}
+
+.mbc
+{  #method  bad coverage
+   text-align: left;
+   background-color:#eb4848;
+}
+
+
+.chc
+{  #class high coverage
+   text-align: left; 
+   border-right: 1px solid #649cc0; 
+   border-bottom: 1px solid #649cc0; 
+   width: 100; 
+   font-weight: bold;
+   background-color:#86ed60;
+   margin-right:16px;
+}
+
+.cmc
+{  #class high coverage
+   text-align: left; 
+   border-right: 1px solid #649cc0; 
+   border-bottom: 1px solid #649cc0; 
+   width: 100; 
+   font-weight: bold;
+   background-color:#ffff99;
+   margin-right:16px;
+}
+
+.cbc
+{  #class high coverage
+   text-align: left; 
+   border-right: 1px solid #649cc0; 
+   border-bottom: 1px solid #649cc0; 
+   width: 100; 
+   font-weight: bold;
+   background-color:#eb4848;
+   margin-right:16px;
+}
+ </style>
+
 
     <xsl:variable name="root"
                   select="//CoverageDSPriv" />
 
     <xsl:if test="$root">
+        <h3>Code Coverage Summary (MsTest)</h3>
+
       <table class="section-table"
              cellpadding="2"
              cellspacing="0"
-             border="0"
-             width="98%">
-        <tr>
-          <td class="sectionheader">Code Coverage Summary (MsTest)</td>
-        </tr>
+             border="1">
+        <tr><td class="mhc">highCoverage &gt;= <xsl:value-of select="$highCoverage" /> %</td></tr>
+        <tr><td class="mmc">mediumCoverage &gt;= <xsl:value-of select="$mediumCoverage" /> %</td></tr>
+        <tr><td class="mbc">bad &lt; <xsl:value-of select="$mediumCoverage" /> % </td></tr>
       </table>
 
       <br/>
@@ -91,29 +147,20 @@
     <li>
       <xsl:variable name="pctCovered"
                     select="(BlocksCovered div (BlocksCovered + BlocksNotCovered)) * 100" />
-      <table>
-        <tr>
-          <td>
-            <xsl:attribute name="style">
-              text-align: left; border-right: 1px solid #649cc0; border-bottom: 1px solid #649cc0; width: 100; font-weight: bold;
-              <xsl:choose>
-                <xsl:when test="number($pctCovered &gt;= $highCoverage)">background-color:#86ed60;</xsl:when>
-                <xsl:when test="number($pctCovered &gt;= $mediumCoverage)">background-color:#ffff99;</xsl:when>
-                <xsl:otherwise>background-color:#eb4848;</xsl:otherwise>
+           <span><xsl:attribute name="class"><xsl:choose>
+                <xsl:when test="number($pctCovered &gt;= $highCoverage)">chc</xsl:when>
+                <xsl:when test="number($pctCovered &gt;= $mediumCoverage)">cmc</xsl:when>
+                <xsl:otherwise>cbc</xsl:otherwise>
               </xsl:choose>
             </xsl:attribute>
             <xsl:value-of select="ClassName"/>
-          </td>
-          <td>
-            <xsl:if test="$pctCovered > 0">
-              <xsl:value-of select="format-number($pctCovered, '###.##')" />%
-            </xsl:if>
+          </span>
+            <xsl:if test="$pctCovered > 0"><xsl:value-of select="format-number($pctCovered, '###.##')" />%</xsl:if>
             <xsl:if test="$pctCovered = 0">0.00%</xsl:if>
-          </td>
-        </tr>
-      </table>
 
-      <xsl:apply-templates select="./Method" />
+       <table>
+          <xsl:apply-templates select="./Method" />
+       </table>
     </li>
 
   </xsl:template>
@@ -122,28 +169,16 @@
     <xsl:variable name="pctCovered"
                   select="(BlocksCovered div (BlocksCovered + BlocksNotCovered)) * 100" />
 
-    <table>
-      <tr>
-        <td width="50">
-          <xsl:if test="$pctCovered > 0">
-            <xsl:value-of select="format-number($pctCovered, '###.##')" />%
-          </xsl:if>
-          <xsl:if test="$pctCovered = 0">0.00%</xsl:if>
-        </td>
-        <td>
-          <xsl:attribute name="style">
-            text-align: left;
-            <xsl:choose>
-              <xsl:when test="number($pctCovered &gt;= $highCoverage)">background-color:#86ed60;</xsl:when>
-              <xsl:when test="number($pctCovered &gt;= $mediumCoverage)">background-color:#ffff99;</xsl:when>
-              <xsl:otherwise>background-color:#eb4848;</xsl:otherwise>
+      <tr><td width="50">
+          <xsl:if test="$pctCovered > 0"><xsl:value-of select="format-number($pctCovered, '###.##')" />%</xsl:if>
+          <xsl:if test="$pctCovered = 0">0.00%</xsl:if></td><td>
+          <xsl:attribute name="class"><xsl:choose>
+              <xsl:when test="number($pctCovered &gt;= $highCoverage)">mhc</xsl:when>
+              <xsl:when test="number($pctCovered &gt;= $mediumCoverage)">mmc</xsl:when>
+              <xsl:otherwise>mbc</xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
-          <xsl:value-of select="MethodName"/>
-        </td>
-
-      </tr>
-    </table>
+          <xsl:value-of select="MethodName"/></td></tr>     
   </xsl:template>
 
 

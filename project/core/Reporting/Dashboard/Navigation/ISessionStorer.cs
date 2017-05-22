@@ -9,5 +9,10 @@
         /// The session token to store, null to delete.
         /// </summary>
 		void StoreSessionToken(string sessionToken);
+
+        /// <summary>
+        /// The display name to store, null to delete.
+        /// </summary>
+        void StoreDisplayName(string displayName);
     }
 }

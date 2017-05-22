@@ -2,6 +2,7 @@
   <name>Final Build Status</name>
   <description>Display the final status of the project at the end of a build.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Templates</location>

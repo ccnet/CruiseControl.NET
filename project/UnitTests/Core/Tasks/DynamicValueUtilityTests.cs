@@ -48,9 +48,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
         private void CheckPart(DynamicValueUtility.PropertyPart part, int position, string name, string keyName, string keyValue)
         {
-            Assert.AreEqual(name, part.Name, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part name does not match [{0}]", position));
-            Assert.AreEqual(keyName, part.KeyName, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part key name does not match [{0}]", position));
-            Assert.AreEqual(keyValue, part.KeyValue, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part key value does not match [{0}]", position));
+            Assert.AreEqual(name, part.Name, string.Format(System.Globalization.CultureInfo.CurrentCulture, "Part name does not match [{0}]", position));
+            Assert.AreEqual(keyName, part.KeyName, string.Format(System.Globalization.CultureInfo.CurrentCulture, "Part key name does not match [{0}]", position));
+            Assert.AreEqual(keyValue, part.KeyValue, string.Format(System.Globalization.CultureInfo.CurrentCulture, "Part key value does not match [{0}]", position));
         }
 
         [Test]
@@ -169,6 +169,198 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             result.ChangeProperty("20");
             Assert.AreEqual(20, rootValue.Value, "Property not changed");
         }
+
+        [Test]
+        public void DynamicUtilityNestedTasksWithParameters_EmptyReflectorTable()
+        {
+            var TaskSetupXml = GetNestedTasksWithParametersXML();
+            var processedTaskXml = "<conditional>" +
+                "  <conditions>" +
+                "    <buildCondition>" +
+                "      <value>ForceBuild</value>" +
+                "    </buildCondition>" +
+                "    <compareCondition>" +
+                "      <value1></value1>" +
+                "      <value2>Yes</value2>" +
+                "      <evaluation>Equal</evaluation>" +
+                "    </compareCondition>" +
+                "  </conditions>" +
+                "  <tasks>" +
+                "    <exec>" +
+                "      <!-- if you want the task to fail, ping an unknown server -->" +
+                "      <executable>ping.exe</executable>" +
+                "      <buildArgs>localhost</buildArgs>" +
+                "      <buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                "      <description>Pinging a server</description>" +
+                "    </exec>" +
+                "    <conditional>" +
+                "      <conditions>" +
+                "        <compareCondition>" +
+                "          <value1></value1>" +
+                "          <value2>Yes</value2>" +
+                "          <evaluation>Equal</evaluation>" +
+                "        </compareCondition>" +
+                "      </conditions>" +
+                "      <tasks>" +
+                "        <exec>" +
+                "          <!-- if you want the task to fail, ping an unknown server -->" +
+                "          <executable>ping.exe</executable>" +
+                "          <buildArgs></buildArgs>" +
+                "          <buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                "          <description>Pinging a server</description>" +
+                "        </exec>" +
+                "      </tasks>" +
+                "    </conditional>" +
+                "  </tasks>" +
+                "  <dynamicValues>" +
+                "    <directValue>" +
+                "      <parameter>CommitBuild</parameter>" +
+                "      <property>conditions.compareCondition.value1</property>" +
+                "    </directValue>" +
+                "    <directValue>" +
+                "      <parameter>TagBuild</parameter>" +
+                "      <property>tasks.conditional.conditions.compareCondition.value1</property>" +
+                "    </directValue>" +
+                "    <directValue>" +
+                "      <parameter>TagVersion</parameter>" +
+                "      <property>tasks.conditional.tasks.exec.buildArgs</property>" +
+                "    </directValue>" +
+                "  </dynamicValues>" +
+                "</conditional>";
+
+            var xdoc = new System.Xml.XmlDocument();
+            xdoc.LoadXml(TaskSetupXml);
+            Exortech.NetReflector.NetReflectorTypeTable typeTable = new Exortech.NetReflector.NetReflectorTypeTable();
+
+            var result = ThoughtWorks.CruiseControl.Core.Tasks.DynamicValueUtility.ConvertXmlToDynamicValues(typeTable, xdoc.DocumentElement, null);
+            Console.WriteLine(result.OuterXml);
+
+            xdoc.LoadXml(processedTaskXml); // load in xdoc to ease comparing xml documents
+
+            Assert.AreEqual(xdoc.OuterXml, result.OuterXml);
+        }
+
+        [Test]
+        public void DynamicUtilityNestedTasksWithParameters_ReflectorTableInitialisedAsByServer()
+        {
+            var TaskSetupXml = GetNestedTasksWithParametersXML();
+            var processedTaskXml = "<conditional>" +
+                    "  <conditions>" +
+                    "    <buildCondition>" +
+                    "      <value>ForceBuild</value>" +
+                    "    </buildCondition>" +
+                    "    <compareCondition>" +
+                    "      <value1></value1>" +
+                    "      <value2>Yes</value2>" +
+                    "      <evaluation>Equal</evaluation>" +
+                    "    </compareCondition>" +
+                    "  </conditions>" +
+                    "  <tasks>" +
+                    "    <exec>" +
+                    "      <!-- if you want the task to fail, ping an unknown server -->" +
+                    "      <executable>ping.exe</executable>" +
+                    "      <buildArgs>localhost</buildArgs>" +
+                    "      <buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                    "      <description>Pinging a server</description>" +
+                    "    </exec>" +
+                    "    <conditional>" +
+                    "      <conditions>" +
+                    "        <compareCondition>" +
+                    "          <value1></value1>" +
+                    "          <value2>Yes</value2>" +
+                    "          <evaluation>Equal</evaluation>" +
+                    "        </compareCondition>" +
+                    "      </conditions>" +
+                    "      <tasks>" +
+                    "        <exec>" +
+                    "          <!-- if you want the task to fail, ping an unknown server -->" +
+                    "          <executable>ping.exe</executable>" +
+                    "          <buildArgs></buildArgs>" +
+                    "          <buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                    "          <description>Pinging a server</description>" +
+                    "          <dynamicValues>" +
+                    "            <directValue>" +
+                    "              <parameter>TagVersion</parameter>" +
+                    "              <property>buildArgs</property>" +
+                    "            </directValue>" +
+                    "          </dynamicValues>" +
+                    "        </exec>" +
+                    "      </tasks>" +
+                    "      <dynamicValues>" +
+                    "        <directValue>" +
+                    "          <parameter>TagBuild</parameter>" +
+                    "          <property>conditions[0].value1</property>" +
+                    "        </directValue>" +
+                    "      </dynamicValues>" +
+                    "    </conditional>" +
+                    "  </tasks>" +
+                    "  <dynamicValues>" +
+                    "    <directValue>" +
+                    "      <parameter>CommitBuild</parameter>" +
+                    "      <property>conditions[1].value1</property>" +
+                    "    </directValue>" +
+                    "  </dynamicValues>" +
+                    "</conditional>";
+
+
+            var xdoc = new System.Xml.XmlDocument();
+            xdoc.LoadXml(TaskSetupXml);
+
+            Objection.ObjectionStore objectionStore = new Objection.ObjectionStore();
+            Exortech.NetReflector.NetReflectorTypeTable typeTable = Exortech.NetReflector.NetReflectorTypeTable.CreateDefault(new Objection.NetReflectorPlugin.ObjectionNetReflectorInstantiator(objectionStore));
+
+            var result = ThoughtWorks.CruiseControl.Core.Tasks.DynamicValueUtility.ConvertXmlToDynamicValues(typeTable, xdoc.DocumentElement, null);
+            Console.WriteLine(result.OuterXml);
+
+            xdoc.LoadXml(processedTaskXml); // load in xdoc to ease comparing xml documents
+
+            Assert.AreEqual(xdoc.OuterXml, result.OuterXml);
+        }
+
+        private string GetNestedTasksWithParametersXML()
+        {
+            return "	<conditional>" +
+                "			<conditions>" +
+                "				<buildCondition>" +
+                "					<value>ForceBuild</value>" +
+                "				</buildCondition>" +
+                "				<compareCondition>" +
+                "					<value1>$[CommitBuild]</value1>" +
+                "					<value2>Yes</value2>" +
+                "					<evaluation>Equal</evaluation>" +
+                "				</compareCondition>" +
+                "			</conditions>" +
+                "			<tasks>" +
+                "				<exec>" +
+                "					<!-- if you want the task to fail, ping an unknown server -->" +
+                "					<executable>ping.exe</executable>" +
+                "					<buildArgs>localhost</buildArgs>" +
+                "					<buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                "					<description>Pinging a server</description>" +
+                "				</exec>" +
+                "				<conditional>" +
+                "					<conditions>" +
+                "						<compareCondition>" +
+                "							<value1>$[TagBuild]</value1>" +
+                "							<value2>Yes</value2>" +
+                "							<evaluation>Equal</evaluation>" +
+                "						</compareCondition>" +
+                "					</conditions>" +
+                "					<tasks>" +
+                "						<exec>" +
+                "							<!-- if you want the task to fail, ping an unknown server -->" +
+                "							<executable>ping.exe</executable>" +
+                "							<buildArgs>$[TagVersion]</buildArgs>" +
+                "							<buildTimeoutSeconds>15</buildTimeoutSeconds>" +
+                "							<description>Pinging a server</description>" +
+                "						</exec>					" +
+                "					</tasks>" +
+                "				</conditional>" +
+                "				" +
+                "			</tasks>" +
+                "		</conditional>";
+        }
+
 
         [ReflectorType("testInstance")]
         public class TestClass

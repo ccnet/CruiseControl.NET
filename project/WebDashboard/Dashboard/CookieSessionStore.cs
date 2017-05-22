@@ -58,6 +58,28 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		}
 		#endregion
 
+        #region DisplayName
+        /// <summary>
+        /// Stores the display name in a cookie or deletes the cookie.
+        /// </summary>
+        public void StoreDisplayName(string displayName)
+        {
+            HttpContext.Current.Session["CCNetDisplayName"] = displayName;
+        }
+        #endregion
+
+        #region RetrieveDisplayName()
+        /// <summary>
+        /// Retrieve the display name.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string RetrieveDisplayName(IRequest request)
+        {
+            return (String)HttpContext.Current.Session["CCNetDisplayName"];
+        }
+        #endregion
+
 		#endregion
 	}
 }

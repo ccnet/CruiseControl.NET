@@ -121,6 +121,74 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             return messageObj;
         }
+
+        /// <summary>
+        /// Indicates whether or not a message string can be converted into an object.
+        /// </summary>
+        /// <param name="messageType">The type of message.</param>
+        /// <param name="message">The XML of the message.</param>
+        /// <returns>true if the message can be deserialized to the given message type.</returns>
+        public static bool CanConvertXmlToObject(Type messageType, string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                return false;
+            }
+
+            // Make sure the serialiser has been loaded
+            if (!messageSerialisers.ContainsKey(messageType))
+            {
+                messageSerialisers[messageType] = new XmlSerializer(messageType);
+            }
+
+            // Perform the test
+            try
+            {
+                using (StringReader reader = new StringReader(message))
+                using (XmlReader xmlReader = XmlReader.Create(reader))
+                    return messageSerialisers[messageType].CanDeserialize(xmlReader);
+            }
+            catch (XmlException)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region ConvertObjectToXml()
+        /// <summary>
+        /// Converts an object into a message string
+        /// </summary>
+        /// <param name="anObject">The object of the message.</param>
+        /// <returns>The XML of the message.</returns>
+        public static string ConvertObjectToXml(object anObject)
+        {
+            string result = null;
+
+            Type messageType = anObject.GetType();
+
+            // Make sure the serialiser has been loaded
+            if (!messageSerialisers.ContainsKey(messageType))
+            {
+                messageSerialisers[messageType] = new XmlSerializer(messageType);
+            }
+
+            // Perform the actual conversion
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            
+            using (StringWriter stringWriter = new StringWriter())
+            using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, settings))
+            {
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add("", "");
+
+                messageSerialisers[messageType].Serialize(xmlWriter, anObject, namespaces);
+                result = stringWriter.ToString();
+            }
+
+            return result;
+        }
         #endregion
 
         #region ConvertXmlToRequest()

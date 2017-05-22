@@ -221,10 +221,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         }
                     }
 
-                    // Tell everyone the task is done
-                    events[taskNumber].Set();
                     tasksDetails[taskNumber].Finished = true;
                     tasksDetails[taskNumber].ParentResult.BuildProgressInformation.UpdateStartupInformation(GetStatusInformation(tasksDetails[taskNumber]));
+
+                    // Tell everyone the task is done
+                    events[taskNumber].Set();
+
                 }, loop);
 
             }

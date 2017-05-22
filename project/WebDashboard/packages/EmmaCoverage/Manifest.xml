@@ -2,6 +2,7 @@
   <name>Emma Cover Results</name>
   <description>Display the results of an Emma cover report.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

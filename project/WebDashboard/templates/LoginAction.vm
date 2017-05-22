@@ -1,8 +1,15 @@
 ﻿<!-- LoginAction.vm: Start -->
 #if ($action != "")
-	<a href="$action.Url">$translations.Translate($action.Text)</a>
-#end
-#if ($changePassword != "")
-	<a href="$changePassword.Url">$translations.Translate($changePassword.Text)</a>
+    <table>
+	#if ($userName != "")
+		<tr><td colspan="2" align="left"><strong><i>$userName</i></strong></td></tr>
+	#end
+	 <tr>
+	    <td><a href="$action.Url">$translations.Translate($action.Text)</a></td>
+		#if ($changePassword != "")
+		<td><a href="$changePassword.Url">$translations.Translate($changePassword.Text)</a></td>
+		#end
+	 </tr>
+   </table>
 #end
 <!-- LoginAction.vm: End -->

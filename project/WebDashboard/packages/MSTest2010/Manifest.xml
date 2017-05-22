@@ -2,6 +2,7 @@
   <name>MSTest2010 Results</name>
   <description>Display the results of a MSTest 2010 report. (mstest en coverage)</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>

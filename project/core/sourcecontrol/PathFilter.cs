@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <example>
     /// <code>
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
+    /// &lt;pattern&gt;/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// </code>
     /// </example>

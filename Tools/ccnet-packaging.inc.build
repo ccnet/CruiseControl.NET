@@ -47,6 +47,7 @@
 				<exclude name="${src.dir}/**/*.suo"/>
 				<exclude name="${src.dir}/*.sln.cache"/>
 				<exclude name="${src.dir}/*.sln.proj"/>
+				<exclude name="**/.git/**"/> 				
 			</fileset>
 		</zip>
 	</target>

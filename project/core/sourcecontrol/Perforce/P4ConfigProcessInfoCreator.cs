@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			ProcessInfo processInfo = new ProcessInfo(p4.Executable, BuildCommonArguments(p4) + extraArguments);
 			processInfo.TimeOut = 0; // Don't time out - this should be configurable
+            processInfo.WorkingDirectory = p4.WorkingDirectory;
 			return processInfo;
 		}
 

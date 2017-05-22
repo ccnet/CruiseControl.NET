@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </para>
     /// <para>
     /// The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <link>Multi Source Control
-    /// Block</link>). It can also be included under the <link>Multi Source Control Block</link> provider so that you could have multiple
+    /// </link>Block). It can also be included under the <link>Multi Source Control</link>Block provider so that you could have multiple
     /// FilterSourceControls each filtering a different set of modifications from different source control providers. Essentially, it acts as a
     /// decorator (or an example of the pipes and filters pattern ), wrapping around the specific SourceControl provider that you want to use.
     /// </para>
@@ -43,15 +43,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// &lt;/sourceControlProvider&gt;
     /// &lt;inclusionFilters&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/**/*.*&lt;/pattern&gt;
+    /// &lt;pattern&gt;/Kunigunda/ServiceLocator/Sources/**/*.*&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;/inclusionFilters&gt;
     /// &lt;exclusionFilters&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
+    /// &lt;pattern&gt;/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;pathFilter&gt;
-    /// &lt;pattern&gt;$/**/*.vssscc&lt;/pattern&gt;
+    /// &lt;pattern&gt;/**/*.vssscc&lt;/pattern&gt;
     /// &lt;/pathFilter&gt;
     /// &lt;userFilter&gt;
     /// &lt;names&gt;&lt;name&gt;Perry&lt;/name&gt;&lt;name&gt;Joe&lt;/name&gt;&lt;/names&gt;

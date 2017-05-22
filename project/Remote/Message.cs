@@ -104,7 +104,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The text of the message.</returns>
         public override string ToString()
         {
-            return message;
+            if (message == null)
+                return string.Empty;
+            else
+                return message;
         }
 
         /// <summary>

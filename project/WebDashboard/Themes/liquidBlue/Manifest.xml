@@ -2,6 +2,7 @@
   <name>Liquid Blue Theme</name>
   <description>The liquid blue theme.</description>
   <type>Plugin</type>
+  <group>Dashboard</group>
   <folders>
     <folder>
       <location>Themes\liquidBlue</location>

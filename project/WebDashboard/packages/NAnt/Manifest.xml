@@ -2,6 +2,7 @@
   <name>NAnt Results</name>
   <description>Display the results of a NAnt build.</description>
   <type>Plugin</type>
+  <group>Build</group>  
   <folders>
     <folder>
       <location>Xsl</location>
