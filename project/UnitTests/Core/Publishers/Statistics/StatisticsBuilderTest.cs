@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
             results = builder.ProcessBuildResults(result);
 
             AssertHasStatistic("StartTime", DateUtil.FormatDate(result.StartTime), results);
-            AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString(), results);
+            AssertHasStatistic("Duration","00:00:32:00", results);
             //AssertHasStatistic("ProjectName", "Foo", results);
         }
 
