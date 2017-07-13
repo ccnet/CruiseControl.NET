@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         private class RegistryStub: IRegistry
         {
-            private const string DEFAULT_VS2013_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\12.0";
+            private const string DEFAULT_VS2013_EXE_PATH = @"Software\Wow6432Node\Microsoft\VisualStudio\14.0";
 
             public string GetLocalMachineSubKeyValue(string path, string name)
             {
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 {
                     return "mockPath";
                 }
-                throw new NotImplementedException();
+                throw new NotImplementedException("Change default path in stub to the first one in vsts");
             }
 
             public string GetExpectedLocalMachineSubKeyValue(string path, string name)
