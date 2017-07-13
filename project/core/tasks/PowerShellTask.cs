@@ -395,7 +395,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             builder.AppendArgument("-NoProfile");
             builder.AppendArgument("-NonInteractive");
    
-            builder.AppendArgument("-file");
+            builder.AppendArgument("-Command");
 
             if (!string.IsNullOrEmpty(Script))
             {
