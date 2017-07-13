@@ -651,8 +651,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             if (registryValue == null)
             {
-                Log.Debug("[TFS] Unable to find TF.exe and it was not defined in Executable Parameter");
-                throw new CruiseControlException("Unable to find TF.exe and it was not defined in Executable Parameter");
+                System.Text.StringBuilder LogInfo = new StringBuilder();
+                LogInfo.AppendLine("[TFS] Unable to find TF.exe and it was not defined in Executable Parameter");
+                LogInfo.AppendLine("Visual Studio 2017 and higher have no longer a fixed path, see");
+                LogInfo.AppendLine("http://www.visualstudioextensibility.com/2016/11/23/some-implications-of-the-new-modular-setup-of-visual-studio-2017-for-vsx-developers/");
+
+                Log.Debug(LogInfo.ToString());
+                throw new CruiseControlException(LogInfo.ToString());
             }
 
             return Path.Combine(registryValue, TF_EXE);
