@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             SetupResult.For(webClient.Headers).PropertyBehavior();
             webClient.Headers = new WebHeaderCollection();
             var url = "http://test1:test2@test3";
-            var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
+            var client = new CruiseServerHttpClient(url, webClient);
 
             mocks.ReplayAll();
             client.GetProjectStatus();
