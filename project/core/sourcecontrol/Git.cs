@@ -430,7 +430,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 Log.Debug(string.Concat("[Git] Working directory '", workingDirectory, "' does not exist."));
 
                 // has SparseCheckout Path
-                if (SparseCheckoutPaths.Length > 0)
+                if (SparseCheckoutPaths != null && SparseCheckoutPaths.Length > 0)
                 {
                     _fileSystem.CreateDirectory(workingDirectory);
 
