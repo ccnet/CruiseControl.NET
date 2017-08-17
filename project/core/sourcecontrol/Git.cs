@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using System.Globalization;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -256,6 +257,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public string WorkingDirectory { get; set; }
 
         /// <summary>
+        /// use SparseCheckout to checkout path
+        /// </summary>
+        /// <version>1.8.5</version>
+        /// <default>sparse-checkout path</default>
+        [ReflectorProperty("sparseCheckoutPaths", Required = false)]
+        public string[] SparseCheckoutPaths { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Git" /> class.	
         /// </summary>
         /// <remarks></remarks>
@@ -331,8 +340,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // checkout remote branch
             GitCheckoutRemoteBranch(Branch, result);
 
-			// update submodules
-			if (FetchSubmodules)
+            // update submodules
+            if (FetchSubmodules)
 				GitUpdateSubmodules(result);
 
             // clean up the local working copy
@@ -420,8 +429,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 Log.Debug(string.Concat("[Git] Working directory '", workingDirectory, "' does not exist."));
 
-                // if the working does not exist, call git clone
-                GitClone(result);
+                // has SparseCheckout Path
+                if (SparseCheckoutPaths != null && SparseCheckoutPaths.Length > 0)
+                {
+                    _fileSystem.CreateDirectory(workingDirectory);
+
+                    //init git respository
+                    GitInit(result);
+
+                    //set sparseCheckout enable
+                    GitSetSparseCheckout(Branch, result);
+
+                    //set git remote url
+                    GitSetRometeUrl(Repository, result);
+
+                    //create sparse-checkout config
+                    CreateSparseCheckoutConfig(gitRepositoryDirectory, SparseCheckoutPaths, result);
+                }
+                else
+                {
+                    // if the working does not exist, call git clone
+                    GitClone(result);
+                }
 
                 // init submodules
                 if (FetchSubmodules)
@@ -483,6 +512,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result), priority,
                                                       successExitCodes);
             //processInfo.StreamEncoding = Encoding.UTF8;
+            processInfo.StandardInputContent = "";
             return processInfo;
         }
 
@@ -629,6 +659,63 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             // remove Stdout monitoring
             ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
+
+        /// <summary>
+        /// git init
+        /// </summary>
+        /// <param name="result"></param>
+        private void GitInit(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("init");
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
+
+        /// <summary>
+        /// Set SparseCheckout
+        /// </summary>
+        /// <param name="branchName"></param>
+        /// <param name="result"></param>
+        private void GitSetSparseCheckout(string branchName, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("config");
+            buffer.AddArgument("core.sparsecheckout");
+            buffer.AddArgument("true");
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
+
+        /// <summary>
+        /// Set git Romete Url
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="result"></param>
+        private void GitSetRometeUrl(string repository, IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("remote");
+            buffer.AddArgument("add");
+            buffer.AddArgument("-f");
+            buffer.AddArgument("origin");
+            buffer.AddArgument(repository);
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
+
+        /// <summary>
+        /// Create SparseCheckout config file
+        /// </summary>
+        /// <param name="gitRepositoryDirectory"></param>
+        /// <param name="sparseCheckoutPaths"></param>
+        /// <param name="result"></param>
+        private void CreateSparseCheckoutConfig(string gitRepositoryDirectory, string[] sparseCheckoutPaths, IIntegrationResult result)
+        {
+            var configDir = string.Concat(gitRepositoryDirectory, @"\info\");
+            var configFile = string.Concat(configDir, "sparse-checkout");
+            if (Directory.Exists(configDir))
+            {
+                File.WriteAllLines(configFile, sparseCheckoutPaths);
+            }
         }
 
         /// <summary>

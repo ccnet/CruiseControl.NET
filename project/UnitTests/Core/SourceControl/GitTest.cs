@@ -121,6 +121,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual(100, git.MaxAmountOfModificationsToFetch, "#C14");
 		}
 
+        [Test]
+        public void SparseCheckOutSpeclifedXML()
+        {
+            const string xml = @"
+<git>
+	<executable>git</executable>
+	<repository>git@git.gss.com.tw:HRSBU/HRSPD/Radar.Family/Radar2-Mtb.git</repository>
+	<branch>master</branch>
+	<workingDirectory>D:\git\working</workingDirectory>
+	<autoGetSource>true</autoGetSource>
+    <sparseCheckoutPaths><sparseCheckoutPath>MTB</sparseCheckoutPath></sparseCheckoutPaths>
+</git>";
+
+            git = (Git)NetReflector.Read(xml);
+            Assert.AreEqual("git", git.Executable, "#B1");
+            Assert.AreEqual(@"git@git.gss.com.tw:HRSBU/HRSPD/Radar.Family/Radar2-Mtb.git", git.Repository, "#B2");
+            Assert.AreEqual("master", git.Branch, "#B3");
+            Assert.AreEqual(@"D:\git\working", git.WorkingDirectory, "#B4");
+            Assert.AreEqual(true, git.AutoGetSource, "#B5");
+            Assert.AreEqual("MTB", git.SparseCheckoutPaths[0], "#B6");
+        }
+
 		[Test]
 		public void ShouldApplyLabelIfTagOnSuccessTrue()
 		{
@@ -265,7 +287,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, NewProcessInfo(args, DefaultWorkingDirectory));
+			var processInfo = NewProcessInfo(args, DefaultWorkingDirectory);
+			processInfo.StandardInputContent = "";
+			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, processInfo);
+		}
+
+		private new void ExpectToExecuteArguments(string args)
+		{
+			ExpectToExecuteArguments(args, DefaultWorkingDirectory);
+		}
+
+		protected new void ExpectToExecuteArguments(string args, string workingDirectory)
+		{
+			ProcessInfo processInfo = NewProcessInfo(args, workingDirectory);
+			processInfo.StandardInputContent = "";
+			ExpectToExecute(processInfo);
 		}
 
 		[Test]
