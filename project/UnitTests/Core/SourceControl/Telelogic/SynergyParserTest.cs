@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		private SynergyConnectionInfo connection;
 		private SynergyProjectInfo project;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			connection = new SynergyConnectionInfo();
