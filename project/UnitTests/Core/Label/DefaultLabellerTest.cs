@@ -261,29 +261,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 
 
         [Test]
-        [ExpectedException(ExpectedMessage = "File DummyFile.txt does not exist")]
         public void MustThrowExceptionWhenSpecifyingNonExistentFile()
         {
-            string lblFile = "DummyFile.txt"; 
+            var ex = Assert.Throws<System.Exception>(() =>
+            {
+                string lblFile = "DummyFile.txt";
 
-            labeller.LabelPrefixFile = lblFile;
+                labeller.LabelPrefixFile = lblFile;
 
-            labeller.Generate(SuccessfulResult("1.3.4.35"));
+                labeller.Generate(SuccessfulResult("1.3.4.35"));
+            });
+            Assert.That(ex.Message, Is.EqualTo("File DummyFile.txt does not exist"));
         }
 
 
         [Test]
-        [ExpectedException(ExpectedMessage = "No valid prefix data found in file : thelabelprefix.txt")]
         public void MustThrowExceptionWhenContentsOfLabelPrefixFileDoesNotMatchLabelPrefixsFileSearchPattern()
         {
-            string lblFile = "thelabelprefix.txt";
-            System.IO.File.WriteAllText(lblFile, "ho ho ho");
+            var ex = Assert.Throws<System.Exception>(() =>
+            {
+                string lblFile = "thelabelprefix.txt";
+                System.IO.File.WriteAllText(lblFile, "ho ho ho");
 
-            labeller.LabelPrefixFile = lblFile;
-            labeller.LabelPrefixsFileSearchPattern = @"\d+\.\d+\.\d+\.";
+                labeller.LabelPrefixFile = lblFile;
+                labeller.LabelPrefixsFileSearchPattern = @"\d+\.\d+\.\d+\.";
 
-            labeller.Generate(SuccessfulResult("1.3.4.35"));
+                labeller.Generate(SuccessfulResult("1.3.4.35"));
+            });
+            Assert.That(ex.Message, Is.EqualTo("No valid prefix data found in file : thelabelprefix.txt"));
         }
 
-	}
+    }
 }

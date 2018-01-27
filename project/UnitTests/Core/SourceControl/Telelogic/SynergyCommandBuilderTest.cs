@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		private SynergyProjectInfo project;
 		private IIntegrationResult result;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			Synergy synergy = (Synergy) NetReflector.Read(SynergyMother.ConfigValues);

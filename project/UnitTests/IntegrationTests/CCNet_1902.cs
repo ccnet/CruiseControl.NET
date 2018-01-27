@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
     [Category("Integration")]
     public class CCNet_1902
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void fixLog4Net()
         {
             log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("test.config"));

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			return string.Format(@"<cruisecontrol><build><buildresults>{0}</buildresults></build></cruisecontrol>", xml);
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void LoadStyleSheet()
 		{
             transform = new XslCompiledTransform(true);

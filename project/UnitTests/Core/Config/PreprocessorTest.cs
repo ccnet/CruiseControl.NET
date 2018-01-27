@@ -32,10 +32,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeExists(nav, "/root/test-two/outer-content/nodeset-content");
         }
 
-        [Test, ExpectedException(typeof(InvalidMarkupException))]
+        [Test]
         public void TestAttributeWithNoName()
         {
-            _Preprocess("TestInvalidAttribute2.xml");
+            Assert.Throws<InvalidMarkupException>(() =>
+            {
+                _Preprocess("TestInvalidAttribute2.xml");
+            });
         }
 
         [Test]
@@ -110,20 +113,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeValue(nav, "/root/@foo", "foo_val");
         }
 
-        [Test, ExpectedException(typeof(ExplicitDefinitionRequiredException))]
+        [Test]
         public void TestExplicitDefine2()
         {
-            var settings = new PreprocessorSettings();
-            try
+            Assert.Throws<ExplicitDefinitionRequiredException>(() =>
             {
-                Environment.SetEnvironmentVariable("foo", "foo_val");
-                settings.ExplicitDeclarationRequired = true;
-                _Preprocess("TestExplicitDefine.xml", settings);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("foo", null);
-            }
+                var settings = new PreprocessorSettings();
+                try
+                {
+                    Environment.SetEnvironmentVariable("foo", "foo_val");
+                    settings.ExplicitDeclarationRequired = true;
+                    _Preprocess("TestExplicitDefine.xml", settings);
+                }
+                finally
+                {
+                    Environment.SetEnvironmentVariable("foo", null);
+                }
+            });
         }
 
         [Test]
@@ -205,25 +211,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeValue(nav, "/root/@foo", "foo_val");
         }
 
-        [Test, ExpectedException(typeof(ExplicitDefinitionRequiredException))]
+        [Test]
         public void TestInitialDefine2()
         {
-            var settings = new PreprocessorSettings();
-            var defs = new Dictionary<string, string>();
-            defs["foo"] = "foo_val";
-            settings.InitialDefinitions = defs;
-            settings.ExplicitDeclarationRequired = true;
-            XmlDocument doc = _Preprocess("TestExplicitDefine.xml", settings);
-            XPathNavigator nav = doc.CreateNavigator();
-            AssertNodeValue(nav, "/root/@foo", "foo_val");
+            Assert.Throws<ExplicitDefinitionRequiredException>(() =>
+            {
+                var settings = new PreprocessorSettings();
+                var defs = new Dictionary<string, string>();
+                defs["foo"] = "foo_val";
+                settings.InitialDefinitions = defs;
+                settings.ExplicitDeclarationRequired = true;
+                XmlDocument doc = _Preprocess("TestExplicitDefine.xml", settings);
+                XPathNavigator nav = doc.CreateNavigator();
+                AssertNodeValue(nav, "/root/@foo", "foo_val");
+            });
         }
 
-        [Test, ExpectedException(typeof(InvalidMarkupException))]
+        [Test]
         public void TestMisplacedAttribute()
         {
-            _Preprocess("TestInvalidAttribute.xml");
+            Assert.Throws<InvalidMarkupException>(() =>
+            {
+                _Preprocess("TestInvalidAttribute.xml");
+            });
         }
-        
+
 
         [Test]
         public void TestProcessingInstruction()
@@ -351,23 +363,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             }
         }
 
-        [Test, ExpectedException(typeof(MissingIncludeException))]
+        [Test]
         public void TestMissingIncludeFile()
         {
-            string filename = "TestMissingIncludeFile.xml";
-            using (XmlReader input = GetInput(filename))
+            Assert.Throws<MissingIncludeException>(() =>
             {
-                using (XmlWriter output = GetOutput())
+                string filename = "TestMissingIncludeFile.xml";
+                using (XmlReader input = GetInput(filename))
                 {
-                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
-                    preprocessor.PreProcess(
-                        input, output, 
-                        new FileNotFoundTestResolver(FAKE_ROOT + filename), 
-                        new Uri(FAKE_ROOT + filename));
+                    using (XmlWriter output = GetOutput())
+                    {
+                        ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                        preprocessor.PreProcess(
+                            input, output,
+                            new FileNotFoundTestResolver(FAKE_ROOT + filename),
+                            new Uri(FAKE_ROOT + filename));
+                    }
                 }
-            }
+            });
         }
-        
+
         [Test]
         public void TestScope()
         {            
@@ -378,10 +393,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeValue( doc, "/root/inner/test[2]", "val2_redef" );
         }
 
-        [Test,ExpectedException(typeof(CyclicalEvaluationException))]        
+        [Test]        
         public void TestCycle()
-        {            
-            _Preprocess( "TestCycle.xml" );            
+        {
+            Assert.Throws<CyclicalEvaluationException>(() =>
+            {
+                _Preprocess("TestCycle.xml");
+            });
         }
 
         [Test]

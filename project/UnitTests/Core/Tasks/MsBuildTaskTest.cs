@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 
 			Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
-			Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+			Assert.That(result.TaskOutput, Does.Match("Command line '.*' timed out after \\d+ seconds"));
 		}
 
 		[Test]

@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 {
     public class PublisherTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void fixLog4Net()
         {
             log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("test.config"));
