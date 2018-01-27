@@ -18,7 +18,7 @@
         #endregion
 
         #region Setup
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             // Delete any outputs from the last build
@@ -33,7 +33,7 @@
         #endregion
 
         #region CleanUp
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void CleanUp()
         {
             if (File.Exists(dataFilePath)) File.Delete(dataFilePath);

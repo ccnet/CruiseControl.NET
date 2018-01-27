@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	    private string TEST_DATA = String.Empty;
         private string MEMBER_INFO = String.Empty;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             // Transform xml output

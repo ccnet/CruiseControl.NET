@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 					
 					mocks.VerifyAll();
 					Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
-					Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+					Assert.That(result.TaskOutput, Does.Match("Command line '.*' timed out after \\d+ seconds"));
 				}
 
         private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)

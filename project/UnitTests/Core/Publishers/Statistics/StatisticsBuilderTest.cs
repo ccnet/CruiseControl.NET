@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
         private string failedBuildLog;
         private StatisticsResults results;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void LoadXML()
         {
             StreamReader reader = File.OpenText("buildlog.xml");
