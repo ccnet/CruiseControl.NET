@@ -210,6 +210,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public int BuildTimeoutSeconds { get; set; }
 
         /// <summary>
+        /// CCnet 1.8 always uses -File for execution, this means that if you want to pass an array
+        /// of strings as an argument it screws it up, I'm adding the ability to use -Command which
+        /// will behave as the user expects, however this will optional for backwards compatibility
+        /// </summary>
+        /// <version>1.8</version>
+        /// <default>false</default>
+        [ReflectorProperty("useCommandExecution", Required = false)]
+        public bool UseCommandExecution { get; set; }
+
+        /// <summary>
         /// Run the specified PowerShell and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
@@ -395,7 +405,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             builder.AppendArgument("-NoProfile");
             builder.AppendArgument("-NonInteractive");
 
-            builder.AppendArgument("-file");
+            builder.AppendArgument(UseCommandExecution ? "-command" : "-file");
 
             if (!string.IsNullOrEmpty(Script))
             {
