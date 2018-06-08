@@ -206,6 +206,9 @@ namespace ThoughtWorks.CruiseControl.Remote
                 {
                     // Retrieve the XML from the server - 1.3 or later
                     var url = GenerateUrl("XmlServerReport.aspx");
+
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
+
                     webFunctions.SetCredentials(client, new Uri(url), false);
                     response = client.DownloadString(url);
                 }
