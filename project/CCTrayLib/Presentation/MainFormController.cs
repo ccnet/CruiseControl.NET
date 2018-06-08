@@ -386,7 +386,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (project.IsConnected)
 			{
-				string url = project.WebURL;
+
+			// replace plain http by https in case the buildserver is using https
+			string url = project.WebURL;
+			if(url != null && project.Configuration?.BuildServer?.Url != null 
+				&& project.Configuration.BuildServer.Url.StartsWith("https:") 
+				&& url.StartsWith("http:"))
+			{
+				url = url.Replace("http:", "https:");
+			}
+
 				Process.Start(url);
 			}
 		}
