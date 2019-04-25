@@ -1,0 +1,23 @@
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+image: Visual Studio 2017
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+build_script:
+  - cmd: build.bat
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+test_script:
+  - cmd: build-tests.bat
+after_test:
+  - cmd: 
+
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#

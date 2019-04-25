@@ -153,7 +153,7 @@
 		</copy>
 		<copy todir="${webdashboard.dist.dir}" verbose="${nant.verbosity}">
 			<fileset failonempty="true">
-				<include name="doc/**" />
+				<include name="docs/**" />
 			</fileset>
 		</copy>
 	</target>

@@ -1,0 +1,13 @@
+next-version: 1.9.0
+assembly-versioning-scheme: MajorMinorPatch
+assembly-file-versioning-scheme: MajorMinorPatchTag
+mode: ContinuousDelivery
+branches:
+  master:
+    mode: ContinuousDelivery
+  pull-request:
+    mode: ContinuousDeployment
+  develop:
+    mode: ContinuousDeployment
+ignore:
+  sha: []

@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="docGenerator" default="all" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="docGenerator" default="all" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
+
+	<property name="build.configuration"	 overwrite="false"	value="Debug" />
+	<property name="build.target"			 overwrite="false"	value="Build" />
+  <property name="build.target.framework" overwrite="false" value="4.5" />
+
   <property name="tools.dir" readonly="true" value="${path::get-full-path('Tools')}" />
   <property name="docGen.dir" readonly="true" value="${path::combine(tools.dir, 'docGenerator')}" />
   <property name="build.project" overwrite="false" value="${path::combine(docGen.dir, 'CCNetDocumentGenerator.sln')}" />
+  
   <property name="nauckit.nant.assembly" readonly="true" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
 
+  <!-- Framework Support
+	http://nant.sourceforge.net/faq.html#framework-support
+	-->
+  <property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
+
   <target name="all" depends="clean, compile"/>
-  
+
   <target name="compile">
     <loadtasks assembly="${nauckit.nant.assembly}" />
     <echo message="Build Project: ${build.project}" />
 
-    <msbuild projectFile="${build.project}" verbosity="Minimal">
+    <msbuild projectFile="${build.project}" targets="${build.target}" verbosity="Minimal">
+      <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
+
+      <!-- Hack for current xbuild issues on Mono 2.5 -->
+      <environment>
+        <variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+        <variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+      </environment>
     </msbuild>
   </target>
 

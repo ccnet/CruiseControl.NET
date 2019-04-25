@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
 
 	<!-- properties -->
 	<property name="nant.verbosity"			 overwrite="false"	value="false" />
@@ -112,7 +112,7 @@
 		<echo message="Build Directory: ${build.dir}" />
 
 		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
-			<property name="Configuration" value="${build.configuration}" />
+			<arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
 
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
 			<property name="DISABLE_COM" value="${platform::is-unix()}" />
