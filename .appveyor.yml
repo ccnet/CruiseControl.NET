@@ -1,7 +1,7 @@
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
-image: Visual Studio 2017
+image: Visual Studio 2015
 
 init:
   - git config --global core.autocrlf true
@@ -16,15 +16,22 @@ before_build:
   - ps: gitversion /l console /output buildserver
 
 build_script:
-  - ps: .\build.ps1 --target=build
+  - ps: |    
+      .\build.ps1 --target=build
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 test_script:
-  - ps: .\build.ps1 --target=run-tests
+  - ps: |    
+      .\build.ps1 --target=run-tests
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
 after_test:
-  - ps: .\build.ps1 --target=package
+  - ps: |    
+      .\build.ps1 --target=package
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 
 #---------------------------------#
@@ -37,4 +44,11 @@ artifacts:
 #        global handlers          #
 #---------------------------------#
 on_success:
-  - ps: Write-Host 'Succesfuly build'
+  - ps: |    
+      if($true)
+      {
+        Write-Host 'Succesfuly build'
+      }
+      else {
+        Write-Host "Build failed with exit code $LASTEXITCODE! " -ForegroundColor Red -NoNewline
+      } 
