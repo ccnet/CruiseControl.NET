@@ -3,6 +3,9 @@
 #---------------------------------#
 image: Visual Studio 2017
 
+init:
+  - git config --global core.autocrlf true
+
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
@@ -10,15 +13,15 @@ platform: Any CPU
 configuration: Release
 
 build_script:
-  - ps: build.ps1 --target=build
+  - ps: .\build.ps1 --target=build
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 test_script:
-  - ps: build.ps1 --target=run-tests
+  - ps: .\build.ps1 --target=run-tests
 after_test:
-  - ps: build.ps1 --target=package
+  - ps: .\build.ps1 --target=package
 
 
 #---------------------------------#
