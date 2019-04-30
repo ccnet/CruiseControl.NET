@@ -360,3 +360,10 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
+
+#Rider
+.idea/
+
+#cake
+Tools/Cake/*
+!Tools/Cake/packages.config

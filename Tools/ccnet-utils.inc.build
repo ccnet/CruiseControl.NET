@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
 
 	<target name="cleanupDocsDictionary" description="Delete all files in the docs dictionary.">
 

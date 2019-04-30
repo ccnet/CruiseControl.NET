@@ -6,18 +6,29 @@ image: Visual Studio 2017
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
+platform: Any CPU
+configuration: Release
+
 build_script:
-  - cmd: build.bat
+  - ps: build.ps1 --target=build
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 test_script:
-  - cmd: build-tests.bat
-after_test:
-  - cmd: 
+  - ps: build.ps1 --target=run-tests
+build_success:
+  - ps: build.ps1 --target=package
 
 
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
+artifacts:
+  - path: 'Publish\**'
+
+#---------------------------------#
+#        global handlers          #
+#---------------------------------#
+on_success:
+  - ps: Write-Host 'Succesfuly build'
