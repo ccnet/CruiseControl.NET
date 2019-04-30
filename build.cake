@@ -57,7 +57,7 @@ Task("build")
     //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build.log.txt %*" ,
+                                                Arguments = " clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                                 Silent = false
@@ -78,7 +78,7 @@ Task("build-all")
     //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build.log.txt %*" ,
+                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                                 Silent = false
@@ -99,7 +99,7 @@ Task("run-tests")
     //Tools\NAnt\NAnt.exe runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build-tests.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-tests.log.txt %*" ,
+                                                Arguments = " runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-tests.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))
@@ -119,7 +119,7 @@ Task("package")
     //Tools\NAnt\NAnt.exe package -buildfile:ccnet.build -D:CCNetLabel=1.5.0.0 -nologo -logfile:nant-build-package.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " package -buildfile:ccnet.build -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-package.log.txt %*" ,
+                                                Arguments = " package -buildfile:ccnet.build -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-package.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))
@@ -139,7 +139,7 @@ Task("web-packages")
     //Tools\NAnt\NAnt.exe build.packages -buildfile:ccnet.build -nologo -logfile:nant-build-web-packages.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " build.packages -buildfile:ccnet.build -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-web-packages.log.txt %*" ,
+                                                Arguments = " build.packages -buildfile:ccnet.build -D:version=" + gitVersionResults.AssemblySemVer + " -D:fversion=" + gitVersionResults.AssemblySemFileVer + " -D:iversion=\"" + gitVersionResults.InformationalVersion + "\" -nologo -logfile:nant-build-web-packages.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))
