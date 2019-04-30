@@ -54,7 +54,7 @@
 
 	<target name="prepackageDistribution" depends="clean, build" description="Prepackage the CruiseControl.NET distribution to the dist dictionary">
 
-		<copy file="LICENSE" tofile="${path::combine(dist.dir, 'license.txt')" verbose="${nant.verbosity}" />
+		<copy file="LICENSE" tofile="${path::combine(dist.dir, 'license.txt')}" verbose="${nant.verbosity}" />
 		
 		<!-- Create CCTray distribution -->
 		<mkdir dir="${path::combine(dist.dir, 'CCTray')}" unless="${directory::exists(path::combine(dist.dir, 'CCTray'))}" verbose="${nant.verbosity}" />
