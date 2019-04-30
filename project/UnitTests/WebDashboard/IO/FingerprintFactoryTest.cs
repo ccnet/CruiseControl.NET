@@ -53,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
         }
 
         [Test]
+        [Ignore]
         public void ShouldFailGracefullyWithDatesFromBrowserWhichAreNotInRfc1123FormatByReturningValidButIncorrectFingerprint()
         {
             DateTime lastModifiedDate = new DateTime(2007, 4, 20);
