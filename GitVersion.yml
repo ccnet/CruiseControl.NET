@@ -1,6 +1,7 @@
 next-version: 1.9.0
 assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: MajorMinorPatchTag
+assembly-file-versioning-scheme: '{Major}.{Minor}.{Patch}.{CommitsSinceVersionSource}'
+commit-message-incrementing: MergeMessageOnly
 mode: ContinuousDelivery
 branches:
   master:
