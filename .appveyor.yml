@@ -17,7 +17,7 @@ build_script:
 #---------------------------------#
 test_script:
   - ps: build.ps1 --target=run-tests
-build_success:
+after_test:
   - ps: build.ps1 --target=package
 
 
