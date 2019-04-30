@@ -1,14 +1,5 @@
-next-version: 1.9.0
+next-version: 1.9
 assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: '{Major}.{Minor}.{Patch}.{CommitsSinceVersionSource}'
-commit-message-incrementing: MergeMessageOnly
-mode: ContinuousDelivery
-branches:
-  master:
-    mode: ContinuousDelivery
-  pull-request:
-    mode: ContinuousDeployment
-  develop:
-    mode: ContinuousDeployment
-ignore:
-  sha: []
+assembly-file-versioning-scheme: MajorMinorPatchTag
+commit-message-incrementing: Disabled
+mode: Mainline
