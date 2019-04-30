@@ -18,7 +18,10 @@ before_build:
 build_script:
   - ps: |    
       .\build.ps1 --target=build
-      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project build failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode 
+      }
 
 #---------------------------------#
 #       tests configuration       #
@@ -26,12 +29,18 @@ build_script:
 test_script:
   - ps: |    
       .\build.ps1 --target=run-tests
-      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project tests failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode
+      }
 
 after_test:
   - ps: |    
       .\build.ps1 --target=package
-      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project packaging failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode  
+      }
 
 
 #---------------------------------#
@@ -49,6 +58,10 @@ on_success:
       {
         Write-Host 'Succesfuly build'
       }
-      else {
+
+on_failure:
+  - ps: |    
+      if($true)
+      {
         Write-Host "Build failed with exit code $LASTEXITCODE! " -ForegroundColor Red -NoNewline
       } 
