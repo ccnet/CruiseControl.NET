@@ -12,6 +12,9 @@ init:
 platform: Any CPU
 configuration: Release
 
+before_build:
+  - ps: gitversion /l console /output buildserver
+
 build_script:
   - ps: .\build.ps1 --target=build
 
