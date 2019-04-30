@@ -27,7 +27,7 @@
 	</target>
 
 	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
-		<property name="source.zip.file" value="CruiseControl.NET-${assembly.version}.source.zip" />
+		<property name="source.zip.file" value="CruiseControl.NET-${assembly.fversion}.source.zip" />
 		
 		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
 			<fileset defaultexcludes="true">
@@ -159,7 +159,7 @@
 	</target>
 
 	<target name="packageZipDistribution" depends="prepackageDistribution" description="Creates a zip file containing the CruiseControl.NET distribution">
-		<property name="dist.zip.file" value="CruiseControl.NET-${assembly.version}.zip" />
+		<property name="dist.zip.file" value="CruiseControl.NET-${assembly.fversion}.zip" />
 
 		<zip zipfile="${path::combine(publish.dir, dist.zip.file)}" verbose="${nant.verbosity}">
 			<fileset basedir="${dist.dir}" defaultexcludes="true">
@@ -174,7 +174,7 @@
 		<copy file="${path::combine(path::get-full-path('install'), 'cctray.nsi.template')}" tofile="cctray.nsi" overwrite="true" verbose="${nant.verbosity}">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${assembly.version}" />
+					<token key="VERSION" value="${assembly.fversion}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -197,7 +197,7 @@
     <copy file="${path::combine(path::get-full-path('install'), 'cctools.nsi.template')}" tofile="cctools.nsi" overwrite="true" verbose="${nant.verbosity}">
       <filterchain>
         <replacetokens>
-          <token key="VERSION" value="${assembly.version}" />
+          <token key="VERSION" value="${assembly.fversion}" />
         </replacetokens>
       </filterchain>
     </copy>
@@ -211,7 +211,7 @@
 		<copy file="${path::combine(path::get-full-path('install'), 'ccnet.nsi.template')}" tofile="ccnet.nsi" overwrite="true" verbose="${nant.verbosity}">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${assembly.version}" />
+					<token key="VERSION" value="${assembly.fversion}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
