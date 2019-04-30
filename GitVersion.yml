@@ -1,5 +1,8 @@
 next-version: 1.9
 assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-scheme: MajorMinorPatchTag
+mode: ContinuousDelivery
 commit-message-incrementing: Disabled
-mode: Mainline
+branches: {}
+ignore:
+  sha: []
