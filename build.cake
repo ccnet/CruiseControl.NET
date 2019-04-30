@@ -64,8 +64,12 @@ Task("build")
                                               }))
     {
         process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
+        Information("Nant: build target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: build target failed");
+        }
     }
   });
 
@@ -81,8 +85,12 @@ Task("build-all")
                                               }))
     {
         process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
+        Information("Nant: all target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: build-all target failed");
+        }
     }
   });
 
@@ -97,8 +105,12 @@ Task("run-tests")
                                               }))
     {
         process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
+        Information("Nant: runTests target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: run-tests target failed");
+        }
     }
   });
 
@@ -113,8 +125,12 @@ Task("package")
                                               }))
     {
         process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
+        Information("Nant: package target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: package target failed");
+        }
     }
   });
 
@@ -129,8 +145,12 @@ Task("web-packages")
                                               }))
     {
         process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
+        Information("Nant: build.packages target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: web-packages target failed");
+        }
     }
   });
 
