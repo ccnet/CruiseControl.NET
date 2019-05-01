@@ -1,0 +1,67 @@
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+image: Visual Studio 2015
+
+init:
+  - git config --global core.autocrlf true
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+platform: Any CPU
+configuration: Release
+
+before_build:
+  - ps: gitversion /l console /output buildserver
+
+build_script:
+  - ps: |    
+      .\build.ps1 --target=build
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project build failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode 
+      }
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+test_script:
+  - ps: |    
+      .\build.ps1 --target=run-tests
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project tests failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode
+      }
+
+after_test:
+  - ps: |    
+      .\build.ps1 --target=package
+      if ($LastExitCode -ne 0) { 
+        Write-Host "Project packaging failed with exit code $LastExitCode! " -ForegroundColor Red -NoNewline
+        exit $LastExitCode  
+      }
+
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+artifacts:
+  - path: 'Publish\**'
+
+#---------------------------------#
+#        global handlers          #
+#---------------------------------#
+on_success:
+  - ps: |    
+      if($true)
+      {
+        Write-Host 'Succesfuly build'
+      }
+
+on_failure:
+  - ps: |    
+      if($true)
+      {
+        Write-Host "Build failed with exit code $LASTEXITCODE! " -ForegroundColor Red -NoNewline
+      } 

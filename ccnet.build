@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
 
 	<!-- properties -->
 	<property name="nant.verbosity"			 overwrite="false"	value="false" />
@@ -8,8 +8,10 @@
 	<property name="build.target"			 overwrite="false"	value="Build" />
 	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
 	<property name="build.target.framework"  overwrite="false"	value="4.5"  />
-	<property name="CCNetLabel"				 overwrite="false"	value="0.0.0.0" />
 	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
+	<property name="version"			     unless="${property::exists('version')}"	value="0.0.0" />
+	<property name="fversion"			     unless="${property::exists('fversion')}"	value="0.0.0.0" />
+	<property name="iversion"			     unless="${property::exists('iversion')}"	value="Git hash:0000000000000000000000000000000000000000" />
 
 	<!-- common path properties -->
 	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
@@ -36,9 +38,9 @@
 	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
 	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
 	<property name="assembly.trademark"		readonly="true"		value="" />
-	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
-	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}" />    
-	<property name="LastChangeNumber"       unless="${property::exists('LastChangeNumber')}"  value="0000000000000000000000000000000000000000"      />     
+	<property name="assembly.version"		                    value="${version}" />
+	<property name="assembly.fileversion"	                    value="${fversion}" />    
+	<property name="assembly.informalversion"                   value="${iversion}"      />     
  	
 
 	<!-- Framework Support
@@ -99,7 +101,7 @@
 				<attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
 				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 				<attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
-				<attribute type="AssemblyInformationalVersionAttribute" value="Git hash : ${LastChangeNumber}" />			
+				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.informalversion}" />			
 			</attributes>
 		</asminfo>
 	</target>
@@ -112,7 +114,7 @@
 		<echo message="Build Directory: ${build.dir}" />
 
 		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
-			<property name="Configuration" value="${build.configuration}" />
+			<arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
 
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
 			<property name="DISABLE_COM" value="${platform::is-unix()}" />

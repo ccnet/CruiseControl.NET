@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
 
 	<!-- properties -->
 	<property name="webdashboard.dist.dir" value="${path::combine(dist.dir, 'WebDashboard')}" />
@@ -27,7 +27,7 @@
 	</target>
 
 	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
-		<property name="source.zip.file" value="CruiseControl.NET-${assembly.version}.source.zip" />
+		<property name="source.zip.file" value="CruiseControl.NET-${assembly.fileversion}.source.zip" />
 		
 		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
 			<fileset defaultexcludes="true">
@@ -54,7 +54,7 @@
 
 	<target name="prepackageDistribution" depends="clean, build" description="Prepackage the CruiseControl.NET distribution to the dist dictionary">
 
-		<copy file="license.txt" todir="${dist.dir}" verbose="${nant.verbosity}" />
+		<copy file="LICENSE" tofile="${path::combine(dist.dir, 'license.txt')}" verbose="${nant.verbosity}" />
 		
 		<!-- Create CCTray distribution -->
 		<mkdir dir="${path::combine(dist.dir, 'CCTray')}" unless="${directory::exists(path::combine(dist.dir, 'CCTray'))}" verbose="${nant.verbosity}" />
@@ -153,13 +153,13 @@
 		</copy>
 		<copy todir="${webdashboard.dist.dir}" verbose="${nant.verbosity}">
 			<fileset failonempty="true">
-				<include name="doc/**" />
+				<include name="docs/**" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="packageZipDistribution" depends="prepackageDistribution" description="Creates a zip file containing the CruiseControl.NET distribution">
-		<property name="dist.zip.file" value="CruiseControl.NET-${assembly.version}.zip" />
+		<property name="dist.zip.file" value="CruiseControl.NET-${assembly.fileversion}.zip" />
 
 		<zip zipfile="${path::combine(publish.dir, dist.zip.file)}" verbose="${nant.verbosity}">
 			<fileset basedir="${dist.dir}" defaultexcludes="true">
@@ -174,7 +174,7 @@
 		<copy file="${path::combine(path::get-full-path('install'), 'cctray.nsi.template')}" tofile="cctray.nsi" overwrite="true" verbose="${nant.verbosity}">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${assembly.version}" />
+					<token key="VERSION" value="${assembly.fileversion}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -197,7 +197,7 @@
     <copy file="${path::combine(path::get-full-path('install'), 'cctools.nsi.template')}" tofile="cctools.nsi" overwrite="true" verbose="${nant.verbosity}">
       <filterchain>
         <replacetokens>
-          <token key="VERSION" value="${assembly.version}" />
+          <token key="VERSION" value="${assembly.fileversion}" />
         </replacetokens>
       </filterchain>
     </copy>
@@ -211,7 +211,7 @@
 		<copy file="${path::combine(path::get-full-path('install'), 'ccnet.nsi.template')}" tofile="ccnet.nsi" overwrite="true" verbose="${nant.verbosity}">
 			<filterchain>
 				<replacetokens>
-					<token key="VERSION" value="${assembly.version}" />
+					<token key="VERSION" value="${assembly.fileversion}" />
 				</replacetokens>
 			</filterchain>
 		</copy>
