@@ -6,24 +6,24 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
-	/// <summary>
-	/// Allows access to the state of a single cruise control project, over remoting
-	/// </summary>
-	public class RemotingCruiseProjectManager : ICruiseProjectManager
-	{
+    /// <summary>
+    /// Allows access to the state of a single cruise control project, over remoting
+    /// </summary>
+    public class RemotingCruiseProjectManager : ICruiseProjectManager
+    {
         private readonly CruiseServerClientBase manager;
-		private readonly string projectName;
+        private readonly string projectName;
 
         public RemotingCruiseProjectManager(CruiseServerClientBase manager, string projectName)
-		{
-			this.manager = manager;
-			this.projectName = projectName;
-		}
+        {
+            this.manager = manager;
+            this.projectName = projectName;
+        }
 
         public void ForceBuild(string sessionToken, Dictionary<string, string> parameters, string userName)
-		{
-			try
-			{
+        {
+            try
+            {
                 manager.DisplayName = userName;
                 manager.SessionToken = sessionToken;
                 if (parameters != null)
@@ -35,112 +35,112 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 {
                     manager.ForceBuild(projectName);
                 }
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
 
-		public void FixBuild(string sessionToken, string fixingUserName)
-		{
-			string Fixer;
-			if (fixingUserName.Trim().Length == 0)
-			{
-				Fixer = Environment.UserName;
-			}
-			else
-			{
-				Fixer = fixingUserName;
-			}
+        public void FixBuild(string sessionToken, string fixingUserName)
+        {
+            string Fixer;
+            if (fixingUserName.Trim().Length == 0)
+            {
+                Fixer = Environment.UserName;
+            }
+            else
+            {
+                Fixer = fixingUserName;
+            }
 
-			try
-			{
-                string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is fixing the build.", Fixer);
+            try
+            {
+                string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "Fixer: {0}.", Fixer);
                 manager.SessionToken = sessionToken;
                 manager.SendMessage(projectName, new Message(message, Message.MessageKind.Fixer));
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
 
         public void AbortBuild(string sessionToken, string userName)
-		{
-			try
-			{
+        {
+            try
+            {
                 manager.DisplayName = userName;
                 manager.SessionToken = sessionToken;
                 manager.AbortBuild(projectName);
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
-		
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
+
         public void StopProject(string sessionToken)
-		{
-			try
-			{
+        {
+            try
+            {
                 manager.SessionToken = sessionToken;
                 manager.StopProject(projectName);
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
-		
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
+
         public void StartProject(string sessionToken)
-		{
-			try
-			{
+        {
+            try
+            {
                 manager.SessionToken = sessionToken;
                 manager.StartProject(projectName);
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
-		
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
+
         public void CancelPendingRequest(string sessionToken)
-		{
-			try
-			{
+        {
+            try
+            {
                 manager.SessionToken = sessionToken;
                 manager.CancelPendingRequest(projectName);
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch (System.Net.Sockets.SocketException)
-			{
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-			}
-		}
+            }
+            // Silently ignore exceptions that occur due to connection problems
+            catch (System.Net.Sockets.SocketException)
+            {
+            }
+            catch (System.Runtime.Remoting.RemotingException)
+            {
+            }
+        }
 
-		public string ProjectName
-		{
-			get { return projectName; }
-		}
+        public string ProjectName
+        {
+            get { return projectName; }
+        }
 
         #region RetrieveSnapshot()
         /// <summary>
@@ -187,5 +187,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         {
             return manager.ListBuildParameters(projectName);
         }
-	}
+    }
 }

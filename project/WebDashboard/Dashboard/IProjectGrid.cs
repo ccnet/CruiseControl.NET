@@ -4,14 +4,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public interface IProjectGrid
-	{
-        ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, 
-            string forceBuildActionName, 
-            ProjectGridSortColumn sortColumn, 
-            bool sortIsAscending, 
-            string categoryFilter, 
-            ICruiseUrlBuilder urlBuilder, 
-            Translations translations);
-	}
+    public interface IProjectGrid
+    {
+        ProjectGridRow[] GenerateProjectGridRows(ProjectGridParameters parameters);
+    }
 }

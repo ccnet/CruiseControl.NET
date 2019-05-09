@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IConfiguration configuration;
         private IExecutionEnvironment currentExecutionEnvironment;
         private bool writeSummaryFile;
-        
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
@@ -269,8 +269,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <version>1.4</version>
         /// <default>false</default>
         [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
-        public bool StopProjectOnReachingMaxSourceControlRetries {get; set;}
-        
+        public bool StopProjectOnReachingMaxSourceControlRetries { get; set; }
+
         /// <summary>
         /// (Should) show or hide the ForceBuildButton in UI programs. This is an extra setting on top of security.
         /// This is setting is mainly meant to disable the possibility to force a project via a UI. (dashboard and cctray)
@@ -281,8 +281,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <version>1.6</version>
         /// <default>True</default>
         [ReflectorProperty("showForceBuildButton", Required = false)]
-        public  bool ShowForceBuildButton {get; set;}
-        
+        public bool ShowForceBuildButton { get; set; }
+
 
         /// <summary>
         /// (Should) show or hide the Start - Stop Button in UI programs. This is an extra setting on top of security.
@@ -295,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <default>True</default>
         [ReflectorProperty("showStartStopButton", Required = false)]
         public bool ShowStartStopButton { get; set; }
-        
+
 
         /// <summary>
         /// What action to take when a source control error occurs (during GetModifications).
@@ -555,9 +555,9 @@ namespace ThoughtWorks.CruiseControl.Core
             var timer = new Stopwatch();
             timer.Start();
             var summary = new BuildSummary
-                              {
-                                  StartTime = DateTime.Now
-                              };
+            {
+                StartTime = DateTime.Now
+            };
             var logDirectory = this.GetLogDirectory();
             var fileSystem = new SystemIoFileSystem();
             var serialiser = new XmlSerializer(typeof(BuildSummary));
@@ -662,13 +662,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 var fileSystem = new SystemIoFileSystem();
                 var serialiser = new XmlSerializer(typeof(BuildSummary));
                 Func<string, BuildSummary> loadSummary = f =>
-                                                             {
-                                                                 using (var stream = fileSystem.OpenInputStream(f))
-                                                                 {
-                                                                     var summary = serialiser.Deserialize(stream);
-                                                                     return summary as BuildSummary;
-                                                                 }
-                                                             };
+                {
+                    using (var stream = fileSystem.OpenInputStream(f))
+                    {
+                        var summary = serialiser.Deserialize(stream);
+                        return summary as BuildSummary;
+                    }
+                };
                 var files = fileSystem.GetFilesInDirectory(logDirectory, "*.summary", SearchOption.TopDirectoryOnly);
                 summaries.AddRange(
                     files.OrderByDescending(f => f).Skip(start).Take(count).Select(loadSummary));
@@ -1066,6 +1066,10 @@ namespace ThoughtWorks.CruiseControl.Core
                     if (baseTask != null)
                     {
                         wasSuccessful = baseTask.WasSuccessful;
+                        if (!wasSuccessful)
+                        {
+                            DetectWhatPublisherFailed(baseTask.Name);
+                        }
                     }
 
                     // Only need to update the status if it is not already set
@@ -1098,6 +1102,27 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        private void DetectWhatPublisherFailed(string taskName)
+        {
+            switch (taskName)
+            {
+                case "ForceBuildPublisher":
+                    messages.Add(new Message("ForceBuildPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "PowerShellTask":
+                    messages.Add(new Message("PowerShellTask Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "XmlLogPublisher":
+                    messages.Add(new Message("XmlLogPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "StatisticsPublisher":
+                    messages.Add(new Message("StatisticsPublisher Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+                case "ArtifactCleanUpTask":
+                    messages.Add(new Message("ArtifactCleanUp Task Failed", Message.MessageKind.ForceBuildPublisherFailed));
+                    break;
+            }
+        }
         /// <summary>
         /// Cancels any tasks that have not been run.
         /// </summary>

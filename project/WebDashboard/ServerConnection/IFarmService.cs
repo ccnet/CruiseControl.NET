@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
@@ -7,8 +7,8 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-	public interface IFarmService
-	{
+    public interface IFarmService
+    {
         IBuildSpecifier[] GetMostRecentBuildSpecifiers(IProjectSpecifier projectSpecifier, int buildCount, string sessionToken);
         IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier serverSpecifier, string sessionToken);
         void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment, string sessionToken);
@@ -18,13 +18,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken);
         void Start(IProjectSpecifier projectSpecifier, string sessionToken);
         void Stop(IProjectSpecifier projectSpecifier, string sessionToken);
+        void CancelPendingRequest(IProjectSpecifier projectSpecifier, string sessionToken);
         void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, Dictionary<string, string> parameters);
-		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken);
+        void VolunteerFixer(IProjectSpecifier projectSpecifier, string sessionToken, string fixingUserName);
+        void RemoveFixer(IProjectSpecifier projectSpecifier, string sessionToken);
+        ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken);
         ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken);
         ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier, string sessionToken);
-		IServerSpecifier[] GetServerSpecifiers();
+        IServerSpecifier[] GetServerSpecifiers();
         IServerSpecifier GetServerConfiguration(string serverName);
-		string GetServerVersion(IServerSpecifier serverSpecifier, string sessionToken);
+        string GetServerVersion(IServerSpecifier serverSpecifier, string sessionToken);
         string GetArtifactDirectory(IProjectSpecifier projectSpecifier, string sessionToken);
         string GetStatisticsDocument(IProjectSpecifier projectSpecifier, string sessionToken);
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(string sessionToken);
@@ -91,8 +94,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="sessionToken"></param>
         /// <returns>A list of <see cref="AuditRecord" />s containing the audit details.</returns>
         List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords);
-       
- 		/// <summary>
+
+        /// <summary>
         /// Reads the specified number of filtered audit events.
         /// </summary>
         /// <param name="startPosition">The starting position.</param>

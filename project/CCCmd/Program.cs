@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 {
     class Program
     {
-    	private static bool help;
+        private static bool help;
         private static string server;
         private static string target;
         private static string project;
@@ -26,11 +26,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static string userName;
         private static string password;
         private static bool xml;
+        private static string volunteer_name = Environment.UserName;
         private static BuildCondition condition = BuildCondition.ForceBuild;
 
         static void Main(string[] args)
         {
-           	OptionSet opts = new OptionSet();
+            OptionSet opts = new OptionSet();
             opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; })
                 .Add("s|server=", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate(string v) { server = v; })
                 .Add("t|target=", "the target server for all messages", delegate(string v) { target = v; })
@@ -39,33 +40,34 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("q|quiet", "run in quiet mode (do not print messages)", delegate(string v) { quiet = v != null; })
                 .Add("ime|ifmodificationexists", "only force the build if modification exist", delegate(string v) { condition = v != null ? BuildCondition.IfModificationExists : BuildCondition.ForceBuild; })
                 .Add("r|params=", "a semicolon separated list of name value pairs", delegate(string v) { string_params = v; })
-                .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })             
- 				.Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
+                .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })
+                .Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
-                .Add("pwd=", "the password to use for the user", v => { password = v;});        	
-        	try
-        	{
-        		extra = opts.Parse(args);
-        	}
-        	catch (OptionException e)
-        	{
-				Console.WriteLine(e.Message);
-				Console.WriteLine(e.StackTrace);
-				return;
-			}
-        	
-        	if((extra.Count == 1) && !help)
-        	{
-        		command = (CommandType) Enum.Parse(typeof(CommandType), extra[0], true);
-        	}
-        	else
-        	{
-        		DisplayHelp(opts);
-        		return;
-        	}
-        	
+                .Add("pwd=", "the password to use for the user", v => { password = v; })
+                .Add("volunteer_name=", "the name to use when volunteering (defaults to Environment.UserName)", v => { volunteer_name = v; });
             try
-            {                
+            {
+                extra = opts.Parse(args);
+            }
+            catch (OptionException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                return;
+            }
+
+            if ((extra.Count == 1) && !help)
+            {
+                command = (CommandType)Enum.Parse(typeof(CommandType), extra[0], true);
+            }
+            else
+            {
+                DisplayHelp(opts);
+                return;
+            }
+
+            try
+            {
                 switch (command)
                 {
                     case CommandType.Help:
@@ -77,6 +79,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                     case CommandType.ForceBuild:
                         RunForceBuild();
                         break;
+                    case CommandType.CancelPending:
+                        RunCancelPending();
+                        break;
                     case CommandType.AbortBuild:
                         RunAbortBuild();
                         break;
@@ -85,6 +90,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         break;
                     case CommandType.StopProject:
                         RunStopProject();
+                        break;
+                    case CommandType.Volunteer:
+                        RunVolunteer();
+                        break;
+                    case CommandType.CancelVolunteer:
+                        RunCancelVolunteer();
                         break;
                     default:
                         throw new CruiseControlException("Unknown action: " + command.ToString());
@@ -110,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static void RunForceBuild()
         {
             if (ValidateParameter(server, "--server") &&
-        	    ValidateNotAll() &&
+                ValidateNotAll() &&
                 ValidateParameter(project, "--project"))
             {
                 try
@@ -134,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                             string[] splittedNameValuePair = nameValuePair.Split('=');
                             userParameters.Add(splittedNameValuePair[0], splittedNameValuePair[1]);
                         }
-                    } 
+                    }
 
 
                     using (var client = GenerateClient())
@@ -144,21 +155,21 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
                         foreach (ParameterBase parameter in parameters)
                         {
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter: {0}", parameter.Name), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Parameter: {0}", parameter.Name), ConsoleColor.Gray);
 
                             bool required = false;
                             PropertyInfo propInfos = parameter.GetType().GetProperty("IsRequired");
                             if (propInfos == null)
-                                WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"propInfos is null, considering that parameter {0} is not required", parameter.Name), ConsoleColor.DarkYellow);
+                                WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "propInfos is null, considering that parameter {0} is not required", parameter.Name), ConsoleColor.DarkYellow);
                             else
                                 required = (bool)propInfos.GetValue(parameter, null);
 
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Kind: {0}", parameter.ToString()), ConsoleColor.Gray);
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Data type: {0}", parameter.DataType), ConsoleColor.Gray);
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Required: {0}", required), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Kind: {0}", parameter.ToString()), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Data type: {0}", parameter.DataType), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Required: {0}", required), ConsoleColor.Gray);
                             string userProvidedValue;
                             userParameters.TryGetValue(parameter.Name, out userProvidedValue);
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," User provided value: {0}", userProvidedValue), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " User provided value: {0}", userProvidedValue), ConsoleColor.Gray);
 
                             var convertedValue = parameter.Convert(userProvidedValue);
                             string convertedValueString = userProvidedValue;
@@ -166,16 +177,16 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                             {
                                 convertedValueString = convertedValue.ToString();
                             }
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Converted value: {0}", convertedValueString), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Converted value: {0}", convertedValueString), ConsoleColor.Gray);
 
-                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Default value: {0}", parameter.DefaultValue), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Default value: {0}", parameter.DefaultValue), ConsoleColor.Gray);
                             if (parameter.AllowedValues == null)
                             {
                                 if (!quiet) WriteLine(" Allowed values: null", ConsoleColor.Gray);
                             }
                             else
                             {
-                                if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," Allowed values: {0}", parameter.AllowedValues), ConsoleColor.Gray);
+                                if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, " Allowed values: {0}", parameter.AllowedValues), ConsoleColor.Gray);
 
                                 bool isAllowedValue = false;
                                 int i = 0;
@@ -186,16 +197,16 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                                 }
 
                                 if (!isAllowedValue)
-                                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} was given value {1} which is not one of the allowed ones ({2})", parameter.Name, userProvidedValue, string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}", parameter.AllowedValues)));
+                                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Parameter {0} was given value {1} which is not one of the allowed ones ({2})", parameter.Name, userProvidedValue, string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}", parameter.AllowedValues)));
                             }
 
                             if (required && String.IsNullOrEmpty(convertedValueString) && String.IsNullOrEmpty(parameter.DefaultValue))
-                                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} is required but was not provided and does not have a default value", parameter.Name));
+                                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Parameter {0} is required but was not provided and does not have a default value", parameter.Name));
 
                             buildParameters.Add(new NameValuePair(parameter.Name, convertedValueString));
-                        } 
+                        }
 
-                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
                         client.ForceBuild(project, buildParameters, condition);
                         if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
                     }
@@ -203,6 +214,29 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 catch (Exception error)
                 {
                     WriteError("ERROR: Unable to send ForceBuild request", error);
+                }
+            }
+        }
+
+        private static void RunCancelPending()
+        {
+            if (ValidateParameter(server, "--server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "--project"))
+            {
+                try
+                {
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending CancelPending request for '{0}'", project),
+                                                                                                                                            ConsoleColor.White);
+                        client.CancelPendingRequest(project);
+                        if (!quiet) WriteLine("CancelPending request sent", ConsoleColor.White);
+                    }
+                }
+                catch (Exception error)
+                {
+                    WriteError("ERROR: Unable to send CancelPending request", error);
                 }
             }
         }
@@ -217,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 {
                     using (var client = GenerateClient())
                     {
-                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending AbortBuild request for '{0}'", project), ConsoleColor.White);
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending AbortBuild request for '{0}'", project), ConsoleColor.White);
                         client.AbortBuild(project);
                         if (!quiet) WriteLine("AbortBuild request sent", ConsoleColor.White);
                     }
@@ -239,7 +273,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 {
                     using (var client = GenerateClient())
                     {
-                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending StartProject request for '{0}'", project), ConsoleColor.White);
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending StartProject request for '{0}'", project), ConsoleColor.White);
                         client.StartProject(project);
                         if (!quiet) WriteLine("StartProject request sent", ConsoleColor.White);
                     }
@@ -261,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 {
                     using (var client = GenerateClient())
                     {
-                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending StopProject request for '{0}'", project), ConsoleColor.White);
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Sending StopProject request for '{0}'", project), ConsoleColor.White);
                         client.StopProject(project);
                         if (!quiet) WriteLine("StopProject request sent", ConsoleColor.White);
                     }
@@ -273,11 +307,57 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
+        private static void RunVolunteer()
+        {
+            if (ValidateParameter(server, "--server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "--project"))
+            {
+                try
+                {
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Volunteering to fix '{0}'", project), ConsoleColor.White);
+                        string message = string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} is fixing the build.", volunteer_name);
+                        client.SendMessage(project, new Message(message, Message.MessageKind.Fixer));
+                        if (!quiet) WriteLine("Volunteer message sent", ConsoleColor.White);
+                    }
+                }
+                catch (Exception error)
+                {
+                    WriteError("ERROR: Unable to volunteer", error);
+                }
+            }
+        }
+
+        private static void RunCancelVolunteer()
+        {
+            if (ValidateParameter(server, "--server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "--project"))
+            {
+                try
+                {
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Removing the fixer in '{0}'", project),
+                                                                                                                                ConsoleColor.White);
+                        client.SendMessage(project, new Message(string.Empty, Message.MessageKind.Fixer));
+                        if (!quiet) WriteLine("CancelVolunteer message sent", ConsoleColor.White);
+                    }
+                }
+                catch (Exception error)
+                {
+                    WriteError("ERROR: Unable to volunteer", error);
+                }
+            }
+        }
+
         private static void RunRetrive()
         {
             if (ValidateParameter(server, "--server"))
             {
-            	if (string.IsNullOrEmpty(project) && !all)
+                if (string.IsNullOrEmpty(project) && !all)
                 {
                     WriteLine("Must specify either a project or use the '-all' option", ConsoleColor.Red);
                 }
@@ -317,7 +397,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                     {
                         DisplayProject(prj);
                     }
-                } 
+                }
             }
             catch (Exception error)
             {
@@ -329,7 +409,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         {
             try
             {
-                if (!isQuiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Retrieving project '{0}' on server {1}", projectName, client.TargetServer), ConsoleColor.Gray);
+                if (!isQuiet) WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Retrieving project '{0}' on server {1}", projectName, client.TargetServer), ConsoleColor.Gray);
                 CruiseServerSnapshot snapShot = client.GetCruiseServerSnapshot();
                 var wasFound = false;
                 foreach (ProjectStatus project in snapShot.ProjectStatuses)
@@ -346,8 +426,8 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         else
                         {
                             DisplayProject(project);
-                        } 
-                        
+                        }
+
                         wasFound = true;
                         break;
                     }
@@ -366,9 +446,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void DisplayProject(ProjectStatus project)
         {
-            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1}", project.Name, project.Status), ConsoleColor.White);
-            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tActivity: {0}", project.Activity), ConsoleColor.White);
-            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tBuild Status: {0}", project.BuildStatus), ConsoleColor.White);
+            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}: {1}", project.Name, project.Status), ConsoleColor.White);
+            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tActivity: {0}", project.Activity), ConsoleColor.White);
+            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tBuild Status: {0}", project.BuildStatus), ConsoleColor.White);
             if (!string.IsNullOrEmpty(project.BuildStage))
             {
                 XmlDocument stageXml = new XmlDocument();
@@ -379,23 +459,23 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                     {
                         string stageTime = stageItem.GetAttribute("Time");
                         string stageData = stageItem.GetAttribute("Data");
-                        WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tBuild Stage: {0} ({1})", stageData, stageTime), ConsoleColor.White);
+                        WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tBuild Stage: {0} ({1})", stageData, stageTime), ConsoleColor.White);
                     }
                 }
                 catch
                 {
-                    WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tBuild Stage: {0}", project.BuildStage), ConsoleColor.White);
+                    WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tBuild Stage: {0}", project.BuildStage), ConsoleColor.White);
                 }
             }
-            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tLast Build: {0:G}", project.LastBuildDate), ConsoleColor.White);
-            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tNext Build: {0:G}", project.NextBuildTime), ConsoleColor.White);
+            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tLast Build: {0:G}", project.LastBuildDate), ConsoleColor.White);
+            WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture, "\tNext Build: {0:G}", project.NextBuildTime), ConsoleColor.White);
         }
 
         private static bool ValidateParameter(string value, string name)
         {
             if (string.IsNullOrEmpty(value))
             {
-                WriteError(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Input parameter '{0}' is missing", name), null);
+                WriteError(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Input parameter '{0}' is missing", name), null);
                 return false;
             }
             return true;
@@ -405,7 +485,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         {
             if (all)
             {
-                WriteError(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Input parameter '--all' is not valid for {0}", command), null);
+                WriteError(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Input parameter '--all' is not valid for {0}", command), null);
                 return false;
             }
             return true;
@@ -459,13 +539,13 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 helpStream.Close();
             }
-            opts.WriteOptionDescriptions (Console.Out);
+            opts.WriteOptionDescriptions(Console.Out);
 
             Console.WriteLine();
             WriteLine("Layout of the parameter file :", ConsoleColor.Yellow);
-            WriteLine(xmlParamFileLayout,ConsoleColor.DarkGray);
+            WriteLine(xmlParamFileLayout, ConsoleColor.DarkGray);
             Console.WriteLine();
-            WriteLine(" Examples :",ConsoleColor.Yellow);
+            WriteLine(" Examples :", ConsoleColor.Yellow);
             WriteLine("-==========-", ConsoleColor.Yellow);
             WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a", ConsoleColor.White);
             WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a -x", ConsoleColor.White);
@@ -474,7 +554,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet -r=buildtype=fulltest", ConsoleColor.White);
             WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet -r=buildtype=fulltest;makepackage=true", ConsoleColor.White);
 
- 
+
 
 
         }

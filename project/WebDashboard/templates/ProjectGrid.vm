@@ -1,235 +1,403 @@
+
 <!-- ProjectGrid.vm: Start -->
 <script type="text/javascript">
   $(function(){
-      $('#parameterCheck').dialog({
-      autoOpen:false,
-      modal:true,
-      title:'$translations.Translate("Project Parameters")',
-      width:400,
-      height:300,
-      overlay:{
-      opacity:0.5,
-      background:'black'
-      }
-      });
-      #if ($wholeFarm)
-      var sortList = [[0,0],[1,0]];
-      #else
-      var sortList = [[0,0]];
-      #end
-      $('#StatusGrid').initialiseProjectGrid({
-        sortList:sortList
-      });
+  $('#parameterCheck').dialog({
+  autoOpen:false,
+  modal:true,
+  title:'$translations.Translate("Project Parameters")',
+  width:400,
+  height:300,
+  overlay:{
+  opacity:0.5,
+  background:'black'
+  }
   });
+  #if ($wholeFarm)
+  var sortList = [[0,0],[1,0]];
+  #else
+  var sortList = [[0,0]];
+  #end
+  $('#StatusGrid').initialiseProjectGrid({
+  sortList:sortList
+  });
+  });
+  $('#StatusGrid').load();
 </script>
+
 <div id="parameterCheck" style="display:none;">
   <div id="parameterEditor">$translations.Translate("Loading parameters, please wait...")</div>
 </div>
-<form id="RefreshForm"
-      method="post">
+
+<form id="RefreshForm" method="post">
   <table width="100%">
     <tr>
-      <td align="left">
+      <td align="right">
         <input type="submit"
-               align="right"
-               name="Refresh"
-               value="$translations.Translate("Refresh status")" />
+           align="right"
+           name="Refresh"
+           value="$translations.Translate('Refresh status')"
+           class="refreshStatus"
+				 />
       </td>
     </tr>
   </table>
 </form>
 
+#set ($ProjectOKCounter = 0)
+#set ($ProjectNOKCounter = 0)
+#foreach ($projectGridRow in $projectGrid)
+#set($ProjectServer = $projectGridRow.ServerName)
+#if ($projectGridRow.BuildStatus == "Success")
+#set ($ProjectOKCounter = $ProjectOKCounter + 1)
+#else
+#set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
+#end
+#end
+#set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
+#if ($ProjectCounter == 0)
+#set ($OKPercent = 50)
+#set ($NOKPercent = 0)
+#else
+#set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
+#set ($NOKPercent = 50 - $OKPercent)
+#end
+#set ($OKPercentToolTip = $OKPercent * 2)
+
+<div id="legend" class="legend">
+  <h3>Caption [</h3>
+  <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/playsmall.png"/>
+  Start |
+  <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/stopsmall.png"/>
+  Stop |
+  <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/abort.png"/>
+  Abort |
+  <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/forcesmall.png"/>
+  Force run |
+  <img class="iconLegend" src="http://${ProjectServer}/ccnet/images/out.png"/>
+  Cancel Pending <h3>]</h3>
+</div>
+
 #if ($forceBuildMessage.Length > 0)
-<P>
+<p>
   <span id="StatusLabel">
     <b>
       <font color="#4A3C8C">$translations.Translate($forceBuildMessage)</font>
     </b>
   </span>
-</P>
+</p>
 #end
-
-#set ($ProjectOKCounter = 0)
-#set ($ProjectNOKCounter = 0)
-#foreach ($projectGridRow in $projectGrid)
-  #if ($projectGridRow.BuildStatus == "Success")
-    #set ($ProjectOKCounter = $ProjectOKCounter + 1)
-  #else
-    #set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
-  #end
-#end
-#set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
-#if ($ProjectCounter == 0)
-  #set ($OKPercent = 50)
-  #set ($NOKPercent = 0)
-#else
-  #set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
-  #set ($NOKPercent = 50 - $OKPercent)
-#end
-#set ($OKPercentToolTip = $OKPercent * 2)
 
 #if ($projectGrid.Length > 0)
-<table id="StatusGrid"
-       class="SortableGrid">
-  <thead>
-    #if ($barAtTop)
-    <tr>
-      <td colspan="10">
-        <table  id="BuildPercentage">
-          <tr title="Percentage of successful builds : $OKPercentToolTip%">
-            #if ($OKPercent == 50)
-            <td width="100%"
+<div id="Statusdiv" onload="sorter()">
+  <table id="StatusGrid" class="SortableGrid">
+    <thead>
+      #if ($barAtTop)
+      <tr>
+        <td colspan="10">
+          <table  id="BuildPercentage">
+            <tr title="Percentage of successfull builds : $OKPercentToolTip%">
+              #if ($OKPercent == 50)
+              <td width="100%"
                 bgcolor="#33CC00"></td>
-            #else
-            <td width="$OKPercent%"
+              #else
+              <td width="$OKPercent%"
                 bgcolor="#33CC00"></td>
-            <td width="$NOKPercent%"
+              <td width="$NOKPercent%"
                 bgcolor="#FF0000"></td>
-            <td width="$NOKPercent%"
+              <td width="$NOKPercent%"
                 bgcolor="#FF0000"></td>
-            <td width="$OKPercent%"
+              <td width="$OKPercent%"
                 bgcolor="#33CC00"></td>
-            #end
-          </tr>
-        </table>
-      </td>
-    </tr>
-    #end
-    <tr class="ProjectGridHeader">
-      #if ($wholeFarm)
-      <th class="left">$translations.Translate("Server")</th>
+              #end
+            </tr>
+          </table>
+        </td>
+      </tr>
       #end
-      <th class="{sorter:false}">$translations.Translate("Admin")</th>	  
-      <th class="left">$translations.Translate("Project Name")</th>
-      <th>$translations.Translate("Last Build Status")</th>
-      <th>$translations.Translate("Last Build Time")</th>
-      <th>$translations.Translate("Next Build Time")</th>
-      <th>$translations.Translate("Last Build Label")</th>
-      <th>$translations.Translate("CCNet Status")</th>
-      <th>$translations.Translate("Activity")</th>
-      <th class="{sorter:false}">$translations.Translate("Messages")</th>      
-    </tr>
-  </thead>
-  <tbody>
 
-    #set ($RowId = 0)
-    #foreach ($projectGridRow in $projectGrid)
-    #set ($RowId = $RowId + 1)
+      <tr class="ProjectGridHeader">
+        <th class="nameTh">$translations.Translate("Project Name")</th>
+        <th class="lastBuild">$translations.Translate("Last Build")</th>
+        <th class="statisticsTh">$translations.Translate("Statistics")</th>
+        <th class="{sorter:false} messageTh">$translations.Translate("Messages")</th>
+        <th class="dateTh">$translations.Translate("Last Build Time")</th>
+        <th class="runningTh">$translations.Translate("Run Time")</th>
+        <th class="statusTh">$translations.Translate("Status")</th>
+        <th class="activityTh">$translations.Translate("Activity")</th>
+        <th class="{sorter:false}">$translations.Translate("Admin")</th>
+      </tr>
+    </thead>
 
-        <tr id="projectData$RowId">
-            #if ($wholeFarm)
-            <td class="Black left">$projectGridRow.ServerName</td>
-            #end
-            <td>
-              <form method="post"
-                    style="margin-bottom:0px;">
-                <input type="hidden"
-                       name="projectName"
-                       value="$projectGridRow.Name" />
-                <input type="hidden"
-                       name="serverName"
-                       value="$projectGridRow.ServerName" />
-                <font color="Black">
-                  #if ($projectGridRow.allowForceBuild)
-                  #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
-                  <input type="button"
-                         name="$projectGridRow.ForceAbortBuildButtonName"
-                         value="$translations.Translate($projectGridRow.ForceAbortBuildButtonValue)"
-                         onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
-                  #else
-                  <input type="submit"
-                         name="$projectGridRow.ForceAbortBuildButtonName"
-                         value="$translations.Translate($projectGridRow.ForceAbortBuildButtonValue)"/>
-                  #end
-                  #end
-                  #if ($projectGridRow.AllowStartStopBuild)
-                  <input type="submit"
-                         name="$projectGridRow.StartStopButtonName"
-                         value="$translations.Translate($projectGridRow.StartStopButtonValue)"/>
-                  #end
-                </font>
-              </form>
-            </td>			
-            <td class="left">
-              <a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
-            </td>
-            <td class="$projectGridRow.BuildStatusHtmlColor">$translations.Translate($projectGridRow.BuildStatus)</td>
-            <td><a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.LastBuildDate</a></td>
-            <td>$translations.Translate($projectGridRow.NextBuildTime)</td>
-            <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
-            <td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
-            <td class="activity$projectGridRow.Activity">$translations.Translate($projectGridRow.Activity.ToString())</td>
-            <td class="left">
-              <ul>
-                #if ($projectGridRow.Breakers.Length > 0)
-                <li>$translations.Translate("Breakers : {0}", $projectGridRow.Breakers)</li>
-                #end
-                #if ($projectGridRow.Fixer.Length > 0)
-                <li>$projectGridRow.Fixer</li>
-                #end
-                #if ($projectGridRow.FailingTasks.Length > 0)
-                <li>$translations.Translate("Failing Tasks : {0}", $projectGridRow.FailingTasks)</li>
-                #end
-              </ul>
-            </td>
-
-        </tr>
-        #if ($projectGridRow.BuildStage.Length > 0)
-        <tr id="link$RowId" class="buildStatus">
-            #if ($wholeFarm)
-            <td colspan="10">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
-            #else
-            <td colspan="9">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
-            #end
-        </tr>
+    <tbody>
+      #set ($RowId = 0)
+      #foreach ($projectGridRow in $projectGrid)
+      #set ($RowId = $RowId + 1)
+      #set($colorText="")
+      #set($cont=0)
+      <tr id="projectData$RowId">
+        #if ($projectGridRow.BuildStatus == "Failure" )
+        #set($colorText = "Red")
+        #elseif ($projectGridRow.BuildStatus == "Exception" )
+        #set($colorText = "Orange")
+        #elseif ($projectGridRow.BuildStatus == "Unknown" )
+        #set($colorText = "Blue")
+        #elseif ($projectGridRow.BuildStatus == "Success" )
+        #set($colorText = "Green")
         #end
+        <td class="$colorText left project--name">
+          <a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
+        </td>
+        <td class="$colorText ">
+          #if($projectGridRow.BuildStatus == "Failure")
+          <div class="statusIconTd">
+            #else
+            <div>
+              #end
+              <span id="spStatus" title="$projectGridRow.BuildStatus $projectGridRow.LastBuildDate">
+                <a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">
+                  <img src="http://${projectGridRow.ServerName}/ccnet/images/${colorText}circle.png" class="icon0">
+                    #if($projectGridRow.BuildStatus == "Failure")
+                    #if($projectGridRow.BrokenTime.Length > 0)
+                    <span title="This project has been failing for ${projectGridRow.BrokenTime}">
+                      <div class="brokenDays">$projectGridRow.BrokenTime</div>
+                    </span>
+                    #end
+                    #end
+                  </a>
+              </span>
+            </div>
+          </td>
+        <td class="$colorText left project--name">$projectGridRow.Statistics</td>
+
+        #if ($projectGridRow.Breakers.Length == 0)
+        <td class="left width--content">
+          #else
+          <td class="left scroll--content">
+            #end
+            #if($projectGridRow.BuildStatus == "Failure")
+            #if(!($projectGridRow.Fixer.Length > 0))
+            <form method="post" class="volunteerFixForm">
+              <input type="hidden"
+                name="projectName"
+                value="$projectGridRow.Name" />
+              <input type="hidden"
+                name="serverName"
+                value="$projectGridRow.ServerName" />
+
+              <label for="FixerName" class="volunteerFix">Volunteer :</label>
+              <input list="users${RowId}"
+                class="volunteerFixText"
+                name="FixerName">
+                <datalist id="users${RowId}">
+                  #foreach($userName in $projectGridRow.BreakersNames)
+                  <option value="${userName}"/>
+                  #end
+                </datalist>
+                <span title="Enter a fixer">
+                  <input type="image"
+                    name="Volunteer"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/enterFixer.png"
+                    class="iconFixer"/>
+                </span>
+              </form>
+            #end
+            #if($projectGridRow.ForceBuildPublisher.Length > 0 && $projectGridRow.Breakers.Length == 0)
+            <li class="content--force__fail">$projectGridRow.ForceBuildPublisher</li>
+            #elseif($projectGridRow.ForceBuildPublisher.Length > 0)
+            <li class="content--force__fail__WithBreakers">$projectGridRow.ForceBuildPublisher</li>
+            #end
+            #if ($projectGridRow.Fixer.Length > 0)
+            #if($projectGridRow.Breakers.Length > 0)
+            <form method="post" class="removeFixerForm">
+              #else
+              <form method="post" class="removeFixerFormNoBreakers">
+                #end
+                <li class="content--fixer">$projectGridRow.Fixer</li>
+                <input type="hidden"
+                  name="projectName"
+                  value="$projectGridRow.Name" />
+                <input type="hidden"
+                  name="serverName"
+                  value="$projectGridRow.ServerName" />
+                <input type="hidden"
+                  name="FixerName"
+                  value="nobody"/>
+                <span title="Remove the fixer">
+                  <input type="image"
+                    name="Volunteer"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/removeFixer.png"
+                    class="iconRemoveFixer"/>
+                </span>
+              </form>
+              #end
+              #if ($projectGridRow.Breakers.Length > 0)
+              <ul>
+                <li class="content--breaker">
+                  $translations.Translate("Breakers :<br>{0}",$projectGridRow.Breakers)
+									</li>
+              </ul>
+              #end
+              #end
+            </td>
+          <td>
+            <a href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.LastBuildDate</a>
+            <!--lastBuildDate/projectGridRow.LastBuildDate-->
+          </td>
+
+          <td>
+            <a id= "demo" href="server/$projectGridRow.ServerName/project/$projectGridRow.Name/ViewLatestBuildReport.aspx">$projectGridRow.RunningTime</a>
+            <!-- projectGridRow.RunningTime-->
+          </td>
+
+          <td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
+          <td class="activity$projectGridRow.Activity">
+
+            #if($projectGridRow.Activity.ToString() == "Pending")
+            <span title="Priority in queue: ${projectGridRow.QueuePriority}&#13;Position in queue: ${projectGridRow.QueuePosition}">
+              #else
+              <span title="Priority in queue: ${projectGridRow.QueuePriority}">
+                #end
+                $translations.Translate($projectGridRow.Activity.ToString()) (P$projectGridRow.QueuePriority)
+                #if($projectGridRow.Activity.ToString() == "Pending")
+                #if($projectGridRow.QueuePosition < 10)
+									(Q0$projectGridRow.QueuePosition)
+								#else
+									(Q$projectGridRow.QueuePosition)
+								#end
+							#end
+              </span>
+            </td>
+          <td class="admin--icon">
+            <form method="post"
+						style="margin-bottom:0px;"
+						id="main">
+              <input type="hidden"
+								name="projectName"
+								value="$projectGridRow.Name" />
+              <input type="hidden"
+								name="serverName"
+								value="$projectGridRow.ServerName" />
+              <font color="Black">
+                <!-- Action's Icons -->
+                #if ($projectGridRow.allowForceBuild)
+                #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+                #if($projectGridRow.Activity == "Pending")
+                <span title="Force run">
+                  <img src="http://${projectGridRow.ServerName}/ccnet/images/forceDisabled.png" class="action--icon action--iconSmall"/>
+                </span>
+                #else
+                <span title="Force run">
+                  #if($projectGridRow.BuildParametersCount > 0)
+                  <input type="image"
+                    name="$projectGridRow.ForceAbortBuildButtonName"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/forceSmall.png"
+                    onclick="checkForParams(this, '$projectGridRow.ParametersUrl');return false;"
+                    class="action--iconSmall"/>
+                  #else
+                  <input type="image"
+                    name="$projectGridRow.ForceAbortBuildButtonName"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/forceSmall.png"
+                    onclick="checkForParams(this, '$projectGridRow.ParametersUrl');"
+                    class="action--iconSmall"/>
+                  #end
+                </span>
+                #end
+                #else
+                <span title="Abort">
+                  <input type="image"
+                     name="$projectGridRow.ForceAbortBuildButtonName"
+                     src="http://${projectGridRow.ServerName}/ccnet/images/abortSmall.png"
+                     class="action--iconSmall"/>
+                </span>
+                #end
+                #end
+                <span title="Cancel Pending (The project must be on a queue to be canceled)">
+                  #if($projectGridRow.Activity.ToString() == "Pending")
+                  <input type="image"
+                     name="$projectGridRow.CancelPendingButtonName"
+                     src="http://${projectGridRow.ServerName}/ccnet/images/out.png"
+                     class="action--icon cancelPendingIcon"/>
+                  #else
+                  <img src="http://${projectGridRow.ServerName}/ccnet/images/outDisabled.png" class="action--icon cancelPendingIcon"/>
+                  #end
+                </span>
+                #if ($projectGridRow.AllowStartStopBuild)
+                #if ($projectGridRow.Status == "Running")
+                <span title="Stop">
+                  <input type="image"
+                    name="$projectGridRow.StartStopButtonName"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/stopsmall.png"
+                    class="action--iconSmall"/>
+                </span>
+                #else
+                <span title="Start">
+                  <input type="image"
+                    name="$projectGridRow.StartStopButtonName"
+                    src="http://${projectGridRow.ServerName}/ccnet/images/playsmall.png"
+                    class="playSmallIcon"/>
+                </span>
+                #end
+                #end
+              </font>
+            </form>
+          </td>
+        </tr>
+      #if ($projectGridRow.BuildStage.Length > 0)
+      <tr id="link$RowId" class="buildStatus">
+        #if ($wholeFarm)
+        <td colspan="10">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
+        #else
+        <td colspan="9">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
+        #end
+      </tr>
+      #end
       #end
     </tbody>
-  #if ($barAtBottom)
-  <tfoot>
-    <tr>
-      <td colspan="10">
-        <table  id="BuildPercentage">
-          <tr title="Percentage of successful builds : $OKPercentToolTip%">
-            #if ($OKPercent == 50)
-            <td width="100%"
+
+    #if ($barAtBottom)
+    <tfoot>
+      <tr>
+        <td colspan="10">
+          <table  id="BuildPercentage">
+            <tr title="Percentage of successfull builds : $OKPercentToolTip%">
+              #if ($OKPercent == 50)
+              <td width="100%"
                 bgcolor="#33CC00"></td>
-            #else
-            <td width="$OKPercent%"
+              #else
+              <td width="$OKPercent%"
                 bgcolor="#33CC00"></td>
-            <td width="$NOKPercent%"
+              <td width="$NOKPercent%"
                 bgcolor="#FF0000"></td>
-            <td width="$NOKPercent%"
+              <td width="$NOKPercent%"
                 bgcolor="#FF0000"></td>
-            <td width="$OKPercent%"
+              <td width="$OKPercent%"
                 bgcolor="#33CC00"></td>
-            #end
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </tfoot>
-  #end
-</table>
+              #end
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tfoot>
+    #end
+  </table>
+</div>
 #end
-
-
-
 
 #if ($exceptions.Length > 0)
 <P>
   <span id="ExceptionTitleLabel">
-        $translations.Translate("There were exceptions connecting to the following servers"):
+    $translations.Translate("There were exceptions connecting to the following servers"):
   </span>
 </P>
 <table cellspacing="0"
-       cellpadding="4"
-       rules="all"
-       bordercolor="#CC9966"
-       border="1"
-       id="ExceptionGrid"
-       bgcolor="White"
-       width="100%">
+   cellpadding="4"
+   rules="all"
+   bordercolor="#CC9966"
+   border="1"
+   id="ExceptionGrid"
+   bgcolor="White"
+   width="100%">
   <tr bgcolor="#990000">
     <th>
       <font color="#FFFFCC">
