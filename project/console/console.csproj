@@ -141,6 +141,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainRunner.cs" />
     <None Include="..\service\ccnet.config">
       <Link>ccnet.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
