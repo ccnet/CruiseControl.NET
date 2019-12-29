@@ -9,13 +9,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Rhino.Mocks;
+    using System.Threading;
+    using Moq;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Threading;
 
     /// <summary>
     /// Tests for the SynchronisationTask class.
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -51,12 +51,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunRunsTasksInSequence()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var task = new SynchronisationTask
@@ -68,7 +69,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -81,12 +81,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunFailsIfTaskFails()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Failure };
             var task = new SynchronisationTask
@@ -98,7 +99,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -108,12 +108,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunFailsIfTaskFailsButContinueOnFailure()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Failure };
             var childTask3 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
@@ -128,7 +129,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 ContinueOnFailure = true
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -141,12 +141,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunFailsIfTaskErrors()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new FailingTask();
             var task = new SynchronisationTask
@@ -158,7 +159,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -170,12 +170,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunFailsIfTaskErrorsButContinueOnFailure()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new FailingTask();
             var childTask3 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
@@ -190,7 +191,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 ContinueOnFailure = true
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -205,12 +205,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunWorksWithCustomContextName()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.Stub<IIntegrationResult>();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result).SetupAllProperties();
             result.Status = IntegrationStatus.Success;
-            SetupResult.For(result.Clone()).Return(result);
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            var logger = mocks.Create<ILogger>().Object;
             var childTask1 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var childTask2 = new SleepingTask { SleepPeriod = 10, Result = IntegrationStatus.Success };
             var task = new SynchronisationTask
@@ -223,7 +224,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 ContextName = "customContext"
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 
@@ -236,14 +236,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunAllowsTasksInSeparateContexts()
         {
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
 
             // Setup the first task
-            var buildInfo1 = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result1 = mocks.Stub<IIntegrationResult>();
+            var buildInfo1 = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result1 = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result1).SetupAllProperties();
             result1.Status = IntegrationStatus.Success;
-            SetupResult.For(result1.Clone()).Return(result1);
-            SetupResult.For(result1.BuildProgressInformation).Return(buildInfo1);
+            Mock.Get(result1).Setup(_result => _result.Clone()).Returns(result1);
+            Mock.Get(result1).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo1);
             var childTask11 = new SleepingTask { SleepPeriod = 1000, Result = IntegrationStatus.Success };
             var childTask12 = new SleepingTask { SleepPeriod = 1000, Result = IntegrationStatus.Success };
             var task1 = new SynchronisationTask
@@ -257,11 +258,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the first task
-            var buildInfo2 = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result2 = mocks.Stub<IIntegrationResult>();
+            var buildInfo2 = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result2 = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result2).SetupAllProperties();
             result2.Status = IntegrationStatus.Success;
-            SetupResult.For(result2.Clone()).Return(result2);
-            SetupResult.For(result2.BuildProgressInformation).Return(buildInfo2);
+            Mock.Get(result2).Setup(_result => _result.Clone()).Returns(result2);
+            Mock.Get(result2).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo2);
             var childTask21 = new SleepingTask { SleepPeriod = 1000, Result = IntegrationStatus.Success };
             var childTask22 = new SleepingTask { SleepPeriod = 1000, Result = IntegrationStatus.Success };
             var task2 = new SynchronisationTask
@@ -277,7 +279,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var event1 = new ManualResetEvent(false);
             var event2 = new ManualResetEvent(false);
 
-            this.mocks.ReplayAll();
             Assert.IsTrue(ThreadPool.QueueUserWorkItem(t1 =>
             {
                 task1.Run(result1);
@@ -304,14 +305,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunTimesOutIfContextNotAvailable()
         {
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
 
             // Setup the first task
-            var buildInfo1 = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result1 = mocks.Stub<IIntegrationResult>();
+            var buildInfo1 = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result1 = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result1).SetupAllProperties();
             result1.Status = IntegrationStatus.Success;
-            SetupResult.For(result1.Clone()).Return(result1);
-            SetupResult.For(result1.BuildProgressInformation).Return(buildInfo1);
+            Mock.Get(result1).Setup(_result => _result.Clone()).Returns(result1);
+            Mock.Get(result1).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo1);
             var childTask11 = new SleepingTask { SleepPeriod = 2000, Result = IntegrationStatus.Success };
             var childTask12 = new SleepingTask { SleepPeriod = 2000, Result = IntegrationStatus.Success };
             var task1 = new SynchronisationTask
@@ -325,11 +327,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the first task
-            var buildInfo2 = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result2 = mocks.Stub<IIntegrationResult>();
+            var buildInfo2 = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result2 = mocks.Create<IIntegrationResult>().Object;
+            Mock.Get(result2).SetupAllProperties();
             result2.Status = IntegrationStatus.Success;
-            SetupResult.For(result2.Clone()).Return(result2);
-            SetupResult.For(result2.BuildProgressInformation).Return(buildInfo2);
+            Mock.Get(result2).Setup(_result => _result.Clone()).Returns(result2);
+            Mock.Get(result2).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo2);
             var childTask21 = new SleepingTask { SleepPeriod = 2000, Result = IntegrationStatus.Success };
             var childTask22 = new SleepingTask { SleepPeriod = 2000, Result = IntegrationStatus.Success };
             var task2 = new SynchronisationTask
@@ -345,7 +348,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var event1 = new ManualResetEvent(false);
             var event2 = new ManualResetEvent(false);
 
-            this.mocks.ReplayAll();
             Assert.IsTrue(ThreadPool.QueueUserWorkItem(t1 =>
             {
                 task1.Run(result1);
@@ -360,7 +362,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 event1,
                 event2
             });
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
 
             // Only expect one of these to be successful
             if (result2.Status == IntegrationStatus.Success)
@@ -376,13 +378,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunContinueOnFaillureStillRunsInnerTasks()
         {
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
 
             // We cannot use a mock object here because having Clone return the original result means the test 
             // will not be able to catch the error we are after.
             var result = new IntegrationResult();
             result.ProjectName = ""; // must set to an empty string because the null default value makes Clone crash
-            mocks.ReplayAll();
 
             const int innerCount = 3;
             const int leafCount = 2;
@@ -427,7 +428,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 ContinueOnFailure = true
             };
 
-            this.mocks.ReplayAll();
             task.Run(result);
             this.mocks.VerifyAll();
 

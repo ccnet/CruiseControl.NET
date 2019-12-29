@@ -2,8 +2,8 @@
 {
     using System;
     using System.Xml;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -22,7 +22,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -31,23 +31,22 @@
         public void ExecuteGeneratesReport()
         {
             var projectName = "daProject";
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var sessionRetriever = this.mocks.StrictMock<ISessionRetriever>();
-            var server = this.mocks.StrictMock<IServerSpecifier>();
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var sessionRetriever = this.mocks.Create<ISessionRetriever>(MockBehavior.Strict).Object;
+            var server = this.mocks.Create<IServerSpecifier>(MockBehavior.Strict).Object;
             var project = new ProjectStatus(projectName, IntegrationStatus.Success, new DateTime(2010, 1, 2, 3, 4, 5));
             project.ServerName = "TESTMACHINE";
             var status = new ProjectStatusOnServer(project, server);
             var snapshot = new ProjectStatusListAndExceptions(
                 new ProjectStatusOnServer[] { status },
                 new CruiseServerException[0]);
-            SetupResult.For(cruiseRequest.ProjectName).Return(projectName);
-            SetupResult.For(cruiseRequest.ServerSpecifier).Return(server);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken(sessionRetriever)).Return(null);
-            SetupResult.For(farmService.GetProjectStatusListAndCaptureExceptions(server, null))
-                .Return(snapshot);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns(projectName);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(server);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken(sessionRetriever)).Returns((string)null);
+            Mock.Get(farmService).Setup(_farmService => _farmService.GetProjectStatusListAndCaptureExceptions(server, null))
+                .Returns(snapshot);
 
-            this.mocks.ReplayAll();
             var report = new ProjectXmlReport(farmService, sessionRetriever);
             var response = report.Execute(cruiseRequest);
 

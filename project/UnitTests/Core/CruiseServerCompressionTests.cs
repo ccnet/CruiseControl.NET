@@ -2,16 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
-    using NUnit.Framework;
-    using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Remote.Messages;
-    using ThoughtWorks.CruiseControl.Core.Config;
     using System.Diagnostics;
+    using System.Text;
+    using Moq;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Queues;
-    using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Core.Security;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote.Events;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
 
     /// <summary>
     /// Tests for the compression methods on <see cref="CruiseServer"/>
@@ -38,7 +39,7 @@
         public void GetLogCompressesData()
         {
             // Initialise the mocks
-            var mocks = new MockRepository();
+            var mocks = new MockRepository(MockBehavior.Default);
             var data = "This is some test - line 1, line 2, line 3 - this is some test data";
 
             // Perform the tests
@@ -49,7 +50,7 @@
             var response = server.GetLog(request);
 
             // Verify the results
-            mocks.VerifyAll();
+            mocks.Verify();
             Assert.AreEqual(ResponseResult.Success, response.Result);
             Assert.AreNotEqual(data, response.Data);
         }
@@ -76,51 +77,48 @@
             projects.Add(project);
 
             // Mock the configuration
-            var configuration = mocks.StrictMock<IConfiguration>();
-            SetupResult.For(configuration.Projects)
-                .Return(projects);
-            SetupResult.For(configuration.SecurityManager)
-                .Return(new NullSecurityManager());
+            var configuration = mocks.Create<IConfiguration>(MockBehavior.Strict).Object;
+            Mock.Get(configuration).SetupGet(_configuration => _configuration.Projects)
+                .Returns(projects);
+            Mock.Get(configuration).SetupGet(_configuration => _configuration.SecurityManager)
+                .Returns(new NullSecurityManager());
 
             // Mock the configuration service
-            var configService = mocks.StrictMock<IConfigurationService>();
-            SetupResult.For(configService.Load())
-                .Return(configuration);
-            Expect.Call(() => { configService.AddConfigurationUpdateHandler(null); })
-                .IgnoreArguments();
+            var configService = mocks.Create<IConfigurationService>(MockBehavior.Strict).Object;
+            Mock.Get(configService).Setup(_configService => _configService.Load())
+                .Returns(configuration);
+            Mock.Get(configService).Setup(_configService => _configService.AddConfigurationUpdateHandler(It.IsAny<ConfigurationUpdateHandler>())).Verifiable();
 
             // Mock the integration repostory
-            var repository = mocks.StrictMock<IIntegrationRepository>();
-            SetupResult.For(repository.GetBuildLog(buildName))
-                .Return(buildLog);
+            var repository = mocks.Create<IIntegrationRepository>(MockBehavior.Strict).Object;
+            Mock.Get(repository).Setup(_repository => _repository.GetBuildLog(buildName))
+                .Returns(buildLog);
             
             // Mock the project integrator
-            var projectIntegrator = mocks.StrictMock<IProjectIntegrator>();
-            SetupResult.For(projectIntegrator.Project)
-                .Return(project);
-            SetupResult.For(projectIntegrator.IntegrationRepository)
-                .Return(repository);
+            var projectIntegrator = mocks.Create<IProjectIntegrator>(MockBehavior.Strict).Object;
+            Mock.Get(projectIntegrator).SetupGet(_projectIntegrator => _projectIntegrator.Project)
+                .Returns(project);
+            Mock.Get(projectIntegrator).SetupGet(_projectIntegrator => _projectIntegrator.IntegrationRepository)
+                .Returns(repository);
 
             // Mock the queue manager
-            var queueManager = mocks.StrictMock<IQueueManager>();
-            Expect.Call(() => { queueManager.AssociateIntegrationEvents(null, null); })
-                .IgnoreArguments();
-            SetupResult.For(queueManager.GetIntegrator(testProjectName))
-                .Return(projectIntegrator);
+            var queueManager = mocks.Create<IQueueManager>(MockBehavior.Strict).Object;
+            Mock.Get(queueManager).Setup(_queueManager => _queueManager.AssociateIntegrationEvents(It.IsAny<EventHandler<IntegrationStartedEventArgs>>(), It.IsAny<EventHandler<IntegrationCompletedEventArgs>>())).Verifiable();
+            Mock.Get(queueManager).Setup(_queueManager => _queueManager.GetIntegrator(testProjectName))
+                .Returns(projectIntegrator);
 
             // Mock the queue manager factory
-            var queueManagerFactory = mocks.StrictMock<IQueueManagerFactory>();
-            SetupResult.For(queueManagerFactory.Create(null, configuration, null))
-                .Return(queueManager);
+            var queueManagerFactory = mocks.Create<IQueueManagerFactory>(MockBehavior.Strict).Object;
+            Mock.Get(queueManagerFactory).Setup(_queueManagerFactory => _queueManagerFactory.Create(null, configuration, null))
+                .Returns(queueManager);
             IntegrationQueueManagerFactory.OverrideFactory(queueManagerFactory);
 
             // Mock the execution environment
-            var execEnviron = mocks.StrictMock<IExecutionEnvironment>();
-            SetupResult.For(execEnviron.GetDefaultProgramDataFolder(ApplicationType.Server))
-                .Return(string.Empty);
+            var execEnviron = mocks.Create<IExecutionEnvironment>(MockBehavior.Strict).Object;
+            Mock.Get(execEnviron).Setup(_execEnviron => _execEnviron.GetDefaultProgramDataFolder(ApplicationType.Server))
+                .Returns(string.Empty);
 
             // Initialise the server
-            mocks.ReplayAll();
             var server = new CruiseServer(
                 configService,
                 null,

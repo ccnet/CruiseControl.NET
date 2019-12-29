@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
@@ -14,23 +14,22 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void EvaluateReturnsTrueIfValuesMatch()
         {
-            var webMock = this.mocks.StrictMock<IWebFunctions>();
-            Expect.Call(webMock.PingUrl("http://somewhere"))
-                .Return(true);
+            var webMock = this.mocks.Create<IWebFunctions>(MockBehavior.Strict).Object;
+            Mock.Get(webMock).Setup(_webMock => _webMock.PingUrl("http://somewhere"))
+                .Returns(true).Verifiable();
             var condition = new UrlPingsTaskCondition
                 {
                     Url = "http://somewhere",
                     WebFunctions = webMock
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -40,13 +39,12 @@
         [Test]
         public void ValidatePassesWithUrl()
         {
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
             var condition = new UrlPingsTaskCondition
                 {
                     Url = "http://somewhere"
                 };
 
-            this.mocks.ReplayAll();
             condition.Validate(null, ConfigurationTrace.Start(this), processor);
 
             this.mocks.VerifyAll();
@@ -55,11 +53,10 @@
         [Test]
         public void ValidateThrowsErrorsWithoutUrl()
         {
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
             var condition = new UrlPingsTaskCondition();
-            Expect.Call(() => processor.ProcessError("URL cannot be empty"));
+            Mock.Get(processor).Setup(_processor => _processor.ProcessError("URL cannot be empty")).Verifiable();
 
-            this.mocks.ReplayAll();
             condition.Validate(null, ConfigurationTrace.Start(this), processor);
 
             this.mocks.VerifyAll();

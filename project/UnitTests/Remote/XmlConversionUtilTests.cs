@@ -2,17 +2,12 @@
 {
     using System;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
     [TestFixture]
     public class XmlConversionUtilTests
     {
-        #region Private fields
-        private MockRepository mocks = new MockRepository();
-        #endregion
-
         #region Test methods
         #region FindMessageType()
         [Test]

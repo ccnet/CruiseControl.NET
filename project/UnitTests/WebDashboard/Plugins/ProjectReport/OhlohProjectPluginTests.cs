@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
     using System.Collections;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
     using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -21,7 +21,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -46,15 +46,14 @@
         [Test]
         public void ExecuteWorksForNonLinkedSite()
         {
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();
-            var request = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            SetupResult.For(request.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(request.RetrieveSessionToken()).Return(null);
-            SetupResult.For(farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Return(string.Empty);
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var viewGenerator = this.mocks.Create<IVelocityViewGenerator>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            Mock.Get(request).SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(request).Setup(_request => _request.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(farmService).Setup(_farmService => _farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Returns(string.Empty);
 
-            this.mocks.ReplayAll();
             var plugin = new OhlohProjectPlugin(farmService, viewGenerator);
             var response = plugin.Execute(request);
 
@@ -67,15 +66,15 @@
         [Test]
         public void ExecuteWorksForLinkedSite()
         {
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();
-            var request = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            SetupResult.For(request.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(request.ProjectName).Return("Test Project");
-            SetupResult.For(request.RetrieveSessionToken()).Return(null);
-            SetupResult.For(farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Return("1234567");
-            Expect.Call(viewGenerator.GenerateView(null, null))
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var viewGenerator = this.mocks.Create<IVelocityViewGenerator>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            Mock.Get(request).SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(request).SetupGet(_request => _request.ProjectName).Returns("Test Project");
+            Mock.Get(request).Setup(_request => _request.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(farmService).Setup(_farmService => _farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Returns("1234567");
+            Mock.Get(viewGenerator).Setup(_viewGenerator => _viewGenerator.GenerateView(It.IsAny<string>(), It.IsAny<Hashtable>()))
                 .Callback<string, Hashtable>((n, ht) => {
                     Assert.AreEqual("OhlohStats.vm", n);
                     Assert.IsNotNull(ht);
@@ -83,11 +82,9 @@
                     Assert.IsTrue(ht.ContainsKey("projectName"));
                     Assert.AreEqual("1234567", ht["ohloh"]);
                     Assert.AreEqual("Test Project", ht["projectName"]);
-                    return true;
                 })
-                .Return(new HtmlFragmentResponse("from nVelocity"));
+                .Returns(new HtmlFragmentResponse("from nVelocity")).Verifiable();
 
-            this.mocks.ReplayAll();
             var plugin = new OhlohProjectPlugin(farmService, viewGenerator);
             var response = plugin.Execute(request);
 

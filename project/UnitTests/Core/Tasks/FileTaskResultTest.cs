@@ -1,10 +1,10 @@
+using System.Diagnostics;
+using System.IO;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.Diagnostics;
-using Rhino.Mocks;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void CreateFile()
 		{
 			filename = TempFileUtil.CreateTempFile("FileTaskResult", "test.xml", "<invalid xml>");
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
 		}
 
 		[TearDown]
@@ -45,16 +45,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void DeleteAfterMergeDeletesTheFile()
         {
             // Initialise the test
-            var fileSystem = this.mocks.StrictMock<IFileSystem>();
+            var fileSystem = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             var file = new FileInfo(this.filename);
-            SetupResult.For(fileSystem.FileExists(file.FullName)).Return(true);
-            Expect.Call(() =>
-            {
-                fileSystem.DeleteFile(file.FullName);
-            });
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(file.FullName)).Returns(true);
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.DeleteFile(file.FullName)).Verifiable();
 
             // Run the test
-            this.mocks.ReplayAll();
             var result = new FileTaskResult(file, true, fileSystem);
             result.CleanUp();
 
@@ -66,12 +62,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void FileIsNotDeletedIfDeletedAfterMergeIsNotSet()
         {
             // Initialise the test
-            var fileSystem = this.mocks.StrictMock<IFileSystem>();
+            var fileSystem = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             var file = new FileInfo(this.filename);
-            SetupResult.For(fileSystem.FileExists(file.FullName)).Return(true);
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(file.FullName)).Returns(true);
 
             // Run the test
-            this.mocks.ReplayAll();
             var result = new FileTaskResult(file, false, fileSystem);
             result.CleanUp();
 

@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
     using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
@@ -16,7 +16,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -31,12 +31,11 @@
         [Test]
         public void NamedActionsReturnsBothActions()
         {
-            var actionInstantiator = this.mocks.StrictMock<IActionInstantiator>();
-            var action = this.mocks.StrictMock<ICruiseAction>();
-            SetupResult.For(actionInstantiator.InstantiateAction(typeof(ProjectTimelineAction)))
-                .Return(action);
+            var actionInstantiator = this.mocks.Create<IActionInstantiator>(MockBehavior.Strict).Object;
+            var action = this.mocks.Create<ICruiseAction>(MockBehavior.Strict).Object;
+            Mock.Get(actionInstantiator).Setup(_actionInstantiator => _actionInstantiator.InstantiateAction(typeof(ProjectTimelineAction)))
+                .Returns(action);
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectTimelinePlugin(actionInstantiator);
             var actions = plugin.NamedActions;
 

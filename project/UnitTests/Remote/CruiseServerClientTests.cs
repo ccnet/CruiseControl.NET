@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
     using ThoughtWorks.CruiseControl.Remote.Security;
@@ -12,7 +12,7 @@
     public class CruiseServerClientTests
     {
         #region Private fields
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         #endregion
 
         #region Test methods
@@ -21,11 +21,9 @@
         public void GetProjectStatusThrowsExceptionOnFailure()
         {
             ProjectStatusResponse response = new ProjectStatusResponse();
-            IServerConnection connection = mocks.DynamicMock<IServerConnection>();
-            SetupResult.For(connection.SendMessage("GetProjectStatus", null))
-                .IgnoreArguments()
-                .Return(response);
-            mocks.ReplayAll();
+            IServerConnection connection = mocks.Create<IServerConnection>().Object;
+            Mock.Get(connection).Setup(_connection => _connection.SendMessage("GetProjectStatus", It.IsAny<ServerRequest>()))
+                .Returns(response);
 
             CruiseServerClient client = new CruiseServerClient(connection);
             Assert.That(delegate { client.GetProjectStatus(); },
@@ -39,11 +37,9 @@
             ProjectStatusResponse response = new ProjectStatusResponse();
             response.Result = ResponseResult.Success;
             response.Projects.Add(status);
-            IServerConnection connection = mocks.DynamicMock<IServerConnection>();
-            SetupResult.For(connection.SendMessage("GetProjectStatus", null))
-                .IgnoreArguments()
-                .Return(response);
-            mocks.ReplayAll();
+            IServerConnection connection = mocks.Create<IServerConnection>().Object;
+            Mock.Get(connection).Setup(_connection => _connection.SendMessage("GetProjectStatus", It.IsAny<ServerRequest>()))
+                .Returns(response);
 
             CruiseServerClient client = new CruiseServerClient(connection);
             ProjectStatus[] results = client.GetProjectStatus();
@@ -273,7 +269,7 @@
         {
             var response = new FileTransferResponse();
             response.Result = ResponseResult.Success;
-            response.FileTransfer = this.mocks.StrictMock<IFileTransfer>();
+            response.FileTransfer = this.mocks.Create<IFileTransfer>(MockBehavior.Strict).Object;
             var client = new CruiseServerClient(
                 new ServerStub("RetrieveFileTransfer", typeof(FileTransferRequest), "Project #1", response));
             var result = client.RetrieveFileTransfer("Project #1", "Build #1");
@@ -595,9 +591,8 @@
         [Test]
         public void IsBusyReturnsUnderlyingConnectionIsBusy()
         {
-            IServerConnection connection = mocks.DynamicMock<IServerConnection>();
-            SetupResult.For(connection.IsBusy).Return(true);
-            mocks.ReplayAll();
+            IServerConnection connection = mocks.Create<IServerConnection>().Object;
+            Mock.Get(connection).SetupGet(_connection => _connection.IsBusy).Returns(true);
 
             CruiseServerClient client = new CruiseServerClient(connection);
             Assert.IsTrue(client.IsBusy);
@@ -609,9 +604,8 @@
         public void AddressReturnsUnderlyingConnectionAddress()
         {
             var address = "http://testing";
-            var connection = mocks.DynamicMock<IServerConnection>();
-            SetupResult.For(connection.Address).Return(address);
-            mocks.ReplayAll();
+            var connection = mocks.Create<IServerConnection>().Object;
+            Mock.Get(connection).SetupGet(_connection => _connection.Address).Returns(address);
 
             CruiseServerClient client = new CruiseServerClient(connection);
             Assert.AreEqual(address, client.Address);

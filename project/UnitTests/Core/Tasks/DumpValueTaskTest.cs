@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;

@@ -1,10 +1,9 @@
+using System.Collections.Generic;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Remote;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
 
 		[Test]
@@ -42,15 +41,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldReqestForceBuildOnRemoteCruiseServer()
 		{
-            var factory = mocks.StrictMock<ICruiseServerClientFactory>();
-            var client = mocks.StrictMock<CruiseServerClientBase>();
-            SetupResult.For(factory.GenerateClient("tcp://localhost:21234/CruiseManager.rem"))
-                .Return(client);
-            Expect.Call(() => client.ForceBuild("project", null))
-                .Constraints(Rhino.Mocks.Constraints.Is.Equal("project"),
-                    Rhino.Mocks.Constraints.Is.TypeOf<List<NameValuePair>>());
-            Expect.Call(client.SessionToken).SetPropertyAndIgnoreArgument();
-            mocks.ReplayAll();
+            var factory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
+            var client = mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
+            Mock.Get(factory).Setup(_factory => _factory.GenerateClient("tcp://localhost:21234/CruiseManager.rem"))
+                .Returns(client);
+            Mock.Get(client).Setup(_client => _client.ForceBuild("project", It.IsNotNull<List<NameValuePair>>()))
+                .Verifiable();
+            Mock.Get(client).SetupSet(_client => _client.SessionToken = It.IsAny<string>()).Verifiable();
 
 			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);
 			publisher.Project = "project";
@@ -63,8 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldOnlyForceBuildIfIntegrationStatusMatches()
 		{
-            var factory = mocks.StrictMock<ICruiseServerClientFactory>();
-            mocks.ReplayAll();
+            var factory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
 
 			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);
 			publisher.IntegrationStatus = IntegrationStatus.Exception;

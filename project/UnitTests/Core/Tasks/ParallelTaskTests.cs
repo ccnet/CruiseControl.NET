@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     [Ignore("Ignored until a random fail on Windows and a deadlock on Unix is fixed. (Deadlock on Unix is in ParallelTaskTests.ExecuteRunsMultipleSuccessfulTasks)")]
     public class ParallelTaskTests
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         #region Test methods
         [Test]
@@ -33,14 +33,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(false);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
+            VerifyResultMock(result, false);
             mocks.VerifyAll();
             Assert.AreEqual(IntegrationStatus.Success, result.Status, "Status does not match");
         }
@@ -60,14 +60,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(false);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
+            VerifyResultMock(result, false);
             mocks.VerifyAll();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
@@ -85,14 +85,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(true);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
+            VerifyResultMock(result, true);
             mocks.VerifyAll();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
@@ -131,8 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     task
                 }
             };
-            var errorProcessor = mocks.StrictMock<IConfigurationErrorProcesser>();
-            mocks.ReplayAll();
+            var errorProcessor = mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
 
             task.Validate(null, ConfigurationTrace.Start(project), errorProcessor);
             mocks.VerifyAll();
@@ -149,12 +148,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     task
                 }
             };
-            var errorProcessor = mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() =>
-            {
-                errorProcessor.ProcessWarning(string.Empty);
-            }).IgnoreArguments();
-            mocks.ReplayAll();
+            var errorProcessor = mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(errorProcessor).Setup(_errorProcessor => _errorProcessor.ProcessWarning(It.IsAny<string>())).Verifiable();
 
             task.Validate(null, ConfigurationTrace.Start(project), errorProcessor);
             mocks.VerifyAll();
@@ -164,23 +159,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         #region Private methods
         private IIntegrationResult GenerateResultMock(bool forException)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.ProjectName).Return("Project name");
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupGet(_result => _result.ProjectName).Returns("Project name");
             for (var loop = 1; loop <= (forException ? 0 : 5); loop++)
             {
-                Expect.Call(() => { result.AddTaskResult(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Task #{0} has run", loop)); });
+                string taskResult = string.Format(System.Globalization.CultureInfo.CurrentCulture, "Task #{0} has run", loop);
+                Mock.Get(result).Setup(_result => _result.AddTaskResult(taskResult)).Verifiable();
             }
-            Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(result).Repeat.Times((forException ? 1 : 5));
-            Expect.Call(() => { result.Merge(result); }).Repeat.Times((forException ? 1 : 5));
+            Mock.Get(result).SetupSet(_result => _result.Status = It.IsAny<IntegrationStatus>()).Verifiable();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result).Verifiable();
+            Mock.Get(result).Setup(_result => _result.Merge(result)).Verifiable();
 
             if (forException)
             {
-                Expect.Call(result.ExceptionResult).PropertyBehavior();
+                Mock.Get(result).SetupSet(_result => _result.ExceptionResult = It.IsAny<Exception>()).Verifiable();
+                Mock.Get(result).SetupProperty(_result => _result.ExceptionResult);
             }
             return result;
+        }
+        private void VerifyResultMock(IIntegrationResult result, bool forException)
+        {
+            Mock.Get(result).Verify(_result => _result.Clone(), Times.Exactly(forException ? 1 : 5));
+            Mock.Get(result).Verify(_result => _result.Merge(result), Times.Exactly(forException ? 1 : 5));
         }
         #endregion
 

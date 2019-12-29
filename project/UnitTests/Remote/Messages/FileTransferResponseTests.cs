@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
@@ -35,8 +35,7 @@
         public void FileTransferCanBeSetAndRetrieved()
         {
             var request = new FileTransferResponse();
-            var mocks = new MockRepository();
-            var transfer = mocks.StrictMock<IFileTransfer>();
+            var transfer = Mock.Of<IFileTransfer>(MockBehavior.Strict);
             request.FileTransfer = transfer;
             Assert.AreEqual(transfer, request.FileTransfer);
         }

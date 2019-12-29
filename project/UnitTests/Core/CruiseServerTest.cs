@@ -1,30 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
+using Moq;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Queues;
+using ThoughtWorks.CruiseControl.Core.Security;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
-using Rhino.Mocks.Interfaces;
-using ThoughtWorks.CruiseControl.UnitTests.Remote;
-using System.IO;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using NMock.Constraints;
-using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.UnitTests.Remote;
+using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class CruiseServerTest : IntegrationFixture
 	{
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 		private DynamicMock configServiceMock;
 		private DynamicMock projectIntegratorListFactoryMock;
 		private DynamicMock projectSerializerMock;
@@ -72,13 +72,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorMock2.SetupResult("Name", "Project 2");
 			integratorMock3.SetupResult("Name", "Project 3");
 
-			fileSystem = mocks.DynamicMock<IFileSystem>();
-			executionEnvironment = mocks.DynamicMock<IExecutionEnvironment>();
+			fileSystem = mocks.Create<IFileSystem>().Object;
+			executionEnvironment = mocks.Create<IExecutionEnvironment>().Object;
 
-			SetupResult.For(executionEnvironment.IsRunningOnWindows).Return(true);
-			SetupResult.For(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).Return(applicationDataPath);
-			SetupResult.For(fileSystem.DirectoryExists(applicationDataPath)).Return(true);
-			mocks.ReplayAll();
+			Mock.Get(executionEnvironment).SetupGet(_executionEnvironment => _executionEnvironment.IsRunningOnWindows).Returns(true);
+			Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).Returns(applicationDataPath);
+			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.DirectoryExists(applicationDataPath)).Returns(true);
 
 			integrationQueue = null; // We have no way of injecting currently.
 
@@ -650,14 +649,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             // Need to set up a new integrator that can return an event
             IProjectIntegrator integrator4;
-            integrator4 = mocks.DynamicMock<IProjectIntegrator>();
-            SetupResult.For(integrator4.Name).Return("Project 4");
-            integrator4.IntegrationStarted += null;
-            IEventRaiser startEventRaiser = LastCall.IgnoreArguments()
-                .GetEventRaiser();
+            integrator4 = mocks.Create<IProjectIntegrator>().Object;
+            Mock.Get(integrator4).SetupGet(_integrator4 => _integrator4.Name).Returns("Project 4");
 
             // Initialise a new cruise server with the new integrator
-            mocks.ReplayAll();
             integratorList.Add(integrator4);
             configServiceMock.ExpectAndReturn("Load", configuration);
             projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
@@ -678,7 +673,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             };
 
 
-            startEventRaiser.Raise(integrator4, 
+            Mock.Get(integrator4).Raise(_integrator4 => _integrator4.IntegrationStarted += null,
                 new IntegrationStartedEventArgs(request, projectName));
             Assert.IsTrue(eventFired, "IntegrationStarted not fired");
         }
@@ -692,14 +687,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             // Need to set up a new integrator that can return an event
             IProjectIntegrator integrator4;
-            integrator4 = mocks.DynamicMock<IProjectIntegrator>();
-            SetupResult.For(integrator4.Name).Return("Project 4");
-            integrator4.IntegrationCompleted += null;
-            IEventRaiser startEventRaiser = LastCall.IgnoreArguments()
-                .GetEventRaiser();
+            integrator4 = mocks.Create<IProjectIntegrator>().Object;
+            Mock.Get(integrator4).SetupGet(_integrator4 => _integrator4.Name).Returns("Project 4");
 
             // Initialise a new cruise server with the new integrator
-            mocks.ReplayAll();
             integratorList.Add(integrator4);
             configServiceMock.ExpectAndReturn("Load", configuration);
             projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
@@ -721,7 +712,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             };
 
 
-            startEventRaiser.Raise(integrator4, 
+            Mock.Get(integrator4).Raise(_integrator4 => _integrator4.IntegrationCompleted += null,
                 new IntegrationCompletedEventArgs(request, projectName, IntegrationStatus.Success));
             Assert.IsTrue(eventFired, "IntegrationCompleted not fired");
         }
@@ -868,12 +859,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 {
                     BuildName = "Build #1"
                 };
-            this.mocks.ReplayAll();
 
             server.SecurityManager = securityManagerMock;
             var actual = server.GetFinalBuildStatus(request);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.AreEqual(ResponseResult.Failure, actual.Result);
             Assert.AreEqual("Permission to execute 'ViewProject' has been denied.", actual.ErrorMessages[0].Message);
         }
@@ -886,12 +876,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 {
                     BuildName = "Build #1"
                 };
-            this.mocks.ReplayAll();
 
             server.SecurityManager = securityManagerMock;
             var actual = server.GetFinalBuildStatus(request);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.AreEqual(ResponseResult.Warning, actual.Result);
             Assert.AreEqual("Build status does not exist", actual.ErrorMessages[0].Message);
         }
@@ -904,16 +893,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 {
                     BuildName = "Build #1"
                 };
-            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
-            SetupResult.For(dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
-                .Return(new ProjectStatusSnapshot { Name = "Project 1" });
-            this.mocks.ReplayAll();
+            var dataStoreMock = this.mocks.Create<IDataStore>(MockBehavior.Strict).Object;
+            Mock.Get(dataStoreMock).Setup(_dataStoreMock => _dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
+                .Returns(new ProjectStatusSnapshot { Name = "Project 1" });
 
             project1.DataStore = dataStoreMock;
             server.SecurityManager = securityManagerMock;
             var actual = server.GetFinalBuildStatus(request);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.AreEqual(ResponseResult.Success, actual.Result);
             Assert.AreEqual("Project 1", actual.Snapshot.Name);
         }
@@ -923,16 +911,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             var securityManagerMock = this.InitialiaseSecurityManagerMock(true, false);
             var request = new ProjectRequest("1234", "Project 1");
-            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
-            SetupResult.For(dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
-                .Return(new ProjectStatusSnapshot { Name = "Project 1" });
-            this.mocks.ReplayAll();
+            var dataStoreMock = this.mocks.Create<IDataStore>(MockBehavior.Strict).Object;
+            Mock.Get(dataStoreMock).Setup(_dataStoreMock => _dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
+                .Returns(new ProjectStatusSnapshot { Name = "Project 1" });
 
             project1.RssFeedLoader = () => "RSS-Feed";
             server.SecurityManager = securityManagerMock;
             var actual = server.GetRSSFeed(request);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.AreEqual(ResponseResult.Success, actual.Result);
             Assert.AreEqual("RSS-Feed", actual.Data);
         }
@@ -945,19 +932,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         private ISecurityManager InitialiaseSecurityManagerMock(bool isAllowed, bool expectLogging)
         {
-            var securityManagerMock = this.mocks.StrictMock<ISecurityManager>();
-            SetupResult.For(securityManagerMock.Channel).Return(null);
-            SetupResult.For(securityManagerMock.RequiresSession).Return(true);
-            SetupResult.For(securityManagerMock.GetUserName("1234")).Return("johnDoe");
-            SetupResult.For(securityManagerMock.GetDisplayName("1234", null)).Return("John Doe");
-            SetupResult.For(securityManagerMock.GetDefaultRight(SecurityPermission.ViewProject))
-                .Return(SecurityRight.Inherit);
-            SetupResult.For(securityManagerMock.CheckServerPermission("johnDoe", SecurityPermission.ViewProject))
-                .Return(isAllowed);
+            var securityManagerMock = this.mocks.Create<ISecurityManager>(MockBehavior.Strict).Object;
+            Mock.Get(securityManagerMock).SetupGet(_securityManagerMock => _securityManagerMock.Channel).Returns((IChannelSecurity)null);
+            Mock.Get(securityManagerMock).SetupGet(_securityManagerMock => _securityManagerMock.RequiresSession).Returns(true);
+            Mock.Get(securityManagerMock).Setup(_securityManagerMock => _securityManagerMock.GetUserName("1234")).Returns("johnDoe");
+            Mock.Get(securityManagerMock).Setup(_securityManagerMock => _securityManagerMock.GetDisplayName("1234", null)).Returns("John Doe");
+            Mock.Get(securityManagerMock).Setup(_securityManagerMock => _securityManagerMock.GetDefaultRight(SecurityPermission.ViewProject))
+                .Returns(SecurityRight.Inherit);
+            Mock.Get(securityManagerMock).Setup(_securityManagerMock => _securityManagerMock.CheckServerPermission("johnDoe", SecurityPermission.ViewProject))
+                .Returns(isAllowed);
             if (expectLogging)
             {
-                Expect.Call(() => securityManagerMock.LogEvent(null, null, SecurityEvent.GetFinalBuildStatus, SecurityRight.Allow, null))
-                    .IgnoreArguments();
+                Mock.Get(securityManagerMock).Setup(_securityManagerMock => _securityManagerMock.LogEvent(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SecurityEvent>(), It.IsAny<SecurityRight>(), It.IsAny<string>()))
+                    .Verifiable();
             }
 
             return securityManagerMock;

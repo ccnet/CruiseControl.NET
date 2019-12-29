@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Moq;
 using NMock;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -11,15 +11,16 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
 	public class ProjectGridTest
 	{
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 		private ProjectGrid projectGrid;
 		private ICruiseUrlBuilder urlBuilderMock;
 		private DynamicMock linkFactoryMock;
@@ -30,10 +31,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-            urlBuilderMock = mocks.DynamicMock<ICruiseUrlBuilder>();
-            SetupResult.For(urlBuilderMock.BuildProjectUrl(null, null))
-                .IgnoreArguments()
-                .Return("myLinkUrl");
+            urlBuilderMock = mocks.Create<ICruiseUrlBuilder>().Object;
+            Mock.Get(urlBuilderMock).Setup(_urlBuilderMock => _urlBuilderMock.BuildProjectUrl(It.IsAny<string>(), It.IsAny<IProjectSpecifier>()))
+                .Returns("myLinkUrl");
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
 			projectGrid = new ProjectGrid();
 
@@ -80,7 +80,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -101,7 +100,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -120,8 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				};
 
 			SetupProjectLinkExpectation();
-            mocks.ReplayAll();
-            
+
 			// Execute
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
@@ -186,7 +183,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -210,7 +206,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -252,7 +247,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -295,7 +289,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -319,7 +312,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -345,7 +337,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -393,7 +384,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -445,7 +435,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -493,7 +482,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectA);
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -539,7 +527,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -586,7 +573,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify
@@ -638,8 +624,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectC);
 
 			// Execute
-            mocks.ReplayAll();
-            mocks.ReplayAll();
             ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, true, "", urlBuilderMock, new Translations("en-US"));
 
 			// Verify

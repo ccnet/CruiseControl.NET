@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Moq;
     using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.Triggers;
-    using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Core.Triggers;
+    using ThoughtWorks.CruiseControl.Remote;
 
     [TestFixture]
     public class RollUpTriggerTest
@@ -22,7 +22,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -31,12 +31,11 @@
         [Test(Description = "The next build should return a time after the minimum time period")]
         public void NextBuildReturnsNextAllowedTimeForTimeRollUp()
         {
-            var innerTrigger = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => { innerTrigger.IntegrationCompleted(); });
+            var innerTrigger = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.IntegrationCompleted()).Verifiable();
             var trigger = new RollUpTrigger();
             trigger.InnerTrigger = innerTrigger;
             trigger.MinimumTime = new Timeout(10, TimeUnits.MINUTES);
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             Assert.Greater(trigger.NextBuild, DateTime.Now.AddMinutes(9));
             mocks.VerifyAll();
@@ -47,12 +46,11 @@
         [Test(Description = "The inner trigger should be called when IntegrationCompleted() is called")]
         public void IntegrationCompletedCallsInnerTrigger()
         {
-            var innerTrigger = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => { innerTrigger.IntegrationCompleted(); });
+            var innerTrigger = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.IntegrationCompleted()).Verifiable();
             var trigger = new RollUpTrigger();
             trigger.MinimumTime = new Timeout(10, TimeUnits.MINUTES);
             trigger.InnerTrigger = innerTrigger;
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             mocks.VerifyAll();
         }
@@ -62,15 +60,15 @@
         [Test(Description = "The trigger should fire if the time period has expired")]
         public void FireFiresAfterTimePeriodHasExpired()
         {
-            var innerTrigger = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => { innerTrigger.IntegrationCompleted(); });
+            var innerTrigger = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.IntegrationCompleted()).Verifiable();
             var expected = new IntegrationRequest(BuildCondition.IfModificationExists, "Test", null);
-            Expect.Call(innerTrigger.Fire()).Return(expected);
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.Fire())
+                .Returns(expected).Verifiable();
             var clock = new TestClock { Now = DateTime.Now };
             var trigger = new RollUpTrigger(clock);
             trigger.MinimumTime = new Timeout(10, TimeUnits.MINUTES);
             trigger.InnerTrigger = innerTrigger;
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             clock.TimePasses(new TimeSpan(0, 11, 0));
             var actual = trigger.Fire();
@@ -81,12 +79,11 @@
         [Test(Description = "The trigger should not fire if the time period has not expired")]
         public void FireDoesNotFireBeforeTimePeriodHasExpired()
         {
-            var innerTrigger = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => { innerTrigger.IntegrationCompleted(); });
+            var innerTrigger = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.IntegrationCompleted()).Verifiable();
             var trigger = new RollUpTrigger();
             trigger.MinimumTime = new Timeout(10, TimeUnits.MINUTES);
             trigger.InnerTrigger = innerTrigger;
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             Assert.IsNull(trigger.Fire());
             mocks.VerifyAll();
@@ -95,13 +92,12 @@
         [Test(Description = "The trigger should not fire if the inner trigger does not fire")]
         public void FireDoesNotFireWithoutInnerTrigger()
         {
-            var innerTrigger = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTrigger.Fire())
-                .Return(null);
+            var innerTrigger = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTrigger).Setup(_innerTrigger => _innerTrigger.Fire())
+                .Returns(() => null).Verifiable();
             var trigger = new RollUpTrigger();
             trigger.MinimumTime = new Timeout(10, TimeUnits.MINUTES);
             trigger.InnerTrigger = innerTrigger;
-            mocks.ReplayAll();
             Assert.IsNull(trigger.Fire());
             mocks.VerifyAll();
         }

@@ -5,8 +5,8 @@
     using System.IO;
     using System.Text;
     using Exortech.NetReflector;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Storage;
     using ThoughtWorks.CruiseControl.Core.Util;
@@ -24,7 +24,7 @@
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -56,7 +56,6 @@
                 {
                     FileSystem = fileSystemMock
                 };
-            this.mocks.ReplayAll();
 
             // Act
             dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
@@ -83,7 +82,6 @@
                     FileSystem = fileSystemMock,
                     SnapshotsFolder = folder
                 };
-            this.mocks.ReplayAll();
 
             // Act
             dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
@@ -109,7 +107,6 @@
                     FileSystem = fileSystemMock,
                     SnapshotsFolder = snapshotsDir
                 };
-            this.mocks.ReplayAll();
 
             // Act
             dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
@@ -136,7 +133,6 @@
                     FileSystem = fileSystemMock,
                     BaseFolder = folder
                 };
-            this.mocks.ReplayAll();
 
             // Act
             dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
@@ -162,7 +158,6 @@
                     FileSystem = fileSystemMock,
                     BaseFolder = snapshotsDir
                 };
-            this.mocks.ReplayAll();
 
             // Act
             dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
@@ -194,7 +189,6 @@
                 {
                     FileSystem = fileSystemMock
                 };
-            this.mocks.ReplayAll();
 
             // Act
             var snapshot = dataStore.LoadProjectSnapshot(projectMock, logFile + ".xml");
@@ -223,7 +217,6 @@
                 {
                     FileSystem = fileSystemMock
                 };
-            this.mocks.ReplayAll();
 
             // Act
             var snapshot = dataStore.LoadProjectSnapshot(projectMock, logFile + ".xml");
@@ -255,35 +248,35 @@
 
         private IIntegrationResult InitialiseResultMock(string artefactDir)
         {
-            var resultMock = this.mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(resultMock.ArtifactDirectory).Return(artefactDir);
-            SetupResult.For(resultMock.StartTime).Return(new DateTime(2010, 1, 1, 12, 0, 0));
-            SetupResult.For(resultMock.Label).Return("1.0");
-            SetupResult.For(resultMock.Succeeded).Return(true);
+            var resultMock = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(resultMock).SetupGet(_resultMock => _resultMock.ArtifactDirectory).Returns(artefactDir);
+            Mock.Get(resultMock).SetupGet(_resultMock => _resultMock.StartTime).Returns(new DateTime(2010, 1, 1, 12, 0, 0));
+            Mock.Get(resultMock).SetupGet(_resultMock => _resultMock.Label).Returns("1.0");
+            Mock.Get(resultMock).SetupGet(_resultMock => _resultMock.Succeeded).Returns(true);
             return resultMock;
         }
 
         private IFileSystem InitialiseFileSystemMockForOutput(string snapshotFile, MemoryStream outputStream)
         {
-            var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
-            Expect.Call(() => fileSystemMock.EnsureFolderExists(snapshotFile));
-            Expect.Call(fileSystemMock.OpenOutputStream(snapshotFile)).Return(outputStream);
+            var fileSystemMock = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.EnsureFolderExists(snapshotFile)).Verifiable();
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.OpenOutputStream(snapshotFile)).Returns(outputStream).Verifiable();
             return fileSystemMock;
         }
 
         private IFileSystem InitialiseFileSystemMockForInput(string snapshotFile, string input)
         {
-            var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             if (input != null)
             {
                 var data = Encoding.UTF8.GetBytes(input);
                 var inputStream = new MemoryStream(data);
-                Expect.Call(fileSystemMock.FileExists(snapshotFile)).Return(true);
-                Expect.Call(fileSystemMock.OpenInputStream(snapshotFile)).Return(inputStream);
+                Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists(snapshotFile)).Returns(true).Verifiable();
+                Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.OpenInputStream(snapshotFile)).Returns(inputStream).Verifiable();
             }
             else
             {
-                Expect.Call(fileSystemMock.FileExists(snapshotFile)).Return(false);
+                Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists(snapshotFile)).Returns(false).Verifiable();
             }
 
             return fileSystemMock;
@@ -291,15 +284,15 @@
 
         private ItemStatus InitialiseSnapshotMock(string expected)
         {
-            var snapShotMock = this.mocks.StrictMock<ItemStatus>();
-            Expect.Call(snapShotMock.ToString()).Return(expected);
+            var snapShotMock = this.mocks.Create<ItemStatus>(MockBehavior.Strict).Object;
+            Mock.Get(snapShotMock).Setup(_snapShotMock => _snapShotMock.ToString()).Returns(expected).Verifiable();
             return snapShotMock;
         }
 
         private IProject InitialiseProjectMock(string artefactDir)
         {
-            var projectMock = this.mocks.StrictMock<IProject>();
-            SetupResult.For(projectMock.ArtifactDirectory).Return(artefactDir);
+            var projectMock = this.mocks.Create<IProject>(MockBehavior.Strict).Object;
+            Mock.Get(projectMock).SetupGet(_projectMock => _projectMock.ArtifactDirectory).Returns(artefactDir);
             return projectMock;
         }
         #endregion

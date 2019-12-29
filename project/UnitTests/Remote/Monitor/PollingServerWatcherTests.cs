@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Remote.Monitor;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -44,11 +44,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         public void RefreshCallsClientAndFiresEvent()
         {
             var snapshot = new CruiseServerSnapshot();
-            var client = mocks.StrictMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
             using (var watcher = new PollingServerWatcher(client))
             {
-                Expect.Call(client.GetCruiseServerSnapshot()).Return(snapshot);
-                mocks.ReplayAll();
+                Mock.Get(client).Setup(_client => _client.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
                 var eventFired = false;
                 watcher.Update += (o, e) =>
@@ -70,11 +69,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             var monitor = new ManualResetEvent(false);
             var snapshot = new CruiseServerSnapshot();
-            var client = mocks.StrictMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
             using (var watcher = new PollingServerWatcher(client))
             {
-                Expect.Call(client.GetCruiseServerSnapshot()).Return(snapshot);
-                mocks.ReplayAll();
+                Mock.Get(client).Setup(_client => _client.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
                 var eventFired = false;
                 watcher.Update += (o, e) =>

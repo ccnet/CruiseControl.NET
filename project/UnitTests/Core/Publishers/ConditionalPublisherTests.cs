@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     public class ConditionalPublisherTests
     {
         #region Private fields
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         #endregion
 
         #region Tests
@@ -22,11 +22,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void RunExecutesPublishersWhenConditionIsMet()
         {
             var result = GenerateResultMock();
-            var logger = mocks.DynamicMock<ILogger>();
-            var childPublisher = mocks.StrictMock<ITask>();
-            Expect.Call(result.Clone()).Return(null);
-            Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.Anything));
-            Expect.Call(() => { childPublisher.Run(null); });
+            var logger = mocks.Create<ILogger>().Object;
+            var childPublisher = mocks.Create<ITask>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns((IIntegrationResult)null).Verifiable();
+            Mock.Get(result).Setup(_result => _result.Merge(It.IsAny<IIntegrationResult>())).Verifiable();
+            Mock.Get(childPublisher).Setup(_childPublisher => _childPublisher.Run(null)).Verifiable();
             var publisher = new ConditionalPublisher
             {
                 Logger = logger,
@@ -37,20 +37,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                     IntegrationStatus.Success
                 }
             };
-            mocks.ReplayAll();
 
             result.Status = IntegrationStatus.Success;
             publisher.Run(result);
 
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
         public void RunDoesNotExecutePublishersWhenConditionIsNotMet()
         {
             var result = GenerateResultMock();
-            var logger = mocks.DynamicMock<ILogger>();
-            var childPublisher = mocks.StrictMock<ITask>();
+            var logger = mocks.Create<ILogger>().Object;
+            var childPublisher = mocks.Create<ITask>(MockBehavior.Strict).Object;
             var publisher = new ConditionalPublisher
             {
                 Logger = logger,
@@ -61,21 +60,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                     IntegrationStatus.Success
                 }
             };
-            mocks.ReplayAll();
 
             result.Status = IntegrationStatus.Failure;
             publisher.Run(result);
 
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         private IIntegrationResult GenerateResultMock()
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.ProjectName).Return("Project name");
-            Expect.Call(result.Status).PropertyBehavior();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupGet(_result => _result.ProjectName).Returns("Project name");
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             return result;
         }
         #endregion

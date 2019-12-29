@@ -1,6 +1,6 @@
 using System;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class RemotingCruiseServerManagerTest
 	{
 		private const string ServerUrl = "tcp://blah:1000/";
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         private CruiseServerClientBase cruiseManagerMock;
 		BuildServer buildServer;
 		RemotingCruiseServerManager manager;
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[SetUp]
 		public void SetUp()
 		{
-			cruiseManagerMock = mocks.StrictMock<CruiseServerClientBase>();
+			cruiseManagerMock = mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
 
 			buildServer = new BuildServer(ServerUrl);
 			manager = new RemotingCruiseServerManager(cruiseManagerMock, buildServer);
@@ -38,10 +38,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void RetrieveSnapshotFromManager()
 		{
             var snapshot= new CruiseServerSnapshot();
-            Expect.Call(cruiseManagerMock.GetCruiseServerSnapshot())
-                .IgnoreArguments()
-                .Return(snapshot);
-            mocks.ReplayAll();
+            Mock.Get(cruiseManagerMock).Setup(_cruiseManagerMock => _cruiseManagerMock.GetCruiseServerSnapshot())
+                .Returns(snapshot);
 
             CruiseServerSnapshot result = manager.GetCruiseServerSnapshot();
 			Assert.AreEqual(snapshot, result);

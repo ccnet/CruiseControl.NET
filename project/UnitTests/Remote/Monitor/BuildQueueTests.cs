@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Rhino.Mocks;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Monitor;
 using ThoughtWorks.CruiseControl.Remote;
@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -39,8 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ConstructorDoesNotAllowNullServer()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
-            mocks.ReplayAll();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             try
             {
                 var queue = new BuildQueue(client, null, null);
@@ -52,9 +51,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ConstructorDoesNotAllowNullStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
-            mocks.ReplayAll();
             try
             {
                 var queue = new BuildQueue(client, server, null);
@@ -68,11 +66,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ServerReturnsUnderlyingServer()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot();
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
             Assert.AreSame(server, queue.Server);
         }
         #endregion
@@ -81,11 +78,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void NameReturnsQueueNameFromSnapshot()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot { QueueName = "Test BuildQueue" };
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.QueueName, queue.Name);
         }
         #endregion
@@ -94,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void RequestsReturnsRequestsFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot
             {
@@ -105,7 +101,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                     }
             };
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
         }
         #endregion
 
@@ -113,11 +108,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateValidatesArguments()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot { QueueName = "Testing" };
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
             try
             {
                 queue.Update(null);
@@ -129,8 +123,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateFiresPropertyChangedWhenMessageIsAdded()
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot
                 {
@@ -141,7 +135,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                     }
                 };
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
 
             var newStatus = new QueueSnapshot
@@ -166,8 +159,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateFiresPropertyChangedWhenMessageIsRemoved()
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new QueueSnapshot
             {
@@ -181,7 +174,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                     }
             };
             var queue = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
             queue.Update(status);
 
@@ -206,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         #region Helper methods
         private Server InitialiseServer()
         {
-            var watcher = mocks.Stub<IServerWatcher>();
+            var watcher = mocks.Create<IServerWatcher>().Object;
             var client = new CruiseServerClientMock();
             var monitor = new Server(client, watcher);
             return monitor;

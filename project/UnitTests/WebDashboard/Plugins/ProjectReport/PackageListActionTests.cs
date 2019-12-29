@@ -3,8 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -23,7 +23,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -60,15 +60,15 @@
             };
             var packages = new PackageDetails[] { package1, package2, package3 };
             var projectName = "Test Project";
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            SetupResult.For(cruiseRequest.ProjectName).Return(projectName);
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(farmService.RetrievePackageList(projectSpec, null)).Return(packages);
-            Expect.Call(viewGenerator.GenerateView(null, null))
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var viewGenerator = this.mocks.Create<IVelocityViewGenerator>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns(projectName);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(farmService).Setup(_farmService => _farmService.RetrievePackageList(projectSpec, null)).Returns(packages);
+            Mock.Get(viewGenerator).Setup(_viewGenerator => _viewGenerator.GenerateView(It.IsAny<string>(), It.IsAny<Hashtable>()))
                 .Callback<string, Hashtable>((n, ht) =>
                 {
                     Assert.AreEqual("PackageList.vm", n);
@@ -77,11 +77,9 @@
                     Assert.AreEqual(projectName, ht["projectName"]);
                     Assert.IsTrue(ht.ContainsKey("packages"));
                     Assert.IsInstanceOf<List<PackageListAction.PackageDisplay>>(ht["packages"]);
-                    return true;
                 })
-                .Return(new HtmlFragmentResponse("from nVelocity"));
+                .Returns(new HtmlFragmentResponse("from nVelocity")).Verifiable();
 
-            this.mocks.ReplayAll();
             var plugin = new PackageListAction(viewGenerator, farmService);
             var response = plugin.Execute(cruiseRequest);
 

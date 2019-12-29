@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Moq;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
 using ThoughtWorks.CruiseControl.Remote;
@@ -16,16 +16,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
     {
         private const string testSessionToken = "test session token";
         private InternalSecurityManager manager;
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         private IAuthentication authenticationMock;
         private ISessionCache sessionMock;
 
         [SetUp]
         public void SetUp()
         {
-            authenticationMock = mocks.DynamicMock<IAuthentication>();
-            SetupResult.For(authenticationMock.Identifier).Return("johndoe");
-            sessionMock = mocks.DynamicMock<ISessionCache>();
+            authenticationMock = mocks.Create<IAuthentication>().Object;
+            Mock.Get(authenticationMock).SetupGet(_authenticationMock => _authenticationMock.Identifier).Returns("johndoe");
+            sessionMock = mocks.Create<ISessionCache>().Object;
 
             manager = new InternalSecurityManager();
             manager.Users = new IAuthentication[]{
@@ -38,14 +38,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void ValidLoginReturnsSessionToken()
         {
             LoginRequest credentials = new LoginRequest("johndoe");
-            Expect.Call(authenticationMock.Authenticate(credentials)).Return(true);
-            Expect.Call(authenticationMock.GetUserName(credentials)).Return("johndoe");
-            Expect.Call(authenticationMock.GetDisplayName(credentials)).Return("johndoe");
-            Expect.Call(sessionMock.AddToCache("johndoe")).Return(testSessionToken);
-            Expect.Call(delegate { sessionMock.StoreSessionValue(string.Empty, string.Empty, string.Empty); })
-                .IgnoreArguments();
+            Mock.Get(authenticationMock).Setup(_authenticationMock => _authenticationMock.Authenticate(credentials)).Returns(true).Verifiable();
+            Mock.Get(authenticationMock).Setup(_authenticationMock => _authenticationMock.GetUserName(credentials)).Returns("johndoe").Verifiable();
+            Mock.Get(authenticationMock).Setup(_authenticationMock => _authenticationMock.GetDisplayName(credentials)).Returns("johndoe").Verifiable();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.AddToCache("johndoe")).Returns(testSessionToken).Verifiable();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.StoreSessionValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string sessionToken = manager.Login(credentials);
@@ -55,21 +53,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ValidWildCardLoginReturnsSessionToken()
         {
-            IAuthentication wildcardMock = mocks.DynamicMock<IAuthentication>();
-            SetupResult.For(wildcardMock.Identifier).Return("*doe");
+            IAuthentication wildcardMock = mocks.Create<IAuthentication>().Object;
+            Mock.Get(wildcardMock).SetupGet(_wildcardMock => _wildcardMock.Identifier).Returns("*doe");
             manager.Users = new IAuthentication[]{
                 wildcardMock
             };
 
             LoginRequest credentials = new LoginRequest("johndoe");
-            Expect.Call(wildcardMock.Authenticate(credentials)).Return(true);
-            Expect.Call(wildcardMock.GetUserName(credentials)).Return("johndoe");
-            Expect.Call(wildcardMock.GetDisplayName(credentials)).Return("johndoe");
-            Expect.Call(sessionMock.AddToCache("johndoe")).Return(testSessionToken);
-            Expect.Call(delegate { sessionMock.StoreSessionValue(string.Empty, string.Empty, string.Empty); })
-                .IgnoreArguments();
+            Mock.Get(wildcardMock).Setup(_wildcardMock => _wildcardMock.Authenticate(credentials)).Returns(true).Verifiable();
+            Mock.Get(wildcardMock).Setup(_wildcardMock => _wildcardMock.GetUserName(credentials)).Returns("johndoe").Verifiable();
+            Mock.Get(wildcardMock).Setup(_wildcardMock => _wildcardMock.GetDisplayName(credentials)).Returns("johndoe").Verifiable();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.AddToCache("johndoe")).Returns(testSessionToken).Verifiable();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.StoreSessionValue(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string sessionToken = manager.Login(credentials);
@@ -80,10 +76,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void InvalidLoginReturnsNull()
         {
             LoginRequest credentials = new LoginRequest("johndoe");
-            Expect.Call(authenticationMock.Authenticate(credentials)).Return(false);
-            Expect.Call(authenticationMock.GetUserName(credentials)).Return("johndoe");
+            Mock.Get(authenticationMock).Setup(_authenticationMock => _authenticationMock.Authenticate(credentials)).Returns(false).Verifiable();
+            Mock.Get(authenticationMock).Setup(_authenticationMock => _authenticationMock.GetUserName(credentials)).Returns("johndoe").Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string sessionToken = manager.Login(credentials);
@@ -95,7 +90,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             LoginRequest credentials = new LoginRequest("janedoe");
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string sessionToken = manager.Login(credentials);
@@ -105,10 +99,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void LogoutRemovesSessionFromCache()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return(testSessionToken);
-            Expect.Call(delegate { sessionMock.RemoveFromCache(testSessionToken); });
-            
-            mocks.ReplayAll();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns(testSessionToken).Verifiable();
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RemoveFromCache(testSessionToken)).Verifiable();
+
             manager.Initialise();
 
             manager.Logout(testSessionToken);
@@ -117,9 +110,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void LogoutForNonExistantSessionIsSafe()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return(null);
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns((string)null).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             manager.Logout(testSessionToken);
@@ -128,9 +120,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ValidateSessionReturnsTrueForAValidSession()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return("johndoe");
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns("johndoe").Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             bool result = manager.ValidateSession(testSessionToken);
@@ -140,9 +131,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ValidateSessionReturnsFalseForAnInvalidSession()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return(null);
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns((string)null).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             bool result = manager.ValidateSession(testSessionToken);
@@ -152,7 +142,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ValidateSessionReturnsFalseForANullSession()
         {
-            mocks.ReplayAll();
             manager.Initialise();
 
             bool result = manager.ValidateSession(null);
@@ -162,9 +151,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetUserNameReturnsUserNameForAValidSession()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return("johndoe");
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns("johndoe").Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetUserName(testSessionToken);
@@ -174,9 +162,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetUserNameReturnsNullForAnInvalidSession()
         {
-            Expect.Call(sessionMock.RetrieveFromCache(testSessionToken)).Return(null);
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveFromCache(testSessionToken)).Returns((string)null).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetUserName(testSessionToken);
@@ -186,7 +173,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetUserNameReturnsNullForANullSession()
         {
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetUserName(null);
@@ -196,9 +182,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetDisplayNameReturnsDisplayNameForAValidSession()
         {
-            Expect.Call(sessionMock.RetrieveSessionValue(testSessionToken, "DisplayName")).Return("John Doe");
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveSessionValue(testSessionToken, "DisplayName")).Returns("John Doe").Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetDisplayName(testSessionToken, null);
@@ -208,9 +193,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetDisplayNameReturnsNullForAnInvalidSession()
         {
-            Expect.Call(sessionMock.RetrieveSessionValue(testSessionToken, "DisplayName")).Return(null);
+            Mock.Get(sessionMock).Setup(_sessionMock => _sessionMock.RetrieveSessionValue(testSessionToken, "DisplayName")).Returns(null).Verifiable();
 
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetDisplayName(testSessionToken, null);
@@ -220,7 +204,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetDisplayNameReturnsNullForANullSession()
         {
-            mocks.ReplayAll();
             manager.Initialise();
 
             string result = manager.GetDisplayName(null, null);
@@ -236,10 +219,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             SecurityRight eventRight = SecurityRight.Allow;
             string message = "A message";
 
-            IAuditLogger logger = mocks.StrictMock<IAuditLogger>();
-            Expect.Call(delegate { logger.LogEvent(projectName, userName, eventType, eventRight, message); });
+            IAuditLogger logger = mocks.Create<IAuditLogger>(MockBehavior.Strict).Object;
+            Mock.Get(logger).Setup(_logger => _logger.LogEvent(projectName, userName, eventType, eventRight, message)).Verifiable();
 
-            mocks.ReplayAll();
             manager.AuditLoggers = new IAuditLogger[] {
                 logger
             };
@@ -250,10 +232,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ListAllUsers()
         {
-            SetupResult.For(authenticationMock.AuthenticationName).Return("Mocked");
-            SetupResult.For(authenticationMock.DisplayName).Return("John Doe");
-            SetupResult.For(authenticationMock.UserName).Return("johndoe");
-            mocks.ReplayAll();
+            Mock.Get(authenticationMock).SetupGet(_authenticationMock => _authenticationMock.AuthenticationName).Returns("Mocked");
+            Mock.Get(authenticationMock).SetupGet(_authenticationMock => _authenticationMock.DisplayName).Returns("John Doe");
+            Mock.Get(authenticationMock).SetupGet(_authenticationMock => _authenticationMock.UserName).Returns("johndoe");
             manager.Initialise();
             List<UserDetails> users = manager.ListAllUsers();
             Assert.IsNotNull(users, "No data returned");
@@ -263,7 +244,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ReadAuditEventsWithoutReader()
         {
-            mocks.ReplayAll();
             manager.Initialise();
             List<AuditRecord> actual = manager.ReadAuditRecords(0, 100);
             Assert.AreEqual(0, actual.Count);
@@ -272,7 +252,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ReadFilteredAuditEventsWithoutReader()
         {
-            mocks.ReplayAll();
             manager.Initialise();
             List<AuditRecord> actual = manager.ReadAuditRecords(0, 100, AuditFilters.ByProject("Project #1"));
             Assert.AreEqual(0, actual.Count);
@@ -281,12 +260,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ReadAuditEventsWithReader()
         {
-            IAuditReader readerMock = mocks.DynamicMock<IAuditReader>();
+            IAuditReader readerMock = mocks.Create<IAuditReader>().Object;
             List<AuditRecord> records = new List<AuditRecord>();
             records.Add(new AuditRecord());
-            SetupResult.For(readerMock.Read(0, 100)).Return(records);
+            Mock.Get(readerMock).Setup(_readerMock => _readerMock.Read(0, 100)).Returns(records);
             manager.AuditReader = readerMock;
-            mocks.ReplayAll();
             manager.Initialise();
             List<AuditRecord> actual = manager.ReadAuditRecords(0, 100);
             Assert.AreEqual(1, actual.Count);
@@ -296,12 +274,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void ReadFilteredAuditEventsWithReader()
         {
             AuditFilterBase filter = AuditFilters.ByProject("Project #1");
-            IAuditReader readerMock = mocks.DynamicMock<IAuditReader>();
+            IAuditReader readerMock = mocks.Create<IAuditReader>().Object;
             List<AuditRecord> records = new List<AuditRecord>();
             records.Add(new AuditRecord());
-            SetupResult.For(readerMock.Read(0, 100, filter)).Return(records);
+            Mock.Get(readerMock).Setup(_readerMock => _readerMock.Read(0, 100, filter)).Returns(records);
             manager.AuditReader = readerMock;
-            mocks.ReplayAll();
             manager.Initialise();
             List<AuditRecord> actual = manager.ReadAuditRecords(0, 100, filter);
             Assert.AreEqual(1, actual.Count);

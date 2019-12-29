@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
     [TestFixture]
     public class SequentialTaskTests
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         #region Test methods
         [Test]
@@ -31,15 +31,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(5);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
-            mocks.VerifyAll();
+            VerifyResultMock(result, 5);
+            mocks.Verify();
             Assert.AreEqual(IntegrationStatus.Success, result.Status, "Status does not match");
         }
 
@@ -58,15 +58,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(4);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
-            mocks.VerifyAll();
+            VerifyResultMock(result, 4);
+            mocks.Verify();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
@@ -86,15 +86,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(5);
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
-            mocks.VerifyAll();
+            VerifyResultMock(result, 5);
+            mocks.Verify();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
@@ -111,16 +111,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var result = GenerateResultMock(0);
-            Expect.Call(result.ExceptionResult).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupSet(_result => _result.ExceptionResult = It.IsAny<Exception>()).Verifiable();
+            Mock.Get(result).SetupProperty(_result => _result.ExceptionResult);
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
-            mocks.VerifyAll();
+            VerifyResultMock(result, 0);
+            mocks.Verify();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
@@ -147,36 +148,42 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Setup the mocks
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
 
             // We cannot use a mock object here because having Clone return the original result means the test 
             // will not be able to catch the error we are after.
             var result = new IntegrationResult();
             result.ProjectName = ""; // must set to an empty string because the null default value makes Clone crash
-            mocks.ReplayAll();
 
             // Run the actual task
             task.Run(result);
 
             // Verify the results
-            mocks.VerifyAll();
+            mocks.Verify();
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
             Assert.AreEqual(innerCount * leafCount, result.TaskResults.Count, "Bad task results count");
         }
 
         private IIntegrationResult GenerateResultMock(int runCount)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
             for (var loop = 1; loop <= runCount; loop++)
             {
-                Expect.Call(() => { result.AddTaskResult(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Task #{0} has run", loop)); });
+                string taskResult = string.Format(System.Globalization.CultureInfo.CurrentCulture, "Task #{0} has run", loop);
+                Mock.Get(result).Setup(_result => _result.AddTaskResult(taskResult)).Verifiable();
             }
-            Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(result).Repeat.Times(runCount == 0 ? 1 : runCount);
-            if (runCount > 0) Expect.Call(() => { result.Merge(result); }).Repeat.Times(runCount);
+            Mock.Get(result).SetupSet(_result => _result.Status = It.IsAny<IntegrationStatus>()).Verifiable();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).Setup(_result => _result.Clone()).Returns(result).Verifiable();
+            if(runCount > 0) Mock.Get(result).Setup(_result => _result.Merge(result)).Verifiable();
             return result;
+        }
+        private void VerifyResultMock(IIntegrationResult result, int runCount)
+        {
+            Mock.Get(result).Verify(_result => _result.Clone(), Times.Exactly(runCount == 0 ? 1 : runCount));
+            if(runCount > 0) Mock.Get(result).Verify(_result => _result.Merge(result), Times.Exactly(runCount));
         }
         #endregion
 

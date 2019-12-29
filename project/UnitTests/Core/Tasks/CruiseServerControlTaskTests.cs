@@ -1,14 +1,14 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
+    using System;
+    using System.Collections.Generic;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
-    using System.Collections.Generic;
-    using System;
-using ThoughtWorks.CruiseControl.Core.Config;
 
     [TestFixture]
     public class CruiseServerControlTaskTests
@@ -26,15 +26,15 @@ using ThoughtWorks.CruiseControl.Core.Config;
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
-            this.logger = this.mocks.StrictMock<ILogger>();
-            this.factory = this.mocks.StrictMock<ICruiseServerClientFactory>();
-            this.result = this.mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(this.result.Status).PropertyBehavior();
+            this.mocks = new MockRepository(MockBehavior.Default);
+            this.logger = this.mocks.Create<ILogger>(MockBehavior.Strict).Object;
+            this.factory = this.mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
+            this.result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(this.result).SetupProperty(_result => _result.Status);
             this.result.Status = IntegrationStatus.Unknown;
-            this.buildInfo = this.mocks.StrictMock<BuildProgressInformation>("somewhere", "test");
-            SetupResult.For(this.result.BuildProgressInformation).Return(this.buildInfo);
-            this.client = this.mocks.StrictMock<CruiseServerClientBase>();
+            this.buildInfo = this.mocks.Create<BuildProgressInformation>(MockBehavior.Strict, "somewhere", "test").Object;
+            Mock.Get(this.result).SetupGet(_result => _result.BuildProgressInformation).Returns(this.buildInfo);
+            this.client = this.mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
         }
         #endregion
 
@@ -50,15 +50,12 @@ using ThoughtWorks.CruiseControl.Core.Config;
             var task = new CruiseServerControlTask();
             task.Logger = this.logger;
             task.ClientFactory = this.factory;
-            using (mocks.Ordered())
-            {
-                this.InitialiseStandardBuildInfo();
-                this.InitialiseClient("tcp://localhost:21234", "Test", "Dummy");
-                this.InitialiseTermination(0);
-            }
+            MockSequence sequence = new MockSequence();
+            this.InitialiseStandardBuildInfo(sequence);
+            this.InitialiseClient(sequence, "tcp://localhost:21234", "Test", "Dummy");
+            this.InitialiseTermination(sequence, 0);
 
             // Run the test
-            this.mocks.ReplayAll();
             task.Run(result);
 
             // Verify the results
@@ -76,20 +73,15 @@ using ThoughtWorks.CruiseControl.Core.Config;
             var task = new CruiseServerControlTask();
             task.Logger = this.logger;
             task.ClientFactory = this.factory;
-            using (mocks.Ordered())
-            {
-                this.InitialiseStandardBuildInfo();
-                this.InitialiseClient("tcp://localhost:21234", "Test", "Dummy");
-                this.InitialiseActionEvents(
-                    "Dummy", 
-                    "Performing start project action", 
-                    p => 
-                    {
-                        this.client.StartProject(p);
-                    },
-                    "Dummy");
-                this.InitialiseTermination(1);
-            }
+            MockSequence sequence = new MockSequence();
+            this.InitialiseStandardBuildInfo(sequence);
+            this.InitialiseClient(sequence, "tcp://localhost:21234", "Test", "Dummy");
+            this.InitialiseActionEvents(sequence,
+                "Dummy", 
+                "Performing start project action", 
+                CruiseServerControlTaskActionType.StartProject, 
+                "Dummy");
+            this.InitialiseTermination(sequence, 1);
 
             // Add the action
             task.Actions = new CruiseServerControlTaskAction[] 
@@ -102,7 +94,6 @@ using ThoughtWorks.CruiseControl.Core.Config;
             };
 
             // Run the test
-            this.mocks.ReplayAll();
             task.Run(result);
 
             // Verify the results
@@ -120,21 +111,16 @@ using ThoughtWorks.CruiseControl.Core.Config;
             var task = new CruiseServerControlTask();
             task.Logger = this.logger;
             task.ClientFactory = this.factory;
-            using (mocks.Ordered())
-            {
-                this.InitialiseStandardBuildInfo();
-                this.InitialiseClient("tcp://localhost:21234", "Test", "Dummy");
-                this.InitialiseActionEvents(
-                    "*",
-                    "Performing start project action",
-                    p =>
-                    {
-                        this.client.StartProject(p);
-                    },
-                    "Test",
-                    "Dummy");
-                this.InitialiseTermination(2);
-            }
+            MockSequence sequence = new MockSequence();
+            this.InitialiseStandardBuildInfo(sequence);
+            this.InitialiseClient(sequence, "tcp://localhost:21234", "Test", "Dummy");
+            this.InitialiseActionEvents(sequence,
+                "*",
+                "Performing start project action",
+                CruiseServerControlTaskActionType.StartProject,
+                "Test",
+                "Dummy");
+            this.InitialiseTermination(sequence, 2);
 
             // Add the action
             task.Actions = new CruiseServerControlTaskAction[] 
@@ -147,7 +133,6 @@ using ThoughtWorks.CruiseControl.Core.Config;
             };
 
             // Run the test
-            this.mocks.ReplayAll();
             task.Run(result);
 
             // Verify the results
@@ -165,29 +150,21 @@ using ThoughtWorks.CruiseControl.Core.Config;
             var task = new CruiseServerControlTask();
             task.Logger = this.logger;
             task.ClientFactory = this.factory;
-            using (mocks.Ordered())
-            {
-                this.InitialiseStandardBuildInfo();
-                this.InitialiseClient("tcp://localhost:21234", "Test1", "Dummy", "Test2");
-                this.InitialiseActionEvents(
-                    "Test?",
-                    "Performing start project action",
-                    p =>
-                    {
-                        this.client.StartProject(p);
-                    },
-                    "Test1",
-                    "Test2");
-                this.InitialiseActionEvents(
-                    "Dummy",
-                    "Performing stop project action",
-                    p =>
-                    {
-                        this.client.StopProject(p);
-                    },
-                    "Dummy");
-                this.InitialiseTermination(3);
-            }
+            MockSequence sequence = new MockSequence();
+            this.InitialiseStandardBuildInfo(sequence);
+            this.InitialiseClient(sequence, "tcp://localhost:21234", "Test1", "Dummy", "Test2");
+            this.InitialiseActionEvents(sequence,
+                "Test?",
+                "Performing start project action",
+                CruiseServerControlTaskActionType.StartProject,
+                "Test1",
+                "Test2");
+            this.InitialiseActionEvents(sequence,
+                "Dummy",
+                "Performing stop project action",
+                CruiseServerControlTaskActionType.StopProject,
+                "Dummy");
+            this.InitialiseTermination(sequence, 3);
 
             // Add the action
             task.Actions = new CruiseServerControlTaskAction[] 
@@ -205,7 +182,6 @@ using ThoughtWorks.CruiseControl.Core.Config;
             };
 
             // Run the test
-            this.mocks.ReplayAll();
             task.Run(result);
 
             // Verify the results
@@ -230,10 +206,9 @@ using ThoughtWorks.CruiseControl.Core.Config;
                     Type = CruiseServerControlTaskActionType.StopProject
                 }
             };
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            this.mocks.ReplayAll();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
             task.Validate(null, null, processor);
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
         }
 
         /// <summary>
@@ -244,14 +219,10 @@ using ThoughtWorks.CruiseControl.Core.Config;
         {
             var task = new CruiseServerControlTask();
             task.Actions = null;
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() =>
-            {
-                processor.ProcessWarning("This task will not do anything - no actions specified");
-            });
-            this.mocks.ReplayAll();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(processor).Setup(_processor => _processor.ProcessWarning("This task will not do anything - no actions specified")).Verifiable();
             task.Validate(null, null, processor);
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
         }
 
         /// <summary>
@@ -262,43 +233,27 @@ using ThoughtWorks.CruiseControl.Core.Config;
         {
             var task = new CruiseServerControlTask();
             task.Actions = new CruiseServerControlTaskAction[0];
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() =>
-            {
-                processor.ProcessWarning("This task will not do anything - no actions specified");
-            });
-            this.mocks.ReplayAll();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(processor).Setup(_processor => _processor.ProcessWarning("This task will not do anything - no actions specified")).Verifiable();
             task.Validate(null, null, processor);
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
         }
         #endregion
         #endregion
 
         #region Helpers
-        private void InitialiseStandardBuildInfo()
+        private void InitialiseStandardBuildInfo(MockSequence sequence)
         {
-            Expect.Call(() =>
-            {
-                this.buildInfo.SignalStartRunTask("Performing server actions");
-            });
-            Expect.Call(() =>
-            {
-                this.logger.Info("Performing server actions");
-            });
-            Expect.Call(() =>
-            {
-                this.logger.Debug("Initialising client");
-            });
+            Mock.Get(this.buildInfo).InSequence(sequence).Setup(_buildInfo => _buildInfo.SignalStartRunTask("Performing server actions")).Verifiable();
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Info("Performing server actions")).Verifiable();
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Debug("Initialising client")).Verifiable();
         }
 
-        private void InitialiseClient(string address, params string[] projects)
+        private void InitialiseClient(MockSequence sequence, string address, params string[] projects)
         {
-            Expect.Call(this.factory.GenerateClient(address))
-                .Return(this.client);
-            Expect.Call(() =>
-            {
-                this.logger.Info("Retrieving projects from server");
-            });
+            Mock.Get(this.factory).InSequence(sequence).Setup(_factory => _factory.GenerateClient(address))
+                .Returns(this.client).Verifiable();
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Info("Retrieving projects from server")).Verifiable();
 
             var list = new List<ProjectStatus>();
             foreach (var project in projects)
@@ -306,44 +261,37 @@ using ThoughtWorks.CruiseControl.Core.Config;
                 list.Add(new ProjectStatus(project, IntegrationStatus.Unknown, DateTime.Now));
             }
 
-            Expect.Call(this.client.GetProjectStatus())
-                .Return(list.ToArray());
-            Expect.Call(() =>
-            {
-                this.logger.Debug(projects.Length.ToString() + " project(s) retrieved");
-            });
+            Mock.Get(this.client).InSequence(sequence).Setup(_client => _client.GetProjectStatus())
+                .Returns(list.ToArray()).Verifiable();
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Debug(projects.Length.ToString() + " project(s) retrieved")).Verifiable();
         }
 
-        private void InitialiseActionEvents(string pattern, string actionMessage, Action<string> action, params string[] projects)
+        private void InitialiseActionEvents(MockSequence sequence, string pattern, string actionMessage, CruiseServerControlTaskActionType taskActionType, params string[] projects)
         {
-            Expect.Call(() =>
-            {
-                this.logger.Info("Found " + projects.Length + " project(s) for pattern '" + pattern + "'");
-            });
-            Expect.Call(() =>
-            {
-                this.logger.Info(actionMessage);
-            });
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Info("Found " + projects.Length + " project(s) for pattern '" + pattern + "'")).Verifiable();
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Info(actionMessage)).Verifiable();
 
             foreach (var project in projects)
             {
-                Expect.Call(() =>
+                Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Debug("Sending action to " + project)).Verifiable();
+                if (taskActionType == CruiseServerControlTaskActionType.StartProject)
                 {
-                    this.logger.Debug("Sending action to " + project);
-                });
-                Expect.Call(() =>
+                    Mock.Get(this.client).InSequence(sequence).Setup(_client => _client.StartProject(project)).Verifiable();
+                }
+                else if (taskActionType == CruiseServerControlTaskActionType.StopProject)
                 {
-                    action(project);
-                });
+                    Mock.Get(this.client).InSequence(sequence).Setup(_client => _client.StopProject(project)).Verifiable();
+                }
+                else
+                {
+                    throw new ArgumentException("Unsupported argument.", "taskActionType");
+                }
             }
         }
 
-        private void InitialiseTermination(int commandCount)
+        private void InitialiseTermination(MockSequence sequence, int commandCount)
         {
-            Expect.Call(() =>
-            {
-                this.logger.Info("Server actions completed: " + commandCount + " command(s) sent");
-            });
+            Mock.Get(this.logger).InSequence(sequence).Setup(_logger => _logger.Info("Server actions completed: " + commandCount + " command(s) sent")).Verifiable();
         }
         #endregion
     }

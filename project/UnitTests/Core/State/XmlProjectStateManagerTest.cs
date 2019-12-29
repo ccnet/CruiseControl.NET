@@ -1,9 +1,8 @@
-using NUnit.Framework;
-using Rhino.Mocks.Constraints;
-using Rhino.Mocks;
+using System;
 using System.IO;
 using System.Text;
-using System;
+using Moq;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -28,17 +27,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		public void Setup()
 		{
 			persistanceFilePath = Path.Combine(applicationDataPath, "ProjectsState.xml");
-			mocks = new MockRepository();
-			fileSystem = mocks.StrictMock<IFileSystem>();
-			executionEnvironment = mocks.StrictMock<IExecutionEnvironment>();
+			mocks = new MockRepository(MockBehavior.Default);
+			fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+			executionEnvironment = mocks.Create<IExecutionEnvironment>(MockBehavior.Strict).Object;
 		}
 
 		private void SetupDefaultContent()
 		{
 			var defaultFile = "<state><project>Test Project #3</project></state>";
 			var stream = new MemoryStream(UTF8Encoding.UTF8.GetBytes(defaultFile));
-			Expect.Call(fileSystem.FileExists(persistanceFilePath)).Return(true);
-			Expect.Call(fileSystem.OpenInputStream(persistanceFilePath)).Return(stream);
+			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(persistanceFilePath)).Returns(true).Verifiable();
+			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenInputStream(persistanceFilePath)).Returns(stream).Verifiable();
 		}
 		#endregion
 
@@ -48,10 +47,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		{
 			// This is an indirect test - if the correct location is set, then the FileExists call
 			// will be valid
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			Expect.Call(fileSystem.FileExists(persistanceFilePath)).Return(false);
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
+			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(persistanceFilePath)).Returns(false).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.CheckIfProjectCanStart("Project");
@@ -67,9 +66,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			SetupDefaultContent();
 			var stream = InitialiseOutputStream();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.RecordProjectAsStopped(projectName);
@@ -88,9 +87,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			SetupDefaultContent();
 			var stream = InitialiseOutputStream();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.RecordProjectAsStopped(projectName);
@@ -111,9 +110,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			SetupDefaultContent();
 			var stream = InitialiseOutputStream();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.RecordProjectAsStartable(projectName);
@@ -132,9 +131,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			SetupDefaultContent();
 			var stream = InitialiseOutputStream();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.RecordProjectAsStartable(projectName);
@@ -151,12 +150,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		{
 			var projectName = "Test Project #1";
 			SetupDefaultContent();
-			var stream1 = InitialiseOutputStream();
-			var stream2 = InitialiseOutputStream();
+			var stream1 = new MemoryStream();
+			var stream2 = new MemoryStream();
+			Mock.Get(fileSystem).SetupSequence(_fileSystem => _fileSystem.OpenOutputStream(persistanceFilePath))
+				.Returns(stream1).Returns(stream2);
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			stateManager.RecordProjectAsStopped(projectName);
@@ -179,9 +180,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			var projectName = "Test Project #2";
 			SetupDefaultContent();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			var result = stateManager.CheckIfProjectCanStart(projectName);
@@ -195,9 +196,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			var projectName = "Test Project #3";
 			SetupDefaultContent();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			var result = stateManager.CheckIfProjectCanStart(projectName);
@@ -211,9 +212,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			var projectName = "Test Project #4";
 			SetupDefaultContent();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			var result = stateManager.CheckIfProjectCanStart(projectName);
@@ -227,9 +228,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			var projectName = "Test Project #3";
 			SetupDefaultContent();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			var result = stateManager.CheckIfProjectCanStart(projectName);
@@ -243,9 +244,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			var projectName = "Test Project #4";
 			SetupDefaultContent();
 
-            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
-            Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); }).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull());
-			mocks.ReplayAll();
+            Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(It.IsNotNull<ApplicationType>()))
+                .Returns(applicationDataPath).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(It.IsNotNull<string>())).Verifiable();
 
 			stateManager = new XmlProjectStateManager(fileSystem, executionEnvironment);
 			var result = stateManager.CheckIfProjectCanStart(projectName);
@@ -257,7 +258,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		private MemoryStream InitialiseOutputStream()
 		{
 			var stream = new MemoryStream();
-			Expect.Call(fileSystem.OpenOutputStream(persistanceFilePath)).Return(stream);
+			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenOutputStream(persistanceFilePath)).Returns(stream).Verifiable();
 			return stream;
 		}
 

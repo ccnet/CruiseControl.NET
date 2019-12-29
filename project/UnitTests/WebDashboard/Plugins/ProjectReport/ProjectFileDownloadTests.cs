@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
     using System.IO;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -20,7 +20,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -32,19 +32,18 @@
             var label = "daLabel";
             var stream = new MemoryStream(new byte[0]);
             var transfer = new RemotingFileTransfer(stream);
-            var farmService = this.mocks.StrictMock<IFarmService>();
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
             var action = new ProjectFileDownload(farmService);
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var request = this.mocks.StrictMock<IRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(request.GetText("file")).Return(fileName);
-            SetupResult.For(request.GetText("label")).Return(label);
-            SetupResult.For(farmService.RetrieveFileTransfer(projectSpec, label + "\\" + fileName, null)).Return(transfer);
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(request).Setup(_request => _request.GetText("file")).Returns(fileName);
+            Mock.Get(request).Setup(_request => _request.GetText("label")).Returns(label);
+            Mock.Get(farmService).Setup(_farmService => _farmService.RetrieveFileTransfer(projectSpec, label + "\\" + fileName, null)).Returns(transfer);
 
-            mocks.ReplayAll();
             var response = action.Execute(cruiseRequest);
 
             mocks.VerifyAll();
