@@ -32,7 +32,7 @@
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
 	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console-x86.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
-	<property name="nuget.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" />
+	<property name="nuget.executable"		readonly="true"		value="${environment::get-variable('NUGET_EXE')}" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
@@ -84,7 +84,10 @@
 	</target>
 
 	<target name="restore" description="Restore the nuget packages">
-		<exec program="${nuget.executable}">
+		<if test="${not file::exists(nuget.executable)}">
+			<echo level="Warning" message="NuGet installation not found." />
+		</if>
+		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
 			<arg value="restore"/>
 			<arg value="${path::combine(src.dir, build.project)}"/>
 		</exec>
