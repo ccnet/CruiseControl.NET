@@ -1,6 +1,6 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -27,14 +27,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 </exclusionFilters>
               </sourcecontrol>";
 		private FilteredSourceControl _filteredSourceControl;
-		private DynamicMock _mockSC;
+		private Mock<ISourceControl> _mockSC;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_filteredSourceControl = new FilteredSourceControl();
-			_mockSC = new DynamicMock(typeof(ISourceControl));
-			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
+			_mockSC = new Mock<ISourceControl>();
+			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.Object;
 		}
 
 		[TearDown]
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			//// SETUP
 			IntegrationResult result = new IntegrationResult();
-			_mockSC.Expect("LabelSourceControl", result);
+			_mockSC.Setup(sc => sc.LabelSourceControl(result)).Verifiable();
 
 			//// EXECUTE
 			_filteredSourceControl.LabelSourceControl(result);
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			//// SETUP
 			IntegrationResult result = new IntegrationResult();
-			_mockSC.Expect("GetSource", result);
+			_mockSC.Setup(sc => sc.GetSource(result)).Verifiable();
 
 			//// EXECUTE
 			_filteredSourceControl.GetSource(result);
@@ -94,10 +94,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			//// SETUP
 			IntegrationResult from = IntegrationResult(DateTime.Now);
 			IntegrationResult to = IntegrationResult(DateTime.Now.AddDays(10));
-			_mockSC.ExpectAndReturn("GetModifications", Modifications, from, to);
+			_mockSC.Setup(sc => sc.GetModifications(from, to)).Returns(Modifications).Verifiable();
 
 			NetReflector.Read(SourceControlXml, _filteredSourceControl);
-			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
+			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.Object;
 
 			//// EXECUTE
 			Modification[] filteredResult = _filteredSourceControl.GetModifications(from, to);
@@ -154,10 +154,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             // Setup
             IntegrationResult from = IntegrationResult(DateTime.Now);
             IntegrationResult to = IntegrationResult(DateTime.Now.AddDays(10));
-            _mockSC.ExpectAndReturn("GetModifications", ModificationsWithCVS, from, to);
+            _mockSC.Setup(sc => sc.GetModifications(from, to)).Returns(ModificationsWithCVS).Verifiable();
             
             NetReflector.Read(SourceControlXmlWithCVS, _filteredSourceControl);
-            _filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
+            _filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.Object;
 
             //// EXECUTE
             Modification[] filteredResult = _filteredSourceControl.GetModifications(from, to);

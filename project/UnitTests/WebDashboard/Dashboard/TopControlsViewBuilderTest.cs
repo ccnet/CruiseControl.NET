@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -25,17 +24,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	{
 		private TopControlsViewBuilder viewBuilder;
 
-		private DynamicMock cruiseRequestMock;
-		private DynamicMock requestMock;
-		private DynamicMock linkFactoryMock;
-		private DynamicMock velocityViewGeneratorMock;
-		private DynamicMock farmServiceMock;
+		private Mock<ICruiseRequest> cruiseRequestMock;
+		private Mock<IRequest> requestMock;
+		private Mock<ILinkFactory> linkFactoryMock;
+		private Mock<IVelocityViewGenerator> velocityViewGeneratorMock;
+		private Mock<IFarmService> farmServiceMock;
 
 		private DefaultServerSpecifier serverSpecifier;
 		private DefaultProjectSpecifier projectSpecifier;
 		private DefaultBuildSpecifier buildSpecifier;
 		private Hashtable expectedVelocityContext;
-		private IResponse response;
+		private HtmlFragmentResponse response;
 		private IAbsoluteLink link1;
 		private IAbsoluteLink link2;
 		private IAbsoluteLink link3;
@@ -44,17 +43,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			requestMock = new DynamicMock(typeof(IRequest));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			farmServiceMock = new DynamicMock(typeof(IFarmService));
+			cruiseRequestMock = new Mock<ICruiseRequest>();
+			requestMock = new Mock<IRequest>();
+			linkFactoryMock = new Mock<ILinkFactory>();
+			velocityViewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			farmServiceMock = new Mock<IFarmService>();
 
 			viewBuilder = new TopControlsViewBuilder(
-				(ICruiseRequest) cruiseRequestMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance,
-				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(IFarmService) farmServiceMock.MockInstance,
+				(ICruiseRequest) cruiseRequestMock.Object,
+				(ILinkFactory) linkFactoryMock.Object,
+				(IVelocityViewGenerator) velocityViewGeneratorMock.Object,
+				(IFarmService) farmServiceMock.Object,
 				null, null);
 
 			serverSpecifier = new DefaultServerSpecifier("myServer");
@@ -81,22 +80,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmLinkIfNothingSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "");
-			cruiseRequestMock.ExpectAndReturn("ServerName", "");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
-			cruiseRequestMock.ExpectAndReturn("BuildName", "");
-			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
-			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
 
 			expectedVelocityContext["serverName"] = "";
 			expectedVelocityContext["categoryName"] = "";
 			expectedVelocityContext["projectName"] = "";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME)).Returns(link1).Verifiable();
 			expectedVelocityContext["farmLink"] = link1;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"TopMenu.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedVelocityContext)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, viewBuilder.Execute());
@@ -107,26 +107,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmAndServerLinksIfServerButNoProjectSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
-			cruiseRequestMock.ExpectAndReturn("BuildName", "");
-			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
-			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";
 			expectedVelocityContext["projectName"] = "";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME)).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, ServerReportServerPlugin.ACTION_NAME)).Returns(link2).Verifiable();
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"TopMenu.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedVelocityContext)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, viewBuilder.Execute());
@@ -137,36 +138,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmServerAndProjectLinksIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("BuildName", "");
-			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
-			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
 
             ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new List<ParameterBase>());
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
+			farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifier, null)).Returns(pslae).Verifiable();
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";
 			expectedVelocityContext["projectName"] = "myProject";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME)).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, ServerReportServerPlugin.ACTION_NAME)).Returns(link2).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME)).Returns(link3).Verifiable();
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 			expectedVelocityContext["projectLink"] = link3;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"TopMenu.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedVelocityContext)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, viewBuilder.Execute());
@@ -177,39 +179,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmServerProjectAndBuildLinksIfServerProjectAndBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("BuildName", "myBuild");
-			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			cruiseRequestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
-			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
-			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("myBuild").Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
 
             ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new List<ParameterBase>());
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
+			farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifier, null)).Returns(pslae).Verifiable();
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";
 			expectedVelocityContext["projectName"] = "myProject";
 			expectedVelocityContext["buildName"] = "myBuild";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link4, buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME)).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, ServerReportServerPlugin.ACTION_NAME)).Returns(link2).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME)).Returns(link3).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(buildSpecifier, BuildReportBuildPlugin.ACTION_NAME)).Returns(link4).Verifiable();
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 			expectedVelocityContext["projectLink"] = link3;
 			expectedVelocityContext["buildLink"] = link4;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"TopMenu.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedVelocityContext)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, viewBuilder.Execute());

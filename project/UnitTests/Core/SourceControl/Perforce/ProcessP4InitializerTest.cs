@@ -1,5 +1,5 @@
 using System.Net;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
@@ -10,16 +10,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 	[TestFixture]
 	public class ProcessP4InitializerTest
 	{
-		private DynamicMock processExecutorMock;
-		private DynamicMock processInfoCreatorMock;
+		private Mock<ProcessExecutor> processExecutorMock;
+		private Mock<IP4ProcessInfoCreator> processInfoCreatorMock;
 		private ProcessP4Initializer p4Initializer;
 
 		[SetUp]
 		public void Setup()
 		{
-			processExecutorMock = new DynamicMock(typeof(ProcessExecutor));
-			processInfoCreatorMock = new DynamicMock(typeof(IP4ProcessInfoCreator));
-			p4Initializer = new ProcessP4Initializer((ProcessExecutor) processExecutorMock.MockInstance,  (IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
+			processExecutorMock = new Mock<ProcessExecutor>();
+			processInfoCreatorMock = new Mock<IP4ProcessInfoCreator>();
+			p4Initializer = new ProcessP4Initializer((ProcessExecutor) processExecutorMock.Object,  (IP4ProcessInfoCreator) processInfoCreatorMock.Object);
 		}
 
 		private void VerifyAll()
@@ -32,18 +32,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreatesAClientWithGivenClientNameIfSpecified()
 		{
 			// Setup
-			DynamicMock p4Mock = new DynamicMock(typeof(P4));
-			P4 p4 = (P4) p4Mock.MockInstance;
+			var p4Mock = new Mock<P4>();
+			P4 p4 = (P4) p4Mock.Object;
 			p4.Client = "myClient";
 
-			p4Mock.SetupResult("ViewForSpecifications", new string[] { "//mydepot/...", "//myotherdepot/..." });
+			p4Mock.SetupGet(_p4 => _p4.ViewForSpecifications).Returns(new string[] { "//mydepot/...", "//myotherdepot/..." }).Verifiable();
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
 			processInfoWithStdInContent.StandardInputContent = "Client: myClient\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //myClient/mydepot/...\n //myotherdepot/... //myClient/myotherdepot/...\n";
 
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfoWithStdInContent);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
 			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
@@ -67,8 +67,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
 			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfoWithStdInContent);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
 			p4Initializer.Initialize(p4, projectName, @"c:\my\working\dir");
@@ -118,8 +118,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		{
 			P4 p4 = new P4();
 			p4.View = @"""//blah/my path with spaces/...""";
-			processInfoCreatorMock.SetupResult("CreateProcessInfo", new ProcessInfo(""), typeof(P4), typeof(string));
-			processExecutorMock.SetupResult("Execute", new ProcessResult("", "", 0, false), typeof(ProcessInfo));
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(It.IsAny<P4>(), It.IsAny<string>())).Returns(new ProcessInfo("")).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
 			VerifyAll();
@@ -139,8 +139,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
 			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("This is standard out", "This is standard error", 1, false), processInfoWithStdInContent);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("This is standard out", "This is standard error", 1, false)).Verifiable();
 
 			// Execute
 			try

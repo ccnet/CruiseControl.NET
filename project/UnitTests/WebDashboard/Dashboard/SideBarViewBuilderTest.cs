@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -21,18 +20,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class SideBarViewBuilderTest
 	{
-		private DynamicMock cruiseRequestWrapperMock;
-		private DynamicMock buildNameRetrieverMock;
-		private DynamicMock recentBuildsViewBuilderMock;
-		private DynamicMock pluginLinkCalculatorMock;
-		private DynamicMock velocityViewGeneratorMock;
-		private DynamicMock linkFactoryMock;
-		private DynamicMock linkListFactoryMock;
-		private DynamicMock farmServiceMock;
+		private Mock<ICruiseRequest> cruiseRequestWrapperMock;
+		private Mock<IBuildNameRetriever> buildNameRetrieverMock;
+		private Mock<IRecentBuildsViewBuilder> recentBuildsViewBuilderMock;
+		private Mock<IPluginLinkCalculator> pluginLinkCalculatorMock;
+		private Mock<IVelocityViewGenerator> velocityViewGeneratorMock;
+		private Mock<ILinkFactory> linkFactoryMock;
+		private Mock<ILinkListFactory> linkListFactoryMock;
+		private Mock<IFarmService> farmServiceMock;
 
 		private SideBarViewBuilder sideBarViewBuilder;
 
-		private IResponse velocityResponse;
+		private HtmlFragmentResponse velocityResponse;
 		private Hashtable velocityContext;
 		private IAbsoluteLink[] links;
 		private IAbsoluteLink[] serverLinks;
@@ -42,25 +41,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
-			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
-			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
-			pluginLinkCalculatorMock = new DynamicMock(typeof(IPluginLinkCalculator));
-			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
-			farmServiceMock = new DynamicMock(typeof(IFarmService));
+			cruiseRequestWrapperMock = new Mock<ICruiseRequest>();
+			buildNameRetrieverMock = new Mock<IBuildNameRetriever>();
+			recentBuildsViewBuilderMock = new Mock<IRecentBuildsViewBuilder>();
+			pluginLinkCalculatorMock = new Mock<IPluginLinkCalculator>();
+			velocityViewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			linkFactoryMock = new Mock<ILinkFactory>();
+			linkListFactoryMock = new Mock<ILinkListFactory>();
+			farmServiceMock = new Mock<IFarmService>();
 
 
 			sideBarViewBuilder = new SideBarViewBuilder(
-				(ICruiseRequest) cruiseRequestWrapperMock.MockInstance,
-				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance,
-				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance,
-				(IPluginLinkCalculator) pluginLinkCalculatorMock.MockInstance,
-				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance,
-				(ILinkListFactory)linkListFactoryMock.MockInstance,
-				(IFarmService) farmServiceMock.MockInstance,
+				(ICruiseRequest) cruiseRequestWrapperMock.Object,
+				(IBuildNameRetriever) buildNameRetrieverMock.Object,
+				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.Object,
+				(IPluginLinkCalculator) pluginLinkCalculatorMock.Object,
+				(IVelocityViewGenerator) velocityViewGeneratorMock.Object,
+				(ILinkFactory) linkFactoryMock.Object,
+				(ILinkListFactory)linkListFactoryMock.Object,
+				(IFarmService) farmServiceMock.Object,
                 null);
 
 			velocityResponse = new HtmlFragmentResponse("velocity view");
@@ -86,15 +85,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmViewIfNoServerSpecified()
 		{
 			// Setup
-			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "");
-			pluginLinkCalculatorMock.ExpectAndReturn("GetFarmPluginLinks", links);
-			farmServiceMock.ExpectAndReturn("GetServerSpecifiers", serverSpecifiers);            
-			linkListFactoryMock.ExpectAndReturn("CreateServerLinkList", serverLinks, serverSpecifiers, "ViewServerReport");
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
+			pluginLinkCalculatorMock.Setup(calculator => calculator.GetFarmPluginLinks()).Returns(links).Verifiable();
+			farmServiceMock.Setup(service => service.GetServerSpecifiers()).Returns(serverSpecifiers).Verifiable();
+			linkListFactoryMock.Setup(factory => factory.CreateServerLinkList(serverSpecifiers, "ViewServerReport")).Returns(serverLinks).Verifiable();
 
             ProjectStatus ps = new ProjectStatus("", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0, new List<ParameterBase>());
             ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifiers[0]) };
             ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-            farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifiers[0], (string)null);
+            farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifiers[0], null)).Returns(pslae).Verifiable();
 
 			velocityContext["links"] = links;
 			velocityContext["serverlinks"] = serverLinks;
@@ -104,15 +103,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
             CruiseControl.WebDashboard.Dashboard.DefaultLinkFactory x = new DefaultLinkFactory(new DefaultUrlBuilder(),null,null);
 
             IAbsoluteLink farmLink = x.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME);
-            linkFactoryMock.ExpectAndReturn("CreateFarmLink", farmLink, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+            linkFactoryMock.Setup(factory => factory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME)).Returns(farmLink).Verifiable();
             velocityContext["farmLink"] = farmLink;
 
             System.Diagnostics.Debug.WriteLine("starting");
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"FarmSideBar.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, velocityContext)).Returns(velocityResponse).Verifiable();
 
 			// Execute
-            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.Object as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -124,31 +124,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			IServerSpecifier serverSpecifier = new DefaultServerSpecifier("myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "");
-			cruiseRequestWrapperMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
 
-			pluginLinkCalculatorMock.ExpectAndReturn("GetServerPluginLinks", links, serverSpecifier);
+			pluginLinkCalculatorMock.Setup(calculator => calculator.GetServerPluginLinks(serverSpecifier)).Returns(links).Verifiable();
 
             ProjectStatus ps = new ProjectStatus("", "myCategory", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0, new List<ParameterBase>());
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, (string)null);
+			farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifier, null)).Returns(pslae).Verifiable();
 
 			IAbsoluteLink link = new GeneralAbsoluteLink("link");
 			IAbsoluteLink[] categoryLinks = new GeneralAbsoluteLink[] { new GeneralAbsoluteLink("myCategory", "?Category=myCategory") };
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, ServerReportServerPlugin.ACTION_NAME)).Returns(link).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, ServerReportServerPlugin.ACTION_NAME)).Returns(link).Verifiable();
 
 			velocityContext["links"] = links;
 			velocityContext["serverlink"] = link;
 			velocityContext["showCategories"] = true;
 			velocityContext["categorylinks"] = categoryLinks;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ServerSideBar.vm", new HashtableConstraint(velocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"ServerSideBar.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, velocityContext)).Returns(velocityResponse).Verifiable();
 
 			// Execute
-            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.Object as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -160,22 +161,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestWrapperMock.ExpectAndReturn("BuildName", "");
-			cruiseRequestWrapperMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 
-			pluginLinkCalculatorMock.ExpectAndReturn("GetProjectPluginLinks", links, projectSpecifier);
+			pluginLinkCalculatorMock.Setup(calculator => calculator.GetProjectPluginLinks(projectSpecifier)).Returns(links).Verifiable();
 			string recentBuildsView = "";
-			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, projectSpecifier, null);
+			recentBuildsViewBuilderMock.Setup(builder => builder.BuildRecentBuildsTable(projectSpecifier, null)).Returns(recentBuildsView).Verifiable();
 
 			velocityContext["links"] = links;
 			velocityContext["recentBuildsTable"] = recentBuildsView;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ProjectSideBar.vm", new HashtableConstraint(velocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"ProjectSideBar.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, velocityContext)).Returns(velocityResponse).Verifiable();
 
 			// Execute
-            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.Object as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -188,15 +190,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
-			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestWrapperMock.ExpectAndReturn("BuildName", "myBuild");
-			cruiseRequestWrapperMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
-			cruiseRequestWrapperMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("myBuild").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 
-			pluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", links, buildSpecifier);
+			pluginLinkCalculatorMock.Setup(calculator => calculator.GetBuildPluginLinks(buildSpecifier)).Returns(links).Verifiable();
 			string recentBuildsView = "";
-			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, buildSpecifier, null);
+			recentBuildsViewBuilderMock.Setup(builder => builder.BuildRecentBuildsTable(buildSpecifier, null)).Returns(recentBuildsView).Verifiable();
 
 			IBuildSpecifier nextBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "next");
 			IBuildSpecifier previousBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "previous");
@@ -204,14 +206,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink nextLink = new GeneralAbsoluteLink("test next");
 			IAbsoluteLink previousLink = new GeneralAbsoluteLink("test previous");
 
-			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier, null);
-			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier, null);
+			buildNameRetrieverMock.Setup(retriever => retriever.GetNextBuildSpecifier(buildSpecifier, null)).Returns(nextBuildSpecifier).Verifiable();
+			buildNameRetrieverMock.Setup(retriever => retriever.GetPreviousBuildSpecifier(buildSpecifier, null)).Returns(previousBuildSpecifier).Verifiable();
 
 			string action = BuildReportBuildPlugin.ACTION_NAME;
 
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", latestLink, projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", nextLink, nextBuildSpecifier, "", action);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", previousLink, previousBuildSpecifier, "", action);
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME)).Returns(latestLink).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(nextBuildSpecifier, "", action)).Returns(nextLink).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(previousBuildSpecifier, "", action)).Returns(previousLink).Verifiable();
 
 			velocityContext["links"] = links;
 			velocityContext["recentBuildsTable"] = recentBuildsView;
@@ -219,10 +221,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityContext["nextLink"] = nextLink;
 			velocityContext["previousLink"] = previousLink;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"BuildSideBar.vm", new HashtableConstraint(velocityContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"BuildSideBar.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, velocityContext)).Returns(velocityResponse).Verifiable();
 
 			// Execute
-			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.Object as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);

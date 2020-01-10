@@ -1,5 +1,4 @@
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -10,24 +9,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class ServerCheckingProxyActionTest
 	{
-		private DynamicMock errorViewBuilderMock;
-		private DynamicMock proxiedActionMock;
+		private Mock<IErrorViewBuilder> errorViewBuilderMock;
+		private Mock<ICruiseAction> proxiedActionMock;
 		private ServerCheckingProxyAction checkingAction;
 
-		private DynamicMock cruiseRequestMock;
+		private Mock<ICruiseRequest> cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
 		{
-			errorViewBuilderMock = new DynamicMock(typeof(IErrorViewBuilder));
-			proxiedActionMock = new DynamicMock(typeof(ICruiseAction));
+			errorViewBuilderMock = new Mock<IErrorViewBuilder>();
+			proxiedActionMock = new Mock<ICruiseAction>();
 			checkingAction = new ServerCheckingProxyAction(
-				(ICruiseAction) proxiedActionMock.MockInstance,
-				(IErrorViewBuilder) errorViewBuilderMock.MockInstance);
+				(ICruiseAction) proxiedActionMock.Object,
+				(IErrorViewBuilder) errorViewBuilderMock.Object);
 
-			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
+			cruiseRequestMock = new Mock<ICruiseRequest>();
+			cruiseRequest = (ICruiseRequest) cruiseRequestMock.Object;
 		}
 
 		private void VerifyAll()
@@ -42,9 +41,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
-			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			proxiedActionMock.Setup(action => action.Execute(cruiseRequest)).Returns(response).Verifiable();
 
 			// Execute
 			IResponse returnedResponse = checkingAction.Execute(cruiseRequest);
@@ -52,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			// Verify
 			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
+			errorViewBuilderMock.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -59,9 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "");
-			errorViewBuilderMock.ExpectAndReturn("BuildView", response, new IsTypeOf(typeof(string)));
-			proxiedActionMock.ExpectNoCall("Execute", typeof(ICruiseRequest));
+			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
+			errorViewBuilderMock.Setup(builder => builder.BuildView(It.IsAny<string>())).Returns(response).Verifiable();
 
 			// Execute
 			IResponse returnedResponse = checkingAction.Execute(cruiseRequest);
@@ -69,6 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			// Verify
 			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
+			proxiedActionMock.VerifyNoOtherCalls();
 		}
 	}
 }

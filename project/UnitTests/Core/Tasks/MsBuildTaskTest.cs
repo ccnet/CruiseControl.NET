@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Mock.Get(executionEnvironment).SetupGet(_executionEnvironment => _executionEnvironment.RuntimeDirectory).Returns(RuntimeEnvironment.GetRuntimeDirectory());
 
 			CreateProcessExecutorMock(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "MSBuild.exe"));
-			task = new MsBuildTask((ProcessExecutor) mockProcessExecutor.MockInstance, executionEnvironment, shadowCopier);
+			task = new MsBuildTask((ProcessExecutor) mockProcessExecutor.Object, executionEnvironment, shadowCopier);
 
 			result = IntegrationResult();
 			result.Label = "1.0";

@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -12,17 +12,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 	public class BitKeeperTest : ProcessExecutorTestFixtureBase
 	{
 		private BitKeeper bitkeeper;
-		private IMock mockHistoryParser;
+		private Mock<IHistoryParser> mockHistoryParser;
 		private DateTime from;
 		private DateTime to;
 
 		[SetUp]
 		protected void SetUp()
 		{
-			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
+			mockHistoryParser = new Mock<IHistoryParser>();
 			CreateProcessExecutorMock(BitKeeper.DefaultExecutable);
-			ProcessExecutor executor = (ProcessExecutor) mockProcessExecutor.MockInstance;
-			IHistoryParser parser = (IHistoryParser) mockHistoryParser.MockInstance;
+			ProcessExecutor executor = (ProcessExecutor) mockProcessExecutor.Object;
+			IHistoryParser parser = (IHistoryParser) mockHistoryParser.Object;
 			bitkeeper = new BitKeeper(parser, executor);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);

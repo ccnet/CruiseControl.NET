@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 
@@ -10,12 +10,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void PublishersShouldBeTasks()
 		{
-			IMock mock = new DynamicMock(typeof (ITask));
+			var mock = new Mock<ITask>();
 			IntegrationResult result = new IntegrationResult();
-			mock.Expect("Run", result);
+			mock.Setup(task => task.Run(result)).Verifiable();
 
-			ITask publisher = (ITask) mock.MockInstance;
+			ITask publisher = (ITask) mock.Object;
 			publisher.Run(result);
+			mock.Verify();
 		}
 	}
 }

@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -9,20 +9,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 	[TestFixture]
 	public class CachingConfigurationServiceTest
 	{
-		private DynamicMock slaveServiceMock;
+		private Mock<IConfigurationService> slaveServiceMock;
 		private CachingConfigurationService cachingConfigurationService;
 
-		private DynamicMock configurationMock;
+		private Mock<IConfiguration> configurationMock;
 		private IConfiguration configuration;
 
 		[SetUp]
 		public void Setup()
 		{
-			slaveServiceMock = new DynamicMock(typeof(IConfigurationService));
-			cachingConfigurationService = new CachingConfigurationService((IConfigurationService) slaveServiceMock.MockInstance);
+			slaveServiceMock = new Mock<IConfigurationService>();
+			cachingConfigurationService = new CachingConfigurationService((IConfigurationService) slaveServiceMock.Object);
 
-			configurationMock = new DynamicMock(typeof(IConfiguration));
-			configuration = (IConfiguration) configurationMock.MockInstance;
+			configurationMock = new Mock<IConfiguration>();
+			configuration = (IConfiguration) configurationMock.Object;
 		}
 
 		private void VerifyAll()
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void ShouldDelegateLoadRequests()
 		{
 			// Setup
-			slaveServiceMock.ExpectAndReturn("Load", configuration);
+			slaveServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(configuration, cachingConfigurationService.Load());
@@ -47,13 +47,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			// Setup
 			// (only 1 call expected)
-			slaveServiceMock.ExpectAndReturn("Load", configuration);
+			slaveServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
 
 			// Execute
 			cachingConfigurationService.Load();
 			cachingConfigurationService.Load();
 
 			// Verify
+			slaveServiceMock.Verify(service => service.Load(), Times.Once);
 			VerifyAll();
 		}
 
@@ -61,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void ShouldDelegateSaveRequests()
 		{
 			// Setup
-			slaveServiceMock.Expect("Save", configuration);
+			slaveServiceMock.Setup(service => service.Save(configuration)).Verifiable();
 
 			// Execute
 			cachingConfigurationService.Save(configuration);
@@ -74,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			ConfigurationUpdateHandler handler = new ConfigurationUpdateHandler(HandlerTarget);
 			// Setup
-			slaveServiceMock.Expect("AddConfigurationUpdateHandler", handler);
+			slaveServiceMock.Setup(service => service.AddConfigurationUpdateHandler(handler)).Verifiable();
 
 			// Execute
 			cachingConfigurationService.AddConfigurationUpdateHandler(handler);
@@ -88,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			// Setup
 			SlaveServiceForTestingEvents slaveService = new SlaveServiceForTestingEvents();
 			cachingConfigurationService = new CachingConfigurationService(slaveService);
-			IConfiguration configuration2 = (IConfiguration) new DynamicMock(typeof(IConfiguration)).MockInstance;
+			IConfiguration configuration2 = (IConfiguration) new Mock<IConfiguration>().Object;
 
 			// Execute & Verify
 			slaveService.configuration = configuration;

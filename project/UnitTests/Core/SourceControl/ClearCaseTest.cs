@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -212,8 +212,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceIfAutoGetSourceTrue()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.Object);
 			clearCase.Executable = EXECUTABLE;
 			clearCase.ViewPath = VIEWPATH;
 			clearCase.AutoGetSource = true;
@@ -221,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ProcessInfo expectedProcessRequest = new ProcessInfo(EXECUTABLE, @"update -force -overwrite """ + VIEWPATH + @"""");
 			expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			clearCase.GetSource(new IntegrationResult());
 			executor.Verify();
 		}
@@ -229,15 +229,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceFalse()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.Object);
 			clearCase.Executable = EXECUTABLE;
 			clearCase.ViewPath = VIEWPATH;
 			clearCase.AutoGetSource = false;
 
-			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 			clearCase.GetSource(new IntegrationResult());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 	}
 }

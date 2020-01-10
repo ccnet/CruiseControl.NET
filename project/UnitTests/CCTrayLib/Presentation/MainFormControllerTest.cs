@@ -1,11 +1,9 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -13,29 +11,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	public class MainFormControllerTest
 	{
 		private int eventCount = 0;
-		private DynamicMock mockProjectMonitor;
+		private Mock<IProjectMonitor> mockProjectMonitor;
 		private IProjectMonitor projectMonitor;
-		private DynamicMock mockConfiguration;
+		private Mock<ICCTrayMultiConfiguration> mockConfiguration;
 		private ICCTrayMultiConfiguration configuration;
 		private MainFormController controller;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockProjectMonitor = new DynamicMock(typeof (IProjectMonitor));
-			mockProjectMonitor.Strict = true;
-			projectMonitor = (IProjectMonitor) mockProjectMonitor.MockInstance;
+			mockProjectMonitor = new Mock<IProjectMonitor>(MockBehavior.Strict);
+			projectMonitor = (IProjectMonitor) mockProjectMonitor.Object;
 
-			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
-			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
+			mockConfiguration = new Mock<ICCTrayMultiConfiguration>();
+			configuration = (ICCTrayMultiConfiguration) mockConfiguration.Object;
             
             ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[0];
-            mockConfiguration.SetupResult("GetServerMonitors", serverMonitors);
-            mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0], typeof(ISingleServerMonitor[]));
-			mockConfiguration.SetupResult("Icons", new Icons());
-            mockConfiguration.SetupResult("FixUserName", "John");
+            mockConfiguration.Setup(configuration => configuration.GetServerMonitors()).Returns(serverMonitors);
+            mockConfiguration.Setup(configuration => configuration.GetProjectStatusMonitors(It.IsAny<ISingleServerMonitor[]>())).Returns(new IProjectMonitor[0]);
+			mockConfiguration.SetupGet(configuration => configuration.Icons).Returns(new Icons());
+            mockConfiguration.SetupGet(configuration => configuration.FixUserName).Returns("John");
             GrowlConfiguration growlConfig = new GrowlConfiguration();
-            mockConfiguration.SetupResult("Growl", growlConfig);            
+            mockConfiguration.SetupGet(configuration => configuration.Growl).Returns(growlConfig);
 
 			eventCount = 0;
 
@@ -62,11 +59,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
-            mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
+			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
+            mockProjectMonitor.Setup(monitor => monitor.ListBuildParameters()).Returns(() => null).Verifiable();
 			controller.SelectedProject = projectMonitor;
 
-			mockProjectMonitor.Expect("ForceBuild", (Dictionary<string, string>)null, (string)null);
+			mockProjectMonitor.Setup(monitor => monitor.ForceBuild(null, "John")).Verifiable();
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
@@ -75,14 +72,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildDoesNothingIfProjectIsNotConnected()
 		{
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.NotConnected);
-            mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
+			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.NotConnected).Verifiable();
+            mockProjectMonitor.Setup(monitor => monitor.ListBuildParameters()).Returns(() => null).Verifiable();
 			controller.SelectedProject = projectMonitor;
 
-            mockProjectMonitor.ExpectNoCall("ForceBuild", typeof(Dictionary<string, string>), typeof(string));
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
+			mockProjectMonitor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -96,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanFixBuildIfBuildIsBroken()
 		{
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Broken);
+			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Broken).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -105,8 +102,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanFixBuildIfBuildIsBrokenAndBuilding()
 		{
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.BrokenAndBuilding);
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.BrokenAndBuilding);
+			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.BrokenAndBuilding).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -115,8 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CannotFixBuildIfBuildIsWorking()
 		{
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
-			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
+			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsFalse(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -133,8 +128,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void VolunteeringToFixBuildShouldInvokeServer()
 		{
-			controller.SelectedProject = projectMonitor;            
-			mockProjectMonitor.Expect("FixBuild","John");
+			controller.SelectedProject = projectMonitor;
+			mockProjectMonitor.Setup(monitor => monitor.FixBuild("John")).Verifiable();
 			controller.VolunteerToFixBuild();
 			mockProjectMonitor.Verify();
 		}
@@ -150,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanCancelPendingIfBuildIsPending()
 		{
-			mockProjectMonitor.ExpectAndReturn("IsPending", true);
+			mockProjectMonitor.SetupGet(monitor => monitor.IsPending).Returns(true).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanCancelPending());
 			mockProjectMonitor.Verify();
@@ -159,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CannotCancelPendingIfBuildIsNotPending()
 		{
-			mockProjectMonitor.ExpectAndReturn("IsPending", false);
+			mockProjectMonitor.SetupGet(monitor => monitor.IsPending).Returns(false).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsFalse(controller.CanCancelPending());
 			mockProjectMonitor.Verify();
@@ -177,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void CancelPendingShouldInvokeServer()
 		{
 			controller.SelectedProject = projectMonitor;
-			mockProjectMonitor.Expect("CancelPending");
+			mockProjectMonitor.Setup(monitor => monitor.CancelPending()).Verifiable();
 			controller.CancelPending();
 			mockProjectMonitor.Verify();
 		}

@@ -1,7 +1,7 @@
 using System;
+using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			</vault>";
 
 		protected VaultVersionChecker vault;
-		protected DynamicMock mockHistoryParser;
+		protected Mock<IHistoryParser> mockHistoryParser;
 		protected IntegrationResult result;
 
 		/* 
@@ -49,8 +49,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public virtual void SetUp()
 		{
 			CreateProcessExecutorMock(VaultVersionChecker.DefaultExecutable);
-			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			vault = new VaultVersionChecker((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, VaultVersionChecker.EForcedVaultVersion.Vault3);
+			mockHistoryParser = new Mock<IHistoryParser>();
+			vault = new VaultVersionChecker((IHistoryParser) mockHistoryParser.Object, (ProcessExecutor) mockProcessExecutor.Object, VaultVersionChecker.EForcedVaultVersion.Vault3);
 
 			result = IntegrationResultMother.CreateSuccessful("foo");
 			result.WorkingDirectory = this.DefaultWorkingDirectory;
@@ -551,9 +551,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public virtual void ShouldNotGetSourceIfAutoGetSourceIsFalse()
 		{
-			ExpectThatExecuteWillNotBeCalled();
 			vault.AutoGetSource = false;
 			vault.GetSource(IntegrationResultMother.CreateSuccessful());
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -603,7 +603,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public virtual void ShouldNotDeleteLabelIfItWasNeverApplied()
 		{
-			this.ExpectThatExecuteWillNotBeCalled();
 			vault.ApplyLabel = true;
 			vault.UseVaultWorkingDirectory = false;
 			vault.WorkingDirectory = DefaultWorkingDirectory;
@@ -614,6 +613,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			failed.Label = result.Label;
 			failed.WorkingDirectory = result.WorkingDirectory;
 			vault.LabelSourceControl(failed);
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -698,7 +698,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		protected void ExpectToParseHistory()
 		{
-			mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new Modification[0]).Verifiable();
 		}
 
 		/* 

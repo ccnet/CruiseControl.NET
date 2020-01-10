@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -12,15 +12,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	public class BuildTransitionSoundPlayerTest
 	{
 		private StubProjectMonitor stubProjectMonitor;
-		private DynamicMock mockAudioPlayer;
+		private Mock<IAudioPlayer> mockAudioPlayer;
 
 		[SetUp]
 		public void SetUp()
 		{
 			stubProjectMonitor = new StubProjectMonitor("project");
 
-			mockAudioPlayer = new DynamicMock(typeof(IAudioPlayer));
-			mockAudioPlayer.Strict = true;
+			mockAudioPlayer = new Mock<IAudioPlayer>(MockBehavior.Strict);
 		}
 
 		[Test]
@@ -34,19 +33,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			new BuildTransitionSoundPlayer(
 				stubProjectMonitor, 
-				(IAudioPlayer) mockAudioPlayer.MockInstance,
+				(IAudioPlayer) mockAudioPlayer.Object,
 				files);
 
-			mockAudioPlayer.Expect("Play", files.BrokenBuildSound);
+			mockAudioPlayer.Setup(player => player.Play(files.BrokenBuildSound)).Verifiable();
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.Broken));
 
-			mockAudioPlayer.Expect("Play", files.FixedBuildSound);
+			mockAudioPlayer.Setup(player => player.Play(files.FixedBuildSound)).Verifiable();
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.Fixed));
 
-			mockAudioPlayer.Expect("Play", files.StillFailingBuildSound);
+			mockAudioPlayer.Setup(player => player.Play(files.StillFailingBuildSound)).Verifiable();
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillFailing));
-			
-			mockAudioPlayer.Expect("Play", files.StillSuccessfulBuildSound);
+
+			mockAudioPlayer.Setup(player => player.Play(files.StillSuccessfulBuildSound)).Verifiable();
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillSuccessful));
 
 			mockAudioPlayer.Verify();
@@ -61,15 +60,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			new BuildTransitionSoundPlayer(
 				stubProjectMonitor, 
-				(IAudioPlayer) mockAudioPlayer.MockInstance,
+				(IAudioPlayer) mockAudioPlayer.Object,
 				files);
 
-			mockAudioPlayer.ExpectNoCall("Play", typeof(string));
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillSuccessful));
 
-			
-			mockAudioPlayer.ExpectNoCall("Play", typeof(string));
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillFailing));
+
+			mockAudioPlayer.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -77,16 +75,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			new BuildTransitionSoundPlayer(
 				stubProjectMonitor, 
-				(IAudioPlayer) mockAudioPlayer.MockInstance,
+				(IAudioPlayer) mockAudioPlayer.Object,
 				null);
 
-			mockAudioPlayer.ExpectNoCall("Play", typeof(string));
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillSuccessful));
 
-			
-			mockAudioPlayer.ExpectNoCall("Play", typeof(string));
 			stubProjectMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor, BuildTransition.StillFailing));
-			
+
+			mockAudioPlayer.VerifyNoOtherCalls();
 		}
 	}
 }

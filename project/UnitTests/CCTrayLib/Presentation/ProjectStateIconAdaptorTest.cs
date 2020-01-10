@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	[TestFixture]
 	public class ProjectStateIconAdaptorTest
 	{
-		private DynamicMock mockIconProvider;
+		private Mock<IProjectStateIconProvider> mockIconProvider;
 		private StubProjectMonitor monitor;
 		private IProjectStateIconProvider iconProvider;
 
@@ -19,10 +19,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			monitor = new StubProjectMonitor( "testProject" );
 
-			mockIconProvider = new DynamicMock( typeof (IProjectStateIconProvider) );
-			this.mockIconProvider.Strict = true;
+			mockIconProvider = new Mock<IProjectStateIconProvider>(MockBehavior.Strict);
 
-			iconProvider = (IProjectStateIconProvider) this.mockIconProvider.MockInstance;
+			iconProvider = (IProjectStateIconProvider) this.mockIconProvider.Object;
 
 			this.monitor.ProjectState = ProjectState.Building;
 
@@ -32,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void OnCreationTheCurrentStateOfTheIconIsRead()
 		{
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.ExpectAndReturn( "GetStatusIconForState", icon, ProjectState.Building );
+			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			Assert.AreSame( icon, adaptor.StatusIcon );
@@ -44,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void WhenTheMonitorPollsTheIconMayBeUpdated()
 		{
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.ExpectAndReturn( "GetStatusIconForState", icon, ProjectState.Building );
+			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			Assert.AreSame( icon, adaptor.StatusIcon );
@@ -52,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			monitor.ProjectState = ProjectState.Broken;
 
 			StatusIcon icon2 = new StatusIcon();
-			mockIconProvider.ExpectAndReturn( "GetStatusIconForState", icon2, ProjectState.Broken );
+			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Broken)).Returns(icon2).Verifiable();
 
 			monitor.Poll();
 
@@ -68,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			iconChangedCount = 0;
 
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.ExpectAndReturn( "GetStatusIconForState", icon, ProjectState.Building );
+			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			adaptor.IconChanged += new EventHandler(IconChanged);

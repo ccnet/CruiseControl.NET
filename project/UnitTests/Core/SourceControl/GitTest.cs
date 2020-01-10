@@ -1,15 +1,12 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Core.Util;
 using System.IO;
-using NMock;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.UnitTests.Core;
 using Exortech.NetReflector;
+using Moq;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using NMock.Constraints;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
@@ -29,19 +26,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_LOG_ALL = "log origin/master " + GIT_LOG_OPTIONS;
 
 		private Git git;
-		private IMock mockHistoryParser;
-		private IMock mockFileSystem;
-		private IMock mockFileDirectoryDeleter;
+		private Mock<IHistoryParser> mockHistoryParser;
+		private Mock<IFileSystem> mockFileSystem;
+		private Mock<IFileDirectoryDeleter> mockFileDirectoryDeleter;
 
 		[SetUp]
 		protected void CreateGit()
 		{
-			mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
-			mockFileSystem = new DynamicMock(typeof(IFileSystem));
-			mockFileDirectoryDeleter = new DynamicMock(typeof(IFileDirectoryDeleter));
+			mockHistoryParser = new Mock<IHistoryParser>();
+			mockFileSystem = new Mock<IFileSystem>();
+			mockFileDirectoryDeleter = new Mock<IFileDirectoryDeleter>();
 			CreateProcessExecutorMock("git");
 
-			SetupGit((IFileSystem)mockFileSystem.MockInstance, (IFileDirectoryDeleter)mockFileDirectoryDeleter.MockInstance);
+			SetupGit((IFileSystem)mockFileSystem.Object, (IFileDirectoryDeleter)mockFileDirectoryDeleter.Object);
 		}
 
 		[TearDown]
@@ -215,12 +212,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCloneIfDirectoryDoesNotExist()
 		{
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, DefaultWorkingDirectory);
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(DefaultWorkingDirectory)).Returns(false).Verifiable();
 			ExpectCloneAndInitialiseRepository();
 
 			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
 			ExpectLogRemoteHead(TO_COMMIT);
-			mockHistoryParser.ExpectAndReturn("Parse", new Modification[] { }, new IsAnything(), new IsAnything(), new IsAnything());
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new Modification[] { }).Verifiable();
 
 			IIntegrationResult to = IntegrationResult();
 			git.GetModifications(IntegrationResult(FROM_COMMIT), to);
@@ -231,15 +228,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCloneAndDeleteWorkingDirIfGitDirectoryDoesNotExist()
 		{
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, DefaultWorkingDirectory);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(DefaultWorkingDirectory, ".git"));
-			mockFileDirectoryDeleter.Expect("DeleteIncludingReadOnlyObjects", DefaultWorkingDirectory);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, DefaultWorkingDirectory);
+			MockSequence sequence = new MockSequence();
+			mockFileSystem.InSequence(sequence).Setup(fileSystem => fileSystem.DirectoryExists(DefaultWorkingDirectory)).Returns(true).Verifiable();
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectory, ".git"))).Returns(false).Verifiable();
+			mockFileDirectoryDeleter.Setup(deleter => deleter.DeleteIncludingReadOnlyObjects(DefaultWorkingDirectory)).Verifiable();
+			mockFileSystem.InSequence(sequence).Setup(fileSystem => fileSystem.DirectoryExists(DefaultWorkingDirectory)).Returns(false).Verifiable();
 			ExpectCloneAndInitialiseRepository();
 
 			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
 			ExpectLogRemoteHead(TO_COMMIT);
-			mockHistoryParser.ExpectAndReturn("Parse", new Modification[] { }, new IsAnything(), new IsAnything(), new IsAnything());
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new Modification[] { }).Verifiable();
 
 			IIntegrationResult to = IntegrationResult();
 			git.GetModifications(IntegrationResult(FROM_COMMIT), to);
@@ -250,8 +248,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldLogWholeHistoryIfCommitNotPresentInFromIntegrationResult()
 		{
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, DefaultWorkingDirectory);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectory, ".git"));
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(DefaultWorkingDirectory)).Returns(true).Verifiable();
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectory, ".git"))).Returns(true).Verifiable();
 
 			ExpectToExecuteArguments(GIT_FETCH);
 			ExpectToExecuteArguments(GIT_LOG_ALL);
@@ -267,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			var processInfo = NewProcessInfo(args, DefaultWorkingDirectory);
 			processInfo.StandardInputContent = "";
-			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, processInfo);
+			mockProcessExecutor.Setup(executor => executor.Execute(processInfo)).Returns(returnValue).Verifiable();
 		}
 
 		private new void ExpectToExecuteArguments(string args)
@@ -298,9 +296,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.TagOnSuccess = true;
 
-			ExpectThatExecuteWillNotBeCalled();
-
 			git.LabelSourceControl(IntegrationResultMother.CreateFailed());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -308,9 +306,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.TagOnSuccess = false;
 
-			ExpectThatExecuteWillNotBeCalled();
-
 			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -318,16 +316,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.AutoGetSource = false;
 
-			ExpectThatExecuteWillNotBeCalled();
-
 			git.GetSource(IntegrationResult());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void ShouldReturnModificationsWhenHashsDifferent()
 		{
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, DefaultWorkingDirectory);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectory, ".git"));
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(DefaultWorkingDirectory)).Returns(true).Verifiable();
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectory, ".git"))).Returns(true).Verifiable();
 
 			Modification[] modifications = new Modification[2] { new Modification(), new Modification() };
 
@@ -335,7 +333,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectToExecuteArguments(GIT_LOG_REMOTE_COMMITS);
 			ExpectLogRemoteHead(TO_COMMIT);
 
-			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(modifications).Verifiable();
 
 			IIntegrationResult to = IntegrationResult();
 			Modification[] result = git.GetModifications(IntegrationResult(FROM_COMMIT), to);
@@ -346,7 +344,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private void SetupGit(IFileSystem filesystem, IFileDirectoryDeleter fileDirectoryDeleter)
 		{
-			git = new Git((IHistoryParser)mockHistoryParser.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance, filesystem, fileDirectoryDeleter);
+			git = new Git((IHistoryParser)mockHistoryParser.Object, (ProcessExecutor)mockProcessExecutor.Object, filesystem, fileDirectoryDeleter);
 			git.Repository = @"xyz.git";
 			git.WorkingDirectory = DefaultWorkingDirectory;
 		}

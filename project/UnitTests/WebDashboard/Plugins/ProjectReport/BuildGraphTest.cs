@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using NUnit.Framework;
-using NMock;
-using ThoughtWorks;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
 {

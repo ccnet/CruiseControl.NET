@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -13,8 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private Modification[] mods;
 		private IntegrationResult lastBuild;
 		private IntegrationResult thisBuild;
-		private IMock mockSourceControl;
-		private IMock mockDateTimeProvider;
+		private Mock<ISourceControl> mockSourceControl;
+		private Mock<DateTimeProvider> mockDateTimeProvider;
 		private QuietPeriod quietPeriod;
 
 		[SetUp]
@@ -25,11 +25,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			mods = new Modification[] { CreateModificationAtTime(12, 01, 30) };
 
-			mockSourceControl = new DynamicMock(typeof (ISourceControl));
-			mockSourceControl.Strict = true;
-			mockDateTimeProvider = new DynamicMock(typeof (DateTimeProvider));
-			mockDateTimeProvider.Strict = true;
-			quietPeriod = new QuietPeriod((DateTimeProvider) mockDateTimeProvider.MockInstance);
+			mockSourceControl = new Mock<ISourceControl>(MockBehavior.Strict);
+			mockDateTimeProvider = new Mock<DateTimeProvider>(MockBehavior.Strict);
+			quietPeriod = new QuietPeriod((DateTimeProvider) mockDateTimeProvider.Object);
 		}
 
 		[TearDown]
@@ -44,12 +42,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			quietPeriod.ModificationDelaySeconds = 0;
 
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (TimeSpan));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(mods, actualMods);
+
+			mockDateTimeProvider.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -58,13 +57,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			quietPeriod.ModificationDelaySeconds = 45;
 
 			// last build was at 12:01:00, current build is at 12:02:00, modification at 12:01:30
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.Expect("Sleep", TimeSpan.FromSeconds(15));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
+			mockDateTimeProvider.Setup(provider => provider.Sleep(TimeSpan.FromSeconds(15))).Verifiable();
 
-			mockDateTimeProvider.ExpectAndReturn("Now", CreateDateTime(12, 02, 15));
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 15)));
+			mockDateTimeProvider.SetupGet(provider => provider.Now).Returns(CreateDateTime(12, 02, 15)).Verifiable();
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 15)))).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(mods, actualMods);
 		}
@@ -73,6 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckModificationsUntilThereAreNoModsInModificationDelay()
 		{
+			MockSequence sequence = new MockSequence();
 			quietPeriod.ModificationDelaySeconds = 45;		
 
 			// last build was at 12:01:00, current build is at 12:02:00
@@ -81,19 +81,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification[] newMods = new Modification[] { CreateModificationAtTime(12, 01, 30) };
 			
 			// ...should wait for 15 seconds so that the 45 second delay completes (at 12:02:15)
-			mockSourceControl.ExpectAndReturn("GetModifications", newMods, lastBuild, thisBuild);
-			mockDateTimeProvider.Expect("Sleep", TimeSpan.FromSeconds(15));
-			mockDateTimeProvider.ExpectAndReturn("Now", CreateDateTime(12, 02, 15));
+			mockSourceControl.InSequence(sequence).Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(newMods).Verifiable();
+			mockDateTimeProvider.InSequence(sequence).Setup(provider => provider.Sleep(TimeSpan.FromSeconds(15))).Verifiable();
+			mockDateTimeProvider.InSequence(sequence).SetupGet(provider => provider.Now).Returns(CreateDateTime(12, 02, 15)).Verifiable();
 
 			// After this time it should ask for modifications again.  Introduce a new modification at 12:02:10, meaning that the ealiest a build can start is at 12:02:55
 			//  i.e. 40 seconds from the time of the current build (12:02:15)
 			newMods = new Modification[] {newMods[0], CreateModificationAtTime(12, 02, 10)};		
-			mockSourceControl.ExpectAndReturn("GetModifications", newMods, lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 15)));
-			mockDateTimeProvider.Expect("Sleep", TimeSpan.FromSeconds(40));
-			mockDateTimeProvider.ExpectAndReturn("Now", CreateDateTime(12, 02, 55));
-			mockSourceControl.ExpectAndReturn("GetModifications", newMods, lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 55)));
+			mockSourceControl.InSequence(sequence).Setup(sc => sc.GetModifications(lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 15)))).Returns(newMods).Verifiable();
+			mockDateTimeProvider.InSequence(sequence).Setup(provider => provider.Sleep(TimeSpan.FromSeconds(40))).Verifiable();
+			mockDateTimeProvider.InSequence(sequence).SetupGet(provider => provider.Now).Returns(CreateDateTime(12, 02, 55)).Verifiable();
+			mockSourceControl.InSequence(sequence).Setup(sc => sc.GetModifications(lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 02, 55)))).Returns(newMods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(newMods, actualMods);
 		}
@@ -114,13 +114,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldHandleIfNoModificationsAreReturned()
 		{
-			mockSourceControl.ExpectAndReturn("GetModifications", null, lastBuild, thisBuild);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (TimeSpan));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(() => null).Verifiable();
 
 			quietPeriod.ModificationDelaySeconds = 60;
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(new Modification[0], actualMods);
+
+			mockDateTimeProvider.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -128,27 +129,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			thisBuild = IntegrationResultMother.CreateSuccessful(mods[0].ModifiedTime.AddSeconds(60).AddTicks(-1));
 
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (TimeSpan));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
 
 			quietPeriod.ModificationDelaySeconds = 60;
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(mods, actualMods);
+
+			mockDateTimeProvider.VerifyNoOtherCalls();
 		}
-		
+
 		[Test]
 		public void WhenTheTimeDifferenceIsLessThanATenthOfASecondIgnoreTheQuietPeriodAndDoTheBuildAnyway()
 		{
 			quietPeriod.ModificationDelaySeconds = 60;
 			thisBuild = IntegrationResultMother.CreateSuccessful(mods[0].ModifiedTime.AddSeconds(quietPeriod.ModificationDelaySeconds).AddMilliseconds(-99));
 
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (TimeSpan));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(mods, actualMods);
+
+			mockDateTimeProvider.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -157,15 +160,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			quietPeriod.ModificationDelaySeconds = 60;
 			thisBuild = IntegrationResultMother.CreateSuccessful(mods[0].ModifiedTime.AddSeconds(quietPeriod.ModificationDelaySeconds).AddMilliseconds(-100));
 
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
 		
-			mockDateTimeProvider.Expect("Sleep", TimeSpan.FromMilliseconds(100));
+			mockDateTimeProvider.Setup(provider => provider.Sleep(TimeSpan.FromMilliseconds(100))).Verifiable();
 
 			DateTime nextBuildTime = thisBuild.StartTime.AddSeconds(1);
-			mockDateTimeProvider.ExpectAndReturn("Now", nextBuildTime);
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, IntegrationResultMother.CreateSuccessful(nextBuildTime));
+			mockDateTimeProvider.SetupGet(provider => provider.Now).Returns(nextBuildTime).Verifiable();
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, IntegrationResultMother.CreateSuccessful(nextBuildTime))).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreSame(mods, actualMods);
 		}
@@ -178,13 +181,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			
 			// last build was at 12:01:00, current build is at 12:02:00, modification at 12:02:55
 			// so should wait until 12:03:55
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.Expect("Sleep", TimeSpan.FromSeconds(60 + 55));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
+			mockDateTimeProvider.Setup(provider => provider.Sleep(TimeSpan.FromSeconds(60 + 55))).Verifiable();
 
-			mockDateTimeProvider.ExpectAndReturn("Now", CreateDateTime(12, 03, 55));
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 03, 55)));
+			mockDateTimeProvider.SetupGet(provider => provider.Now).Returns(CreateDateTime(12, 03, 55)).Verifiable();
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, IntegrationResultMother.CreateSuccessful(CreateDateTime(12, 03, 55)))).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreEqual(mods, actualMods);
 			
@@ -198,13 +201,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			
 			// last build was at 12:01:00, current build is at 12:02:00, modification at 12:02:55
 			// so should wait until 12:03:55
-			mockSourceControl.ExpectAndReturn("GetModifications", mods, lastBuild, thisBuild);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (TimeSpan));
+			mockSourceControl.Setup(sc => sc.GetModifications(lastBuild, thisBuild)).Returns(mods).Verifiable();
 
-			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, lastBuild, thisBuild);
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.Object, lastBuild, thisBuild);
 
 			Assert.AreSame(mods, actualMods);
-			
+
+			mockDateTimeProvider.VerifyNoOtherCalls();
 		}
 
 	}

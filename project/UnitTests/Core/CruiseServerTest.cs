@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Moq;
-using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -17,7 +15,6 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.UnitTests.Remote;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -25,13 +22,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class CruiseServerTest : IntegrationFixture
 	{
         private MockRepository mocks = new MockRepository(MockBehavior.Default);
-		private DynamicMock configServiceMock;
-		private DynamicMock projectIntegratorListFactoryMock;
-		private DynamicMock projectSerializerMock;
-		private DynamicMock integratorMock1;
-		private DynamicMock integratorMock2;
-		private DynamicMock integratorMock3;
-        private DynamicMock stateManagerMock;
+		private Mock<IConfigurationService> configServiceMock;
+		private Mock<IProjectIntegratorListFactory> projectIntegratorListFactoryMock;
+		private Mock<IProjectSerializer> projectSerializerMock;
+		private Mock<IProjectIntegrator> integratorMock1;
+		private Mock<IProjectIntegrator> integratorMock2;
+		private Mock<IProjectIntegrator> integratorMock3;
+        private Mock<IProjectStateManager> stateManagerMock;
 
 		private CruiseServer server;
 
@@ -39,10 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private Project project1;
 		private Project project2;
 
-		private IMock mockProject;
+		private Mock<IProject> mockProject;
 		private IProject mockProjectInstance;
-		
-		private IIntegrationQueue integrationQueue;
 
 		private IProjectIntegrator integrator1;
 		private IProjectIntegrator integrator2;
@@ -60,17 +55,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		protected void SetUp()
 		{
-			projectSerializerMock = new DynamicMock(typeof (IProjectSerializer));
+			projectSerializerMock = new Mock<IProjectSerializer>();
 
-			integratorMock1 = new DynamicMock(typeof (IProjectIntegrator));
-			integratorMock2 = new DynamicMock(typeof (IProjectIntegrator));
-			integratorMock3 = new DynamicMock(typeof (IProjectIntegrator));
-			integrator1 = (IProjectIntegrator) integratorMock1.MockInstance;
-			integrator2 = (IProjectIntegrator) integratorMock2.MockInstance;
-			integrator3 = (IProjectIntegrator) integratorMock3.MockInstance;
-            integratorMock1.SetupResult("Name", "Project 1");
-			integratorMock2.SetupResult("Name", "Project 2");
-			integratorMock3.SetupResult("Name", "Project 3");
+			integratorMock1 = new Mock<IProjectIntegrator>();
+			integratorMock2 = new Mock<IProjectIntegrator>();
+			integratorMock3 = new Mock<IProjectIntegrator>();
+			integrator1 = (IProjectIntegrator) integratorMock1.Object;
+			integrator2 = (IProjectIntegrator) integratorMock2.Object;
+			integrator3 = (IProjectIntegrator) integratorMock3.Object;
+            integratorMock1.SetupGet(integrator => integrator.Name).Returns("Project 1");
+			integratorMock2.SetupGet(integrator => integrator.Name).Returns("Project 2");
+			integratorMock3.SetupGet(integrator => integrator.Name).Returns("Project 3");
 
 			fileSystem = mocks.Create<IFileSystem>().Object;
 			executionEnvironment = mocks.Create<IExecutionEnvironment>().Object;
@@ -79,25 +74,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Mock.Get(executionEnvironment).Setup(_executionEnvironment => _executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).Returns(applicationDataPath);
 			Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.DirectoryExists(applicationDataPath)).Returns(true);
 
-			integrationQueue = null; // We have no way of injecting currently.
-
 			configuration = new Configuration();
 			project1 = new Project();
 			project1.Name = "Project 1";
-            integratorMock1.SetupResult("Project", project1);
+            integratorMock1.SetupGet(integrator => integrator.Project).Returns(project1);
 			
 			project2 = new Project();
 			project2.Name = "Project 2";
-            integratorMock2.SetupResult("Project", project1);
+            integratorMock2.SetupGet(integrator => integrator.Project).Returns(project1);
 
-			mockProject = new DynamicMock(typeof(IProject));
-			mockProject.SetupResult("Name", "Project 3");
-            mockProject.SetupResult("QueueName", "Project 3");
-            mockProject.SetupResult("QueueName", "Project 3");
-            mockProjectInstance = (IProject)mockProject.MockInstance;
-			mockProject.SetupResult("Name", "Project 3");
-            mockProject.SetupResult("StartupMode", ProjectStartupMode.UseLastState);
-            integratorMock3.SetupResult("Project", mockProjectInstance);
+			mockProject = new Mock<IProject>();
+            mockProjectInstance = (IProject)mockProject.Object;
+            mockProject.SetupGet(project => project.Name).Returns("Project 3");
+            mockProject.SetupGet(project => project.QueueName).Returns("Project 3");
+            mockProject.SetupGet(project => project.StartupMode).Returns(ProjectStartupMode.UseLastState);
+            integratorMock3.SetupGet(integrator => integrator.Project).Returns(mockProjectInstance);
 
 			configuration.AddProject(project1);
 			configuration.AddProject(project2);
@@ -108,19 +99,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorList.Add(integrator2);
 			integratorList.Add(integrator3);
             
-			configServiceMock = new DynamicMock(typeof (IConfigurationService));
-			configServiceMock.ExpectAndReturn("Load", configuration);
+			configServiceMock = new Mock<IConfigurationService>();
+			configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
 
-			projectIntegratorListFactoryMock = new DynamicMock(typeof (IProjectIntegratorListFactory));
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+			projectIntegratorListFactoryMock = new Mock<IProjectIntegratorListFactory>();
+			projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+				.Returns(integratorList).Verifiable();
 
-            stateManagerMock = new DynamicMock(typeof(IProjectStateManager));
-            stateManagerMock.SetupResult("CheckIfProjectCanStart", true, typeof(string));
+            stateManagerMock = new Mock<IProjectStateManager>();
+            stateManagerMock.Setup(manager => manager.CheckIfProjectCanStart(It.IsAny<string>())).Returns(true);
 
-			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
-			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
-			                          (IProjectSerializer) projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+			server = new CruiseServer((IConfigurationService) configServiceMock.Object,
+			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.Object,
+			                          (IProjectSerializer) projectSerializerMock.Object,
+                                      (IProjectStateManager)stateManagerMock.Object,
 									  fileSystem,
 									  executionEnvironment,
                                       null);
@@ -137,8 +129,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartAllProjectsInCruiseServer()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
@@ -155,15 +147,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CallingStopStopsIntegratorsAndWaitsForThemToFinish()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
-			integratorMock1.Expect("Stop",false);
-			integratorMock1.Expect("WaitForExit");
-			integratorMock2.Expect("Stop",false);
-			integratorMock2.Expect("WaitForExit");
+			integratorMock1.Setup(integrator => integrator.Stop(false)).Verifiable();
+			integratorMock1.Setup(integrator => integrator.WaitForExit()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Stop(false)).Verifiable();
+			integratorMock2.Setup(integrator => integrator.WaitForExit()).Verifiable();
 
 			server.Stop();
 
@@ -180,15 +172,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CallingAbortStopsIntegratorsAndWaitsForThemToFinish()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
-			integratorMock1.Expect("Abort");
-			integratorMock1.Expect("WaitForExit");
-			integratorMock2.Expect("Abort");
-			integratorMock2.Expect("WaitForExit");
+			integratorMock1.Setup(integrator => integrator.Abort()).Verifiable();
+			integratorMock1.Setup(integrator => integrator.WaitForExit()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Abort()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.WaitForExit()).Verifiable();
 
 			server.Abort();
 
@@ -198,28 +190,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void OnRestartKillAllIntegratorsRefreshConfigAndStartupNewIntegrators()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
-			integratorMock1.Expect("Stop",true);
-			integratorMock1.Expect("WaitForExit");
-			integratorMock2.Expect("Stop",true);
-			integratorMock2.Expect("WaitForExit");
+			integratorMock1.Setup(integrator => integrator.Stop(true)).Verifiable();
+			integratorMock1.Setup(integrator => integrator.WaitForExit()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Stop(true)).Verifiable();
+			integratorMock2.Setup(integrator => integrator.WaitForExit()).Verifiable();
 
 			configuration = new Configuration();
 			configuration.AddProject(project1);
 			integratorList = new ProjectIntegratorList();
 			integratorList.Add(integrator1);
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-
-			integratorMock1.Expect("Start");
-			integratorMock2.ExpectNoCall("Start");
+			configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+			projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+				.Returns(integratorList).Verifiable();
 
 			server.Restart();
 
+			integratorMock1.Verify(integrator => integrator.Start(), Times.Exactly(2));
+			integratorMock2.Verify(integrator => integrator.Start(), Times.Exactly(1));
 			VerifyAll();
 		}
 
@@ -266,13 +258,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ForceBuildForProject()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
             var parameters = new Dictionary<string, string>();
-            integratorMock1.Expect("Request", new IntegrationRequestConstraint { Condition = BuildCondition.ForceBuild });
+            integratorMock1.Setup(integrator => integrator.Request(It.Is<IntegrationRequest>(r => r.BuildCondition == BuildCondition.ForceBuild))).Verifiable();
 
             server.CruiseManager.ForceBuild("Project 1", "BuildForcer");
 
@@ -289,12 +281,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void WaitForExitForProject()
 		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
+			integratorMock1.Setup(integrator => integrator.Start()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
 
 			server.Start();
 
-			integratorMock1.Expect("WaitForExit");
+			integratorMock1.Setup(integrator => integrator.WaitForExit()).Verifiable();
 
 			server.CruiseManager.WaitForExit("Project 1");
 
@@ -304,14 +296,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldOnlyDisposeOnce()
 		{
-			integratorMock1.Expect("Abort");
-			integratorMock2.Expect("Abort");
+			integratorMock1.Setup(integrator => integrator.Abort()).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Abort()).Verifiable();
 			((IDisposable) server).Dispose();
 
-			integratorMock1.ExpectNoCall("Abort");
-			integratorMock2.ExpectNoCall("Abort");
 			((IDisposable) server).Dispose();
 
+			integratorMock1.Verify(integrator => integrator.Abort(), Times.Once());
+			integratorMock2.Verify(integrator => integrator.Abort(), Times.Once());
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
@@ -326,8 +318,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StopSpecificProject()
 		{
-            stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
-            integratorMock1.Expect("Stop",false);
+            stateManagerMock.Setup(manager => manager.RecordProjectAsStopped("Project 1")).Verifiable();
+            integratorMock1.Setup(integrator => integrator.Stop(false)).Verifiable();
 			server.CruiseManager.Stop("Project 1");
 			integratorMock1.Verify();
             stateManagerMock.Verify();
@@ -343,8 +335,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartSpecificProject()
 		{
-            stateManagerMock.Expect("RecordProjectAsStartable", "Project 2");
-			integratorMock2.Expect("Start");
+            stateManagerMock.Setup(manager => manager.RecordProjectAsStartable("Project 2")).Verifiable();
+			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
             server.CruiseManager.Start("Project 2");
 			integratorMock2.Verify();
             stateManagerMock.Verify();
@@ -357,7 +349,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Source = Environment.MachineName;
 			IntegrationRequest request = Request(BuildCondition.IfModificationExists);
             Source = oldSource;
-			integratorMock2.Expect("Request", request);
+			integratorMock2.Setup(integrator => integrator.Request(request)).Verifiable();
             server.CruiseManager.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
@@ -654,12 +646,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             // Initialise a new cruise server with the new integrator
             integratorList.Add(integrator4);
-            configServiceMock.ExpectAndReturn("Load", configuration);
-            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
-                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
-                                      (IProjectSerializer)projectSerializerMock.MockInstance,
-									  (IProjectStateManager)stateManagerMock.MockInstance,
+            configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+            projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+                .Returns(integratorList).Verifiable();
+            server = new CruiseServer((IConfigurationService)configServiceMock.Object,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.Object,
+                                      (IProjectSerializer)projectSerializerMock.Object,
+									  (IProjectStateManager)stateManagerMock.Object,
 									  fileSystem,
 									  executionEnvironment,
                                       null);
@@ -692,12 +685,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             // Initialise a new cruise server with the new integrator
             integratorList.Add(integrator4);
-            configServiceMock.ExpectAndReturn("Load", configuration);
-            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
-                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
-                                      (IProjectSerializer)projectSerializerMock.MockInstance,
-									  (IProjectStateManager)stateManagerMock.MockInstance,
+            configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+            projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+                .Returns(integratorList).Verifiable();
+            server = new CruiseServer((IConfigurationService)configServiceMock.Object,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.Object,
+                                      (IProjectSerializer)projectSerializerMock.Object,
+									  (IProjectStateManager)stateManagerMock.Object,
 									  fileSystem,
 									  executionEnvironment,
                                       null);
@@ -725,12 +719,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.ServerExtensionStub,ThoughtWorks.CruiseControl.UnitTests";
             extensions.Add(extensionStub);
 
-            configServiceMock.ExpectAndReturn("Load", configuration);
-            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
-                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
-                                      (IProjectSerializer)projectSerializerMock.MockInstance,
-									  (IProjectStateManager)stateManagerMock.MockInstance,
+            configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+            projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+                .Returns(integratorList).Verifiable();
+            server = new CruiseServer((IConfigurationService)configServiceMock.Object,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.Object,
+                                      (IProjectSerializer)projectSerializerMock.Object,
+									  (IProjectStateManager)stateManagerMock.Object,
 									  fileSystem,
 									  executionEnvironment,
                                       extensions);
@@ -751,16 +746,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.Garbage,ThoughtWorks.CruiseControl.UnitTests";
             extensions.Add(extensionStub);
 
-            configServiceMock.ExpectAndReturn("Load", configuration);
-            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+            projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+                .Returns(integratorList).Verifiable();
 
             Assert.That(delegate
                             {
-                                new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
+                                new CruiseServer((IConfigurationService) configServiceMock.Object,
                                                  (IProjectIntegratorListFactory)
-                                                 projectIntegratorListFactoryMock.MockInstance,
-                                                 (IProjectSerializer) projectSerializerMock.MockInstance,
-                                                 (IProjectStateManager) stateManagerMock.MockInstance,
+                                                 projectIntegratorListFactoryMock.Object,
+                                                 (IProjectSerializer) projectSerializerMock.Object,
+                                                 (IProjectStateManager) stateManagerMock.Object,
                                                  fileSystem,
                                                  executionEnvironment,
                                                  extensions);
@@ -777,12 +773,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.ServerExtensionStub,ThoughtWorks.CruiseControl.UnitTests";
             extensions.Add(extensionStub);
 
-            configServiceMock.ExpectAndReturn("Load", configuration);
-            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
-                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
-                                      (IProjectSerializer)projectSerializerMock.MockInstance,
-									  (IProjectStateManager)stateManagerMock.MockInstance,
+            configServiceMock.Setup(service => service.Load()).Returns(configuration).Verifiable();
+            projectIntegratorListFactoryMock.Setup(factory => factory.CreateProjectIntegrators(configuration.Projects, It.IsAny<IntegrationQueueSet>()))
+                .Returns(integratorList).Verifiable();
+            server = new CruiseServer((IConfigurationService)configServiceMock.Object,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.Object,
+                                      (IProjectSerializer)projectSerializerMock.Object,
+									  (IProjectStateManager)stateManagerMock.Object,
 									  fileSystem,
 									  executionEnvironment,
                                       extensions);
@@ -948,33 +945,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             }
 
             return securityManagerMock;
-        }
-    }
-
-    public class IntegrationRequestConstraint : BaseConstraint
-    {
-        public BuildCondition Condition { get; set; }
-        private string message = null;
-
-        public override bool Eval(object val)
-        {
-            if (val is IntegrationRequest)
-            {
-                if (!string.Equals(Condition, (val as IntegrationRequest).BuildCondition))
-                {
-                    message = "Conditions do not match";
-                }
-            }
-            else
-            {
-                message = "Expected an IntegrationRequest";
-            }
-            return (message == null);
-        }
-
-        public override string Message
-        {
-            get { return message; }
         }
     }
 }

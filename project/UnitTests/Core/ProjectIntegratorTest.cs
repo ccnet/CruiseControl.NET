@@ -1,16 +1,15 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using NMock.Constraints;
+using System.Threading;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.Remote.Events;
-using System.Threading;
-using System;
-using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -19,8 +18,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		private const string TestQueueName = "projectQueue";
 	    private static readonly string tempDir = Path.GetTempPath() + Assembly.GetExecutingAssembly().FullName + "\\";
-		private LatchMock integrationTriggerMock;
-		private LatchMock projectMock;
+		private Mock<ITrigger> integrationTriggerMock;
+		private Mock<IProject> projectMock;
 		private ProjectIntegrator integrator;
 		private IntegrationQueueSet integrationQueues;
 		private IIntegrationQueue integrationQueue;
@@ -31,21 +30,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		public void SetUp()
 		{
-			integrationTriggerMock = new LatchMock(typeof (ITrigger));
-			integrationTriggerMock.Strict = true;
-			projectMock = new LatchMock(typeof (IProject));
-			projectMock.Strict = true;
-			projectMock.SetupResult("Name", "project");
-			projectMock.SetupResult("QueueName", TestQueueName);
-			projectMock.SetupResult("QueuePriority", 0);
-			projectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
-            projectMock.SetupResult("WorkingDirectory", tempWorkingDir1);
-            projectMock.SetupResult("ArtifactDirectory", tempArtifactDir1);
+			integrationTriggerMock = new Mock<ITrigger>(MockBehavior.Strict);
+			projectMock = new Mock<IProject>(MockBehavior.Strict);
+			projectMock.SetupGet(_project => _project.Name).Returns("project");
+			projectMock.SetupGet(_project => _project.QueueName).Returns(TestQueueName);
+			projectMock.SetupGet(_project => _project.QueuePriority).Returns(0);
+			projectMock.SetupGet(_project => _project.Triggers).Returns(integrationTriggerMock.Object);
+            projectMock.SetupGet(_project => _project.WorkingDirectory).Returns(tempWorkingDir1);
+            projectMock.SetupGet(_project => _project.ArtifactDirectory).Returns(tempArtifactDir1);
 
 			integrationQueues = new IntegrationQueueSet();
             integrationQueues.Add(TestQueueName, new DefaultQueueConfiguration(TestQueueName));
 			integrationQueue = integrationQueues[TestQueueName];
-			integrator = new ProjectIntegrator((IProject) projectMock.MockInstance, integrationQueue);
+			integrator = new ProjectIntegrator((IProject) projectMock.Object, integrationQueue);
 		}
 
 		[TearDown]
@@ -71,88 +68,92 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldContinueRunningIfNotToldToStop()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldStopWhenStoppedExternally()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 
 			integrator.Stop(false);
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void StartMultipleTimes()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
 			integrator.Start();
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			integrator.Stop(false);
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void RestartIntegrator()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			integrator.Stop(false);
 			integrator.WaitForExit();
 
-			integrationTriggerMock.ResetLatch();
+			latchHelper.ResetLatch();
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			integrator.Stop(false);
 			integrator.WaitForExit();
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void StopUnstartedIntegrator()
 		{
-			integrationTriggerMock.ExpectNoCall("Fire");
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
-
 			integrator.Stop(false);
 			Assert.AreEqual(ProjectIntegratorState.Stopping, integrator.State);
+
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.Fire(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
@@ -161,16 +162,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			string exceptionMessage = "Intentional exception";
 
-			integrationTriggerMock.ExpectAndReturn("Fire", ForceBuildRequest());
-			projectMock.Expect("NotifyPendingState");
-			projectMock.ExpectAndThrow("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
-			projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.Expect("IntegrationCompleted");
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+			projectMock.Setup(project => project.Integrate(It.Is<IntegrationRequest>(r => r.BuildCondition == BuildCondition.ForceBuild))).Throws(new CruiseControlException(exceptionMessage)).Verifiable();
+			LatchHelper latchHelper = new LatchHelper();
+			projectMock.Setup(project => project.NotifySleepingState()).Callback(() => latchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
 
 			integrator.Start();
-			projectMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			integrator.Stop(false);
 			integrator.WaitForExit();
@@ -181,49 +183,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void Abort()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			integrator.Abort();
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void TerminateWhenProjectIsntStarted()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Abort();
 			Assert.AreEqual(ProjectIntegratorState.Unknown, integrator.State);
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void TerminateCalledTwice()
 		{
-			integrationTriggerMock.SetupResultAndSignal("Fire", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
+			LatchHelper latchHelper = new LatchHelper();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => latchHelper.SetLatch()).Returns(() => null);
 
 			integrator.Start();
-			integrationTriggerMock.WaitForSignal();
+			latchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			integrator.Abort();
 			integrator.Abort();
+			projectMock.Verify(project => project.NotifyPendingState(), Times.Never);
+			projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Never);
+			projectMock.Verify(project => project.NotifySleepingState(), Times.Never);
+			integrationTriggerMock.Verify(trigger => trigger.IntegrationCompleted(), Times.Never);
 			VerifyAll();
 		}
 
@@ -231,21 +236,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [Ignore("can not get to work consistently, is handled in integrationtests")]
 		public void ForceBuild()
 		{
-			integrationTriggerMock.ExpectNoCall("Fire");
-			projectMock.Expect("Integrate", new HasForceBuildCondition());
-			projectMock.Expect("NotifyPendingState");
-			projectMock.ExpectAndSignal("NotifySleepingState");
-			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+			LatchHelper projectLatchHelper = new LatchHelper();
+			projectMock.Setup(project => project.Integrate(It.Is<IntegrationRequest>(r => r.BuildCondition == BuildCondition.ForceBuild))).Verifiable();
+			projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+			projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
 		    integrator.Start();
             
-            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Verifiable();
             var parameters = new Dictionary<string, string>();
             integrator.ForceBuild("BuildForcer", parameters);
-			integrationTriggerMock.WaitForSignal();
-			projectMock.WaitForSignal();
+			integrationTriggerLatchHelper.WaitForSignal();
+			projectLatchHelper.WaitForSignal();
 			VerifyAll();
+			projectMock.VerifyNoOtherCalls();
+			integrationTriggerMock.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -254,16 +261,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			
-            projectMock.Expect("NotifyPendingState");
-			projectMock.Expect("Integrate", request);
-			projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+			LatchHelper projectLatchHelper = new LatchHelper();
+            projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+			projectMock.Setup(project => project.Integrate(request)).Verifiable();
+			projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Verifiable();
 		    integrator.Start();
             integrator.Request(request);
-			integrationTriggerMock.WaitForSignal();
-			projectMock.WaitForSignal();
+			integrationTriggerLatchHelper.WaitForSignal();
+			projectLatchHelper.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			VerifyAll();
 		}
@@ -273,17 +282,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldClearRequestQueueAsSoonAsRequestIsProcessed()
 		{
             IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
-			projectMock.Expect("Integrate", request);
-			projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.Expect("IntegrationCompleted");
-			integrationTriggerMock.ExpectAndReturnAndSignal("Fire", null);
+			LatchHelper projectLatchHelper = new LatchHelper();
+			projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+			projectMock.Setup(project => project.Integrate(request)).Verifiable();
+			projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			integrationTriggerMock.Setup(trigger => trigger.Fire()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Returns(() => null).Verifiable();
 		    integrator.Start();
 			integrator.Request(request);
-			projectMock.WaitForSignal();
-			integrationTriggerMock.WaitForSignal();
+			projectLatchHelper.WaitForSignal();
+			integrationTriggerLatchHelper.WaitForSignal();
 			VerifyAll();
 		}
 
@@ -300,19 +311,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CancelPendingRequestRemovesPendingItems()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 
 			int queuedItemCount = integrationQueue.GetQueuedIntegrations().Length;
 			Assert.AreEqual(2, queuedItemCount);
-			integrationTriggerMock.Expect("IntegrationCompleted");
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
 
 			integrator.CancelPendingRequest();
 
@@ -320,15 +330,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(1, queuedItemCount);
 
 			VerifyAll();
+			projectMock.Verify(_project => _project.NotifyPendingState(), Times.Once);
 		}
 
 		[Test]
 		public void FirstBuildOfProjectShouldSetToPending()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			VerifyAll();
@@ -337,28 +348,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void SecondBuildOfProjectShouldNotSetToPendingWhenQueued()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.ExpectNoCall("NotifyPendingState");
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 			VerifyAll();
+			projectMock.Verify(_project => _project.NotifyPendingState(), Times.Once);
 		}
 
 		[Test]
 		public void CompletingOnlyQueueBuildGoesToSleepingState()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
-			integrationTriggerMock.Expect("IntegrationCompleted");
-			projectMock.Expect("NotifySleepingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			projectMock.Setup(_project => _project.NotifySleepingState()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			// Simulate first build completed by dequeuing it to invoke notifcation.
@@ -369,16 +380,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CompletingWithPendingQueueBuildGoesToPendingState()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 
 			// As first build completes we go to pending as still another build on queue
-			integrationTriggerMock.Expect("IntegrationCompleted");
-			projectMock.Expect("NotifyPendingState");
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
@@ -391,18 +402,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CompletingAllPendingQueueBuildsGoesToPendingState()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			// As first build completes we go to pending as still another build on queue
-			integrationTriggerMock.Expect("IntegrationCompleted");
-			projectMock.Expect("NotifyPendingState");
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 			// As second build completes, we can go to sleeping state
-			integrationTriggerMock.Expect("IntegrationCompleted");
-			projectMock.Expect("NotifySleepingState");
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			projectMock.Setup(_project => _project.NotifySleepingState()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
@@ -417,51 +428,50 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CancellingAPendingRequestWhileBuildingIgnoresState()
 		{
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject project = (IProject) projectMock.Object;
 
             IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			// As pending build is cancelled we should not alter state
-			projectMock.ExpectNoCall("NotifyPendingState");
-			projectMock.ExpectNoCall("NotifySleepingState");
-			integrationTriggerMock.Expect("IntegrationCompleted");
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 			// Cancel second build project on queue
 			integrator.CancelPendingRequest();
-			
+
+			projectMock.Verify(_project => _project.NotifyPendingState(), Times.Once);
+			projectMock.Verify(_project => _project.NotifySleepingState(), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void CancellingAPendingRequestWhileNotBuildingGoesToSleeping()
 		{
-			LatchMock otherProjectMock = new LatchMock(typeof (IProject));
-			otherProjectMock.Strict = true;
-			otherProjectMock.SetupResult("Name", "otherProject");
-			otherProjectMock.SetupResult("QueueName", TestQueueName);
-			otherProjectMock.SetupResult("QueuePriority", 0);
-			otherProjectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
-            otherProjectMock.SetupResult("WorkingDirectory", tempDir + "tempWorkingDir2");
-            otherProjectMock.SetupResult("ArtifactDirectory", tempDir + "tempArtifactDir2");
+			var otherProjectMock = new Mock<IProject>(MockBehavior.Strict);
+			otherProjectMock.SetupGet(_project => _project.Name).Returns("otherProject");
+			otherProjectMock.SetupGet(_project => _project.QueueName).Returns(TestQueueName);
+			otherProjectMock.SetupGet(_project => _project.QueuePriority).Returns(0);
+			otherProjectMock.SetupGet(_project => _project.Triggers).Returns(integrationTriggerMock.Object);
+            otherProjectMock.SetupGet(_project => _project.WorkingDirectory).Returns(tempDir + "tempWorkingDir2");
+            otherProjectMock.SetupGet(_project => _project.ArtifactDirectory).Returns(tempDir + "tempArtifactDir2");
 
-			IProject otherProject = (IProject) otherProjectMock.MockInstance;
-			IProject project = (IProject) projectMock.MockInstance;
+			IProject otherProject = (IProject) otherProjectMock.Object;
+			IProject project = (IProject) projectMock.Object;
 
 			ProjectIntegrator otherIntegrator = new ProjectIntegrator(otherProject, integrationQueue);
 			// Queue up the "otherProject" in the first queue position to build
             IntegrationRequest otherProjectRequest = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			otherProjectMock.Expect("NotifyPendingState");
+			otherProjectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 
 			// Queue up our test project on the same queue as so it goes to pending
             IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
-			projectMock.Expect("NotifyPendingState");
+			projectMock.Setup(_project => _project.NotifyPendingState()).Verifiable();
 			// Cancelling the pending request should revert status to sleeping
-			projectMock.Expect("NotifySleepingState");
-			integrationTriggerMock.Expect("IntegrationCompleted");
+			projectMock.Setup(_project => _project.NotifySleepingState()).Verifiable();
+			integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(otherProject, otherProjectRequest, otherIntegrator));
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
@@ -477,7 +487,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string enforcer = "BuildForcer";
             IntegrationResult result = new IntegrationResult();
-            result.ProjectName = (projectMock.MockInstance as IProject).Name;
+            result.ProjectName = (projectMock.Object as IProject).Name;
             result.Status = IntegrationStatus.Success;
             // The following latch is needed to ensure the end assertions are not called before
             // the events have been fired. Because of the multi-threaded nature of the integrators
@@ -498,19 +508,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 latch.Set();
             };
 
-            integrationTriggerMock.Expect("Fire");
-            projectMock.ExpectAndReturn("Integrate", result, new HasForceBuildCondition());
-            projectMock.Expect("NotifyPendingState");
-            projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.ExpectNoCall("Integrate", typeof(IntegrationRequest));
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.Fire()).Verifiable();
+            LatchHelper projectLatchHelper = new LatchHelper();
+            projectMock.Setup(project => project.Integrate(It.Is<IntegrationRequest>(r => r.BuildCondition == BuildCondition.ForceBuild))).Returns(result).Verifiable();
+            projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+            projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Verifiable();
             var parameters = new Dictionary<string, string>();
             integrator.Start();
             integrator.ForceBuild(enforcer, parameters);
-            integrationTriggerMock.WaitForSignal();
-            projectMock.WaitForSignal();
+            integrationTriggerLatchHelper.WaitForSignal();
+            projectLatchHelper.WaitForSignal();
+            projectMock.Verify(project => project.Integrate(It.IsAny<IntegrationRequest>()), Times.Once);
             VerifyAll();
 
             latch.WaitOne(2000, false);
@@ -525,7 +537,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string enforcer = "BuildForcer";
             IntegrationResult result = new IntegrationResult();
-            result.ProjectName = (projectMock.MockInstance as IProject).Name;
+            result.ProjectName = (projectMock.Object as IProject).Name;
             result.Status = IntegrationStatus.Success;
             // The following latch is needed to ensure the end assertions are not called before
             // the events have been fired. Because of the multi-threaded nature of the integrators
@@ -552,20 +564,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 latch.Set();
             };
 
-            integrationTriggerMock.Expect("Fire");
-            projectMock.ExpectAndReturn("Integrate", result, new HasForceBuildCondition());
-            projectMock.Expect("NotifyPendingState");
-            projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.ExpectNoCall("Integrate", typeof(IntegrationRequest));
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.Fire()).Verifiable();
+            LatchHelper projectLatchHelper = new LatchHelper();
+            projectMock.Setup(project => project.Integrate(It.Is<IntegrationRequest>(r => r.BuildCondition == BuildCondition.ForceBuild))).Returns(result).Verifiable();
+            projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+            projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Verifiable();
             var parameters = new Dictionary<string, string>();
             integrator.Start();
             integrator.ForceBuild(enforcer, parameters);
-            integrationTriggerMock.WaitForSignal();
-            projectMock.WaitForSignal();
+            integrationTriggerLatchHelper.WaitForSignal();
+            projectLatchHelper.WaitForSignal();
             VerifyAll();
+            projectMock.VerifyNoOtherCalls();
 
             latch.WaitOne(2000, false);
             Assert.IsTrue(eventIntegrationStartedFired);
@@ -579,7 +593,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string enforcer = "BuildForcer";
             IntegrationResult result = new IntegrationResult();
-            result.ProjectName = (projectMock.MockInstance as IProject).Name;
+            result.ProjectName = (projectMock.Object as IProject).Name;
             result.Status = IntegrationStatus.Success;
             // The following latch is needed to ensure the end assertions are not called before
             // the events have been fired. Because of the multi-threaded nature of the integrators
@@ -601,20 +615,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 latch.Set();
             };
 
-            integrationTriggerMock.Expect("Fire");
-            projectMock.ExpectNoCall("Integrate", typeof(IntegrationRequest));
-            projectMock.Expect("NotifyPendingState");
-            projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.ExpectNoCall("Integrate", typeof(IntegrationRequest));
-            projectMock.SetupResult("MaxSourceControlRetries", 5);
-            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+            LatchHelper integrationTriggerLatchHelper = new LatchHelper();
+            integrationTriggerMock.Setup(trigger => trigger.Fire()).Verifiable();
+            LatchHelper projectLatchHelper = new LatchHelper();
+            projectMock.Setup(project => project.NotifyPendingState()).Verifiable();
+            projectMock.Setup(project => project.NotifySleepingState()).Callback(() => projectLatchHelper.SetLatch()).Verifiable();
+            projectMock.SetupGet(project => project.MaxSourceControlRetries).Returns(5);
+            projectMock.SetupGet(project => project.SourceControlErrorHandling).Returns(ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+            integrationTriggerMock.Setup(trigger => trigger.IntegrationCompleted()).Callback(() => integrationTriggerLatchHelper.SetLatch()).Verifiable();
             var parameters = new Dictionary<string, string>();
             integrator.Start();
             integrator.ForceBuild(enforcer, parameters);
-            integrationTriggerMock.WaitForSignal();
-            projectMock.WaitForSignal();
+            integrationTriggerLatchHelper.WaitForSignal();
+            projectLatchHelper.WaitForSignal();
             VerifyAll();
+            projectMock.VerifyNoOtherCalls();
 
             latch.WaitOne(2000, false);
             Assert.IsTrue(eventIntegrationStartedFired);
@@ -622,17 +637,4 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(IntegrationStatus.Cancelled, status);
         }
     }
-
-	public class HasForceBuildCondition : BaseConstraint
-	{
-		public override bool Eval(object val)
-		{
-			return ((IntegrationRequest) val).BuildCondition == BuildCondition.ForceBuild;
-		}
-
-		public override string Message
-		{
-			get { return "IntegrationRequest is not ForceBuild."; }
-		}
-	}
 }

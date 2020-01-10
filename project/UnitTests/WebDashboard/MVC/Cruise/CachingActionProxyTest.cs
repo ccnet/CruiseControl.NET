@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -9,18 +9,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class CachingActionProxyTest
 	{
-		private DynamicMock mockCache;
-		private DynamicMock mockAction;
+		private Mock<IResponseCache> mockCache;
+		private Mock<IAction> mockAction;
 		private CachingActionProxy proxy;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockCache = new DynamicMock(typeof (IResponseCache));
-			mockCache.Strict = true;
-			mockAction = new DynamicMock(typeof (IAction));
-			mockAction.Strict = true;
-			proxy = new CachingActionProxy((IAction) mockAction.MockInstance, (IResponseCache) mockCache.MockInstance);
+			mockCache = new Mock<IResponseCache>(MockBehavior.Strict);
+			mockAction = new Mock<IAction>(MockBehavior.Strict);
+			proxy = new CachingActionProxy((IAction) mockAction.Object, (IResponseCache) mockCache.Object);
 		}
 
 		private void VerifyAll()
@@ -35,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			IResponse expectedResponse = new HtmlFragmentResponse("<html />");
 			IRequest request = CreateRequest();
 
-			mockCache.ExpectAndReturn("Get", expectedResponse, request);
+			mockCache.Setup(cache => cache.Get(request)).Returns(expectedResponse).Verifiable();
 
 			IResponse actualResponse = proxy.Execute(request);
 			Assert.AreSame(expectedResponse, actualResponse);
@@ -54,9 +52,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			IResponse generatedResponse = new HtmlFragmentResponse("<html />");
 			IRequest request = CreateRequest();
 
-			mockCache.ExpectAndReturn("Get", null, request);
-			mockAction.ExpectAndReturn("Execute", generatedResponse, request);
-			mockCache.Expect("Insert", request, generatedResponse);
+			mockCache.Setup(cache => cache.Get(request)).Returns(() => null).Verifiable();
+			mockAction.Setup(action => action.Execute(request)).Returns(generatedResponse).Verifiable();
+			mockCache.Setup(cache => cache.Insert(request, generatedResponse)).Verifiable();
 
 			IResponse actualResponse = proxy.Execute(request);
 			Assert.AreSame(generatedResponse, actualResponse);

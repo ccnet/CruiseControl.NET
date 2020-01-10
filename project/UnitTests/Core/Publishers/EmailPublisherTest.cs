@@ -1,16 +1,14 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Net.Mail;
 using System.Xml;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -18,20 +16,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	public class EmailPublisherTest : CustomAssertion
 	{
 		private EmailPublisher publisher;
-		private IMock mockGateway;
+		private Mock<EmailGateway> mockGateway;
 
 		[SetUp]
 		public void SetUp()
 		{
 			publisher = EmailPublisherMother.Create();
-			mockGateway = new DynamicMock(typeof(EmailGateway));
-			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
+			mockGateway = new Mock<EmailGateway>();
+			publisher.EmailGateway = (EmailGateway) mockGateway.Object;
 		}
 
 		[Test]
 		public void SendMessage()
 		{
-            mockGateway.Expect("Send", new MailMessageValidator());
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual("from@foo.com", message.From.Address);
+                    Assert.AreEqual("to@bar.com", message.To[0].Address);
+                    Assert.AreEqual("replyto@bar.com", message.ReplyTo.Address);
+                    Assert.AreEqual("test subject", message.Subject);
+                    Assert.AreEqual("test message", message.Body);
+                }).Verifiable();
 
 			publisher.SendMessage("from@foo.com", "to@bar.com", "replyto@bar.com", "test subject", "test message", "workingDir");
             mockGateway.Verify();
@@ -40,23 +45,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	    [Test]
 		public void ShouldNotSendMessageIfRecipientIsNotSpecifiedAndBuildIsSuccessful()
 		{
-            mockGateway.ExpectNoCall("Send", typeof(MailMessage));
 			publisher = new EmailPublisher();
-			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
+			publisher.EmailGateway = (EmailGateway) mockGateway.Object;
             publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
             publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
 			publisher.Run(IntegrationResultMother.CreateStillSuccessful());
             mockGateway.Verify();
+            mockGateway.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void ShouldSendMessageIfRecipientIsNotSpecifiedAndBuildFailed()
 		{
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(1, message.To.Count);
+                }).Verifiable();
 
-			publisher = new EmailPublisher();
+            publisher = new EmailPublisher();
 		    publisher.FromAddress = "from@foo.com";
-			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
+			publisher.EmailGateway = (EmailGateway) mockGateway.Object;
             publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
             publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
 			publisher.Run(IntegrationResultMother.CreateFailed());
@@ -66,11 +74,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	    [Test]
 		public void ShouldSendMessageIfBuildFailed()
 		{
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(1, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
+			publisher.EmailGateway = (EmailGateway) mockGateway.Object;
             publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
             publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
 			publisher.Run(IntegrationResultMother.CreateFailed() );
@@ -81,11 +92,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
 		public void ShouldSendMessageIfBuildFailedAndPreviousFailed()
 		{
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
-            
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(1, message.To.Count);
+                }).Verifiable();
+
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
 
             publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
             publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
@@ -100,11 +114,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldSendMessageIfBuildFailedAndPreviousOK()
 		{
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
-            
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(2, message.To.Count);
+                }).Verifiable();
+
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
 
             publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
             publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
@@ -119,11 +136,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void ShouldSendMessageIfBuildSuccessful()
         {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(1, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
             publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
             publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
             publisher.Run(IntegrationResultMother.CreateSuccessful());
@@ -133,11 +153,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void ShouldSendMessageIfBuildSuccessfulAndPreviousFailed()
         {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(2, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
 
             publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
             publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
@@ -154,11 +177,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void ShouldSendMessageIfBuildSuccessfulAndPreviousSuccessful()
         {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(1, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
 
             publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
             publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
@@ -173,11 +199,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void ShouldSendToModifiersAndFailureUsers()
         {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(2, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
 
             publisher.IndexedEmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
             publisher.IndexedEmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
@@ -200,11 +229,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void ShouldSendFixedMailToFailureUsersWithModificationNotificationSetToFailedAndFixed()
         {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).
+                Callback<MailMessage>(message => {
+                    Assert.AreEqual(2, message.To.Count);
+                }).Verifiable();
 
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailGateway = (EmailGateway)mockGateway.Object;
             publisher.ModifierNotificationTypes = new EmailGroup.NotificationType[2];
             publisher.ModifierNotificationTypes[0] = EmailGroup.NotificationType.Failed;
             publisher.ModifierNotificationTypes[1] = EmailGroup.NotificationType.Fixed;
@@ -249,9 +281,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void IfThereIsAnExceptionBuildMessageShouldPublishExceptionMessage()
 		{
-			DynamicMock mock = new DynamicMock(typeof(IMessageBuilder));
-			mock.ExpectAndThrow("BuildMessage", new Exception("oops"), new IsAnything());
-			publisher = new EmailPublisher((IMessageBuilder) mock.MockInstance);
+			var mock = new Mock<IMessageBuilder>();
+			mock.Setup(builder => builder.BuildMessage(It.IsAny<IIntegrationResult>())).Throws(new Exception("oops")).Verifiable();
+			publisher = new EmailPublisher((IMessageBuilder) mock.Object);
 			string message = publisher.CreateMessage(new IntegrationResult());
 			AssertContains("oops", message);
 		}
@@ -260,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void Publish()
 		{
 //            mockGateway.Expect("MailHost", "mock.gateway.org");
-            mockGateway.Expect("Send", new IsAnything());
+            mockGateway.Setup(gateway => gateway.Send(It.IsAny<MailMessage>())).Verifiable();
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
 			publisher.Run(result);
             mockGateway.Verify();
@@ -307,10 +339,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void Publish_UnknownIntegrationStatus()
 		{
-            mockGateway.ExpectNoCall("Send", typeof(MailMessage));
 			publisher.Run(new IntegrationResult());
 			// verify that no messages are sent if there were no modifications
             mockGateway.Verify();
+            mockGateway.VerifyNoOtherCalls();
 		}
 
 	    [Test]
@@ -421,44 +453,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.IsTrue(actual.IndexOf(result.ExceptionResult.GetType().Name) > 0);
 			Assert.IsTrue(actual.IndexOf("BUILD COMPLETE") == -1); // verify build complete message is not output
 		}
-
-        private class MailMessageValidator : BaseConstraint
-        {
-            public override bool Eval(object val)
-            {
-                MailMessage message = (MailMessage)val;
-                Assert.AreEqual("from@foo.com", message.From.Address);
-                Assert.AreEqual("to@bar.com", message.To[0].Address);
-                Assert.AreEqual("replyto@bar.com", message.ReplyTo.Address);
-                Assert.AreEqual("test subject", message.Subject);
-                Assert.AreEqual("test message", message.Body);
-                return true;
-            }
-
-            public override string Message
-            {
-                get { return "MailMessage does not match!"; }
-            }
-        }
-
-	    private class MailMessageRecipientValidator : BaseConstraint
-	    {
-	        private readonly int recipients;
-
-	        public MailMessageRecipientValidator(int recipients)
-	        {
-	            this.recipients = recipients;
-	        }
-
-	        public override bool Eval(object val)
-	        {
-	            return recipients == ((MailMessage) val).To.Count;
-	        }
-
-	        public override string Message
-	        {
-	            get { return "Invalid number of recipients!"; }
-	        }
-	    }
 	}
 }

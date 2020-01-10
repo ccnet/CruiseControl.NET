@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(DefaultExecutable);
-			task = new ExecutableTask((ProcessExecutor) mockProcessExecutor.MockInstance);
+			task = new ExecutableTask((ProcessExecutor) mockProcessExecutor.Object);
 			task.Executable = DefaultExecutable;
 			task.BuildArgs = DefaultArgs;
 		}
@@ -138,8 +138,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 
 			IntegrationResult result = (IntegrationResult) IntegrationResult();
 			result.Label = "1.0";
@@ -152,7 +153,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.BuildTimeoutSeconds = 222;
 			task.Run(result);
 
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual("test-exe", info.FileName);
 			Assert.AreEqual(222000, info.TimeOut);
 			Assert.AreEqual("test-args", info.Arguments);
@@ -203,12 +203,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 
 			task.Run(result);
 
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 			Verify();
 		}
@@ -216,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecutableOutputShouldBeBuildResults()
         {
-            ExecutableTask xmlTestTask = new ExecutableTask((ProcessExecutor)mockProcessExecutor.MockInstance);
+            ExecutableTask xmlTestTask = new ExecutableTask((ProcessExecutor)mockProcessExecutor.Object);
             xmlTestTask.Executable = DefaultExecutable;
             xmlTestTask.BuildArgs = DefaultArgs;
             ExpectToExecuteArguments(DefaultArgs);
@@ -258,8 +258,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSuccessExitCodesToProcessExecutor()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 
 			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			result.Label = "1.0";
@@ -269,8 +270,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task.SuccessExitCodes = "0,1,3,5";
 			task.Run(result);
-
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 
 			Assert.IsTrue(info.ProcessSuccessful(0));
 			Assert.IsTrue(info.ProcessSuccessful(1));

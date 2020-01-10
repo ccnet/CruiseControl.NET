@@ -1,10 +1,10 @@
+using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -60,14 +60,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceIfAutoGetSourceTrue()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-			AccuRev accurev = new AccuRev((ProcessExecutor) executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+			AccuRev accurev = new AccuRev((ProcessExecutor) executor.Object);
 			accurev.AutoGetSource = true;
 
 			ProcessInfo expectedProcessRequest = new ProcessInfo("accurev.exe", "update");
 			expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			accurev.GetSource(new IntegrationResult());
 			executor.Verify();
 		}
@@ -75,26 +75,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceFalse()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-			AccuRev accurev = new AccuRev((ProcessExecutor) executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+			AccuRev accurev = new AccuRev((ProcessExecutor) executor.Object);
 			accurev.AutoGetSource = false;
 
-			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 			accurev.GetSource(new IntegrationResult());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 
         [Test]
         public void ShouldUpdateSourceToHighestKnownModification()
         {
-            DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-            AccuRev accurev = new AccuRev((ProcessExecutor)executor.MockInstance);
+            var executor = new Mock<ProcessExecutor>();
+            AccuRev accurev = new AccuRev((ProcessExecutor)executor.Object);
             accurev.AutoGetSource = true;
 
             ProcessInfo expectedProcessRequest = new ProcessInfo("accurev.exe", "update -t 10");
             expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-            executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+            executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
             IntegrationResult result = new IntegrationResult();
             result.Modifications = new Modification[2];
             result.Modifications[0] = new Modification
@@ -116,14 +116,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ShouldUpdateSourceToCurrentIfNoModifications()
         {
-            DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-            AccuRev accurev = new AccuRev((ProcessExecutor)executor.MockInstance);
+            var executor = new Mock<ProcessExecutor>();
+            AccuRev accurev = new AccuRev((ProcessExecutor)executor.Object);
             accurev.AutoGetSource = true;
 
             ProcessInfo expectedProcessRequest = new ProcessInfo("accurev.exe", "update");  // Note: No "-t whatever"
             expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-            executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+            executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
             IntegrationResult result = new IntegrationResult();
             accurev.GetSource(result);
             executor.Verify();

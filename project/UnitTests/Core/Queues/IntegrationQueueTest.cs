@@ -1,10 +1,10 @@
+using System;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
-using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 {
@@ -13,12 +13,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 	{
 		private const string TestQueueName = "ProjectQueueOne";
 
-		private LatchMock queueNotifier1Mock;
-		private LatchMock queueNotifier2Mock;
-        private LatchMock queueNotifier3Mock;
-        private LatchMock project1Mock;
-		private LatchMock project2Mock;
-        private LatchMock project3Mock;
+		private Mock<IIntegrationQueueNotifier> queueNotifier1Mock;
+		private Mock<IIntegrationQueueNotifier> queueNotifier2Mock;
+        private Mock<IIntegrationQueueNotifier> queueNotifier3Mock;
+        private Mock<IProject> project1Mock;
+		private Mock<IProject> project2Mock;
+        private Mock<IProject> project3Mock;
         private IntegrationQueueSet integrationQueues;
 		private IIntegrationQueue integrationQueueUseFirst;
         private IIntegrationQueue integrationQueueReAdd;
@@ -62,44 +62,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             integrationRequestForceBuild = new IntegrationRequest(BuildCondition.ForceBuild, "Test", null);
             integrationRequestIfModificationExists = new IntegrationRequest(BuildCondition.IfModificationExists, "Test", null);
 			
-			project1Mock = new LatchMock(typeof (IProject));
-			project1Mock.Strict = true;
-			project1Mock.SetupResult("Name", "ProjectOne");
-			project1Mock.SetupResult("QueueName", TestQueueName);
-			project1Mock.SetupResult("QueuePriority", 0);
+			project1Mock = new Mock<IProject>(MockBehavior.Strict);
+			project1Mock.SetupGet(project => project.Name).Returns("ProjectOne");
+			project1Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(0);
 			
-			project2Mock = new LatchMock(typeof (IProject));
-			project2Mock.Strict = true;
-			project2Mock.SetupResult("Name", "ProjectTwo");
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			project2Mock.SetupResult("QueuePriority", 0);
+			project2Mock = new Mock<IProject>(MockBehavior.Strict);
+			project2Mock.SetupGet(project => project.Name).Returns("ProjectTwo");
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
 			
-			project3Mock = new LatchMock(typeof (IProject));
-			project3Mock.Strict = true;
-			project3Mock.SetupResult("Name", "ProjectThree");
-			project3Mock.SetupResult("QueueName", TestQueueName);
-			project3Mock.SetupResult("QueuePriority", 1);
+			project3Mock = new Mock<IProject>(MockBehavior.Strict);
+			project3Mock.SetupGet(project => project.Name).Returns("ProjectThree");
+			project3Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project3Mock.SetupGet(project => project.QueuePriority).Returns(1);
 
-			queueNotifier1Mock = new LatchMock(typeof(IIntegrationQueueNotifier));
-			queueNotifier1Mock.Strict = true;
+			queueNotifier1Mock = new Mock<IIntegrationQueueNotifier>(MockBehavior.Strict);
 
-			queueNotifier2Mock = new LatchMock(typeof(IIntegrationQueueNotifier));
-			queueNotifier2Mock.Strict = true;
+			queueNotifier2Mock = new Mock<IIntegrationQueueNotifier>(MockBehavior.Strict);
 
-            queueNotifier3Mock = new LatchMock(typeof(IIntegrationQueueNotifier));
-            queueNotifier3Mock.Strict = true;
+            queueNotifier3Mock = new Mock<IIntegrationQueueNotifier>(MockBehavior.Strict);
 
-            integrationQueueItem1 = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.MockInstance);
+            integrationQueueItem1 = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.Object);
 
-			integrationQueueItem2 = new IntegrationQueueItem((IProject)project2Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier2Mock.MockInstance);
+			integrationQueueItem2 = new IntegrationQueueItem((IProject)project2Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier2Mock.Object);
 
-			integrationQueueItem3 = new IntegrationQueueItem((IProject)project3Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier3Mock.MockInstance);
+			integrationQueueItem3 = new IntegrationQueueItem((IProject)project3Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier3Mock.Object);
 
-            integrationQueueItem4 = new IntegrationQueueItem((IProject)project2Mock.MockInstance,
-                integrationRequestIfModificationExists, (IIntegrationQueueNotifier)queueNotifier2Mock.MockInstance);
+            integrationQueueItem4 = new IntegrationQueueItem((IProject)project2Mock.Object,
+                integrationRequestIfModificationExists, (IIntegrationQueueNotifier)queueNotifier2Mock.Object);
         }
 
 		private void VerifyAll()
@@ -121,8 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void FirstProjectOnQueueShouldIntegrateImmediately()
 		{
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			string[] queueNames = integrationQueues.GetQueueNames();
@@ -134,20 +127,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(integrationQueueItem1, itemsOnQueue[0]);
 
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void SecondIntegrationRequestForQueuedProjectShouldNotStartImmediately()
 		{
 			// Setup the first request
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 			// Add a second request for same project
-			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.MockInstance);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.Object);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(secondQueueItem);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -156,48 +148,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(secondQueueItem, itemsOnQueue[1]);
 			
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void NoMoreThanOnePendingIntegrationForAProject()
 		{
 			// Setup the first request
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 			// Add a second request for same project
-			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.MockInstance);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.Object);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(secondQueueItem);
 			// Try to add a third request for same project
-			IIntegrationQueueItem thirdQueueItem = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.MockInstance);
-			queueNotifier1Mock.ExpectNoCall("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			IIntegrationQueueItem thirdQueueItem = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier1Mock.Object);
 			integrationQueueUseFirst.Enqueue(thirdQueueItem);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
 			Assert.AreEqual(2, itemsOnQueue.Length);
 			Assert.AreSame(integrationQueueItem1, itemsOnQueue[0]);
 			Assert.AreSame(secondQueueItem, itemsOnQueue[1]);
-			
+
+			queueNotifier1Mock.Verify(notifier => notifier.NotifyEnteringIntegrationQueue(), Times.Exactly(2));
+			queueNotifier1Mock.Verify(notifier => notifier.NotifyExitingIntegrationQueue(It.IsAny<bool>()), Times.Exactly(0));
 			VerifyAll();
 		}
-	
+
 		[Test]
 		public void TwoProjectsWithSameQueueNameShouldShareQueue()
 		{
 			// Setup the first project request
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Add a second project request for different project with same queue name
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			string[] queueNames = integrationQueues.GetQueueNames();
@@ -210,13 +199,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(integrationQueueItem2, itemsOnQueue[1]);
 
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
+			queueNotifier2Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void DequeueForSingleQueuedItemClearsQueue()
 		{
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyExitingIntegrationQueue", false);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(false)).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			integrationQueueUseFirst.Dequeue();
@@ -234,14 +225,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void DequeueForMultipleQueuedItemsActivatesNextItemOnQueue()
 		{
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyExitingIntegrationQueue", false);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(false)).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Force second project to be on same queue as the first.
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			integrationQueueUseFirst.Dequeue();
@@ -251,85 +241,83 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(integrationQueueItem2, itemsOnQueue[0]);
 
 			VerifyAll();
+			queueNotifier2Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void RemoveProjectClearsOnlyItemsThatAreForThisProject()
 		{
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyExitingIntegrationQueue", false);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(false)).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Second item is different project but same queue
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			// Third item is same project as the first.
-			IIntegrationQueueItem thirdQueueItem = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier3Mock.MockInstance);
-			queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier3Mock.Expect("NotifyExitingIntegrationQueue", true);
+			IIntegrationQueueItem thirdQueueItem = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier3Mock.Object);
+			queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier3Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(true)).Verifiable();
 			integrationQueueUseFirst.Enqueue(thirdQueueItem);
 
-			integrationQueueUseFirst.RemoveProject((IProject)project1Mock.MockInstance);
+			integrationQueueUseFirst.RemoveProject((IProject)project1Mock.Object);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
 			Assert.AreEqual(1, itemsOnQueue.Length);
 			Assert.AreSame(integrationQueueItem2, itemsOnQueue[0]);
 
 			VerifyAll();
+			queueNotifier2Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void RemovePendingRequestOnly()
 		{
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Second item is same project
-			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier2Mock.MockInstance);
+			IIntegrationQueueItem secondQueueItem = new IntegrationQueueItem((IProject)project1Mock.Object, 
+				integrationRequestForceBuild, (IIntegrationQueueNotifier)queueNotifier2Mock.Object);
 
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.Expect("NotifyExitingIntegrationQueue", true);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(true)).Verifiable();
 			integrationQueueUseFirst.Enqueue(secondQueueItem);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
 			Assert.AreEqual(2, itemsOnQueue.Length);
 
-			integrationQueueUseFirst.RemovePendingRequest((IProject)project1Mock.MockInstance);
+			integrationQueueUseFirst.RemovePendingRequest((IProject)project1Mock.Object);
 
 			itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
 			Assert.AreEqual(1, itemsOnQueue.Length);
 			Assert.AreSame(integrationQueueItem1, itemsOnQueue[0]);
 
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
 		}
-	
+
 		[Test]
 		public void ProjectsWithSamePriorityShouldBeInEntryOrder()
 		{
 			// Setup the first project request
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Add a second project request for different project with same queue name and priority
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			project2Mock.SetupResult("QueuePriority", 1);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project2Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			// Add a third project request for different project with same queue name and priority
-			project3Mock.SetupResult("QueueName", TestQueueName);
-			project3Mock.SetupResult("QueuePriority", 1);
-			queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier3Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project3Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project3Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem3);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -339,30 +327,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(integrationQueueItem3, itemsOnQueue[2]);
 
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
+			queueNotifier2Mock.VerifyNoOtherCalls();
+			queueNotifier3Mock.VerifyNoOtherCalls();
 		}
-	
+
 		[Test]
 		public void ProjectsWithNonZeroPriorityInFrontOfZeroPriority()
 		{
 			// Setup the first project request
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Add a second project request for different project with same queue name
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			project2Mock.SetupResult("QueuePriority", 0);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			// Add a third project request for different project with same queue name
 			// Priority 1 should be before previous entry of priority 0
-			project3Mock.SetupResult("QueueName", TestQueueName);
-			project3Mock.SetupResult("QueuePriority", 1);
-			queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier3Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			project3Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project3Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem3);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -372,12 +360,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreSame(integrationQueueItem2, itemsOnQueue[2]);
 
 			VerifyAll();
+			queueNotifier1Mock.VerifyNoOtherCalls();
+			queueNotifier2Mock.VerifyNoOtherCalls();
+			queueNotifier3Mock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void GetNextRequestIsNullWithNothingOnQueue()
 		{
-			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project1Mock.MockInstance);
+			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project1Mock.Object);
 			Assert.IsNull(ir);
 			VerifyAll();
 		}
@@ -385,11 +376,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void GetNextRequestIsNullWhenFirstQueueItemIsDifferentProject()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project2Mock.MockInstance);
+			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project2Mock.Object);
 			Assert.IsNull(ir);
 			VerifyAll();
 		}
@@ -397,11 +388,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void GetNextRequestSucceedsWhenFirstQueueItemIsThisProject()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project1Mock.MockInstance);
+			IntegrationRequest ir = integrationQueueUseFirst.GetNextRequest((IProject)project1Mock.Object);
 			Assert.AreSame(ir, integrationRequestForceBuild);
 			VerifyAll();
 		}
@@ -409,7 +400,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemPendingOnQueueFalseWhenQueueIsEmpty()
 		{
-			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project1Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project1Mock.Object);
 			Assert.IsFalse(hasItem);
 			VerifyAll();
 		}
@@ -417,11 +408,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemPendingOnQueueFalseWhenProjectNotOnQueue()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project2Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project2Mock.Object);
 			Assert.IsFalse(hasItem);
 			VerifyAll();
 		}
@@ -429,11 +420,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemPendingOnQueueFalseWhenProjectIsJustIntegrating()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project1Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project1Mock.Object);
 			Assert.IsFalse(hasItem);
 			VerifyAll();
 		}
@@ -442,17 +433,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void HasItemPendingOnQueueTrueWhenProjectIsQueued()
 		{
 			// Setup the first project request
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Add a second project request for different project with same queue name
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			project2Mock.SetupResult("QueuePriority", 0);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
-			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project2Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemPendingOnQueue((IProject) project2Mock.Object);
 			Assert.IsTrue(hasItem);
 			VerifyAll();
 		}
@@ -460,7 +451,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemOnQueueFalseWhenQueueIsEmpty()
 		{
-			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project1Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project1Mock.Object);
 			Assert.IsFalse(hasItem);
 			VerifyAll();
 		}
@@ -468,11 +459,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemOnQueueFalseWhenProjectNotOnQueue()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project2Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project2Mock.Object);
 			Assert.IsFalse(hasItem);
 			VerifyAll();
 		}
@@ -480,11 +471,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void HasItemOnQueueTrueWhenProjectIsJustIntegrating()
 		{
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
-			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project1Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project1Mock.Object);
 			Assert.IsTrue(hasItem);
 			VerifyAll();
 		}
@@ -493,17 +484,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void HasItemOnQueueTrueWhenProjectIsQueued()
 		{
 			// Setup the first project request
-			project1Mock.SetupResult("QueuePriority", 1);
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+			queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			// Add a second project request for different project with same queue name
-			project2Mock.SetupResult("QueueName", TestQueueName);
-			project2Mock.SetupResult("QueuePriority", 0);
-			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+			project2Mock.SetupGet(project => project.QueueName).Returns(TestQueueName);
+			project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
-			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project2Mock.MockInstance);
+			bool hasItem = integrationQueueUseFirst.HasItemOnQueue((IProject) project2Mock.Object);
 			Assert.IsTrue(hasItem);
 			VerifyAll();
 		}
@@ -512,28 +503,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         public void AddingADuplicateProjectWithForceBuildReAdds()
         {
             // Setup the first project request
-            project1Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem1);
 
             // Add a second project request for different project with same queue name
-            project2Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem4);
 
             // Add a third project request for different project with same queue name
-            project3Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project3Mock.SetupResult("QueuePriority", 0);
-            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            project3Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project3Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem3);
 
             // Now add the second project request again, but with a force build
-            project2Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-            queueNotifier2Mock.Expect("NotifyExitingIntegrationQueue", true);
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+			queueNotifier2Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(true)).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem2);
 
             // Check the queued items
@@ -547,28 +538,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         public void AddingADuplicateProjectWithForceBuildReAddsToTop()
         {
             // Setup the first project request
-            project1Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAddTop.Name);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAddTop.Enqueue(integrationQueueItem1);
 
             // Add a second project request for different project with same queue name
-            project2Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAddTop.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAddTop.Enqueue(integrationQueueItem4);
 
             // Add a third project request for different project with same queue name
-            project3Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
-            project3Mock.SetupResult("QueuePriority", 0);
-            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            project3Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAddTop.Name);
+            project3Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAddTop.Enqueue(integrationQueueItem3);
 
             // Now add the second project request again, but with a force build
-            project2Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-            queueNotifier2Mock.Expect("NotifyExitingIntegrationQueue", true);
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAddTop.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(true)).Verifiable();
             integrationQueueReAddTop.Enqueue(integrationQueueItem2);
 
             // Check the queued items
@@ -582,28 +573,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         public void AddingADuplicateProjectWithForceBuildReplaces()
         {
             // Setup the first project request
-            project1Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem1);
 
             // Add a second project request for different project with same queue name
-            project2Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem4);
 
             // Add a third project request for different project with same queue name
-            project3Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project3Mock.SetupResult("QueuePriority", 0);
-            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            project3Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project3Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem3);
 
             // Now add the second project request again, but with a force build
-            project2Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-            queueNotifier2Mock.Expect("NotifyExitingIntegrationQueue", true);
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyExitingIntegrationQueue(true)).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem2);
 
             // Check the queued items
@@ -617,26 +608,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         public void AddingADuplicateProjectWithIfModificationExistsDoesNotReAdd()
         {
             // Setup the first project request
-            project1Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem1);
 
             // Add a second project request for different project with same queue name
-            project2Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem4);
 
             // Add a third project request for different project with same queue name
-            project3Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project3Mock.SetupResult("QueuePriority", 0);
-            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            project3Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project3Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReAdd.Enqueue(integrationQueueItem3);
 
             // Now add the second project request again
-            project2Mock.SetupResult("QueueName", integrationQueueReAdd.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReAdd.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
             integrationQueueReAdd.Enqueue(integrationQueueItem4);
 
             // Check the queued items
@@ -650,26 +641,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         public void AddingADuplicateProjectWithIfModificationExistsDoesNotReplace()
         {
             // Setup the first project request
-            project1Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem1);
 
             // Add a second project request for different project with same queue name
-            project2Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
-            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier2Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem4);
 
             // Add a third project request for different project with same queue name
-            project3Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project3Mock.SetupResult("QueuePriority", 0);
-            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            project3Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project3Mock.SetupGet(project => project.QueuePriority).Returns(0);
+            queueNotifier3Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem3);
 
             // Now add the second project request again
-            project2Mock.SetupResult("QueueName", integrationQueueReplace.Name);
-            project2Mock.SetupResult("QueuePriority", 0);
+            project2Mock.SetupGet(project => project.QueueName).Returns(integrationQueueReplace.Name);
+            project2Mock.SetupGet(project => project.QueuePriority).Returns(0);
             integrationQueueReplace.Enqueue(integrationQueueItem4);
 
             // Check the queued items
@@ -748,16 +739,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             IDisposable lock1;
             Assert.IsTrue(integrationQueues[queues[0]].TryLock(out lock1));
 
-            project1Mock.SetupResult("QueueName", queues[1]);
-            project1Mock.SetupResult("QueuePriority", 1);
-            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            project1Mock.SetupGet(project => project.QueueName).Returns(queues[1]);
+            project1Mock.SetupGet(project => project.QueuePriority).Returns(1);
+            queueNotifier1Mock.Setup(notifier => notifier.NotifyEnteringIntegrationQueue()).Verifiable();
             integrationQueueReplace.Enqueue(integrationQueueItem1);
 
-            Assert.IsNull(integrationQueueReplace.GetNextRequest((IProject)project1Mock.MockInstance), "Expected no next request, as queue is locked");
+            Assert.IsNull(integrationQueueReplace.GetNextRequest((IProject)project1Mock.Object), "Expected no next request, as queue is locked");
 
             lock1.Dispose();
 
-            IntegrationRequest next = integrationQueueReplace.GetNextRequest((IProject)project1Mock.MockInstance);
+            IntegrationRequest next = integrationQueueReplace.GetNextRequest((IProject)project1Mock.Object);
             Assert.IsNotNull(next, "Expected next request as queue lock has been released");
         }
     }

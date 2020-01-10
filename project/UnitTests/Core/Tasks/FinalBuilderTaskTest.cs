@@ -1,13 +1,12 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using NMock;
-
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	{		
 		private IIntegrationResult _result;
 		private FinalBuilderTask _task;
-		private IMock _mockRegistry;
+		private Mock<IRegistry> _mockRegistry;
 		private string fbExecutable;
 
 		[SetUp]
@@ -24,12 +23,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			fbExecutable = Path.Combine(DefaultWorkingDirectory, "FBCmd.exe");
 
-			_mockRegistry = new DynamicMock(typeof (IRegistry));
+			_mockRegistry = new Mock<IRegistry>();
 			CreateProcessExecutorMock(fbExecutable);
 			_result = IntegrationResult();
 			_result.Label = "1.0";
 			_result.ArtifactDirectory = Path.GetTempPath();
-			_task = new FinalBuilderTask((IRegistry) _mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
+			_task = new FinalBuilderTask((IRegistry) _mockRegistry.Object, (ProcessExecutor) mockProcessExecutor.Object);
 		}
 
 		[TearDown]
@@ -45,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string expectedArgs = @"/B /S /Vvar1=value1;var2=""value 2"" /P" + StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5"));
 			ExpectToExecuteArguments(expectedArgs);
 
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 
 			_task.FBVariables = new FBVariable[2];
 			_task.FBVariables[0] = new FBVariable("var1", "value1");
@@ -68,8 +67,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             string expectedArgs = @"/B /S /Vvar1=value1;var2=""value 2"" /P" + StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5"));
             ExpectToExecuteArguments(expectedArgs);
 
-            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
-            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location");
+            _mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(() => null).Verifiable();
+            _mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 
             _task.FBVariables = new FBVariable[2];
             _task.FBVariables[0] = new FBVariable("var1", "value1");
@@ -92,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string expectedArgs = string.Concat("/P", StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectoryWithSpaces, "TestProject.fbz5")));
 			ExpectToExecuteArguments(expectedArgs, DefaultWorkingDirectoryWithSpaces);
 
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 							
 			_task.ShowBanner = true;
 			_task.ProjectFile = Path.Combine(DefaultWorkingDirectoryWithSpaces, "TestProject.fbz5");
@@ -138,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 								</FinalBuilder>";
 
 			// Get the FB5 path from the FB registry not the XML configuration.
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 					
 			NetReflector.Read(xmlConfig, _task);
 
@@ -150,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AutodetectFB5Path()
 		{
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 			_task.ProjectFile = @"C:\Dummy\Project.fbz5";
 			Assert.AreEqual(5, _task.GetFBVersion());
             Assert.AreEqual(fbExecutable, _task.GetFBPath());
@@ -159,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AutodetectFB4Path()
 		{
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe"), @"SOFTWARE\VSoft\FinalBuilder\4.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\4.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe")).Verifiable();
 			_task.ProjectFile = @"C:\Dummy\Project.fbz4";
 			Assert.AreEqual(4, _task.GetFBVersion());
             Assert.AreEqual(fbExecutable, _task.GetFBPath());
@@ -168,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AutodetectFB3Path()
 		{
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe"), @"SOFTWARE\VSoft\FinalBuilder\3.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\3.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe")).Verifiable();
 			_task.ProjectFile = @"C:\Dummy\Project.fbz3";
 			Assert.AreEqual(3, _task.GetFBVersion());
             Assert.AreEqual(Path.Combine(DefaultWorkingDirectory, "FB3Cmd.exe"), _task.GetFBPath());
@@ -177,25 +176,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void InvalidProjectFileName()
         {
-            ExpectThatExecuteWillNotBeCalled();
-            _mockRegistry.ExpectNoCall("GetLocalMachineSubKeyValue", new Type[] { typeof(string), typeof(string) });
             NetReflector.Read(@"<FinalBuilder>
 				<ProjectFile>C:\Dummy\Project.txt</ProjectFile>
 			</FinalBuilder>", _task);
             Assert.That(delegate { _task.Run(_result); },
                         Throws.TypeOf<BuilderException>().With.Message.EqualTo("Finalbuilder version could not be autodetected from project file name."));
+            mockProcessExecutor.VerifyNoOtherCalls();
+           _mockRegistry.VerifyNoOtherCalls();
         }
 
         [Test]
         public void FinalBuilderIsNotInstalled()
         {
-            ExpectThatExecuteWillNotBeCalled();
-            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
-            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location");
+            _mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(() => null).Verifiable();
+            _mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\Wow6432Node\VSoft\FinalBuilder\5.0", "Location")).Returns(() => null).Verifiable();
 
             _task.ProjectFile = @"C:\Dummy\Project.fbz5";
             Assert.That(delegate { _task.Run(_result); },
                         Throws.TypeOf<BuilderException>().With.Message.EqualTo("Path to Finalbuilder 5 command line executable could not be found."));
+            mockProcessExecutor.VerifyNoOtherCalls();
         }
 
 		[Test]
@@ -211,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string expectedArgs = @"/B /TL /P" + StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5")); 
             ExpectToExecuteArguments(expectedArgs);
 
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 
 			_task.ProjectFile = Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5");
             _task.UseTemporaryLogFile = true;
@@ -229,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string expectedArgs = @"/B /TL /P" + StringUtil.AutoDoubleQuoteString(Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5"));
             ExpectToExecuteArguments(expectedArgs);
 
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+			_mockRegistry.Setup(registry => registry.GetLocalMachineSubKeyValue(@"SOFTWARE\VSoft\FinalBuilder\5.0", "Location")).Returns(Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe")).Verifiable();
 
 			_task.ProjectFile = Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5");
             _task.UseTemporaryLogFile = true;

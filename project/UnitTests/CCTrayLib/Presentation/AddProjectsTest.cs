@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -65,10 +65,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                             	new CCTrayProject("tcp://localhost:123/blah", "proj2"),
 			                             };
 
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
-			mockCruiseManagerFactory.ExpectAndReturn("GetProjectList", allProjects, allProjects[0].BuildServer, false);
+			var mockCruiseManagerFactory = new Mock<ICruiseProjectManagerFactory>();
+			mockCruiseManagerFactory.Setup(factory => factory.GetProjectList(allProjects[0].BuildServer, false)).Returns(allProjects).Verifiable();
 			AddProjects addProjects = new AddProjects(
-                (ICruiseProjectManagerFactory)mockCruiseManagerFactory.MockInstance,
+                (ICruiseProjectManagerFactory)mockCruiseManagerFactory.Object,
                 null, 
                 selectedProjects);
 		}

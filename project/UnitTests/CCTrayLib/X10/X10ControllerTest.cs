@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -7,7 +7,6 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring;
-using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 {
@@ -17,16 +16,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		private StubProjectMonitor stubProjectMonitor;
 		private StubCurrentTimeProvider stubCurrentTimeProvider;
 		private X10Configuration configuration;
-		private DynamicMock mockLampController;
+		private Mock<ILampController> mockLampController;
 
 		[SetUp]
 		public void SetUp()
 		{
 			stubProjectMonitor = new StubProjectMonitor("project");
 
-			mockLampController = new DynamicMock(typeof(ILampController));
-			mockLampController.Strict = true;
-			ILampController lampController = mockLampController.MockInstance as ILampController;
+			mockLampController = new Mock<ILampController>(MockBehavior.Strict);
+			ILampController lampController = mockLampController.Object as ILampController;
 			
 			configuration = new X10Configuration();
 			configuration.Enabled = true;
@@ -90,9 +88,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 			stubProjectMonitor.IntegrationStatus = status;
 			stubProjectMonitor.ProjectState = state;
 			
-			mockLampController.Expect("RedLightOn", redLightOn);
-			mockLampController.Expect("YellowLightOn", yellowLightOn);
-			mockLampController.Expect("GreenLightOn", greenLightOn);
+			mockLampController.SetupSet(controller => controller.RedLightOn = redLightOn).Verifiable();
+			mockLampController.SetupSet(controller => controller.YellowLightOn = yellowLightOn).Verifiable();
+			mockLampController.SetupSet(controller => controller.GreenLightOn = greenLightOn).Verifiable();
 			
 			stubProjectMonitor.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor));
 			

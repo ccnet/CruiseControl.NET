@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class ServerQueryingBuildRetrieverTest
 	{
-		private DynamicMock cruiseManagerWrapperMock;
+		private Mock<ICruiseManagerWrapper> cruiseManagerWrapperMock;
 		private ServerQueryingBuildRetriever serverQueryingBuildRetriever;
 		private string logContent;
 		private DefaultBuildSpecifier buildSpecifier;
@@ -17,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			cruiseManagerWrapperMock = new DynamicMock(typeof(ICruiseManagerWrapper));
+			cruiseManagerWrapperMock = new Mock<ICruiseManagerWrapper>();
 
-			serverQueryingBuildRetriever = new ServerQueryingBuildRetriever(((ICruiseManagerWrapper) cruiseManagerWrapperMock.MockInstance));
+			serverQueryingBuildRetriever = new ServerQueryingBuildRetriever(((ICruiseManagerWrapper) cruiseManagerWrapperMock.Object));
 
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("s"), "p"), "myBuild");
 			logContent = "log Content";
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsBuildUsingLogFromServer()
 		{
-			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, buildSpecifier, null);
+			cruiseManagerWrapperMock.Setup(manager => manager.GetLog(buildSpecifier, null)).Returns(logContent).Verifiable();
 
 			Build returnedBuild = serverQueryingBuildRetriever.GetBuild(buildSpecifier, null);
 

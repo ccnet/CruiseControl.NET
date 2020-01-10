@@ -1,5 +1,5 @@
 using System.IO;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
@@ -10,17 +10,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 	[TestFixture]
 	public class ProessP4PurgerTest
 	{
-		private DynamicMock processExecutorMock;
-		private DynamicMock processInfoCreatorMock;
+		private Mock<ProcessExecutor> processExecutorMock;
+		private Mock<IP4ProcessInfoCreator> processInfoCreatorMock;
 		private ProcessP4Purger p4Purger;
 		private string tempDirPath;
 
 		[SetUp]
 		public void Setup()
 		{
-			processExecutorMock = new DynamicMock(typeof(ProcessExecutor));
-			processInfoCreatorMock = new DynamicMock(typeof(IP4ProcessInfoCreator));
-			p4Purger = new ProcessP4Purger((ProcessExecutor) processExecutorMock.MockInstance,  (IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
+			processExecutorMock = new Mock<ProcessExecutor>();
+			processInfoCreatorMock = new Mock<IP4ProcessInfoCreator>();
+			p4Purger = new ProcessP4Purger((ProcessExecutor) processExecutorMock.Object,  (IP4ProcessInfoCreator) processInfoCreatorMock.Object);
 
 			tempDirPath = TempFileUtil.CreateTempDir("tempDir");
 		}
@@ -41,13 +41,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void ShouldDeleteClientSpecAndWorkingDirectoryOnPurge()
 		{
 			// Setup
-			DynamicMock p4Mock = new DynamicMock(typeof(P4));
-			P4 p4 = (P4) p4Mock.MockInstance;
+			var p4Mock = new Mock<P4>();
+			P4 p4 = (P4) p4Mock.Object;
 			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -d myClient");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -d myClient")).Returns(processInfo).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(processInfo)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			Assert.IsTrue(Directory.Exists(tempDirPath));
 
@@ -63,12 +63,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void ShouldNotTryAndDeleteClientSpecIfClientSpecNotSet()
 		{
 			// Setup
-			DynamicMock p4Mock = new DynamicMock(typeof(P4));
-			P4 p4 = (P4) p4Mock.MockInstance;
+			var p4Mock = new Mock<P4>();
+			P4 p4 = (P4) p4Mock.Object;
 			p4.Client = null;
-
-			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
-			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
 
 			Assert.IsTrue(Directory.Exists(tempDirPath));
 
@@ -78,19 +75,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			// Verify
 			Assert.IsFalse(Directory.Exists(tempDirPath));
 			VerifyAll();
+			processInfoCreatorMock.VerifyNoOtherCalls();
+			processExecutorMock.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void ShouldThrowAnExceptionIfProcessFails()
 		{
 			// Setup
-			DynamicMock p4Mock = new DynamicMock(typeof(P4));
-			P4 p4 = (P4) p4Mock.MockInstance;
+			var p4Mock = new Mock<P4>();
+			P4 p4 = (P4) p4Mock.Object;
 			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -d myClient");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("This is standard out", "This is standard error", 1, false), processInfo);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -d myClient")).Returns(processInfo).Verifiable();
+			processExecutorMock.Setup(executor => executor.Execute(processInfo)).Returns(new ProcessResult("This is standard out", "This is standard error", 1, false)).Verifiable();
 
 			// Execute
 			try

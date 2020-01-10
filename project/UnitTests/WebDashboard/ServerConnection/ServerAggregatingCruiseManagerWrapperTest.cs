@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Moq;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 {
 	[TestFixture]
 	public class ServerAggregatingCruiseManagerWrapperTest
 	{
-		private DynamicMock configurationMock;
-		private DynamicMock cruiseManagerFactoryMock;
-		private DynamicMock cruiseManagerMock;
+		private Mock<IRemoteServicesConfiguration> configurationMock;
+		private Mock<ICruiseServerClientFactory> cruiseManagerFactoryMock;
+		private Mock<ICruiseServerClient> cruiseManagerMock;
 		private ServerAggregatingCruiseManagerWrapper managerWrapper;
 		private DefaultServerSpecifier serverSpecifier;
 		private IProjectSpecifier projectSpecifier;
@@ -29,17 +27,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		[SetUp]
 		public void Setup()
 		{
-			configurationMock = new DynamicMock(typeof (IRemoteServicesConfiguration));
-            cruiseManagerFactoryMock = new DynamicMock(typeof(ICruiseServerClientFactory));
-			cruiseManagerMock = new DynamicMock(typeof (ICruiseServerClient));
+			configurationMock = new Mock<IRemoteServicesConfiguration>();
+            cruiseManagerFactoryMock = new Mock<ICruiseServerClientFactory>();
+			cruiseManagerMock = new Mock<ICruiseServerClient>();
 			serverSpecifier = new DefaultServerSpecifier("myserver");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "mybuild");
 			buildSpecifierForUnknownServer = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("unknownServer"), "myProject"), "myBuild");
 
 			managerWrapper = new ServerAggregatingCruiseManagerWrapper(
-				(IRemoteServicesConfiguration) configurationMock.MockInstance,
-                (ICruiseServerClientFactory)cruiseManagerFactoryMock.MockInstance
+				(IRemoteServicesConfiguration) configurationMock.Object,
+                (ICruiseServerClientFactory)cruiseManagerFactoryMock.Object
 				);
 
 			serverLocation = new ServerLocation();
@@ -62,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		[Test]
 		public void ThrowsCorrectExceptionIfServerNotKnown()
 		{
-			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation});
+			configurationMock.SetupGet(configuration => configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
 			try
 			{
 				managerWrapper.GetLog(buildSpecifierForUnknownServer, null);
@@ -73,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 				Assert.AreEqual("unknownServer", e.RequestedServer);
 			}
 
-			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation});
+			configurationMock.SetupGet(configuration => configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
 			try
 			{
 				managerWrapper.GetLatestBuildSpecifier(buildSpecifierForUnknownServer.ProjectSpecifier, null);
@@ -250,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
-			configurationMock.SetupResult("Servers", servers);
+			configurationMock.SetupGet(configuration => configuration.Servers).Returns(servers).Verifiable();
 			IServerSpecifier[] serverSpecifiers = managerWrapper.GetServerSpecifiers();
 			Assert.AreEqual(2, serverSpecifiers.Length);
 			Assert.AreEqual("myserver", serverSpecifiers[0].ServerName);
@@ -315,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
-			configurationMock.ExpectAndReturn("Servers", servers);
+			configurationMock.SetupGet(configuration => configuration.Servers).Returns(servers).Verifiable();
 
 			IServerSpecifier specifier = managerWrapper.GetServerConfiguration("myserver");
 			Assert.AreEqual(true, specifier.AllowForceBuild);

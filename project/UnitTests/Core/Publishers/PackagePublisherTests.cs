@@ -1,11 +1,10 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Xml;
     using Exortech.NetReflector;
-    using NMock;
+    using Moq;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -290,17 +289,15 @@
 
             XmlDocument manifest = new XmlDocument();
             manifest.AppendChild(manifest.CreateElement("manifest"));
-            DynamicMock generatorMock = new DynamicMock(typeof(IManifestGenerator));
-            List<string> files = new List<string>();
-            files.Add(dataFilePath);
-            generatorMock.ExpectAndReturn("Generate", manifest, result, files.ToArray());
+            var generatorMock = new Mock<IManifestGenerator>();
+            generatorMock.Setup(generator => generator.Generate(result, It.Is<string[]>(files => files.Length == 1 && files[0] == dataFilePath))).Returns(manifest).Verifiable();
 
             string packageLocation = Path.Combine(Path.GetTempPath(), "Test Package-1");
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.ManifestGenerator = generatorMock.MockInstance as IManifestGenerator;
+            publisher.ManifestGenerator = generatorMock.Object as IManifestGenerator;
             publisher.PackageList = new IPackageItem[] { 
                 new PackageFile(dataFilePath) 
             };

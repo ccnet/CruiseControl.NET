@@ -1,26 +1,25 @@
+using System.Xml;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
 	public class ModificationWriterTaskTest
 	{
-		private IMock mockIO;
+		private Mock<IFileSystem> mockIO;
 		private ModificationWriterTask task;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockIO = new DynamicMock(typeof (IFileSystem));
-			task = new ModificationWriterTask(mockIO.MockInstance as IFileSystem);
+			mockIO = new Mock<IFileSystem>();
+			task = new ModificationWriterTask(mockIO.Object as IFileSystem);
 		}
 
 		[TearDown]
@@ -32,7 +31,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldWriteOutModificationsToFileAsXml()
 		{
-			mockIO.Expect("Save", @"artifactDir\modifications.xml", new IsValidXml().And(new HasChildElements(2)));
+			mockIO.Setup(fileSystem => fileSystem.Save(@"artifactDir\modifications.xml", It.IsAny<string>())).
+				Callback<string, string>((file, content) => {
+					XmlUtil.VerifyXmlIsWellFormed(content);
+					XmlElement element = XmlUtil.CreateDocumentElement(content);
+					Assert.AreEqual(2, element.ChildNodes.Count);
+				}).Verifiable();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -52,7 +56,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\modifications_{0}.xml",result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
-            mockIO.Expect("Save", newFileName , new IsValidXml().And(new HasChildElements(2)));
+            mockIO.Setup(fileSystem => fileSystem.Save(newFileName, It.IsAny<string>())).
+                Callback<string, string>((file, content) => {
+                    XmlUtil.VerifyXmlIsWellFormed(content);
+                    XmlElement element = XmlUtil.CreateDocumentElement(content);
+                    Assert.AreEqual(2, element.ChildNodes.Count);
+            }).Verifiable();
 
             result.ArtifactDirectory = "artifactDir";
             result.Modifications = new Modification[]
@@ -69,7 +78,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSaveEmptyFileIfNoModificationsSpecified()
 		{
-			mockIO.Expect("Save", @"artifactDir\output.xml", new IsValidXml().And(new HasChildElements(0)));
+			mockIO.Setup(fileSystem => fileSystem.Save(@"artifactDir\output.xml", It.IsAny<string>())).
+				Callback<string, string>((file, content) => {
+					XmlUtil.VerifyXmlIsWellFormed(content);
+					XmlElement element = XmlUtil.CreateDocumentElement(content);
+					Assert.AreEqual(0, element.ChildNodes.Count);
+				}).Verifiable();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -84,7 +98,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\output_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
-            mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
+            mockIO.Setup(fileSystem => fileSystem.Save(newFileName, It.IsAny<string>())).
+                Callback<string, string>((file, content) => {
+                    XmlUtil.VerifyXmlIsWellFormed(content);
+                    XmlElement element = XmlUtil.CreateDocumentElement(content);
+                    Assert.AreEqual(0, element.ChildNodes.Count);
+                }).Verifiable();
 
             result.ArtifactDirectory = "artifactDir";
             task.Filename = "output.xml";
@@ -98,7 +117,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldRebaseDirectoryRelativeToArtifactDir()
 		{
-			mockIO.Expect("Save", @"artifactDir\relativePath\modifications.xml", new IsValidXml().And(new HasChildElements(0)));
+			mockIO.Setup(fileSystem => fileSystem.Save(@"artifactDir\relativePath\modifications.xml", It.IsAny<string>())).
+				Callback<string, string>((file, content) => {
+					XmlUtil.VerifyXmlIsWellFormed(content);
+					XmlElement element = XmlUtil.CreateDocumentElement(content);
+					Assert.AreEqual(0, element.ChildNodes.Count);
+				}).Verifiable();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -113,7 +137,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\relativePath\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
-            mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
+            mockIO.Setup(fileSystem => fileSystem.Save(newFileName, It.IsAny<string>())).
+                Callback<string, string>((file, content) => {
+                    XmlUtil.VerifyXmlIsWellFormed(content);
+                    XmlElement element = XmlUtil.CreateDocumentElement(content);
+                    Assert.AreEqual(0, element.ChildNodes.Count);
+                }).Verifiable();
 
             result.ArtifactDirectory = "artifactDir";
             task.OutputPath = "relativePath";
@@ -126,7 +155,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
-			mockIO.Expect("Save", @"artifactDir\modifications.xml", new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+			mockIO.Setup(fileSystem => fileSystem.Save(@"artifactDir\modifications.xml", It.IsAny<string>())).
+				Callback<string, string>((file, content) => {
+					Assert.IsTrue(content.StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+				}).Verifiable();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -141,7 +173,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
-            mockIO.Expect("Save", newFileName, new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+            mockIO.Setup(fileSystem => fileSystem.Save(newFileName, It.IsAny<string>())).
+                Callback<string, string>((file, content) => {
+                    Assert.IsTrue(content.StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+                }).Verifiable();
 
             result.ArtifactDirectory = "artifactDir";
             task.AppendTimeStamp = true;

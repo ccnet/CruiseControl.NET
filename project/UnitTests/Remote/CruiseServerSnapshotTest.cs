@@ -1,7 +1,5 @@
 using System;
-using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote

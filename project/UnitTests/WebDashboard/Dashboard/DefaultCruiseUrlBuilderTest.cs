@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class DefaultCruiseUrlBuilderTest
 	{
-		private DynamicMock urlBuilderMock;
+		private Mock<IUrlBuilder> urlBuilderMock;
 		private DefaultCruiseUrlBuilder cruiseUrlBuilder;
 		private DefaultServerSpecifier serverSpecifier;
 		private IProjectSpecifier projectSpecifier;
@@ -16,11 +16,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			urlBuilderMock = new DynamicMock(typeof (IUrlBuilder));
+			urlBuilderMock = new Mock<IUrlBuilder>();
 			serverSpecifier = new DefaultServerSpecifier("myserver");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "mybuild");
-			cruiseUrlBuilder = new DefaultCruiseUrlBuilder((IUrlBuilder) urlBuilderMock.MockInstance);
+			cruiseUrlBuilder = new DefaultCruiseUrlBuilder((IUrlBuilder) urlBuilderMock.Object);
 		}
 
 		private void VerifyAll()
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildServerUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "", "server/myserver")).Returns("myUrl").Verifiable();
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier);
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildServerUrlAddingCorrectlyFormattedActionAndQueryString()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "query1=arg1", "server/myserver");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "query1=arg1", "server/myserver")).Returns("myUrl").Verifiable();
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier, "query1=arg1");
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildProjectUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "", "server/myserver/project/myproject")).Returns("myUrl").Verifiable();
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildProjectUrl("myAction", projectSpecifier);
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldUrlEncodeProject()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%232");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "", "server/myserver/project/myproject%232")).Returns("myUrl").Verifiable();
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject#2");
 
 			// Execute
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldUrlEncodeProjectWithSpaces()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%202");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "", "server/myserver/project/myproject%202")).Returns("myUrl").Verifiable();
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject 2");
 
 			// Execute
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildBuildUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject/build/mybuild");
+			urlBuilderMock.Setup(builder => builder.BuildUrl("myAction", "", "server/myserver/project/myproject/build/mybuild")).Returns("myUrl").Verifiable();
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildBuildUrl("myAction", buildSpecifier);
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldDelegateExtensionToSubBuilder()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("Extension", "foo");
+			urlBuilderMock.SetupSet(builder => builder.Extension = "foo").Verifiable();
 
 			// Execute
 			cruiseUrlBuilder.Extension = "foo";

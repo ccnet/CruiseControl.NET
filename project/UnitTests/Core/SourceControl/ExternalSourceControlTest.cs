@@ -1,6 +1,6 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -81,8 +81,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceIfAutoGetSourceTrue()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-            ExternalSourceControl externalSC = new ExternalSourceControl((ProcessExecutor)executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+            ExternalSourceControl externalSC = new ExternalSourceControl((ProcessExecutor)executor.Object);
             externalSC.AutoGetSource = true;
 		    externalSC.Executable = "banana.bat";
 		    externalSC.ArgString = @"arg1 ""arg2 is longer"" arg3";
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 );
 			expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
             externalSC.GetSource(intResult);
 			executor.Verify();
 		}
@@ -107,13 +107,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceFalse()
 		{
-			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
-            ExternalSourceControl externalSC = new ExternalSourceControl((ProcessExecutor)executor.MockInstance);
+			var executor = new Mock<ProcessExecutor>();
+            ExternalSourceControl externalSC = new ExternalSourceControl((ProcessExecutor)executor.Object);
             externalSC.AutoGetSource = false;
 
-			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
             externalSC.GetSource(new IntegrationResult());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 	}
 }

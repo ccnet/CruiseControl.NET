@@ -147,10 +147,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
-    <Reference Include="nmock">
-      <Name>nmock</Name>
-      <HintPath>..\..\lib\nmock.dll</HintPath>
-    </Reference>
     <Reference Include="NPlot">
       <Name>NPlot</Name>
       <HintPath>..\..\lib\NPlot.dll</HintPath>
@@ -1051,9 +1047,6 @@
     <Compile Include="Core\Util\WildCardPathTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Util\XmlConstraints.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\Util\XmlFragmentWriterTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1084,11 +1077,7 @@
     </Compile>
     <Compile Include="Remote\XmlConversionUtilTests.cs" />
     <Compile Include="TestHelpers.cs" />
-    <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
-    <Compile Include="UnitTestUtils\HashtableConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UnitTestUtils\LatchMock.cs">
+    <Compile Include="UnitTestUtils\LatchHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UnitTestUtils\Mockery.cs">

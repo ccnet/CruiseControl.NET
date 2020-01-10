@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -12,19 +12,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class FileSourceControlTest : IntegrationFixture
 	{
 		private FileSourceControl sc;
-		private DynamicMock fileSystemMock;
+		private Mock<IFileSystem> fileSystemMock;
 		private SystemPath tempRoot;
 		private SystemPath tempSubRoot;
 
 		[SetUp]
 		public void SetUp()
 		{
-			fileSystemMock = new DynamicMock(typeof (IFileSystem));
+			fileSystemMock = new Mock<IFileSystem>();
 
 			tempRoot = SystemPath.UniqueTempPath();
 			tempSubRoot = tempRoot.Combine("subrepo");
 
-			sc = new FileSourceControl((IFileSystem) fileSystemMock.MockInstance);
+			sc = new FileSourceControl((IFileSystem) fileSystemMock.Object);
 			sc.RepositoryRoot = tempRoot.ToString();
 		}
 
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			IntegrationResult result = (IntegrationResult) Integration("foo", "myWorkingDirectory", "myArtifactDirectory");
 			sc.AutoGetSource = true;
-			fileSystemMock.Expect("Copy", tempRoot.ToString(), "myWorkingDirectory");
+			fileSystemMock.Setup(fileSystem => fileSystem.Copy(tempRoot.ToString(), "myWorkingDirectory")).Verifiable();
 
 			sc.GetSource(result);
 
@@ -126,11 +126,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldNotCopySourceIfAutoGetSourceNotBeenSetToTrue()
 		{
             IIntegrationResult result = Integration("foo", "myWorkingDirectory", "myArtifactDirectory");
-			fileSystemMock.ExpectNoCall("Copy", typeof (string), typeof (string));
 
 			sc.GetSource(result);
 
 			fileSystemMock.Verify();
+			fileSystemMock.VerifyNoOtherCalls();
 		}
 
 		private IntegrationResult IntegrationResult(DateTime date)

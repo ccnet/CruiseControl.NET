@@ -2,8 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	{
 		public const string DEFAULT_SS_EXE_PATH = @"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe";
 
-		private IMock mockRegistry;
+		private Mock<IRegistry> mockRegistry;
 		private VssHistoryParser historyParser;
 		private Vss vss;
 		private DateTime today;
@@ -26,12 +25,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(DEFAULT_SS_EXE_PATH);
-			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
-			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
+			mockRegistry = new Mock<IRegistry>(MockBehavior.Strict);
+			mockRegistry.Setup(registry => registry.GetExpectedLocalMachineSubKeyValue(It.IsAny<string>(), It.IsAny<string>())).Returns(DEFAULT_SS_EXE_PATH);
 			VssLocale locale = new VssLocale(CultureInfo.InvariantCulture);
 			historyParser = new VssHistoryParser(locale);
 
-			vss = new Vss(locale, historyParser, (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
+			vss = new Vss(locale, historyParser, (ProcessExecutor) mockProcessExecutor.Object, (IRegistry) mockRegistry.Object);
 			vss.Project = "$/fooProject";
 			vss.Culture = string.Empty; // invariant culture
 			vss.Username = "Joe Admin";
@@ -101,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ReadDefaultExecutableFromRegistry()
 		{
-			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL", Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY);
+			mockRegistry.Setup(registry => registry.GetExpectedLocalMachineSubKeyValue(Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY)).Returns(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL").Verifiable();
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.Executable);
 		}
 
@@ -221,9 +220,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void OnlyGetSourceIfAutoGetSourceIsSpecified()
 		{
-			ExpectThatExecuteWillNotBeCalled();
 			vss.AutoGetSource = false;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -303,10 +302,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void TemporaryLabelNotAppliedByDefault()
 		{
-			ExpectThatExecuteWillNotBeCalled();
 			vss.ApplyLabel = false;
 			vss.AutoGetSource = false;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful());
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -326,7 +325,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldDeleteTemporaryLabelIfIntegrationFailed()
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new IsAnything());
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(SuccessfulProcessResult()).Verifiable();
 			ExpectToExecuteArguments("label $/fooProject -L -VLCCNETUNVERIFIED06102005182431 \"-YJoe Admin,admin\" -I-Y");
 
 			IntegrationResult result = IntegrationResultMother.CreateFailed("foo");

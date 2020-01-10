@@ -1,7 +1,5 @@
 using System;
 using System.Globalization;
-using System.IO;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -51,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mockRegistry = new RegistryStub();
             historyParser = new VstsHistoryParser();
 
-            vsts = new Vsts((ProcessExecutor)mockProcessExecutor.MockInstance, historyParser, mockRegistry);
+            vsts = new Vsts((ProcessExecutor)mockProcessExecutor.Object, historyParser, mockRegistry);
             vsts.Username = fakeUsername;
             vsts.Password = fakePassword;
             vsts.WorkingDirectory = DefaultWorkingDirectory;

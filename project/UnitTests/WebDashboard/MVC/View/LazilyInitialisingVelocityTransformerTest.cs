@@ -1,6 +1,6 @@
 using System.Collections;
 using System.IO;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -19,17 +19,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			Hashtable contextContents = new Hashtable();
 			contextContents["foo"] = "bar";
 
-			DynamicMock pathMapperMock = new DynamicMock(typeof(IPhysicalApplicationPathProvider));
-			pathMapperMock.SetupResult("GetFullPathFor", Path.Combine(".", "templates"), typeof (string));
+			var pathMapperMock = new Mock<IPhysicalApplicationPathProvider>();
+			pathMapperMock.Setup(provider => provider.GetFullPathFor(It.IsAny<string>())).Returns(Path.Combine(".", "templates"));
 
-            DynamicMock pluginsMock = new DynamicMock(typeof(IPluginConfiguration));
-            pluginsMock.SetupResult("TemplateLocation", null);
+            var pluginsMock = new Mock<IPluginConfiguration>();
+            pluginsMock.SetupGet(configuration => configuration.TemplateLocation).Returns(() => null);
 
-            DynamicMock configurationMock = new DynamicMock(typeof(IDashboardConfiguration));
-            configurationMock.SetupResult("PluginConfiguration", pluginsMock.MockInstance);
+            var configurationMock = new Mock<IDashboardConfiguration>();
+            configurationMock.SetupGet(configuration => configuration.PluginConfiguration).Returns(pluginsMock.Object);
 
-            viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.MockInstance,
-                (IDashboardConfiguration)configurationMock.MockInstance);
+            viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.Object,
+                (IDashboardConfiguration)configurationMock.Object);
 
 			Assert.AreEqual("foo is bar", viewTransformer.Transform("testTransform.vm", contextContents));
 		}

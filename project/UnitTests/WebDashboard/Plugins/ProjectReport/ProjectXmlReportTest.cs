@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
@@ -14,20 +14,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
     [TestFixture]
     public class ProjectXmlReportTest
     {
-        private IMock mockFarmService;
-        private IMock mockRequest;
+        private Mock<IFarmService> mockFarmService;
+        private Mock<ICruiseRequest> mockRequest;
         private ProjectXmlReport report;
         private IServerSpecifier serverSpecifier;
 
         [SetUp]
         protected void SetUp()
         {
-            mockFarmService = new DynamicMock(typeof (IFarmService));
-            mockRequest = new DynamicMock(typeof (ICruiseRequest));
+            mockFarmService = new Mock<IFarmService>();
+            mockRequest = new Mock<ICruiseRequest>();
             serverSpecifier = new DefaultServerSpecifier("local");
-            mockRequest.SetupResult("ServerSpecifier", serverSpecifier);
-            mockRequest.SetupResult("ProjectName", "test");
-            report = new ProjectXmlReport((IFarmService)mockFarmService.MockInstance, null);
+            mockRequest.SetupGet(request => request.ServerSpecifier).Returns(serverSpecifier);
+            mockRequest.SetupGet(request => request.ProjectName).Returns("test");
+            report = new ProjectXmlReport((IFarmService)mockFarmService.Object, null);
         }
 
         [TearDown]
@@ -43,9 +43,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
         {
             ProjectStatusOnServer status = new ProjectStatusOnServer(ProjectStatusFixture.New("wrong"), serverSpecifier);
             ProjectStatusOnServer status2 = new ProjectStatusOnServer(ProjectStatusFixture.New("test"), serverSpecifier);
-            mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", ProjectStatusList(status, status2), null);
+            mockFarmService.Setup(service => service.GetProjectStatusListAndCaptureExceptions(null)).Returns(ProjectStatusList(status, status2)).Verifiable();
 
-            IResponse response = report.Execute((ICruiseRequest) mockRequest.MockInstance);
+            IResponse response = report.Execute((ICruiseRequest) mockRequest.Object);
 
             Assert.That(response, Is.InstanceOf<XmlFragmentResponse>());
             string xml = ((XmlFragmentResponse) response).ResponseFragment;
@@ -56,8 +56,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
         [Ignore("Cannot get the mocking to work properly")]
         public void ShouldThrowExceptionIfProjectNameIsInvalid()
         {
-            mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", ProjectStatusList(), null);
-            Assert.That(delegate { report.Execute((ICruiseRequest)mockRequest.MockInstance); },
+            mockFarmService.Setup(service => service.GetProjectStatusListAndCaptureExceptions(null)).Returns(ProjectStatusList()).Verifiable();
+            Assert.That(delegate { report.Execute((ICruiseRequest)mockRequest.Object); },
                         Throws.TypeOf<NoSuchProjectException>());
         }
 

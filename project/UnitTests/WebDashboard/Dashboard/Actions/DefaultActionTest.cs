@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
@@ -11,13 +11,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 	public class DefaultActionTest
 	{
 		private DefaultAction action;
-		private DynamicMock linkFactoryMock;
+		private Mock<ILinkFactory> linkFactoryMock;
 
 		[SetUp]
 		public void Setup()
 		{
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			action = new DefaultAction((ILinkFactory) linkFactoryMock.MockInstance);
+			linkFactoryMock = new Mock<ILinkFactory>();
+			action = new DefaultAction((ILinkFactory) linkFactoryMock.Object);
 		}
 
 		private void VerifyAll()
@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 		public void ShouldReturnRedirectToFarmReport()
 		{
 			IAbsoluteLink link = new GeneralAbsoluteLink("", "http://here");
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link, "", FarmReportFarmPlugin.ACTION_NAME);
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("", FarmReportFarmPlugin.ACTION_NAME)).Returns(link).Verifiable();
 
 			IResponse response = action.Execute(null);
 

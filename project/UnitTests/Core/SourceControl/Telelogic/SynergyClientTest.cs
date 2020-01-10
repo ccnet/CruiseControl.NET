@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 {
@@ -172,15 +172,16 @@ Current project could not be identified.
 		[Test]
 		public void GetModifications()
 		{
-			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything());
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			IMock mockParser = new DynamicMock(typeof(SynergyParser));
-			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
+			var mockCommand = new Mock<ISynergyCommand>();
+			MockSequence sequence = new MockSequence();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			var mockParser = new Mock<SynergyParser>();
+			mockParser.Setup(parser => parser.Parse(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>())).Returns(new Modification[0]).Verifiable();
 
-			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
+			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.Object, (SynergyParser) mockParser.Object);
 			synergy.GetModifications(new IntegrationResult(), new IntegrationResult());
 			mockCommand.Verify();
 		}
@@ -188,18 +189,19 @@ Current project could not be identified.
 		[Test]
 		public void ApplyLabel()
 		{
-			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(DateTime.MinValue.ToString(CultureInfo.InvariantCulture)), new IsAnything());
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything());
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
-			IMock mockParser = new DynamicMock(typeof(SynergyParser));
-			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
+			var mockCommand = new Mock<ISynergyCommand>();
+			MockSequence sequence = new MockSequence();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateSuccessfulResult(DateTime.MinValue.ToString(CultureInfo.InvariantCulture))).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			mockCommand.InSequence(sequence).Setup(command => command.Execute(It.IsAny<ProcessInfo>(), false)).Returns(ProcessResultFixture.CreateSuccessfulResult("output")).Verifiable();
+			var mockParser = new Mock<SynergyParser>();
+			mockParser.Setup(parser => parser.Parse(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>())).Returns(new Modification[0]).Verifiable();
 
 			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();
 			connectionInfo.FormatProvider = CultureInfo.InvariantCulture;
-			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
+			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.Object, (SynergyParser) mockParser.Object);
 			IntegrationResult integrationResult = new IntegrationResult();
 			integrationResult.Status = ThoughtWorks.CruiseControl.Remote.IntegrationStatus.Success;
 			synergy.LabelSourceControl(integrationResult);
@@ -210,11 +212,11 @@ Current project could not be identified.
 		public void GetReconfigureTimeShouldHandleNonUSDates()
 		{
             string dateString = "samedi 2 décembre 2006";
-			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
-			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(dateString), new IsAnything());
+			var mockCommand = new Mock<ISynergyCommand>();
+			mockCommand.Setup(command => command.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateSuccessfulResult(dateString)).Verifiable();
 			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();
 			connectionInfo.FormatProvider = new CultureInfo("FR-fr");
-			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, null);
+			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.Object, null);
 			DateTime time = synergy.GetReconfigureTime();
 			mockCommand.Verify();
 		}

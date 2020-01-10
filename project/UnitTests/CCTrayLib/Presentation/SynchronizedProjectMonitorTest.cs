@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using System.ComponentModel;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -15,19 +14,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void MethodsAndPropertiesDoSimpleDelagationOntoInjectedMonitor()
 		{
-			DynamicMock mockProjectMonitor = new DynamicMock(typeof (IProjectMonitor));
+			var mockProjectMonitor = new Mock<IProjectMonitor>();
 
 			SynchronizedProjectMonitor monitor = new SynchronizedProjectMonitor(
-				(IProjectMonitor) mockProjectMonitor.MockInstance, null);
+				(IProjectMonitor) mockProjectMonitor.Object, null);
 
-			mockProjectMonitor.ExpectAndReturn("ProjectState", null);
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(() => null).Verifiable();
 			Assert.IsNull(monitor.ProjectState);
 
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-			mockProjectMonitor.Expect("ForceBuild", parameters, (string)null);
+			mockProjectMonitor.Setup(_monitor => _monitor.ForceBuild(parameters, null)).Verifiable();
 			monitor.ForceBuild(parameters, null);
 
-			mockProjectMonitor.Expect("Poll");
+			mockProjectMonitor.Setup(_monitor => _monitor.Poll()).Verifiable();
 			monitor.Poll();
 
 			mockProjectMonitor.Verify();
@@ -36,17 +35,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenPolledIsFiredTheDelegateIsInvokedThroughISynchronisedInvoke()
 		{
-			DynamicMock mockSynchronizeInvoke = new DynamicMock(typeof (ISynchronizeInvoke));
+			var mockSynchronizeInvoke = new Mock<ISynchronizeInvoke>();
 			StubProjectMonitor containedMonitor = new StubProjectMonitor("test");
 
 			SynchronizedProjectMonitor monitor = new SynchronizedProjectMonitor(
 				containedMonitor,
-				(ISynchronizeInvoke) mockSynchronizeInvoke.MockInstance);
+				(ISynchronizeInvoke) mockSynchronizeInvoke.Object);
 
 			MonitorPolledEventHandler delegateToPolledMethod = new MonitorPolledEventHandler(Monitor_Polled);
 			monitor.Polled += delegateToPolledMethod;
 
-			mockSynchronizeInvoke.Expect("BeginInvoke", delegateToPolledMethod, new IsTypeOf(typeof (object[])));
+			mockSynchronizeInvoke.Setup(invoke => invoke.BeginInvoke(delegateToPolledMethod, It.IsAny<object[]>())).Verifiable();
 			containedMonitor.OnPolled(new MonitorPolledEventArgs(containedMonitor));
 
 			mockSynchronizeInvoke.Verify();
@@ -55,17 +54,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenBuildOccurredIsFiredTheDelegateIsInvokedThroughISynchronisedInvoke()
 		{
-			DynamicMock mockSynchronizeInvoke = new DynamicMock(typeof (ISynchronizeInvoke));
+			var mockSynchronizeInvoke = new Mock<ISynchronizeInvoke>();
 			StubProjectMonitor containedMonitor = new StubProjectMonitor("test");
 
 			SynchronizedProjectMonitor monitor = new SynchronizedProjectMonitor(
 				containedMonitor,
-				(ISynchronizeInvoke) mockSynchronizeInvoke.MockInstance);
+				(ISynchronizeInvoke) mockSynchronizeInvoke.Object);
 
 			MonitorBuildOccurredEventHandler delegateToBuildOccurred = new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 			monitor.BuildOccurred += delegateToBuildOccurred;
 
-			mockSynchronizeInvoke.Expect("BeginInvoke", delegateToBuildOccurred, new IsTypeOf(typeof (object[])));
+			mockSynchronizeInvoke.Setup(invoke => invoke.BeginInvoke(delegateToBuildOccurred, It.IsAny<object[]>())).Verifiable();
 			containedMonitor.OnBuildOccurred(new MonitorBuildOccurredEventArgs(null, BuildTransition.StillFailing));
 
 			mockSynchronizeInvoke.Verify();

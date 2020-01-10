@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.ArtifactDirectory = Path.GetTempPath();
 			logfile = Path.Combine(result.ArtifactDirectory, GendarmeTask.logFilename);
 			TempFileUtil.DeleteTempFile(logfile);
-			task = new GendarmeTask((ProcessExecutor)mockProcessExecutor.MockInstance);
+			task = new GendarmeTask((ProcessExecutor)mockProcessExecutor.Object);
 		}
 
 		[TearDown]

@@ -1,7 +1,6 @@
 using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -20,14 +19,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         private string SCRIPTS_PATH = System.Environment.GetEnvironmentVariable("USERPROFILE") + @"\Documents\WindowsPowerShell\";
        
         private PowerShellTask mytask;
-        private IMock mockRegistry;
+        private Mock<IRegistry> mockRegistry;
 
         [SetUp]
         public void Setup()
         {
-            mockRegistry = new DynamicMock(typeof(IRegistry));
+            mockRegistry = new Mock<IRegistry>();
             CreateProcessExecutorMock(POWERSHELL1_PATH);
-            mytask = new PowerShellTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mytask = new PowerShellTask((IRegistry)mockRegistry.Object, (ProcessExecutor)mockProcessExecutor.Object);
         }
 
         [TearDown]
@@ -74,12 +73,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             PowerShellTask task = (PowerShellTask)NetReflector.Read(xml);
 
             // Need to override the default registry search, otherwise this fails on a machine that does not have PowerShell installed
-            var registryMock2 = new DynamicMock(typeof(IRegistry));
-            task.Registry = (IRegistry)registryMock2.MockInstance;
-            registryMock2.ExpectAndReturn("GetLocalMachineSubKeyValue",
-                @"C:\Windows\System32\WindowsPowerShell\v1.0",
+            var registryMock2 = new Mock<IRegistry>();
+            task.Registry = (IRegistry)registryMock2.Object;
+            registryMock2.Setup(registry => registry.GetLocalMachineSubKeyValue(
                 @"SOFTWARE\Microsoft\PowerShell\2\PowerShellEngine",
-                @"ApplicationBase");
+                @"ApplicationBase")).Returns(@"C:\Windows\System32\WindowsPowerShell\v1.0").Verifiable();
 
             Assert.AreEqual(@"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", task.Executable);
             Assert.AreEqual(@"myScript.ps1", task.Script);
@@ -92,12 +90,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void DefaultPowerShellShouldBe1IfNothingNewerInstalled()
         {
-            IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+            var mockRegistry2 = new Mock<IRegistry>();
 
-            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", POWERSHELL1_PATH,
-                                         PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder);
+            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
+            mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
+            mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder)).Returns(POWERSHELL1_PATH).Verifiable();
             Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
@@ -107,11 +104,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Ignore("In which place is the BuilderException expected? => Use Assert.That(..., Throws.TypeOf<BuilderException>())")]
         public void ShouldThrowAnExceptionIfPowerShellNotInstalled()
         {
-            IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+            var mockRegistry2 = new Mock<IRegistry>();
 
-            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder);
+            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
+            mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
+            mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
             Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
@@ -120,11 +117,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void DefaultPowerShellShouldBe2IfInstalled()
         {
-            IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+            var mockRegistry2 = new Mock<IRegistry>();
 
-            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", POWERSHELL2_PATH, 
-                                        PowerShellTask.regkeypowershell2,PowerShellTask.regkeyholder);
+            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
+            mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2,PowerShellTask.regkeyholder)).Returns(POWERSHELL2_PATH).Verifiable();
             Assert.AreEqual(POWERSHELL2_PATH + "\\powershell.exe", task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
@@ -133,15 +129,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void VerifyPowerShellProcessInfoBasic()
         {
-            CollectingConstraint constraint = new CollectingConstraint();
+            ProcessInfo info = null;
             ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-            mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+                Callback<ProcessInfo>(processInfo => info = processInfo).Returns(processResult).Verifiable();
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScipt.ps1";
            
             mytask.Run(IntegrationResult());
 
-            ProcessInfo info = (ProcessInfo)constraint.Parameter;
             Assert.AreEqual(POWERSHELL_PATH, info.FileName);
             Assert.AreEqual(PowerShellTask.DefaultBuildTimeOut * 1000, info.TimeOut);
             CustomAssertion.AssertContains(mytask.Script, info.Arguments);
@@ -150,16 +146,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void VerifyPowerShellProcessInfoWithScriptsDirectoryConfigured()
         {
-            CollectingConstraint constraint = new CollectingConstraint();
+            ProcessInfo info = null;
             ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-            mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+                Callback<ProcessInfo>(processInfo => info = processInfo).Returns(processResult).Verifiable();
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
             mytask.ConfiguredScriptsDirectory = @"D:\CruiseControl";
 
             mytask.Run(IntegrationResult());
 
-            ProcessInfo info = (ProcessInfo)constraint.Parameter;
             Assert.AreEqual(POWERSHELL_PATH, info.FileName);
             Assert.AreEqual(PowerShellTask.DefaultBuildTimeOut * 1000, info.TimeOut);
             CustomAssertion.AssertStartsWith(@"-nologo -NoProfile -NonInteractive -file ""D:\CruiseControl\MyScript.ps1""", info.Arguments);
@@ -169,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild()
         {
             ProcessResult processResult = new ProcessResult(" ", string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, false);
-            mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything() });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(processResult).Verifiable();
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
             mytask.BuildArgs = "an arg";
@@ -193,8 +189,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ShouldSetOutputAndIntegrationStatusToFailedOnFailedBuild()
         {
             ProcessResult processResult = new ProcessResult(@"Documents\WindowsPowerShell\MyScript.ps1' is not recognized as a cmdlet", string.Empty, 1, false);
-            CollectingConstraint constraint = new CollectingConstraint();
-            mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint });
+            ProcessInfo info = null;
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+                Callback<ProcessInfo>(processInfo => info = processInfo).Returns(processResult).Verifiable();
 
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
@@ -203,7 +200,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IIntegrationResult result = Integration("myProject", @"D:\CruiseControl", "myArtifactDirectory");
             mytask.Run(result);
 
-            ProcessInfo info = (ProcessInfo)constraint.Parameter;
             Assert.AreEqual(@"D:\CruiseControl", info.WorkingDirectory);
 
             Assert.AreEqual(IntegrationStatus.Failure, result.Status);
@@ -213,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
         {
-            mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything() });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Throws(new IOException()).Verifiable();
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
@@ -224,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
         {
-            mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything() });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Throws(new IOException()).Verifiable();
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
@@ -236,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ShouldFailBuildIfProcessTimesOut()
         {
 						ProcessResult processResult = ProcessResultFixture.CreateTimedOutResult();
-            mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything() });
+            mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(processResult).Verifiable();
             mytask.BuildTimeoutSeconds = 2;
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
