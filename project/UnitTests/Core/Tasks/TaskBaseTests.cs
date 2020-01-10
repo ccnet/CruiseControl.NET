@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core;
-//using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Remote;
 using System.Xml;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
 using Exortech.NetReflector;
+using Moq;
+using NUnit.Framework;
+//using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     public class TaskBaseTests
     {
         #region Private fields
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         #endregion
 
         #region Tests
@@ -49,9 +49,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             {
                 Result = () => true
             };
-            var result = mocks.DynamicMock<IIntegrationResult>();
+            var result = mocks.Create<IIntegrationResult>().Object;
 
-            mocks.ReplayAll();
             task.Run(result);
             mocks.VerifyAll();
 
@@ -66,9 +65,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             {
                 Result = () => false
             };
-            var result = mocks.DynamicMock<IIntegrationResult>();
+            var result = mocks.Create<IIntegrationResult>().Object;
 
-            mocks.ReplayAll();
             task.Run(result);
             mocks.VerifyAll();
 
@@ -86,9 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     throw new CruiseControlException();
                 }
             };
-            var result = mocks.DynamicMock<IIntegrationResult>();
-
-            mocks.ReplayAll();
+            var result = mocks.Create<IIntegrationResult>().Object;
 
             // This may look like a weird test, but we don't care that Run() has an exception
             try
@@ -813,7 +809,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ApplyParametersHandlesParameter()
         {
-            var dynamicValue = mocks.StrictMock<IDynamicValue>();
+            var dynamicValue = mocks.Create<IDynamicValue>(MockBehavior.Strict).Object;
             var task = new TestTask
             {
                 DynamicValues = new IDynamicValue[]
@@ -823,12 +819,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
             var parameters = new Dictionary<string, string>();
             var definitions = new List<ParameterBase>();
-            Expect.Call(() =>
-            {
-                dynamicValue.ApplyTo(task, parameters, definitions);
-            });
+            Mock.Get(dynamicValue).Setup(_dynamicValue => _dynamicValue.ApplyTo(task, parameters, definitions)).Verifiable();
 
-            mocks.ReplayAll();
             task.ApplyParameters(parameters, definitions);
             mocks.VerifyAll();
         }

@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
     using System;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -20,7 +20,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -28,18 +28,17 @@
         [Test]
         public void ExecuteGeneratesXmlOutputByDefault()
         {
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            var request = this.mocks.StrictMock<IRequest>();
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
             var snapshot = this.GenerateSnapshot();
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(request.GetText("view")).Return(null);
-            SetupResult.For(farmService.TakeStatusSnapshot(projectSpec, null)).Return(snapshot);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(request).Setup(_request => _request.GetText("view")).Returns((string)null);
+            Mock.Get(farmService).Setup(_farmService => _farmService.TakeStatusSnapshot(projectSpec, null)).Returns(snapshot);
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectStatusAction(farmService);
             var response = plugin.Execute(cruiseRequest);
 
@@ -53,18 +52,17 @@
         [Test]
         public void ExecuteGeneratesXmlOutputForXml()
         {
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            var request = this.mocks.StrictMock<IRequest>();
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
             var snapshot = this.GenerateSnapshot();
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(request.GetText("view")).Return("xml");
-            SetupResult.For(farmService.TakeStatusSnapshot(projectSpec, null)).Return(snapshot);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(request).Setup(_request => _request.GetText("view")).Returns("xml");
+            Mock.Get(farmService).Setup(_farmService => _farmService.TakeStatusSnapshot(projectSpec, null)).Returns(snapshot);
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectStatusAction(farmService);
             var response = plugin.Execute(cruiseRequest);
 
@@ -78,18 +76,17 @@
         [Test]
         public void ExecuteGeneratesJsonOutputForJson()
         {
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            var request = this.mocks.StrictMock<IRequest>();
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
             var snapshot = this.GenerateSnapshot();
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(request.GetText("view")).Return("json");
-            SetupResult.For(farmService.TakeStatusSnapshot(projectSpec, null)).Return(snapshot);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(request).Setup(_request => _request.GetText("view")).Returns("json");
+            Mock.Get(farmService).Setup(_farmService => _farmService.TakeStatusSnapshot(projectSpec, null)).Returns(snapshot);
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectStatusAction(farmService);
             var response = plugin.Execute(cruiseRequest);
 

@@ -6,8 +6,8 @@
     using CruiseControl.Core.Config;
     using CruiseControl.Core.Util;
     using CruiseControl.Remote;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions;
 
@@ -20,7 +20,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -120,11 +120,10 @@
                            };
             var resultMock = this.GenerateResultMock();
             
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsTrue(passRan);
             Assert.IsFalse(failRan);
         }
@@ -154,11 +153,10 @@
                            };
             var resultMock = this.GenerateResultMock();
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsFalse(passRan);
             Assert.IsTrue(failRan);
         }
@@ -202,11 +200,10 @@
             AddResultMockExpectedMerge(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsTrue(firstPassRan);
             Assert.IsTrue(secondPassRan);
             Assert.IsTrue(thirdPassRan);
@@ -252,11 +249,10 @@
             AddResultMockExpectedMerge(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsFalse(passRan);
             Assert.IsTrue(firstFailRan);
             Assert.IsTrue(secondFailRan);
@@ -301,11 +297,10 @@
             AddResultMockExpectedClone(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsTrue(firstPassRan);
             Assert.IsTrue(secondPassRan);
             Assert.IsFalse(thirdPassRan);
@@ -350,11 +345,10 @@
             AddResultMockExpectedClone(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsFalse(passRan);
             Assert.IsTrue(firstFailRan);
             Assert.IsTrue(secondFailRan);
@@ -424,11 +418,10 @@
             AddResultMockExpectedMerge(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.AreEqual(innerCount * leafCount, taskRunCount, "Bad task run count");
             Assert.IsFalse(failRan);
         }
@@ -498,11 +491,10 @@
             AddResultMockExpectedMerge(resultMock);
             AddResultMockExpectedMerge(resultMock);
 
-            this.mocks.ReplayAll();
             resultMock.Status = IntegrationStatus.Success;
             task.Run(resultMock);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsFalse(passRan);
             Assert.AreEqual(innerCount * leafCount, taskRunCount, "Bad task run count");
         }
@@ -511,11 +503,11 @@
 
         private IIntegrationResult GenerateResultMock(int cloneCloneCount, int cloneMergeCount)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.Status).PropertyBehavior();
-            SetupResult.For(result.ExceptionResult).PropertyBehavior();
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).SetupProperty(_result => _result.ExceptionResult);
             result.Status = IntegrationStatus.Success;
             AddResultMockExpectedClone(result, cloneCloneCount, cloneMergeCount);
             AddResultMockExpectedMerge(result);
@@ -534,21 +526,20 @@
 
         private void AddResultMockExpectedClone(IIntegrationResult result, int cloneCloneCount, int cloneMergeCount)
         {
-            Expect.Call(result.Clone()).
-                Do((Func<IIntegrationResult>)(() =>
+            Mock.Get(result).Setup(_result => _result.Clone()).
+                Returns(() =>
                 {
-                    var clone = mocks.StrictMock<IIntegrationResult>();
-                    SetupResult.For(clone.BuildProgressInformation).Return(result.BuildProgressInformation);
-                    SetupResult.For(clone.Status).PropertyBehavior();
-                    SetupResult.For(clone.ExceptionResult).PropertyBehavior();
+                    var clone = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+                    Mock.Get(clone).SetupGet(_clone => _clone.BuildProgressInformation).Returns(result.BuildProgressInformation);
+                    Mock.Get(clone).SetupProperty(_clone => _clone.Status);
+                    Mock.Get(clone).SetupProperty(_clone => _clone.ExceptionResult);
                     for (int i = 0; i < cloneCloneCount; i++)
                         AddResultMockExpectedClone(clone);
                     for (int i = 0; i < cloneMergeCount; i++)
                         AddResultMockExpectedMerge(clone);
                     clone.Status = result.Status;
-                    clone.Replay();
                     return clone;
-                }));
+                }).Verifiable();
         }
 
         private void AddResultMockExpectedClone(IIntegrationResult result, int cloneCloneCount)
@@ -563,8 +554,8 @@
 
         private void AddResultMockExpectedMerge(IIntegrationResult result)
         {
-            Expect.Call(() => result.Merge(Arg<IIntegrationResult>.Is.NotNull)).
-                Do((Action<IIntegrationResult>)((otherResult) =>
+            Mock.Get(result).Setup(_result => _result.Merge(It.IsNotNull<IIntegrationResult>())).
+                Callback<IIntegrationResult>(otherResult =>
                 {
                     // Apply some rules to the status merging - basically apply a hierachy of status codes
                     if ((otherResult.Status == IntegrationStatus.Exception) || (result.Status == IntegrationStatus.Unknown))
@@ -577,7 +568,7 @@
                     {
                         result.Status = otherResult.Status;
                     }
-                }));
+                }).Verifiable();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
     using System;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -15,17 +15,16 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void ValidateRaisesAnErrorIfNullChildConditionsDefined()
         {
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() => processor.ProcessError(
-                "Validation failed for orCondition - at least one child condition must be supplied"));
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(processor).Setup(_processor => _processor.ProcessError(
+                "Validation failed for orCondition - at least one child condition must be supplied")).Verifiable();
 
-            this.mocks.ReplayAll();
             var condition = new OrTaskCondition();
             condition.Validate(null, null, processor);
 
@@ -35,11 +34,10 @@
         [Test]
         public void ValidateRaisesAnErrorIfNoChildConditionsDefined()
         {
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() => processor.ProcessError(
-                "Validation failed for orCondition - at least one child condition must be supplied"));
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(processor).Setup(_processor => _processor.ProcessError(
+                "Validation failed for orCondition - at least one child condition must be supplied")).Verifiable();
 
-            this.mocks.ReplayAll();
             var condition = new OrTaskCondition
             {
                 Conditions = new ITaskCondition[0]
@@ -52,14 +50,13 @@
         [Test]
         public void ValidateCallsChildrenValidation()
         {
-            var processor = this.mocks.StrictMock<IConfigurationErrorProcesser>();
+            var processor = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
             var validateCalled = false;
             var childCondition = new MockCondition
             {
                 ValidateAction = (c, t, ep) => validateCalled = true
             };
 
-            this.mocks.ReplayAll();
             var condition = new OrTaskCondition
             {
                 Conditions = new[] { childCondition }
@@ -82,9 +79,8 @@
                             new MockCondition { EvalFunction = evalFunc }
                         }
             };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -104,9 +100,8 @@
                             new MockCondition { EvalFunction = evalFunc }
                         }
             };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();

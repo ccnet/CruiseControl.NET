@@ -2,14 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
+    using Exortech.NetReflector;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
-    using System.IO;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core;
 
@@ -28,7 +28,7 @@
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -58,11 +58,10 @@
                 Solution = "test.sln"
             };
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -88,11 +87,10 @@
                 Profile = "profile"
             };
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -112,8 +110,7 @@
             var fileSystemMock = this.InitialiseFileSystemMock(defaultWorkingDir);
             var task = new CodeItRightTask(executor, fileSystemMock);
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             Assert.Throws<CruiseControlException>(() => task.Run(result));
         }
@@ -142,8 +139,7 @@
                 FailureThreshold = CodeItRightTask.Severity.Error
             };
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             Assert.AreEqual(IntegrationStatus.Failure, result.Status);
@@ -159,42 +155,38 @@
 
         private IIntegrationResult GenerateResultMock(string workingDir)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.WorkingDirectory).Return(workingDir);
-            SetupResult.For(result.IntegrationProperties).Return(new Dictionary<string, string>());
-            SetupResult.For(result.BaseFromWorkingDirectory(Arg<string>.Is.Anything))
-                .Do(new Func<string, string>(p => Path.Combine(workingDir, p)));
-            Expect.Call(() => result.AddTaskResult(Arg<ProcessTaskResult>.Is.Anything));
-            Expect.Call(() => result.AddTaskResult((ITaskResult)null));
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(workingDir);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
+            Mock.Get(result).Setup(_result => _result.BaseFromWorkingDirectory(It.IsAny<string>()))
+                .Returns<string>(p => Path.Combine(workingDir, p));
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ProcessTaskResult>())).Verifiable();
+            Mock.Get(result).Setup(_result => _result.AddTaskResult((ITaskResult)null)).Verifiable();
             return result;
         }
 
         private ProcessExecutor GenerateExecutorMock(string fileName, string args, string workingDir, int timeout)
         {
-            var executor = mocks.StrictMock<ProcessExecutor>();
-            Expect.Call(executor.Execute(null))
-                .IgnoreArguments()
-                .Do(new Function<ProcessInfo, ProcessResult>(info =>
-                {
+            var executor = mocks.Create<ProcessExecutor>(MockBehavior.Strict).Object;
+            Mock.Get(executor).Setup(_executor => _executor.Execute(It.IsAny<ProcessInfo>()))
+                .Callback<ProcessInfo>(info => {
                     Assert.AreEqual(fileName, info.FileName);
                     Assert.AreEqual(args, info.Arguments);
                     Assert.AreEqual(workingDir, info.WorkingDirectory);
                     Assert.AreEqual(timeout, info.TimeOut);
-                    return new ProcessResult(string.Empty, string.Empty, 0, false);
-                }));
+                }).Returns(new ProcessResult(string.Empty, string.Empty, 0, false)).Verifiable();
             return executor;
         }
 
         private IFileSystem InitialiseFileSystemMock(string workingDir)
         {
             var xmlFile = Path.Combine(workingDir, "codeitright.xml");
-            var fileSystemMock = mocks.StrictMock<IFileSystem>();
-            Expect
-                .Call(fileSystemMock.GenerateTaskResultFromFile(xmlFile, true))
-                .Return(null);
-            SetupResult.For(fileSystemMock.FileExists(xmlFile)).Return(true);
+            var fileSystemMock = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.GenerateTaskResultFromFile(xmlFile, true))
+                .Returns((ITaskResult)null).Verifiable();
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists(xmlFile)).Returns(true);
             var xml = "<CodeItRightReport>" +
                     "<Violations>" + 
                         "<Violation>" +
@@ -203,7 +195,7 @@
                     "</Violations>" +
                 "</CodeItRightReport>";
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
-            SetupResult.For(fileSystemMock.OpenInputStream(xmlFile)).Return(stream);
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.OpenInputStream(xmlFile)).Returns(stream);
             return fileSystemMock;
         }
         #endregion

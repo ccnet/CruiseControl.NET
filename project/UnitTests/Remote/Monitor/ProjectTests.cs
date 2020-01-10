@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Rhino.Mocks;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Monitor;
 using ThoughtWorks.CruiseControl.Remote;
@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -39,8 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ConstructorDoesNotAllowNullServer()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
-            mocks.ReplayAll();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             try
             {
                 var project = new Project(client, null, null);
@@ -52,9 +51,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ConstructorDoesNotAllowNullStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
-            mocks.ReplayAll();
             try
             {
                 var project = new Project(client, server, null);
@@ -68,11 +66,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ServerReturnsUnderlyingServer()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus();
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreSame(server, project.Server);
         }
         #endregion
@@ -81,11 +78,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void NameReturnsNameFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Name, project.Name);
         }
         #endregion
@@ -94,11 +90,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void BuildStageReturnsBuildStageFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { BuildStage = "Old" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.BuildStage, project.BuildStage);
         }
         #endregion
@@ -107,11 +102,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void BuildStatusReturnsBuildStatusFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { BuildStatus = IntegrationStatus.Exception };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.BuildStatus, project.BuildStatus);
         }
         #endregion
@@ -120,11 +114,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void StatusReturnsStatusFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Status = ProjectIntegratorState.Stopping };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Status, project.Status);
         }
         #endregion
@@ -133,11 +126,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ActivityReturnsActivityFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Activity = ProjectActivity.CheckingModifications };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Activity, project.Activity);
         }
         #endregion
@@ -146,11 +138,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void DescriptionReturnsDescriptionFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Description = "Description" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Description, project.Description);
         }
         #endregion
@@ -159,11 +150,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void CategoryReturnsCategoryFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Category = "Category" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Category, project.Category);
         }
         #endregion
@@ -172,11 +162,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void QueueReturnsQueueFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Queue = "Queue Name" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.Queue, project.Queue);
         }
         #endregion
@@ -185,11 +174,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void QueuePriorityReturnsQueuePriorityFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { QueuePriority = 7 };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.QueuePriority, project.QueuePriority);
         }
         #endregion
@@ -198,11 +186,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void WebURLReturnsWebURLFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { WebURL = "http://somewhere" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.WebURL, project.WebURL);
         }
         #endregion
@@ -211,11 +198,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void LastBuildDateReturnsLastBuildDateFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { LastBuildDate = new DateTime(2009, 1, 1) };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.LastBuildDate, project.LastBuildDate);
         }
         #endregion
@@ -224,11 +210,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void LastBuildLabelReturnsLastBuildLabelFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { LastBuildLabel = "Last label" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.LastBuildLabel, project.LastBuildLabel);
         }
         #endregion
@@ -237,11 +222,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void LastSuccessfulBuildLabelReturnsLastSuccessfulBuildLabelFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { LastSuccessfulBuildLabel = "Last success label" };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.LastSuccessfulBuildLabel, project.LastSuccessfulBuildLabel);
         }
         #endregion
@@ -250,11 +234,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void NextBuildTimeReturnsNextBuildTimeFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { NextBuildTime = new DateTime(2009, 1, 2) };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreEqual(status.NextBuildTime, project.NextBuildTime);
         }
         #endregion
@@ -263,14 +246,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void MessagesReturnsMessagesFromStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var messages = new Message[] {
                 new Message { Text = "Testing"}
             };
             var status = new ProjectStatus { Messages = messages };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             Assert.AreSame(status.Messages, project.Messages);
         }
         #endregion
@@ -279,11 +261,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateValidatesArguments()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { BuildStatus = IntegrationStatus.Exception };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             try
             {
                 project.Update(null);
@@ -295,11 +276,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateChangesUnderlyingStatus()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { BuildStatus = IntegrationStatus.Exception };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
 
             var newStatus = new ProjectStatus { BuildStatus = IntegrationStatus.Failure };
             project.Update(newStatus);
@@ -327,8 +307,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateFiresPropertyChangedWhenMessageIsAdded()
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus
                 {
@@ -337,7 +317,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                 }
             };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
 
             var newStatus = new ProjectStatus
@@ -358,8 +337,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateFiresPropertyChangedWhenMessageIsRemoved()
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus
             {
@@ -369,7 +348,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                 }
             };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
 
             var newStatus = new ProjectStatus
@@ -389,8 +367,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void UpdateFiresPropertyChangedWhenMessageIsChanged()
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus
             {
@@ -399,7 +377,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                 }
             };
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
 
             var newStatus = new ProjectStatus
@@ -421,12 +398,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ForceBuildSendsRequestToClient()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
-            Expect.Call(() => client.ForceBuild("Test Project"));
-            mocks.ReplayAll();
+            Mock.Get(client).Setup(_client => _client.ForceBuild("Test Project")).Verifiable();
             project.ForceBuild();
             mocks.VerifyAll();
         }
@@ -434,13 +410,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ForceBuildWithParametersSendsRequestToClient()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
             var parameters = new List<NameValuePair>();
-            Expect.Call(() => client.ForceBuild("Test Project", parameters));
-            mocks.ReplayAll();
+            Mock.Get(client).Setup(_client => _client.ForceBuild("Test Project", parameters)).Verifiable();
             project.ForceBuild(parameters);
             mocks.VerifyAll();
         }
@@ -450,12 +425,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void AbortBuildSendsRequestToClient()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
-            Expect.Call(() => client.AbortBuild("Test Project"));
-            mocks.ReplayAll();
+            Mock.Get(client).Setup(_client => _client.AbortBuild("Test Project")).Verifiable();
             project.AbortBuild();
             mocks.VerifyAll();
         }
@@ -465,12 +439,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void StartSendsRequestToClient()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
-            Expect.Call(() => client.StartProject("Test Project"));
-            mocks.ReplayAll();
+            Mock.Get(client).Setup(_client => _client.StartProject("Test Project")).Verifiable();
             project.Start();
             mocks.VerifyAll();
         }
@@ -480,12 +453,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void StopSendsRequestToClient()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var status = new ProjectStatus { Name = "Test Project" };
             var project = new Project(client, server, status);
-            Expect.Call(() => client.StopProject("Test Project"));
-            mocks.ReplayAll();
+            Mock.Get(client).Setup(_client => _client.StopProject("Test Project")).Verifiable();
             project.Stop();
             mocks.VerifyAll();
         }
@@ -495,8 +467,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         #region Helper methods
         private void RunPropertyChangedTest(string property, object originalValue, object newValue)
         {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            mocks = new MockRepository(MockBehavior.Default);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var server = InitialiseServer();
             var statusType = typeof(ProjectStatus);
             var propertyMember = statusType.GetProperty(property);
@@ -504,7 +476,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             var status = new ProjectStatus();
             propertyMember.SetValue(status, originalValue, new object[0]);
             var project = new Project(client, server, status);
-            mocks.ReplayAll();
             var eventFired = false;
 
             var newStatus = new ProjectStatus();
@@ -519,7 +490,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
 
         private Server InitialiseServer()
         {
-            var watcher = mocks.Stub<IServerWatcher>();
+            var watcher = mocks.Create<IServerWatcher>().Object;
             var client = new CruiseServerClientMock();
             var monitor = new Server(client, watcher);
             return monitor;

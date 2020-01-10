@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 
@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     public class TaskContainerBaseTests
     {
         #region Private fields
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         #endregion
 
         #region Tests
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ValidateHandlesNonValidationTasks()
         {
-            var subTask = mocks.StrictMock<ITask>();
+            var subTask = mocks.Create<ITask>(MockBehavior.Strict).Object;
             var task = new TestTask
             {
                 Tasks = new ITask[] 
@@ -69,7 +69,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            mocks.ReplayAll();
             task.Validate(null, null, null);
             mocks.VerifyAll();
         }
@@ -89,9 +88,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     subTask
                 }
             };
-            var result = mocks.DynamicMock<IIntegrationResult>();
+            var result = mocks.Create<IIntegrationResult>().Object;
 
-            mocks.ReplayAll();
             task.ApplyParameters(parameters, definitions);
             task.Run(result);
             mocks.VerifyAll();
@@ -145,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void InitialiseStatusHandlesNonStatusTask()
         {
-            var subTask = mocks.StrictMock<ITask>();
+            var subTask = mocks.Create<ITask>(MockBehavior.Strict).Object;
             var task = new TestTask
             {
                 Tasks = new ITask[] 
@@ -154,7 +152,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            mocks.ReplayAll();
             task.TestStatus();
             mocks.VerifyAll();
 

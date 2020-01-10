@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
     using System;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
 
@@ -13,7 +13,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
@@ -24,9 +24,8 @@
                     Value1 = "test",
                     Value2 = "test"
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -41,9 +40,8 @@
                     Value1 = "test1",
                     Value2 = "test2"
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -59,9 +57,8 @@
                     Value2 = "test2",
                     EvaluationType = CompareValuesTaskCondition.Evaluation.NotEqual
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -77,9 +74,8 @@
                 Value2 = "test2",
                 EvaluationType = (CompareValuesTaskCondition.Evaluation)99
             };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
 
-            this.mocks.ReplayAll();
             Assert.Throws<InvalidOperationException>(() => condition.Eval(result));
 
             this.mocks.VerifyAll();

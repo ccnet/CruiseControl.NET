@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml.Serialization;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using System.Xml.Serialization;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
     [TestFixture]
     public class CruiseServerClientTests
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         [Test]
         public void ProcessMessageCorrectlyHandlesAValidMessage()
@@ -25,9 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             response.Result = ResponseResult.Success;
 
             // Initialises the mocks
-            ICruiseServer server = mocks.DynamicMock<ICruiseServer>();
-            Expect.Call(server.ForceBuild(request)).Return(response);
-            mocks.ReplayAll();
+            ICruiseServer server = mocks.Create<ICruiseServer>().Object;
+            Mock.Get(server).Setup(_server => _server.ForceBuild(request)).Returns(response);
 
             // Run the actual test
             var manager = new ThoughtWorks.CruiseControl.Core.CruiseServerClient(server);
@@ -40,8 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void ProcessMessageCorrectlyHandlesAnUnknownMessage()
         {
             // Initialises the mocks
-            ICruiseServer server = mocks.DynamicMock<ICruiseServer>();
-            mocks.ReplayAll();
+            ICruiseServer server = mocks.Create<ICruiseServer>().Object;
 
             // Run the actual test
             var manager = new ThoughtWorks.CruiseControl.Core.CruiseServerClient(server);
@@ -57,8 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             ProjectRequest request = new ProjectRequest("123-45", "A test project");
 
             // Initialises the mocks
-            ICruiseServer server = mocks.DynamicMock<ICruiseServer>();
-            mocks.ReplayAll();
+            ICruiseServer server = mocks.Create<ICruiseServer>().Object;
 
             // Run the actual test
             var manager = new ThoughtWorks.CruiseControl.Core.CruiseServerClient(server);

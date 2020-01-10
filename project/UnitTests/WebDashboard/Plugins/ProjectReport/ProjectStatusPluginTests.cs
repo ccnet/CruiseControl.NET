@@ -1,16 +1,16 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
+    using System.Collections;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
     using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
     using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using System.Collections;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
     public class ProjectStatusPluginTests
     {
@@ -22,7 +22,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -51,20 +51,20 @@
             var url = "/somewhere/action";
             var appPath = "/";
             var projectName = "The Project";
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var request = this.mocks.StrictMock<IRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            var urlBuilder = this.mocks.StrictMock<ICruiseUrlBuilder>();
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(request.ApplicationPath).Return(appPath);
-            SetupResult.For(projectSpec.ProjectName).Return(projectName);
-            SetupResult.For(farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Return("1234567");
-            SetupResult.For(urlBuilder.BuildProjectUrl(ProjectStatusAction.ActionName, projectSpec)).Return(url);
-            Expect.Call(viewGenerator.GenerateView(null, null))
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var viewGenerator = this.mocks.Create<IVelocityViewGenerator>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            var urlBuilder = this.mocks.Create<ICruiseUrlBuilder>(MockBehavior.Strict).Object;
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(request).SetupGet(_request => _request.ApplicationPath).Returns(appPath);
+            Mock.Get(projectSpec).SetupGet(_projectSpec => _projectSpec.ProjectName).Returns(projectName);
+            Mock.Get(farmService).Setup(_farmService => _farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Returns("1234567");
+            Mock.Get(urlBuilder).Setup(_urlBuilder => _urlBuilder.BuildProjectUrl(ProjectStatusAction.ActionName, projectSpec)).Returns(url);
+            Mock.Get(viewGenerator).Setup(_viewGenerator => _viewGenerator.GenerateView(It.IsAny<string>(), It.IsAny<Hashtable>()))
                 .Callback<string, Hashtable>((n, ht) =>
                 {
                     Assert.AreEqual("ProjectStatusReport.vm", n);
@@ -75,15 +75,13 @@
                     Assert.AreEqual(projectName, ht["projectName"]);
                     Assert.IsTrue(ht.ContainsKey("applicationPath"));
                     Assert.AreEqual(string.Empty, ht["applicationPath"]);
-                    return true;
                 })
-                .Return(new HtmlFragmentResponse("from nVelocity"));
+                .Returns(new HtmlFragmentResponse("from nVelocity")).Verifiable();
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectStatusPlugin(farmService, viewGenerator, urlBuilder);
             var response = plugin.Execute(cruiseRequest);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsInstanceOf<HtmlFragmentResponse>(response);
             var actual = response as HtmlFragmentResponse;
             Assert.AreEqual("from nVelocity", actual.ResponseFragment);
@@ -95,20 +93,20 @@
             var url = "/somewhere/action";
             var appPath = "/ccnet/";
             var projectName = "The Project";
-            var farmService = this.mocks.StrictMock<IFarmService>();
-            var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();
-            var cruiseRequest = this.mocks.StrictMock<ICruiseRequest>();
-            var request = this.mocks.StrictMock<IRequest>();
-            var projectSpec = this.mocks.StrictMock<IProjectSpecifier>();
-            var urlBuilder = this.mocks.StrictMock<ICruiseUrlBuilder>();
-            SetupResult.For(cruiseRequest.Request).Return(request);
-            SetupResult.For(cruiseRequest.ProjectSpecifier).Return(projectSpec);
-            SetupResult.For(cruiseRequest.RetrieveSessionToken()).Return(null);
-            SetupResult.For(request.ApplicationPath).Return(appPath);
-            SetupResult.For(projectSpec.ProjectName).Return(projectName);
-            SetupResult.For(farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Return("1234567");
-            SetupResult.For(urlBuilder.BuildProjectUrl(ProjectStatusAction.ActionName, projectSpec)).Return(url);
-            Expect.Call(viewGenerator.GenerateView(null, null))
+            var farmService = this.mocks.Create<IFarmService>(MockBehavior.Strict).Object;
+            var viewGenerator = this.mocks.Create<IVelocityViewGenerator>(MockBehavior.Strict).Object;
+            var cruiseRequest = this.mocks.Create<ICruiseRequest>(MockBehavior.Strict).Object;
+            var request = this.mocks.Create<IRequest>(MockBehavior.Strict).Object;
+            var projectSpec = this.mocks.Create<IProjectSpecifier>(MockBehavior.Strict).Object;
+            var urlBuilder = this.mocks.Create<ICruiseUrlBuilder>(MockBehavior.Strict).Object;
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(request);
+            Mock.Get(cruiseRequest).SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpec);
+            Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
+            Mock.Get(request).SetupGet(_request => _request.ApplicationPath).Returns(appPath);
+            Mock.Get(projectSpec).SetupGet(_projectSpec => _projectSpec.ProjectName).Returns(projectName);
+            Mock.Get(farmService).Setup(_farmService => _farmService.GetLinkedSiteId(projectSpec, null, "ohloh")).Returns("1234567");
+            Mock.Get(urlBuilder).Setup(_urlBuilder => _urlBuilder.BuildProjectUrl(ProjectStatusAction.ActionName, projectSpec)).Returns(url);
+            Mock.Get(viewGenerator).Setup(_viewGenerator => _viewGenerator.GenerateView(It.IsAny<string>(), It.IsAny<Hashtable>()))
                 .Callback<string, Hashtable>((n, ht) =>
                 {
                     Assert.AreEqual("ProjectStatusReport.vm", n);
@@ -119,15 +117,13 @@
                     Assert.AreEqual(projectName, ht["projectName"]);
                     Assert.IsTrue(ht.ContainsKey("applicationPath"));
                     Assert.AreEqual("/ccnet/", ht["applicationPath"]);
-                    return true;
                 })
-                .Return(new HtmlFragmentResponse("from nVelocity"));
+                .Returns(new HtmlFragmentResponse("from nVelocity")).Verifiable();
 
-            this.mocks.ReplayAll();
             var plugin = new ProjectStatusPlugin(farmService, viewGenerator, urlBuilder);
             var response = plugin.Execute(cruiseRequest);
 
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsInstanceOf<HtmlFragmentResponse>(response);
             var actual = response as HtmlFragmentResponse;
             Assert.AreEqual("from nVelocity", actual.ResponseFragment);

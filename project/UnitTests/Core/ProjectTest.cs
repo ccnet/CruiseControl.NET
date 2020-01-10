@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Exortech.NetReflector;
 using Exortech.NetReflector.Util;
+using Moq;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
@@ -18,9 +21,7 @@ using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
-using Rhino.Mocks;
-using System.Collections.Generic;
-using System.Collections;
+using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -44,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		public void SetUp()
 		{
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
             workingDirPath = TempFileUtil.CreateTempDir("workingDir");
 			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
 			Assert.IsTrue(Directory.Exists(workingDirPath));
@@ -571,16 +572,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [Test]
         public void RetrieveBuildFinalStatusReturnsDataStoreResult()
         {
-            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
+            var dataStoreMock = this.mocks.Create<IDataStore>(MockBehavior.Strict).Object;
             var project = new Project
                 {
                     DataStore = dataStoreMock
                 };
             var buildName = "testBuild";
             var expected = new ItemStatus();
-            Expect.Call(dataStoreMock.LoadProjectSnapshot(project, buildName)).Return(expected);
+            Mock.Get(dataStoreMock).Setup(_dataStoreMock => _dataStoreMock.LoadProjectSnapshot(project, buildName)).Returns(expected).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = project.RetrieveBuildFinalStatus(buildName);
 
             this.mocks.VerifyAll();
@@ -634,12 +634,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void PublishResultsShouldCleanTemporaryResultsOnSuccess()
         {
             // Set up the test
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
-            SetupResult.For(result.Succeeded).Return(true);
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Succeeded).Returns(true);
             var results = new List<ITaskResult>();
-            SetupResult.For(result.TaskResults).Return(results);
+            Mock.Get(result).SetupGet(_result => _result.TaskResults).Returns(results);
             var project = new Project();
             project.Publishers = new ITask[]
             {
@@ -650,7 +650,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             results.Add(tempResult);
 
             // Run the test
-            this.mocks.ReplayAll();
             project.PublishResults(result);
 
             // Check the results
@@ -662,19 +661,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void PublishResultsShouldNotCleanTemporaryResultsWithoutAMerge()
         {
             // Set up the test
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
-            SetupResult.For(result.Succeeded).Return(true);
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Succeeded).Returns(true);
             var results = new List<ITaskResult>();
-            SetupResult.For(result.TaskResults).Return(results);
+            Mock.Get(result).SetupGet(_result => _result.TaskResults).Returns(results);
             var project = new Project();
             project.Publishers = new ITask[0];
             var tempResult = new PhantomResult(p => { Assert.Fail("CleanUp() called"); });
             results.Add(tempResult);
 
             // Run the test
-            this.mocks.ReplayAll();
             project.PublishResults(result);
 
             // Check the results
@@ -685,15 +683,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void PublishResultsShouldCleanTemporaryResultsOnFailure()
         {
             // Set up the test
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
-            SetupResult.For(result.Succeeded).Return(false);
-            SetupResult.For(result.Modifications).Return(new Modification[0]);
-            SetupResult.For(result.FailureUsers).Return(new ArrayList());
-            SetupResult.For(result.FailureTasks).Return(new ArrayList());
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Succeeded).Returns(false);
+            Mock.Get(result).SetupGet(_result => _result.Modifications).Returns(new Modification[0]);
+            Mock.Get(result).SetupGet(_result => _result.FailureUsers).Returns(new ArrayList());
+            Mock.Get(result).SetupGet(_result => _result.FailureTasks).Returns(new ArrayList());
             var results = new List<ITaskResult>();
-            SetupResult.For(result.TaskResults).Return(results);
+            Mock.Get(result).SetupGet(_result => _result.TaskResults).Returns(results);
             var project = new Project();
             project.Publishers = new ITask[]
             {
@@ -704,11 +702,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             results.Add(tempResult);
 
             // Run the test
-            this.mocks.ReplayAll();
             project.PublishResults(result);
 
             // Check the results
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
             Assert.IsTrue(cleaned);
         }
 
@@ -716,15 +713,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void PublishResultsShouldNotCleanTemporaryResultsOnMergeFailure()
         {
             // Set up the test
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
-            SetupResult.For(result.Succeeded).Return(false);
-            SetupResult.For(result.Modifications).Return(new Modification[0]);
-            SetupResult.For(result.FailureUsers).Return(new ArrayList());
-            SetupResult.For(result.FailureTasks).Return(new ArrayList());
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Succeeded).Returns(false);
+            Mock.Get(result).SetupGet(_result => _result.Modifications).Returns(new Modification[0]);
+            Mock.Get(result).SetupGet(_result => _result.FailureUsers).Returns(new ArrayList());
+            Mock.Get(result).SetupGet(_result => _result.FailureTasks).Returns(new ArrayList());
             var results = new List<ITaskResult>();
-            SetupResult.For(result.TaskResults).Return(results);
+            Mock.Get(result).SetupGet(_result => _result.TaskResults).Returns(results);
             var project = new Project();
             project.Publishers = new ITask[]
             {
@@ -734,11 +731,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             results.Add(tempResult);
 
             // Run the test
-            this.mocks.ReplayAll();
             project.PublishResults(result);
 
             // Check the results
-            this.mocks.VerifyAll();
+            this.mocks.Verify();
         }
         #endregion
 

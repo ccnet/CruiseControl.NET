@@ -1,23 +1,14 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
     using System;
+    using System.Threading;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Core.Triggers;
-    using System.Threading;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Util;
 
     [TestFixture]
     public class CronTriggerTest
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            this.mocks = new MockRepository();
-        }
-
         [Test]
         public void TestX()
         {

@@ -1,13 +1,13 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
+    using System.IO;
+    using System.Text;
     using ICSharpCode.SharpZipLib.Zip;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Publishers;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using System.IO;
-    using System.Text;
 
     [TestFixture]
     public class PackageFileTests
@@ -17,27 +17,27 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void HandlesShortDirectoryName()
         {
             var testFile = @"C:\Somewhere.txt";
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.WorkingDirectory).Return(@"C:\OnceUponATime\InALandFarFarWayFromHere\ThereLivedABeautifulPrincess");
-            var fileSystem = mocks.StrictMock<IFileSystem>();
-            Expect.Call(fileSystem.FileExists(testFile)).Return(true);
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(@"C:\OnceUponATime\InALandFarFarWayFromHere\ThereLivedABeautifulPrincess");
+            var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(testFile)).Returns(true).Verifiable();
             var inputStream = new MemoryStream(Encoding.UTF8.GetBytes("This is some test data"));
-            Expect.Call(fileSystem.GetFileLength(testFile)).Return(inputStream.Length);
-            Expect.Call(fileSystem.OpenInputStream(testFile)).Return(inputStream);
-            Expect.Call(fileSystem.GetLastWriteTime(testFile)).Return(System.DateTime.Now);
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.GetFileLength(testFile)).Returns(inputStream.Length).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenInputStream(testFile)).Returns(inputStream).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.GetLastWriteTime(testFile)).Returns(System.DateTime.Now).Verifiable();
 
             var file = new PackageFile(testFile);
             file.FileSystem = fileSystem;
-            var outputStream = mocks.DynamicMock<ZipOutputStream>();
+            var stream = new MemoryStream();
+            var outputStream = new ZipOutputStream(stream);
 
-            mocks.ReplayAll();
             file.Package(result, outputStream);
             mocks.VerifyAll();
         }

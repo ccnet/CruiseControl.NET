@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
     using ThoughtWorks.CruiseControl.Remote;
@@ -13,7 +13,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
@@ -23,10 +23,9 @@
             {
                 BuildCondition = BuildCondition.ForceBuild
             };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.BuildCondition).Return(BuildCondition.ForceBuild);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildCondition).Returns(BuildCondition.ForceBuild).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -41,10 +40,9 @@
                     BuildCondition = BuildCondition.ForceBuild,
                     Description = "Not equal test"
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.BuildCondition).Return(BuildCondition.IfModificationExists);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildCondition).Returns(BuildCondition.IfModificationExists).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();

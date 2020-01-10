@@ -2,8 +2,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -18,20 +18,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private string logfile;
 		private IIntegrationResult result;
 		private MsBuildTask task;
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
 		[SetUp]
 		protected void SetUp()
 		{
-			var shadowCopier = mocks.DynamicMock<IShadowCopier>();
-			SetupResult.For(shadowCopier.RetrieveFilePath(defaultLogger)).Return(defaultLogger);
+			var shadowCopier = mocks.Create<IShadowCopier>().Object;
+			Mock.Get(shadowCopier).Setup(_shadowCopier => _shadowCopier.RetrieveFilePath(defaultLogger)).Returns(defaultLogger);
 
-			var executionEnvironment = mocks.DynamicMock<IExecutionEnvironment>();
-			SetupResult.For(executionEnvironment.IsRunningOnWindows).Return(true);
-			SetupResult.For(executionEnvironment.RuntimeDirectory).Return(RuntimeEnvironment.GetRuntimeDirectory());
-
-			mocks.ReplayAll();
-
+			var executionEnvironment = mocks.Create<IExecutionEnvironment>().Object;
+			Mock.Get(executionEnvironment).SetupGet(_executionEnvironment => _executionEnvironment.IsRunningOnWindows).Returns(true);
+			Mock.Get(executionEnvironment).SetupGet(_executionEnvironment => _executionEnvironment.RuntimeDirectory).Returns(RuntimeEnvironment.GetRuntimeDirectory());
 
 			CreateProcessExecutorMock(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "MSBuild.exe"));
 			task = new MsBuildTask((ProcessExecutor) mockProcessExecutor.MockInstance, executionEnvironment, shadowCopier);
@@ -61,7 +58,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.BuildArgs = "/p:Configuration=Release";
 			task.Timeout = 600;
 
-            mocks.ReplayAll();
 			task.Run(result);
 
 			Assert.AreEqual(1, result.TaskResults.Count);
@@ -75,7 +71,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" ""my project.proj""" + GetLoggerArgument());
 			task.ProjectFile = "my project.proj";
 
-            mocks.ReplayAll();
             task.Run(result);
 		}
 
@@ -85,7 +80,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             ExpectToExecuteArguments(@"/nologo /t:first;""next task"" " + IntegrationProperties() + GetLoggerArgument());
 			task.Targets = "first;next task";
 
-            mocks.ReplayAll();
 			task.Run(result);
 		}
 
@@ -100,7 +94,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.Label = @"My Label";
 			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 
-            mocks.ReplayAll();
 			task.Run(result);
 		}
 
@@ -109,7 +102,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
             ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + GetLoggerArgument());
 			task.BuildArgs = "/noconsolelogger /p:Configuration=Debug";
-            mocks.ReplayAll();
 			task.Run(result);			
 		}
 
@@ -121,7 +113,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ExpectToExecute(info);
 			task.WorkingDirectory = "src";
 
-            mocks.ReplayAll();
 			task.Run(result);
 		}
 

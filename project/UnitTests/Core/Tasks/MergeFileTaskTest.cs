@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
+using System.IO;
+using System.Xml;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Config;
-using System.Xml;
-using Rhino.Mocks;
-using System.IO;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	[TestFixture]
 	public class MergeFileTaskTest : CustomAssertion
 	{
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         [Test]
         public void ConfigurationIsLoadedCorrectly()
@@ -182,23 +182,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 target ?? string.Empty);
 
             // Mock the logger
-            var logger = mocks.StrictMock<ILogger>();
-            Expect.Call(() => { logger.Info(""); }).IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(() => { logger.Warning(""); }).IgnoreArguments().Repeat.AtLeastOnce();
+            var logger = mocks.Create<ILogger>(MockBehavior.Strict).Object;
+            Mock.Get(logger).Setup(_logger => _logger.Info(It.IsAny<string>(), It.IsAny<object[]>())).Verifiable();
+            Mock.Get(logger).Setup(_logger => _logger.Warning(It.IsAny<string>(), It.IsAny<object[]>())).Verifiable();
 
             // Mock the file system
-            var fileSystem = mocks.StrictMock<IFileSystem>();
-            Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.xml"))).Return(true);
-            Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.xml"))).Return(true);
-            Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.txt"))).Return(true);
-            Expect.Call(fileSystem.FileExists(Path.Combine(working, "blank.txt"))).Return(false);
-            Expect.Call(() => { fileSystem.EnsureFolderExists(targetFolder); });
-            Expect.Call(() =>
-            {
-                fileSystem.Copy(
-                    Path.Combine(working, "text.txt"),
-                    Path.Combine(targetFolder, "text.txt"));
-            });
+            var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(Path.Combine(working, "text.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(Path.Combine(working, "text.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(Path.Combine(working, "text.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(Path.Combine(working, "blank.txt"))).Returns(false).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.EnsureFolderExists(targetFolder)).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.Copy(
+                Path.Combine(working, "text.txt"),
+                Path.Combine(targetFolder, "text.txt"))
+            ).Verifiable();
 
             // Initialise the task
             var task = new MergeFilesTask
@@ -214,23 +212,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Mock the result
-            var result = mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(() =>
-                            {
-                                result.AddTaskResult((ITaskResult) null);
-                            }).IgnoreArguments();
-            Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Succeeded).Return(true);
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ITaskResult>())).Verifiable();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).SetupGet(_result => _result.Succeeded).Returns(true).Verifiable();
 
-            var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
-            SetupResult.For(result.BuildProgressInformation)
-                .Return(buildProgress);
-            SetupResult.For(result.WorkingDirectory).Return(working);
-            SetupResult.For(result.ArtifactDirectory).Return(artefact);
-            SetupResult.For(result.Label).Return(label);
-            Expect.Call(() => { buildProgress.SignalStartRunTask("Merging Files"); });
-            buildProgress.Expect(bpi => bpi.AddTaskInformation(null)).IgnoreArguments();
-            buildProgress.Expect(bpi => bpi.AddTaskInformation(null)).IgnoreArguments();
+            var buildProgress = mocks.Create<BuildProgressInformation>(MockBehavior.Strict, artefact, "Project1").Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildProgress);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(working);
+            Mock.Get(result).SetupGet(_result => _result.ArtifactDirectory).Returns(artefact);
+            Mock.Get(result).SetupGet(_result => _result.Label).Returns(label);
+            Mock.Get(buildProgress).Setup(_buildProgress => _buildProgress.SignalStartRunTask("Merging Files")).Verifiable();
+            Mock.Get(buildProgress).Setup(_buildProgress => _buildProgress.AddTaskInformation(It.IsAny<string>())).Verifiable();
 
             //var testFile = new FileInfo(Path.Combine(working, "text.xml"));
             //Expect.Call(fileSystem.FileExists(testFile.FullName)).Return(true);
@@ -242,7 +235,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             //                });
 
             // Run the test
-            mocks.ReplayAll();
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
 

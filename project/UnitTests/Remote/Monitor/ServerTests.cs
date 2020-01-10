@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
-using Rhino.Mocks;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Monitor;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
 {
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -40,8 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         [Test]
         public void ConstructorDoesNotAllowNullWatcher()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
-            mocks.ReplayAll();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             try
             {
                 var monitor = new Server(client, (IServerWatcher)null);
@@ -57,7 +56,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             var watcher = new TestWatcher();
             var monitor = InitialiseServer(watcher);
-            mocks.ReplayAll();
             monitor.Refresh();
             Assert.IsTrue(watcher.Refreshed);
         }
@@ -67,7 +65,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             var watcher = new TestWatcher();
             var monitor = InitialiseServer(watcher);
-            mocks.ReplayAll();
             var hasFired = false;
             monitor.ProjectAdded += (o, e) =>
             {
@@ -94,7 +91,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             var watcher = new TestWatcher();
             var monitor = InitialiseServer(watcher);
-            mocks.ReplayAll();
             var hasFired = false;
             monitor.ProjectRemoved += (o, e) =>
             {
@@ -116,7 +112,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             var watcher = new TestWatcher();
             var monitor = InitialiseServer(watcher);
-            mocks.ReplayAll();
             monitor.Refresh();
             watcher.Snapshot.ProjectStatuses = new ProjectStatus[]{
                 new ProjectStatus {
@@ -138,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         #region Helper methods
         private Server InitialiseServer()
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
             var monitor = new Server(client, new TestWatcher());
             return monitor;
         }

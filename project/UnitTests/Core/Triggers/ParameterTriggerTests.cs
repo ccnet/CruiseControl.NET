@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core.Triggers;
 
@@ -16,19 +16,18 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void IntegrationCompletedShouldDelegateToInnerTrigger()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => innerTriggerMock.IntegrationCompleted());
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.IntegrationCompleted()).Verifiable();
             var trigger = new ParameterTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             mocks.VerifyAll();
         }
@@ -37,13 +36,12 @@
         public void NextBuildShouldReturnInnerTriggerNextBuildIfUnknown()
         {
             var now = DateTime.Now;
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.NextBuild).Return(now);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).SetupGet(_innerTriggerMock => _innerTriggerMock.NextBuild).Returns(now).Verifiable();
             var trigger = new ParameterTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             var actual = trigger.NextBuild;
 
             mocks.VerifyAll();
@@ -53,13 +51,12 @@
         [Test]
         public void FireDoesNothingIfInnerTriggerDoesNotFire()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.Fire()).Return(null);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.Fire()).Returns(() => null).Verifiable();
             var trigger = new ParameterTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             var actual = trigger.Fire();
 
             mocks.VerifyAll();
@@ -74,14 +71,13 @@
                     new NameValuePair("test", "testValue")
                 };
             var request = new IntegrationRequest(BuildCondition.IfModificationExists, "test", null);
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.Fire()).Return(request);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.Fire()).Returns(request).Verifiable();
             var trigger = new ParameterTrigger
                 {
                     InnerTrigger = innerTriggerMock,
                     Parameters = parameters
                 };
-            mocks.ReplayAll();
             var actual = trigger.Fire();
 
             mocks.VerifyAll();
@@ -95,13 +91,12 @@
         public void FireMandlesMissingParameters()
         {
             var request = new IntegrationRequest(BuildCondition.IfModificationExists, "test", null);
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.Fire()).Return(request);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.Fire()).Returns(request).Verifiable();
             var trigger = new ParameterTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             var actual = trigger.Fire();
 
             mocks.VerifyAll();

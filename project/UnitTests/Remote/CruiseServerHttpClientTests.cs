@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Net;
 using System.Text;
+using Moq;
+using Moq.Protected;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
-using Rhino.Mocks;
-using System.Net;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
@@ -76,21 +79,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Activity = ProjectActivity.Building,
             ProjectName = "CCNet"
         };
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         #endregion
 
         [Test]
         public void GetCruiseServerSnapshotSetsCredentialsOnWebClient()
         {
-            var webClient = mocks.DynamicMock<WebClient>();
-            Expect.Call(webClient.DownloadString(""))
-                .IgnoreArguments()
-                .Return(xmlFrom11);
-            SetupResult.For(webClient.Credentials).PropertyBehavior();
             var url = "http://test1:test2@test3";
+            var webClient = mocks.Create<WebClient>().Object;
+            SetupWebClient(webClient, url, xmlFrom11);
             var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
 
-            mocks.ReplayAll();
             client.GetCruiseServerSnapshot();
 
             Assert.IsNotNull(webClient.Credentials, "No credentials set");
@@ -102,15 +101,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GetProjectStatusSetsCredentialsOnWebClient()
         {
-            var webClient = mocks.DynamicMock<WebClient>();
-            Expect.Call(webClient.DownloadString(""))
-                .IgnoreArguments()
-                .Return(xmlFrom11);
-            SetupResult.For(webClient.Credentials).PropertyBehavior();
             var url = "http://test1:test2@test3";
+            var webClient = mocks.Create<WebClient>().Object;
+            SetupWebClient(webClient, url, xmlFrom11);
             var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
 
-            mocks.ReplayAll();
             client.GetProjectStatus();
 
             Assert.IsNotNull(webClient.Credentials, "No credentials set");
@@ -122,12 +117,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void StartProjectSetsCredentialsOnWebClient()
         {
-            var webClient = mocks.DynamicMock<WebClient>();
-            SetupResult.For(webClient.Credentials).PropertyBehavior();
             var url = "http://test1:test2@test3";
+            var webClient = mocks.Create<WebClient>().Object;
+            SetupWebClient(webClient, url);
             var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
 
-            mocks.ReplayAll();
             client.StartProject(null);
 
             Assert.IsNotNull(webClient.Credentials, "No credentials set");
@@ -139,20 +133,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GetProjectStatusForcesAuthorizationIf403ForbiddenIsReceived()
         {
-            var webClient = mocks.DynamicMock<WebClient>();
-            Expect.Call(webClient.DownloadString(""))
-                .IgnoreArguments()
-                .Throw(new WebException("The remote server returned an error: (403) Forbidden."));
-            Expect.Call(webClient.DownloadString(""))
-                .IgnoreArguments()
-                .Return(xmlFrom11);
-            SetupResult.For(webClient.Credentials).PropertyBehavior();
-            SetupResult.For(webClient.Headers).PropertyBehavior();
-            webClient.Headers = new WebHeaderCollection();
             var url = "http://test1:test2@test3";
+            var webClient = mocks.Create<WebClient>().Object;
+            SetupWebClient(webClient, url, xmlFrom11, true);
+            webClient.Headers = new WebHeaderCollection();
             var client = new CruiseServerHttpClient("http://test1:test2@test3", webClient);
 
-            mocks.ReplayAll();
             client.GetProjectStatus();
 
             Assert.AreEqual("Basic dGVzdDE6dGVzdDI=", webClient.Headers["Authorization"], "Unexpected Authorization header");
@@ -161,30 +147,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GetProjectStatusCorrectlyHandlesRelativePath()
         {
-            var webClient = mocks.StrictMock<WebClient>();
-            Expect.Call(webClient.DownloadString("http://relative/XmlStatusReport.aspx"))
-                .Return(xmlFrom11);
+            var webClient = mocks.Create<WebClient>(MockBehavior.Strict).Object;
+            SetupWebClient(webClient, "http://relative/XmlStatusReport.aspx", xmlFrom11);
             var client = new CruiseServerHttpClient("http://relative", webClient);
 
-            mocks.ReplayAll();
             var results = client.GetProjectStatus();
 
             Assert.IsNotNull(results, "No projects parsed");
             Assert.AreEqual(1, results.Length, "Unexpected number of projects returned");
             CompareProjects(projectFrom11, results[0]);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
         public void ForceBuildCorrectlyHandlesRelativePath()
         {
-            var webClient = mocks.StrictMock<WebClient>();
-            Expect.Call(webClient.UploadValues("http://relative/ViewFarmReport.aspx", null))
-                .IgnoreArguments()
-                .Return(new byte[0]);
+            var webClient = mocks.Create<WebClient>(MockBehavior.Strict).Object;
+            SetupWebClient(webClient, "http://relative/ViewFarmReport.aspx");
             var client = new CruiseServerHttpClient("http://relative", webClient);
 
-            mocks.ReplayAll();
             client.ForceBuild("Project1");
 
             mocks.VerifyAll();
@@ -193,29 +174,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GetProjectStatusCorrectlyHandles1_1Data()
         {
-            var webClient = mocks.StrictMock<WebClient>();
-            Expect.Call(webClient.DownloadString("http://relative/XmlStatusReport.aspx"))
-                .Return(xmlFrom11);
+            var webClient = mocks.Create<WebClient>(MockBehavior.Strict).Object;
+            SetupWebClient(webClient, "http://relative/XmlStatusReport.aspx", xmlFrom11);
             var client = new CruiseServerHttpClient("http://relative", webClient);
 
-            mocks.ReplayAll();
             var results = client.GetProjectStatus();
 
             Assert.IsNotNull(results, "No projects parsed");
             Assert.AreEqual(1, results.Length, "Unexpected number of projects returned");
             CompareProjects(projectFrom11, results[0]);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
         public void GetProjectStatusCorrectlyHandles1_4_4Data()
         {
-            var webClient = mocks.StrictMock<WebClient>();
-            Expect.Call(webClient.DownloadString("http://relative/XmlServerReport.aspx"))
-                .Return(xmlFrom144);
+            var webClient = mocks.Create<WebClient>(MockBehavior.Strict).Object;
+            SetupWebClient(webClient, "http://relative/XmlServerReport.aspx", xmlFrom144);
             var client = new CruiseServerHttpClient("http://relative", webClient);
 
-            mocks.ReplayAll();
             var results = client.GetCruiseServerSnapshot();
 
             Assert.IsNotNull(results, "Snapshot not parsed");
@@ -227,24 +204,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Assert.AreEqual(requestFrom144.Activity, results.QueueSetSnapshot.Queues[0].Requests[0].Activity, "Queue request activity does not match");
             Assert.AreEqual(requestFrom144.ProjectName, results.QueueSetSnapshot.Queues[0].Requests[0].ProjectName, "Queue request project name does not match");
 
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
         public void GetProjectStatusCorrectlyHandlesCCData()
         {
-            var webClient = mocks.StrictMock<WebClient>();
-            Expect.Call(webClient.DownloadString("http://relative/XmlStatusReport.aspx"))
-                .Return(xmlFromCC);
+            var webClient = mocks.Create<WebClient>(MockBehavior.Strict).Object;
+            SetupWebClient(webClient, "http://relative/XmlStatusReport.aspx", xmlFromCC);
             var client = new CruiseServerHttpClient("http://relative", webClient);
 
-            mocks.ReplayAll();
             var results = client.GetProjectStatus();
 
             Assert.IsNotNull(results, "No projects parsed");
             Assert.AreEqual(1, results.Length, "Unexpected number of projects returned");
             CompareProjects(projectFromCC, results[0]);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         private void CompareProjects(ProjectStatus expected, ProjectStatus actual)
@@ -260,6 +235,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Assert.AreEqual(expected.WebURL, actual.WebURL, "WebURL does not match");
             Assert.AreEqual(expected.BuildStage, actual.BuildStage, "BuildStage does not match");
             Assert.AreEqual(expected.ServerName, actual.ServerName, "ServerName does not match");
+        }
+
+        private void SetupWebClient(WebClient webClient, string requestUrl, string response = null, bool exceptionOnFirstRequest = false)
+        {
+            var webRequest = mocks.Create<WebRequest>().Object;
+            Mock.Get(webRequest).SetupGet(_webRequest => _webRequest.RequestUri).Returns(new Uri(requestUrl));
+            Mock.Get(webRequest).Setup(_webRequest => _webRequest.GetRequestStream()).Returns(() => new MemoryStream());
+            var webResponse = mocks.Create<WebResponse>().Object;
+            if (response != null)
+            {
+                MemoryStream responseStream = new MemoryStream(Encoding.UTF8.GetBytes(response));
+                Mock.Get(webResponse).SetupGet(_webResponse => _webResponse.ContentLength).Returns(responseStream.Length);
+                Mock.Get(webResponse).Setup(_webResponse => _webResponse.GetResponseStream()).Returns(responseStream);
+            }
+            Mock.Get(webClient).Protected().Setup<WebRequest>("GetWebRequest", ItExpr.Is<Uri>(uri => uri.OriginalString.StartsWith(requestUrl))).Returns(webRequest);
+            if (exceptionOnFirstRequest)
+            {
+                Mock.Get(webClient).Protected().SetupSequence<WebResponse>("GetWebResponse", ItExpr.IsAny<WebRequest>())
+                    .Throws(new WebException("The remote server returned an error: (403) Forbidden."))
+                    .Returns(webResponse);
+            }
+            else
+            {
+                Mock.Get(webClient).Protected().Setup<WebResponse>("GetWebResponse", ItExpr.IsAny<WebRequest>()).Returns(webResponse);
+            }
         }
     }
 }

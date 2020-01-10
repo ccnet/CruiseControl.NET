@@ -1,9 +1,10 @@
 using System;
-using Rhino.Mocks;
+using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
-using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
@@ -11,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class HttpCruiseProjectManagerTest
 	{
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 		private HttpCruiseProjectManager manager;
         private ICruiseServerManager serverManagerMock;
         private CruiseServerClientBase serverClient;
@@ -35,23 +36,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[SetUp]
 		public void SetUp()
 		{
-            serverClient = mocks.DynamicMock<CruiseServerClientBase>();
+            serverClient = mocks.Create<CruiseServerClientBase>().Object;
             manager = new HttpCruiseProjectManager(serverClient, "yyy");		
 		}
 
 		[Test]
 		public void ShouldNotThrowExceptionsOnCreation()
 		{
-            new HttpCruiseProjectManager(mocks.StrictMock<CruiseServerClientBase>(), 
+            new HttpCruiseProjectManager(mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object, 
                 "foo");
 		}
 
 		[Test]
 		public void ShouldNotUseTheWebRetrieverOrServerManagerOnCreation()
 		{
-            var client = mocks.StrictMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
 
-            mocks.ReplayAll();
             new HttpCruiseProjectManager(client, "foo");
             mocks.VerifyAll();
 		}
@@ -61,12 +61,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
-            Expect.Call(serverClient.SessionToken).PropertyBehavior();
-            Expect.Call(() =>
-            {
-                serverClient.ForceBuild("yyy", NameValuePair.FromDictionary(parameters));
-            });
-            mocks.ReplayAll();
+            Mock.Get(serverClient).SetupSet(_serverClient => _serverClient.SessionToken = It.IsAny<string>());
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.ForceBuild("yyy", It.Is<List<NameValuePair>>(_parameters => _parameters.SequenceEqual(NameValuePair.FromDictionary(parameters)))));
 
             manager.ForceBuild(null, parameters, null);
             mocks.VerifyAll();
@@ -75,12 +71,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void AbortBuild()
 		{
-            Expect.Call(serverClient.SessionToken).PropertyBehavior();
-            Expect.Call(() =>
-            {
-                serverClient.AbortBuild("yyy");
-            });
-            mocks.ReplayAll();
+            Mock.Get(serverClient).SetupSet(_serverClient => _serverClient.SessionToken = It.IsAny<string>());
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.AbortBuild("yyy"));
             manager.AbortBuild(null,"John Do");
             mocks.VerifyAll();
 		}
@@ -88,12 +80,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StartProject()
 		{
-            Expect.Call(serverClient.SessionToken).PropertyBehavior();
-            Expect.Call(() =>
-            {
-                serverClient.StartProject("yyy");
-            });
-            mocks.ReplayAll();
+            Mock.Get(serverClient).SetupSet(_serverClient => _serverClient.SessionToken = It.IsAny<string>());
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.StartProject("yyy"));
             manager.StartProject(null);
             mocks.VerifyAll();
 		}
@@ -101,12 +89,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StopProject()
 		{
-            Expect.Call(serverClient.SessionToken).PropertyBehavior();
-            Expect.Call(() =>
-            {
-                serverClient.StopProject("yyy");
-            });
-            mocks.ReplayAll();
+            Mock.Get(serverClient).SetupSet(_serverClient => _serverClient.SessionToken = It.IsAny<string>());
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.StopProject("yyy"));
             manager.StopProject(null);
             mocks.VerifyAll();
 		}

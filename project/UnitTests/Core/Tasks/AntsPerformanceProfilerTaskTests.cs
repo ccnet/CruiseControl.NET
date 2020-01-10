@@ -1,16 +1,16 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using Exortech.NetReflector;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
-    using System;
 
     [TestFixture]
     public class AntsPerformanceProfilerTaskTests
@@ -30,7 +30,7 @@
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -64,15 +64,14 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Service = appName;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -87,15 +86,14 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.ComPlus = appName;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -110,15 +108,14 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Silverlight = appName;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -133,15 +130,14 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -159,16 +155,15 @@
                 baseDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.BaseDirectory = baseDir;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -189,7 +184,7 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.SummaryCsvFile = "summary.csv";
@@ -199,11 +194,10 @@
             task.CallTreeHtmlFile = "calltree.html";
             task.DataFile = "data.out";
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -233,7 +227,7 @@
             ExpectFileCheckAndCopy(fileSystemMock, "calltree.html");
             ExpectFileCheckAndCopy(fileSystemMock, "data.out");
 
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger);
             task.Application = appName;
             task.SummaryCsvFile = "summary.csv";
@@ -243,11 +237,10 @@
             task.CallTreeHtmlFile = "calltree.html";
             task.DataFile = "data.out";
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         private static void ExpectFileCheckAndCopy(IFileSystem fileSystem, string fileName)
@@ -256,8 +249,8 @@
             var destFile = Path.Combine(
                 Path.Combine("artefactDir", "1"),
                 Path.Combine("AntsPerformance", fileName));
-            Expect.Call(fileSystem.FileExists(sourceFile)).Return(true);
-            Expect.Call(() => fileSystem.Copy(sourceFile, destFile));
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.FileExists(sourceFile)).Returns(true).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.Copy(sourceFile, destFile)).Verifiable();
         }
 
         [Test]
@@ -281,7 +274,7 @@
                 baseDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.BaseDirectory = baseDir;
@@ -292,11 +285,10 @@
             task.CallTreeHtmlFile = "calltree.html";
             task.DataFile = "data.out";
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -315,7 +307,7 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.Quiet = true;
@@ -337,11 +329,10 @@
             task.ForceOverwrite = false;
             task.Threshold = 10;
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -357,16 +348,15 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.XmlArgsFile = "args config.xml";
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -381,28 +371,26 @@
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
-            var logger = mocks.DynamicMock<ILogger>();
+            var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.XmlArgsFile = "c:\\args.xml";
 
-            Expect.Call(result.Status).PropertyBehavior();
-            mocks.ReplayAll();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
         public void ValidateDoesNotAllowBothQuietAndVerbose()
         {
             var trace = new ConfigurationTrace(null, null);
-            var errorProcesser = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() => errorProcesser.ProcessError("Cannot have both verbose and quiet set"));
+            var errorProcesser = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(errorProcesser).Setup(_errorProcesser => _errorProcesser.ProcessError("Cannot have both verbose and quiet set")).Verifiable();
             var task = new AntsPerformanceProfilerTask();
             task.Quiet = true;
             task.Verbose = true;
-            this.mocks.ReplayAll();
             task.Validate(null, trace, errorProcesser);
             this.mocks.VerifyAll();
         }
@@ -411,11 +399,10 @@
         public void ValidateDoesNotAllowaNegativeProfilerTimeout()
         {
             var trace = new ConfigurationTrace(null, null);
-            var errorProcesser = this.mocks.StrictMock<IConfigurationErrorProcesser>();
-            Expect.Call(() => errorProcesser.ProcessError("profilerTimeout cannot be negative"));
+            var errorProcesser = this.mocks.Create<IConfigurationErrorProcesser>(MockBehavior.Strict).Object;
+            Mock.Get(errorProcesser).Setup(_errorProcesser => _errorProcesser.ProcessError("profilerTimeout cannot be negative")).Verifiable();
             var task = new AntsPerformanceProfilerTask();
             task.ProfilerTimeOut = -1;
-            this.mocks.ReplayAll();
             task.Validate(null, trace, errorProcesser);
             this.mocks.VerifyAll();
         }
@@ -423,15 +410,14 @@
         [Test]
         public void ShouldFailIfProcessTimesOut()
         {
-            var executorStub = mocks.StrictMock<ProcessExecutor>();
-            SetupResult.For(executorStub.Execute(null)).IgnoreArguments().Return(ProcessResultFixture.CreateTimedOutResult());
+            var executorStub = mocks.Create<ProcessExecutor>(MockBehavior.Strict).Object;
+            Mock.Get(executorStub).Setup(_executorStub => _executorStub.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateTimedOutResult());
 
             var task = CreateTask(executorStub);
             var result = IntegrationResultMother.CreateUnknown();
 
-            mocks.ReplayAll();
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
 
             Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
             Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
@@ -442,10 +428,9 @@
         private AntsPerformanceProfilerTask CreateTask(ProcessExecutor executor)
         {
             var fileSystemMock = this.InitialiseFileSystemMock("Profile");
-            SetupResult.For(fileSystemMock.FileExists(string.Empty))
-                .IgnoreArguments()
-                .Return(false);
-            var logger = mocks.DynamicMock<ILogger>();
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists(It.IsAny<string>()))
+                .Returns(false);
+            var logger = mocks.Create<ILogger>().Object;
 
             return new AntsPerformanceProfilerTask(executor, fileSystemMock, logger);
         }
@@ -457,40 +442,38 @@
 
         private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.WorkingDirectory).Return(workingDir);
-            SetupResult.For(result.ArtifactDirectory).Return(artefactDir);
-            SetupResult.For(result.IntegrationProperties).Return(new Dictionary<string, string>());
-            SetupResult.For(result.Label).Return("1");
-            Expect.Call(() => result.AddTaskResult(mocks.DynamicMock<ITaskResult>())).IgnoreArguments().Repeat.Any();
-            SetupResult.For(result.BaseFromArtifactsDirectory("1")).Return(string.Concat(artefactDir, "\\1"));
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(workingDir);
+            Mock.Get(result).SetupGet(_result => _result.ArtifactDirectory).Returns(artefactDir);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
+            Mock.Get(result).SetupGet(_result => _result.Label).Returns("1");
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ITaskResult>())).Verifiable();
+            Mock.Get(result).Setup(_result => _result.BaseFromArtifactsDirectory("1")).Returns(string.Concat(artefactDir, "\\1"));
             return result;
         }
 
         private ProcessExecutor GenerateExecutorMock(string fileName, string args, string workingDir, int timeout)
         {
-            var executor = mocks.StrictMock<ProcessExecutor>();
-            Expect.Call(executor.Execute(null))
-                .IgnoreArguments()
-                .Do(new Function<ProcessInfo, ProcessResult>(info =>
+            var executor = mocks.Create<ProcessExecutor>(MockBehavior.Strict).Object;
+            Mock.Get(executor).Setup(_executor => _executor.Execute(It.IsAny<ProcessInfo>()))
+                .Callback<ProcessInfo>(info =>
                 {
                     Assert.AreEqual(fileName, info.FileName);
                     Assert.AreEqual(args, info.Arguments);
                     Assert.AreEqual(workingDir, info.WorkingDirectory);
                     Assert.AreEqual(timeout, info.TimeOut);
-                    return new ProcessResult(string.Empty, string.Empty, 0, false);
-                }));
+                }).Returns(new ProcessResult(string.Empty, string.Empty, 0, false)).Verifiable();
             return executor;
         }
 
         private IFileSystem InitialiseFileSystemMock(string executablePath)
         {
-            var fileSystemMock = mocks.StrictMock<IFileSystem>();
-            SetupResult.For(fileSystemMock.FileExists(executablePath)).Return(true);
-            SetupResult.For(fileSystemMock.GetFileVersion(executablePath))
-                .Return(new Version(6, 1));
+            var fileSystemMock = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists(executablePath)).Returns(true);
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.GetFileVersion(executablePath))
+                .Returns(new Version(6, 1));
             return fileSystemMock;
         }
         #endregion

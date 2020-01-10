@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using NUnit.Framework;
-    using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
     using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
+    using Moq;
+    using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
 
     [TestFixture]
@@ -23,7 +23,7 @@
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
         #endregion
 
@@ -48,20 +48,16 @@
         [Test]
         public void ExecuteLogsMessage()
         {
-            var buildInfo = this.mocks.StrictMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            var logger = this.mocks.StrictMock<ILogger>();
-            SetupResult.For(result.Status).PropertyBehavior();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            Expect.Call(() => buildInfo.SignalStartRunTask("Adding a comment to the log"));
-            Expect.Call(() => logger.Debug("Logging message: Test Message"));
+            var buildInfo = this.mocks.Create<BuildProgressInformation>(MockBehavior.Strict, string.Empty, string.Empty).Object;
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            var logger = this.mocks.Create<ILogger>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).Setup(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(buildInfo).Setup(_buildInfo => _buildInfo.SignalStartRunTask("Adding a comment to the log")).Verifiable();
+            Mock.Get(logger).Setup(_logger => _logger.Debug("Logging message: Test Message")).Verifiable();
             GeneralTaskResult loggedResult = null;
-            Expect.Call(() => result.AddTaskResult(
-                Arg<GeneralTaskResult>.Matches<GeneralTaskResult>(arg =>
-                {
-                    loggedResult = arg;
-                    return true;
-                })));
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<GeneralTaskResult>()))
+                .Callback<ITaskResult>(arg => loggedResult = (GeneralTaskResult)arg).Verifiable();
             var task = new CommentTask
                 {
                     Message = "Test Message",
@@ -69,7 +65,6 @@
                 };
             result.Status = IntegrationStatus.Unknown;
 
-            this.mocks.ReplayAll();
             task.Run(result);
 
             this.mocks.VerifyAll();
@@ -81,20 +76,16 @@
         [Test]
         public void ExecuteLogsFailMessage()
         {
-            var buildInfo = this.mocks.StrictMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            var logger = this.mocks.StrictMock<ILogger>();
-            SetupResult.For(result.Status).PropertyBehavior();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            Expect.Call(() => buildInfo.SignalStartRunTask("Adding a comment to the log"));
-            Expect.Call(() => logger.Debug("Logging error message: Test Message"));
+            var buildInfo = this.mocks.Create<BuildProgressInformation>(MockBehavior.Strict, string.Empty, string.Empty).Object;
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            var logger = this.mocks.Create<ILogger>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(buildInfo).Setup(_buildInfo => _buildInfo.SignalStartRunTask("Adding a comment to the log")).Verifiable();
+            Mock.Get(logger).Setup(_logger => _logger.Debug("Logging error message: Test Message")).Verifiable();
             GeneralTaskResult loggedResult = null;
-            Expect.Call(() => result.AddTaskResult(
-                Arg<GeneralTaskResult>.Matches<GeneralTaskResult>(arg =>
-                {
-                    loggedResult = arg;
-                    return true;
-                })));
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<GeneralTaskResult>()))
+                .Callback<ITaskResult>(arg => loggedResult = (GeneralTaskResult)arg).Verifiable();
             var task = new CommentTask
             {
                 FailTask = true,
@@ -103,7 +94,6 @@
             };
             result.Status = IntegrationStatus.Unknown;
 
-            this.mocks.ReplayAll();
             task.Run(result);
 
             this.mocks.VerifyAll();

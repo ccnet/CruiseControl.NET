@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Text;
+using System.Xml;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     [TestFixture]
     class XslTransformationTaskTest
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         [Test]
         public void ConfigurationIsLoadedCorrectly()
@@ -69,19 +68,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var output = Path.Combine(working, "output.xml");
 
             // Mock the file system
-            var fileSystem = mocks.StrictMock<IFileSystem>();
-            Expect.Call(fileSystem.OpenInputStream(source)).Return(new MemoryStream());
-            Expect.Call(fileSystem.OpenOutputStream(output)).Return(new MemoryStream());
+            var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenInputStream(source)).Returns(new MemoryStream()).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenOutputStream(output)).Returns(new MemoryStream()).Verifiable();
 
             // Mock the transformer
-            var transformer = mocks.StrictMock<ITransformer>();
-            Expect.Call(transformer.Transform(null, null, null)).
-                IgnoreArguments().Constraints(
-                Rhino.Mocks.Constraints.Is.Equal(""), 
-                Rhino.Mocks.Constraints.Is.Equal(stylesheet),
-                Rhino.Mocks.Constraints.Is.TypeOf(typeof(Hashtable)) &&
-                    Rhino.Mocks.Constraints.List.Count(Rhino.Mocks.Constraints.Is.Equal(0))).
-                Return("");
+            var transformer = mocks.Create<ITransformer>(MockBehavior.Strict).Object;
+            Mock.Get(transformer).Setup(_transformer => _transformer.Transform(It.Is<string>(s => s == ""), It.Is<string>(s => s == stylesheet), It.Is<Hashtable>(t => t.Count == 0))).
+                Returns("").Verifiable();
 
             // Initialise the task
             var task = new XslTransformationTask(transformer, fileSystem)
@@ -92,24 +86,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Mock the result
-            var result = mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.Status).PropertyBehavior();
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).SetupSet(_result => _result.Status = It.IsAny<IntegrationStatus>()).Verifiable();
 
-            var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
-            SetupResult.For(result.BuildProgressInformation)
-                .Return(buildProgress);
-            SetupResult.For(result.WorkingDirectory).Return(working);
-            SetupResult.For(result.ArtifactDirectory).Return(artefact);
-            SetupResult.For(result.Label).Return(label);
-            Expect.Call(() => { buildProgress.SignalStartRunTask("Transforming"); });
+            var buildProgress = mocks.Create<BuildProgressInformation>(MockBehavior.Strict, artefact, "Project1").Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation)
+                .Returns(buildProgress);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(working);
+            Mock.Get(result).SetupGet(_result => _result.ArtifactDirectory).Returns(artefact);
+            Mock.Get(result).SetupGet(_result => _result.Label).Returns(label);
+            Mock.Get(buildProgress).Setup(_buildProgress => _buildProgress.SignalStartRunTask("Transforming")).Verifiable();
 
             // Run the test
-            mocks.ReplayAll();
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
 
             // Check the results
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
         [Test]
@@ -123,21 +117,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var output = Path.Combine(working, "output.xml");
 
             // Mock the file system
-            var fileSystem = mocks.StrictMock<IFileSystem>();
-            Expect.Call(fileSystem.OpenInputStream(source)).Return(new MemoryStream());
-            Expect.Call(fileSystem.OpenOutputStream(output)).Return(new MemoryStream());
+            var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenInputStream(source)).Returns(new MemoryStream()).Verifiable();
+            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.OpenOutputStream(output)).Returns(new MemoryStream()).Verifiable();
 
             // Mock the transformer
-            var transformer = mocks.StrictMock<ITransformer>();
-            Expect.Call(transformer.Transform(null, null, null)).
-                IgnoreArguments().Constraints(
-                Rhino.Mocks.Constraints.Is.Equal(""),
-                Rhino.Mocks.Constraints.Is.Equal(stylesheet),
-                Rhino.Mocks.Constraints.Is.TypeOf(typeof(Hashtable)) && 
-                    Rhino.Mocks.Constraints.List.Count(Rhino.Mocks.Constraints.Is.Equal(1)) &&
-                    Rhino.Mocks.Constraints.List.Element<string>("Test", Rhino.Mocks.Constraints.Is.Equal("SomeValue"))
-                ).
-                Return("");
+            var transformer = mocks.Create<ITransformer>(MockBehavior.Strict).Object;
+            Mock.Get(transformer).Setup(_transformer => _transformer.Transform(It.Is<string>(s => s == ""), It.Is<string>(s => s == stylesheet), It.Is<Hashtable>(t => t.Count == 1 && (string)t["Test"] == "SomeValue"))).
+                Returns("").Verifiable();
 
             // Initialise the task
             var task = new XslTransformationTask(transformer, fileSystem)
@@ -149,24 +136,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             };
 
             // Mock the result
-            var result = mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.Status).PropertyBehavior();
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupProperty(_result => _result.Status);
+            Mock.Get(result).SetupSet(_result => _result.Status = It.IsAny<IntegrationStatus>()).Verifiable();
 
-            var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
-            SetupResult.For(result.BuildProgressInformation)
-                .Return(buildProgress);
-            SetupResult.For(result.WorkingDirectory).Return(working);
-            SetupResult.For(result.ArtifactDirectory).Return(artefact);
-            SetupResult.For(result.Label).Return(label);
-            Expect.Call(() => { buildProgress.SignalStartRunTask("Transforming"); });
+            var buildProgress = mocks.Create<BuildProgressInformation>(MockBehavior.Strict, artefact, "Project1").Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation)
+                .Returns(buildProgress);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(working);
+            Mock.Get(result).SetupGet(_result => _result.ArtifactDirectory).Returns(artefact);
+            Mock.Get(result).SetupGet(_result => _result.Label).Returns(label);
+            Mock.Get(buildProgress).Setup(_buildProgress => _buildProgress.SignalStartRunTask("Transforming")).Verifiable();
 
             // Run the test
-            mocks.ReplayAll();
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
 
             // Check the results
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
     }

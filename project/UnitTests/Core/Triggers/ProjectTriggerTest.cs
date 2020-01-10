@@ -1,13 +1,13 @@
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Net.Sockets;
     using Exortech.NetReflector;
-    using Rhino.Mocks;
+    using Moq;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Core.Triggers;
     using ThoughtWorks.CruiseControl.Remote;
-    using System.Collections.Generic;
-    using System.Net.Sockets;
 
     [TestFixture]
     public class ProjectTriggerTest : IntegrationFixture
@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [SetUp]
         protected void SetUp()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
             now = DateTime.Now;
             later = now.AddHours(1);
         }
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void ShouldNotTriggerOnFirstIntegration()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = InitialiseClientMock(true, NewProjectStatus("project", IntegrationStatus.Success, now));
             var factoryMock = this.InitialiseFactoryMock(clientMock);
             var trigger = new ProjectTrigger(factoryMock)
@@ -36,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                     InnerTrigger = innerTriggerMock
                 };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             Assert.IsNull(actual);
         }
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void ShouldTriggerOnFirstIntegrationIfDependentProjectBuildSucceededAndTriggerFirstTimeIsSet()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = InitialiseClientMock(
                 true,
                 NewProjectStatus("project", IntegrationStatus.Success, now));
@@ -58,9 +58,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                     TriggerFirstTime = true
                 };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             var expected = ModificationExistRequest();
             Assert.AreEqual(expected, actual);
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void ShouldNotTriggerOnFirstIntegrationIfDependentProjectBuildFailedAndTriggerFirstTimeIsSet()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = InitialiseClientMock(true, NewProjectStatus("project", IntegrationStatus.Failure, now));
             var factoryMock = this.InitialiseFactoryMock(clientMock);
             var trigger = new ProjectTrigger(factoryMock)
@@ -79,9 +79,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                     TriggerFirstTime = true
                 };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             Assert.IsNull(actual);
         }
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void TriggerWhenDependentProjectBuildsSuccessfully()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(2);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMocks = new[] 
                 {
                     InitialiseClientMock(true, NewProjectStatus("project", IntegrationStatus.Success, now)),
@@ -102,10 +102,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                     InnerTrigger = innerTriggerMock
                 };
 
-            this.mocks.ReplayAll();
             trigger.Fire();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 2);
             this.mocks.VerifyAll();
             var expected = ModificationExistRequest();
             Assert.AreEqual(expected, actual);
@@ -114,16 +114,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void DoNotTriggerWhenInnerTriggerReturnsNoBuild()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.Fire()).Return(null);
-            var factoryMock = this.mocks.StrictMock<ICruiseServerClientFactory>();
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTrigger => _innerTrigger.Fire()).Returns(() => null).Verifiable();
+            var factoryMock = this.mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
             var trigger = new ProjectTrigger(factoryMock)
             {
                 Project = "project",
                 InnerTrigger = innerTriggerMock
             };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
             this.mocks.VerifyAll();
@@ -133,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void DoNotTriggerWhenDependentProjectBuildFails()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(2);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMocks = new[] 
                 {
                     InitialiseClientMock(true, NewProjectStatus("project", IntegrationStatus.Success, now)),
@@ -146,10 +145,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 InnerTrigger = innerTriggerMock
             };
 
-            this.mocks.ReplayAll();
             trigger.Fire();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 2);
             this.mocks.VerifyAll();
             Assert.IsNull(actual);
         }
@@ -157,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void DoNotTriggerIfProjectHasNotBuiltSinceLastPoll()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(2);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMocks = new[] 
                 {
                     InitialiseClientMock(true, NewProjectStatus("project", IntegrationStatus.Success, now)),
@@ -170,10 +169,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 InnerTrigger = innerTriggerMock
             };
 
-            this.mocks.ReplayAll();
             trigger.Fire();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 2);
             this.mocks.VerifyAll();
             Assert.IsNull(actual);
         }
@@ -181,13 +180,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void IntegrationCompletedShouldDelegateToInnerTrigger()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(() => innerTriggerMock.IntegrationCompleted());
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTrigger => _innerTrigger.IntegrationCompleted()).Verifiable();
             var trigger = new ProjectTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             trigger.IntegrationCompleted();
             mocks.VerifyAll();
         }
@@ -195,13 +193,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void NextBuildShouldReturnInnerTriggerNextBuildIfUnknown()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.NextBuild).Return(now);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).SetupGet(_innerTrigger => _innerTrigger.NextBuild).Returns(now).Verifiable();
             var trigger = new ProjectTrigger
                 {
                     InnerTrigger = innerTriggerMock
                 };
-            mocks.ReplayAll();
             var actual = trigger.NextBuild;
 
             mocks.VerifyAll();
@@ -246,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void HandleExceptionInProjectLocator()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = this.InitialiseClientMock(true, NewProjectStatus("wrong", IntegrationStatus.Failure, now));
             var factoryMock = this.InitialiseFactoryMock(clientMock);
             var trigger = new ProjectTrigger(factoryMock)
@@ -255,30 +252,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 InnerTrigger = innerTriggerMock
             };
 
-            this.mocks.ReplayAll();
             Assert.Throws<NoSuchProjectException>(() => trigger.Fire());
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
         }
 
         [Test]
         public void HandleSocketError()
         {
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
-            var clientMock = this.mocks.StrictMock<CruiseServerClientBase>();
+            var innerTriggerMock = this.InitialiseTriggerMock();
+            var clientMock = this.mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
             var factoryMock = this.InitialiseFactoryMock(clientMock);
-            Expect.Call(clientMock.SessionToken).SetPropertyAndIgnoreArgument();
-            Expect.Call(clientMock.GetProjectStatus())
-                .Throw(new SocketException());
+            Mock.Get(clientMock).SetupSet(_clientMock => _clientMock.SessionToken = It.IsAny<string>()).Verifiable();
+            Mock.Get(clientMock).Setup(_clientMock => _clientMock.GetProjectStatus())
+                .Throws(new SocketException()).Verifiable();
             var trigger = new ProjectTrigger(factoryMock)
             {
                 Project = "project",
                 InnerTrigger = innerTriggerMock
             };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             Assert.IsNull(actual);
         }
@@ -290,13 +287,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 {
                     new NameValuePair("user", "me")
                 };
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = InitialiseClientMock(
                 false,
                 NewProjectStatus("project", IntegrationStatus.Success, now));
-            Expect.Call(clientMock.Login(new List<NameValuePair>(credentials))).Return(true);
-            Expect.Call(clientMock.SessionToken).Return("token");
-            Expect.Call(() => clientMock.Logout());
+            Mock.Get(clientMock).Setup(_clientMock => _clientMock.Login(new List<NameValuePair>(credentials))).Returns(true).Verifiable();
+            Mock.Get(clientMock).SetupGet(_clientMock => _clientMock.SessionToken).Returns("token").Verifiable();
+            Mock.Get(clientMock).Setup(_clientMock => _clientMock.Logout()).Verifiable();
             var factoryMock = this.InitialiseFactoryMock(clientMock);
             var trigger = new ProjectTrigger(factoryMock)
             {
@@ -306,9 +303,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 SecurityCredentials = credentials
             };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             var expected = ModificationExistRequest();
             Assert.AreEqual(expected, actual);
@@ -321,11 +318,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 {
                     new NameValuePair("user", "me")
                 };
-            var innerTriggerMock = this.InitialiseTriggerMock(1);
+            var innerTriggerMock = this.InitialiseTriggerMock();
             var clientMock = InitialiseClientMock(
                 false,
                 NewProjectStatus("project", IntegrationStatus.Success, now));
-            Expect.Call(clientMock.Login(new List<NameValuePair>(credentials))).Return(false);
+            Mock.Get(clientMock).Setup(_clientMock => _clientMock.Login(new List<NameValuePair>(credentials))).Returns(false).Verifiable();
             var factoryMock = this.InitialiseFactoryMock(clientMock);
             var trigger = new ProjectTrigger(factoryMock)
             {
@@ -335,9 +332,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                 SecurityCredentials = credentials
             };
 
-            this.mocks.ReplayAll();
             var actual = trigger.Fire();
 
+            this.InitialiseTriggerMockVerify(innerTriggerMock, 1);
             this.mocks.VerifyAll();
             var expected = ModificationExistRequest();
             Assert.AreEqual(expected, actual);
@@ -348,36 +345,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
             return ProjectStatusFixture.New(name, integrationStatus, dateTime);
         }
 
-        private ITrigger InitialiseTriggerMock(int times)
+        private ITrigger InitialiseTriggerMock()
         {
-            var innerTriggerMock = this.mocks.StrictMock<ITrigger>();
-            Expect.Call(innerTriggerMock.Fire()).Return(ModificationExistRequest()).Repeat.Times(times);
-            Expect.Call(() => innerTriggerMock.IntegrationCompleted()).Repeat.Times(times);
+            var innerTriggerMock = this.mocks.Create<ITrigger>(MockBehavior.Strict).Object;
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.Fire()).Returns(ModificationExistRequest()).Verifiable();
+            Mock.Get(innerTriggerMock).Setup(_innerTriggerMock => _innerTriggerMock.IntegrationCompleted()).Verifiable();
             return innerTriggerMock;
+        }
+        private void InitialiseTriggerMockVerify(ITrigger innerTriggerMock, int times)
+        {
+            Mock.Get(innerTriggerMock).Verify(_innerTriggerMock => _innerTriggerMock.Fire(), Times.Exactly(times));
+            Mock.Get(innerTriggerMock).Verify(_innerTriggerMock => _innerTriggerMock.IntegrationCompleted(), Times.Exactly(times));
         }
 
         private CruiseServerClientBase InitialiseClientMock(bool expectSessionOverride, params ProjectStatus[] statuses)
         {
-            var clientMock = this.mocks.StrictMock<CruiseServerClientBase>();
+            var clientMock = this.mocks.Create<CruiseServerClientBase>(MockBehavior.Strict).Object;
             if (expectSessionOverride)
             {
-                Expect.Call(clientMock.SessionToken).SetPropertyAndIgnoreArgument();
+                Mock.Get(clientMock).SetupSet(_clientMock => _clientMock.SessionToken = It.IsAny<string>()).Verifiable();
             }
 
-            Expect.Call(clientMock.GetProjectStatus()).Return(statuses);
+            Mock.Get(clientMock).Setup(_clientMock => _clientMock.GetProjectStatus()).Returns(statuses).Verifiable();
             return clientMock;
         }
 
         private ICruiseServerClientFactory InitialiseFactoryMock(params CruiseServerClientBase[] clientMocks)
         {
-            var factoryMock = this.mocks.StrictMock<ICruiseServerClientFactory>();
+            var factoryMock = this.mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict);
+            var setupSequence = factoryMock.SetupSequence(_factoryMock => _factoryMock.GenerateClient("tcp://localhost:21234/CruiseManager.rem"));
             foreach (var clientMock in clientMocks)
             {
-                Expect.Call(factoryMock.GenerateClient("tcp://localhost:21234/CruiseManager.rem"))
-                    .Return(clientMock);
+                setupSequence = setupSequence.Returns(clientMock);
             }
-
-            return factoryMock;
+            return factoryMock.Object;
         }
     }
 }

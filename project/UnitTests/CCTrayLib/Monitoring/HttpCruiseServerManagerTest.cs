@@ -1,10 +1,10 @@
 using System;
-using Rhino.Mocks;
+using System.Net;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Net;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	{
 		private const string SERVER_URL = @"http://localhost/ccnet/XmlServerReport.aspx";
 
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         private CruiseServerClientBase serverClient;
         private BuildServer buildServer;
         private HttpCruiseServerManager manager;
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[SetUp]
 		public void SetUp()
 		{
-            serverClient = mocks.DynamicMock<CruiseServerClientBase>();
+            serverClient = mocks.Create<CruiseServerClientBase>().Object;
 
 			buildServer = new BuildServer(SERVER_URL);
             manager = new HttpCruiseServerManager(serverClient, buildServer);
@@ -40,8 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
 
-            Expect.Call(serverClient.GetCruiseServerSnapshot()).Return(snapshot);
-            mocks.ReplayAll();
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.GetCruiseServerSnapshot()).Returns(snapshot);
 			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
 			
 			Assert.AreSame(snapshot, actual);
@@ -49,8 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		[Test]
 		public void CanHandleTimeouts(){
-            Expect.Call(serverClient.GetCruiseServerSnapshot()).Throw(new WebException("The operation has timed out"));
-            mocks.ReplayAll();
+            Mock.Get(serverClient).Setup(_serverClient => _serverClient.GetCruiseServerSnapshot()).Throws(new WebException("The operation has timed out"));
 
 			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
 			

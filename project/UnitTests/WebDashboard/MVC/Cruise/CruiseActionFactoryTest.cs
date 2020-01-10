@@ -1,4 +1,4 @@
-using Rhino.Mocks;
+using Moq;
 using NUnit.Framework;
 using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class CruiseActionFactoryTest
 	{
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
         private ObjectSource objectSource;
 		private CruiseActionFactory actionFactory;
 		private IRequest request;
@@ -18,19 +18,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[SetUp]
 		public void Setup()
 		{
-			objectSource = mocks.StrictMock<ObjectSource>();
+			objectSource = mocks.Create<ObjectSource>(MockBehavior.Strict).Object;
 			actionFactory = new CruiseActionFactory(objectSource);
-			request = mocks.StrictMock<IRequest>();
+			request = mocks.Create<IRequest>(MockBehavior.Strict).Object;
 		}
 
 		[Test]
 		public void ShouldReturnUnknownActionIfActionIsntAvailable()
 		{
-			Expect.Call(request.FileNameWithoutExtension)
-                .Return("ThisAintNoAction");
-			Expect.Call(objectSource.GetByName("thisaintnoaction"))
-                .Return(null);
-            mocks.ReplayAll();
+			Mock.Get(request).SetupGet(_request => _request.FileNameWithoutExtension)
+                .Returns("ThisAintNoAction").Verifiable();
+			Mock.Get(objectSource).Setup(_objectSource => _objectSource.GetByName("thisaintnoaction"))
+                .Returns(null).Verifiable();
 
 			Assert.IsTrue(actionFactory.Create(request) is UnknownActionAction);
 
@@ -40,13 +39,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnDefaultActionIfNoActionSpecified()
 		{
-			Expect.Call(request.FileNameWithoutExtension)
-                .Return(string.Empty);
+			Mock.Get(request).SetupGet(_request => _request.FileNameWithoutExtension)
+                .Returns(string.Empty).Verifiable();
 
-			var stubAction = mocks.DynamicMock<IAction>();
-			Expect.Call(objectSource.GetByType(typeof(DefaultAction)))
-                .Return(stubAction);
-            mocks.ReplayAll();
+			var stubAction = mocks.Create<IAction>().Object;
+			Mock.Get(objectSource).Setup(_objectSource => _objectSource.GetByType(typeof(DefaultAction)))
+                .Returns(stubAction).Verifiable();
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
@@ -56,13 +54,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnDefaultActionIfDefaultActionSpecified()
 		{
-			Expect.Call(request.FileNameWithoutExtension)
-                .Return("default");
+			Mock.Get(request).SetupGet(_request => _request.FileNameWithoutExtension)
+                .Returns("default").Verifiable();
 
-			var stubAction = mocks.DynamicMock<IAction>();
-			Expect.Call(objectSource.GetByType(typeof(DefaultAction)))
-                .Return(stubAction);
-            mocks.ReplayAll();
+			var stubAction = mocks.Create<IAction>().Object;
+			Mock.Get(objectSource).Setup(_objectSource => _objectSource.GetByType(typeof(DefaultAction)))
+                .Returns(stubAction).Verifiable();
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
@@ -72,13 +69,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnRequestedActionIfAvailable()
 		{
-			Expect.Call(request.FileNameWithoutExtension)
-                .Return("myAction");
+			Mock.Get(request).SetupGet(_request => _request.FileNameWithoutExtension)
+                .Returns("myAction").Verifiable();
 
-			var stubAction = mocks.DynamicMock<IAction>();
-			Expect.Call(objectSource.GetByName("myaction"))
-                .Return(stubAction);
-            mocks.ReplayAll();
+			var stubAction = mocks.Create<IAction>().Object;
+			Mock.Get(objectSource).Setup(_objectSource => _objectSource.GetByName("myaction"))
+                .Returns(stubAction).Verifiable();
 
 			Assert.AreSame(stubAction, actionFactory.Create(request));
 

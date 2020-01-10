@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Moq;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -7,8 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
-using System.Collections.Generic;
-using Rhino.Mocks;
+using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -37,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
 
             mockery = new Mockery();
             targetMock = mockery.NewDynamicMock(typeof(IIntegrationRunnerTarget));
@@ -164,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             // Initialise the test
             var runner = new IntegrationRunner(null, null, null);
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var integrationProperties = new Dictionary<string, string>
             {
                 {
@@ -176,14 +177,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                     "1.1"
                 }
             };
-            SetupResult.For(result.IntegrationProperties).Return(integrationProperties);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(integrationProperties);
             var request = new IntegrationRequest(BuildCondition.ForceBuild, "Test", "John Doe");
-            SetupResult.For(result.IntegrationRequest).Return(request);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationRequest).Returns(request);
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
 
             // Run the test
-            this.mocks.ReplayAll();
             runner.GenerateSystemParameterValues(result);
 
             // Check the results
@@ -205,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             // Initialise the test
             var runner = new IntegrationRunner(null, null, null);
-            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             var integrationProperties = new Dictionary<string, string>
             {
                 {
@@ -217,14 +217,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                     "1.1"
                 }
             };
-            SetupResult.For(result.IntegrationProperties).Return(integrationProperties);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(integrationProperties);
             var request = new IntegrationRequest(BuildCondition.ForceBuild, "Test", "John Doe");
-            SetupResult.For(result.IntegrationRequest).Return(request);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationRequest).Returns(request);
             var parameters = new List<NameValuePair>();
-            SetupResult.For(result.Parameters).Return(parameters);
+            Mock.Get(result).SetupGet(_result => _result.Parameters).Returns(parameters);
 
             // Run the test
-            this.mocks.ReplayAll();
             runner.GenerateSystemParameterValues(result);
             integrationProperties["CCNetLabel"] = "1.2";
             runner.GenerateSystemParameterValues(result);

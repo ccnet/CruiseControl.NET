@@ -32,6 +32,7 @@
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
 	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console-x86.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
+	<property name="nuget.executable"		readonly="true"		value="${environment::get-variable('NUGET_EXE')}" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
@@ -82,6 +83,16 @@
 		</delete>
 	</target>
 
+	<target name="restore" description="Restore the nuget packages">
+		<if test="${not file::exists(nuget.executable)}">
+			<echo level="Warning" message="NuGet installation not found." />
+		</if>
+		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+			<arg value="restore"/>
+			<arg value="${path::combine(src.dir, build.project)}"/>
+		</exec>
+	</target>
+
 	<target name="init" description="Initial compilation setup">
 		<mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
 		<mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
@@ -106,7 +117,7 @@
 		</asminfo>
 	</target>
 
-	<target name="build" depends="init, createAssemblyInfo" description="Compilation of the build project">
+	<target name="build" depends="restore, init, createAssemblyInfo" description="Compilation of the build project">
 		<loadtasks assembly="${nauckit.nant.assembly}" />
 
 		<echo message="Build configuration: ${build.configuration}" />

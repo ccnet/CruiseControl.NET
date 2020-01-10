@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Exortech.NetReflector;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            executor = mocks.StrictMock<ProcessExecutor>();
+            mocks = new MockRepository(MockBehavior.Default);
+            executor = mocks.Create<ProcessExecutor>(MockBehavior.Strict).Object;
         }
 
         [Test]
@@ -72,19 +72,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var task = new FakeTask(executor);
             task.BuildFile = buildFile;
             SetupExecutorMock(executor, "FAKE.exe", string.Concat(StringUtil.AutoDoubleQuoteString(buildFile), " ", "logfile=", StringUtil.AutoDoubleQuoteString(Path.Combine(artefactDir, string.Format(FakeTask.logFilename, task.LogFileId)))), workingDir, 600000);
-            Expect.Call(result.Status).PropertyBehavior();
+            Mock.Get(result).SetupProperty(_result => _result.Status);
 
-            mocks.ReplayAll();
             result.Status = IntegrationStatus.Unknown;
             task.Run(result);
-            mocks.VerifyAll();
+            mocks.Verify();
         }
 
 				[Test]
 				public void ShouldFailIfProcessTimesOut()
 				{
 					ExecutorShouldTimeOut(executor);
-					mocks.ReplayAll();
 
 					var task = new FakeTask(executor);
 
@@ -98,37 +96,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
         private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)
         {
-            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
-            var result = mocks.StrictMock<IIntegrationResult>();
-            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.WorkingDirectory).Return(workingDir);
-            SetupResult.For(result.ArtifactDirectory).Return(artefactDir);
-            SetupResult.For(result.IntegrationProperties).Return(new Dictionary<string, string>());
-            SetupResult.For(result.Label).Return("1");
-            Expect.Call(() => result.AddTaskResult(mocks.DynamicMock<ITaskResult>())).IgnoreArguments().Repeat.Any();
-            SetupResult.For(result.BaseFromWorkingDirectory("")).Return(workingDir);
+            var buildInfo = mocks.Create<BuildProgressInformation>(string.Empty, string.Empty).Object;
+            var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).SetupGet(_result => _result.BuildProgressInformation).Returns(buildInfo);
+            Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(workingDir);
+            Mock.Get(result).SetupGet(_result => _result.ArtifactDirectory).Returns(artefactDir);
+            Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
+            Mock.Get(result).SetupGet(_result => _result.Label).Returns("1");
+            Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ITaskResult>())).Verifiable();
+            Mock.Get(result).Setup(_result => _result.BaseFromWorkingDirectory("")).Returns(workingDir);
             return result;
         }
 
         private void SetupExecutorMock(ProcessExecutor executor, string fileName, string args, string workingDir, int timeout)
         {
-            Expect.Call(executor.Execute(null))
-                .IgnoreArguments()
-                .Do(new Function<ProcessInfo, ProcessResult>(info =>
+            Mock.Get(executor).Setup(_executor => _executor.Execute(It.IsAny<ProcessInfo>()))
+                .Callback<ProcessInfo>(info =>
                 {
                     Assert.AreEqual(fileName, info.FileName);
                     Assert.AreEqual(args, info.Arguments);
                     Assert.AreEqual(workingDir, info.WorkingDirectory);
                     Assert.AreEqual(timeout, info.TimeOut);
-                    return new ProcessResult(string.Empty, string.Empty, 0, false);
-                }));
+                }).Returns(new ProcessResult(string.Empty, string.Empty, 0, false)).Verifiable();
         }
 
 				private void ExecutorShouldTimeOut(ProcessExecutor executor)
 				{
-					Expect.Call(executor.Execute(null))
-							.IgnoreArguments()
-							.Return(ProcessResultFixture.CreateTimedOutResult());
+					Mock.Get(executor).Setup(_executor => _executor.Execute(It.IsAny<ProcessInfo>()))
+							.Returns(ProcessResultFixture.CreateTimedOutResult()).Verifiable();
 				}
 		}
 }

@@ -1,8 +1,9 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
+    using System;
     using System.Xml;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core.Extensions;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Events;
@@ -15,23 +16,22 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void InitialiseLoadsNumberOfRequestsAllowed()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
             config.Items = new[] 
                 {
                     GenerateElement("limit", "10")
                 };
-            Expect.Call(() => serverMock.IntegrationCompleted += null).IgnoreArguments();
-            Expect.Call(() => serverMock.IntegrationStarted += null).IgnoreArguments();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
 
             this.mocks.VerifyAll();
@@ -42,18 +42,14 @@
         public void IntegrationStartIsAllowedWhenWithinLimit()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Expect.Call(() => serverMock.IntegrationCompleted += null).IgnoreArguments();
-            var startRaiser = Expect
-                .Call(() => serverMock.IntegrationStarted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
             var eventArgs = new IntegrationStartedEventArgs(null, "TestProject");
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
-            startRaiser.Raise(serverMock, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
             this.mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
@@ -63,20 +59,16 @@
         public void IntegrationStartIsDelayedBeyondLimit()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Expect.Call(() => serverMock.IntegrationCompleted += null).IgnoreArguments();
-            var startRaiser = Expect
-                .Call(() => serverMock.IntegrationStarted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
             var eventArgs = new IntegrationStartedEventArgs(null, "TestProject");
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
             extension.NumberOfRequestsAllowed = 1;
-            startRaiser.Raise(serverMock, new IntegrationStartedEventArgs(null, "First"));
-            startRaiser.Raise(serverMock, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(null, "First"));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
             this.mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Delay, eventArgs.Result);
@@ -86,28 +78,19 @@
         public void IntegrationStartAllowedAtTopOfQueue()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            var completeRaiser = Expect
-                .Call(() => serverMock.IntegrationCompleted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
-            var startRaiser = Expect
-                .Call(() => serverMock.IntegrationStarted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
             var eventArgs = new IntegrationStartedEventArgs(null, "TestProject");
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
             extension.NumberOfRequestsAllowed = 1;
-            startRaiser.Raise(serverMock, new IntegrationStartedEventArgs(null, "First"));
-            startRaiser.Raise(serverMock, eventArgs);
-            startRaiser.Raise(serverMock, new IntegrationStartedEventArgs(null, "Third"));
-            completeRaiser.Raise(
-                serverMock,
-                new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
-            startRaiser.Raise(serverMock, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(null, "First"));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(null, "Third"));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
             this.mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
@@ -117,27 +100,18 @@
         public void IntegrationCompleteClearsSlot()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            var completeRaiser = Expect
-                .Call(() => serverMock.IntegrationCompleted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
-            var startRaiser = Expect
-                .Call(() => serverMock.IntegrationStarted += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
             var eventArgs = new IntegrationStartedEventArgs(null, "TestProject");
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
             extension.NumberOfRequestsAllowed = 1;
-            startRaiser.Raise(serverMock, new IntegrationStartedEventArgs(null, "First"));
-            startRaiser.Raise(serverMock, eventArgs);
-            completeRaiser.Raise(
-                serverMock,
-                new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
-            startRaiser.Raise(serverMock, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(null, "First"));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
+            Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
             this.mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
@@ -147,12 +121,11 @@
         public void StartAndStopDoesNothing()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Expect.Call(() => serverMock.IntegrationCompleted += null).IgnoreArguments();
-            Expect.Call(() => serverMock.IntegrationStarted += null).IgnoreArguments();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
             extension.Start();
             extension.Stop();
@@ -164,12 +137,11 @@
         public void StartAndAbortDoesNothing()
         {
             var extension = new IntegrationRequestThrottleExtension();
-            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Expect.Call(() => serverMock.IntegrationCompleted += null).IgnoreArguments();
-            Expect.Call(() => serverMock.IntegrationStarted += null).IgnoreArguments();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
 
-            this.mocks.ReplayAll();
             extension.Initialise(serverMock, config);
             extension.Start();
             extension.Abort();

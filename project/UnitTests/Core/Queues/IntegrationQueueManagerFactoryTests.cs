@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
-using System;
+﻿using System;
 using System.Collections;
+using Moq;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Queues;
 
@@ -10,22 +10,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
     [TestFixture]
     public class IntegrationQueueManagerFactoryTests
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         [Test]
         public void CreateManagerGeneratesDefault()
         {
-            IConfiguration configuration = mocks.DynamicMock<IConfiguration>();
-            IProjectList projectList = mocks.DynamicMock<IProjectList>();
-            IEnumerator enumerator = mocks.DynamicMock<IEnumerator>();
-            SetupResult.For(enumerator.MoveNext()).Return(false);
-            SetupResult.For(projectList.GetEnumerator()).Return(enumerator);
-            SetupResult.For(configuration.Projects).Return(projectList);
-            IProjectIntegratorListFactory listFactory = mocks.DynamicMock<IProjectIntegratorListFactory>();
-            IProjectIntegratorList list = mocks.DynamicMock<IProjectIntegratorList>();
-            SetupResult.For(list.Count).Return(0);
-            SetupResult.For(listFactory.CreateProjectIntegrators(null, null)).IgnoreArguments().Return(list);
-            mocks.ReplayAll();
+            IConfiguration configuration = mocks.Create<IConfiguration>().Object;
+            IProjectList projectList = mocks.Create<IProjectList>().Object;
+            IEnumerator enumerator = mocks.Create<IEnumerator>().Object;
+            Mock.Get(enumerator).Setup(_enumerator => _enumerator.MoveNext()).Returns(false);
+            Mock.Get(projectList).Setup(_projectList => _projectList.GetEnumerator()).Returns(enumerator);
+            Mock.Get(configuration).Setup(_configuration => _configuration.Projects).Returns(projectList);
+            IProjectIntegratorListFactory listFactory = mocks.Create<IProjectIntegratorListFactory>().Object;
+            IProjectIntegratorList list = mocks.Create<IProjectIntegratorList>().Object;
+            Mock.Get(list).SetupGet(_list => _list.Count).Returns(0);
+            Mock.Get(listFactory).Setup(_listFactory => _listFactory.CreateProjectIntegrators(It.IsAny<IProjectList>(), It.IsAny<IntegrationQueueSet>())).Returns(list);
 
             object instance = IntegrationQueueManagerFactory.CreateManager(listFactory, configuration, null);
             Assert.That(instance, Is.InstanceOf<IntegrationQueueManager>());
@@ -34,10 +33,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         [Test]
         public void OverrideChangesFactory()
         {
-            IQueueManagerFactory newFactory = mocks.StrictMock<IQueueManagerFactory>();
-            IQueueManager newManager = mocks.StrictMock<IQueueManager>();
-            Expect.Call(newFactory.Create(null, null, null)).Return(newManager);
-            mocks.ReplayAll();
+            IQueueManagerFactory newFactory = mocks.Create<IQueueManagerFactory>(MockBehavior.Strict).Object;
+            IQueueManager newManager = mocks.Create<IQueueManager>(MockBehavior.Strict).Object;
+            Mock.Get(newFactory).Setup(_newFactory => _newFactory.Create(null, null, null)).Returns(newManager).Verifiable();
 
             IntegrationQueueManagerFactory.OverrideFactory(newFactory);
             try

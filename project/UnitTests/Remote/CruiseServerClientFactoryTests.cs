@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
@@ -10,10 +9,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
     [TestFixture]
     public class CruiseServerClientFactoryTests
     {
-        #region Private fields
-        private MockRepository mocks = new MockRepository();
-        #endregion
-
         #region Test methods
         #region GenerateClient()
         [Test]

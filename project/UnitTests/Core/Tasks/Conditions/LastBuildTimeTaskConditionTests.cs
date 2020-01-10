@@ -1,8 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
     using System;
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
     using ThoughtWorks.CruiseControl.Core.Util;
@@ -15,7 +15,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
@@ -26,11 +26,10 @@
                     Time = new Timeout(1000)
                 };
             var status = new IntegrationSummary(IntegrationStatus.Success, "1", "1", DateTime.Now.AddHours(-1));
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(false);
-            Expect.Call(result.LastIntegration).Return(status);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.IsInitial()).Returns(false).Verifiable();
+            Mock.Get(result).SetupGet(_result => _result.LastIntegration).Returns(status).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -46,11 +45,10 @@
                     Description = "Not equal test"
                 };
             var status = new IntegrationSummary(IntegrationStatus.Success, "1", "1", DateTime.Now);
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(false);
-            Expect.Call(result.LastIntegration).Return(status);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.IsInitial()).Returns(false).Verifiable();
+            Mock.Get(result).SetupGet(_result => _result.LastIntegration).Returns(status).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -64,10 +62,9 @@
                 {
                     Time = new Timeout(1000)
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(true);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.IsInitial()).Returns(true).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();

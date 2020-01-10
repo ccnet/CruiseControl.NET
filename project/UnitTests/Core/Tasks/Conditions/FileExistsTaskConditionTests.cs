@@ -1,7 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
+    using Moq;
     using NUnit.Framework;
-    using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
     using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,23 +13,22 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository();
+            this.mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
         public void EvaluateReturnsTrueIfConditionIsMatched()
         {
-            var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             var condition = new FileExistsTaskCondition
                 {
                     FileSystem = fileSystemMock,
                     FileName = "TestFile"
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.BaseFromWorkingDirectory("TestFile")).Return("TestFile");
-            Expect.Call(fileSystemMock.FileExists("TestFile")).Return(true);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.BaseFromWorkingDirectory("TestFile")).Returns("TestFile").Verifiable();
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists("TestFile")).Returns(true).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
@@ -39,17 +38,16 @@
         [Test]
         public void EvaluateReturnsFalseIfConditionIsNotMatched()
         {
-            var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             var condition = new FileExistsTaskCondition
                 {
                     FileSystem = fileSystemMock,
                     FileName = "TestFile"
                 };
-            var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.BaseFromWorkingDirectory("TestFile")).Return("TestFile");
-            Expect.Call(fileSystemMock.FileExists("TestFile")).Return(false);
+            var result = this.mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
+            Mock.Get(result).Setup(_result => _result.BaseFromWorkingDirectory("TestFile")).Returns("TestFile").Verifiable();
+            Mock.Get(fileSystemMock).Setup(_fileSystemMock => _fileSystemMock.FileExists("TestFile")).Returns(false).Verifiable();
 
-            this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();

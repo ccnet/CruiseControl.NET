@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -13,12 +12,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class CruiseProjectManagerFactoryTest
 	{
 		private const string ProjectName = "projectName";
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks = new MockRepository(MockBehavior.Default);
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
+            mocks = new MockRepository(MockBehavior.Default);
         }
 
 		[Test]
@@ -26,18 +25,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
             var serverAddress = "tcp://somethingOrOther";
 
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
-			var clientFactory = mocks.StrictMock<ICruiseServerClientFactory>();
-            Expect.Call(clientFactory.GenerateRemotingClient(serverAddress, new ClientStartUpSettings()))
-                .Constraints(new Equal(serverAddress), new Anything())
-                .Return(client);
+            var client = mocks.Create<CruiseServerClientBase>().Object;
+			var clientFactory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
+            Mock.Get(clientFactory).Setup(_clientFactory => _clientFactory.GenerateRemotingClient(serverAddress, It.IsAny<ClientStartUpSettings>()))
+                .Returns(client);
             var factory = new CruiseProjectManagerFactory(clientFactory);
 
 			var server= new BuildServer(serverAddress);
 
 			var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 			serverManagers[server] = new HttpCruiseServerManager(client, server);
-            mocks.ReplayAll();
 
 			var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
@@ -50,18 +47,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
             var serverAddress = "http://somethingOrOther";
             var server = new BuildServer(serverAddress);
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = mocks.Create<CruiseServerClientBase>().Object;
 
-            var clientFactory = mocks.StrictMock<ICruiseServerClientFactory>();
-            Expect.Call(clientFactory.GenerateHttpClient(serverAddress, new ClientStartUpSettings()))
-                .Constraints(new Equal(serverAddress), new Anything())
-                .Return(client);
+            var clientFactory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
+            Mock.Get(clientFactory).Setup(_clientFactory => _clientFactory.GenerateHttpClient(serverAddress, It.IsAny<ClientStartUpSettings>()))
+                .Returns(client);
             var factory = new CruiseProjectManagerFactory(clientFactory);
 
 			var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 			serverManagers[server] = new HttpCruiseServerManager(client, server);
 
-            mocks.ReplayAll();
 			var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
 			Assert.AreEqual(typeof(HttpCruiseProjectManager), manager.GetType());
@@ -73,11 +68,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void WhenRequestingACruiseProjectManagerWithAnExtensionProtocolValidExtension()
         {
             var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests",string.Empty);
-            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var mockCruiseManagerFactory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
             var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
             var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 
-            mocks.ReplayAll();
             var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
             Assert.AreEqual(ProjectName, manager.ProjectName);
 
@@ -88,10 +82,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void GetProjectListWithAnExtensionProtocolValidExtension()
         {
             var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests",string.Empty);
-            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var mockCruiseManagerFactory = mocks.Create<ICruiseServerClientFactory>(MockBehavior.Strict).Object;
             var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
 
-            mocks.ReplayAll();
             CCTrayProject[] projectList = factory.GetProjectList(server, false);
             Assert.AreNotEqual(0, projectList.Length);
 
