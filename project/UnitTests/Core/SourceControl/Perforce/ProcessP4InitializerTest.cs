@@ -32,11 +32,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreatesAClientWithGivenClientNameIfSpecified()
 		{
 			// Setup
-			var p4Mock = new Mock<P4>();
-			P4 p4 = (P4) p4Mock.Object;
+			P4 p4 = new P4();
 			p4.Client = "myClient";
-
-			p4Mock.SetupGet(_p4 => _p4.ViewForSpecifications).Returns(new string[] { "//mydepot/...", "//myotherdepot/..." }).Verifiable();
+			p4.View = "//mydepot/...,//myotherdepot/...";
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
@@ -49,7 +47,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
 
 			// Verify
-			p4Mock.Verify();
 			VerifyAll();
 		}
 

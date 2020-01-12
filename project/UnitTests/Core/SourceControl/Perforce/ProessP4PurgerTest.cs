@@ -41,8 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void ShouldDeleteClientSpecAndWorkingDirectoryOnPurge()
 		{
 			// Setup
-			var p4Mock = new Mock<P4>();
-			P4 p4 = (P4) p4Mock.Object;
+			P4 p4 = new P4();
 			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
@@ -63,8 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void ShouldNotTryAndDeleteClientSpecIfClientSpecNotSet()
 		{
 			// Setup
-			var p4Mock = new Mock<P4>();
-			P4 p4 = (P4) p4Mock.Object;
+			P4 p4 = new P4();
 			p4.Client = null;
 
 			Assert.IsTrue(Directory.Exists(tempDirPath));
@@ -83,8 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void ShouldThrowAnExceptionIfProcessFails()
 		{
 			// Setup
-			var p4Mock = new Mock<P4>();
-			P4 p4 = (P4) p4Mock.Object;
+			P4 p4 = new P4();
 			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
