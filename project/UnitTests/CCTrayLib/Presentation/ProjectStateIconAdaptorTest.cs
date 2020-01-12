@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void OnCreationTheCurrentStateOfTheIconIsRead()
 		{
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
+			mockIconProvider.Setup(_iconProvider => _iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			Assert.AreSame( icon, adaptor.StatusIcon );
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void WhenTheMonitorPollsTheIconMayBeUpdated()
 		{
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
+			mockIconProvider.Setup(_iconProvider => _iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			Assert.AreSame( icon, adaptor.StatusIcon );
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			monitor.ProjectState = ProjectState.Broken;
 
 			StatusIcon icon2 = new StatusIcon();
-			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Broken)).Returns(icon2).Verifiable();
+			mockIconProvider.Setup(_iconProvider => _iconProvider.GetStatusIconForState(ProjectState.Broken)).Returns(icon2).Verifiable();
 
 			monitor.Poll();
 
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			iconChangedCount = 0;
 
 			StatusIcon icon = new StatusIcon();
-			mockIconProvider.Setup(iconProvider => iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
+			mockIconProvider.Setup(_iconProvider => _iconProvider.GetStatusIconForState(ProjectState.Building)).Returns(icon).Verifiable();
 
 			ProjectStateIconAdaptor adaptor = new ProjectStateIconAdaptor( monitor, iconProvider );
 			adaptor.IconChanged += new EventHandler(IconChanged);

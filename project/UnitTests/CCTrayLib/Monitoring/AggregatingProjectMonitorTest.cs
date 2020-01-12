@@ -47,9 +47,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void PollInvokesPollOnAllContainedProjects()
 		{
-			monitor1.Setup(monitor => monitor.Poll()).Verifiable();
-			monitor2.Setup(monitor => monitor.Poll()).Verifiable();
-			monitor3.Setup(monitor => monitor.Poll()).Verifiable();
+			monitor1.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor2.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor3.Setup(_monitor => _monitor.Poll()).Verifiable();
 			aggregator.Poll();
 		}
 
@@ -158,9 +158,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private ProjectState CombinedState(ProjectState state1, ProjectState state2, ProjectState state3)
 		{
-			monitor1.SetupGet(monitor => monitor.ProjectState).Returns(state1).Verifiable();
-			monitor2.SetupGet(monitor => monitor.ProjectState).Returns(state2).Verifiable();
-			monitor3.SetupGet(monitor => monitor.ProjectState).Returns(state3).Verifiable();
+			monitor1.SetupGet(_monitor => _monitor.ProjectState).Returns(state1).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.ProjectState).Returns(state2).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.ProjectState).Returns(state3).Verifiable();
 
 			return aggregator.ProjectState;
 		}
@@ -168,9 +168,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringCombinesAllStringsWithNewLinesBetween()
 		{
-			monitor1.SetupGet(monitor => monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
-			monitor2.SetupGet(monitor => monitor.SummaryStatusString).Returns("and from monitor2").Verifiable();
-			monitor3.SetupGet(monitor => monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("and from monitor2").Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("hello from monitor1\nand from monitor2\ngoodbye from monitor3", statusString);
@@ -179,9 +179,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringDoesNotIncludeBlankLinesWhenAProjectReturnsNothing()
 		{
-			monitor1.SetupGet(monitor => monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
-			monitor2.SetupGet(monitor => monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
-			monitor3.SetupGet(monitor => monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("hello from monitor1\ngoodbye from monitor3", statusString);
@@ -190,9 +190,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringReturnsADefaultMessageIfAllProjectsReturnEmptyString()
 		{
-			monitor1.SetupGet(monitor => monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
-			monitor2.SetupGet(monitor => monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
-			monitor3.SetupGet(monitor => monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("All builds are good", statusString);
@@ -223,9 +223,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private IntegrationStatus CombinedIntegrationStatus(IntegrationStatus state1, IntegrationStatus state2, IntegrationStatus state3)
 		{
-			monitor1.SetupGet(monitor => monitor.IntegrationStatus).Returns(state1).Verifiable();
-			monitor2.SetupGet(monitor => monitor.IntegrationStatus).Returns(state2).Verifiable();
-			monitor3.SetupGet(monitor => monitor.IntegrationStatus).Returns(state3).Verifiable();
+			monitor1.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state1).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state2).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state3).Verifiable();
 
 			return aggregator.IntegrationStatus;
 		}

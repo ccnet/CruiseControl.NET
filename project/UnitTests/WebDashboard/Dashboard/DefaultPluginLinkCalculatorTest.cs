@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildPluginMock2.Setup(plugin => plugin.IsDisplayedForProject(It.IsAny<IProjectSpecifier>())).Returns(true);
 			buildPluginMock3.Setup(plugin => plugin.IsDisplayedForProject(It.IsAny<IProjectSpecifier>())).Returns(false);
 
-			configurationMock.SetupGet(configuration => configuration.BuildPlugins).Returns(new IBuildPlugin[]
+			configurationMock.SetupGet(_configuration => _configuration.BuildPlugins).Returns(new IBuildPlugin[]
 				{
 					(IBuildPlugin) buildPluginMock1.Object, (IBuildPlugin) buildPluginMock2.Object, (IBuildPlugin) buildPluginMock3.Object
 				}).Verifiable();
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnServerPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.SetupGet(configuration => configuration.ServerPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.ServerPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, "Description 1", "Action Name 1")).Returns(link1).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, "Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnFarmPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.SetupGet(configuration => configuration.FarmPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.FarmPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Description 1", "Action Name 1")).Returns(link1).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnProjectPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.SetupGet(configuration => configuration.ProjectPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.ProjectPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "Description 1", "Action Name 1")).Returns(link1).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "Description 2", "Action Name 2")).Returns(link2).Verifiable();
 

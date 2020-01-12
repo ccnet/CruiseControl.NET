@@ -80,12 +80,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmLinkIfNothingSpecified()
 		{
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
-			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(_request => _request.GetText("Category")).Returns("").Verifiable();
 
 			expectedVelocityContext["serverName"] = "";
 			expectedVelocityContext["categoryName"] = "";
@@ -107,14 +107,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmAndServerLinksIfServerButNoProjectSpecified()
 		{
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
-			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(_request => _request.GetText("Category")).Returns("").Verifiable();
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";
@@ -138,17 +138,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmServerAndProjectLinksIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
-			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(_request => _request.GetText("Category")).Returns("").Verifiable();
 
             ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new List<ParameterBase>());
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
@@ -179,18 +179,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmServerProjectAndBuildLinksIfServerProjectAndBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("myBuild").Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
-			requestMock.Setup(request => request.GetText("Category")).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("myBuild").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.Request).Returns(requestMock.Object).Verifiable();
+			requestMock.Setup(_request => _request.GetText("Category")).Returns("").Verifiable();
 
             ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1, new List<ParameterBase>());
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };

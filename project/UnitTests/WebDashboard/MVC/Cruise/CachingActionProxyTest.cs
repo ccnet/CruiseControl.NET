@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			IRequest request = CreateRequest();
 
 			mockCache.Setup(cache => cache.Get(request)).Returns(() => null).Verifiable();
-			mockAction.Setup(action => action.Execute(request)).Returns(generatedResponse).Verifiable();
+			mockAction.Setup(_action => _action.Execute(request)).Returns(generatedResponse).Verifiable();
 			mockCache.Setup(cache => cache.Insert(request, generatedResponse)).Verifiable();
 
 			IResponse actualResponse = proxy.Execute(request);

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void ShouldReturnWarningMessageIfNoBuildsAvailable()
 		{
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestMock.SetupGet(request => request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 			farmServiceMock.Setup(services => services.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[0]).Verifiable();
 			
 			IResponse returnedReponse = plugin.Execute(cruiseRequest);
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
-			cruiseRequestMock.SetupGet(request => request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 			farmServiceMock.Setup(services => services.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
 			linkFactoryMock.Setup(factory => factory.CreateBuildLink(buildSpecifier, BuildReportBuildPlugin.ACTION_NAME)).Returns(new GeneralAbsoluteLink("foo", "buildUrl")).Verifiable();
 

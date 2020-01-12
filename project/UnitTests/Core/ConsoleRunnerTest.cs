@@ -54,9 +54,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			consoleArgs.Project = "test";
 			
 			var mockCruiseServer = new Mock<ICruiseServer>();
-            mockCruiseServer.Setup(server => server.ForceBuild(It.Is<ProjectRequest>(request => request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
-            mockCruiseServer.Setup(server => server.Stop(It.Is<ProjectRequest>(request => request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
-            mockCruiseServer.Setup(server => server.WaitForExit(It.Is<ProjectRequest>(request => request.ProjectName == "test"))).Verifiable();
+            mockCruiseServer.Setup(server => server.ForceBuild(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
+            mockCruiseServer.Setup(server => server.Stop(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
+            mockCruiseServer.Setup(server => server.WaitForExit(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Verifiable();
 			var mockCruiseServerFactory = new Mock<ICruiseServerFactory>();
 			mockCruiseServerFactory.Setup(factory => factory.Create(consoleArgs.UseRemoting, consoleArgs.ConfigFile)).Returns(mockCruiseServer.Object).Verifiable();
 

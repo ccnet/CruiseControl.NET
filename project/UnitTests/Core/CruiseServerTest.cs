@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 				.Returns(integratorList).Verifiable();
 
             stateManagerMock = new Mock<IProjectStateManager>();
-            stateManagerMock.Setup(manager => manager.CheckIfProjectCanStart(It.IsAny<string>())).Returns(true);
+            stateManagerMock.Setup(_manager => _manager.CheckIfProjectCanStart(It.IsAny<string>())).Returns(true);
 
 			server = new CruiseServer((IConfigurationService) configServiceMock.Object,
 			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.Object,
@@ -318,7 +318,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StopSpecificProject()
 		{
-            stateManagerMock.Setup(manager => manager.RecordProjectAsStopped("Project 1")).Verifiable();
+            stateManagerMock.Setup(_manager => _manager.RecordProjectAsStopped("Project 1")).Verifiable();
             integratorMock1.Setup(integrator => integrator.Stop(false)).Verifiable();
 			server.CruiseManager.Stop("Project 1");
 			integratorMock1.Verify();
@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartSpecificProject()
 		{
-            stateManagerMock.Setup(manager => manager.RecordProjectAsStartable("Project 2")).Verifiable();
+            stateManagerMock.Setup(_manager => _manager.RecordProjectAsStartable("Project 2")).Verifiable();
 			integratorMock2.Setup(integrator => integrator.Start()).Verifiable();
             server.CruiseManager.Start("Project 2");
 			integratorMock2.Verify();

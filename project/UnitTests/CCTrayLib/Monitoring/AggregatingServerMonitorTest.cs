@@ -42,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void PollInvokesPollOnAllContainedServers()
 		{
-			monitor1.Setup(monitor => monitor.Poll()).Verifiable();
-			monitor2.Setup(monitor => monitor.Poll()).Verifiable();
-			monitor3.Setup(monitor => monitor.Poll()).Verifiable();
+			monitor1.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor2.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor3.Setup(_monitor => _monitor.Poll()).Verifiable();
 			aggregator.Poll();
 		}
 

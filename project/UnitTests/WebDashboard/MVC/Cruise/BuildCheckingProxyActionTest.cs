@@ -41,8 +41,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("myBuild").Verifiable();
-			proxiedActionMock.Setup(action => action.Execute(cruiseRequest)).Returns(response).Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("myBuild").Verifiable();
+			proxiedActionMock.Setup(_action => _action.Execute(cruiseRequest)).Returns(response).Verifiable();
 
 			// Execute
 			IResponse returnedResponse = checkingAction.Execute(cruiseRequest);
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("").Verifiable();
 			errorViewBuilderMock.Setup(builder => builder.BuildView(It.IsAny<string>())).Returns(response).Verifiable();
 
 			// Execute

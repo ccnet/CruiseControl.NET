@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		[Test]
 		public void ThrowsCorrectExceptionIfServerNotKnown()
 		{
-			configurationMock.SetupGet(configuration => configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
 			try
 			{
 				managerWrapper.GetLog(buildSpecifierForUnknownServer, null);
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 				Assert.AreEqual("unknownServer", e.RequestedServer);
 			}
 
-			configurationMock.SetupGet(configuration => configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.Servers).Returns(new ServerLocation[] {serverLocation}).Verifiable();
 			try
 			{
 				managerWrapper.GetLatestBuildSpecifier(buildSpecifierForUnknownServer.ProjectSpecifier, null);
@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
-			configurationMock.SetupGet(configuration => configuration.Servers).Returns(servers).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.Servers).Returns(servers).Verifiable();
 			IServerSpecifier[] serverSpecifiers = managerWrapper.GetServerSpecifiers();
 			Assert.AreEqual(2, serverSpecifiers.Length);
 			Assert.AreEqual("myserver", serverSpecifiers[0].ServerName);
@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
-			configurationMock.SetupGet(configuration => configuration.Servers).Returns(servers).Verifiable();
+			configurationMock.SetupGet(_configuration => _configuration.Servers).Returns(servers).Verifiable();
 
 			IServerSpecifier specifier = managerWrapper.GetServerConfiguration("myserver");
 			Assert.AreEqual(true, specifier.AllowForceBuild);

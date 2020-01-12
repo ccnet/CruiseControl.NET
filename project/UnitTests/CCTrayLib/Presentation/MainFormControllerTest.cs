@@ -27,12 +27,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.Object;
             
             ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[0];
-            mockConfiguration.Setup(configuration => configuration.GetServerMonitors()).Returns(serverMonitors);
-            mockConfiguration.Setup(configuration => configuration.GetProjectStatusMonitors(It.IsAny<ISingleServerMonitor[]>())).Returns(new IProjectMonitor[0]);
-			mockConfiguration.SetupGet(configuration => configuration.Icons).Returns(new Icons());
-            mockConfiguration.SetupGet(configuration => configuration.FixUserName).Returns("John");
+            mockConfiguration.Setup(_configuration => _configuration.GetServerMonitors()).Returns(serverMonitors);
+            mockConfiguration.Setup(_configuration => _configuration.GetProjectStatusMonitors(It.IsAny<ISingleServerMonitor[]>())).Returns(new IProjectMonitor[0]);
+			mockConfiguration.SetupGet(_configuration => _configuration.Icons).Returns(new Icons());
+            mockConfiguration.SetupGet(_configuration => _configuration.FixUserName).Returns("John");
             GrowlConfiguration growlConfig = new GrowlConfiguration();
-            mockConfiguration.SetupGet(configuration => configuration.Growl).Returns(growlConfig);
+            mockConfiguration.SetupGet(_configuration => _configuration.Growl).Returns(growlConfig);
 
 			eventCount = 0;
 
@@ -59,11 +59,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
-            mockProjectMonitor.Setup(monitor => monitor.ListBuildParameters()).Returns(() => null).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
+            mockProjectMonitor.Setup(_monitor => _monitor.ListBuildParameters()).Returns(() => null).Verifiable();
 			controller.SelectedProject = projectMonitor;
 
-			mockProjectMonitor.Setup(monitor => monitor.ForceBuild(null, "John")).Verifiable();
+			mockProjectMonitor.Setup(_monitor => _monitor.ForceBuild(null, "John")).Verifiable();
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
@@ -72,8 +72,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildDoesNothingIfProjectIsNotConnected()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.NotConnected).Verifiable();
-            mockProjectMonitor.Setup(monitor => monitor.ListBuildParameters()).Returns(() => null).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(ProjectState.NotConnected).Verifiable();
+            mockProjectMonitor.Setup(_monitor => _monitor.ListBuildParameters()).Returns(() => null).Verifiable();
 			controller.SelectedProject = projectMonitor;
 
 			controller.ForceBuild();
@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanFixBuildIfBuildIsBroken()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Broken).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(ProjectState.Broken).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanFixBuildIfBuildIsBrokenAndBuilding()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.BrokenAndBuilding).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(ProjectState.BrokenAndBuilding).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CannotFixBuildIfBuildIsWorking()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.ProjectState).Returns(ProjectState.Success).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsFalse(controller.CanFixBuild());
 			mockProjectMonitor.Verify();
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void VolunteeringToFixBuildShouldInvokeServer()
 		{
 			controller.SelectedProject = projectMonitor;
-			mockProjectMonitor.Setup(monitor => monitor.FixBuild("John")).Verifiable();
+			mockProjectMonitor.Setup(_monitor => _monitor.FixBuild("John")).Verifiable();
 			controller.VolunteerToFixBuild();
 			mockProjectMonitor.Verify();
 		}
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanCancelPendingIfBuildIsPending()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.IsPending).Returns(true).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.IsPending).Returns(true).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsTrue(controller.CanCancelPending());
 			mockProjectMonitor.Verify();
@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CannotCancelPendingIfBuildIsNotPending()
 		{
-			mockProjectMonitor.SetupGet(monitor => monitor.IsPending).Returns(false).Verifiable();
+			mockProjectMonitor.SetupGet(_monitor => _monitor.IsPending).Returns(false).Verifiable();
 			controller.SelectedProject = projectMonitor;
 			Assert.IsFalse(controller.CanCancelPending());
 			mockProjectMonitor.Verify();
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void CancelPendingShouldInvokeServer()
 		{
 			controller.SelectedProject = projectMonitor;
-			mockProjectMonitor.Setup(monitor => monitor.CancelPending()).Verifiable();
+			mockProjectMonitor.Setup(_monitor => _monitor.CancelPending()).Verifiable();
 			controller.CancelPending();
 			mockProjectMonitor.Verify();
 		}

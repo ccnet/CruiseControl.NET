@@ -25,8 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             mockFarmService = new Mock<IFarmService>();
             mockRequest = new Mock<ICruiseRequest>();
             serverSpecifier = new DefaultServerSpecifier("local");
-            mockRequest.SetupGet(request => request.ServerSpecifier).Returns(serverSpecifier);
-            mockRequest.SetupGet(request => request.ProjectName).Returns("test");
+            mockRequest.SetupGet(_request => _request.ServerSpecifier).Returns(serverSpecifier);
+            mockRequest.SetupGet(_request => _request.ProjectName).Returns("test");
             report = new ProjectXmlReport((IFarmService)mockFarmService.Object, null);
         }
 

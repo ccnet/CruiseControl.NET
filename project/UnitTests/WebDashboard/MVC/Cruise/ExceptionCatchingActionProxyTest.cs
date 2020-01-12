@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		public void ShouldReturnProxiedViewIfProxiedActionDoesntThrowException()
 		{
 			// Setup
-			actionMock.Setup(action => action.Execute(request)).Returns(response).Verifiable();
+			actionMock.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, exceptionCatchingAction.Execute(request));
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			// Setup
 			CruiseControlException e = new CruiseControlException("A nasty exception");
-			actionMock.Setup(action => action.Execute(request)).Throws(e).Verifiable();
+			actionMock.Setup(_action => _action.Execute(request)).Throws(e).Verifiable();
 
 			velocityViewGeneratorMock.Setup(generator => generator.GenerateView("ActionException.vm", It.Is<Hashtable>(t => t.Count == 1 && t["exception"] == e))).
 				Returns(errorResponse).Verifiable();

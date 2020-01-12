@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldGenerateFarmViewIfNoServerSpecified()
 		{
 			// Setup
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("").Verifiable();
 			pluginLinkCalculatorMock.Setup(calculator => calculator.GetFarmPluginLinks()).Returns(links).Verifiable();
 			farmServiceMock.Setup(service => service.GetServerSpecifiers()).Returns(serverSpecifiers).Verifiable();
 			linkListFactoryMock.Setup(factory => factory.CreateServerLinkList(serverSpecifiers, "ViewServerReport")).Returns(serverLinks).Verifiable();
@@ -124,9 +124,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			IServerSpecifier serverSpecifier = new DefaultServerSpecifier("myServer");
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerSpecifier).Returns(serverSpecifier).Verifiable();
 
 			pluginLinkCalculatorMock.Setup(calculator => calculator.GetServerPluginLinks(serverSpecifier)).Returns(links).Verifiable();
 
@@ -161,10 +161,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 
 			pluginLinkCalculatorMock.Setup(calculator => calculator.GetProjectPluginLinks(projectSpecifier)).Returns(links).Verifiable();
 			string recentBuildsView = "";
@@ -190,11 +190,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ServerName).Returns("myServer").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectName).Returns("myProject").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildName).Returns("myBuild").Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
-			cruiseRequestWrapperMock.SetupGet(cruiseRequest => cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ServerName).Returns("myServer").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectName).Returns("myProject").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildName).Returns("myBuild").Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			cruiseRequestWrapperMock.SetupGet(_cruiseRequest => _cruiseRequest.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
 
 			pluginLinkCalculatorMock.Setup(calculator => calculator.GetBuildPluginLinks(buildSpecifier)).Returns(links).Verifiable();
 			string recentBuildsView = "";

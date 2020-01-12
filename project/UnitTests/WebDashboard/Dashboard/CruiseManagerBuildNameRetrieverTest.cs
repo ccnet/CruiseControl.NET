@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsNameOfLatestLog()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetLatestBuildSpecifier(projectSpecifier, null)).Returns(buildSpecifier).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetLatestBuildSpecifier(projectSpecifier, null)).Returns(buildSpecifier).Verifiable();
 
 			Assert.AreEqual(buildSpecifier, nameBuildRetriever.GetLatestBuildSpecifier(projectSpecifier, null));
 
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void NextBuildIsRequestedBuildIfNoneNewer()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 
             Assert.AreEqual("log3", nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log3"), null).BuildName);
 
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void NextBuildIsNextMostRecentBuildIfOneExists()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 
             Assert.AreEqual("log2", nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log1"), null).BuildName);
 			VerifyAll();
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ThrowsAnExceptionForNextBuildIfBuildIsUnknown()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 			try
 			{
                 nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "not a real build"), null);
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void PreviousBuildIsRequestedBuildIfNoneOlder()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 
             Assert.AreEqual("log1", nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log1"), null).BuildName);
 
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void PreviousBuildIsNextOldestIfOneExists()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 
             Assert.AreEqual("log2", nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log3"), null).BuildName);
 
@@ -108,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ThrowsAnExceptionForPreviousBuildIfBuildIsUnknown()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetBuildSpecifiers(projectSpecifier, null)).Returns(buildSpecifiers).Verifiable();
 			try
 			{
                 nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "not a real build"), null);

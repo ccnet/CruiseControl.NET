@@ -50,8 +50,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldPassThroughIntegrationCompletedCallToAllSubTriggers()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.IntegrationCompleted()).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.IntegrationCompleted()).Verifiable();
 			trigger.IntegrationCompleted();
 			VerifyAll();
 		}
@@ -59,8 +59,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnNoBuildIfAllNoBuild()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
 			Assert.IsNull(trigger.Fire());
 			VerifyAll();
 		}
@@ -68,8 +68,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnIfModificationExistsNoForceBuild()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -77,8 +77,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotCareAboutOrderingForChecking()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -86,8 +86,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnForceBuildIfOneForceBuildAndOneNoBuild()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
 			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -95,8 +95,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnForceBuildIfOneForceBuildAndOneIfModifications()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
 			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -104,8 +104,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotCareAboutOrderingForCheckingForceBuild()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -113,8 +113,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnForceBuildIfAllForceBuild()
 		{
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
 			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
@@ -130,9 +130,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldReturnEarliestTriggerTimeForNextBuild()
 		{
 			DateTime earlierDate = new DateTime(2005, 1, 1);
-			subTrigger1Mock.SetupGet(trigger => trigger.NextBuild).Returns(earlierDate).Verifiable();
+			subTrigger1Mock.SetupGet(_trigger => _trigger.NextBuild).Returns(earlierDate).Verifiable();
 			DateTime laterDate = new DateTime(2005, 1, 2);
-			subTrigger2Mock.SetupGet(trigger => trigger.NextBuild).Returns(laterDate).Verifiable();
+			subTrigger2Mock.SetupGet(_trigger => _trigger.NextBuild).Returns(laterDate).Verifiable();
 			Assert.AreEqual(earlierDate, trigger.NextBuild);
 		}
 
@@ -167,8 +167,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void UsingAndConditionOnlyTriggersBuildIfBothTriggersShouldBuild()
 		{
 			trigger.Operator = Operator.And;
-			subTrigger1Mock.Setup(trigger => trigger.Fire()).Returns(() => null).Verifiable();
-			subTrigger2Mock.Setup(trigger => trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
+			subTrigger1Mock.Setup(_trigger => _trigger.Fire()).Returns(() => null).Verifiable();
+			subTrigger2Mock.Setup(_trigger => _trigger.Fire()).Returns(ForceBuildRequest()).Verifiable();
 			Assert.IsNull(trigger.Fire());
 		}
 	}

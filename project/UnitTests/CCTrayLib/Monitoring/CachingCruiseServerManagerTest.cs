@@ -23,12 +23,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldDelegateMostMethodsToWrappedInstance()
 		{
             MockSequence sequence = new MockSequence();
-            wrappedManagerMock.InSequence(sequence).SetupGet(manager => manager.Configuration).
+            wrappedManagerMock.InSequence(sequence).SetupGet(_manager => _manager.Configuration).
                 Returns(new BuildServer("tcp://testUrl")).Verifiable();
-            wrappedManagerMock.InSequence(sequence).SetupGet(manager => manager.Configuration).
+            wrappedManagerMock.InSequence(sequence).SetupGet(_manager => _manager.Configuration).
                 Returns(new BuildServer("tcp://testUrl")).Verifiable();
-			wrappedManagerMock.SetupGet(manager => manager.DisplayName).Returns("testDisplayName").Verifiable();
-			wrappedManagerMock.Setup(manager => manager.CancelPendingRequest("testProjectName")).Verifiable();
+			wrappedManagerMock.SetupGet(_manager => _manager.DisplayName).Returns("testDisplayName").Verifiable();
+			wrappedManagerMock.Setup(_manager => _manager.CancelPendingRequest("testProjectName")).Verifiable();
 
 
 			Assert.AreEqual("tcp://testUrl", cachingManager.Configuration.Url);
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldDelegateFirstSnapshotGet()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			wrappedManagerMock.Setup(manager => manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
+			wrappedManagerMock.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
 
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldReturnSecondSnapshotGetWithoutDelegating()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			wrappedManagerMock.Setup(manager => manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
+			wrappedManagerMock.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			CruiseServerSnapshot snapshot1 = new CruiseServerSnapshot();
 			CruiseServerSnapshot snapshot2 = new CruiseServerSnapshot();
-			wrappedManagerMock.SetupSequence(manager => manager.GetCruiseServerSnapshot())
+			wrappedManagerMock.SetupSequence(_manager => _manager.GetCruiseServerSnapshot())
 				.Returns(snapshot1)
 				.Returns(snapshot2);
 
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			((ICache) cachingManager).InvalidateCache();
 			Assert.AreSame(snapshot2, cachingManager.GetCruiseServerSnapshot());
 
-			wrappedManagerMock.Verify(manager => manager.GetCruiseServerSnapshot(), Times.Exactly(2));
+			wrappedManagerMock.Verify(_manager => _manager.GetCruiseServerSnapshot(), Times.Exactly(2));
 		}	
 	}
 }

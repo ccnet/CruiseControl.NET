@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		{
 			/// Setup
 			mockActionFactory.Setup(factory => factory.Create(request)).Returns(action).Verifiable();
-			mockAction.Setup(action => action.Execute(request)).Returns(response).Verifiable();
+			mockAction.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
             mockFingerprintFactory.Setup(factory => factory.BuildFromRequest(It.IsAny<IRequest>())).Returns(ConditionalGetFingerprint.NOT_AVAILABLE).Verifiable();
 
 			/// Execute & Verify
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
             mockActionFactory.Setup(factory => factory.CreateFingerprintProvider(request)).Returns(() => null).Verifiable();
             mockActionFactory.Setup(factory => factory.Create(request)).Returns(action).Verifiable();
 
-            mockAction.Setup(action => action.Execute(request)).Returns(response).Verifiable();
+            mockAction.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
 
             IResponse actualResponse = controller.Do();
 
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
             mockFingerprintFactory.Setup(factory => factory.BuildFromRequest(request)).Returns(ConditionalGetFingerprint.NOT_AVAILABLE).Verifiable();
             mockActionFactory.Setup(factory => factory.Create(request)).Returns(action).Verifiable();
 
-            mockAction.Setup(action => action.Execute(request)).Returns(response).Verifiable();
+            mockAction.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
             ConditionalGetFingerprint fingerprint = new ConditionalGetFingerprint(DateTime.Now, "test token");
             mockFingerprintableContentProvider.Setup(provider => provider.GetFingerprint(request)).Returns(fingerprint).Verifiable();
 
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
             mockFingerprintFactory.Setup(factory => factory.BuildFromRequest(request)).Returns(sharedFingerprint).Verifiable();
             mockActionFactory.Setup(factory => factory.Create(request)).Returns(action).Verifiable();
 
-            mockAction.Setup(action => action.Execute(request)).Returns(response).Verifiable();
+            mockAction.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
             mockFingerprintableContentProvider.Setup(provider => provider.GetFingerprint(request)).Returns(sharedFingerprint).Verifiable();
 
             IResponse actualResponse = controller.Do();

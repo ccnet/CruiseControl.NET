@@ -36,8 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 		{
 			DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(
 				new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestMock.SetupGet(request => request.ProjectSpecifier).Returns(projectSpecifier);
-			cruiseRequestMock.SetupGet(request => request.ProjectName).Returns("myProject");
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier);
+			cruiseRequestMock.SetupGet(_request => _request.ProjectName).Returns("myProject");
 
             mockFarmService.Setup(service => service.ForceBuild(projectSpecifier, (string)null)).Verifiable();
 

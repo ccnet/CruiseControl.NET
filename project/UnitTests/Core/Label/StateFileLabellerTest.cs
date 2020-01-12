@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void ShouldLoadIntegrationResultFromStateManagerAndReturnLastSuccessfulBuildLabel()
 		{
-			mockStateManager.Setup(manager => manager.LoadState("Project1")).Returns(SuccessfulResult("success")).Verifiable();
+			mockStateManager.Setup(_manager => _manager.LoadState("Project1")).Returns(SuccessfulResult("success")).Verifiable();
 			labeller.Project = "Project1";
 
 			Assert.AreEqual("success", labeller.Generate(new IntegrationResult()));

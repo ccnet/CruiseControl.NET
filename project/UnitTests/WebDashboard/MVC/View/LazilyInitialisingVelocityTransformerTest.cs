@@ -23,10 +23,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			pathMapperMock.Setup(provider => provider.GetFullPathFor(It.IsAny<string>())).Returns(Path.Combine(".", "templates"));
 
             var pluginsMock = new Mock<IPluginConfiguration>();
-            pluginsMock.SetupGet(configuration => configuration.TemplateLocation).Returns(() => null);
+            pluginsMock.SetupGet(_configuration => _configuration.TemplateLocation).Returns(() => null);
 
             var configurationMock = new Mock<IDashboardConfiguration>();
-            configurationMock.SetupGet(configuration => configuration.PluginConfiguration).Returns(pluginsMock.Object);
+            configurationMock.SetupGet(_configuration => _configuration.PluginConfiguration).Returns(pluginsMock.Object);
 
             viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.Object,
                 (IDashboardConfiguration)configurationMock.Object);

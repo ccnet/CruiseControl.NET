@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldInvokeDecoratedTriggerWhenTimeIsOutsideOfRange()
 		{
-			mockTrigger.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			mockTrigger.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			mockDateTime.SetupGet(provider => provider.Now).Returns(new DateTime(2004, 12, 1, 11, 30, 0, 0)).Verifiable();
 
             Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.StartTime = "23:00";
 			trigger.EndTime = "7:00";
 
-			mockTrigger.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			mockTrigger.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			mockDateTime.SetupGet(provider => provider.Now).Returns(new DateTime(2004, 12, 1, 11, 30, 0, 0)).Verifiable();
 
             Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTodayIsOneOfSpecifiedWeekdays()
 		{
-			mockTrigger.Setup(trigger => trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
+			mockTrigger.Setup(_trigger => _trigger.Fire()).Returns(ModificationExistRequest()).Verifiable();
 			mockDateTime.SetupGet(provider => provider.Now).Returns(new DateTime(2004, 12, 2, 10, 30, 0, 0)).Verifiable();
 
             Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldDelegateIntegrationCompletedCallToInnerTrigger()
 		{
-			mockTrigger.Setup(trigger => trigger.IntegrationCompleted()).Verifiable();
+			mockTrigger.Setup(_trigger => _trigger.IntegrationCompleted()).Verifiable();
 			trigger.IntegrationCompleted();
 		}
 
@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldUseFilterEndTimeIfTriggerBuildTimeIsInFilter()
 		{
 			DateTime triggerNextBuildTime = new DateTime(2004, 12, 1, 10, 30, 00);
-			mockTrigger.SetupGet(trigger => trigger.NextBuild).Returns(triggerNextBuildTime).Verifiable();
+			mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(triggerNextBuildTime).Verifiable();
 			Assert.AreEqual(new DateTime(2004, 12, 1, 11, 00, 00), trigger.NextBuild, "trigger.NextBuild");
 		}
 
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldNotFilterIfTriggerBuildDayIsNotInFilter()
 		{
 			DateTime triggerNextBuildTime = new DateTime(2004, 12, 4, 10, 00, 00);
-			mockTrigger.SetupGet(trigger => trigger.NextBuild).Returns(triggerNextBuildTime).Verifiable();
+			mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(triggerNextBuildTime).Verifiable();
             Assert.AreEqual(triggerNextBuildTime, trigger.NextBuild, "trigger.NextBuild");
 		}
 
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldNotFilterIfTriggerBuildTimeIsNotInFilter()
 		{
 			DateTime nextBuildTime = new DateTime(2004, 12, 1, 13, 30, 00);
-			mockTrigger.SetupGet(trigger => trigger.NextBuild).Returns(nextBuildTime).Verifiable();
+			mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(nextBuildTime).Verifiable();
             Assert.AreEqual(nextBuildTime, trigger.NextBuild, "trigger.NextBuild");
 		}
 
@@ -224,7 +224,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.EndTime = "23:59:59";
 			trigger.WeekDays = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
 			IntegrationRequest request = ModificationExistRequest();
-			mockTrigger.Setup(trigger => trigger.Fire()).Returns(request);
+			mockTrigger.Setup(_trigger => _trigger.Fire()).Returns(request);
 			
 			mockDateTime.SetupGet(provider => provider.Now).Returns(new DateTime(2006, 8, 10, 11, 30, 0, 0)); // Thurs midday
             Assert.AreEqual(request, outerTrigger.Fire(), "outerTrigger.Fire()");

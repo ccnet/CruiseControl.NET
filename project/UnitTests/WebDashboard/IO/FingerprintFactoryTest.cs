@@ -22,20 +22,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
         [Test]
         public void ShouldReturnNotAvailableIfEitherOrBothHeadersAreMissing()
         {
-            mockRequest.SetupGet(request => request.IfModifiedSince).Returns(() => null).Verifiable();
-            mockRequest.SetupGet(request => request.IfNoneMatch).Returns(() => null).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfModifiedSince).Returns(() => null).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfNoneMatch).Returns(() => null).Verifiable();
             ConditionalGetFingerprint fingerprint = new FingerprintFactory(null, null).BuildFromRequest(request);
             Assert.AreSame(ConditionalGetFingerprint.NOT_AVAILABLE, fingerprint);
 
 
-            mockRequest.SetupGet(request => request.IfModifiedSince).Returns(DateTime.Now.ToString("r")).Verifiable();
-            mockRequest.SetupGet(request => request.IfNoneMatch).Returns(() => null).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfModifiedSince).Returns(DateTime.Now.ToString("r")).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfNoneMatch).Returns(() => null).Verifiable();
             fingerprint = new FingerprintFactory(null, null).BuildFromRequest(request);
             Assert.AreSame(ConditionalGetFingerprint.NOT_AVAILABLE, fingerprint);
 
 
-            mockRequest.SetupGet(request => request.IfModifiedSince).Returns(() => null).Verifiable();
-            mockRequest.SetupGet(request => request.IfNoneMatch).Returns("\"opaque value in etag\"").Verifiable();
+            mockRequest.SetupGet(_request => _request.IfModifiedSince).Returns(() => null).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfNoneMatch).Returns("\"opaque value in etag\"").Verifiable();
             fingerprint = new FingerprintFactory(null, null).BuildFromRequest(request);
             Assert.AreSame(ConditionalGetFingerprint.NOT_AVAILABLE, fingerprint);
         }
@@ -46,8 +46,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
             DateTime lastModifiedDate = new DateTime(2007, 4, 20);
             string etagValue = "\"some opaque value\"";
 
-            mockRequest.SetupGet(request => request.IfModifiedSince).Returns(lastModifiedDate.ToString("r")).Verifiable();
-            mockRequest.SetupGet(request => request.IfNoneMatch).Returns(etagValue).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfModifiedSince).Returns(lastModifiedDate.ToString("r")).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfNoneMatch).Returns(etagValue).Verifiable();
             ConditionalGetFingerprint fingerprint = new FingerprintFactory(null, null).BuildFromRequest(request);
             Assert.AreEqual(new ConditionalGetFingerprint(lastModifiedDate, etagValue), fingerprint);
         }
@@ -59,8 +59,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
             DateTime lastModifiedDate = new DateTime(2007, 4, 20);
             string etagValue = "\"some opaque value\"";
 
-            mockRequest.SetupGet(request => request.IfModifiedSince).Returns(lastModifiedDate.ToString()).Verifiable();
-            mockRequest.SetupGet(request => request.IfNoneMatch).Returns(etagValue).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfModifiedSince).Returns(lastModifiedDate.ToString()).Verifiable();
+            mockRequest.SetupGet(_request => _request.IfNoneMatch).Returns(etagValue).Verifiable();
             ConditionalGetFingerprint fingerprint = new FingerprintFactory(null, null).BuildFromRequest(request);
             Assert.AreNotEqual(new ConditionalGetFingerprint(lastModifiedDate, etagValue), fingerprint);
         }

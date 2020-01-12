@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void ReturnsServerLogFromRequestedServer()
 		{
 			// Setup
-			requestMock.SetupGet(request => request.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			requestMock.SetupGet(_request => _request.BuildSpecifier).Returns(buildSpecifier).Verifiable();
 			buildRetrieverMock.Setup(retriever => retriever.GetBuild(buildSpecifier, null)).Returns(build).Verifiable();
 			urlBuilderMock.SetupGet(builder => builder.Extension).Returns("foo").Verifiable();
 			urlBuilderMock.SetupSet(builder => builder.Extension = "xml").Verifiable();
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
             DateTime templateDate = new DateTime(2005,1,2);
 
             var requestMock = new Mock<IRequest>();
-            requestMock.SetupGet(request => request.SubFolders).Returns(new string[] { "server", "testServer", "project", "testProject", "build", "testBuild" });
+            requestMock.SetupGet(_request => _request.SubFolders).Returns(new string[] { "server", "testServer", "project", "testProject", "build", "testBuild" });
 
 	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(logFileDate, TEST_TOKEN);
 

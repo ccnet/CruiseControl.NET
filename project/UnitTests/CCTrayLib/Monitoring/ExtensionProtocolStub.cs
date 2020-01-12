@@ -41,14 +41,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public ICruiseProjectManager RetrieveProjectManager(string projectName)
         {
             var projectManagerMock = new Mock<ICruiseProjectManager>();
-            projectManagerMock.SetupGet(manager => manager.ProjectName).Returns(projectName);
+            projectManagerMock.SetupGet(_manager => _manager.ProjectName).Returns(projectName);
             return projectManagerMock.Object as ICruiseProjectManager;
         }
 
         public ICruiseServerManager RetrieveServerManager()
         {
             var serverMock = new Mock<ICruiseServerManager>();
-            serverMock.SetupGet(manager => manager.Configuration).Returns(configuration);
+            serverMock.SetupGet(_manager => _manager.Configuration).Returns(configuration);
             return serverMock.Object as ICruiseServerManager;
         }
 

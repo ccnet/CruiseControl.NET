@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			// Setup
 			cruiseRequestFactoryMock.Setup(factory => factory.CreateCruiseRequest(request,
                 (ICruiseUrlBuilder)urlBuilderMock.Object, null)).Returns(cruiseRequest).Verifiable();
-			proxiedActionMock.Setup(action => action.Execute(cruiseRequest)).Returns(response).Verifiable();
+			proxiedActionMock.Setup(_action => _action.Execute(cruiseRequest)).Returns(response).Verifiable();
 
 			// Execute
 			IResponse returnedResponse = proxy.Execute(request);

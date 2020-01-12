@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsBuildUsingLogFromServer()
 		{
-			cruiseManagerWrapperMock.Setup(manager => manager.GetLog(buildSpecifier, null)).Returns(logContent).Verifiable();
+			cruiseManagerWrapperMock.Setup(_manager => _manager.GetLog(buildSpecifier, null)).Returns(logContent).Verifiable();
 
 			Build returnedBuild = serverQueryingBuildRetriever.GetBuild(buildSpecifier, null);
 

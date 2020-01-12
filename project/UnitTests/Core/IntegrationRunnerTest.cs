@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             resultMock.SetupGet(_result => _result.EndTime).Returns(endTime).Verifiable();
             resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Exception).Verifiable();
             targetMock.Setup(target => target.PublishResults(result)).Verifiable();
-            resultManagerMock.Setup(manager => manager.FinishIntegration()).Verifiable();
+            resultManagerMock.Setup(_manager => _manager.FinishIntegration()).Verifiable();
 
             runner.Integrate(ModificationExistRequest());
             mockery.Verify();
@@ -125,9 +125,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         private void SetupPreambleExpections()
         {
             targetMock.SetupSet(target => target.Activity = ProjectActivity.CheckingModifications).Verifiable();
-            resultManagerMock.Setup(manager => manager.StartNewIntegration(request)).Returns(result).Verifiable();
+            resultManagerMock.Setup(_manager => _manager.StartNewIntegration(request)).Returns(result).Verifiable();
             resultMock.Setup(_result => _result.MarkStartTime()).Verifiable();
-            resultManagerMock.SetupGet(manager => manager.LastIntegrationResult).Returns(lastResult).Verifiable();
+            resultManagerMock.SetupGet(_manager => _manager.LastIntegrationResult).Returns(lastResult).Verifiable();
             sourceControlMock = new Mock<ISourceControl>(MockBehavior.Strict);
             targetMock.SetupGet(target => target.SourceControl).Returns(sourceControlMock.Object).Verifiable();
             quietPeriodMock.Setup(period => period.GetModifications(sourceControlMock.Object, lastResult, result)).Returns(modifications).Verifiable();
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Success).Verifiable();
             sourceControlMock.Setup(sourceControl => sourceControl.LabelSourceControl(result)).Verifiable();
             targetMock.Setup(target => target.PublishResults(result)).Verifiable();
-            resultManagerMock.Setup(manager => manager.FinishIntegration()).Verifiable();           
+            resultManagerMock.Setup(_manager => _manager.FinishIntegration()).Verifiable();           
         }
 
         #region GenerateSystemParameterValues() tests

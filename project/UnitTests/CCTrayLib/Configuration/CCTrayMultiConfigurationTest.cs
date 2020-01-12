@@ -74,9 +74,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			CCTrayMultiConfiguration provider = CreateTestConfiguration(ConfigXml);
             var mockCruiseServerManager = new Mock<ICruiseServerManager>(MockBehavior.Strict);
             MockSequence sequence = new MockSequence();
-            mockCruiseServerManager.InSequence(sequence).SetupGet(manager => manager.Configuration)
+            mockCruiseServerManager.InSequence(sequence).SetupGet(_manager => _manager.Configuration)
                 .Returns(new BuildServer("tcp://blah1")).Verifiable();
-            mockCruiseServerManager.InSequence(sequence).SetupGet(manager => manager.Configuration)
+            mockCruiseServerManager.InSequence(sequence).SetupGet(_manager => _manager.Configuration)
                 .Returns(new BuildServer("tcp://blah2")).Verifiable();
 		    ICruiseServerManager cruiseServerManagerInstance = (ICruiseServerManager) mockCruiseServerManager.Object;
 

@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			string serverLog = "server log";
 			HtmlFragmentResponse response = new HtmlFragmentResponse("foo");
 
-			requestMock.SetupGet(request => request.ServerSpecifier).Returns(serverSpecifier);
+			requestMock.SetupGet(_request => _request.ServerSpecifier).Returns(serverSpecifier);
 			farmServiceMock.Setup(service => service.GetServerLog(serverSpecifier, null)).Returns(serverLog).Verifiable();
 			farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifier, null)).Returns(new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null)).Verifiable();
 			viewGeneratorMock.Setup(generator => generator.GenerateView(@"ServerLog.vm", It.Is<Hashtable>(t => t.Count == 2 && (string)t["log"] == serverLog && t.ContainsKey("projectLinks")))).Returns(response).Verifiable();
@@ -68,9 +68,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			string serverLog = "server log";
 			HtmlFragmentResponse response = new HtmlFragmentResponse("foo");
 
-			requestMock.SetupGet(request => request.ServerSpecifier).Returns(serverSpecifier);
-			requestMock.SetupGet(request => request.ProjectName).Returns(projectSpecifier.ProjectName);
-			requestMock.SetupGet(request => request.ProjectSpecifier).Returns(projectSpecifier);
+			requestMock.SetupGet(_request => _request.ServerSpecifier).Returns(serverSpecifier);
+			requestMock.SetupGet(_request => _request.ProjectName).Returns(projectSpecifier.ProjectName);
+			requestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier);
 			farmServiceMock.Setup(service => service.GetServerLog(projectSpecifier, null)).Returns(serverLog).Verifiable();
 			farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(serverSpecifier, null)).Returns(new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null)).Verifiable();
 			viewGeneratorMock.Setup(generator => generator.GenerateView(@"ServerLog.vm",

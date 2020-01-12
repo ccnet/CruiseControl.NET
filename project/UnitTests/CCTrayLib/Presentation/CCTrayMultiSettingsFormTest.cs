@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			var existingConfiguration = new Mock<ICCTrayMultiConfiguration>(MockBehavior.Strict);
 			CCTrayMultiConfiguration clonedConfiguration = new CCTrayMultiConfiguration(null, null, null);
-			existingConfiguration.Setup(configuration => configuration.Clone()).Returns(clonedConfiguration).Verifiable();
+			existingConfiguration.Setup(_configuration => _configuration.Clone()).Returns(clonedConfiguration).Verifiable();
 			
 			NullReferenceException nullReference = null;
 			try

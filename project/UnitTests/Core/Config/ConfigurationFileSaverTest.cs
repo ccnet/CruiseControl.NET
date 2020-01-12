@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			projectList.Add(project2);
 
 			var mockConfiguration = new Mock<IConfiguration>();
-			mockConfiguration.SetupGet(configuration => configuration.Projects).Returns(projectList).Verifiable();
+			mockConfiguration.SetupGet(_configuration => _configuration.Projects).Returns(projectList).Verifiable();
 
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempFile(TempFileUtil.CreateTempDir(this), "loadernet.config"));
 

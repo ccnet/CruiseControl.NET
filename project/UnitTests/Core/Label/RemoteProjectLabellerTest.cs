@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		protected void SetUp()
 		{
 			mockCruiseManager = new Mock<ICruiseManager>();
-			mockCruiseManager.Setup(manager => manager.GetProjectStatus()).Returns(new ProjectStatus[1] {NewProjectStatus("foo", "1")}).Verifiable();
+			mockCruiseManager.Setup(_manager => _manager.GetProjectStatus()).Returns(new ProjectStatus[1] {NewProjectStatus("foo", "1")}).Verifiable();
 
 			mockRemotingService = new Mock<IRemotingService>();
 			mockRemotingService.Setup(service => service.Connect(typeof(ICruiseManager), RemoteCruiseServer.DefaultManagerUri)).Returns(mockCruiseManager.Object).Verifiable();
