@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(NAntTask.defaultExecutable);
-			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
+			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.Object);
 			result = IntegrationResult();
 			result.Label = "1.0";
 		}
@@ -213,10 +213,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = SuccessfulProcessResult();
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(returnVal).Verifiable();
 			builder.Run(integrationResult);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 		}
 		

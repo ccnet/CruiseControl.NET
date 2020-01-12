@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Text;
 using System.Threading;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -22,8 +22,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			CreateProcessExecutorMock(VaultVersionChecker.DefaultExecutable);
-			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			vault = new VaultVersionChecker(new VaultHistoryParser(culture), (ProcessExecutor) mockProcessExecutor.MockInstance, VaultVersionChecker.EForcedVaultVersion.Vault317);
+			mockHistoryParser = new Mock<IHistoryParser>();
+			vault = new VaultVersionChecker(new VaultHistoryParser(culture), (ProcessExecutor) mockProcessExecutor.Object, VaultVersionChecker.EForcedVaultVersion.Vault317);
 
 			result = IntegrationResultMother.CreateSuccessful("foo");
 			result.WorkingDirectory = this.DefaultWorkingDirectory;

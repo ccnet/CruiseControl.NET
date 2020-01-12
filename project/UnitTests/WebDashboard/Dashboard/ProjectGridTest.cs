@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Moq;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,7 +12,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -23,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
         private MockRepository mocks = new MockRepository(MockBehavior.Default);
 		private ProjectGrid projectGrid;
 		private ICruiseUrlBuilder urlBuilderMock;
-		private DynamicMock linkFactoryMock;
+		private Mock<ILinkFactory> linkFactoryMock;
 		private IAbsoluteLink projectLink;
 		private IServerSpecifier serverSpecifier;
 		private IProjectSpecifier projectSpecifier;
@@ -34,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
             urlBuilderMock = mocks.Create<ICruiseUrlBuilder>().Object;
             Mock.Get(urlBuilderMock).Setup(_urlBuilderMock => _urlBuilderMock.BuildProjectUrl(It.IsAny<string>(), It.IsAny<IProjectSpecifier>()))
                 .Returns("myLinkUrl");
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			linkFactoryMock = new Mock<ILinkFactory>();
 			projectGrid = new ProjectGrid();
 
 			serverSpecifier = new DefaultServerSpecifier("server");
@@ -55,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 		private void SetupProjectLinkExpectation(IProjectSpecifier projectSpecifierForLink)
 		{
-            linkFactoryMock.SetupResult("CreateProjectLink", projectLink, typeof(IProjectSpecifier), typeof(string));
+            linkFactoryMock.Setup(factory => factory.CreateProjectLink(It.IsAny<IProjectSpecifier>(), It.IsAny<string>())).Returns(projectLink);
 		}
 
 		[Test]

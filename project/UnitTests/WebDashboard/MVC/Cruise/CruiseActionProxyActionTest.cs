@@ -1,5 +1,5 @@
 using System.Collections.Specialized;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class CruiseActionProxyActionTest
 	{
-		private DynamicMock cruiseRequestFactoryMock;
-		private DynamicMock proxiedActionMock;
-        private DynamicMock urlBuilderMock;
+		private Mock<ICruiseRequestFactory> cruiseRequestFactoryMock;
+		private Mock<ICruiseAction> proxiedActionMock;
+        private Mock<ICruiseUrlBuilder> urlBuilderMock;
 		private CruiseActionProxyAction proxy;
 
 		private ICruiseRequest cruiseRequest;
@@ -23,17 +23,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[SetUp]
 		public void Setup()
 		{
-			cruiseRequestFactoryMock = new DynamicMock(typeof(ICruiseRequestFactory));
-			proxiedActionMock = new DynamicMock(typeof(ICruiseAction));
-            urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+			cruiseRequestFactoryMock = new Mock<ICruiseRequestFactory>();
+			proxiedActionMock = new Mock<ICruiseAction>();
+            urlBuilderMock = new Mock<ICruiseUrlBuilder>();
 
 			proxy = new CruiseActionProxyAction(
-				(ICruiseAction) proxiedActionMock.MockInstance,
-				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance,
+				(ICruiseAction) proxiedActionMock.Object,
+				(ICruiseRequestFactory) cruiseRequestFactoryMock.Object,
+                (ICruiseUrlBuilder)urlBuilderMock.Object,
                 null);
 
-            cruiseRequest = new RequestWrappingCruiseRequest(null, (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
+            cruiseRequest = new RequestWrappingCruiseRequest(null, (ICruiseUrlBuilder)urlBuilderMock.Object, null);
             request = new NameValueCollectionRequest(new NameValueCollection(), null, null, null, null);
 		}
 
@@ -48,9 +48,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
-			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
+			cruiseRequestFactoryMock.Setup(factory => factory.CreateCruiseRequest(request,
+                (ICruiseUrlBuilder)urlBuilderMock.Object, null)).Returns(cruiseRequest).Verifiable();
+			proxiedActionMock.Setup(_action => _action.Execute(cruiseRequest)).Returns(response).Verifiable();
 
 			// Execute
 			IResponse returnedResponse = proxy.Execute(request);

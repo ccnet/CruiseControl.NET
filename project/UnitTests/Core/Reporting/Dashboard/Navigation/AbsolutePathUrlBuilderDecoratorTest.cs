@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
@@ -11,14 +11,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 		public void ShouldDecorateUrlsToCreateAbsoluteURLs()
 		{
 			/// Setup
-			DynamicMock decoratedBuilderMock = new DynamicMock(typeof(IUrlBuilder));
+			var decoratedBuilderMock = new Mock<IUrlBuilder>();
 			string baseUrl = "https://myserver:8080/myvdir";
 
-			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.MockInstance, baseUrl);
+			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.Object, baseUrl);
 			string actionName = "myAction";
-			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl", actionName);
-			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl2", actionName, "query");
-			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myPath/myRelativeUrl3", actionName, "query", "myPath/");
+			decoratedBuilderMock.Setup(builder => builder.BuildUrl(actionName)).Returns("myRelativeUrl").Verifiable();
+			decoratedBuilderMock.Setup(builder => builder.BuildUrl(actionName, "query")).Returns("myRelativeUrl2").Verifiable();
+			decoratedBuilderMock.Setup(builder => builder.BuildUrl(actionName, "query", "myPath/")).Returns("myPath/myRelativeUrl3").Verifiable();
 
 			/// Execute & Verify
 			Assert.AreEqual(baseUrl + "/myRelativeUrl", decorator.BuildUrl(actionName));
@@ -32,12 +32,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 		public void ShouldHandleBaseURLsWithTrailingSlashes()
 		{
 			/// Setup
-			DynamicMock decoratedBuilderMock = new DynamicMock(typeof(IUrlBuilder));
+			var decoratedBuilderMock = new Mock<IUrlBuilder>();
 			string baseUrl = "https://myserver:8080/myvdir/";
 
-			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.MockInstance, baseUrl);
+			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.Object, baseUrl);
 			string actionName = "myAction";
-			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl", actionName);
+			decoratedBuilderMock.Setup(builder => builder.BuildUrl(actionName)).Returns("myRelativeUrl").Verifiable();
 
 			/// Execute & Verify
 			Assert.AreEqual(baseUrl + "myRelativeUrl", decorator.BuildUrl(actionName));
@@ -49,11 +49,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 		public void ShouldDelegateExtensionToSubBuilder()
 		{
 			// Setup
-			DynamicMock decoratedBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			decoratedBuilderMock.ExpectAndReturn("Extension", "foo");
+			var decoratedBuilderMock = new Mock<IUrlBuilder>();
+			decoratedBuilderMock.SetupSet(builder => builder.Extension = "foo").Verifiable();
 
 			// Execute
-			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.MockInstance, null);
+			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.Object, null);
 			decorator.Extension = "foo";
 
 			// Verify

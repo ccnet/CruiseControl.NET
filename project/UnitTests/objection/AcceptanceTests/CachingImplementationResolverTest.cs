@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading;
-using NMock;
+using Moq;
 using NUnit.Framework;
 
 namespace Objection.UnitTests.AcceptanceTests
@@ -15,15 +15,14 @@ namespace Objection.UnitTests.AcceptanceTests
 		{
 			TypeToTypeMap sharedMap = new HashtableTypeMap(Hashtable.Synchronized(new Hashtable()));
 			
-			DynamicMock expectedToBeUsed = new DynamicMock(typeof(ImplementationResolver));
-			expectedToBeUsed.ExpectAndReturn("ResolveImplementation", typeof(TestClass), typeof(TestInterface));
-			DynamicMock notExpectedToBeUsed = new DynamicMock(typeof(ImplementationResolver));
-			notExpectedToBeUsed.ExpectNoCall("ResolveImplementation", typeof(Type));
+			var expectedToBeUsed = new Mock<ImplementationResolver>();
+			expectedToBeUsed.Setup(resolver => resolver.ResolveImplementation(typeof(TestInterface))).Returns(typeof(TestClass)).Verifiable();
+			var notExpectedToBeUsed = new Mock<ImplementationResolver>();
 
-			StallingImplementationResolver stallingResolver = new StallingImplementationResolver((ImplementationResolver) expectedToBeUsed.MockInstance);
+			StallingImplementationResolver stallingResolver = new StallingImplementationResolver((ImplementationResolver) expectedToBeUsed.Object);
 			ImplementationResolver resolvingResolver = new CachingImplementationResolver(
 				stallingResolver, sharedMap);
-			ImplementationResolver moochingResolver = new CachingImplementationResolver((ImplementationResolver) notExpectedToBeUsed.MockInstance, sharedMap);
+			ImplementationResolver moochingResolver = new CachingImplementationResolver((ImplementationResolver) notExpectedToBeUsed.Object, sharedMap);
 
 			ImplementationResolverRunner resolvingRunner = new ImplementationResolverRunner(resolvingResolver, typeof(TestInterface));
 			Thread resolvingThread = new Thread(
@@ -42,6 +41,7 @@ namespace Objection.UnitTests.AcceptanceTests
 			
 			expectedToBeUsed.Verify();
 			notExpectedToBeUsed.Verify();
+			notExpectedToBeUsed.VerifyNoOtherCalls();
 
 			Assert.AreEqual(typeof(TestClass), resolvingRunner.implementationType);
 			Assert.AreEqual(typeof(TestClass), moochingRunner.implementationType);

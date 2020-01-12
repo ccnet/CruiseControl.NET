@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -9,20 +9,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 	[TestFixture]
 	public class RemoteProjectLabellerTest
 	{
-		private IMock mockCruiseManager;
-		private IMock mockRemotingService;
+		private Mock<ICruiseManager> mockCruiseManager;
+		private Mock<IRemotingService> mockRemotingService;
 		private RemoteProjectLabeller labeller;
 
 		[SetUp]
 		protected void SetUp()
 		{
-			mockCruiseManager = new DynamicMock(typeof (ICruiseManager));
-			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[1] {NewProjectStatus("foo", "1")});
+			mockCruiseManager = new Mock<ICruiseManager>();
+			mockCruiseManager.Setup(_manager => _manager.GetProjectStatus()).Returns(new ProjectStatus[1] {NewProjectStatus("foo", "1")}).Verifiable();
 
-			mockRemotingService = new DynamicMock(typeof (IRemotingService));
-			mockRemotingService.ExpectAndReturn("Connect", mockCruiseManager.MockInstance, typeof (ICruiseManager), RemoteCruiseServer.DefaultManagerUri);
+			mockRemotingService = new Mock<IRemotingService>();
+			mockRemotingService.Setup(service => service.Connect(typeof(ICruiseManager), RemoteCruiseServer.DefaultManagerUri)).Returns(mockCruiseManager.Object).Verifiable();
 
-			labeller = new RemoteProjectLabeller((IRemotingService) mockRemotingService.MockInstance);
+			labeller = new RemoteProjectLabeller((IRemotingService) mockRemotingService.Object);
 		}
 
 		[Test]

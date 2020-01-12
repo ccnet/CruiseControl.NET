@@ -1,6 +1,6 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -13,14 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 	{
 		private IterationLabeller labeller;
 		private DateTime releaseStartDate = new DateTime(2005, 01, 01, 00, 00, 00, 00);
-		private IMock dateTimeMock;
+		private Mock<DateTimeProvider> dateTimeMock;
 
 		[SetUp]
 		public void SetUp()
 		{
-			dateTimeMock = new DynamicMock(typeof (DateTimeProvider));
-			dateTimeMock.SetupResult("Today", new DateTime(2005, 7, 20, 0, 0, 0, 0));
-			labeller = new IterationLabeller((DateTimeProvider) dateTimeMock.MockInstance);
+			dateTimeMock = new Mock<DateTimeProvider>();
+			dateTimeMock.SetupGet(provider => provider.Today).Returns(new DateTime(2005, 7, 20, 0, 0, 0, 0));
+			labeller = new IterationLabeller((DateTimeProvider) dateTimeMock.Object);
 			labeller.ReleaseStartDate = releaseStartDate;
 		}
 
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			// Set the release start date needs to be 15 iterations ago
 			// from today.  So take today's date and remove 15 weeks and a couple more days.
-			dateTimeMock.SetupResult("Today", DateTime.Today);
+			dateTimeMock.SetupGet(provider => provider.Today).Returns(DateTime.Today);
 			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15*7 + 2));
 
 			// one week iterations
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			// Set the release start date needs to be 15 iterations ago
 			// from today.  So take today's date and remove 15 weeks and a couple more days.
-			dateTimeMock.SetupResult("Today", DateTime.Today);
+			dateTimeMock.SetupGet(provider => provider.Today).Returns(DateTime.Today);
 			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15*7 + 2));
 
 			// one week iterations

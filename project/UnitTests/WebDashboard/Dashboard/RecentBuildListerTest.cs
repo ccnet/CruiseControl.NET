@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -17,13 +16,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class RecentBuildListerTest
 	{
-		private DynamicMock farmServiceMock;
-		private DynamicMock velocityTransformerMock;
-		private DynamicMock velocityViewGeneratorMock;
-		private DynamicMock linkFactoryMock;
-		private DynamicMock linkListFactoryMock;
-        private DynamicMock fingerprintFactoryMock;
-        private DynamicMock urlBuilderMock;
+		private Mock<IFarmService> farmServiceMock;
+		private Mock<IVelocityTransformer> velocityTransformerMock;
+		private Mock<IVelocityViewGenerator> velocityViewGeneratorMock;
+		private Mock<ILinkFactory> linkFactoryMock;
+		private Mock<ILinkListFactory> linkListFactoryMock;
+        private Mock<IFingerprintFactory> fingerprintFactoryMock;
+        private Mock<ICruiseUrlBuilder> urlBuilderMock;
 
 		private RecentBuildLister lister;
 		private IProjectSpecifier projectSpecifier;
@@ -33,22 +32,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	    [SetUp]
 		public void Setup()
 		{
-			farmServiceMock = new DynamicMock(typeof(IFarmService));
-			velocityTransformerMock = new DynamicMock(typeof(IVelocityTransformer));
-			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
-		    fingerprintFactoryMock = new DynamicMock(typeof (IFingerprintFactory));
-            urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+			farmServiceMock = new Mock<IFarmService>();
+			velocityTransformerMock = new Mock<IVelocityTransformer>();
+			velocityViewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			linkFactoryMock = new Mock<ILinkFactory>();
+			linkListFactoryMock = new Mock<ILinkListFactory>();
+		    fingerprintFactoryMock = new Mock<IFingerprintFactory>();
+            urlBuilderMock = new Mock<ICruiseUrlBuilder>();
 
 			lister = new RecentBuildLister(
-				(IFarmService) farmServiceMock.MockInstance,
-				(IVelocityTransformer) velocityTransformerMock.MockInstance,
-				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance,
-				(ILinkListFactory) linkListFactoryMock.MockInstance,
-                (IFingerprintFactory) fingerprintFactoryMock.MockInstance,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance,
+				(IFarmService) farmServiceMock.Object,
+				(IVelocityTransformer) velocityTransformerMock.Object,
+				(IVelocityViewGenerator) velocityViewGeneratorMock.Object,
+				(ILinkFactory) linkFactoryMock.Object,
+				(ILinkListFactory) linkListFactoryMock.Object,
+                (IFingerprintFactory) fingerprintFactoryMock.Object,
+                (ICruiseUrlBuilder)urlBuilderMock.Object,
                 null);
 
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
@@ -73,19 +72,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
 			string buildRows = "renderred Links";
 			string recentBuilds = "recentBuilds";
-			Hashtable context1 = new Hashtable();
-			Hashtable context2 = new Hashtable();
 
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10, null);
-			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, build1Specifier, BuildReportBuildPlugin.ACTION_NAME);
-			context1["links"] = buildLinks;
-			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
+			farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, 10, null)).Returns(buildSpecifiers).Verifiable();
+			linkListFactoryMock.Setup(factory => factory.CreateStyledBuildLinkList(buildSpecifiers, build1Specifier, BuildReportBuildPlugin.ACTION_NAME)).Returns(buildLinks).Verifiable();
+			velocityTransformerMock.Setup(transformer => transformer.Transform(@"BuildRows.vm", It.Is<Hashtable>(t => t.Count == 1 && t["links"] == buildLinks))).Returns(buildRows).Verifiable();
 
-			context2["buildRows"] = buildRows;
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
-			context2["allBuildsLink"] = allBuildsLink;
-			velocityTransformerMock.ExpectAndReturn("Transform", recentBuilds, @"RecentBuilds.vm", new HashtableConstraint(context2));
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME)).Returns(allBuildsLink).Verifiable();
+			velocityTransformerMock.Setup(transformer => transformer.Transform(@"RecentBuilds.vm", It.Is<Hashtable>(t => t.Count == 2 && (string)t["buildRows"] == buildRows && t["allBuildsLink"] == allBuildsLink))).Returns(recentBuilds).Verifiable();
 
 			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(build1Specifier, null));
 
@@ -98,20 +92,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IBuildSpecifier[] buildSpecifiers = new IBuildSpecifier [] {build2Specifier, build1Specifier };
 			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
 			string buildRows = "renderred Links";
-			IResponse allBuildsResponse = new HtmlFragmentResponse("foo");
-			Hashtable context1 = new Hashtable();
-			Hashtable context2 = new Hashtable();
+			HtmlFragmentResponse allBuildsResponse = new HtmlFragmentResponse("foo");
 
-			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier, null);
-			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, BuildReportBuildPlugin.ACTION_NAME);
-			context1["links"] = buildLinks;
-			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
+			farmServiceMock.Setup(service => service.GetBuildSpecifiers(projectSpecifier, null)).Returns(new IBuildSpecifier[] { build2Specifier, build1Specifier }).Verifiable();
+			linkListFactoryMock.Setup(factory => factory.CreateStyledBuildLinkList(buildSpecifiers, BuildReportBuildPlugin.ACTION_NAME)).Returns(buildLinks).Verifiable();
+			velocityTransformerMock.Setup(transformer => transformer.Transform(@"BuildRows.vm", It.Is<Hashtable>(t => t.Count == 1 && t["links"] == buildLinks))).Returns(buildRows).Verifiable();
 
-			context2["buildRows"] = buildRows;
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
-			context2["allBuildsLink"] = allBuildsLink;
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsResponse, @"AllBuilds.vm", new HashtableConstraint(context2));
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME)).Returns(allBuildsLink).Verifiable();
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"AllBuilds.vm", It.Is<Hashtable>(t => t.Count == 2 && (string)t["buildRows"] == buildRows && t["allBuildsLink"] == allBuildsLink))).Returns(allBuildsResponse).Verifiable();
 
 			Assert.AreEqual(allBuildsResponse, lister.GenerateAllBuildsView(projectSpecifier, null));
 
@@ -125,18 +114,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
             // Would be nice to have a cleaner way of getting the date. Possibly from the specifier directly?
             const string testToken = "test token";
 
-            DynamicMock requestMock = new DynamicMock(typeof(IRequest));
-	        IRequest request = (IRequest) requestMock.MockInstance;
+            var requestMock = new Mock<IRequest>();
+	        IRequest request = (IRequest) requestMock.Object;
 
             DateTime olderDate = new DateTime(2007,1,1,1,1,1);
             DateTime mostRecentDate = new DateTime(2007, 4, 21, 1, 7, 8);
 
-	        fingerprintFactoryMock.SetupResult("BuildFromDate", new ConditionalGetFingerprint(olderDate, testToken), typeof(DateTime));
-            fingerprintFactoryMock.SetupResult("BuildFromFileNames", new ConditionalGetFingerprint(mostRecentDate, testToken), typeof(string[]));
+	        fingerprintFactoryMock.Setup(factory => factory.BuildFromDate(It.IsAny<DateTime>())).Returns(new ConditionalGetFingerprint(olderDate, testToken)).Verifiable();
+            fingerprintFactoryMock.Setup(factory => factory.BuildFromFileNames(It.IsAny<string[]>())).Returns(new ConditionalGetFingerprint(mostRecentDate, testToken)).Verifiable();
 
-            requestMock.SetupResult("SubFolders", new string[] {"server", "testServer", "project", "testProject", "build", "testBuild"});
+            requestMock.SetupGet(_request => _request.SubFolders).Returns(new string[] {"server", "testServer", "project", "testProject", "build", "testBuild"}).Verifiable();
 
-            farmServiceMock.SetupResult("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { build2Specifier, build1Specifier }, typeof(IProjectSpecifier), typeof(int), null);
+            farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(It.IsAny<IProjectSpecifier>(), It.IsAny<int>(), null)).Returns(new IBuildSpecifier[] { build2Specifier, build1Specifier }).Verifiable();
 
 	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(mostRecentDate, testToken);
 

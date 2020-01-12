@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 	[TestFixture]
 	public class XslMultiGenericReportActionTest
 	{
-		private DynamicMock actionInstantiatorMock;
+		private Mock<IActionInstantiator> actionInstantiatorMock;
 		private XslMultiReportBuildPlugin buildPlugin;
         private BuildReportXslFilename[] xslFiles = new BuildReportXslFilename[] {
             new BuildReportXslFilename(@"xsl\myxsl.xsl"),
@@ -20,8 +20,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 		[SetUp]
 		public void Setup()
 		{
-			actionInstantiatorMock = new DynamicMock(typeof (IActionInstantiator));
-			buildPlugin = new XslMultiReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.MockInstance);
+			actionInstantiatorMock = new Mock<IActionInstantiator>();
+			buildPlugin = new XslMultiReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.Object);
 		}
 
 		private void VerifyAll()
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			buildPlugin.XslFileNames = xslFiles;
 
 			MultipleXslReportBuildAction xslReportAction = new MultipleXslReportBuildAction(null, null);
-			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof (MultipleXslReportBuildAction));
+			actionInstantiatorMock.Setup(instantiator => instantiator.InstantiateAction(typeof(MultipleXslReportBuildAction))).Returns(xslReportAction).Verifiable();
 
 			INamedAction[] namedActions = buildPlugin.NamedActions;
 

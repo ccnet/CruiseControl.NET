@@ -1,10 +1,8 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Collections.Generic;
-using NMock.Constraints;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
@@ -35,10 +33,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			consoleArgs.UseRemoting = true;
 			consoleArgs.ShowHelp = true;			
 			
-			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectNoCall("Create", typeof(bool), typeof(string));
+			var mockCruiseServerFactory = new Mock<ICruiseServerFactory>();
 
-			ConsoleRunner runner = new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance);
+			ConsoleRunner runner = new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.Object);
 			runner.Run();
 			
 			// FIXME: should we care for the usage text and the logging implementation?
@@ -47,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			//Assert.IsTrue(listener.Traces[0].ToString().IndexOf(ConsoleRunnerArguments.Usage) > 0, "Wrong message was logged.");
 
 			mockCruiseServerFactory.Verify();
+			mockCruiseServerFactory.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -55,18 +53,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
 			consoleArgs.Project = "test";
 			
-			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-            var projectConstraint = new ProjectRequestConstraint
-            {
-                ProjectName = "test"
-            };
-            mockCruiseServer.ExpectAndReturn("ForceBuild", new Response { Result = ResponseResult.Success }, projectConstraint);
-            mockCruiseServer.ExpectAndReturn("Stop", new Response { Result = ResponseResult.Success }, projectConstraint);
-            mockCruiseServer.Expect("WaitForExit", projectConstraint);
-			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, consoleArgs.UseRemoting, consoleArgs.ConfigFile);
+			var mockCruiseServer = new Mock<ICruiseServer>();
+            mockCruiseServer.Setup(server => server.ForceBuild(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
+            mockCruiseServer.Setup(server => server.Stop(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Returns(new Response { Result = ResponseResult.Success }).Verifiable();
+            mockCruiseServer.Setup(server => server.WaitForExit(It.Is<ProjectRequest>(_request => _request.ProjectName == "test"))).Verifiable();
+			var mockCruiseServerFactory = new Mock<ICruiseServerFactory>();
+			mockCruiseServerFactory.Setup(factory => factory.Create(consoleArgs.UseRemoting, consoleArgs.ConfigFile)).Returns(mockCruiseServer.Object).Verifiable();
 
-			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.Object).Run();
 
 			mockCruiseServer.Verify();
 		}	
@@ -75,13 +69,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void StartCruiseServerProject()
 		{
 			ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
-			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-			mockCruiseServer.Expect("Start");
-			mockCruiseServer.Expect("WaitForExit");
-			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, consoleArgs.UseRemoting, consoleArgs.ConfigFile);
+			var mockCruiseServer = new Mock<ICruiseServer>();
+			mockCruiseServer.Setup(server => server.Start()).Verifiable();
+			mockCruiseServer.Setup(server => server.WaitForExit()).Verifiable();
+			var mockCruiseServerFactory = new Mock<ICruiseServerFactory>();
+			mockCruiseServerFactory.Setup(factory => factory.Create(consoleArgs.UseRemoting, consoleArgs.ConfigFile)).Returns(mockCruiseServer.Object).Verifiable();
 
-			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.Object).Run();
 
 			mockCruiseServer.Verify();
 		}
@@ -92,40 +86,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
             consoleArgs.ValidateConfigOnly = true;
             
-            Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-            Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-            mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, false, consoleArgs.ConfigFile);
+            var mockCruiseServer = new Mock<ICruiseServer>();
+            var mockCruiseServerFactory = new Mock<ICruiseServerFactory>();
+            mockCruiseServerFactory.Setup(factory => factory.Create(false, consoleArgs.ConfigFile)).Returns(mockCruiseServer.Object).Verifiable();
 
-            new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+            new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.Object).Run();
 
             mockCruiseServer.Verify();
-        }
-    }
-
-    public class ProjectRequestConstraint : BaseConstraint
-    {
-        public string ProjectName { get; set; }
-        private string message = null;
-
-        public override bool Eval(object val)
-        {
-            if (val is ProjectRequest)
-            {
-                if (!string.Equals(ProjectName, (val as ProjectRequest).ProjectName))
-                {
-                    message = "Project names do not match";
-                }
-            }
-            else
-            {
-                message = "Expected a ProjectRequest";
-            }
-            return (message == null);
-        }
-
-        public override string Message
-        {
-            get { return message; }
         }
     }
 }

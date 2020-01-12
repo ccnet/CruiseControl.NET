@@ -1,6 +1,5 @@
 using System;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -14,13 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldHandleIncrementingLabelAfterInitialBuildFailsWithException()
 		{
-			IMock mockSourceControl = new DynamicMock(typeof (ISourceControl));
-			mockSourceControl.ExpectAndThrow("GetModifications", new Exception("doh!"), new IsAnything(), new IsAnything());
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[] {new Modification()}, new IsAnything(), new IsAnything());
+			var mockSourceControl = new Mock<ISourceControl>();
+			MockSequence sequence = new MockSequence();
+			mockSourceControl.InSequence(sequence).Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Throws(new Exception("doh!")).Verifiable();
+			mockSourceControl.InSequence(sequence).Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(new Modification[] {new Modification()}).Verifiable();
 
 			Project project = new Project();
 			project.Name = "test";
-			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
+			project.SourceControl = (ISourceControl) mockSourceControl.Object;
 			project.StateManager = new StateManagerStub();
 			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));}
 			catch (Exception) { }
@@ -33,16 +33,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldNotResetLabelIfGetModificationsThrowsException()
 		{
-			IMock mockSourceControl = new DynamicMock(typeof (ISourceControl));
-			mockSourceControl.ExpectAndThrow("GetModifications", new Exception("doh!"), new IsAnything(), new IsAnything());
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[] {new Modification()}, new IsAnything(), new IsAnything());
+			var mockSourceControl = new Mock<ISourceControl>();
+			MockSequence sequence = new MockSequence();
+			mockSourceControl.InSequence(sequence).Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Throws(new Exception("doh!")).Verifiable();
+			mockSourceControl.InSequence(sequence).Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(new Modification[] { new Modification() }).Verifiable();
 
 			StateManagerStub stateManagerStub = new StateManagerStub();
 			stateManagerStub.SaveState(IntegrationResultMother.CreateSuccessful("10"));
 			
 			Project project = new Project();
 			project.Name = "test";
-			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
+			project.SourceControl = (ISourceControl) mockSourceControl.Object;
 			project.StateManager = stateManagerStub;
 			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));}
 			catch (Exception) { }

@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -10,13 +10,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ShouldDelegateForEachFileAndSeparateWithLineBreaks()
 		{
-			DynamicMock delegateMock = new DynamicMock(typeof(ITransformer));
-			HtmlAwareMultiTransformer transformer = new HtmlAwareMultiTransformer((ITransformer) delegateMock.MockInstance);
+			var delegateMock = new Mock<ITransformer>();
+			HtmlAwareMultiTransformer transformer = new HtmlAwareMultiTransformer((ITransformer) delegateMock.Object);
 
 			string input = "myinput";
 
-			delegateMock.ExpectAndReturn("Transform", @"<p>MyFirstOutput<p>",  input, "xslFile1", null);
-			delegateMock.ExpectAndReturn("Transform", @"<p>MySecondOutput<p>",  input, "xslFile2", null);
+			delegateMock.Setup(t => t.Transform(input, "xslFile1", null)).Returns(@"<p>MyFirstOutput<p>").Verifiable();
+			delegateMock.Setup(t => t.Transform(input, "xslFile2", null)).Returns(@"<p>MySecondOutput<p>").Verifiable();
 
 			Assert.AreEqual(@"<p>MyFirstOutput<p><p>MySecondOutput<p>", transformer.Transform(input, new string[] { "xslFile1", "xslFile2" }, null));
 			delegateMock.Verify();

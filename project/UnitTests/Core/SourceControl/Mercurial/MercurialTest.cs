@@ -1,13 +1,10 @@
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 {
-	using Exortech.NetReflector;
-	using NMock;
-	using NMock.Constraints;
-	using NUnit.Framework;
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
-	using System.Text;
+	using Exortech.NetReflector;
+	using Moq;
+	using NUnit.Framework;
 	using ThoughtWorks.CruiseControl.Core;
 	using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 	using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial;
@@ -47,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		private Mercurial hg;
 		private DateTime from;
 		private DateTime to;
-		private IMock mockFileSystem;
-		private IMock mockFileDirectoryDeleter;
-		private IMock mockHistoryParser;
+		private Mock<IFileSystem> mockFileSystem;
+		private Mock<IFileDirectoryDeleter> mockFileDirectoryDeleter;
+		private Mock<IHistoryParser> mockHistoryParser;
 		private string tempWorkDir;
 		private string tempHgDir;
 		private string outputTemplate;
@@ -61,9 +58,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		[SetUp]
 		protected void SetUp()
 		{
-			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			mockFileSystem = new DynamicMock(typeof (IFileSystem));
-			mockFileDirectoryDeleter = new DynamicMock(typeof (IFileDirectoryDeleter));
+			mockHistoryParser = new Mock<IHistoryParser>();
+			mockFileSystem = new Mock<IFileSystem>();
+			mockFileDirectoryDeleter = new Mock<IFileDirectoryDeleter>();
 			CreateProcessExecutorMock(Mercurial.DefaultExecutable);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);
@@ -73,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 			Directory.CreateDirectory(tempHgDir);
 			outputTemplate = Path.Combine(tempHgDir, "ccnet.template");
 
-			hg = new Mercurial((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, new StubFileSystem(), new StubFileDirectoryDeleter());
+			hg = new Mercurial((IHistoryParser) mockHistoryParser.Object, (ProcessExecutor) mockProcessExecutor.Object, new StubFileSystem(), new StubFileDirectoryDeleter());
 			hg.WorkingDirectory = tempWorkDir;
 		}
 
@@ -164,15 +161,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		[Test]
 		public void ShouldBuildUrlIfUrlBuilderSpecified()
 		{
-			IMock mockUrlBuilder = new DynamicMock(typeof (IModificationUrlBuilder));
+			var mockUrlBuilder = new Mock<IModificationUrlBuilder>();
 			Modification[] modifications = new Modification[2] {new Modification(), new Modification()};
-			hg.UrlBuilder = (IModificationUrlBuilder) mockUrlBuilder.MockInstance;
-
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), new IsAnything());
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("3", "", 0, false), new IsAnything());
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("4", "", 0, false), new IsAnything());
-			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
-			mockUrlBuilder.ExpectAndReturn("SetupModification", modifications, new object[] {modifications});
+			hg.UrlBuilder = (IModificationUrlBuilder) mockUrlBuilder.Object;
+			MockSequence sequence = new MockSequence();
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("", "", 0, false)).Verifiable();
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("3", "", 0, false)).Verifiable();
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("4", "", 0, false)).Verifiable();
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(modifications).Verifiable();
+			mockUrlBuilder.Setup(builder => builder.SetupModification(modifications)).Verifiable();
 
 			Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
 			Assert.That(result, Is.EqualTo(modifications));
@@ -182,19 +179,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		[Test]
 		public void ShouldCreateWorkingDirectoryIfItDoesntExistOrIsNotARepository()
 		{
-			hg = new Mercurial((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance,
-			                   (IFileSystem) mockFileSystem.MockInstance, (IFileDirectoryDeleter) mockFileDirectoryDeleter.MockInstance);
+			hg = new Mercurial((IHistoryParser) mockHistoryParser.Object, (ProcessExecutor) mockProcessExecutor.Object,
+			                   (IFileSystem) mockFileSystem.Object, (IFileDirectoryDeleter) mockFileDirectoryDeleter.Object);
 			hg.WorkingDirectory = tempWorkDir;
 			hg.Repository = @"C:\foo";
 
-			mockFileSystem.Expect("EnsureFolderExists", tempWorkDir);
-			mockFileSystem.Expect("EnsureFolderExists", tempHgDir);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, tempWorkDir);
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempHgDir);
-			mockFileDirectoryDeleter.Expect("DeleteIncludingReadOnlyObjects", new object[] { tempWorkDir });
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, tempWorkDir);
-			ExpectToExecuteArguments(@"init " + StringUtil.AutoDoubleQuoteString(tempWorkDir), Directory.GetParent(Path.GetFullPath(tempWorkDir)).FullName);
-			ExpectToExecuteArguments(@"pull C:\foo", tempWorkDir);
+			MockSequence sequence = new MockSequence();
+			mockFileSystem.Setup(fileSystem => fileSystem.EnsureFolderExists(tempWorkDir)).Verifiable();
+			mockFileSystem.Setup(fileSystem => fileSystem.EnsureFolderExists(tempHgDir)).Verifiable();
+			mockFileSystem.InSequence(sequence).Setup(fileSystem => fileSystem.DirectoryExists(tempWorkDir)).Returns(true).Verifiable();
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(tempHgDir)).Returns(false).Verifiable();
+			mockFileDirectoryDeleter.Setup(deleter => deleter.DeleteIncludingReadOnlyObjects(tempWorkDir)).Verifiable();
+			mockFileSystem.InSequence(sequence).Setup(fileSystem => fileSystem.DirectoryExists(tempWorkDir)).Returns(false).Verifiable();
+			ExpectToExecuteArguments(sequence, @"init " + StringUtil.AutoDoubleQuoteString(tempWorkDir), Directory.GetParent(Path.GetFullPath(tempWorkDir)).FullName);
+			ExpectToExecuteArguments(sequence, @"pull C:\foo", tempWorkDir);
 
 			hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
@@ -221,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 			ExpectToExecuteWithArgumentsAndReturn("parents --template {rev}:", new ProcessResult("2:3:", "", 0, false));
 			ExpectToExecuteWithArgumentsAndReturn("log -r tip --template {rev}", new ProcessResult("5", "", 0, false));
 			ExpectToExecuteArguments("log -r 3:5 --style xml -v");
-			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), new IsAnything(), new IsAnything());
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(modifications).Verifiable();
 
 			Modification[] result = hg.GetModifications(IntegrationResult(from), IntegrationResult(to));
 			Assert.That(result, Is.EqualTo(modifications));
@@ -294,9 +292,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		{
 			hg.AutoGetSource = false;
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
-
 			hg.GetSource(IntegrationResult());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -402,9 +400,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		{
 			hg.TagOnSuccess = true;
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
-
 			hg.LabelSourceControl(IntegrationResultMother.CreateFailed());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -412,9 +410,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 		{
 			hg.TagOnSuccess = false;
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
-
 			hg.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -477,7 +475,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 
 		private void ExpectToExecuteWithArgumentsAndReturn(string args, ProcessResult returnValue)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", returnValue, NewProcessInfo(args, tempWorkDir));
+			mockProcessExecutor.Setup(executor => executor.Execute(NewProcessInfo(args, tempWorkDir))).Returns(returnValue).Verifiable();
 		}
 
 		private new void ExpectToExecuteArguments(string args)

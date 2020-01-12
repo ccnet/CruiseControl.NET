@@ -1,36 +1,36 @@
 using System;
-using NMock;
+using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
 	[TestFixture]
 	public class AggregatingProjectMonitorTest
 	{
-		private DynamicMock monitor1;
-		private DynamicMock monitor2;
-		private DynamicMock monitor3;
+		private Mock<IProjectMonitor> monitor1;
+		private Mock<IProjectMonitor> monitor2;
+		private Mock<IProjectMonitor> monitor3;
 		private IProjectMonitor[] monitors;
 		private AggregatingProjectMonitor aggregator;
 
 		[SetUp]
 		public void SetUp()
 		{
-			monitor1 = new DynamicMock(typeof (IProjectMonitor));
-			monitor2 = new DynamicMock(typeof (IProjectMonitor));
-			monitor3 = new DynamicMock(typeof (IProjectMonitor));
+			monitor1 = new Mock<IProjectMonitor>();
+			monitor2 = new Mock<IProjectMonitor>();
+			monitor3 = new Mock<IProjectMonitor>();
 
 			monitors = new IProjectMonitor[]
 				{
-					(IProjectMonitor) monitor1.MockInstance,
-					(IProjectMonitor) monitor2.MockInstance,
-					(IProjectMonitor) monitor3.MockInstance,
+					(IProjectMonitor) monitor1.Object,
+					(IProjectMonitor) monitor2.Object,
+					(IProjectMonitor) monitor3.Object,
 				};
 
 			aggregator = new AggregatingProjectMonitor(monitors);
@@ -47,9 +47,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void PollInvokesPollOnAllContainedProjects()
 		{
-			monitor1.Expect("Poll");
-			monitor2.Expect("Poll");
-			monitor3.Expect("Poll");
+			monitor1.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor2.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor3.Setup(_monitor => _monitor.Poll()).Verifiable();
 			aggregator.Poll();
 		}
 
@@ -158,9 +158,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private ProjectState CombinedState(ProjectState state1, ProjectState state2, ProjectState state3)
 		{
-			monitor1.SetupResult("ProjectState", state1);
-			monitor2.SetupResult("ProjectState", state2);
-			monitor3.SetupResult("ProjectState", state3);
+			monitor1.SetupGet(_monitor => _monitor.ProjectState).Returns(state1).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.ProjectState).Returns(state2).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.ProjectState).Returns(state3).Verifiable();
 
 			return aggregator.ProjectState;
 		}
@@ -168,9 +168,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringCombinesAllStringsWithNewLinesBetween()
 		{
-			monitor1.ExpectAndReturn("SummaryStatusString", "hello from monitor1");
-			monitor2.ExpectAndReturn("SummaryStatusString", "and from monitor2");
-			monitor3.ExpectAndReturn("SummaryStatusString", "goodbye from monitor3");
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("and from monitor2").Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("hello from monitor1\nand from monitor2\ngoodbye from monitor3", statusString);
@@ -179,9 +179,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringDoesNotIncludeBlankLinesWhenAProjectReturnsNothing()
 		{
-			monitor1.ExpectAndReturn("SummaryStatusString", "hello from monitor1");
-			monitor2.ExpectAndReturn("SummaryStatusString", string.Empty);
-			monitor3.ExpectAndReturn("SummaryStatusString", "goodbye from monitor3");
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("hello from monitor1").Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns("goodbye from monitor3").Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("hello from monitor1\ngoodbye from monitor3", statusString);
@@ -190,9 +190,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectSummaryStringReturnsADefaultMessageIfAllProjectsReturnEmptyString()
 		{
-			monitor1.ExpectAndReturn("SummaryStatusString", string.Empty);
-			monitor2.ExpectAndReturn("SummaryStatusString", string.Empty);
-			monitor3.ExpectAndReturn("SummaryStatusString", string.Empty);
+			monitor1.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.SummaryStatusString).Returns(string.Empty).Verifiable();
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("All builds are good", statusString);
@@ -223,9 +223,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private IntegrationStatus CombinedIntegrationStatus(IntegrationStatus state1, IntegrationStatus state2, IntegrationStatus state3)
 		{
-			monitor1.SetupResult("IntegrationStatus", state1);
-			monitor2.SetupResult("IntegrationStatus", state2);
-			monitor3.SetupResult("IntegrationStatus", state3);
+			monitor1.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state1).Verifiable();
+			monitor2.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state2).Verifiable();
+			monitor3.SetupGet(_monitor => _monitor.IntegrationStatus).Returns(state3).Verifiable();
 
 			return aggregator.IntegrationStatus;
 		}

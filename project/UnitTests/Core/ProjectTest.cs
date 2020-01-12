@@ -6,8 +6,6 @@ using System.Reflection;
 using Exortech.NetReflector;
 using Exortech.NetReflector.Util;
 using Moq;
-using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -21,7 +19,6 @@ using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -30,12 +27,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
         private MockRepository mocks;
 		private Project project;
-		private IMock mockSourceControl;
-		private IMock mockStateManager;
-		private IMock mockTrigger;
-		private IMock mockLabeller;
-		private IMock mockPublisher;
-		private IMock mockTask;
+		private Mock<ISourceControl> mockSourceControl;
+		private Mock<IStateManager> mockStateManager;
+		private Mock<ITrigger> mockTrigger;
+		private Mock<ILabeller> mockLabeller;
+		private Mock<ITask> mockPublisher;
+		private Mock<ITask> mockTask;
 		private string workingDirPath;
 		private string artifactDirPath;
 		private const string ProjectName = "test";
@@ -52,12 +49,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
 			queue = new IntegrationQueue("foo", new DefaultQueueConfiguration("foo"), null);
 			mockery = new Mockery();
-			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
-			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));
-			mockTrigger = mockery.NewStrictMock(typeof (ITrigger));
-			mockLabeller = mockery.NewStrictMock(typeof (ILabeller));
-			mockPublisher = mockery.NewStrictMock((typeof (ITask)));
-			mockTask = mockery.NewStrictMock((typeof (ITask)));
+			mockSourceControl = mockery.NewStrictMock<ISourceControl>();
+			mockStateManager = mockery.NewStrictMock<IStateManager>();
+			mockTrigger = mockery.NewStrictMock<ITrigger>();
+			mockLabeller = mockery.NewStrictMock<ILabeller>();
+			mockPublisher = mockery.NewStrictMock<ITask>();
+			mockTask = mockery.NewStrictMock<ITask>();
 
 			project = new Project();
 			SetupProject();
@@ -66,12 +63,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private void SetupProject()
 		{
 			project.Name = ProjectName;
-			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
-			project.StateManager = (IStateManager) mockStateManager.MockInstance;
-			project.Triggers = (ITrigger) mockTrigger.MockInstance;
-			project.Labeller = (ILabeller) mockLabeller.MockInstance;
-			project.Publishers = new ITask[] {new ThoughtWorks.CruiseControl.Core.Publishers.XmlLogPublisher(),  (ITask) mockPublisher.MockInstance};
-			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance};
+			project.SourceControl = (ISourceControl) mockSourceControl.Object;
+			project.StateManager = (IStateManager) mockStateManager.Object;
+			project.Triggers = (ITrigger) mockTrigger.Object;
+			project.Labeller = (ILabeller) mockLabeller.Object;
+			project.Publishers = new ITask[] {new ThoughtWorks.CruiseControl.Core.Publishers.XmlLogPublisher(),  (ITask) mockPublisher.Object };
+			project.Tasks = new ITask[] {(ITask) mockTask.Object };
 			project.ConfiguredWorkingDirectory = workingDirPath;
 			project.ConfiguredArtifactDirectory = artifactDirPath;
 		}
@@ -184,8 +181,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			expected.Label = "previous";
 			expected.Status = IntegrationStatus.Success;
 
-			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
-			mockStateManager.ExpectAndReturn("LoadState", expected, ProjectName);
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(true).Verifiable();
+			mockStateManager.Setup(_manager => _manager.LoadState(ProjectName)).Returns(expected).Verifiable();
 
 			Assert.AreEqual(expected, project.CurrentResult);
 			VerifyAll();
@@ -202,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldCallSourceControlInitializeOnInitialize()
 		{
 			// Setup
-			mockSourceControl.Expect("Initialize", project);
+			mockSourceControl.Setup(sourceControl => sourceControl.Initialize(project)).Verifiable();
 
 			// Execute
 			project.Initialize();
@@ -214,13 +211,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldNotCallSourceControlPurgeOrDeleteDirectoriesOnPurgeIfNoDeletesRequested()
 		{
-			// Setup
-			mockSourceControl.ExpectNoCall("Purge", typeof (IProject));
-
 			// Execute
 			project.Purge(false, false, false);
 
 			// Verify
+			mockSourceControl.Verify(sourceControl => sourceControl.Purge(It.IsAny<IProject>()), Times.Never);
 			VerifyAll();
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
@@ -230,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldCallSourceControlPurgeIfRequested()
 		{
 			// Setup
-			mockSourceControl.Expect("Purge", project);
+			mockSourceControl.Setup(sourceControl => sourceControl.Purge(project)).Verifiable();
 
 			// Execute
 			project.Purge(false, false, true);
@@ -243,7 +238,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldCallSourceControlPurgeAndDeleteDirectoriesIfRequested()
 		{
 			// Setup
-			mockSourceControl.Expect("Purge", project);
+			mockSourceControl.Setup(sourceControl => sourceControl.Purge(project)).Verifiable();
 
 			// Execute
 			project.Purge(true, true, true);
@@ -257,13 +252,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldDeleteWorkingDirectoryOnPurgeIfRequested()
 		{
-			// Setup
-			mockSourceControl.ExpectNoCall("Purge", typeof (IProject));
-
 			// Execute
 			project.Purge(true, false, false);
 
 			// Verify
+			mockSourceControl.Verify(sourceControl => sourceControl.Purge(It.IsAny<IProject>()), Times.Never);
 			VerifyAll();
 			Assert.IsFalse(Directory.Exists(workingDirPath));
 		}
@@ -271,13 +264,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldDeleteArtifactDirectoryOnPurgeIfRequested()
 		{
-			// Setup
-			mockSourceControl.ExpectNoCall("Purge", typeof (IProject));
-
 			// Execute
 			project.Purge(false, true, false);
 
 			// Verify
+			mockSourceControl.Verify(sourceControl => sourceControl.Purge(It.IsAny<IProject>()), Times.Never);
 			VerifyAll();
 			Assert.IsFalse(Directory.Exists(artifactDirPath));
 		}
@@ -286,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldNotDeleteDirectoriesIfSourceControlFailsOnPurge()
 		{
 			// Setup
-			mockSourceControl.ExpectAndThrow("Purge", new CruiseControlException(), project);
+			mockSourceControl.Setup(sourceControl => sourceControl.Purge(project)).Throws(new CruiseControlException()).Verifiable();
 
 			// Execute
 			try
@@ -306,7 +297,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldHandleWorkingDirectoryNotExisting()
 		{
 			// Setup
-			mockSourceControl.ExpectNoCall("Purge", typeof (IProject));
 			TempFileUtil.DeleteTempDir("workingDir");
 			Assert.IsFalse(Directory.Exists(workingDirPath));
 
@@ -314,6 +304,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Purge(true, false, false);
 
 			// Verify
+			mockSourceControl.Verify(sourceControl => sourceControl.Purge(It.IsAny<IProject>()), Times.Never);
 			VerifyAll();
 		}
 
@@ -321,7 +312,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldHandleArtifactDirectoryNotExisting()
 		{
 			// Setup
-			mockSourceControl.ExpectNoCall("Purge", typeof (IProject));
 			TempFileUtil.DeleteTempDir("artifactDir");
 			Assert.IsFalse(Directory.Exists(artifactDirPath));
 
@@ -329,26 +319,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Purge(false, true, false);
 
 			// Verify
+			mockSourceControl.Verify(sourceControl => sourceControl.Purge(It.IsAny<IProject>()), Times.Never);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldCallIntegratableWhenIntegrateCalled()
 		{
-			DynamicMock integratableMock = new DynamicMock(typeof (IIntegratable));
-			project = new Project((IIntegratable) integratableMock.MockInstance);
+			var integratableMock = new Mock<IIntegratable>();
+			project = new Project((IIntegratable) integratableMock.Object);
 			SetupProject();
 
-            DynamicMock resultMock = new DynamicMock(typeof(IIntegrationResult));
-            resultMock.SetupResult("Status", IntegrationStatus.Unknown);
-            resultMock.SetupResult("StartTime", DateTime.Now);
-            resultMock.SetupResult("Succeeded", false);
+            var resultMock = new Mock<IIntegrationResult>();
+            resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Unknown).Verifiable();
+            resultMock.SetupGet(_result => _result.StartTime).Returns(DateTime.Now).Verifiable();
+            resultMock.SetupGet(_result => _result.Succeeded).Returns(false).Verifiable();
 
             
 
-			IIntegrationResult result = (IIntegrationResult)resultMock.MockInstance;
+			IIntegrationResult result = (IIntegrationResult)resultMock.Object;
 			IntegrationRequest request = ForceBuildRequest();
-			integratableMock.ExpectAndReturn("Integrate", result, request);
+			integratableMock.Setup(integratable => integratable.Integrate(request)).Returns(result).Verifiable();
 			Assert.AreEqual(result, project.Integrate(request));
 			VerifyAll();
 		}
@@ -358,14 +349,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RunningFirstIntegrationShouldForceBuild()
 		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName); // running the first integration (no state file)
-			mockStateManager.Expect("SaveState", new IsAnything());
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
-			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
-			mockPublisher.Expect("Run", new IsAnything());
-			mockTask.Expect("Run", new AddTaskResultConstraint());
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable(); // running the first integration (no state file)
+			mockStateManager.Setup(_manager => _manager.SaveState(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockLabeller.Setup(labeller => labeller.Generate(It.IsAny<IIntegrationResult>())).Returns("label").Verifiable(); // generate new label
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(new Modification[0]).Verifiable(); // return no modifications found
+			mockSourceControl.Setup(sourceControl => sourceControl.GetSource(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.LabelSourceControl(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockTask.Setup(task => task.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
@@ -388,10 +379,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test] 
 		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
-			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(true).Verifiable();
+			mockStateManager.Setup(_manager => _manager.LoadState(ProjectName)).Returns(IntegrationResultMother.CreateSuccessful()).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(new Modification[0]).Verifiable(); // return no modifications found
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
@@ -405,6 +395,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.AreEqual(string.Empty, result.TaskOutput, "no output is expected as builder is not called");
 			//			Assert.IsTrue(result.EndTime >= result.StartTime);
+			mockPublisher.Verify(publisher => publisher.Run(It.IsAny<IntegrationResult>()), Times.Never);
 			VerifyAll();
 		}
 
@@ -413,14 +404,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			Modification[] modifications = new Modification[1] {new Modification()};
 
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockStateManager.Expect("SaveState", new IsAnything());
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
-			mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
-			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockPublisher.Expect("Run", new IsAnything());
-			mockTask.Expect("Run", new AddTaskResultConstraint());
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+			mockStateManager.Setup(_manager => _manager.SaveState(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockLabeller.Setup(labeller => labeller.Generate(It.IsAny<IIntegrationResult>())).Returns("label").Verifiable(); // generate new label
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(modifications).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.LabelSourceControl(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetSource(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockTask.Setup(task => task.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
@@ -439,13 +430,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
-			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(true).Verifiable();
+			mockStateManager.Setup(_manager => _manager.LoadState(ProjectName)).Throws(new CruiseControlException("expected exception")).Verifiable();
 
-            DynamicMock resultMock = new DynamicMock(typeof(IIntegrationResult));
-            resultMock.SetupResult("Status", IntegrationStatus.Unknown);
-            resultMock.SetupResult("StartTime", DateTime.Now);
-            resultMock.SetupResult("Succeeded", false);
+            var resultMock = new Mock<IIntegrationResult>();
+            resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Unknown).Verifiable();
+            resultMock.SetupGet(_result => _result.StartTime).Returns(DateTime.Now).Verifiable();
+            resultMock.SetupGet(_result => _result.Succeeded).Returns(false).Verifiable();
 
 
             Assert.That(delegate { project.Integrate(ModificationExistRequest()); },
@@ -456,14 +447,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void SourceControlLabelled()
 		{
-			mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
-			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
-			mockPublisher.Expect("Run", new IsAnything());
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockTask.Expect("Run", new AddTaskResultConstraint());
-			mockStateManager.Expect("SaveState", new IsAnything());
+			mockLabeller.Setup(labeller => labeller.Generate(It.IsAny<IIntegrationResult>())).Returns("1.2.1").Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(CreateModifications()).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetSource(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.LabelSourceControl(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+			mockTask.Setup(task => task.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
+			mockStateManager.Setup(_manager => _manager.SaveState(It.IsAny<IIntegrationResult>())).Verifiable();
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
@@ -478,15 +469,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldStopBuildIfTaskFails()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateFailed();
-			mockTask.Expect("Run", result);
+			mockTask.Setup(task => task.Run(result)).Verifiable();
 
-			IMock secondTask = new DynamicMock(typeof (ITask));
-			secondTask.ExpectNoCall("Run", typeof (IntegrationResult));
+			var secondTask = new Mock<ITask>();
 
-			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance, (ITask) secondTask.MockInstance};
+			project.Tasks = new ITask[] { (ITask) mockTask.Object, (ITask) secondTask.Object };
 			project.Run(result);
 			VerifyAll();
-			secondTask.Verify();
+			secondTask.Verify(task => task.Run(It.IsAny<IntegrationResult>()), Times.Never);
 		}
 
 		private static Modification[] CreateModifications()
@@ -503,15 +493,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		// publishers will need to log their own exceptions
 		[Test] public void IfPublisherThrowsExceptionShouldStillSaveState()
 		{
-			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockStateManager.Expect("SaveState", new IsAnything());
-			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
+			mockLabeller.Setup(labeller => labeller.Generate(It.IsAny<IIntegrationResult>())).Returns("1.0").Verifiable();
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+			mockStateManager.Setup(_manager => _manager.SaveState(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(CreateModifications()).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetSource(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.LabelSourceControl(It.IsAny<IIntegrationResult>())).Verifiable();
 			Exception expectedException = new CruiseControlException("expected exception");
-			mockPublisher.ExpectAndThrow("Run", expectedException, new IsAnything());
-			mockTask.Expect("Run", new AddTaskResultConstraint());
+			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Throws(expectedException).Verifiable();
+			mockTask.Setup(task => task.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
@@ -524,13 +514,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void TimedoutTaskShouldFailBuildIfPublishExceptionsIsTrue()
 		{
-			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockStateManager.Expect("SaveState", new IsAnything());
-			mockTask.ExpectAndThrow("Run", new CruiseControlException(), new IsAnything());
-			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockPublisher.Expect("Run", new IsAnything());
+			mockLabeller.Setup(labeller => labeller.Generate(It.IsAny<IIntegrationResult>())).Returns("1.0").Verifiable();
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+			mockStateManager.Setup(_manager => _manager.SaveState(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockTask.Setup(task => task.Run(It.IsAny<IIntegrationResult>())).Throws(new CruiseControlException()).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetModifications(It.IsAny<IIntegrationResult>(), It.IsAny<IIntegrationResult>())).Returns(CreateModifications()).Verifiable();
+			mockSourceControl.Setup(sourceControl => sourceControl.GetSource(It.IsAny<IIntegrationResult>())).Verifiable();
+			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Verifiable();
 
 			project.Integrate(ForceBuildRequest());
 
@@ -540,8 +530,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void AddedMessageShouldBeIncludedInProjectStatus()
 		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+			mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+			mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(DateTime.Now).Verifiable();
 
 			Message message = new Message("foo");
 			project.AddMessage(message);
@@ -587,29 +577,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreSame(expected, actual);
         }
 
-		private class AddTaskResultConstraint : BaseConstraint
-		{
-			public override bool Eval(object val)
-			{
-				IntegrationResult result = val as IntegrationResult;
-				if (result == null) return false;
-				result.AddTaskResult("success");
-				return true;
-			}
-
-			public override string Message
-			{
-				get { return "failed AddTaskResultConstraint"; }
-			}
-        }
-
         #region PublishResults() tests
         [Test]
         public void ShouldClearMessagesAfterSuccessfulBuild()
         {
-            mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-            mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
-            mockPublisher.Expect("Run", new AddTaskResultConstraint());
+            mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+            mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(DateTime.Now).Verifiable();
+            mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
 
             project.AddMessage(new Message("foo"));
             project.PublishResults(IntegrationResultMother.CreateSuccessful());
@@ -620,9 +594,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [Test]
         public void DoNotClearMessagesAfterFailedBuild()
         {
-            mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-            mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
-            mockPublisher.Expect("Run", new AddTaskResultConstraint());
+            mockStateManager.Setup(_manager => _manager.HasPreviousState(ProjectName)).Returns(false).Verifiable();
+            mockTrigger.SetupGet(_trigger => _trigger.NextBuild).Returns(DateTime.Now).Verifiable();
+            mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
 
             project.AddMessage(new Message("foo"));
             project.PublishResults(IntegrationResultMother.CreateFailed());

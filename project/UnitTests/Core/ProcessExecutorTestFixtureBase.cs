@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -20,24 +19,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		protected string testTimeString = "08:45:00";
         
 
-		protected IMock mockProcessExecutor;
+		protected Mock<ProcessExecutor> mockProcessExecutor;
 		protected string defaultExecutable;
 
 		protected void CreateProcessExecutorMock(string executable)
 		{
-			mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
-			mockProcessExecutor.Strict = true;
+			mockProcessExecutor = new Mock<ProcessExecutor>(MockBehavior.Strict);
 			defaultExecutable = executable;
 		}
 
 		protected void Verify()
 		{
 			mockProcessExecutor.Verify();
-		}
-
-		protected void ExpectThatExecuteWillNotBeCalled()
-		{
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 		}
 
 		protected void ExpectToExecuteArguments(string args)
@@ -50,19 +43,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			ExpectToExecute(NewProcessInfo(args, workingDirectory));
 		}
 
+		protected void ExpectToExecuteArguments(MockSequence sequence, string args, string workingDirectory) {
+			ExpectToExecute(sequence, NewProcessInfo(args, workingDirectory));
+		}
+
 		protected void ExpectToExecute(ProcessInfo processInfo)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), processInfo);
+			mockProcessExecutor.Setup(executor => executor.Execute(processInfo)).Returns(SuccessfulProcessResult()).Verifiable();
+		}
+
+		protected void ExpectToExecute(MockSequence sequence, ProcessInfo processInfo) {
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(processInfo)).Returns(SuccessfulProcessResult()).Verifiable();
 		}
 
 		protected void ExpectToExecuteAndReturn(ProcessResult result)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", result, new IsAnything());
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(result).Verifiable();
 		}
 
 		protected void ExpectToExecuteAndThrow()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Throws(new IOException()).Verifiable();
 		}
 
 		protected virtual IIntegrationResult IntegrationResult()

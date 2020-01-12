@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class ServerMonitorTest
 	{
-		private DynamicMock mockServerManager;
+		private Mock<ICruiseServerManager> mockServerManager;
 		private ServerMonitor monitor;
 		private int pollCount;
 		private int queueChangedCount;
@@ -21,9 +21,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SetUp()
 		{
 			queueChangedCount = pollCount = 0;
-			mockServerManager = new DynamicMock(typeof (ICruiseServerManager));
-			mockServerManager.Strict = true;
-			monitor = new ServerMonitor((ICruiseServerManager) mockServerManager.MockInstance);
+			mockServerManager = new Mock<ICruiseServerManager>(MockBehavior.Strict);
+			monitor = new ServerMonitor((ICruiseServerManager) mockServerManager.Object);
 			monitor.Polled += new MonitorServerPolledEventHandler(Monitor_Polled);
 			monitor.QueueChanged += new MonitorServerQueueChangedEventHandler(Monitor_QueueChanged);
 		}
@@ -38,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void WhenPollIsCalledRetrievesANewCopyOfTheCruiseServerSnapshot()
 		{
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			monitor.Poll();
 
@@ -53,11 +52,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(0, pollCount);
 
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(2, pollCount);
 		}
@@ -67,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, pollCount);
 			Exception ex = new Exception("should be caught");
-            mockServerManager.ExpectAndThrow("GetCruiseServerSnapshot", ex);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Throws(ex).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 			Assert.AreEqual(ex, monitor.ConnectException);
@@ -79,24 +78,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(0, queueChangedCount);
             CruiseServerSnapshot snapshot = CreateCruiseServerSnapshot();
 
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
 
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
 
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot",
-			                                   CreateCruiseServerSnapshot2());
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(CreateCruiseServerSnapshot2()).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(2, queueChangedCount);
 
-			mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot",
-			                                   CreateCruiseServerSnapshot());
+			mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(CreateCruiseServerSnapshot()).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(3, queueChangedCount);
@@ -129,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void ExposesTheCruiseServerSnapshotOfTheContainedServer()
 		{
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			monitor.Poll();
 
@@ -160,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 				};
 
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot(result, null);
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
             monitor.Poll(); // Force the snapshot to be loaded
             ProjectStatus projectStatus = monitor.GetProjectStatus(PROJECT_NAME);
@@ -179,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             };
 
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot(result, null);
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            mockServerManager.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
             monitor.Poll();// Force the snapshot to be loaded 
 

@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
@@ -12,15 +12,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ShouldCloneConfigurationAndOnlyBindToTheClone()
 		{
-			DynamicMock existingConfiguration = new DynamicMock(typeof(ICCTrayMultiConfiguration));
-			existingConfiguration.Strict = true;
+			var existingConfiguration = new Mock<ICCTrayMultiConfiguration>(MockBehavior.Strict);
 			CCTrayMultiConfiguration clonedConfiguration = new CCTrayMultiConfiguration(null, null, null);
-			existingConfiguration.ExpectAndReturn("Clone", clonedConfiguration);
+			existingConfiguration.Setup(_configuration => _configuration.Clone()).Returns(clonedConfiguration).Verifiable();
 			
 			NullReferenceException nullReference = null;
 			try
 			{
-				new CCTrayMultiSettingsForm((ICCTrayMultiConfiguration)existingConfiguration.MockInstance);
+				new CCTrayMultiSettingsForm((ICCTrayMultiConfiguration)existingConfiguration.Object);
 			}
 			catch (NullReferenceException e)
 			{

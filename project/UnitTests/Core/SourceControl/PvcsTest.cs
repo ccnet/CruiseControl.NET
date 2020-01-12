@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
+using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -13,16 +13,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class PvcsTest : CustomAssertion
 	{
-		private IMock mockParser;
-		private IMock mockExecutor;
+		private Mock<IHistoryParser> mockParser;
+		private Mock<ProcessExecutor> mockExecutor;
 		private Pvcs pvcs;
 
 		[SetUp]
 		protected void CreatePvcs()
 		{
-			mockParser = new DynamicMock(typeof (IHistoryParser));
-			mockExecutor = new DynamicMock(typeof (ProcessExecutor));
-			pvcs = new Pvcs((IHistoryParser) mockParser.MockInstance, (ProcessExecutor) mockExecutor.MockInstance);
+			mockParser = new Mock<IHistoryParser>();
+			mockExecutor = new Mock<ProcessExecutor>();
+			pvcs = new Pvcs((IHistoryParser) mockParser.Object, (ProcessExecutor) mockExecutor.Object);
 		}
 
 		[TearDown]
@@ -112,8 +112,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetModifications()
 		{
-			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
-			mockParser.ExpectAndReturn("Parse", new Modification[] {new Modification(), new Modification()}, new IsAnything(), new IsAnything(), new IsAnything());
+			mockExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateSuccessfulResult()).Verifiable();
+			mockParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new Modification[] { new Modification(), new Modification() }).Verifiable();
 
 			Modification[] mods = pvcs.GetModifications(IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 1, 1, 1)), 
 				IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 2, 2, 2)));
@@ -176,9 +176,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private TimeZone CreateMockTimeZone(bool inDayLightSavings)
 		{
-			Mock mock = new DynamicMock(typeof (TimeZone));
-			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings, new IsTypeOf(typeof (DateTime)));
-			return (TimeZone) mock.MockInstance;
+			var mock = new Mock<TimeZone>();
+			mock.Setup(timeZone => timeZone.IsDaylightSavingTime(It.IsAny<DateTime>())).Returns(inDayLightSavings).Verifiable();
+			return (TimeZone) mock.Object;
 		}
 	}
 }

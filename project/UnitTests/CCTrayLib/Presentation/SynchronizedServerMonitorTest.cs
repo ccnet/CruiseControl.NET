@@ -1,8 +1,6 @@
 using System.ComponentModel;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
-
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 
@@ -14,18 +12,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void MethodsAndPropertiesDoSimpleDelagationOntoInjectedMonitor()
 		{
-			DynamicMock mockServerMonitor = new DynamicMock(typeof (ISingleServerMonitor));
+			var mockServerMonitor = new Mock<ISingleServerMonitor>();
 
 			SynchronizedServerMonitor monitor = new SynchronizedServerMonitor(
-				(ISingleServerMonitor) mockServerMonitor.MockInstance, null);
+				(ISingleServerMonitor) mockServerMonitor.Object, null);
 
-			mockServerMonitor.ExpectAndReturn("ServerUrl", @"tcp://blah/");
+			mockServerMonitor.SetupGet(_monitor => _monitor.ServerUrl).Returns(@"tcp://blah/").Verifiable();
 			Assert.AreEqual(@"tcp://blah/", monitor.ServerUrl);
 
-			mockServerMonitor.ExpectAndReturn("IsConnected", true);
+			mockServerMonitor.SetupGet(_monitor => _monitor.IsConnected).Returns(true).Verifiable();
 			Assert.AreEqual(true, monitor.IsConnected);
 
-			mockServerMonitor.Expect("Poll");
+			mockServerMonitor.Setup(_monitor => _monitor.Poll()).Verifiable();
 			monitor.Poll();
 
 			mockServerMonitor.Verify();
@@ -34,17 +32,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenPolledIsFiredTheDelegateIsInvokedThroughISynchronisedInvoke()
 		{
-			DynamicMock mockSynchronizeInvoke = new DynamicMock(typeof (ISynchronizeInvoke));
+			var mockSynchronizeInvoke = new Mock<ISynchronizeInvoke>();
 			StubServerMonitor containedMonitor = new StubServerMonitor(@"tcp://blah/");
 
 			SynchronizedServerMonitor monitor = new SynchronizedServerMonitor(
 				containedMonitor,
-				(ISynchronizeInvoke) mockSynchronizeInvoke.MockInstance);
+				(ISynchronizeInvoke) mockSynchronizeInvoke.Object);
 
 			MonitorServerPolledEventHandler delegateToPolledMethod = new MonitorServerPolledEventHandler(Monitor_Polled);
 			monitor.Polled += delegateToPolledMethod;
 
-			mockSynchronizeInvoke.Expect("BeginInvoke", delegateToPolledMethod, new IsTypeOf(typeof (object[])));
+			mockSynchronizeInvoke.Setup(invoke => invoke.BeginInvoke(delegateToPolledMethod, It.IsAny<object[]>())).Verifiable();
 			containedMonitor.OnPolled(new MonitorServerPolledEventArgs(containedMonitor));
 
 			mockSynchronizeInvoke.Verify();
@@ -53,17 +51,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenBuildOccurredIsFiredTheDelegateIsInvokedThroughISynchronisedInvoke()
 		{
-			DynamicMock mockSynchronizeInvoke = new DynamicMock(typeof (ISynchronizeInvoke));
+			var mockSynchronizeInvoke = new Mock<ISynchronizeInvoke>();
 			StubServerMonitor containedMonitor = new StubServerMonitor(@"tcp://blah/");
 
 			SynchronizedServerMonitor monitor = new SynchronizedServerMonitor(
 				containedMonitor,
-				(ISynchronizeInvoke) mockSynchronizeInvoke.MockInstance);
+				(ISynchronizeInvoke) mockSynchronizeInvoke.Object);
 
 			MonitorServerQueueChangedEventHandler delegateToQueueChanged = new MonitorServerQueueChangedEventHandler(Monitor_QueueChanged);
 			monitor.QueueChanged += delegateToQueueChanged;
 
-			mockSynchronizeInvoke.Expect("BeginInvoke", delegateToQueueChanged, new IsTypeOf(typeof (object[])));
+			mockSynchronizeInvoke.Setup(invoke => invoke.BeginInvoke(delegateToQueueChanged, It.IsAny<object[]>())).Verifiable();
 			containedMonitor.OnQueueChanged(new MonitorServerQueueChangedEventArgs(null));
 
 			mockSynchronizeInvoke.Verify();

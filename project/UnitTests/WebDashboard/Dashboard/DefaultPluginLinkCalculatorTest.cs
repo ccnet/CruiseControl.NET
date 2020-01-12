@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
@@ -13,13 +13,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private string projectName = "my project";
 		private string buildName = "my build";
 		private DefaultPluginLinkCalculator Plugins;
-		private DynamicMock linkFactoryMock;
-		private DynamicMock configurationMock;
+		private Mock<ILinkFactory> linkFactoryMock;
+		private Mock<IPluginConfiguration> configurationMock;
 		private DefaultBuildSpecifier buildSpecifier;
 		private IProjectSpecifier projectSpecifier;
 		private DefaultServerSpecifier serverSpecifier;
-		private DynamicMock pluginMock1;
-		private DynamicMock pluginMock2;
+		private Mock<IPlugin> pluginMock1;
+		private Mock<IPlugin> pluginMock2;
 		private INamedAction action1;
 		private INamedAction action2;
 		private INamedAction action3;
@@ -32,21 +32,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			serverSpecifier = new DefaultServerSpecifier(serverName);
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, projectName);
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, buildName);
-			linkFactoryMock = new DynamicMock(typeof (ILinkFactory));
-			configurationMock = new DynamicMock(typeof (IPluginConfiguration));
-			Plugins = new DefaultPluginLinkCalculator((ILinkFactory) linkFactoryMock.MockInstance, (IPluginConfiguration) configurationMock.MockInstance);
+			linkFactoryMock = new Mock<ILinkFactory>();
+			configurationMock = new Mock<IPluginConfiguration>();
+			Plugins = new DefaultPluginLinkCalculator((ILinkFactory) linkFactoryMock.Object, (IPluginConfiguration) configurationMock.Object);
 
-			pluginMock1 = new DynamicMock(typeof (IPlugin));
-			pluginMock2 = new DynamicMock(typeof (IPlugin));
+			pluginMock1 = new Mock<IPlugin>();
+			pluginMock2 = new Mock<IPlugin>();
 			action1 = new ImmutableNamedAction("Action Name 1", null);
 			action2 = new ImmutableNamedAction("Action Name 2", null);
 			action3 = new ImmutableNamedAction("Action Name 3", null);
-			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
-			pluginMock1.ExpectAndReturn("NamedActions", new INamedAction[] {action1});
-			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
-			pluginMock2.ExpectAndReturn("NamedActions", new INamedAction[] {action2});
-			link1 = (IAbsoluteLink) new DynamicMock(typeof (IAbsoluteLink)).MockInstance;
-			link2 = (IAbsoluteLink) new DynamicMock(typeof (IAbsoluteLink)).MockInstance;
+			pluginMock1.SetupGet(plugin => plugin.LinkDescription).Returns("Description 1").Verifiable();
+			pluginMock1.SetupGet(plugin => plugin.NamedActions).Returns(new INamedAction[] {action1}).Verifiable();
+			pluginMock2.SetupGet(plugin => plugin.LinkDescription).Returns("Description 2").Verifiable();
+			pluginMock2.SetupGet(plugin => plugin.NamedActions).Returns(new INamedAction[] {action2}).Verifiable();
+			link1 = (IAbsoluteLink) new Mock<IAbsoluteLink>().Object;
+			link2 = (IAbsoluteLink) new Mock<IAbsoluteLink>().Object;
 		}
 
 		private void VerifyAll()
@@ -58,23 +58,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnBuildPluginLinksRelevantToThisProject()
 		{
-			DynamicMock buildPluginMock1 = new DynamicMock(typeof (IBuildPlugin));
-			DynamicMock buildPluginMock2 = new DynamicMock(typeof (IBuildPlugin));
-			DynamicMock buildPluginMock3 = new DynamicMock(typeof (IBuildPlugin));
-			buildPluginMock1.SetupResult("LinkDescription", "Description 1");
-			buildPluginMock1.SetupResult("NamedActions", new INamedAction[] {action1});
-			buildPluginMock1.SetupResult("IsDisplayedForProject", true, typeof(IProjectSpecifier));
-			buildPluginMock2.SetupResult("LinkDescription", "Description 2");
-			buildPluginMock2.SetupResult("NamedActions", new INamedAction[] {action2});
-			buildPluginMock2.SetupResult("IsDisplayedForProject", true, typeof(IProjectSpecifier));
-			buildPluginMock3.SetupResult("IsDisplayedForProject", false, typeof(IProjectSpecifier));
+			var buildPluginMock1 = new Mock<IBuildPlugin>();
+			var buildPluginMock2 = new Mock<IBuildPlugin>();
+			var buildPluginMock3 = new Mock<IBuildPlugin>();
+			buildPluginMock1.SetupGet(plugin => plugin.LinkDescription).Returns("Description 1");
+			buildPluginMock1.SetupGet(plugin => plugin.NamedActions).Returns(new INamedAction[] {action1});
+			buildPluginMock1.Setup(plugin => plugin.IsDisplayedForProject(It.IsAny<IProjectSpecifier>())).Returns(true);
+			buildPluginMock2.SetupGet(plugin => plugin.LinkDescription).Returns("Description 2");
+			buildPluginMock2.SetupGet(plugin => plugin.NamedActions).Returns(new INamedAction[] {action2});
+			buildPluginMock2.Setup(plugin => plugin.IsDisplayedForProject(It.IsAny<IProjectSpecifier>())).Returns(true);
+			buildPluginMock3.Setup(plugin => plugin.IsDisplayedForProject(It.IsAny<IProjectSpecifier>())).Returns(false);
 
-			configurationMock.ExpectAndReturn("BuildPlugins", new IBuildPlugin[]
+			configurationMock.SetupGet(_configuration => _configuration.BuildPlugins).Returns(new IBuildPlugin[]
 				{
-					(IBuildPlugin) buildPluginMock1.MockInstance, (IBuildPlugin) buildPluginMock2.MockInstance, (IBuildPlugin) buildPluginMock3.MockInstance
-				});
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, buildSpecifier, "Description 1", "Action Name 1");
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, buildSpecifier, "Description 2", "Action Name 2");
+					(IBuildPlugin) buildPluginMock1.Object, (IBuildPlugin) buildPluginMock2.Object, (IBuildPlugin) buildPluginMock3.Object
+				}).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(buildSpecifier, "Description 1", "Action Name 1")).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(buildSpecifier, "Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
 			IAbsoluteLink[] buildLinks = Plugins.GetBuildPluginLinks(buildSpecifier);
 
@@ -87,9 +87,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnServerPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.ExpectAndReturn("ServerPlugins", new IPlugin[] {(IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance});
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link1, serverSpecifier, "Description 1", "Action Name 1");
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, "Description 2", "Action Name 2");
+			configurationMock.SetupGet(_configuration => _configuration.ServerPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, "Description 1", "Action Name 1")).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateServerLink(serverSpecifier, "Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
 			IAbsoluteLink[] buildLinks = Plugins.GetServerPluginLinks(serverSpecifier);
 
@@ -102,9 +102,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnFarmPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.ExpectAndReturn("FarmPlugins", new IPlugin[] {(IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance});
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Description 1", "Action Name 1");
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link2, "Description 2", "Action Name 2");
+			configurationMock.SetupGet(_configuration => _configuration.FarmPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Description 1", "Action Name 1")).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateFarmLink("Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
 			IAbsoluteLink[] buildLinks = Plugins.GetFarmPluginLinks();
 
@@ -117,9 +117,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnProjectPluginLinksByQueryingConfiguration()
 		{
-			configurationMock.ExpectAndReturn("ProjectPlugins", new IPlugin[] {(IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance});
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link1, projectSpecifier, "Description 1", "Action Name 1");
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link2, projectSpecifier, "Description 2", "Action Name 2");
+			configurationMock.SetupGet(_configuration => _configuration.ProjectPlugins).Returns(new IPlugin[] { (IPlugin)pluginMock1.Object, (IPlugin)pluginMock2.Object }).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "Description 1", "Action Name 1")).Returns(link1).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, "Description 2", "Action Name 2")).Returns(link2).Verifiable();
 
 			IAbsoluteLink[] buildLinks = Plugins.GetProjectPluginLinks(projectSpecifier);
 

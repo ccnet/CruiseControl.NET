@@ -1,6 +1,5 @@
 using System;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         const string WORKING_DIRECTORY = @"c:\temp";
         const string ARTIFACT_DIRECTORY = @"c:\temp";
 
-		private IMock executorMock;
+		private Mock<ProcessExecutor> executorMock;
 		private NUnitTask task;
 		private IIntegrationResult result;
 	    private SystemPath tempOutputFile;
@@ -25,9 +24,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		protected void Init()
 		{
 		    tempOutputFile = new TempDirectory().CreateTextFile("results.xml", "foo");
-		    executorMock = new DynamicMock(typeof (ProcessExecutor));
+		    executorMock = new Mock<ProcessExecutor>();
 
-			task = new NUnitTask(executorMock.MockInstance as ProcessExecutor);
+			task = new NUnitTask(executorMock.Object as ProcessExecutor);
 			task.Assemblies = TEST_ASSEMBLIES;
 			task.NUnitPath = NUnitConsolePath;
 	        task.OutputFile = tempOutputFile.ToString();
@@ -46,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		    string args = string.Format(@"/xml={0} /nologo foo.dll", GeneratePath("{0}", task.OutputFile));
 		    ProcessInfo info = new ProcessInfo(NUnitConsolePath, args, WORKING_DIRECTORY);
 			info.TimeOut = NUnitTask.DefaultTimeout * 1000;
-			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), new object[] { info });
+			executorMock.Setup(executor => executor.Execute(info)).Returns(new ProcessResult("", String.Empty, 0, false)).Verifiable();
 
 			task.Run(result);
 
@@ -57,9 +56,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldThrowExceptionIfTestsFailed()
 		{
-			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new object[] { new IsAnything() });
+			executorMock.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(ProcessResultFixture.CreateNonZeroExitCodeResult()).Verifiable();
 
-			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
+			task = new NUnitTask((ProcessExecutor) executorMock.Object);
             Assert.That(delegate { task.Run(result); },
                         Throws.TypeOf<CruiseControlException>());
 		}

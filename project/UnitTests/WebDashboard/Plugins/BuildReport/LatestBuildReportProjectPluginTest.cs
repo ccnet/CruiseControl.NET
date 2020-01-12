@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -12,30 +12,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 	[TestFixture]
 	public class LatestBuildReportProjectPluginTest
 	{
-		private DynamicMock farmServiceMock;
-		private DynamicMock linkFactoryMock;
+		private Mock<IFarmService> farmServiceMock;
+		private Mock<ILinkFactory> linkFactoryMock;
 		private LatestBuildReportProjectPlugin plugin;
-		private DynamicMock cruiseRequestMock;
+		private Mock<ICruiseRequest> cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
 		{
-			farmServiceMock = new DynamicMock(typeof(IFarmService));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			plugin = new LatestBuildReportProjectPlugin((IFarmService) farmServiceMock.MockInstance,
-			                                            (ILinkFactory) linkFactoryMock.MockInstance);
+			farmServiceMock = new Mock<IFarmService>();
+			linkFactoryMock = new Mock<ILinkFactory>();
+			plugin = new LatestBuildReportProjectPlugin((IFarmService) farmServiceMock.Object,
+			                                            (ILinkFactory) linkFactoryMock.Object);
 
-			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
+			cruiseRequestMock = new Mock<ICruiseRequest>();
+			cruiseRequest = (ICruiseRequest) cruiseRequestMock.Object;
 		}
 		
 		[Test]
 		public void ShouldReturnWarningMessageIfNoBuildsAvailable()
 		{
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1, null);
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			farmServiceMock.Setup(services => services.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[0]).Verifiable();
 			
 			IResponse returnedReponse = plugin.Execute(cruiseRequest);
 			Assert.IsTrue(returnedReponse is HtmlFragmentResponse);
@@ -47,9 +47,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1, null);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", new GeneralAbsoluteLink("foo", "buildUrl"), buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			farmServiceMock.Setup(services => services.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateBuildLink(buildSpecifier, BuildReportBuildPlugin.ACTION_NAME)).Returns(new GeneralAbsoluteLink("foo", "buildUrl")).Verifiable();
 
 			IResponse returnedReponse = plugin.Execute(cruiseRequest);
 			Assert.IsTrue(returnedReponse is RedirectResponse);

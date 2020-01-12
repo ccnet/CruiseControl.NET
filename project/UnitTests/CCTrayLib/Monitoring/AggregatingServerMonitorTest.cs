@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
@@ -8,24 +8,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class AggregatingServerMonitorTest
 	{
-		private DynamicMock monitor1;
-		private DynamicMock monitor2;
-		private DynamicMock monitor3;
+		private Mock<IServerMonitor> monitor1;
+		private Mock<IServerMonitor> monitor2;
+		private Mock<IServerMonitor> monitor3;
 		private IServerMonitor[] monitors;
 		private AggregatingServerMonitor aggregator;
 
 		[SetUp]
 		public void SetUp()
 		{
-			monitor1 = new DynamicMock(typeof (IServerMonitor));
-			monitor2 = new DynamicMock(typeof (IServerMonitor));
-			monitor3 = new DynamicMock(typeof (IServerMonitor));
+			monitor1 = new Mock<IServerMonitor>();
+			monitor2 = new Mock<IServerMonitor>();
+			monitor3 = new Mock<IServerMonitor>();
 
 			monitors = new IServerMonitor[]
 				{
-					(IServerMonitor) monitor1.MockInstance,
-					(IServerMonitor) monitor2.MockInstance,
-					(IServerMonitor) monitor3.MockInstance,
+					(IServerMonitor) monitor1.Object,
+					(IServerMonitor) monitor2.Object,
+					(IServerMonitor) monitor3.Object,
 				};
 
 			aggregator = new AggregatingServerMonitor(monitors);
@@ -42,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void PollInvokesPollOnAllContainedServers()
 		{
-			monitor1.Expect("Poll");
-			monitor2.Expect("Poll");
-			monitor3.Expect("Poll");
+			monitor1.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor2.Setup(_monitor => _monitor.Poll()).Verifiable();
+			monitor3.Setup(_monitor => _monitor.Poll()).Verifiable();
 			aggregator.Poll();
 		}
 

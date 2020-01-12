@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -9,23 +9,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class CachingCruiseServerManagerTest
 	{
-		private DynamicMock wrappedManagerMock;
+		private Mock<ICruiseServerManager> wrappedManagerMock;
 		private ICruiseServerManager cachingManager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			wrappedManagerMock = new DynamicMock(typeof(ICruiseServerManager));
-			cachingManager = new CachingCruiseServerManager((ICruiseServerManager) wrappedManagerMock.MockInstance);
+			wrappedManagerMock = new Mock<ICruiseServerManager>();
+			cachingManager = new CachingCruiseServerManager((ICruiseServerManager) wrappedManagerMock.Object);
 		}
 
 		[Test]
 		public void ShouldDelegateMostMethodsToWrappedInstance()
 		{
-            wrappedManagerMock.ExpectAndReturn("Configuration", new BuildServer("tcp://testUrl"));
-            wrappedManagerMock.ExpectAndReturn("Configuration", new BuildServer("tcp://testUrl"));
-			wrappedManagerMock.ExpectAndReturn("DisplayName", "testDisplayName");
-			wrappedManagerMock.Expect("CancelPendingRequest", "testProjectName");
+            MockSequence sequence = new MockSequence();
+            wrappedManagerMock.InSequence(sequence).SetupGet(_manager => _manager.Configuration).
+                Returns(new BuildServer("tcp://testUrl")).Verifiable();
+            wrappedManagerMock.InSequence(sequence).SetupGet(_manager => _manager.Configuration).
+                Returns(new BuildServer("tcp://testUrl")).Verifiable();
+			wrappedManagerMock.SetupGet(_manager => _manager.DisplayName).Returns("testDisplayName").Verifiable();
+			wrappedManagerMock.Setup(_manager => _manager.CancelPendingRequest("testProjectName")).Verifiable();
 
 
 			Assert.AreEqual("tcp://testUrl", cachingManager.Configuration.Url);
@@ -41,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldDelegateFirstSnapshotGet()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			wrappedManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+			wrappedManagerMock.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
 
@@ -52,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldReturnSecondSnapshotGetWithoutDelegating()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			wrappedManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+			wrappedManagerMock.Setup(_manager => _manager.GetCruiseServerSnapshot()).Returns(snapshot).Verifiable();
 
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
 			Assert.AreSame(snapshot, cachingManager.GetCruiseServerSnapshot());
@@ -64,16 +67,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ShouldDelegateSnapshotGetAfterCacheCleared()
 		{
 			CruiseServerSnapshot snapshot1 = new CruiseServerSnapshot();
-			wrappedManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot1);
 			CruiseServerSnapshot snapshot2 = new CruiseServerSnapshot();
-			wrappedManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot2);
+			wrappedManagerMock.SetupSequence(_manager => _manager.GetCruiseServerSnapshot())
+				.Returns(snapshot1)
+				.Returns(snapshot2);
 
 			Assert.AreSame(snapshot1, cachingManager.GetCruiseServerSnapshot());
 			Assert.AreSame(snapshot1, cachingManager.GetCruiseServerSnapshot());
 			((ICache) cachingManager).InvalidateCache();
 			Assert.AreSame(snapshot2, cachingManager.GetCruiseServerSnapshot());
 
-			wrappedManagerMock.Verify();
+			wrappedManagerMock.Verify(_manager => _manager.GetCruiseServerSnapshot(), Times.Exactly(2));
 		}	
 	}
 }

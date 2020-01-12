@@ -1,8 +1,7 @@
 using System.Collections;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -12,19 +11,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class ExceptionCatchingActionProxyTest
 	{
-		private DynamicMock actionMock;
-		private DynamicMock velocityViewGeneratorMock;
+		private Mock<IAction> actionMock;
+		private Mock<IVelocityViewGenerator> velocityViewGeneratorMock;
 		private ExceptionCatchingActionProxy exceptionCatchingAction;
 		private IResponse response;
-		private IResponse errorResponse;
+		private HtmlFragmentResponse errorResponse;
 		private IRequest request;
 
 		[SetUp]
 		public void Setup()
 		{
-			actionMock = new DynamicMock(typeof(IAction));
-			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator)) ;
-			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
+			actionMock = new Mock<IAction>();
+			velocityViewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.Object, (IVelocityViewGenerator) velocityViewGeneratorMock.Object);
 			response = new HtmlFragmentResponse("my view");
 			errorResponse = new HtmlFragmentResponse("error view");
             request = new NameValueCollectionRequest(null, null, null, null, null);
@@ -40,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		public void ShouldReturnProxiedViewIfProxiedActionDoesntThrowException()
 		{
 			// Setup
-			actionMock.ExpectAndReturn("Execute", response, request);
+			actionMock.Setup(_action => _action.Execute(request)).Returns(response).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(response, exceptionCatchingAction.Execute(request));
@@ -52,11 +51,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			// Setup
 			CruiseControlException e = new CruiseControlException("A nasty exception");
-			actionMock.ExpectAndThrow("Execute", e, request);
+			actionMock.Setup(_action => _action.Execute(request)).Throws(e).Verifiable();
 
-			Hashtable expectedContext = new Hashtable();
-			expectedContext["exception"] = e;
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", errorResponse, "ActionException.vm", new HashtableConstraint(expectedContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView("ActionException.vm", It.Is<Hashtable>(t => t.Count == 1 && t["exception"] == e))).
+				Returns(errorResponse).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(errorResponse, exceptionCatchingAction.Execute(request));

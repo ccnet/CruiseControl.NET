@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -10,19 +10,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 	public class StateFileLabellerTest : IntegrationFixture
 	{
 		private StateFileLabeller labeller;
-		private IMock mockStateManager;
+		private Mock<IStateManager> mockStateManager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockStateManager = new DynamicMock(typeof (IStateManager));
-			labeller = new StateFileLabeller((IStateManager) mockStateManager.MockInstance);
+			mockStateManager = new Mock<IStateManager>();
+			labeller = new StateFileLabeller((IStateManager) mockStateManager.Object);
 		}
 
 		[Test]
 		public void ShouldLoadIntegrationResultFromStateManagerAndReturnLastSuccessfulBuildLabel()
 		{
-			mockStateManager.ExpectAndReturn("LoadState", SuccessfulResult("success"), "Project1");
+			mockStateManager.Setup(_manager => _manager.LoadState("Project1")).Returns(SuccessfulResult("success")).Verifiable();
 			labeller.Project = "Project1";
 
 			Assert.AreEqual("success", labeller.Generate(new IntegrationResult()));

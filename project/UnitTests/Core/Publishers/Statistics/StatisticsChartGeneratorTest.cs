@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 
@@ -17,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 	{
 		private XmlDocument statistics;
 		private StatisticsChartGenerator chartGenerator;
-		private IMock mockPlotter;
+		private Mock<IPlotter> mockPlotter;
 
 		#region Report.xml
 
@@ -183,26 +181,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			statistics = new XmlDocument();
 			statistics.LoadXml(xml);
 
-			mockPlotter= new DynamicMock(typeof(IPlotter));
-			chartGenerator = new StatisticsChartGenerator((IPlotter)mockPlotter.MockInstance);
+			mockPlotter= new Mock<IPlotter>();
+			chartGenerator = new StatisticsChartGenerator((IPlotter)mockPlotter.Object);
 		}
 
 		[Test]
 		public void ShouldThrowExceptionIfAskedToPlotUnavailableStatistics()
 		{
-			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList), typeof(string));
-			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"Unavailable"};
             Assert.That(delegate { chartGenerator.Process(statistics, "dummy"); }, Throws.TypeOf<UnavailableStatisticsException>());
+			mockPlotter.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void ShouldPlotChartForAvailableStatistics()
 		{
-			mockPlotter.Expect("DrawGraph", new IsAnything(), new IsAnything(), new IsAnything());
-			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
+			mockPlotter.Setup(plotter => plotter.DrawGraph(It.IsAny<IList>(), It.IsAny<IList>(), It.IsAny<string>())).Verifiable();
 			chartGenerator.RelevantStats = new string[]{"TestCount"};
 			chartGenerator.Process(statistics, "dummy");
+			mockPlotter.Verify();
+			mockPlotter.VerifyNoOtherCalls();
 		}
 
 		[Test]

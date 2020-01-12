@@ -1,6 +1,6 @@
-﻿using NMock;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Moq;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
@@ -40,16 +40,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
         public ICruiseProjectManager RetrieveProjectManager(string projectName)
         {
-            DynamicMock projectManagerMock = new DynamicMock(typeof(ICruiseProjectManager));
-            projectManagerMock.SetupResult("ProjectName", projectName);
-            return projectManagerMock.MockInstance as ICruiseProjectManager;
+            var projectManagerMock = new Mock<ICruiseProjectManager>();
+            projectManagerMock.SetupGet(_manager => _manager.ProjectName).Returns(projectName);
+            return projectManagerMock.Object as ICruiseProjectManager;
         }
 
         public ICruiseServerManager RetrieveServerManager()
         {
-            DynamicMock serverMock = new DynamicMock(typeof(ICruiseServerManager));
-            serverMock.SetupResult("Configuration", configuration);
-            return serverMock.MockInstance as ICruiseServerManager;
+            var serverMock = new Mock<ICruiseServerManager>();
+            serverMock.SetupGet(_manager => _manager.Configuration).Returns(configuration);
+            return serverMock.Object as ICruiseServerManager;
         }
 
         public bool Configure(System.Windows.Forms.IWin32Window owner)

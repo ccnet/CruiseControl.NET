@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -11,18 +11,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 	[TestFixture]
 	public class ForceBuildXmlActionTest
 	{
-		private DynamicMock mockFarmService;
+		private Mock<IFarmService> mockFarmService;
 		private ForceBuildXmlAction reportAction;
-		private DynamicMock cruiseRequestMock;
+		private Mock<ICruiseRequest> cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockFarmService = new DynamicMock(typeof (IFarmService));
-			reportAction = new ForceBuildXmlAction((IFarmService) mockFarmService.MockInstance);
-			cruiseRequestMock = new DynamicMock(typeof (ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
+			mockFarmService = new Mock<IFarmService>();
+			reportAction = new ForceBuildXmlAction((IFarmService) mockFarmService.Object);
+			cruiseRequestMock = new Mock<ICruiseRequest>();
+			cruiseRequest = (ICruiseRequest) cruiseRequestMock.Object;
 		}
 
 		public void VerifyAll()
@@ -36,10 +36,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 		{
 			DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(
 				new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestMock.SetupResult("ProjectSpecifier", projectSpecifier);
-			cruiseRequestMock.SetupResult("ProjectName", "myProject");
+			cruiseRequestMock.SetupGet(_request => _request.ProjectSpecifier).Returns(projectSpecifier);
+			cruiseRequestMock.SetupGet(_request => _request.ProjectName).Returns("myProject");
 
-            mockFarmService.Expect("ForceBuild", projectSpecifier, (string)null);
+            mockFarmService.Setup(service => service.ForceBuild(projectSpecifier, (string)null)).Verifiable();
 
 			IResponse response = reportAction.Execute(cruiseRequest);
 			Assert.IsTrue(response is XmlFragmentResponse);

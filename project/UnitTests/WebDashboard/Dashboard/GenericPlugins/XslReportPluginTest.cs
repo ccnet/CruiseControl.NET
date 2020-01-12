@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
@@ -9,14 +9,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 	[TestFixture]
 	public class XslReportPluginTest
 	{
-		private DynamicMock actionInstantiatorMock;
+		private Mock<IActionInstantiator> actionInstantiatorMock;
 		private XslReportBuildPlugin buildPlugin;
 
 		[SetUp]
 		public void Setup()
 		{
-			actionInstantiatorMock = new DynamicMock(typeof(IActionInstantiator));
-			buildPlugin = new XslReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.MockInstance);
+			actionInstantiatorMock = new Mock<IActionInstantiator>();
+			buildPlugin = new XslReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.Object);
 		}
 
 		private void VerifyAll()
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 			buildPlugin.XslFileName = @"xsl\myxsl.xsl";
 
 			XslReportBuildAction xslReportAction = new XslReportBuildAction(null, null);
-			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof(XslReportBuildAction));
+			actionInstantiatorMock.Setup(instantiator => instantiator.InstantiateAction(typeof(XslReportBuildAction))).Returns(xslReportAction).Verifiable();
 
 			INamedAction[] namedActions = buildPlugin.NamedActions;
 

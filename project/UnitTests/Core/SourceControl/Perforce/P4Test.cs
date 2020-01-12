@@ -1,6 +1,6 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
@@ -13,21 +13,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 	[TestFixture]
 	public class P4Test : ProcessExecutorTestFixtureBase
 	{
-		private DynamicMock p4InitializerMock;
-		private DynamicMock processInfoCreatorMock;
-		private DynamicMock projectMock;
+		private Mock<IP4Initializer> p4InitializerMock;
+		private Mock<IP4ProcessInfoCreator> processInfoCreatorMock;
+		private Mock<IProject> projectMock;
 		private IProject project;
-		private DynamicMock p4PurgerMock;
+		private Mock<IP4Purger> p4PurgerMock;
 
 		[SetUp]
 		public void Setup()
 		{
 			CreateProcessExecutorMock("p4");
-			p4InitializerMock = new DynamicMock(typeof (IP4Initializer));
-			p4PurgerMock = new DynamicMock(typeof (IP4Purger));
-			processInfoCreatorMock = new DynamicMock(typeof (IP4ProcessInfoCreator));
-			projectMock = new DynamicMock(typeof (IProject));
-			project = (IProject) projectMock.MockInstance;
+			p4InitializerMock = new Mock<IP4Initializer>();
+			p4PurgerMock = new Mock<IP4Purger>();
+			processInfoCreatorMock = new Mock<IP4ProcessInfoCreator>();
+			projectMock = new Mock<IProject>();
+			project = (IProject) projectMock.Object;
 		}
 
 		private void VerifyAll()
@@ -108,10 +108,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 
 		private P4 CreateP4()
 		{
-			return new P4((ProcessExecutor) mockProcessExecutor.MockInstance,
-			              (IP4Initializer) p4InitializerMock.MockInstance,
-			              (IP4Purger) p4PurgerMock.MockInstance,
-			              (IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
+			return new P4((ProcessExecutor) mockProcessExecutor.Object,
+			              (IP4Initializer) p4InitializerMock.Object,
+			              (IP4Purger) p4PurgerMock.Object,
+			              (IP4ProcessInfoCreator) processInfoCreatorMock.Object);
 		}
 
 		[Test]
@@ -286,10 +286,11 @@ exit: 0
 			P4 p4 = CreateP4();
 
 			ProcessInfo info = new ProcessInfo("p4.exe");
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", info, p4, "changes -s submitted ViewData@0001/01/01:00:00:00");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(changes, "", 0, false), info);
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", info, p4, "describe -s 3328 3327 332");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(P4Mother.P4_LOGFILE_CONTENT, "", 0, false), info);
+			MockSequence sequence = new MockSequence();
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "changes -s submitted ViewData@0001/01/01:00:00:00")).Returns(info).Verifiable();
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(info)).Returns(new ProcessResult(changes, "", 0, false)).Verifiable();
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "describe -s 3328 3327 332")).Returns(info).Verifiable();
+			mockProcessExecutor.InSequence(sequence).Setup(executor => executor.Execute(info)).Returns(new ProcessResult(P4Mother.P4_LOGFILE_CONTENT, "", 0, false)).Verifiable();
 
 			p4.View = "ViewData";
 			p4.P4WebURLFormat = "http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10";
@@ -313,10 +314,10 @@ exit: 0
 			labelSpecProcessWithStdInContent.StandardInputContent = "Label:	foo-123\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n //depot/myproject/...\n";
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSyncProcess, p4, "labelsync -l foo-123");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "label -i")).Returns(labelSpecProcess).Verifiable();
+			mockProcessExecutor.Setup(executor => executor.Execute(labelSpecProcessWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "labelsync -l foo-123")).Returns(labelSyncProcess).Verifiable();
+			mockProcessExecutor.Setup(executor => executor.Execute(labelSyncProcess)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
@@ -337,10 +338,10 @@ exit: 0
 			labelSpecProcessWithStdInContent.StandardInputContent = "Label:	foo-123\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n //depot/myproj/...\n //myotherdepot/proj/...\n";
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
-			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSyncProcess, p4, "labelsync -l foo-123");
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "label -i")).Returns(labelSpecProcess).Verifiable();
+			mockProcessExecutor.Setup(executor => executor.Execute(labelSpecProcessWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
+			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "labelsync -l foo-123")).Returns(labelSyncProcess).Verifiable();
+			mockProcessExecutor.Setup(executor => executor.Execute(labelSyncProcess)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
@@ -395,10 +396,10 @@ exit: 0
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = false;
 
-			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
 
+			processInfoCreatorMock.VerifyNoOtherCalls();
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -409,10 +410,10 @@ exit: 0
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = true;
 
-			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateFailed("foo-123"));
 
+			processInfoCreatorMock.VerifyNoOtherCalls();
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -422,10 +423,10 @@ exit: 0
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 
-			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("123"));
 
+			processInfoCreatorMock.VerifyNoOtherCalls();
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -438,8 +439,8 @@ exit: 0
 
             DateTime modificationsToDate = new DateTime(2002, 10, 31, 5, 5, 0);
             ProcessInfo processInfo = new ProcessInfo("getSource");
-            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync //depot/myproject/...@2002/10/31:05:05:00");
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+            processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "sync //depot/myproject/...@2002/10/31:05:05:00")).Returns(processInfo).Verifiable();
+            mockProcessExecutor.Setup(executor => executor.Execute(processInfo)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
             p4.GetSource(IntegrationResultMother.CreateSuccessful(modificationsToDate));
 
             VerifyAll();
@@ -455,8 +456,8 @@ exit: 0
 
             DateTime modificationsToDate = new DateTime(2002, 10, 31, 5, 5, 0);
             ProcessInfo processInfo = new ProcessInfo("getSource");
-            processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync -f //depot/myproject/...@2002/10/31:05:05:00");
-            mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+            processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "sync -f //depot/myproject/...@2002/10/31:05:05:00")).Returns(processInfo).Verifiable();
+            mockProcessExecutor.Setup(executor => executor.Execute(processInfo)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
             p4.GetSource(IntegrationResultMother.CreateSuccessful(modificationsToDate));
 
             VerifyAll();
@@ -469,9 +470,9 @@ exit: 0
 			p4.View = "//depot/myproject/...";
 			p4.AutoGetSource = false;
 
-			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.GetSource(new IntegrationResult());
+			processInfoCreatorMock.VerifyNoOtherCalls();
+			mockProcessExecutor.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 
@@ -481,9 +482,9 @@ exit: 0
 			// Setup
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
-			p4InitializerMock.Expect("Initialize", p4, "myProject", "workingDirFromProject");
-			projectMock.ExpectAndReturn("Name", "myProject");
-			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+			p4InitializerMock.Setup(initializer => initializer.Initialize(p4, "myProject", "workingDirFromProject")).Verifiable();
+			projectMock.SetupGet(_project => _project.Name).Returns("myProject").Verifiable();
+			projectMock.SetupGet(_project => _project.WorkingDirectory).Returns("workingDirFromProject").Verifiable();
 
 			// Execute
 			p4.Initialize(project);
@@ -499,9 +500,9 @@ exit: 0
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "";
-			p4InitializerMock.Expect("Initialize", p4, "myProject", "workingDirFromProject");
-			projectMock.ExpectAndReturn("Name", "myProject");
-			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+			p4InitializerMock.Setup(initializer => initializer.Initialize(p4, "myProject", "workingDirFromProject")).Verifiable();
+			projectMock.SetupGet(_project => _project.Name).Returns("myProject").Verifiable();
+			projectMock.SetupGet(_project => _project.WorkingDirectory).Returns("workingDirFromProject").Verifiable();
 
 			// Execute
 			p4.Initialize(project);
@@ -517,15 +518,15 @@ exit: 0
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "p4sOwnWorkingDirectory";
-			p4InitializerMock.Expect("Initialize", p4, "myProject", "p4sOwnWorkingDirectory");
-			projectMock.ExpectAndReturn("Name", "myProject");
-			projectMock.ExpectNoCall("WorkingDirectory");
+			p4InitializerMock.Setup(initializer => initializer.Initialize(p4, "myProject", "p4sOwnWorkingDirectory")).Verifiable();
+			projectMock.SetupGet(_project => _project.Name).Returns("myProject").Verifiable();
 
 			// Execute
 			p4.Initialize(project);
 
 			// Verify
 			VerifyAll();
+			projectMock.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -534,8 +535,8 @@ exit: 0
 			// Setup
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
-			p4PurgerMock.Expect("Purge", p4, "workingDirFromProject");
-			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+			p4PurgerMock.Setup(purger => purger.Purge(p4, "workingDirFromProject")).Verifiable();
+			projectMock.SetupGet(_project => _project.WorkingDirectory).Returns("workingDirFromProject").Verifiable();
 
 			// Execute
 			p4.Purge(project);
@@ -551,8 +552,8 @@ exit: 0
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "";
-			p4PurgerMock.Expect("Purge", p4, "workingDirFromProject");
-			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+			p4PurgerMock.Setup(purger => purger.Purge(p4, "workingDirFromProject")).Verifiable();
+			projectMock.SetupGet(_project => _project.WorkingDirectory).Returns("workingDirFromProject").Verifiable();
 
 			// Execute
 			p4.Purge(project);
@@ -568,13 +569,13 @@ exit: 0
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "p4sOwnWorkingDirectory";
-			p4PurgerMock.Expect("Purge", p4, "p4sOwnWorkingDirectory");
-			projectMock.ExpectNoCall("WorkingDirectory");
+			p4PurgerMock.Setup(purger => purger.Purge(p4, "p4sOwnWorkingDirectory")).Verifiable();
 
 			// Execute
 			p4.Purge(project);
 
 			// Verify
+			projectMock.VerifyNoOtherCalls();
 			VerifyAll();
 		}
 	}

@@ -1,16 +1,12 @@
 using System;
-using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using Moq;
-using NMock;
-using NMock.Remoting;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -31,54 +27,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void DeleteTempFiles()
 		{
 			TempFileUtil.DeleteTempDir("RemoteCruiseServerTest");
-		}
-
-		[Test]
-		[Ignore("This is intermittently failing, I think due to some evil NMock static nastiness. Do we even want to Unit Test this stuff? Is it not too much of an edge case?")]
-		public void SetupAndTeardownRemotingInfrastructure()
-		{
-			string configFile = CreateTemporaryConfigurationFile();
-
-			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
-			IMock mockCruiseServer = new DynamicMock(typeof (ICruiseServer));
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.Expect("Dispose");
-
-			using (new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile))
-			{
-				Assert.AreEqual(2, ChannelServices.RegisteredChannels.Length);
-				Assert.IsNotNull(ChannelServices.GetChannel("ccnet"), "ccnet channel is missing");
-				Assert.IsNotNull(ChannelServices.GetChannel("ccnet2"), "ccnet2 channel is missing");
-
-				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.ManagerUri);
-				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on tcp channel");
-
-				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.ManagerUri);
-				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on http channel");
-			}
-			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length, "all registered channels should be closed.");
-			mockCruiseServer.Verify();
-			mockCruiseManager.Verify();
-		}
-
-		[Test]
-		[Ignore("This is intermittently failing, I think due to some evil NMock static nastiness.")]
-		public void ShouldOnlyDisposeOnce()
-		{
-			string configFile = CreateTemporaryConfigurationFile();
-			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
-			IMock mockCruiseServer = new DynamicMock(typeof (ICruiseServer));
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.Expect("Dispose");
-
-			RemoteCruiseServer server = new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile);
-			((IDisposable)server).Dispose();
-
-			mockCruiseServer.ExpectNoCall("Dispose");
-			((IDisposable)server).Dispose();
-			mockCruiseServer.Verify();
 		}
 
         [Test(Description = "Check to make sure AbortBuildProcessed is correctly wired")]

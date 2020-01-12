@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -13,7 +12,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 
@@ -22,11 +20,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 	[TestFixture]
 	public class ProjectReportProjectPluginTest
 	{
-		private DynamicMock farmServiceMock;
-		private DynamicMock viewGeneratorMock;
-		private DynamicMock linkFactoryMock;
+		private Mock<IFarmService> farmServiceMock;
+		private Mock<IVelocityViewGenerator> viewGeneratorMock;
+		private Mock<ILinkFactory> linkFactoryMock;
 		private ProjectReportProjectPlugin plugin;
-		private DynamicMock cruiseRequestMock;
+		private Mock<ICruiseRequest> cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
         private NetReflectorRemoteServicesConfiguration configuration = new NetReflectorRemoteServicesConfiguration();
 
@@ -41,26 +39,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
                 }, new CruiseServerException[] {
                 });
 
-			farmServiceMock = new DynamicMock(typeof(IFarmService));
-            farmServiceMock.SetupResult("GetProjectStatusListAndCaptureExceptions", statusList, typeof(IServerSpecifier), typeof(string));
-			viewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			farmServiceMock = new Mock<IFarmService>();
+            farmServiceMock.Setup(service => service.GetProjectStatusListAndCaptureExceptions(It.IsAny<IServerSpecifier>(), It.IsAny<string>())).Returns(statusList);
+			viewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			linkFactoryMock = new Mock<ILinkFactory>();
             ServerLocation serverConfig = new ServerLocation();
             serverConfig.ServerName = "myServer";
             configuration.Servers = new ServerLocation[] {
                 serverConfig
             };
-            var urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
-            urlBuilderMock.SetupResult("BuildProjectUrl", string.Empty, typeof(string), typeof(IProjectSpecifier));
+            var urlBuilderMock = new Mock<ICruiseUrlBuilder>();
+            urlBuilderMock.Setup(builder => builder.BuildProjectUrl(It.IsAny<string>(), It.IsAny <IProjectSpecifier>())).Returns(string.Empty);
 
-			plugin = new ProjectReportProjectPlugin((IFarmService) farmServiceMock.MockInstance,
-				(IVelocityViewGenerator) viewGeneratorMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance,
+			plugin = new ProjectReportProjectPlugin((IFarmService) farmServiceMock.Object,
+				(IVelocityViewGenerator) viewGeneratorMock.Object,
+				(ILinkFactory) linkFactoryMock.Object,
                 configuration,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+                (ICruiseUrlBuilder)urlBuilderMock.Object);
 
-			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.MockInstance;
+			cruiseRequestMock = new Mock<ICruiseRequest>();
+			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.Object;
 
 		}
 
@@ -83,13 +81,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
 			Hashtable expectedContext = new Hashtable();
 
-            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
-            IRequest request = (IRequest)requestStub.MockInstance;
+            var requestStub = new Mock<IRequest>();
+            IRequest request = (IRequest)requestStub.Object;
 
-            cruiseRequestMock.SetupResult("Request", request);
-            requestStub.SetupResult("ApplicationPath", "myAppPath");
+            cruiseRequestMock.SetupGet(r => r.Request).Returns(request);
+            requestStub.SetupGet(r => r.ApplicationPath).Returns("myAppPath");
             
-            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
+            farmServiceMock.Setup(service => service.GetRSSFeed(projectSpecifier, It.IsAny<string>())).Returns("").Verifiable();
             
 			expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
@@ -101,19 +99,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
 
 
-			IResponse response = new HtmlFragmentResponse("myView");
+			HtmlFragmentResponse response = new HtmlFragmentResponse("myView");
 
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1, null);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
-
-            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+            cruiseRequestMock.SetupGet(r => r.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
+			farmServiceMock.Setup(service => service.GetExternalLinks(projectSpecifier, null)).Returns(links).Verifiable();
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME)).Returns(new GeneralAbsoluteLink("foo", "buildUrl")).Verifiable();
+            linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME)).Returns(new GeneralAbsoluteLink("RSS", @"myServer")).Verifiable();
 
 
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
-            expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
+            farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
+            expectedContext["graphDayInfo"] = new ArrayList();
             
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
@@ -129,7 +125,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
             expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
-			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+			viewGeneratorMock.Setup(generator => generator.GenerateView(@"ProjectReport.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedContext)).Returns(response).Verifiable();
 
 
 			// Execute
@@ -148,8 +145,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			ExternalLink[] links = new ExternalLink[] { new ExternalLink("foo", "bar") };
 			Hashtable expectedContext = new Hashtable();
 
-            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
-            IRequest request = (IRequest)requestStub.MockInstance;
+            var requestStub = new Mock<IRequest>();
+            IRequest request = (IRequest)requestStub.Object;
             
             expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
@@ -159,24 +156,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["rssDataPresent"] = false;
             expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
         
-            cruiseRequestMock.SetupResult("Request", request);
-            requestStub.SetupResult("ApplicationPath", "myAppPath");
+            cruiseRequestMock.SetupGet(r => r.Request).Returns(request);
+            requestStub.SetupGet(r => r.ApplicationPath).Returns("myAppPath");
 
-            IResponse response = new HtmlFragmentResponse("myView");
+            HtmlFragmentResponse response = new HtmlFragmentResponse("myView");
 
             
             IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1, null);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
+            cruiseRequestMock.SetupGet(r => r.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[0]).Verifiable();
+			farmServiceMock.Setup(service => service.GetExternalLinks(projectSpecifier, null)).Returns(links).Verifiable();
 
-            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
-            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+            farmServiceMock.Setup(service => service.GetRSSFeed(projectSpecifier, It.IsAny<string>())).Returns("").Verifiable();
+            linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME)).Returns(new GeneralAbsoluteLink("RSS", @"myServer")).Verifiable();
 
 
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
-            expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
+            farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null)).Returns(new IBuildSpecifier[0]).Verifiable();
+            expectedContext["graphDayInfo"] = new ArrayList();
 
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
@@ -192,10 +188,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
             expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
-            viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+            viewGeneratorMock.Setup(generator => generator.GenerateView(@"ProjectReport.vm", It.IsAny<Hashtable>())).
+                Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedContext)).Returns(response).Verifiable();
 
             
             // Execute
+
 			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
@@ -216,8 +214,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             Hashtable expectedContext = new Hashtable();
 
-            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
-            IRequest request = (IRequest)requestStub.MockInstance;
+            var requestStub = new Mock<IRequest>();
+            IRequest request = (IRequest)requestStub.Object;
 
 
 			expectedContext["projectName"] = "myProject";
@@ -229,24 +227,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["applicationPath"] = "myAppPath";
             expectedContext["rssDataPresent"] = false;
             expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
-            cruiseRequestMock.SetupResult("Request", request);
-            requestStub.SetupResult("ApplicationPath", "myAppPath");
+            cruiseRequestMock.SetupGet(r => r.Request).Returns(request);
+            requestStub.SetupGet(r => r.ApplicationPath).Returns("myAppPath");
 
 
 
-			IResponse response = new HtmlFragmentResponse("myView");
+			HtmlFragmentResponse response = new HtmlFragmentResponse("myView");
 
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1, null);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
+            cruiseRequestMock.SetupGet(r => r.ProjectSpecifier).Returns(projectSpecifier).Verifiable();
+			farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, 1, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
+			farmServiceMock.Setup(service => service.GetExternalLinks(projectSpecifier, null)).Returns(links);
+			linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME)).Returns(new GeneralAbsoluteLink("foo", "buildUrl")).Verifiable();
 
-            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
-            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+            farmServiceMock.Setup(service => service.GetRSSFeed(projectSpecifier, It.IsAny<string>())).Returns("").Verifiable();
+            linkFactoryMock.Setup(factory => factory.CreateProjectLink(projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME)).Returns(new GeneralAbsoluteLink("RSS", @"myServer")).Verifiable();
 
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
-            expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
+            farmServiceMock.Setup(service => service.GetMostRecentBuildSpecifiers(projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null)).Returns(new IBuildSpecifier[] { buildSpecifier }).Verifiable();
+            expectedContext["graphDayInfo"] = new ArrayList();
 
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
@@ -262,7 +259,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
             expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
-            viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+			viewGeneratorMock.Setup(generator => generator.GenerateView(@"ProjectReport.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedContext)).Returns(response).Verifiable();
                        
             
             // Execute

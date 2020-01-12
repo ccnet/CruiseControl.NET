@@ -1,11 +1,11 @@
 using System;
-using NMock;
+using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
-using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -13,8 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class ProjectMonitorTest
 	{
 		private StubCurrentTimeProvider dateTimeProvider;
-        private DynamicMock mockServerMonitor;
-        private DynamicMock mockProjectManager;
+        private Mock<ISingleServerMonitor> mockServerMonitor;
+        private Mock<ICruiseProjectManager> mockProjectManager;
 		private ProjectMonitor monitor;
 		private int pollCount;
 		private int buildOccurredCount;
@@ -27,12 +27,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SetUp()
 		{
 			buildOccurredCount = pollCount = 0;
-            mockServerMonitor = new DynamicMock(typeof(ISingleServerMonitor));
-            mockServerMonitor.Strict = true;
-            mockProjectManager = new DynamicMock(typeof(ICruiseProjectManager));
-			mockProjectManager.Strict = true;
+            mockServerMonitor = new Mock<ISingleServerMonitor>(MockBehavior.Strict);
+            mockProjectManager = new Mock<ICruiseProjectManager>(MockBehavior.Strict);
 			dateTimeProvider = new StubCurrentTimeProvider();
-            monitor = new ProjectMonitor(null, (ICruiseProjectManager)mockProjectManager.MockInstance, (ISingleServerMonitor)mockServerMonitor.MockInstance, dateTimeProvider);
+            monitor = new ProjectMonitor(null, (ICruiseProjectManager)mockProjectManager.Object, (ISingleServerMonitor)mockServerMonitor.Object, dateTimeProvider);
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
@@ -48,8 +46,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void WhenPollIsCalledRetrievesANewCopyOfTheProjectStatus()
 		{
 			ProjectStatus status = new ProjectStatus();
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 
 			monitor.Poll();
 
@@ -65,13 +63,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(0, pollCount);
 
 			ProjectStatus status = new ProjectStatus();
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
             monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
             monitor.Poll();
 			Assert.AreEqual(2, pollCount);
 		}
@@ -81,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, pollCount);
 
-            mockProjectManager.ExpectAndThrow("ProjectName", new Exception("should be caught"));
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Throws(new Exception("should be caught")).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 		}
@@ -92,29 +90,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(0, buildOccurredCount);
 
 		    ProjectStatus status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(0, buildOccurredCount);
 
             status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
             monitor.Poll();
 
 			Assert.AreEqual(0, buildOccurredCount);
 
             status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 2));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
             monitor.Poll();
 
 			Assert.AreEqual(1, buildOccurredCount);
 
             status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 3));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
             monitor.Poll();
 
 			Assert.AreEqual(2, buildOccurredCount);
@@ -125,22 +123,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			ProjectStatus firstBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 0, 0, 0));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", firstBuildStatus, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(firstBuildStatus).Verifiable();
             dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 1, 0, 0));
 			monitor.Poll();
 
 			ProjectStatus secondBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 2, 0, 0));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", secondBuildStatus, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(secondBuildStatus).Verifiable();
             dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 3, 0, 0));
 			monitor.Poll();
 
 			ProjectStatus thirdBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 4, 0, 0));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", thirdBuildStatus, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(thirdBuildStatus).Verifiable();
             dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 5, 0, 0));
 			monitor.Poll();
 
@@ -178,14 +176,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			// initial connection
             ProjectStatus status = CreateProjectStatus(initialIntegrationStatus, new DateTime(2004, 1, 1));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 			monitor.Poll();
 
 			// then the build
             status = CreateProjectStatus(nextBuildIntegrationStatus, new DateTime(2004, 1, 2));
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 			monitor.Poll();
 
 			Assert.AreEqual(1, buildOccurredCount);
@@ -220,53 +218,63 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Sleeping), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Sleeping)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Sleeping), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Sleeping)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Sleeping), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Sleeping)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Unknown, ProjectActivity.Sleeping), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Unknown, ProjectActivity.Sleeping)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", null, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(() => null).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Building), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Building)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.BrokenAndBuilding, monitor.ProjectState);
 
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Building), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Building)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.BrokenAndBuilding, monitor.ProjectState);
 		}
@@ -274,12 +282,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void DoNotTransitionProjectStateForNewInstanceOfSameProjectActivity()
 		{
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building)).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, new ProjectActivity(ProjectActivity.Building.ToString())), PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME))
+                .Returns(CreateProjectStatus(IntegrationStatus.Success, new ProjectActivity(ProjectActivity.Building.ToString()))).Verifiable();
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 		}
@@ -287,9 +297,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ForceBuildIsForwardedOn()
 		{
-            mockServerMonitor.ExpectAndReturn("SessionToken", null);
+            mockServerMonitor.SetupGet(_monitor => _monitor.SessionToken).Returns(() => null).Verifiable();
             var parameters = new Dictionary<string, string>();
-            mockProjectManager.Expect("ForceBuild", (string)null, parameters, (string)null);
+            mockProjectManager.Setup(_manager => _manager.ForceBuild(null, parameters, null)).Verifiable();
             monitor.ForceBuild(parameters, null);
 		}
 
@@ -297,9 +307,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SummaryStatusStringReturnsASummaryStatusStringWhenTheStateNotSuccess()
 		{
 			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Failure, ProjectActivity.Sleeping);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 
 			monitor.Poll();
 
@@ -310,8 +319,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SummaryStatusStringReturnsEmptyStringWhenTheStateIsSuccess()
 		{
 			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 
 			monitor.Poll();
 
@@ -330,8 +339,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private void AssertIntegrationStateReturned(IntegrationStatus integrationStatus)
 		{
 			ProjectStatus status = ProjectStatusFixture.New(integrationStatus, ProjectActivity.CheckingModifications);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(status).Verifiable();
 
 			monitor.Poll();
 
@@ -347,8 +356,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void InvokeServerWhenVolunteeringToFixBuild()
 		{
-            mockServerMonitor.ExpectAndReturn("SessionToken", null);
-            mockProjectManager.Expect("FixBuild", null, "John");
+            mockServerMonitor.SetupGet(_monitor => _monitor.SessionToken).Returns(() => null).Verifiable();
+            mockProjectManager.Setup(_manager => _manager.FixBuild(null, "John")).Verifiable();
 			monitor.FixBuild("John");
 			mockProjectManager.Verify();
 		}
@@ -356,18 +365,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void DisplayBalloonMessageWhenNewMessageIsReceived()
 		{
+            monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
 			ProjectStatus initial = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", initial, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(initial).Verifiable();
+
+			monitor.Poll();
+			Assert.AreEqual(actualMessage, null);
 
 			Message expectedMessage = new Message("foo");
 			ProjectStatus newStatus = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
 			newStatus.Messages = new Message[] {expectedMessage};
-            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
-            mockServerMonitor.ExpectAndReturn("GetProjectStatus", newStatus, PROJECT_NAME);
+            mockProjectManager.SetupGet(_manager => _manager.ProjectName).Returns(PROJECT_NAME).Verifiable();
+            mockServerMonitor.Setup(_monitor => _monitor.GetProjectStatus(PROJECT_NAME)).Returns(newStatus).Verifiable();
 
-            monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
-			monitor.Poll();
 			monitor.Poll();
 			Assert.AreEqual(actualMessage, expectedMessage);
 		}
@@ -375,8 +386,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void InvokeServerWhenCancelPendingRequest()
 		{
-            mockServerMonitor.ExpectAndReturn("SessionToken", null);
-            mockProjectManager.Expect("CancelPendingRequest", (string)null);
+            mockServerMonitor.SetupGet(_monitor => _monitor.SessionToken).Returns(() => null).Verifiable();
+            mockProjectManager.Setup(_manager => _manager.CancelPendingRequest(null)).Verifiable();
 			monitor.CancelPending();
 			mockProjectManager.Verify();
 		}

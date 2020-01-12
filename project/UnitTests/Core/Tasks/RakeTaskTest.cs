@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(RakeTask.DefaultExecutable);
-			builder = new RakeTask((ProcessExecutor) mockProcessExecutor.MockInstance);
+			builder = new RakeTask((ProcessExecutor) mockProcessExecutor.Object);
 			result = IntegrationResult();
 			result.Label = "1.0";
 		}
@@ -119,8 +119,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 
 			IntegrationResult integrationResult = (IntegrationResult)IntegrationResult();
 			integrationResult.ProjectName = "test";
@@ -134,7 +135,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			builder.BuildTimeoutSeconds = 222;
 			builder.Run(integrationResult);
 
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("rake", info.FileName);
 			Assert.AreEqual(222000, info.TimeOut);
 			Assert.AreEqual("myargs", info.Arguments);
@@ -186,13 +186,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldRunWithMultipleTargetsSpecified()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
-			
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
+
 			builder.Targets = new string[] { "targeta", "targetb", "targetc" };
 			builder.Run(result);
 			
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("targeta targetb targetc", info.Arguments);
 		}
 
@@ -236,13 +236,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)
 		{
-			ProcessResult returnVal = SuccessfulProcessResult();
-			CollectingConstraint constraint = new CollectingConstraint();
-			object[] arr = new object[1];
-			arr[0] = constraint;
-			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, arr);
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Run(integrationResult);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 		}
 
@@ -282,69 +279,69 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void SilentOptionShouldAddSilentArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Silent = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--silent", info.Arguments);
 		}
 		
 		[Test]
 		public void SilentAndTraceOptionShouldAddSilentAndTraceArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Silent = true;
 			builder.Trace = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--silent --trace", info.Arguments);
 		}
 		
 		[Test]
 		public void QuietOptionShouldAddQuietArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Quiet = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--quiet", info.Arguments);
 		}
 		
 		[Test]
 		public void QuietAndTraceOptionShouldAddQuietAndTraceArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Quiet = true;
 			builder.Trace = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--quiet --trace", info.Arguments);
 		}
 		
 		[Test]
 		public void TraceOptionShouldAddTraceArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Trace = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--trace", info.Arguments);
 		}
 		
 		[Test]
 		public void SilentAndQuietOptionShouldOnlyAddSilentArgument()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
+			ProcessInfo info = null;
+			mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
+				Callback<ProcessInfo>(processInfo => info = processInfo).Returns(SuccessfulProcessResult()).Verifiable();
 			builder.Silent = true;
 			builder.Quiet = true;
 			builder.Run(result);
-			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("--silent", info.Arguments);
 		}
 		

@@ -1,5 +1,5 @@
 using System.IO;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -36,14 +36,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			projectList.Add(project1);
 			projectList.Add(project2);
 
-			DynamicMock mockConfiguration = new DynamicMock(typeof(IConfiguration));
-			mockConfiguration.ExpectAndReturn("Projects", projectList);
+			var mockConfiguration = new Mock<IConfiguration>();
+			mockConfiguration.SetupGet(_configuration => _configuration.Projects).Returns(projectList).Verifiable();
 
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempFile(TempFileUtil.CreateTempDir(this), "loadernet.config"));
 
 			// Execute
 			DefaultConfigurationFileSaver saver = new DefaultConfigurationFileSaver(new NetReflectorProjectSerializer());
-			saver.Save((IConfiguration) mockConfiguration.MockInstance, configFile);
+			saver.Save((IConfiguration) mockConfiguration.Object, configFile);
 
 			DefaultConfigurationFileLoader loader = new DefaultConfigurationFileLoader();
 			IConfiguration configuration2 = loader.Load(configFile);

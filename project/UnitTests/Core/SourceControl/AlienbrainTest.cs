@@ -1,11 +1,10 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -65,18 +64,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		                                                                     PROJECT_PATH);
 
 		private Alienbrain alienbrain;
-		private IMock executor;
-		private IMock parser;
-		private IMock registry;
+		private Mock<ProcessExecutor> executor;
+		private Mock<IHistoryParser> parser;
+		private Mock<IRegistry> registry;
 
 		[SetUp]
 		protected void Setup()
 		{
-			executor = new DynamicMock(typeof (ProcessExecutor));
-			parser = new DynamicMock(typeof (IHistoryParser));
-			registry = new DynamicMock(typeof (IRegistry));
+			executor = new Mock<ProcessExecutor>();
+			parser = new Mock<IHistoryParser>();
+			registry = new Mock<IRegistry>();
 
-			alienbrain = new Alienbrain((IHistoryParser) parser.MockInstance, (ProcessExecutor) executor.MockInstance, (IRegistry) registry.MockInstance);
+			alienbrain = new Alienbrain((IHistoryParser) parser.Object, (ProcessExecutor) executor.Object, (IRegistry) registry.Object);
 		}
 
 // Process Creations
@@ -192,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			NetReflector.Read(ALIENBRAIN_XML_MINIMAL, alienbrain);
 
 			// Get Default Executable from registry
-			registry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", INSTALLDIR, Alienbrain.AB_REGISTRY_PATH, Alienbrain.AB_REGISTRY_KEY);
+			registry.Setup(r => r.GetExpectedLocalMachineSubKeyValue(Alienbrain.AB_REGISTRY_PATH, Alienbrain.AB_REGISTRY_KEY)).Returns(INSTALLDIR).Verifiable();
 			alienbrain.Executable = string.Empty;
 
 			Assert.AreEqual(INSTALLDIR + "\\" + Alienbrain.AB_COMMMAND_PATH + "\\" + Alienbrain.AB_EXE, alienbrain.Executable);
@@ -237,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                                                                               WORKDIR_PATH));
 			expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			Assert.IsTrue(alienbrain.HasChanges(expectedProcessRequest));
 			executor.Verify();
 		}
@@ -264,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                            to.StartTime.ToFileTime());
 			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			alienbrain.GetModifications(from, to);
 			executor.Verify();
 		}
@@ -291,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                            to.StartTime.ToFileTime());
 			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
 
-			executor.ExpectAndReturn("Execute", new ProcessResult(Alienbrain.NO_CHANGE, null, 1, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult(Alienbrain.NO_CHANGE, null, 1, false)).Verifiable();
 			alienbrain.GetModifications(from, to);
 			executor.Verify();
 		}
@@ -312,7 +311,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                            name);
 			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			alienbrain.LabelSourceControl(IntegrationResultMother.CreateSuccessful(name));
 			executor.Verify();
 		}
@@ -322,9 +321,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			alienbrain.LabelOnSuccess = true;
 
-			executor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			alienbrain.LabelSourceControl(IntegrationResultMother.CreateFailed());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -332,9 +331,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			alienbrain.LabelOnSuccess = false;
 
-			executor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			alienbrain.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -347,7 +346,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				@"getlatest ab://PATH_DOES_NOT_EXIST -s SERVER_DOES_NOT_EXIST -d DATABASE_DOES_NOT_EXIST -u USER_DOES_NOT_EXIST -p PASSWORD_DOES_NOT_EXIST -localpath C:\DOES_NOT_EXIST -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y";
 			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
 
-			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			executor.Setup(e => e.Execute(expectedProcessRequest)).Returns(new ProcessResult("foo", null, 0, false)).Verifiable();
 			alienbrain.GetSource(new IntegrationResult());
 			executor.Verify();
 		}
@@ -357,9 +356,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			alienbrain.AutoGetSource = false;
 
-			executor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			alienbrain.GetSource(new IntegrationResult());
 			executor.Verify();
+			executor.VerifyNoOtherCalls();
 		}
 
 		private void InitialiseAlienbrain()

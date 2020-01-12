@@ -1,5 +1,5 @@
 using System.IO;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -9,27 +9,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 	[TestFixture]
 	public class FileConfigurationServiceTest
 	{
-		private DynamicMock configurationFileLoaderMock;
-		private DynamicMock configurationFileSaverMock;
+		private Mock<IConfigurationFileLoader> configurationFileLoaderMock;
+		private Mock<IConfigurationFileSaver> configurationFileSaverMock;
 		private FileConfigurationService fileService;
 
-		private DynamicMock configurationMock;
+		private Mock<IConfiguration> configurationMock;
 		private IConfiguration configuration;
 		private FileInfo configFile;
 
 		[SetUp]
 		public void Setup()
 		{
-			configurationFileLoaderMock = new DynamicMock(typeof (IConfigurationFileLoader));
-			configurationFileSaverMock = new DynamicMock(typeof (IConfigurationFileSaver));
+			configurationFileLoaderMock = new Mock<IConfigurationFileLoader>();
+			configurationFileSaverMock = new Mock<IConfigurationFileSaver>();
 			configFile = new FileInfo("testFileName");
 
-			fileService = new FileConfigurationService((IConfigurationFileLoader) configurationFileLoaderMock.MockInstance,
-			                                           (IConfigurationFileSaver) configurationFileSaverMock.MockInstance,
+			fileService = new FileConfigurationService((IConfigurationFileLoader) configurationFileLoaderMock.Object,
+			                                           (IConfigurationFileSaver) configurationFileSaverMock.Object,
 			                                           configFile);
 
-			configurationMock = new DynamicMock(typeof (IConfiguration));
-			configuration = (IConfiguration) configurationMock.MockInstance;
+			configurationMock = new Mock<IConfiguration>();
+			configuration = (IConfiguration) configurationMock.Object;
 		}
 
 		private void VerifyAll()
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void ShouldDelegateLoadRequests()
 		{
 			// Setup
-			configurationFileLoaderMock.ExpectAndReturn("Load", configuration, configFile);
+			configurationFileLoaderMock.Setup(loader => loader.Load(configFile)).Returns(configuration).Verifiable();
 
 			// Execute & Verify
 			Assert.AreEqual(configuration, fileService.Load());
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void ShouldDelegateSaveRequests()
 		{
 			// Setup
-			configurationFileSaverMock.Expect("Save", configuration, configFile);
+			configurationFileSaverMock.Setup(saver => saver.Save(configuration, configFile)).Verifiable();
 
 			// Execute & Verify
 			fileService.Save(configuration);

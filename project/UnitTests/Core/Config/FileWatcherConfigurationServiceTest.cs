@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void Setup()
 		{
 			fileWatcher = new MockFileWatcher();
-			IMock mockService = new DynamicMock(typeof (IConfigurationService));
-			fileService = new FileWatcherConfigurationService((IConfigurationService) mockService.MockInstance, fileWatcher);
+			var mockService = new Mock<IConfigurationService>();
+			fileService = new FileWatcherConfigurationService((IConfigurationService) mockService.Object, fileWatcher);
 		}
 
 		[Test]

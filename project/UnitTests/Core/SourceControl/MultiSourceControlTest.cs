@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -52,13 +52,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			//// SETUP
 			IntegrationResult result = new IntegrationResult();
 
-			DynamicMock mockSC1 = new DynamicMock(typeof (ISourceControl));
-			mockSC1.Expect("LabelSourceControl", result);
+			var mockSC1 = new Mock<ISourceControl>();
+			mockSC1.Setup(sourceControl => sourceControl.LabelSourceControl(result)).Verifiable();
 
-			DynamicMock mockSC2 = new DynamicMock(typeof (ISourceControl));
-			mockSC2.Expect("LabelSourceControl", result);
+			var mockSC2 = new Mock<ISourceControl>();
+			mockSC2.Setup(sourceControl => sourceControl.LabelSourceControl(result)).Verifiable();
 
-			ISourceControl[] sourceControls = new ISourceControl[] {(ISourceControl) mockSC1.MockInstance, (ISourceControl) mockSC2.MockInstance};
+			ISourceControl[] sourceControls = new ISourceControl[] {(ISourceControl) mockSC1.Object, (ISourceControl) mockSC2.Object};
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
 			multiSourceControl.SourceControls = sourceControls;
@@ -92,9 +92,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mocks.Add(CreateModificationsSourceControlMock(null, from, to));
 
 			ArrayList scList = new ArrayList();
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
-				scList.Add(mock.MockInstance);
+				scList.Add(mock.Object);
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
 
 			//// VERIFY
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
 				mock.Verify();
 			}
@@ -118,23 +118,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldInstructAggregatedSourceControlsToGetSource()
 		{
 			IntegrationResult result = new IntegrationResult();
-			IMock mockSC1 = new DynamicMock(typeof (ISourceControl));
-			IMock mockSC2 = new DynamicMock(typeof (ISourceControl));
-			mockSC1.Expect("GetSource", result);
-			mockSC2.Expect("GetSource", result);
+			Mock<ISourceControl> mockSC1 = new Mock<ISourceControl>();
+			Mock<ISourceControl> mockSC2 = new Mock<ISourceControl>();
+			mockSC1.Setup(sourceControl => sourceControl.GetSource(result)).Verifiable();
+			mockSC2.Setup(sourceControl => sourceControl.GetSource(result)).Verifiable();
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls = new ISourceControl[] {(ISourceControl) mockSC1.MockInstance, (ISourceControl) mockSC2.MockInstance};
+			multiSourceControl.SourceControls = new ISourceControl[] {(ISourceControl) mockSC1.Object, (ISourceControl) mockSC2.Object};
 			multiSourceControl.GetSource(result);
 
 			mockSC1.Verify();
 			mockSC2.Verify();
 		}
 
-		private DynamicMock CreateModificationsSourceControlMock(Modification[] mods, IntegrationResult dt1, IntegrationResult dt2)
+		private Mock<ISourceControl> CreateModificationsSourceControlMock(Modification[] mods, IntegrationResult dt1, IntegrationResult dt2)
 		{
-			DynamicMock mock = new DynamicMock(typeof (ISourceControl));
-			mock.ExpectAndReturn("GetModifications", mods, dt1, dt2);
+			Mock<ISourceControl> mock = new Mock<ISourceControl>();
+			mock.Setup(sourceControl => sourceControl.GetModifications(dt1, dt2)).Returns(mods).Verifiable();
 			return mock;
 		}
 
@@ -309,9 +309,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mocks.Add(CreateModificationsSourceControlMock(null, from, to));
 
             ArrayList scList = new ArrayList();
-            foreach (DynamicMock mock in mocks)
+            foreach (Mock<ISourceControl> mock in mocks)
             {
-                scList.Add(mock.MockInstance);
+                scList.Add(mock.Object);
             }
             scList.Add(new MockSourceControl());
             scList.Add(new MockSourceControl());
@@ -399,9 +399,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod2}, from, to));
 
 			ArrayList scList = new ArrayList();
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
-				scList.Add(mock.MockInstance);
+				scList.Add(mock.Object);
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
@@ -413,7 +413,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(1, returnedMods.Count);
 
 			//// VERIFY
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
 				mock.Verify();
 			}
@@ -434,9 +434,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mocks.Add(CreateModificationsSourceControlMock(new Modification[0], from, to));
 
 			ArrayList scList = new ArrayList();
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
-				scList.Add(mock.MockInstance);
+				scList.Add(mock.Object);
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
@@ -447,7 +447,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
 
 			//// VERIFY
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
 				mock.Verify();
 			}
@@ -467,14 +467,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			ArrayList mocks = new ArrayList();
 			mocks.Add(CreateModificationsSourceControlMock(new Modification[0], from, to));
-			DynamicMock nonCalledMock = new DynamicMock(typeof (ISourceControl));
-			nonCalledMock.ExpectNoCall("GetModifications", typeof(IIntegrationResult), typeof(IIntegrationResult));
+			Mock<ISourceControl> nonCalledMock = new Mock<ISourceControl>();
 			mocks.Add(nonCalledMock);
 
 			ArrayList scList = new ArrayList();
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
-				scList.Add(mock.MockInstance);
+				scList.Add(mock.Object);
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
@@ -485,9 +484,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
 
 			//// VERIFY
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
 				mock.Verify();
+				mock.VerifyNoOtherCalls();
 			}
 
 			Assert.AreEqual(0, returnedMods.Count);
@@ -512,9 +512,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod3}, from, to));
 
 			ArrayList scList = new ArrayList();
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
-				scList.Add(mock.MockInstance);
+				scList.Add(mock.Object);
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
@@ -525,7 +525,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
 
 			//// VERIFY
-			foreach (DynamicMock mock in mocks)
+			foreach (Mock<ISourceControl> mock in mocks)
 			{
 				mock.Verify();
 			}

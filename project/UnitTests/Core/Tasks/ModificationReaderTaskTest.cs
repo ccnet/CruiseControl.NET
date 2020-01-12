@@ -1,13 +1,8 @@
-using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
-using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {

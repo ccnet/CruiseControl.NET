@@ -1,9 +1,9 @@
-using NMock;
 using System.Collections.Specialized;
+using Moq;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 {
@@ -25,9 +25,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 
 		private void CreateCruiseRequest(string relativePath)
 		{
-            DynamicMock urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+            var urlBuilderMock = new Mock<ICruiseUrlBuilder>();
             underlyingRequest = new NameValueCollectionRequest(queryString, null, applicationPath + relativePath, null, applicationPath);
-            cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest, (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
+            cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest, (ICruiseUrlBuilder)urlBuilderMock.Object, null);
 		}
 
 		[Test]

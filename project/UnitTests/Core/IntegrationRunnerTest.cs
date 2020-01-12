@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Moq;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
-using Mock = Moq.Mock;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -20,12 +18,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         private IntegrationRunner runner;
 
-        private IMock resultManagerMock;
-        private IMock targetMock;
-        private IMock resultMock;
-        private IMock lastResultMock;
-        private IMock sourceControlMock;
-        private IMock quietPeriodMock;
+        private Mock<IIntegrationResultManager> resultManagerMock;
+        private Mock<IIntegrationRunnerTarget> targetMock;
+        private Mock<IIntegrationResult> resultMock;
+        private Mock<IIntegrationResult> lastResultMock;
+        private Mock<ISourceControl> sourceControlMock;
+        private Mock<IQuietPeriod> quietPeriodMock;
 
         private IIntegrationResult result;
         private IIntegrationResult lastResult;
@@ -41,28 +39,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             this.mocks = new MockRepository(MockBehavior.Default);
 
             mockery = new Mockery();
-            targetMock = mockery.NewDynamicMock(typeof(IIntegrationRunnerTarget));
-            resultManagerMock = mockery.NewDynamicMock(typeof(IIntegrationResultManager));
-            quietPeriodMock = mockery.NewDynamicMock(typeof(IQuietPeriod));
+            targetMock = mockery.NewDynamicMock<IIntegrationRunnerTarget>();
+            resultManagerMock = mockery.NewDynamicMock<IIntegrationResultManager>();
+            quietPeriodMock = mockery.NewDynamicMock<IQuietPeriod>();
 
-            runner = new IntegrationRunner((IIntegrationResultManager)resultManagerMock.MockInstance,
-                                           (IIntegrationRunnerTarget)targetMock.MockInstance,
-                                           (IQuietPeriod)quietPeriodMock.MockInstance);
+            runner = new IntegrationRunner((IIntegrationResultManager)resultManagerMock.Object,
+                                           (IIntegrationRunnerTarget)targetMock.Object,
+                                           (IQuietPeriod)quietPeriodMock.Object);
 
 
             request = ModificationExistRequest();
             endTime = new DateTime(2005, 2, 1);
             modifications = new Modification[] { new Modification() };
 
-            resultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));
-            resultMock.SetupResult("WorkingDirectory", TempFileUtil.GetTempPath("workingDir"));
-            resultMock.SetupResult("ArtifactDirectory", TempFileUtil.GetTempPath("artifactDir"));
-            resultMock.SetupResult("BuildProgressInformation", new ThoughtWorks.CruiseControl.Core.Util.BuildProgressInformation("",string.Empty));
-            resultMock.SetupResult("IntegrationProperties", new Dictionary<string, string>());
-            result = (IIntegrationResult)resultMock.MockInstance;
+            resultMock = mockery.NewDynamicMock<IIntegrationResult>();
+            resultMock.SetupGet(_result => _result.WorkingDirectory).Returns(TempFileUtil.GetTempPath("workingDir"));
+            resultMock.SetupGet(_result => _result.ArtifactDirectory).Returns(TempFileUtil.GetTempPath("artifactDir"));
+            resultMock.SetupGet(_result => _result.BuildProgressInformation).Returns(new ThoughtWorks.CruiseControl.Core.Util.BuildProgressInformation("",string.Empty));
+            resultMock.SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
+            result = (IIntegrationResult)resultMock.Object;
 
-            lastResultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));
-            lastResult = (IIntegrationResult)lastResultMock.MockInstance;
+            lastResultMock = mockery.NewDynamicMock<IIntegrationResult>();
+            lastResult = (IIntegrationResult)lastResultMock.Object;
         }
 
         [TearDown]
@@ -77,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void ShouldNotRunBuildIfResultShouldNotBuild()
         {
             SetupPreambleExpections();
-            resultMock.ExpectAndReturn("ShouldRunBuild", false);
-            targetMock.Expect("Activity", ProjectActivity.Sleeping);
+            resultMock.Setup(_result => _result.ShouldRunBuild()).Returns(false).Verifiable();
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.Sleeping).Verifiable();
 
             IIntegrationResult returnedResult = runner.Integrate(request);
 
@@ -106,19 +104,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             SetupPreambleExpections();
 
-            resultMock.ExpectAndReturn("ShouldRunBuild", true);
-            resultMock.ExpectAndReturn("LastIntegrationStatus", IntegrationStatus.Success);
+            resultMock.Setup(_result => _result.ShouldRunBuild()).Returns(true).Verifiable();
+            resultMock.SetupGet(_result => _result.LastIntegrationStatus).Returns(IntegrationStatus.Success).Verifiable();
 
-            targetMock.Expect("Activity", ProjectActivity.Building);
-            sourceControlMock.Expect("GetSource", result);
-            targetMock.ExpectAndThrow("Prebuild", new CruiseControlException("expected exception"), result);
-            resultMock.Expect("ExceptionResult");
-            resultMock.Expect("MarkEndTime");
-            targetMock.Expect("Activity", ProjectActivity.Sleeping);
-            resultMock.ExpectAndReturn("EndTime", endTime);
-            resultMock.ExpectAndReturn("Status", IntegrationStatus.Exception);
-            targetMock.Expect("PublishResults", result);
-            resultManagerMock.Expect("FinishIntegration");
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.Building).Verifiable();
+            sourceControlMock.Setup(sourceControl => sourceControl.GetSource(result)).Verifiable();
+            targetMock.Setup(target => target.Prebuild(result)).Throws(new CruiseControlException("expected exception")).Verifiable();
+            resultMock.SetupSet(_result => _result.ExceptionResult = It.IsAny<Exception>()).Verifiable();
+            resultMock.Setup(_result => _result.MarkEndTime()).Verifiable();
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.Sleeping).Verifiable();
+            resultMock.SetupGet(_result => _result.EndTime).Returns(endTime).Verifiable();
+            resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Exception).Verifiable();
+            targetMock.Setup(target => target.PublishResults(result)).Verifiable();
+            resultManagerMock.Setup(_manager => _manager.FinishIntegration()).Verifiable();
 
             runner.Integrate(ModificationExistRequest());
             mockery.Verify();
@@ -126,37 +124,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         private void SetupPreambleExpections()
         {
-            targetMock.Expect("Activity", ProjectActivity.CheckingModifications);
-            resultManagerMock.ExpectAndReturn("StartNewIntegration", result, request);
-            resultMock.Expect("MarkStartTime");
-            resultManagerMock.ExpectAndReturn("LastIntegrationResult", lastResult);
-            sourceControlMock = new DynamicMock(typeof(ISourceControl));
-            sourceControlMock.Strict = true;
-            targetMock.SetupResult("SourceControl", sourceControlMock.MockInstance);
-            quietPeriodMock.ExpectAndReturn("GetModifications", modifications, sourceControlMock.MockInstance, lastResult, result);
-            resultMock.ExpectAndReturn("Modifications", modifications);
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.CheckingModifications).Verifiable();
+            resultManagerMock.Setup(_manager => _manager.StartNewIntegration(request)).Returns(result).Verifiable();
+            resultMock.Setup(_result => _result.MarkStartTime()).Verifiable();
+            resultManagerMock.SetupGet(_manager => _manager.LastIntegrationResult).Returns(lastResult).Verifiable();
+            sourceControlMock = new Mock<ISourceControl>(MockBehavior.Strict);
+            targetMock.SetupGet(target => target.SourceControl).Returns(sourceControlMock.Object).Verifiable();
+            quietPeriodMock.Setup(period => period.GetModifications(sourceControlMock.Object, lastResult, result)).Returns(modifications).Verifiable();
+            resultMock.SetupSet(_result => _result.Modifications = modifications).Verifiable();
         }
 
         private void SetupShouldBuildExpectations()
         {
-            resultMock.ExpectAndReturn("ShouldRunBuild", true);
-            resultMock.ExpectAndReturn("LastIntegrationStatus",IntegrationStatus.Success);
-            targetMock.Expect("Activity", ProjectActivity.Building);
-            sourceControlMock.Expect("GetSource", result);
-            targetMock.Expect("Prebuild", result);
-            resultMock.ExpectAndReturn("Failed", false);
-            targetMock.Expect("Run", result);
-            resultMock.Expect("MarkEndTime");
-            targetMock.Expect("Activity", ProjectActivity.Sleeping);
-            resultMock.ExpectAndReturn("EndTime", endTime);
+            resultMock.Setup(_result => _result.ShouldRunBuild()).Returns(true).Verifiable();
+            resultMock.SetupGet(_result => _result.LastIntegrationStatus).Returns(IntegrationStatus.Success).Verifiable();
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.Building).Verifiable();
+            sourceControlMock.Setup(sourceControl => sourceControl.GetSource(result)).Verifiable();
+            targetMock.Setup(target => target.Prebuild(result)).Verifiable();
+            resultMock.SetupGet(_result => _result.Failed).Returns(false).Verifiable();
+            targetMock.Setup(_result => _result.Run(result)).Verifiable();
+            resultMock.Setup(_result => _result.MarkEndTime()).Verifiable();
+            targetMock.SetupSet(target => target.Activity = ProjectActivity.Sleeping).Verifiable();
+            resultMock.SetupGet(_result => _result.EndTime).Returns(endTime).Verifiable();
         }
 
         private void SetupBuildPassExpectations()
         {
-            resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
-            sourceControlMock.Expect("LabelSourceControl", result);
-            targetMock.Expect("PublishResults", result);
-            resultManagerMock.Expect("FinishIntegration");           
+            resultMock.SetupGet(_result => _result.Status).Returns(IntegrationStatus.Success).Verifiable();
+            sourceControlMock.Setup(sourceControl => sourceControl.LabelSourceControl(result)).Verifiable();
+            targetMock.Setup(target => target.PublishResults(result)).Verifiable();
+            resultManagerMock.Setup(_manager => _manager.FinishIntegration()).Verifiable();           
         }
 
         #region GenerateSystemParameterValues() tests

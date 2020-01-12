@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -9,14 +9,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	[TestFixture]
 	public class IntegrationResultManagerTest : IntegrationFixture
 	{
-		private IMock mockStateManager;
+		private Mock<IStateManager> mockStateManager;
 		private Project project;
 		private IntegrationResultManager manager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockStateManager = new DynamicMock(typeof(IStateManager));
+			mockStateManager = new Mock<IStateManager>();
 
 			project = CreateProject();
 			manager = new IntegrationResultManager(project);
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IIntegrationResult expected = manager.StartNewIntegration(ModificationExistRequest());
 			Assert.AreEqual(lastResult, manager.LastIntegrationResult);
 
-			mockStateManager.Expect("SaveState", expected);
+			mockStateManager.Setup(_manager => _manager.SaveState(expected)).Verifiable();
 			manager.FinishIntegration();
 			Assert.AreEqual(expected, manager.LastIntegrationResult);
 		}
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	    [Test]
 	    public void InitialBuildShouldBeForced()
 	    {
-            mockStateManager.ExpectAndReturn("HasPreviousState", false, "project");
+            mockStateManager.Setup(_manager => _manager.HasPreviousState("project")).Returns(false).Verifiable();
 
             IIntegrationResult expected = manager.StartNewIntegration(ModificationExistRequest());
 	        Assert.AreEqual(BuildCondition.ForceBuild, expected.BuildCondition);
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             modification.UserName = "user";
             newResult.Modifications = new Modification[] { modification };
             newResult.Status = IntegrationStatus.Failure;
-            mockStateManager.Expect("SaveState", newResult);
+            mockStateManager.Setup(_manager => _manager.SaveState(newResult)).Verifiable();
             manager.FinishIntegration();
 
             Assert.AreEqual(2, newResult.FailureUsers.Count, "Mismatched count of resulting FailureUsers");
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             modification.UserName = "user";
             result2.Modifications = new Modification[] { modification };
             result2.Status = IntegrationStatus.Success;
-            mockStateManager.Expect("SaveState", result2);
+            mockStateManager.Setup(_manager => _manager.SaveState(result2)).Verifiable();
             manager.FinishIntegration();
             Assert.AreEqual(1, result2.FailureUsers.Count);
 
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             newResult.Modifications = new Modification[] { modification };
             newResult.Status = IntegrationStatus.Failure;
             newResult.FailureTasks.Add("task2");
-            mockStateManager.Expect("SaveState", newResult);
+            mockStateManager.Setup(_manager => _manager.SaveState(newResult)).Verifiable();
             manager.FinishIntegration();
 
             Assert.AreEqual(1, newResult.FailureTasks.Count, "Mismatched count of resulting FailureTasks");
@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             result2.Modifications = new Modification[] { modification };
             result2.Status = IntegrationStatus.Success;
             result2.FailureTasks.Add("task2");
-            mockStateManager.Expect("SaveState", result2);
+            mockStateManager.Setup(_manager => _manager.SaveState(result2)).Verifiable();
             manager.FinishIntegration();
             Assert.AreEqual(1, result2.FailureTasks.Count);
             Assert.AreEqual("task2", result2.FailureTasks[0]);
@@ -170,8 +170,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         private void ExpectToLoadState(IIntegrationResult result)
 		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", true, "project");
-			mockStateManager.ExpectAndReturn("LoadState", result, "project");
+			mockStateManager.Setup(_manager => _manager.HasPreviousState("project")).Returns(true).Verifiable();
+			mockStateManager.Setup(_manager => _manager.LoadState("project")).Returns(result).Verifiable();
 		}
 
 		private Project CreateProject()
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project = new Project();
 			project.Name = "project";
 			project.ConfiguredWorkingDirectory = @"c:\temp";
-			project.StateManager = (IStateManager) mockStateManager.MockInstance;
+			project.StateManager = (IStateManager) mockStateManager.Object;
 			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;            
 			return project;
 		}

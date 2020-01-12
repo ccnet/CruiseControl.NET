@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			IIntegrationResult result = IntegrationResult();
 			result.ArtifactDirectory = Path.GetTempPath();
 
-			task = new NUnitTask((ProcessExecutor) mockProcessExecutor.MockInstance);
+			task = new NUnitTask((ProcessExecutor) mockProcessExecutor.Object);
 			task.Assemblies = new string[] {"foo.dll"};
 			task.Run(result);
 

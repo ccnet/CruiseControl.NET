@@ -1,8 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -13,16 +12,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class VssApplyLabelTest : CustomAssertion
 	{
-		private IMock _executor;
-		private IMock _historyParser;
+		private Mock<ProcessExecutor> _executor;
+		private Mock<IHistoryParser> _historyParser;
 		private Vss _vss;
 
 		[SetUp]
 		protected void SetUp()
 		{
-			_executor = new DynamicMock(typeof(ProcessExecutor));
-			_historyParser = new DynamicMock(typeof(IHistoryParser));
-			_vss = new Vss(new VssLocale(CultureInfo.InvariantCulture), (IHistoryParser) _historyParser.MockInstance, (ProcessExecutor) _executor.MockInstance, null);
+			_executor = new Mock<ProcessExecutor>();
+			_historyParser = new Mock<IHistoryParser>();
+			_vss = new Vss(new VssLocale(CultureInfo.InvariantCulture), (IHistoryParser) _historyParser.Object, (ProcessExecutor) _executor.Object, null);
 			_vss.Executable = "ss.exe";
 		}
 
@@ -43,11 +42,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ProcessResult result = new ProcessResult("",string.Empty, 0, false);
 			Modification[] dummyArray = new Modification[1] { new Modification() };
-			_historyParser.SetupResult("Parse", dummyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
-			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
-			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			_historyParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(dummyArray).Verifiable();
+			_executor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(result).Verifiable();
 
 			_vss.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.Now), IntegrationResultMother.CreateSuccessful(DateTime.Now));
+
+			_executor.Verify();
+			_executor.VerifyNoOtherCalls();
 		}
 
 		[Test]
@@ -55,11 +56,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ProcessResult result = new ProcessResult("",string.Empty, 0, false);
 			Modification[] emptyArray = new Modification[0];
-			_historyParser.SetupResult("Parse", emptyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
-			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
-			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			_historyParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(emptyArray).Verifiable();
+			_executor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(result).Verifiable();
 
 			_vss.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.Now), IntegrationResultMother.CreateSuccessful(DateTime.Now));
+
+			_executor.Verify();
+			_executor.VerifyNoOtherCalls();
 		}
 	}
 }

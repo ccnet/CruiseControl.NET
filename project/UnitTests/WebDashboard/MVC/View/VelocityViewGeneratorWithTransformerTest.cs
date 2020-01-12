@@ -1,7 +1,6 @@
 using System.Collections;
-using NMock;
+using Moq;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
@@ -10,14 +9,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 	[TestFixture]
 	public class VelocityViewGeneratorWithTransformerTest
 	{
-		private DynamicMock velocityTransformerMock;
+		private Mock<IVelocityTransformer> velocityTransformerMock;
 		private VelocityViewGeneratorWithTransformer viewGenerator;
 
 		[SetUp]
 		public void Setup()
 		{
-			velocityTransformerMock = new DynamicMock(typeof(IVelocityTransformer));
-			viewGenerator = new VelocityViewGeneratorWithTransformer((IVelocityTransformer) velocityTransformerMock.MockInstance);
+			velocityTransformerMock = new Mock<IVelocityTransformer>();
+			viewGenerator = new VelocityViewGeneratorWithTransformer((IVelocityTransformer) velocityTransformerMock.Object);
 		}
 
 		private void VerifyAll()
@@ -31,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			Hashtable context = new Hashtable();
 			context["foo"] = "bar";
 
-			velocityTransformerMock.ExpectAndReturn("Transform", "transformed", "myTemplate", new HashtableConstraint(context));
+			velocityTransformerMock.Setup(transformer => transformer.Transform("myTemplate", It.Is<Hashtable>(t => t.Count == 1 && (string)t["foo"] == "bar"))).Returns("transformed").Verifiable();
 
 			// Execute
 			HtmlFragmentResponse response = viewGenerator.GenerateView("myTemplate", context);

@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -17,30 +16,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 	{
 		private HtmlBuildLogAction buildLogAction;
 
-		private DynamicMock requestMock;
-		private DynamicMock buildRetrieverMock;
-		private DynamicMock urlBuilderMock;
-		private DynamicMock velocityViewGeneratorMock;
-        private DynamicMock fingerprintFactoryMock;
+		private Mock<ICruiseRequest> requestMock;
+		private Mock<IBuildRetriever> buildRetrieverMock;
+		private Mock<ICruiseUrlBuilder> urlBuilderMock;
+		private Mock<IVelocityViewGenerator> velocityViewGeneratorMock;
+        private Mock<IFingerprintFactory> fingerprintFactoryMock;
 
 		private string buildLog;
 		private Build build;
 		private DefaultBuildSpecifier buildSpecifier;
-		private IResponse response;
+		private HtmlFragmentResponse response;
 
 	    [SetUp]
 		public void Setup()
 		{
-			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
-			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
-			requestMock = new DynamicMock(typeof(ICruiseRequest));
-		    fingerprintFactoryMock = new DynamicMock(typeof (IFingerprintFactory));
+			buildRetrieverMock = new Mock<IBuildRetriever>();
+			velocityViewGeneratorMock = new Mock<IVelocityViewGenerator>();
+			urlBuilderMock = new Mock<ICruiseUrlBuilder>();
+			requestMock = new Mock<ICruiseRequest>();
+		    fingerprintFactoryMock = new Mock<IFingerprintFactory>();
 
-			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.MockInstance, 
-				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ICruiseUrlBuilder) urlBuilderMock.MockInstance, 
-                (IFingerprintFactory) fingerprintFactoryMock.MockInstance,
+			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.Object, 
+				(IVelocityViewGenerator) velocityViewGeneratorMock.Object,
+				(ICruiseUrlBuilder) urlBuilderMock.Object, 
+                (IFingerprintFactory) fingerprintFactoryMock.Object,
                 null);
 
 			buildLog = "some stuff in a log with a < and >";
@@ -61,22 +60,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void ReturnsServerLogFromRequestedServer()
 		{
 			// Setup
-			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier, null);
-			urlBuilderMock.ExpectAndReturn("Extension", "foo");
-			urlBuilderMock.Expect("Extension", "xml");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "myUrl", XmlBuildLogAction.ACTION_NAME, buildSpecifier);
-			urlBuilderMock.Expect("Extension", "foo");
+			requestMock.SetupGet(_request => _request.BuildSpecifier).Returns(buildSpecifier).Verifiable();
+			buildRetrieverMock.Setup(retriever => retriever.GetBuild(buildSpecifier, null)).Returns(build).Verifiable();
+			urlBuilderMock.SetupGet(builder => builder.Extension).Returns("foo").Verifiable();
+			urlBuilderMock.SetupSet(builder => builder.Extension = "xml").Verifiable();
+			urlBuilderMock.Setup(builder => builder.BuildBuildUrl(XmlBuildLogAction.ACTION_NAME, buildSpecifier)).Returns("myUrl").Verifiable();
+			urlBuilderMock.SetupSet(builder => builder.Extension = "foo").Verifiable();
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";
             expectedContext["ShowHighLight"] = false;
             expectedContext["logUrl"] = "myUrl";
             
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "BuildLog.vm", new HashtableConstraint(expectedContext));
+			velocityViewGeneratorMock.Setup(generator => generator.GenerateView(@"BuildLog.vm", It.IsAny<Hashtable>())).
+				Callback<string, Hashtable>((name, context) => Assert.AreEqual(context, expectedContext)).Returns(response).Verifiable();
 
 			// Execute & Verify
-			Assert.AreEqual(response, buildLogAction.Execute((ICruiseRequest) requestMock.MockInstance));
+			Assert.AreEqual(response, buildLogAction.Execute((ICruiseRequest) requestMock.Object));
 
 			VerifyAll();
 		}
@@ -89,12 +89,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
             DateTime logFileDate = new DateTime(2006,12,2,1,4,5);
             DateTime templateDate = new DateTime(2005,1,2);
 
-            DynamicMock requestMock = new DynamicMock(typeof(IRequest));
-            requestMock.SetupResult("SubFolders", new string[] { "server", "testServer", "project", "testProject", "build", "testBuild" });
+            var requestMock = new Mock<IRequest>();
+            requestMock.SetupGet(_request => _request.SubFolders).Returns(new string[] { "server", "testServer", "project", "testProject", "build", "testBuild" });
 
 	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(logFileDate, TEST_TOKEN);
 
-            Assert.AreEqual(expectedFingerprint, buildLogAction.GetFingerprint((IRequest) requestMock.MockInstance));
+            Assert.AreEqual(expectedFingerprint, buildLogAction.GetFingerprint((IRequest) requestMock.Object));
 	    }
 	}
 }

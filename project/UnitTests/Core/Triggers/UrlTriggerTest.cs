@@ -1,6 +1,6 @@
 using System;
 using Exortech.NetReflector;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -11,8 +11,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 	[TestFixture]
 	public class UrlTriggerTest : IntegrationFixture
 	{
-		private IMock mockDateTime;
-		private IMock mockHttpWrapper;
+		private Mock<DateTimeProvider> mockDateTime;
+		private Mock<HttpWrapper> mockHttpWrapper;
 		private UrlTrigger trigger;
 		private DateTime initialDateTimeNow;
 		private const string DefaultUrl = @"http://confluence.public.thoughtworks.org/";
@@ -22,11 +22,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			Source = "UrlTrigger";
 			initialDateTimeNow = new DateTime(2002, 1, 2, 3, 0, 0, 0);
-			mockDateTime = new DynamicMock(typeof (DateTimeProvider));
-			mockDateTime.SetupResult("Now", this.initialDateTimeNow);
-			mockHttpWrapper = new DynamicMock(typeof (HttpWrapper));
+			mockDateTime = new Mock<DateTimeProvider>();
+			mockDateTime.SetupGet(provider => provider.Now).Returns(this.initialDateTimeNow);
+			mockHttpWrapper = new Mock<HttpWrapper>();
 
-			trigger = new UrlTrigger((DateTimeProvider) mockDateTime.MockInstance, (HttpWrapper) mockHttpWrapper.MockInstance);
+			trigger = new UrlTrigger((DateTimeProvider) mockDateTime.Object, (HttpWrapper) mockHttpWrapper.Object);
 			trigger.Url = DefaultUrl;
 		}
 
@@ -69,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
         [Test]
         public void ShouldBuildAfterFirstInterval()
         {
-            mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
-            mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), DateTime.MinValue);
+            mockDateTime.SetupGet(provider => provider.Now).Returns(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
+            mockHttpWrapper.Setup(http => http.GetLastModifiedTimeFor(new Uri(DefaultUrl), DateTime.MinValue)).Returns(initialDateTimeNow).Verifiable();
             Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
             VerifyAll();
         }
@@ -79,17 +79,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldNotBuildIfUrlHasNotChanged()
 		{
             // Initial check, no build
-			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), DateTime.MinValue);
+			mockHttpWrapper.Setup(http => http.GetLastModifiedTimeFor(new Uri(DefaultUrl), DateTime.MinValue)).Returns(initialDateTimeNow).Verifiable();
             Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 			trigger.IntegrationCompleted();
 
             // First interval passes, initial build because url date/time is unknown
-            mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
+            mockDateTime.SetupGet(provider => provider.Now).Returns(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
             Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
 
             // Second interval passes, no build because url has not changed
-			mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 2));
-			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), initialDateTimeNow);
+			mockDateTime.SetupGet(provider => provider.Now).Returns(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 2));
+			mockHttpWrapper.Setup(http => http.GetLastModifiedTimeFor(new Uri(DefaultUrl), initialDateTimeNow)).Returns(initialDateTimeNow).Verifiable();
             Assert.IsNull(trigger.Fire(), "trigger.Fire()");
             Assert.AreEqual(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 3), trigger.NextBuild, "trigger.NextBuild");		// Next build should be at third interval
 			VerifyAll();
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldHandleExceptionAccessingUrl()
 		{
-			mockHttpWrapper.ExpectAndThrow("GetLastModifiedTimeFor", new Exception("Uh-oh"), new Uri(DefaultUrl), DateTime.MinValue);
+			mockHttpWrapper.Setup(http => http.GetLastModifiedTimeFor(new Uri(DefaultUrl), DateTime.MinValue)).Throws(new Exception("Uh-oh")).Verifiable();
             Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 	}

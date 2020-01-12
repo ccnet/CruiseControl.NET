@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private Project project;
 		private Configuration configuration;
 		private IntegrationQueueManager queueManager;
-        private DynamicMock stateManagerMock;
+        private Mock<IProjectStateManager> stateManagerMock;
 
         [SetUp]
         public void SetUp()
@@ -27,11 +27,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             configuration = new Configuration();
             configuration.AddProject(project);
-            stateManagerMock = new DynamicMock(typeof(IProjectStateManager));
+            stateManagerMock = new Mock<IProjectStateManager>();
 
             queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),            
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
         }
 
 		[Test]
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(1, queueNames.Length);
 			Assert.AreEqual(project.Name, queueNames[0]);
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(1, queueNames.Length);
 
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(TestQueueName, queueNames[0]);
 			Assert.AreEqual(TestQueueName3, queueNames[1]);
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 new Configuration(),
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(0, queueNames.Length);
 		}
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
             CruiseServerSnapshot cruiseServerSnapshot = queueManager.GetCruiseServerSnapshot();
             Assert.IsNotNull(cruiseServerSnapshot);
             Assert.AreEqual(0, cruiseServerSnapshot.ProjectStatuses.Length);
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(),
                 configuration,
-                (IProjectStateManager)stateManagerMock.MockInstance);
+                (IProjectStateManager)stateManagerMock.Object);
             CruiseServerSnapshot cruiseServerSnapshot = queueManager.GetCruiseServerSnapshot();
             Assert.IsNotNull(cruiseServerSnapshot);
             bool found1 = false;

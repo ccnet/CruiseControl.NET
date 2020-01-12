@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -15,9 +15,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[SetUp]
 		protected void SetUp()
 		{
-			IMock mockDateTimeProvider = new DynamicMock(typeof (DateTimeProvider));
-			mockDateTimeProvider.SetupResult("Now", new DateTime(2005, 1, 1));
-			labeller = new DateLabeller((DateTimeProvider) mockDateTimeProvider.MockInstance);
+			var mockDateTimeProvider = new Mock<DateTimeProvider>();
+			mockDateTimeProvider.SetupGet(provider => provider.Now).Returns(new DateTime(2005, 1, 1));
+			labeller = new DateLabeller((DateTimeProvider) mockDateTimeProvider.Object);
 		}
 
 		[Test]

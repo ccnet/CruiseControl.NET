@@ -1,4 +1,4 @@
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
@@ -11,8 +11,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		[Test]
 		public void ShouldUseConfigurableProperties()
 		{
-			DynamicMock actionMock = new DynamicMock(typeof(INamedAction));
-			INamedAction action = (INamedAction) actionMock.MockInstance;
+			var actionMock = new Mock<INamedAction>();
+			INamedAction action = (INamedAction) actionMock.Object;
 
 			ConfigurablePlugin plugin = new ConfigurablePlugin();
 			plugin.LinkDescription = "My Plugin";

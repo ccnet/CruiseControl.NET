@@ -1,33 +1,32 @@
 using System;
 using System.Collections;
-using NMock;
+using System.Collections.Generic;
+using Moq;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 {
 	public class Mockery
 	{
-		IList mocks = new ArrayList();
+		List<Mock> mocks = new List<Mock>();
 		
-		public IMock NewStrictMock(Type type)
+		public Mock<T> NewStrictMock<T>() where T : class
 		{
-			DynamicMock mock = new DynamicMock(type);
-			mock.Strict = true;
+			Mock<T> mock = new Mock<T>(MockBehavior.Strict);
 			mocks.Add(mock);
 			return mock;
 		}
 		
 		public void Verify()
 		{
-			foreach (IMock mock in mocks)
+			foreach (Mock mock in mocks)
 			{
 				mock.Verify();
 			}
 		}
 
-        public IMock NewDynamicMock(Type type)
+        public Mock<T> NewDynamicMock<T>() where T : class
         {
-            DynamicMock mock = new DynamicMock(type);
-            mock.Strict = false;
+            Mock<T> mock = new Mock<T>(MockBehavior.Loose);
             mocks.Add(mock);
             return mock;
         }

@@ -2,8 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -17,20 +16,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class CvsTest : ProcessExecutorTestFixtureBase
 	{
 		private Cvs cvs;
-		private IMock mockHistoryParser;
+		private Mock<IHistoryParser> mockHistoryParser;
 		private DateTime from;
 		private DateTime to;
-		private IMock mockFileSystem;
+		private Mock<IFileSystem> mockFileSystem;
         private IExecutionEnvironment executionEnv;
 
 		[SetUp]
 		protected void CreateCvs()
 		{
-			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			mockFileSystem = new DynamicMock(typeof (IFileSystem));
+			mockHistoryParser = new Mock<IHistoryParser>();
+			mockFileSystem = new Mock<IFileSystem>();
             executionEnv = new ExecutionEnvironment();
 			CreateProcessExecutorMock(Cvs.DefaultCvsExecutable);
-            cvs = new Cvs((IHistoryParser)mockHistoryParser.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance, (IFileSystem)mockFileSystem.MockInstance, executionEnv);
+            cvs = new Cvs((IHistoryParser)mockHistoryParser.Object, (ProcessExecutor)mockProcessExecutor.Object, (IFileSystem)mockFileSystem.Object, executionEnv);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);
 		}
@@ -228,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		            @"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet",
                     StringUtil.AutoDoubleQuoteString(checkoutDir)), checkoutWd);
 
-			mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(DefaultWorkingDirectoryWithSpaces, "CVS"));
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectoryWithSpaces, "CVS"))).Returns(false).Verifiable();
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
 			cvs.Module = "ccnet";
@@ -262,17 +261,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceIsFalse()
 		{
-			ExpectThatExecuteWillNotBeCalled();
-
 			cvs.AutoGetSource = false;
 			cvs.GetSource(IntegrationResult());
+			mockProcessExecutor.VerifyNoOtherCalls();
 		}
 
 		[Test]
 		public void ShouldRebaseWorkingDirectoryForGetSource()
 		{
 			ExpectToExecuteArguments(@"-q update -d -P -C", Path.Combine(DefaultWorkingDirectory, "myproject"));
-			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(Path.Combine(DefaultWorkingDirectory, "myproject"), "CVS"));
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(Path.Combine(DefaultWorkingDirectory, "myproject"), "CVS"))).Returns(true).Verifiable();
 
 			cvs.AutoGetSource = true;
 			cvs.CleanCopy = true; // set as default
@@ -357,12 +355,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private void ExpectToParseAndReturnModifications(Modification[] modifications)
 		{
-			mockHistoryParser.ExpectAndReturn("Parse", modifications, new IsAnything(), from, to);
+			mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), from, to)).Returns(modifications).Verifiable();
 		}
 
 		private void ExpectCvsDirectoryExists(bool doesCvsDirectoryExist)
 		{
-			mockFileSystem.ExpectAndReturn("DirectoryExists", doesCvsDirectoryExist, Path.Combine(DefaultWorkingDirectory, "CVS"));
+			mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectory, "CVS"))).Returns(doesCvsDirectoryExist).Verifiable();
 		}
 	}
 }

@@ -2,8 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -17,10 +16,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
     public class SvnTest : ProcessExecutorTestFixtureBase
     {
         private Svn svn;
-        private IMock mockHistoryParser;
+        private Mock<IHistoryParser> mockHistoryParser;
         private DateTime from;
         private DateTime to;
-        private DynamicMock mockFileSystem;
+        private Mock<IFileSystem> mockFileSystem;
 
         [SetUp]
         protected void SetUp()
@@ -28,9 +27,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             from = DateTime.Parse("2001-01-21 20:00:00Z");
             to = DateTime.Parse("2001-01-21 20:30:50Z");
             CreateProcessExecutorMock(Svn.DefaultExecutable);
-            mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
-            mockFileSystem = new DynamicMock(typeof(IFileSystem));
-            svn = new Svn((ProcessExecutor)mockProcessExecutor.MockInstance, (IHistoryParser)mockHistoryParser.MockInstance, (IFileSystem)mockFileSystem.MockInstance);
+            mockHistoryParser = new Mock<IHistoryParser>();
+            mockFileSystem = new Mock<IFileSystem>();
+            svn = new Svn((ProcessExecutor)mockProcessExecutor.Object, (IHistoryParser)mockHistoryParser.Object, (IFileSystem)mockFileSystem.Object);
             svn.TrunkUrl = "svn://myserver/mypath";
             svn.TagBaseUrl = "svn://someserver/tags/foo";
             svn.WorkingDirectory = DefaultWorkingDirectory;
@@ -48,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void ShouldGetModificationsEvenWhenTrunkUrlIsNull()
         {
             svn.TrunkUrl = null;
-            mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+            mockHistoryParser.Setup(parser => parser.Parse(It.IsAny<TextReader>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(new Modification[0]).Verifiable();
             ExpectToExecuteArguments("log -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --no-auth-cache --non-interactive");
 
             Modification[] modifications = svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
@@ -205,17 +204,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ShouldNotApplyLabelIfTagOnSuccessFalse()
         {
-            ExpectThatExecuteWillNotBeCalled();
             svn.TagOnSuccess = false;
             svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+            mockProcessExecutor.VerifyNoOtherCalls();
         }
 
         [Test]
         public void ShouldNotApplyLabelIfIntegrationFailed()
         {
-            ExpectThatExecuteWillNotBeCalled();
             svn.TagOnSuccess = true;
             svn.LabelSourceControl(IntegrationResultMother.CreateFailed());
+            mockProcessExecutor.VerifyNoOtherCalls();
         }
 
         [Test]
@@ -290,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ShouldGetSourceWithSpacesInPath()
         {
-            mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectoryWithSpaces, ".svn"));
+            mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(Path.Combine(DefaultWorkingDirectoryWithSpaces, ".svn"))).Returns(true).Verifiable();
 
             ExpectToExecuteArguments(string.Format(@"update {0} --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
             svn.AutoGetSource = true;
@@ -301,9 +300,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ShouldNotGetSourceIfAutoGetSourceFalse()
         {
-            ExpectThatExecuteWillNotBeCalled();
             svn.AutoGetSource = false;
             svn.GetSource(IntegrationResult());
+            mockProcessExecutor.VerifyNoOtherCalls();
         }
 
         [Test]
@@ -367,19 +366,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             ExpectUnderscoreSvnDirectoryExists(false);
             ExpectNoSvnParentDirectoryExists();
 
-            mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new ProcessInfoEncodingValidator());
+            mockProcessExecutor.Setup(executor => executor.Execute(It.Is<ProcessInfo>(info => Encoding.UTF8 == info.StreamEncoding))).Returns(SuccessfulProcessResult()).Verifiable();
 
             svn.GetSource(IntegrationResult());
         }
 
         private void ExpectSvnDirectoryExists(bool doesSvnDirectoryExist)
         {
-            mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, ".svn"));
+            string folder = Path.Combine(DefaultWorkingDirectory, ".svn");
+            mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(folder)).Returns(doesSvnDirectoryExist).Verifiable();
         }
 
         private void ExpectUnderscoreSvnDirectoryExists(bool doesSvnDirectoryExist)
         {
-            mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, "_svn"));
+            string folder = Path.Combine(DefaultWorkingDirectory, "_svn");
+            mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(folder)).Returns(doesSvnDirectoryExist).Verifiable();
         }
 
         private void ExpectNoSvnParentDirectoryExists()
@@ -388,25 +389,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
             while (parent != null)
             {
-                mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(parent.FullName, ".svn"));
-                mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(parent.FullName, "_svn"));
+                string folder1 = Path.Combine(parent.FullName, ".svn");
+                mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(folder1)).Returns(false).Verifiable();
+                string folder2 = Path.Combine(parent.FullName, "_svn");
+                mockFileSystem.Setup(fileSystem => fileSystem.DirectoryExists(folder2)).Returns(false).Verifiable();
                 parent = Directory.GetParent(parent.FullName);
             }
         }
 
-    }
-
-    internal class ProcessInfoEncodingValidator : BaseConstraint
-    {
-        public override bool Eval(object val)
-        {
-            ProcessInfo processInfo = (ProcessInfo)val;
-            return Encoding.UTF8 == processInfo.StreamEncoding;
-        }
-
-        public override string Message
-        {
-            get { return "Wrong encoding specified."; }
-        }
     }
 }

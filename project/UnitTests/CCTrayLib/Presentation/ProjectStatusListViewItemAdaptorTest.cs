@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-using NMock;
+using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -12,14 +12,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	[TestFixture]
 	public class ProjectStatusListViewItemAdaptorTest
 	{
-		private DynamicMock mockProjectDetailStringFormatter;
+		private Mock<IDetailStringProvider> mockProjectDetailStringFormatter;
 		private IDetailStringProvider detailStringFormatter;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockProjectDetailStringFormatter = new DynamicMock(typeof (IDetailStringProvider));
-			detailStringFormatter = (IDetailStringProvider) mockProjectDetailStringFormatter.MockInstance;
+			mockProjectDetailStringFormatter = new Mock<IDetailStringProvider>();
+			detailStringFormatter = (IDetailStringProvider) mockProjectDetailStringFormatter.Object;
 		}
 
 		[Test]
@@ -84,17 +84,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void UsesDescriptionBuilderToGenerateDetailCaption()
 		{
-			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
-			mockProjectDetailStringFormatter.Strict = true;
+			mockProjectDetailStringFormatter = new Mock<IDetailStringProvider>(MockBehavior.Strict);
+			detailStringFormatter = mockProjectDetailStringFormatter.Object;
 
-			mockProjectDetailStringFormatter.ExpectAndReturn("FormatDetailString", "test1", projectMonitor);
+			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
+
+			mockProjectDetailStringFormatter.Setup(formatter => formatter.FormatDetailString(projectMonitor)).Returns("test1").Verifiable();
 			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
 			ListViewItem item = adaptor.Create(projectMonitor);
 
 			ListViewItem.ListViewSubItem detail = item.SubItems[4];
 			Assert.AreEqual("test1", detail.Text);
 
-			mockProjectDetailStringFormatter.ExpectAndReturn("FormatDetailString", "test2", projectMonitor);
+			mockProjectDetailStringFormatter.Setup(formatter => formatter.FormatDetailString(projectMonitor)).Returns("test2").Verifiable();
 			projectMonitor.OnPolled(new MonitorPolledEventArgs(projectMonitor));
 
 			Assert.AreEqual("test2", detail.Text);
