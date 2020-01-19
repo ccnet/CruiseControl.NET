@@ -1,12 +1,12 @@
-﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
     using System;
     using System.Xml;
     using Moq;
     using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Remote;
+    using CruiseControl.Remote.Events;
 
     [TestFixture]
     public class IntegrationRequestThrottleExtensionTests
@@ -16,7 +16,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository(MockBehavior.Default);
+            mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
@@ -25,7 +25,7 @@
             var extension = new IntegrationRequestThrottleExtension();
             var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            config.Items = new[] 
+            config.Items = new[]
                 {
                     GenerateElement("limit", "10")
                 };
@@ -34,7 +34,7 @@
 
             extension.Initialise(serverMock, config);
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
             Assert.AreEqual(10, extension.NumberOfRequestsAllowed);
         }
 
@@ -51,7 +51,7 @@
             extension.Initialise(serverMock, config);
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
         }
 
@@ -70,7 +70,7 @@
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(null, "First"));
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Delay, eventArgs.Result);
         }
 
@@ -92,7 +92,7 @@
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
         }
 
@@ -113,7 +113,7 @@
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(null, "First", IntegrationStatus.Success));
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, eventArgs);
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Continue, eventArgs.Result);
         }
 
@@ -130,7 +130,7 @@
             extension.Start();
             extension.Stop();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -146,7 +146,7 @@
             extension.Start();
             extension.Abort();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         private XmlElement GenerateElement(string name, string value)
@@ -154,6 +154,7 @@
             var xmlDoc = new XmlDocument();
             var element = xmlDoc.CreateElement(name);
             element.InnerXml = value;
+
             return element;
         }
     }

@@ -1,13 +1,13 @@
-﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
     using System;
     using System.Xml;
     using Moq;
     using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Events;
+    using CruiseControl.Core.Extensions;
+    using CruiseControl.Core.Util;
+    using CruiseControl.Remote;
+    using CruiseControl.Remote.Events;
 
     /// <summary>
     /// Test the disk space monitor.
@@ -20,7 +20,7 @@
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository(MockBehavior.Strict);
+            mocks = new MockRepository(MockBehavior.Strict);
         }
 
         [Test]
@@ -134,8 +134,7 @@
             var extension = new DiskSpaceMonitorExtension();
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
-                CreateSizeElement("Mb", 100, "C:\\"),
-                CreateSizeElement("Kb", 100, "D:\\")
+                CreateSizeElement("Mb", 100, "C:\\"), CreateSizeElement("Kb", 100, "D:\\")
             };
             extension.Initialise(server, configuration);
             Assert.AreEqual(104857600, extension.RetrieveMinimumSpaceRequired("C:\\"));
@@ -147,12 +146,14 @@
         {
             // Initialise the file system
             var fileSystem = mocks.Create<IFileSystem>().Object;
-            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.GetFreeDiskSpace("c:\\"))
+            Mock.Get(fileSystem)
+                .Setup(_fileSystem => _fileSystem.GetFreeDiskSpace("c:\\"))
                 .Returns(104857600);
 
             // Initialise the server
             var server = mocks.Create<ICruiseServer>().Object;
-            Mock.Get(server).Setup(_server => _server.RetrieveService(typeof(IFileSystem)))
+            Mock.Get(server)
+                .Setup(_server => _server.RetrieveService(typeof(IFileSystem)))
                 .Returns(fileSystem);
 
             // Initialise the extension
@@ -174,12 +175,14 @@
         {
             // Initialise the file system
             var fileSystem = mocks.Create<IFileSystem>().Object;
-            Mock.Get(fileSystem).Setup(_fileSystem => _fileSystem.GetFreeDiskSpace("c:\\"))
+            Mock.Get(fileSystem)
+                .Setup(_fileSystem => _fileSystem.GetFreeDiskSpace("c:\\"))
                 .Returns(102400);
 
             // Initialise the server
             var server = mocks.Create<ICruiseServer>().Object;
-            Mock.Get(server).Setup(_server => _server.RetrieveService(typeof(IFileSystem)))
+            Mock.Get(server)
+                .Setup(_server => _server.RetrieveService(typeof(IFileSystem)))
                 .Returns(fileSystem);
 
             // Initialise the extension
@@ -200,26 +203,22 @@
         public void StartAndStopDoesNothing()
         {
             var extension = new DiskSpaceMonitorExtension();
-            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
-            var config = new ExtensionConfiguration();
 
             extension.Start();
             extension.Stop();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void StartAndAbortDoesNothing()
         {
             var extension = new DiskSpaceMonitorExtension();
-            var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
-            var config = new ExtensionConfiguration();
 
             extension.Start();
             extension.Abort();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         private XmlElement CreateSizeElement(string unit, int size, string drive)
