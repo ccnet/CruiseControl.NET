@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
         [SetUp]
         public void Setup()
         {
-            this.mocks = new MockRepository(MockBehavior.Default);
+            mocks = new MockRepository(MockBehavior.Default);
         }
 
         [Test]
@@ -30,14 +30,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
                 };
             var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
-            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock)
+                .SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock)
+                .SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
 
             extension.Initialise(serverMock, config);
             extension.Start();
             extension.Stop();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -50,14 +52,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
                 };
             var serverMock = this.mocks.Create<ICruiseServer>(MockBehavior.Strict).Object;
             var config = new ExtensionConfiguration();
-            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
-            Mock.Get(serverMock).SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock)
+                .SetupAdd(_serverMock => _serverMock.IntegrationCompleted += It.IsAny<EventHandler<IntegrationCompletedEventArgs>>()).Verifiable();
+            Mock.Get(serverMock)
+                .SetupAdd(_serverMock => _serverMock.IntegrationStarted += It.IsAny<EventHandler<IntegrationStartedEventArgs>>()).Verifiable();
 
             extension.Initialise(serverMock, config);
             extension.Start();
             extension.Abort();
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -87,14 +91,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             extension.Initialise(serverMock, config);
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(request, "TestProject"));
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(request, "TestProject", IntegrationStatus.Success));
-            
-            this.mocks.VerifyAll();
+
+            mocks.VerifyAll();
         }
 
         [Test]
         public void FailedIntegrationUpdatesFailureCounter()
         {
-            var counters = this.InitialiseCounters();
+            var counters = InitialiseCounters();
             Mock.Get(counters).Setup(_counters => _counters.IncrementCounter(
                 IntegrationPerformanceCountersExtension.CategoryName,
                 IntegrationPerformanceCountersExtension.NumberFailedCounter)).Verifiable();
@@ -119,13 +123,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationStarted += null, new IntegrationStartedEventArgs(request, "TestProject"));
             Mock.Get(serverMock).Raise(_serverMock => _serverMock.IntegrationCompleted += null, new IntegrationCompletedEventArgs(request, "TestProject", IntegrationStatus.Failure));
 
-            this.mocks.VerifyAll();
+            mocks.VerifyAll();
         }
 
         private IPerformanceCounters InitialiseCounters()
         {
             var counters = this.mocks.Create<IPerformanceCounters>(MockBehavior.Strict).Object;
-            Mock.Get(counters).Setup(_counters => _counters.EnsureCategoryExists(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CounterCreationData[]>())).Verifiable();
+            Mock.Get(counters)
+                .Setup(_counters => _counters.EnsureCategoryExists(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CounterCreationData[]>()))
+                .Verifiable();
+
             return counters;
         }
     }
