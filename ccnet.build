@@ -30,9 +30,10 @@
 	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
 	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
-	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console-x86.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
 	<property name="nuget.executable"		readonly="true"		value="${environment::get-variable('NUGET_EXE')}" />
+
+	<property name="nunit.executable"                   value="${path::combine( path::combine(tools.dir, 'NUnit.ConsoleRunner'), 'tools')}" unless="${property::exists('nunit.executable')}" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
@@ -87,6 +88,20 @@
 		<if test="${not file::exists(nuget.executable)}">
 			<echo level="Warning" message="NuGet installation not found." />
 		</if>
+
+		<!-- Restore NuGet tools -->
+		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+            <arg value="install"/>
+            <arg value="NUnit.ConsoleRunner" />
+            <arg value="-Version" />
+            <arg value="3.10.0" />
+            <arg value="-OutputDirectory"/>
+            <arg value="${tools.dir}"/>
+            <arg value="-verbosity" />
+            <arg value="quiet" /> <!-- Specifies the amount of detail displayed in the output: normal, quiet, detailed -->
+        </exec>
+
+		<!-- Restore NuGet packages for project -->
 		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
 			<arg value="restore"/>
 			<arg value="${path::combine(src.dir, build.project)}"/>
