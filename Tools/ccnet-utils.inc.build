@@ -11,5 +11,105 @@
 		</delete>
 
 	</target>
-	
+
+	<!--***********************************
+        Determines the path to MSBuild based on the same logic as NuGet (see NuGetClient.CommandLine.MsBuildUtility)
+        *********************************** -->
+	<script language="C#" prefix="framework">
+		<references>
+			<include name="System.dll" />
+		</references>
+		<imports>
+			<import namespace="System.Diagnostics" />
+		</imports>
+        <code>
+            <![CDATA[
+              [Function("get-msbuild-path")]
+              public static string getMSBuildPath(string vswherePath)
+              {
+                string msBuildPath = string.Empty;
+
+                try
+                {
+                    var platform = (int)Environment.OSVersion.Platform;
+
+                    var isLinux = platform == 4;
+					var isWindows = (platform != 4) && (platform != 6) && (platform != 128);
+
+                    var isMono = Type.GetType("Mono.Runtime") != null;
+                    
+					if(isLinux && isMono)
+                    {
+                        var libPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+                        //path to msbuild folder is /usr/lib/mono/msbuild
+                        //path to xbuild folder is /usr/lib/mono/xbuild
+                        string[] buildExecutables = new string[4]{
+                            Path.Combine(libPath, "..", "msbuild", "15.0", "bin", "MSBuild.dll"),
+                            Path.Combine(libPath, "..", "msbuild", "14.1", "bin", "MSBuild.dll"),
+                            Path.Combine(libPath, "..", "xbuild", "14.0", "bin", "xbuild.exe"),
+                            Path.Combine(libPath, "..", "xbuild", "12.0", "bin", "xbuild.exe")
+                        };
+                        foreach(var buildExe in buildExecutables)
+                        {
+                            if(File.Exists(buildExe))
+                            {
+                                msBuildPath = buildExe;
+                                break;
+                            }
+                        }
+                    }
+
+					if(isWindows)
+					{
+						string vswhere = @"d:\Share\OSS\CruiseControl.NET\CruiseControl.NET_2\Tools\vswhere.2.8.4\tools\vswhere.exe";
+
+						if(!File.Exists(vswhere))
+						{
+							Console.WriteLine("Path to vswhere is invalid!!!");
+						}
+						else
+						{
+							Process process = null;
+							try
+							{
+								using (process = new Process())
+								{
+									process.StartInfo.UseShellExecute = false;
+									// You can start any process, HelloWorld is a do-nothing example.
+									process.StartInfo.FileName = vswhere;
+									process.StartInfo.Arguments = @" -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe";
+									process.StartInfo.CreateNoWindow = true;
+									process.StartInfo.UseShellExecute = false;
+									process.StartInfo.RedirectStandardOutput = true;
+									process.StartInfo.RedirectStandardError = true;
+									process.Start();
+								
+									string output = process.StandardOutput.ReadToEnd();
+									Console.WriteLine("Detected MSBuild: " + output);
+									
+									string error = process.StandardError.ReadToEnd();
+									Console.WriteLine("Error: " + error);
+										
+									process.WaitForExit();
+
+									msBuildPath = output.Replace(Environment.NewLine, "");
+								}
+							}
+							catch (Exception e)
+							{
+								Console.WriteLine(e.Message);
+							}
+						}
+					}
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                return msBuildPath;
+              }
+            ]]>
+        </code>
+    </script>
+
 </project>

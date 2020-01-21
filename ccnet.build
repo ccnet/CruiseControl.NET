@@ -31,9 +31,14 @@
 	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
-	<property name="nuget.executable"		readonly="true"		value="${environment::get-variable('NUGET_EXE')}" />
+	<!-- If NUGET_EXE env. variable does not exist, fallback to the one provided by Cake -->
+	<property name="nuget.executable"		            		value="${environment::get-variable('NUGET_EXE')}" if="${environment::variable-exists('NUGET_EXE')}" />
+	<property name="nuget.executable"		            	    value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" if="${not environment::variable-exists('NUGET_EXE')}"  />
 
-	<property name="nunit.executable"                   value="${path::combine( path::combine(tools.dir, 'NUnit.ConsoleRunner'), 'tools')}" unless="${property::exists('nunit.executable')}" />
+    <!-- NuGet tools retrieved at restore time -->
+    <property name="vswhere.executable"                         value="${path::combine( path::combine(tools.dir, 'vswhere.2.8.4'), 'tools')}" unless="${property::exists('vswhere.path')}" />
+    <property name="shfb.path"                                  value="${path::combine( path::combine(tools.dir, 'EWSoftware.SHFB.2019.11.17'), 'tools')}" unless="${property::exists('shfb.path')}" />
+	<property name="nunit.executable"                   value="${path::combine( path::combine( path::combine(tools.dir, 'NUnit.ConsoleRunner.3.10.0'), 'tools'), 'nunit3-console.exe')}" unless="${property::exists('nunit.executable')}" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
@@ -90,6 +95,28 @@
 		</if>
 
 		<!-- Restore NuGet tools -->
+		 <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+            <arg value="install"/>
+            <arg value="vswhere" />
+            <arg value="-Version" />
+            <arg value="2.8.4" />
+            <arg value="-OutputDirectory"/>
+            <arg value="${tools.dir}"/>
+            <arg value="-verbosity" />
+            <arg value="quiet" /> <!-- Specifies the amount of detail displayed in the output: normal, quiet, detailed -->
+        </exec>
+
+        <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+            <arg value="install"/>
+            <arg value="EWSoftware.SHFB" />
+            <arg value="-Version" />
+            <arg value="2019.11.17" />
+            <arg value="-OutputDirectory"/>
+            <arg value="${tools.dir}"/>
+            <arg value="-verbosity" />
+            <arg value="quiet" /> <!-- Specifies the amount of detail displayed in the output: normal, quiet, detailed -->
+        </exec>
+
 		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
             <arg value="install"/>
             <arg value="NUnit.ConsoleRunner" />
@@ -138,23 +165,40 @@
 		<echo message="Build configuration: ${build.configuration}" />
 		<echo message="Source Directory: ${src.dir}" />
 		<echo message="Build Directory: ${build.dir}" />
+		<echo message="MSBuild path: ${build.dir}" />
 
-		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
+		<!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
+        <exec program="mono" if="${platform::is-unix()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="true">
+            <arg value="${framework::get-msbuild-path('')}" />
+            <arg value="${path::combine(src.dir, build.project)}" />
+            <arg value="/t:${build.target}" />
+            <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
+            <!-- Ignore error CS0619: 'TestFixtureAttribute' is obsolete: 'The NUnit framework shipped with Mono is deprecated and will be removed in a future release'  -->
+            <arg value="/p:WarningsNotAsErrors=619" />
+            <!-- Sandcastle help file required parameters -->
+            <arg value="/p:SHFBROOT=${shfb.path}" />
+            <!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
+            <arg value="/p:DISABLE_COM=${platform::is-unix()}" />
+            <!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
+            <!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
+            <arg value="/p:DISABLE_JSCRIPT=${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+            <!-- Hack for current xbuild issues on Mono 2.5 -->
+            <arg value="/p:MONO_IOMAP=all"  if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+            <arg value="/p:MONO_PATH=${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+        </exec>
+
+		<exec program="${framework::get-msbuild-path(vswhere.executable)}" if="${platform::is-windows()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="true">
+			<arg value="${path::combine(src.dir, build.project)}" />
+            <arg value="/t:${build.target}" />
 			<arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
 
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
-			<property name="DISABLE_COM" value="${platform::is-unix()}" />
+			<arg value="/p:DISABLE_COM=${platform::is-unix()}" />
 
 			<!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
 			<!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
-			<property name="DISABLE_JSCRIPT" value="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-
-			<!-- Hack for current xbuild issues on Mono 2.5 -->
-			<environment>
-				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-			</environment>
-		</msbuild>
+			<arg value="/p:DISABLE_JSCRIPT=${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+		</exec>
 
 		<!-- copy ccnet.config into the server dictionary -->
 		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
@@ -223,23 +267,11 @@
 			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
 		</if>
 
-<!--				
-		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="-" showLabels="true" verbose="${nant.verbosity}">
-			<assemblies>
-				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
-			</assemblies>
-
-			
-			<environment>
-				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-			</environment>
-		</nunitTest>
--->
 		<exec program="${nunit.executable}" >
                         <arg value="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
-                        <arg value="/result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
-                        <arg value="/exclude=Integration" />
-						<arg value="/framework:v4.0" />
+                        <arg value="--result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
+                        <arg value="--where &quot;cat != Integration&quot;" />
+						
         </exec>
  
 		

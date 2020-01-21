@@ -428,6 +428,7 @@
     <Compile Include="Core\Util\PrivateStringTests.cs" />
     <Compile Include="Core\Util\RemoteServerUriTests.cs" />
     <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
+    <Compile Include="GlobalSetup.cs" />
     <Compile Include="IntegrationTests\CCNet_1902.cs" />
     <Compile Include="IntegrationTests\CruiseServerHarness.cs" />
     <Compile Include="IntegrationTests\DynamicValuesTests.cs" />

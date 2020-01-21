@@ -8,7 +8,7 @@ using System.Threading;
 namespace ThoughtWorks.CruiseControl.UnitTests
 {
     /// <summary>
-    /// Helper methods for testing the serialisation/deserialisation of objects.
+    /// Helper methods for testing the serialization / serialization of objects.
     /// </summary>
     public static class TestHelpers
     {
@@ -21,13 +21,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests
         }
 
         /// <summary>
-        /// Tests that an object can be serialised and de-serialised.
+        /// Tests that an object can be serialized and deserialized.
         /// </summary>
         /// <param name="value">The value to test.</param>
-        /// <returns>The de-serialised object.</returns>
+        /// <returns>The deserialized object.</returns>
         /// <remarks>
-        /// This does not test that the de-serialised object is the same as the source, it only tests
-        /// that the object can actually be serialised and de-serialised.
+        /// This does not test that the deserialized object is the same as the source, it only tests
+        /// that the object can actually be serialized and deserialized.
         /// </remarks>
         public static object RunSerialisationTest(object value)
         {
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
             }
             catch (Exception error)
             {
-                Assert.Fail(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to serialise: {0}", error.Message));
+                Assert.Fail(string.Format(CultureInfo.CurrentCulture,"Unable to serialize: {0}", error.Message));
             }
 
             stream.Position = 0;
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
             }
             catch (Exception error)
             {
-                Assert.Fail(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to deserialise: {0}", error.Message));
+                Assert.Fail(string.Format(CultureInfo.CurrentCulture,"Unable to serialize: {0}", error.Message));
             }
             return result;
         }
