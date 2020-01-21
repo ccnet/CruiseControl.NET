@@ -263,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void MustThrowExceptionWhenSpecifyingNonExistentFile()
         {
-            var ex = Assert.Throws<System.Exception>(() =>
+            var ex = Assert.Throws<CruiseControl.Core.Config.ConfigurationException>(() =>
             {
                 string lblFile = "DummyFile.txt";
 
@@ -278,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void MustThrowExceptionWhenContentsOfLabelPrefixFileDoesNotMatchLabelPrefixsFileSearchPattern()
         {
-            var ex = Assert.Throws<System.Exception>(() =>
+            var ex = Assert.Throws<CruiseControl.Core.Config.ConfigurationException>(() =>
             {
                 string lblFile = "thelabelprefix.txt";
                 System.IO.File.WriteAllText(lblFile, "ho ho ho");

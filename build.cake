@@ -96,7 +96,7 @@ Task("build-all")
     //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build.log.txt" ,
+                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-all.log.txt" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                                 Silent = false
