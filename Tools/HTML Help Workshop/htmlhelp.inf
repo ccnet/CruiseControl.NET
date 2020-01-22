@@ -1,0 +1,169 @@
+[Version]
+Signature="$Chicago$"				; Required for 95 and NT
+[SourceDisksNames]
+1="%Title%",,1
+[DefaultInstall]
+DelFiles=DelOldHHUpd
+AddReg=AddInstallPath, UninstallKey, RenameJava
+CustomDestination=HHWDestinationDir		; Ask user for custom destination
+CopyFiles=HHWCopy, HHWCopyInc, HHWCopyLib, HHWCopyJava, HHWCopyHelp, HHWCopyRedist, HHWCopySystem
+UpdateInis=HHWUpdateShortcuts			; Create / update startmenu shortcuts
+BeginPrompt=BeginPromptSection		; Beginning prompt dialog
+EndPrompt=EndPromptSection			; Ending prompt dialog
+RunPostSetupCommands=HHUpdate
+RegisterOCXs=RegisterItccDLL
+[DefaultInstall.NT]
+DelFiles=DelOldHHUpd
+AddReg=AddInstallPath, UninstallKey, RenameJava
+CustomDestination=HHWDestinationDir
+CopyFiles=HHWCopy, HHWCopyInc, HHWCopyLib, HHWCopyJava, HHWCopyHelp, HHWCopyRedist, HHWCopySystem
+UpdateInis=HHWUpdateShortcuts.NT		; Create / update startmenu shortcuts
+BeginPrompt=BeginPromptSection		; Beginning prompt dialog
+EndPrompt=EndPromptSection			; Ending prompt dialog
+RunPostSetupCommands=HHUpdate			; Install the client components
+RegisterOCXs=RegisterItccDLL
+[DefaultInstall.NT5]
+DelFiles=DelOldHHUpd
+AddReg=AddInstallPath, UninstallKey, RenameJava
+CustomDestination=HHWDestinationDir
+CopyFiles=HHWCopy, HHWCopyInc, HHWCopyLib, HHWCopyJava, HHWCopyHelp, HHWCopyRedist, HHWCopySystem
+ProfileItems=HHWAddStartGroup.NT5, HHWAddStartIcon1.NT5, HHWAddStartIcon2.NT5
+BeginPrompt=BeginPromptSection		; Beginning prompt dialog
+EndPrompt=EndPromptSection			; Ending prompt dialog
+RunPostSetupCommands=HHUpdate			; Install the client components
+RegisterOCXs=RegisterItccDLL
+[BeginPromptSection]
+Prompt="%BeginMessage%"
+Title="%Title%"
+ButtonType=YESNO
+[EndPromptSection]
+Prompt="%EndMessage%"
+[DestinationDirs]
+HHWCopy=49000					; Program Files\HTML Help Workshop
+HHWCopyInc=49000,include			; Program Files\HTML Help Workshop\include
+HHWCopyLib=49000,lib				; Program Files\HTML Help Workshop\lib
+HHWCopyJava=49000,java			; Program Files\HTML Help Workshop\java
+HHWCopyHelp=18				; Windows\Help
+HHWCopyRedist=49000,redist			; Program Files\HTML Help Workshop\redist
+HHWCopySystem=11				; Windows\System
+DelOldHHUpd=49000,redist			; Program Files\HTML Help Workshop\redist
+[DelOldHHUpd]
+hhupd.exe
+[HHWCopy]
+htmlhelp.inf,uninst.inf,,,96
+setup.exe,,,96
+setup.ini,,,96
+advpack.dll,,,96
+cnvcnt.dll,,,96
+cnvtoc.dll,,,96
+gencnv.dll,,,96
+hhcout.dll,,,96
+hhkout.dll,,,96
+navout.dll,,,96
+spcom.dll,,,96
+sprbuild.dll,,,96
+spredit.dll,,,96
+sprfile.dll,,,96
+sprlog.dll,,,96
+hhc.exe,,,96
+hhw.exe,,,96
+hhw.gif,,,96
+flash.exe,,,96
+flash256.gif,,,96
+itcc.dll,,,96
+license.txt,,,96
+readme.txt,,,96
+[HHWCopyInc]
+htmlhelp.h,,,96
+[HHWCopyLib]
+htmlhelp.lib,,,96
+[HHWCopyJava]
+dl.cl,,,96					; DialogLayout.class
+e.cl,,,96					; Element.class
+el.cl,,,96					; ElementList.class
+h.cl,,,96					; HHCtrl.class
+ip.cl,,,96					; IndexPanel.class
+rd.cl,,,96					; RelatedDialog.class
+HHCtrl.cab,,,96
+sp.cl,,,96					; SitemapParser.class
+tc.cl,,,96					; TreeCanvas.class
+tv.cl,,,96					; TreeView.class
+cntimage.gif,,,96
+[HHWCopyHelp]
+api.chm,,,96
+hhaxref.chm,,,96
+htmlref.chm,,,96
+htmlhelp.chm,,,96
+[HHWCopyRedist]
+hhupd.exe,,,96
+[HHWCopySystem]
+hha.dll,,,96
+[HHWDestinationDir]
+49100=CustomLDID49100, 5
+49000=CustomLDID49000, 1
+[CustomLDID49100]
+"HKLM","SOFTWARE\Microsoft\Windows\CurrentVersion","ProgramFilesDir","","C:\Program Files"
+[CustomLDID49000]
+"HKLM","SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\hhw.exe","Path","%DirMessage%","%49100%\HTML Help Workshop"
+[AddInstallPath]
+"HKLM","SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\hhw.exe",,,"%49000%\hhw.exe"
+"HKLM","SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\hhw.exe","Path",,"%49000%"
+"HKCU","Software\Microsoft\HTML Help Workshop","InstallDir",,"%49000%"
+[UninstallKey]
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\HTML Help Workshop", "DisplayName",, "HTML Help Workshop"
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\HTML Help Workshop", "UninstallString",, "%49000%\setup.exe Uninstall"
+[RenameJava]
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava",,,%49000%\java
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","dl.cl",,"DialogLayout.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","e.cl",,"Element.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","el.cl",,"ElementList.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","h.cl",,"HHCtrl.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","ip.cl",,"IndexPanel.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","rd.cl",,"RelatedDialog.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","sp.cl",,"SitemapParser.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","tc.cl",,"TreeCanvas.class"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RenameFiles\HHJava","tv.cl",,"TreeView.class"
+[HHWUpdateShortcuts]
+setup.ini, progman.groups,, "group0="%GroupName%""
+setup.ini, group0,, ""%GroupName%""
+setup.ini, group0,, """%HHWIconName%"",""%49000%\hhw.EXE"",,0,"
+setup.ini, group0,, ""%FlashIconName%""
+setup.ini, group0,, """%FlashIconName%"",""%49000%\flash.EXE"",,0,"
+[HHWUpdateShortcuts.NT]
+setup.ini, progman.groups,, ""group0="%GroupName%"""
+setup.ini, group0,, """%HHWIconName%"",""""""%49000%\hhw.EXE""""""
+setup.ini, group0,, """%FlashIconName%"",""""""%49000%\flash.EXE""""""
+[HHWAddStartGroup.NT5]
+Name=%GroupName%,5
+[HHWAddStartIcon1.NT5]
+Name=%HHWIconName%,1
+CmdLine=49000,,hhw.exe
+SubDir=%GroupName%
+[HHWAddStartIcon2.NT5]
+Name=%FlashIconName%,1
+CmdLine=49000,,flash.exe
+SubDir=%GroupName%
+[RegisterItccDLL]
+%49000%\itcc.dll
+%49000%\sprbuild.dll
+%49000%\sprlog.dll
+%49000%\sprfile.dll
+%49000%\spredit.dll
+%49000%\spcom.dll
+%49000%\cnvcnt.dll
+%49000%\cnvtoc.dll
+%49000%\gencnv.dll
+%49000%\hhkout.dll
+%49000%\hhcout.dll
+%49000%\navout.dll
+[HHUpdate]
+"hhupd.exe /C:""setup.exe NoDlg"" /R:N"
+[Strings]
+BeginMessage="Do you wish to install HTML Help Workshop 1.3 now?"
+EndMessage="HTML Help Workshop install complete."
+DirMessage="Choose an installation directory."
+Title="HTML Help Workshop 1.3 Setup"		; Title for all dialogs
+GroupName="HTML Help Workshop"		; Name for the start-menu group
+HHWIconName="HTML Help Workshop"		; Name for hhw.exe icon
+FlashIconName="HTML Help Image Editor"	; Name for flash.exe icon
+DefaultInstallDir="C:\Program Files\HTML Help Workshop"

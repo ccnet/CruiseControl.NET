@@ -1,7 +1,7 @@
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
-image: Visual Studio 2015
+image: Visual Studio 2019
 
 init:
   - git config --global core.autocrlf true
