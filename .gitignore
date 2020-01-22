@@ -4,11 +4,14 @@
 [Dd]ist/
 [Pp]ublish/
 [Rr]eports/
+[Bb]uildMetrics/
 build.txt
 nant-*.log*
 docgen/
 wiki/
-**/CommonAssemblyInfo.cs
+/**/CommonAssemblyInfo.cs
+/**/Webdashboard/projectcache
+/**/Webdashboard/xsl
 
 #ignore NuGet tools
 [Tt]ools/EWSoftware.SHFB*
@@ -374,3 +377,4 @@ _site/
 ![Tt]ools/Cake/packages.config
 
 thelabelprefix.txt
+project/CommonAssemblyInfo.cs
