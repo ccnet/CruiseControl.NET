@@ -2,100 +2,100 @@
 
 <project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sourceforge.net/release/0.92/nant.xsd">
 
-	<!-- properties -->
-	<property name="nant.verbosity"			 overwrite="false"	value="false" />
-	<property name="build.configuration"	 overwrite="false"	value="Build" />
-	<property name="build.target"			 overwrite="false"	value="Build" />
-	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
-	<property name="build.target.framework"  overwrite="false"	value="4.5"  />
-	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
-	<property name="version"			     unless="${property::exists('version')}"	value="0.0.0" />
-	<property name="fversion"			     unless="${property::exists('fversion')}"	value="0.0.0.0" />
-	<property name="iversion"			     unless="${property::exists('iversion')}"	value="Git hash:0000000000000000000000000000000000000000" />
+    <!-- properties -->
+    <property name="nant.verbosity"			 overwrite="false"	value="false" />
+    <property name="build.configuration"	 overwrite="false"	value="Build" />
+    <property name="build.target"			 overwrite="false"	value="Build" />
+    <property name="build.project"			 overwrite="false"	value="ccnet.sln" />
+    <property name="build.target.framework"  overwrite="false"	value="4.5"  />
+    <property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
+    <property name="version"			     unless="${property::exists('version')}"	value="0.0.0" />
+    <property name="fversion"			     unless="${property::exists('fversion')}"	value="0.0.0.0" />
+    <property name="iversion"			     unless="${property::exists('iversion')}"	value="Git hash:0000000000000000000000000000000000000000" />
 
-	<!-- common path properties -->
-	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
-	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}" />
-	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}" />
-	<property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
-	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
-	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
-	<property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
-	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
-	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
+    <!-- common path properties -->
+    <property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
+    <property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}" />
+    <property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}" />
+    <property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
+    <property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
+    <property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
+    <property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
+    <property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
+    <property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
 
-	<!-- tool path properties -->
-	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
-	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" />
-	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
-	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
-	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
-	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
-	<!-- If NUGET_EXE env. variable does not exist, fallback to the one provided by Cake -->
-	<property name="nuget.executable"		            		value="${environment::get-variable('NUGET_EXE')}" if="${environment::variable-exists('NUGET_EXE')}" />
-	<property name="nuget.executable"		            	    value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" if="${not environment::variable-exists('NUGET_EXE')}"  />
+    <!-- tool path properties -->
+    <property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
+    <property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" />
+    <property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
+    <property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
+    <property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
+    <property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
+    <!-- If NUGET_EXE env. variable does not exist, fallback to the one provided by Cake -->
+    <property name="nuget.executable"		            		value="${environment::get-variable('NUGET_EXE')}" if="${environment::variable-exists('NUGET_EXE')}" />
+    <property name="nuget.executable"		            	    value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" if="${not environment::variable-exists('NUGET_EXE')}"  />
 
     <!-- NuGet tools retrieved at restore time -->
-    <property name="vswhere.executable"                         value="${path::combine( path::combine(tools.dir, 'vswhere.2.8.4'), 'tools')}" unless="${property::exists('vswhere.path')}" />
+    <property name="vswhere.executable"                         value="${path::combine( path::combine(path::combine(tools.dir, 'vswhere.2.8.4'), 'tools'), 'vswhere.exe')}" unless="${property::exists('vswhere.path')}" />
     <property name="shfb.path"                                  value="${path::combine( path::combine(tools.dir, 'EWSoftware.SHFB.2019.11.17'), 'tools')}" unless="${property::exists('shfb.path')}" />
-	<property name="nunit.executable"                   value="${path::combine( path::combine( path::combine(tools.dir, 'NUnit.ConsoleRunner.3.10.0'), 'tools'), 'nunit3-console.exe')}" unless="${property::exists('nunit.executable')}" />
+    <property name="nunit.executable"                   		value="${path::combine( path::combine(path::combine(tools.dir, 'NUnit.ConsoleRunner.3.10.0'), 'tools'), 'nunit3-console.exe')}" unless="${property::exists('nunit.executable')}" />
 
-	<!-- common assembly info properties -->
-	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
-	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
-	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
-	<property name="assembly.trademark"		readonly="true"		value="" />
-	<property name="assembly.version"		                    value="${version}" />
-	<property name="assembly.fileversion"	                    value="${fversion}" />    
-	<property name="assembly.informalversion"                   value="${iversion}"      />     
- 	
+    <!-- common assembly info properties -->
+    <property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
+    <property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
+    <property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
+    <property name="assembly.trademark"		readonly="true"		value="" />
+    <property name="assembly.version"		                    value="${version}" />
+    <property name="assembly.fileversion"	                    value="${fversion}" />    
+    <property name="assembly.informalversion"                   value="${iversion}"      />     
+     
 
-	<!-- Framework Support
-	http://nant.sourceforge.net/faq.html#framework-support
-	-->
-	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
+    <!-- Framework Support
+    http://nant.sourceforge.net/faq.html#framework-support
+    -->
+    <property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
 
-	<!-- Includes -->
-	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
-	<include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
-	<include buildfile="${path::combine(tools.dir, 'ccnet-utils.inc.build')}" />
-	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging-webdashboard-packages.inc.build')}" />	
+    <!-- Includes -->
+    <include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
+    <include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
+    <include buildfile="${path::combine(tools.dir, 'ccnet-utils.inc.build')}" />
+    <include buildfile="${path::combine(tools.dir, 'ccnet-packaging-webdashboard-packages.inc.build')}" />	
 
-	<!-- Targets -->
-	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
+    <!-- Targets -->
+    <target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
 
-	<target name="ClearDocFolders" description="Clearing doc folder of all existing files.">
-		<echo message="Clearing doc folder of all existing files ... " />
-		<delete includeemptydirs="false" >
+    <target name="ClearDocFolders" description="Clearing doc folder of all existing files.">
+        <echo message="Clearing doc folder of all existing files ... " />
+        <delete includeemptydirs="false" >
             <fileset>
                 <patternset >
                     <include name="doc/CCNET/**"  />
                     <exclude name="**/.svn/**"  />
-					<exclude name="**/_svn/**"  />
-				</patternset>
+                    <exclude name="**/_svn/**"  />
+                </patternset>
             </fileset>
         </delete>
-	</target>
+    </target>
 
-	<target name="clean" description="Clean up">
-		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
-		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
-		<delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
-		<delete verbose="${nant.verbosity}">
-			<fileset basedir="." failonempty="false">
-				<include name="*.nsi"/>
-			</fileset>
-		</delete>
-	</target>
+    <target name="clean" description="Clean up">
+        <delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+        <delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+        <delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+        <delete verbose="${nant.verbosity}">
+            <fileset basedir="." failonempty="false">
+                <include name="*.nsi"/>
+            </fileset>
+        </delete>
+    </target>
 
-	<target name="restore" description="Restore the nuget packages">
-		<if test="${not file::exists(nuget.executable)}">
-			<echo level="Warning" message="NuGet installation not found." />
-		</if>
+    <target name="restore" description="Restore the nuget packages">
+        <if test="${not file::exists(nuget.executable)}">
+            <echo level="Warning" message="NuGet installation not found." />
+        </if>
 
-		<!-- Restore NuGet tools -->
-		 <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+        <!-- Restore NuGet tools -->
+         <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
             <arg value="install"/>
             <arg value="vswhere" />
             <arg value="-Version" />
@@ -117,7 +117,7 @@
             <arg value="quiet" /> <!-- Specifies the amount of detail displayed in the output: normal, quiet, detailed -->
         </exec>
 
-		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+        <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
             <arg value="install"/>
             <arg value="NUnit.ConsoleRunner" />
             <arg value="-Version" />
@@ -128,47 +128,47 @@
             <arg value="quiet" /> <!-- Specifies the amount of detail displayed in the output: normal, quiet, detailed -->
         </exec>
 
-		<!-- Restore NuGet packages for project -->
-		<exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
-			<arg value="restore"/>
-			<arg value="${path::combine(src.dir, build.project)}"/>
-		</exec>
-	</target>
+        <!-- Restore NuGet packages for project -->
+        <exec program="${nuget.executable}" if="${file::exists(nuget.executable)}">
+            <arg value="restore"/>
+            <arg value="${path::combine(src.dir, build.project)}"/>
+        </exec>
+    </target>
 
-	<target name="init" description="Initial compilation setup">
-		<mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
-		<mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
-		<mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
-		<mkdir dir="${dist.dir}" unless="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
-	</target>
+    <target name="init" description="Initial compilation setup">
+        <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+        <mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
+        <mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+        <mkdir dir="${dist.dir}" unless="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+    </target>
 
-	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number">
-		<asminfo language="CSharp" output="${path::combine(src.dir, 'CommonAssemblyInfo.cs')}" verbose="${nant.verbosity}">
-			<imports>
-				<import namespace="System.Reflection" />
-			</imports>
-			<attributes>
-				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
-				<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
-				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
-				<attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
-				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
-				<attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
-				<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.informalversion}" />			
-			</attributes>
-		</asminfo>
-	</target>
+    <target name="createAssemblyInfo" description="Create an assembly info file with the current build number">
+        <asminfo language="CSharp" output="${path::combine(src.dir, 'CommonAssemblyInfo.cs')}" verbose="${nant.verbosity}">
+            <imports>
+                <import namespace="System.Reflection" />
+            </imports>
+            <attributes>
+                <attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
+                <attribute type="AssemblyProductAttribute" value="${assembly.product}" />
+                <attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+                <attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
+                <attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
+                <attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
+                <attribute type="AssemblyInformationalVersionAttribute" value="${assembly.informalversion}" />			
+            </attributes>
+        </asminfo>
+    </target>
 
-	<target name="build" depends="restore, init, createAssemblyInfo" description="Compilation of the build project">
-		<loadtasks assembly="${nauckit.nant.assembly}" />
+    <target name="build" depends="init, restore, createAssemblyInfo" description="Compilation of the build project">
+        <loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<echo message="Build configuration: ${build.configuration}" />
-		<echo message="Source Directory: ${src.dir}" />
-		<echo message="Build Directory: ${build.dir}" />
-		<echo message="MSBuild path: ${build.dir}" />
+        <echo message="Build configuration: ${build.configuration}" />
+        <echo message="Source Directory: ${src.dir}" />
+        <echo message="Build Directory: ${build.dir}" />
+        <echo message="MSBuild path: ${build.dir}" />
 
-		<!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
-        <exec program="mono" if="${platform::is-unix()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="true">
+        <!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
+        <exec program="mono" if="${platform::is-unix()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
             <arg value="${framework::get-msbuild-path('')}" />
             <arg value="${path::combine(src.dir, build.project)}" />
             <arg value="/t:${build.target}" />
@@ -187,168 +187,165 @@
             <arg value="/p:MONO_PATH=${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
         </exec>
 
-		<exec program="${framework::get-msbuild-path(vswhere.executable)}" if="${platform::is-windows()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="true">
-			<arg value="${path::combine(src.dir, build.project)}" />
+        <exec program="${framework::get-msbuild-path(vswhere.executable)}" if="${platform::is-windows()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
+            <arg value="${path::combine(src.dir, build.project)}" />
             <arg value="/t:${build.target}" />
-			<arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
+            <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
 
-			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
-			<arg value="/p:DISABLE_COM=${platform::is-unix()}" />
+            <!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
+            <arg value="/p:DISABLE_COM=${platform::is-unix()}" />
 
-			<!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
-			<!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
-			<arg value="/p:DISABLE_JSCRIPT=${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-		</exec>
+            <!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
+            <!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
+            <arg value="/p:DISABLE_JSCRIPT=${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+        </exec>
 
-		<!-- copy ccnet.config into the server dictionary -->
-		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
-	</target>
+        <!-- copy ccnet.config into the server dictionary -->
+        <copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
+    </target>
 
-	<!-- Test targets -->
-	<target name="runTests" depends="build" description="Run unit tests">
-		<call target="runNUnitTests" cascade="false" />
-	</target>
+    <!-- Test targets -->
+    <target name="runTests" depends="build" description="Run unit tests">
+        <call target="runNUnitTests" cascade="false" />
+    </target>
 
-	<target name="runNUnitTests" depends="build" description="Run the NUnit tests">
-		<loadtasks assembly="${nauckit.nant.assembly}" />
+    <target name="runNUnitTests" depends="build" description="Run the NUnit tests">
+        <loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
-		<if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
-					<include name="nunit.framework.dll" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${tools.dir}" failonempty="true">
-					<include name="sleeper.exe" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${src.dir}" failonempty="true">
-					<include name="xsl/**" />
-				</fileset>
-			</copy>
-			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
-					<include name="*/**" />
-				</fileset>
-			</copy>
-			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
-		</if>
+        <!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
+        <if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
+                    <include name="nunit.framework.dll" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${tools.dir}" failonempty="true">
+                    <include name="sleeper.exe" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${src.dir}" failonempty="true">
+                    <include name="xsl/**" />
+                </fileset>
+            </copy>
+            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+                <fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
+                    <include name="*/**" />
+                </fileset>
+            </copy>
+            <copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
+        </if>
 
-		<exec program="${nunit.executable}" >
+        <exec program="${nunit.executable}" >
                         <arg value="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
                         <arg value="--result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
                         <arg value="--where &quot;cat != Integration&quot;" />
-						
+                        
         </exec>
- 
-		
-				
-	</target>
+    </target>
 
-	<!-- Code analyze metric targets -->
-	<target name="runCodeMetrics" depends="build" description="Analyze and collect code metrics of the compiled assemblies">
+    <!-- Code analyze metric targets -->
+    <target name="runCodeMetrics" depends="build" description="Analyze and collect code metrics of the compiled assemblies">
 
-		<call target="runGendarme" cascade="false" />
+        <call target="runGendarme" cascade="false" />
 
-		<!-- Execute Windows only code metric tools -->
-		<if test="${platform::is-windows()}">
-			<!-- Check for NDepend installation -->
-			<if test="${not file::exists(ndepend.executable)}">
-				<echo level="Warning" message="NDepend installation not found at '${ndepend.executable}'. Please install NDepend! Target canceled." />
-			</if>
-			<if test="${file::exists(ndepend.executable)}">
-				<call target="runNdepend" cascade="false" />
-			</if>
+        <!-- Execute Windows only code metric tools -->
+        <if test="${platform::is-windows()}">
+            <!-- Check for NDepend installation -->
+            <if test="${not file::exists(ndepend.executable)}">
+                <echo level="Warning" message="NDepend installation not found at '${ndepend.executable}'. Please install NDepend! Target canceled." />
+            </if>
+            <if test="${file::exists(ndepend.executable)}">
+                <call target="runNdepend" cascade="false" />
+            </if>
 
-			<!-- Run FxCop -->
-			<!-- 
-			      commented because of upgrade to .Net 4.5
-			      fxcop is part of visual studio, and not sure if distributing that included version is legal
-				  maybe a better way is to use fxcop cmd id the exe is found on machine
-			<call target="runFxCop" cascade="false" />
-		    -->
-		
-		</if>
-	</target>
+            <!-- Run FxCop -->
+            <!-- 
+                  commented because of upgrade to .Net 4.5
+                  fxcop is part of visual studio, and not sure if distributing that included version is legal
+                  maybe a better way is to use fxcop cmd id the exe is found on machine
+            <call target="runFxCop" cascade="false" />
+            -->
+        
+        </if>
+    </target>
 
-	<target name="runGendarme" depends="build" description="Analyze the compiled assemblies with Mono's Gendarme">
-		<loadtasks assembly="${nauckit.nant.assembly}" />
+    <target name="runGendarme" depends="build" description="Analyze the compiled assemblies with Mono's Gendarme">
+        <loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<if test="${codemetrics.output.type == 'LogFile'}">
-			<property name="gendarme.output.file" value="gendarme-result.log" />
-		</if>
+        <if test="${codemetrics.output.type == 'LogFile'}">
+            <property name="gendarme.output.file" value="gendarme-result.log" />
+        </if>
 
-		<if test="${codemetrics.output.type == 'XmlFile'}">
-			<property name="gendarme.output.file" value="gendarme-result.xml" />
-		</if>
+        <if test="${codemetrics.output.type == 'XmlFile'}">
+            <property name="gendarme.output.file" value="gendarme-result.xml" />
+        </if>
 
-		<if test="${codemetrics.output.type == 'HtmlFile'}">
-			<property name="gendarme.output.file" value="gendarme-result.html" />
-		</if>
+        <if test="${codemetrics.output.type == 'HtmlFile'}">
+            <property name="gendarme.output.file" value="gendarme-result.html" />
+        </if>
 
-		<gendarme executable="${gendarme.executable}" outputType="${codemetrics.output.type}" outputFile="${path::combine(build.metrics.dir, gendarme.output.file)}"
+        <gendarme executable="${gendarme.executable}" outputType="${codemetrics.output.type}" outputFile="${path::combine(build.metrics.dir, gendarme.output.file)}"
               workingDirectory="${build.dir}" assemblyListFile="${gendarme.project}" />
-	</target>
+    </target>
 
-	<target name="runNdepend" depends="build" description="Analyze and collect code metrics of the compiled assemblies with NDepend">
-		<loadtasks assembly="${nauckit.nant.assembly}" />
+    <target name="runNdepend" depends="build" description="Analyze and collect code metrics of the compiled assemblies with NDepend">
+        <loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<ndepend executable="${ndepend.executable}" projectFile="${ndepend.project}" />
-	</target>
+        <ndepend executable="${ndepend.executable}" projectFile="${ndepend.project}" />
+    </target>
 
-	<target name="runFxCop" depends="build" description="Analyze the compiled assemblies with FxCop">
-		<loadtasks assembly="${nauckit.nant.assembly}" />
+    <target name="runFxCop" depends="build" description="Analyze the compiled assemblies with FxCop">
+        <loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<if test="${codemetrics.output.type == 'LogFile'}">
-			<property name="fxcop.output.file" value="fxcop-result.html" />
-			<property name="fxcop.output.xsl" value="true" />
-		</if>
+        <if test="${codemetrics.output.type == 'LogFile'}">
+            <property name="fxcop.output.file" value="fxcop-result.html" />
+            <property name="fxcop.output.xsl" value="true" />
+        </if>
 
-		<if test="${codemetrics.output.type == 'XmlFile'}">
-			<property name="fxcop.output.file" value="fxcop-result.xml" />
-			<property name="fxcop.output.xsl" value="false" />
-		</if>
+        <if test="${codemetrics.output.type == 'XmlFile'}">
+            <property name="fxcop.output.file" value="fxcop-result.xml" />
+            <property name="fxcop.output.xsl" value="false" />
+        </if>
 
-		<if test="${codemetrics.output.type == 'HtmlFile'}">
-			<property name="fxcop.output.file" value="fxcop-result.html" />
-			<property name="fxcop.output.xsl" value="true" />
-		</if>
+        <if test="${codemetrics.output.type == 'HtmlFile'}">
+            <property name="fxcop.output.file" value="fxcop-result.html" />
+            <property name="fxcop.output.xsl" value="true" />
+        </if>
 
-		<fxcop executable="${fxcop.executable}" projectFile="${fxcop.project}" outputFile="${path::combine(build.metrics.dir, fxcop.output.file)}"
-					 xslFile="${path::combine(build.metrics.dir, 'fxcop-report.xsl')}" applyXsl="${fxcop.output.xsl} "/>
-	</target>
+        <fxcop executable="${fxcop.executable}" projectFile="${fxcop.project}" outputFile="${path::combine(build.metrics.dir, fxcop.output.file)}"
+                     xslFile="${path::combine(build.metrics.dir, 'fxcop-report.xsl')}" applyXsl="${fxcop.output.xsl} "/>
+    </target>
 
 </project>
