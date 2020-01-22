@@ -18,9 +18,11 @@
 	<script language="C#" prefix="framework">
 		<references>
 			<include name="System.dll" />
+			<include name="System.Collections.dll" />
 		</references>
 		<imports>
 			<import namespace="System.Diagnostics" />
+			<import namespace="System.Collections.Generic" />
 		</imports>
         <code>
             <![CDATA[
@@ -61,22 +63,16 @@
 
 					if(isWindows)
 					{
-						string vswhere = @"d:\Share\OSS\CruiseControl.NET\CruiseControl.NET_2\Tools\vswhere.2.8.4\tools\vswhere.exe";
+						List<string> buildExecutables = new List<string>();
 
-						if(!File.Exists(vswhere))
-						{
-							Console.WriteLine("Path to vswhere is invalid!!!");
-						}
-						else
+						if(File.Exists(vswherePath))
 						{
 							Process process = null;
 							try
 							{
 								using (process = new Process())
 								{
-									process.StartInfo.UseShellExecute = false;
-									// You can start any process, HelloWorld is a do-nothing example.
-									process.StartInfo.FileName = vswhere;
+									process.StartInfo.FileName = vswherePath;
 									process.StartInfo.Arguments = @" -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe";
 									process.StartInfo.CreateNoWindow = true;
 									process.StartInfo.UseShellExecute = false;
@@ -92,12 +88,36 @@
 										
 									process.WaitForExit();
 
-									msBuildPath = output.Replace(Environment.NewLine, "");
+									if(!string.IsNullOrEmpty(output))
+									{
+										buildExecutables.Add(output.Replace(Environment.NewLine, ""));
+									}
 								}
 							}
 							catch (Exception e)
 							{
 								Console.WriteLine(e.Message);
+							}
+						}
+						else
+						{
+							Console.WriteLine("Path to vswhere is invalid. Checking for MSBuild 14, 12 and 4.0, in this order.");
+						}
+
+						string framework40 = Environment.Is64BitOperatingSystem
+													? "Framework64"
+													: "Framework";
+
+						buildExecutables.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MSBuild", "14.0", "Bin", "MSBuild.exe"));
+						buildExecutables.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "MSBuild", "12.0", "Bin", "MSBuild.exe"));
+						buildExecutables.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Microsoft.NET", framework40, "v4.0.30319", "MSBuild.exe"));
+
+						foreach(string path in buildExecutables)
+						{
+							if(File.Exists(path))
+							{
+								msBuildPath = path;
+								break;
 							}
 						}
 					}
@@ -106,6 +126,7 @@
                 {
                     Console.WriteLine(ex.ToString());
                 }
+
                 return msBuildPath;
               }
             ]]>
