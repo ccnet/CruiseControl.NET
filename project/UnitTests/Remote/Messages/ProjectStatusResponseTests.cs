@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Xml.Linq;
+    using FluentAssertions;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
@@ -56,7 +58,8 @@
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 response.Result,
                 response.Timestamp);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]
@@ -87,7 +90,8 @@
                 projectStatus.LastBuildDate,
                 projectStatus.NextBuildTime,
                 Environment.MachineName);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
     }
 }

@@ -5,7 +5,7 @@
     <!-- properties -->
     <property name="nant.verbosity"			 overwrite="false"	value="false" />
     <property name="build.configuration"	 overwrite="false"	value="Build" />
-    <property name="build.target"			 overwrite="false"	value="Build" />
+    <property name="build.target"			 overwrite="false"	value="Clean;Build" />
     <property name="build.project"			 overwrite="false"	value="ccnet.sln" />
     <property name="build.target.framework"  overwrite="false"	value="4.5"  />
     <property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
@@ -36,7 +36,10 @@
     <property name="nuget.executable"		            	    value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" if="${not environment::variable-exists('NUGET_EXE')}"  />
 
     <!-- NuGet tools retrieved at restore time -->
-    <property name="vswhere.executable"                         value="${path::combine( path::combine(path::combine(tools.dir, 'vswhere.2.8.4'), 'tools'), 'vswhere.exe')}" unless="${property::exists('vswhere.path')}" />
+    <if test="${not property::exists('vswhere.executable')}">
+        <property name="vswhere.executable"                    value="${path::combine( path::combine(path::combine(tools.dir, 'vswhere.2.8.4'), 'tools'), 'vswhere.exe')}" if="${platform::is-windows()}" />
+        <property name="vswhere.executable"                    value="" if="${platform::is-unix()}" />
+    </if>
     <property name="shfb.path"                                  value="${path::combine( path::combine(tools.dir, 'EWSoftware.SHFB.2019.11.17'), 'tools')}" unless="${property::exists('shfb.path')}" />
     <property name="nunit.executable"                   		value="${path::combine( path::combine(path::combine(tools.dir, 'NUnit.ConsoleRunner.3.10.0'), 'tools'), 'nunit3-console.exe')}" unless="${property::exists('nunit.executable')}" />
 
@@ -62,7 +65,7 @@
     <include buildfile="${path::combine(tools.dir, 'ccnet-packaging-webdashboard-packages.inc.build')}" />	
 
     <!-- Targets -->
-    <target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
+    <target name="all" depends="build, runTests, runCodeMetrics, package" description="" />
 
 
     <target name="ClearDocFolders" description="Clearing doc folder of all existing files.">
@@ -135,7 +138,7 @@
         </exec>
     </target>
 
-    <target name="init" description="Initial compilation setup">
+    <target name="init" depends="clean" description="Initial compilation setup">
         <mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
         <mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
         <mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
@@ -167,9 +170,13 @@
         <echo message="Build Directory: ${build.dir}" />
         <echo message="MSBuild path: ${build.dir}" />
 
+        <property name="msbuild.file" value="${framework::get-msbuild-path(vswhere.executable)}" />
+        <property name="msbuild.exe" value="${msbuild.file}" if="${platform::is-windows()}" />
+        <property name="msbuild.exe" value="mono" if="${platform::is-unix()}" />
+
         <!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
-        <exec program="mono" if="${platform::is-unix()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
-            <arg value="${framework::get-msbuild-path('')}" />
+        <exec program="${msbuild.exe}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
+            <arg value="msbuild.file" if="${platform::is-unix()}"/>
             <arg value="${path::combine(src.dir, build.project)}" />
             <arg value="/t:${build.target}" />
             <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
@@ -185,19 +192,6 @@
             <!-- Hack for current xbuild issues on Mono 2.5 -->
             <arg value="/p:MONO_IOMAP=all"  if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
             <arg value="/p:MONO_PATH=${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
-        </exec>
-
-        <exec program="${framework::get-msbuild-path(vswhere.executable)}" if="${platform::is-windows()}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
-            <arg value="${path::combine(src.dir, build.project)}" />
-            <arg value="/t:${build.target}" />
-            <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
-
-            <!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
-            <arg value="/p:DISABLE_COM=${platform::is-unix()}" />
-
-            <!-- Microsoft.JScript was deprecated and removed in mono in 2010 -->
-            <!-- https://github.com/mono/mono/commit/2d66a50bc6df7497e1426d693395906d31f0e490 -->
-            <arg value="/p:DISABLE_JSCRIPT=${framework::get-family(nant.settings.currentframework) == 'mono'}" />
         </exec>
 
         <!-- copy ccnet.config into the server dictionary -->

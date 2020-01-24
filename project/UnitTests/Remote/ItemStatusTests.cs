@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-using NUnit.Framework;
+    using System.Xml.Linq;
+    using FluentAssertions;
+    using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
 
     public class ItemStatusTests
@@ -155,7 +157,9 @@ using NUnit.Framework;
                     "</childItem>" + 
                 "</childItems>" + 
                 "</itemStatus>";
-            Assert.AreEqual(expected, xml);
+            //Assert.AreEqual(expected, xml);
+
+            XDocument.Parse(xml).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]

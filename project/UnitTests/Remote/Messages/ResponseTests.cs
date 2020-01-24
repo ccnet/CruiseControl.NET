@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 
@@ -109,7 +111,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 response.Result,
                 response.Timestamp);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]
@@ -130,7 +133,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 response.RequestIdentifier,
                 response.Result,
                 response.Timestamp);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
     }
 }
