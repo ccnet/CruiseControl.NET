@@ -106,6 +106,9 @@
       <Name>Commons</Name>
       <HintPath>..\..\lib\Commons.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions, Version=5.10.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.5.10.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -144,11 +147,14 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web">
       <Name>System.Web</Name>
@@ -1237,6 +1243,7 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="Core\Config\TestAssets\TestMissingIncludeFile.xml" />
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="resources\IntegrationScenarios\Nant.Build">
       <SubType>Designer</SubType>
@@ -1409,18 +1416,20 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(TargetDir)xsl"
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">mkdir "$(TargetDir)xsl"
+ren "$(TargetPath).config" "app.config"
 copy "$(ProjectDir)test.config" "$(TargetPath).config"
 xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"
 xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q
-copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PreBuildEvent>
-    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(TargetDir)xsl"
+copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mkdir -p "$(TargetDir)xsl"
+mv "$(TargetPath).config" "$(TargetDir)app.config"
 cp "$(ProjectDir)test.config" "$(TargetPath).config"
 cp "$(SolutionDir)xsl"/* "$(TargetDir)xsl"
 cp -R "$(ProjectDir)resources"/* "$(TargetDir)"
-cp "$(ProjectDir)../../Tools/sleeper.exe" "$(TargetDir)"</PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+cp "$(ProjectDir)../../Tools/sleeper.exe" "$(TargetDir)"</PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

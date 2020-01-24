@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Xml.Linq;
+    using FluentAssertions;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
@@ -29,7 +31,8 @@
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]
@@ -54,7 +57,8 @@
                 request.SessionToken,
                 request.Timestamp,
                 request.UserName);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
     }
 }

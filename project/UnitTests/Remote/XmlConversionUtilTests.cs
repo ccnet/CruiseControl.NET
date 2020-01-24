@@ -1,6 +1,9 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
     using System;
+    using System.Xml.Linq;
+    using FluentAssertions;
+    using FluentAssertions.Execution;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
@@ -26,6 +29,7 @@
         #endregion
 
         #region ConvertXmlToObject()
+
         [Test]
         public void ConvertXmlToObjectConvertsCorrectly()
         {
@@ -33,26 +37,37 @@
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);
+
             object result = XmlConversionUtil.ConvertXmlToObject(typeof(Response), xml);
-            Assert.That(result, Is.InstanceOf<Response>());
-            Assert.AreEqual(xml, result.ToString());
+
+            using (new AssertionScope())
+            {
+                result.Should().BeOfType<Response>();
+                XDocument.Parse(result.ToString()).Should().BeEquivalentTo(XDocument.Parse(xml));
+            }
         }
+
         #endregion
 
         #region ConvertXmlToRequest()
+
         [Test]
         public void ConvertXmlToRequestConvertsRequest()
         {
             var request = new ServerRequest("123456-789");
             request.ServerName = "theServer";
             var xmlString = request.ToString();
+
             var convertedRequest = XmlConversionUtil.ConvertXmlToRequest(xmlString);
+
             Assert.AreEqual("123456-789", convertedRequest.SessionToken);
             Assert.AreEqual("theServer", convertedRequest.ServerName);
         }
+
         #endregion
 
         #region ProcessResponse()
+
         [Test]
         public void ProcessResponseHandlesKnownMessage()
         {
@@ -60,17 +75,25 @@
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);
+
             object result = XmlConversionUtil.ProcessResponse(xml);
-            Assert.That(result, Is.InstanceOf<Response>());
-            Assert.AreEqual(xml, result.ToString());
+
+            using (new AssertionScope())
+            {
+                result.Should().BeOfType<Response>();
+                XDocument.Parse(result.ToString()).Should().BeEquivalentTo(XDocument.Parse(xml));
+            }
         }
 
         [Test]
         public void ProcessResponseThrowsAnExceptionForUnknownMessage()
         {
-            Assert.That(delegate { XmlConversionUtil.ProcessResponse("<garbage/>"); },
-                        Throws.TypeOf<CommunicationsException>());
+
+            Action act = () => { XmlConversionUtil.ProcessResponse("<garbage/>");  };
+
+            act.Should().Throw<CommunicationsException>();
         }
+
         #endregion
         #endregion
     }

@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -69,23 +71,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 
-			Assert.AreEqual(4, mods.Length);
-			Assert.AreEqual("file1.txt", mods[0].FileName);
-			Assert.AreEqual("file2.txt", mods[1].FileName);
-            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FileName);
-            Assert.AreEqual("file3.txt", mods[3].FileName);
-			Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
-			Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
-            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FolderName);
-            Assert.AreEqual(Path.GetDirectoryName(file3), mods[3].FolderName);
+			using( new AssertionScope())
+			{
+				mods.Length.Should().Be(4);
+				mods[0].FileName.Should().Be("file1.txt");
+				mods[1].FileName.Should().Be("file2.txt");
+				mods[2].FileName.Should().Be(Path.GetFileName(tempSubRoot.ToString()));
+				mods[3].FileName.Should().Be("file3.txt");
 
-			Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
-			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
-            Assert.AreEqual(new FileInfo(tempSubRoot.ToString()).LastWriteTime, mods[2].ModifiedTime);
-            Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[3].ModifiedTime);
+				mods[0].FolderName.Should().Be(Path.GetDirectoryName(file1));
+				mods[1].FolderName.Should().Be(Path.GetDirectoryName(file2));
+				mods[2].FolderName.Should().Be(Path.GetFileName(tempSubRoot.ToString()));
+				mods[3].FolderName.Should().Be(Path.GetDirectoryName(file3));
 
-			mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
-			Assert.AreEqual(0, mods.Length);
+				new FileInfo(file1).LastWriteTime.Should().BeCloseTo(mods[0].ModifiedTime,  100);
+				new FileInfo(file2).LastWriteTime.Should().BeCloseTo(mods[1].ModifiedTime, 100);
+				new FileInfo(tempSubRoot.ToString()).LastWriteTime.Should().BeCloseTo(mods[2].ModifiedTime, 100);
+				new FileInfo(file3).LastWriteTime.Should().BeCloseTo(mods[3].ModifiedTime, 100);
+			}
+
+            mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
+
+			mods.Length.Should().Be(0);
 		}
 
 		[Test]
@@ -151,20 +158,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
             Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 
-            Assert.AreEqual(3, mods.Length);
-            Assert.AreEqual("file1.txt", mods[0].FileName);
-            Assert.AreEqual("file2.txt", mods[1].FileName);
-            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FileName);
-            Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
-            Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
-            Assert.AreEqual(Path.GetFileName(tempSubRoot.ToString()), mods[2].FolderName);
+			using(new AssertionScope())
+			{
+				mods.Length.Should().Be(3);
 
-            Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
-            Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
-            Assert.AreEqual(new FileInfo(tempSubRoot.ToString()).LastWriteTime, mods[2].ModifiedTime);
+				mods[0].FileName.Should().Be("file1.txt");
+				mods[1].FileName.Should().Be("file2.txt");
+				mods[2].FileName.Should().Be(Path.GetFileName(tempSubRoot.ToString()));
+
+				mods[0].FolderName.Should().Be(Path.GetDirectoryName(file1));
+				mods[1].FolderName.Should().Be(Path.GetDirectoryName(file2));
+				mods[2].FolderName.Should().Be(Path.GetFileName(tempSubRoot.ToString()));
+
+				new FileInfo(file1).LastWriteTime.Should().BeCloseTo(mods[0].ModifiedTime, 100);
+				new FileInfo(file2).LastWriteTime.Should().BeCloseTo(mods[1].ModifiedTime, 100);
+				new FileInfo(tempSubRoot.ToString()).LastWriteTime.Should().BeCloseTo(mods[2].ModifiedTime, 100);
+			}
 
             mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
-            Assert.AreEqual(0, mods.Length);
+			mods.Length.Should().Be(0);
         }
 	}
 }

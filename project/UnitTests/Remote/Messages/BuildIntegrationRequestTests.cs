@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Xml.Linq;
+    using FluentAssertions;
+    using FluentAssertions.Execution;
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
@@ -48,11 +51,15 @@
             string projectName = "the project";
             DateTime now = DateTime.Now;
             BuildIntegrationRequest request = new BuildIntegrationRequest(sessionToken, projectName);
-            Assert.IsFalse(string.IsNullOrEmpty(request.Identifier), "Identifier was not set");
-            Assert.AreEqual(Environment.MachineName, request.SourceName, "Source name doesn't match the machine name");
-            Assert.AreEqual(sessionToken, request.SessionToken, "SessionToken doesn't match the input token");
-            Assert.AreEqual(projectName, request.ProjectName, "ProjectName doesn't match the input project name");
-            Assert.IsTrue((now <= request.Timestamp), "Timestamp was not set");
+
+            using (new AssertionScope())
+            {
+                request.Identifier.Should().NotBeNullOrEmpty("Identifier should be set");
+                request.SourceName.Should().BeEquivalentTo(Environment.MachineName, "SourceName should match the machine name");
+                request.SessionToken.Should().BeEquivalentTo(sessionToken, "SessionToken should match the input token");
+                request.ProjectName.Should().BeEquivalentTo(projectName, "ProjectName should match the input project name");
+                request.Timestamp.Should().Be(now, "Timestamp must be set");
+            }
         }
 
         [Test]
@@ -66,7 +73,8 @@
                 request.SourceName,
                 request.Timestamp,
                 request.BuildCondition);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]
@@ -93,7 +101,8 @@
                 request.Timestamp,
                 request.ProjectName,
                 request.BuildCondition);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
     }
 }

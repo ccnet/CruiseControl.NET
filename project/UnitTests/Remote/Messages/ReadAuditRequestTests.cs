@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
@@ -28,7 +30,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
 
         [Test]
@@ -55,7 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 request.Timestamp,
                 request.StartRecord,
                 request.NumberOfRecords);
-            Assert.AreEqual(expected, actual);
+
+            XDocument.Parse(actual).Should().BeEquivalentTo(XDocument.Parse(expected));
         }
     }
 }
