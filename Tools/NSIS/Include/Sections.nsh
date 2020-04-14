@@ -15,18 +15,27 @@
 
 ; Generic section defines
 
+# section or section group is selected
 !define SF_SELECTED   1
+# section group
 !define SF_SECGRP     2
 !define SF_SUBSEC     2  # deprecated
+# section group end marker
 !define SF_SECGRPEND  4
 !define SF_SUBSECEND  4  # deprecated
+# bold text (Section !blah)
 !define SF_BOLD       8
+# read only (SectionIn RO)
 !define SF_RO         16
+# expanded section group (SectionGroup /e blah)
 !define SF_EXPAND     32
+# section group is partially selected
 !define SF_PSELECTED  64  # internal
+# internal
 !define SF_TOGGLED    128 # internal
 !define SF_NAMECHG    256 # internal
 
+# mask to toggle off the selected flag
 !define SECTION_OFF   0xFFFFFFFE
 
 ;--------------------------------
@@ -36,9 +45,12 @@
 !macro SelectSection SECTION
 
   Push $0
-    SectionGetFlags "${SECTION}" $0
+  Push $1
+    StrCpy $1 "${SECTION}"
+    SectionGetFlags $1 $0
     IntOp $0 $0 | ${SF_SELECTED}
-    SectionSetFlags "${SECTION}" $0
+    SectionSetFlags $1 $0
+  Pop $1
   Pop $0
 
 !macroend
@@ -46,9 +58,12 @@
 !macro UnselectSection SECTION
 
   Push $0
-    SectionGetFlags "${SECTION}" $0
+  Push $1
+    StrCpy $1 "${SECTION}"
+    SectionGetFlags $1 $0
     IntOp $0 $0 & ${SECTION_OFF}
-    SectionSetFlags "${SECTION}" $0
+    SectionSetFlags $1 $0
+  Pop $1
   Pop $0
 
 !macroend
@@ -58,9 +73,12 @@
 !macro ReverseSection SECTION
 
   Push $0
-    SectionGetFlags "${SECTION}" $0
+  Push $1
+    StrCpy $1 "${SECTION}"
+    SectionGetFlags $1 $0
     IntOp $0 $0 ^ ${SF_SELECTED}
-    SectionSetFlags "${SECTION}" $0
+    SectionSetFlags $1 $0
+  Pop $1
   Pop $0
 
 !macroend
@@ -130,9 +148,9 @@
 ;
 ; Written by Robert Kehl
 ;
-; For details, see http://nsis.sourceforge.net/archive/nsisweb.php?page=287
+; For details, see http://nsis.sourceforge.net/wiki/SetSectionInInstType%2C_ClearSectionInInstType
 ;
-; Use the defines below for the WANTED_INSTTYPE paramter.
+; Use the defines below for the WANTED_INSTTYPE parameter.
 
 !define INSTTYPE_1 1
 !define INSTTYPE_2 2
@@ -170,9 +188,12 @@
 !macro SetSectionInInstType SECTION_NAME WANTED_INSTTYPE
 
   Push $0
-    SectionGetInstTypes "${SECTION_NAME}" $0
+  Push $1
+    StrCpy $1 "${SECTION_NAME}"
+    SectionGetInstTypes $1 $0
     IntOp $0 $0 | ${WANTED_INSTTYPE}
-    SectionSetInstTypes "${SECTION_NAME}" $0
+    SectionSetInstTypes $1 $0
+  Pop $1
   Pop $0
 
 !macroend
@@ -181,11 +202,14 @@
 
   Push $0
   Push $1
-    SectionGetInstTypes "${SECTION_NAME}" $0
+  Push $2
+    StrCpy $2 "${SECTION_NAME}"
+    SectionGetInstTypes $2 $0
     StrCpy $1 ${WANTED_INSTTYPE}
     IntOp $1 $1 ~
     IntOp $0 $0 & $1
-    SectionSetInstTypes "${SECTION_NAME}" $0
+    SectionSetInstTypes $2 $0
+  Pop $2
   Pop $1
   Pop $0
 
@@ -201,9 +225,12 @@
 !macro SetSectionFlag SECTION BITS
 
   Push $R0
-    SectionGetFlags "${SECTION}" $R0
+  Push $R1
+    StrCpy $R1 "${SECTION}"
+    SectionGetFlags $R1 $R0
     IntOp $R0 $R0 | "${BITS}"
-    SectionSetFlags "${SECTION}" $R0
+    SectionSetFlags $R1 $R0
+  Pop $R1
   Pop $R0
  
 !macroend
@@ -214,10 +241,13 @@
 
   Push $R0
   Push $R1
-    SectionGetFlags "${SECTION}" $R0
+  Push $R2
+    StrCpy $R2 "${SECTION}"
+    SectionGetFlags $R2 $R0
     IntOp $R1 "${BITS}" ~
     IntOp $R0 $R0 & $R1
-    SectionSetFlags "${SECTION}" $R0
+    SectionSetFlags $R2 $R0
+  Pop $R2
   Pop $R1
   Pop $R0
 
@@ -236,6 +266,43 @@
 	StrCmp "" "${JUMPIFNOTSET}" +3 "${JUMPIFNOTSET}"
 	Pop $R0
 	Goto "${JUMPIFSET}"
+!macroend
+
+;--------------------------------
+
+; Removes a section by unselecting and hiding it
+
+!macro RemoveSection SECTION
+
+  Push $R0
+  Push $R1
+    StrCpy $R1 `${SECTION}`
+    SectionGetFlags $R1 $R0
+    IntOp $R0 $R0 & ${SECTION_OFF}
+    SectionSetFlags $R1 $R0
+    SectionSetText $R1 ``
+  Pop $R1
+  Pop $R0
+
+!macroend
+
+; Undoes the RemoveSection action
+
+!macro UnremoveSection SECTION SECTION_TEXT
+
+  Push $R0
+  Push $R1
+  Push $R2
+    StrCpy $R1 `${SECTION}`
+    StrCpy $R2 `${SECTION_TEXT}`
+    SectionGetFlags $R1 $R0
+    IntOp $R0 $R0 | ${SF_SELECTED}
+    SectionSetFlags $R1 $R0
+    SectionSetText $R1 $R2
+  Pop $R2
+  Pop $R1
+  Pop $R0
+
 !macroend
 
 ;--------------------------------

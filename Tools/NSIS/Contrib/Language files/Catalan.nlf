@@ -1,190 +1,191 @@
-# Header, don't edit
+ï»¿# Header, don't edit
 NLF v6
 # Language ID
 1027
 # Font and size - dash (-) means default
 -
 -
-# Codepage - dash (-) means ANSI code page
--
+# Codepage - dash (-) means ASCII code page
+1252
 # RTL - anything else than RTL means LTR
 -
 # Translation by falanko
+# Corrections by Toni Hermoso Pulido
 # ^Branding
 Nullsoft Install System %s
 # ^SetupCaption
-Instal·lació de $(^Name)
+InstalÂ·laciÃ³ de l'aplicaciÃ³ $(^Name)
 # ^UninstallCaption
-Desinstal·lació de $(^Name)
+DesinstalÂ·laciÃ³ de l'aplicaciÃ³ $(^Name)
 # ^LicenseSubCaption
-: Acord de Llicència
+: Acord de llicÃ¨ncia
 # ^ComponentsSubCaption
-: Opcions d'Instal·lació
+: Opcions d'instalÂ·laciÃ³
 # ^DirSubCaption
-: Carpeta d'Instal·lació
+: Carpeta d'instalÂ·laciÃ³
 # ^InstallingSubCaption
-: Instal·lant
+: S'estÃ  instalÂ·lant
 # ^CompletedSubCaption
-: Finalitzat
+: S'ha acabat
 # ^UnComponentsSubCaption
-: Opcions de Desinstal·lació
+: Opcions de desinstalÂ·laciÃ³
 # ^UnDirSubCaption
-: Carpeta de desinstal·lació
+: Carpeta de desinstalÂ·laciÃ³
 # ^ConfirmSubCaption
-: Confirmació
+: ConfirmaciÃ³
 # ^UninstallingSubCaption
-: Desinstal·lant
+: S'estÃ  desinstalÂ·lant
 # ^UnCompletedSubCaption
-: Finalitzat
+: No s'ha acabat
 # ^BackBtn
-< T&ornar
+< En&rere
 # ^NextBtn
-&Següent >
+En&davant >
 # ^AgreeBtn
-&Accepto
+Hi estic d'a&cord
 # ^AcceptBtn
-A&ccepto els termes de la llicència
+&Accepto els termes de l'acord de llicÃ¨ncia
 # ^DontAcceptBtn
-&No accepto els termes de la llicència
+&No accepto els termes de l'acord de llicÃ¨ncia
 # ^InstallBtn
-&Instal·lar
+&InstalÂ·la
 # ^UninstallBtn
-&Desinstal·lar
+&DesinstalÂ·la
 # ^CancelBtn
-&Cancel·lar
+&CancelÂ·la
 # ^CloseBtn
-&Tancar
+&Tanca
 # ^BrowseBtn
-&Examinar...
+&Navega...
 # ^ShowDetailsBtn
-&Veure detalls
+&Mostra els detalls
 # ^ClickNext
-Premi Següent per continuar.
+Feu clic a Endavant per a continuar.
 # ^ClickInstall
-Premi Instal·lar per començar la instal·lació.
+Feu clic a InstalÂ·la per a iniciar la instalÂ·laciÃ³.
 # ^ClickUninstall
-Premi Desinstal·lar per començar la desinstal·lació.
+Feu clic a DesinstalÂ·la per a iniciar la desinstalÂ·laciÃ³.
 # ^Name
 Nom
 # ^Completed
-Finalitzat
+S'ha acabat
 # ^LicenseText
-Per favor, revisi l'acord de llicència abans d'instal·lar $(^NameDA). Si accepta tots els termes de l'acord, premi Accepto.
+Reviseu l'acord de llicÃ¨ncia abans d'instalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, feu clic a Hi estic d'acord.
 # ^LicenseTextCB
-Per favor, revisi l'acord de llicència abans d'instal·lar $(^NameDA). Si accepta tots els termes de l'acord, marqui la casella de sota. $_CLICK
+Reviseu l'acord de llicÃ¨ncia abans d'instalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, activeu la casella de sota. $_CLICK
 # ^LicesnseTextRB
-Per favor, revisi l'acord de llicència abans d'instal·lar $(^NameDA). Si accepta tots els termes de l'acord, seleccioni la primera opció de sota. $_CLICK
+Reviseu l'acord de llicÃ¨ncia abans d'instalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, seleccioneu la primera opciÃ³ de sota. $_CLICK
 # ^UnLicenseText
-Per favor, revisi l'acord de llicència abans de desinstal·lar $(^NameDA). Si accepta tots els termes de l'acord, premi Accepto.
+Reviseu l'acord de llicÃ¨ncia abans de desinstalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, feu clic a Hi estic d'acord.
 # ^UnLicenseTextCB
-Per favor, revisi l'acord de llicència abans de desinstal·lar $(^NameDA). Si accepta tots els termes de l'acord, marqui la casella de sota. $_CLICK
+Reviseu l'acord de llicÃ¨ncia abans de desinstalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, activeu la la casella de sota. $_CLICK
 # ^UnLicesnseTextRB
-Per favor, revisi l'acord de llicència abans de desinstal·lar $(^NameDA). Si accepta tots els termes de l'acord, seleccioni la primera opció de sota. $_CLICK
+Reviseu l'acord de llicÃ¨ncia abans de desinstalÂ·lar l'aplicaciÃ³ $(^NameDA). Si accepteu tots els termes de l'acord, seleccioneu la primera opciÃ³ de sota. $_CLICK
 # ^Custom
 Personalitzada
 # ^ComponentsText
-Marqui els components que desitja instal·lar i desmarqui els que no desitja instal·lar. $_CLICK
+Activeu els components que voleu instalÂ·lar i desactiveu els que no. $_CLICK
 # ^ComponentsSubText1
-Indiqui el tipus d'instal·lació:
+Seleccioneu el tipus d'instalÂ·laciÃ³:
 # ^ComponentsSubText2_NoInstTypes
-Seleccioni els components a instal·lar:
+Seleccioneu els components per instalÂ·lar:
 # ^ComponentsSubText2
-O bé, seleccioni els components opcionals a instal·lar:
+O bÃ©, seleccioneu els components opcionals que desitgÃ©ssiu instalÂ·lar:
 # ^UnComponentsText
-Marqui els components que desitja desinstal·lar i desmarqui els que no desitja desinstal·lar. $_CLICK
+Activeu els components que voleu desinstalÂ·lar i desactiveu els que no. $_CLICK
 # ^UnComponentsSubText1
-Seleccioni el tipus de desinstal·lació:
+Seleccioneu el tipus de desinstalÂ·laciÃ³:
 # ^UnComponentsSubText2_NoInstTypes
-Seleccioni els components a desinstal·lar:
+Seleccioneu els components per desinstalÂ·lar:
 # ^UnComponentsSubText2
-O bé, seleccioni els components opcionals a desinstal·lar:
+O bÃ©, seleccioneu els components opcionals per desinstalÂ·lar:
 # ^DirText
-El programa d'instal·lació instal·larà $(^NameDA) en la següent carpeta. Per instal·lar en una carpeta diferent, premi Examinar i seleccioni una altra carpeta. $_CLICK
+El programa d'instalÂ·laciÃ³ instalÂ·larÃ  l'aplicaciÃ³ $(^NameDA) en la segÃ¼ent carpeta. Per a instalÂ·lar-lo en una carpeta diferent, feu clic a Navega i seleccioneu-ne una altra. $_CLICK
 # ^DirSubText
-Carpeta de Destí
+Carpeta de destinaciÃ³
 # ^DirBrowseText
-Seleccioni la carpeta on instal·lar $(^NameDA):
+Seleccioneu la carpeta on s'instalÂ·larÃ  l'aplicaciÃ³ $(^NameDA):
 # ^UnDirText
-El programa d'instal·lació desinstal·larà $(^NameDA) de la següent carpeta. Per desinstal·lar des d'una carpeta diferent, premi Examinar i seleccioni una altra carpeta. $_CLICK
+El programa d'instalÂ·laciÃ³ desinstalÂ·larÃ  l'aplicaciÃ³ $(^NameDA) de la segÃ¼ent carpeta. Per a desinstalÂ·lar-lo d'una carpeta diferent, feu clic a Navega i seleccioneu-ne una altra. $_CLICK
 # ^UnDirSubText
 ""
 # ^UnDirBrowseText
-Seleccioni la carpeta des de la que desinstal·lar $(^NameDA):
+Seleccioneu la carpeta des d'on es desinstalÂ·larÃ  l'aplicaciÃ³ $(^NameDA):
 # ^SpaceAvailable
 "Espai lliure: "
 # ^SpaceRequired
 "Espai necessari: "
 # ^UninstallingText
-$(^NameDA) serà desinstal·lat de la següent carpeta. $_CLICK
+Es desinstalÂ·larÃ  l'aplicaciÃ³ $(^NameDA) de la segÃ¼ent carpeta. $_CLICK
 # ^UninstallingSubTex
-Desinstal·lant de:
+S'estÃ  desinstalÂ·lant de:
 # ^FileError
-Error obrint arxiu per escriptura: \r\n\t"$0"\r\nPremi abortar per abortar la instal·lació,\r\nreintentar per reintentar escriure l'arxiu, o\r\nignorar per saltar aquest arxiu
+S'ha produÃ¯t un error en obrir el fitxer en mode d'escriptura: \r\n\t"$0"\r\nFeu clic a Abandona per a aturar la instalÂ·laciÃ³,\r\nReintenta per a tornar-ho a provar, o\r\Ignora per a ometre aquest fitxer.
 # ^FileError_NoIgnore
-Error obrint arxiu per escriptura: \r\n\t"$0"\r\nPremi reintentar per reintentar escriure l'arxiu, o\r\cancel·lar per abortar la instal·lació
+S'ha produÃ¯t un error en obrir el fitxer en mode d'escriptura: \r\n\t"$0"\r\nFeu clic a Reintenta per a tornar-ho a provar, o\r\CancelÂ·la per a aturar la instalÂ·laciÃ³.
 # ^CantWrite
 "No s'ha pogut escriure: "
 # ^CopyFailed
-Ha fallat la còpia
+Ha fallat la cÃ²pia
 # ^CopyTo
-"Copiar a "
+"Copia a "
 # ^Registering
-"Registrant: "
+"S'esta registrant:"
 # ^Unregistering
-"Eliminant registre: "
+"S'estÃ  suprimint el registre: "
 # ^SymbolNotFound
-"No s'ha trobat el símbol: "
+"No s'ha trobat el sÃ­mbol: "
 # ^CouldNotLoad
 "No s'ha pogut carregar: "
 # ^CreateFolder
-"Crear carpeta: "
+"Crea la carpeta: "
 # ^CreateShortcut
-"Crear drecera: "
+"Crea la drecera: "
 # ^CreatedUninstaller
-"Crear desinstal·lador: "
+"S'ha creat el desinstalÂ·lador: "
 # ^Delete
-"Esborrar arxiu: "
+"S'ha suprimit el fitxer: "
 # ^DeleteOnReboot
-"Esborrar al reiniciar: "
+"Suprimeix en reiniciar: "
 # ^ErrorCreatingShortcut
-"Error creant drecera: "
+"S'ha produÃ¯t un error en crear la drecera: "
 # ^ErrorCreating
-Error creant:
+S'ha produÃ¯t un error en crear:
 # ^ErrorDecompressing
-Error descomprimint dades! Instal·lador corrupte?
+S'ha produÃ¯t un error en descomprimir les dades! L'instalÂ·lador estÃ  corrupte?
 # ^ErrorRegistering
-Error registrant DLL
+S'ha produÃ¯t un error en registrar una DLL
 # ^ExecShell
-"Executar comanda: "
+"Executa l'ordre: "
 # ^Exec
-"Executar: "
+"Executa:"
 # ^Extract
-"Extraure: "
+"Extreu: "
 # ^ErrorWriting
-"Extraure: error escrivint a l'arxiu "
+"Extreu: s'ha produÃ¯t un error en escriure el fitxer "
 # ^InvalidOpcode
-Instal·lador corrupte: codi d'operació no vàlid
+L'instalÂ·lador estÃ  corrupte: el codi d'operaciÃ³ no Ã©s vÃ lid
 # ^NoOLE
-"No OLE per: "
+"No hi ha OLE per a: "
 # ^OutputFolder
 "Carpeta de sortida: "
 # ^RemoveFolder
-"Eliminar carpeta: "
+"Suprimeix la carpeta: "
 # ^RenameOnReboot
-"Renombrar al reiniciar: "
+"Reanomena en reiniciar: "
 # ^Rename
-"Renombrar: "
+"Reanomena: "
 # ^Skipped
-"Saltat: "
+"S'ha omÃ¨s: "
 # ^CopyDetails
-Copiar Detalls al Portapapers
+Copia els detalls al porta-retalls
 # ^LogInstall
-Registrar el procés de la instal·lació
+Registra el procÃ©s d'instalÂ·laciÃ³
 # ^Byte
 B
 # ^Kilo
-K
+ K
 # ^Mega
-M
+ M
 # ^Giga
-G
+ G
