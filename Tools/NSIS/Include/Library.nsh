@@ -1,153 +1,24 @@
-/*
+#
+# Library.nsh
+#
+# A system for the installation and uninstallation of dynamic
+# link libraries (DLL) and type libraries (TLB). Using this
+# system you can handle the complete setup with one single
+# line of code:
+#
+#  * File copying
+#  * File copying on reboot
+#  * Version checks
+#  * Registration and unregistration
+#  * Registration and unregistration on reboot
+#  * Shared DLL counting
+#  * Windows File Protection checks
+#
+# For more information, read appendix B in the documentation.
+#
 
-***********************
-Macro - Install Library
-***********************
-
-This macro can be used to install DLL and TLB libraries. It checks for version numbers and Windows file protection,
-registers the files and can update files on reboot.
-
-To ask the user for a reboot if required, use the Modern UI with a Finish page or use IfRebootFlag and make your
-own page or message box.
-
-Usage:
-
-!insertmacro InstallLib libtype shared install localfile destfile tempbasedir
-
-Parameters:
-
-libtype			The type of the library
-
-				DLL				Dynamic link library (DLL)
-				REGDLL			DLL that has to be registered
-				TLB 			Type library or DLL that contains a type LIBRARY
-				REGDLLTLB		DLL that has to be registered and contains a type library
-
-shared			Specify whether the library is shared with other applications
-
-				NOTSHARED		The library is not shared
-				$VARNAME		Variable that is empty when the application is installed for the first time,
-								which is when the shared library count will be increased.
-
-install			Specify the installation method
-
-				REBOOT_PROTECTED		* Upgrade the library on reboot when in use (required for system files).
-										* Upgrade the library if the file is not protected by Windows File Protection.
-
-				NOREBOOT_PROTECTED		* Warns the user when the library is in use. The user will have to close
-										  applications using the library.
-										* Upgrade the library if the file is not protected by Windows File Protection.
-
-				REBOOT_NOTPROTECTED		* Upgrade the library on reboot when in use (required for system files).
-										* Upgrade the library without checking for Windows File Protection.
-
-				NOREBOOT_NOTPROTECTED	* Warns the user when the library is in use. The user will have to close
-										  applications using the library.
-										* Upgrade the library without checking for Windows File Protection.
-
-localfile		Location of the library on the compiler system
-
-destfile		Location to store the library on the user's system
-
-tempbasedir		Directory on the user's system to store a temporary file when the system has
-				to be rebooted.
-
-				For Windows 9x/ME support, this directory should be on the same volume as the
-				destination file (destfile).
-				The Windows temp directory could be located on any volume, so you cannot use
-				this directory.
-
-Options:
-
-LIBRARY_SHELL_EXTENSION
-
-		Define this before inserting InstallLib macro to call SHChangeNotify with SHCNE_ASSOCCHANGED after registration. Use this to refresh the shell when installing a shell extension or when changing file associations.
-
-LIBRARY_COM
-
-		Define this before inserting InstallLib macro to call CoFreeUnusedLibraries after registration. Use this for unloading all unnecessary libraries from memory when installing COM libraries.
-
-Notes:
-
-* If you want to support Windows 9x/ME, you can only use short filenames (8.3).
-
-* You can only compile scripts using this macro on Windows systems.
-
-------------------------
-
-Example:
-
-Var ALREADY_INSTALLED
-;Add code here that sets $ALREADY_INSTALLED to a non-zero value if the application is
-;already installed.
-
-!insertmacro InstallLib REGDLL $ALREADY_INSTALLED REBOOT_NOTPROTECTED dllname.dll $SYSDIR\dllname.dll $SYSDIR
-
-
-*************************
-Macro - Uninstall Library
-*************************
-
-This macro can be used to uninstall DLL and TLB libraries. It unregisters files and can remove them on reboot.
-
-Usage:
-
-!insertmacro UnInstallLib libtype shared uninstall file
-
-Parameters:
-
-libtype			The type of the library
-
-				DLL				Dynamic link library (DLL)
-				REGDLL			DLL that has to be registered
-				TLB				Type library or DLL that contains a type LIBRARY
-				REGTLB			DLL that has to be registered and contains a type library
-
-shared			Specify whether the library is shared with other applications
-
-				NOTSHARED		The library is not shared
-				SHARE			The library is shared and should be removed if the shared library count
-								indicates that the file is not in use anymore.
-
-uninstall		Specify the uninstallation method
-
-				NOREMOVE				The library should not be removed.
-										You should use this option for common or important system files such as the
-										Visual Basic/C++/MFC runtimes.
-
-				REBOOT_PROTECTED		* Remove the library on reboot when in use (required for system files).
-										* Remove the library if the file is not protected by Windows File Protection.
-
-				NOREBOOT_PROTECTED		* Warns the user when the library is in use. The user will have to close
-										  applications using the library.
-										* Remove the library if the file is not protected by Windows File Protection.
-
-				REBOOT_NOTPROTECTED		* Remove the library on reboot when in use (required for system files).
-										* Remove the library without checking for Windows File Protection.
-
-				NOREBOOT_NOTPROTECTED	* Warns the user when the library is in use. The user will have to close
-										  applications using the library.
-										* Remove the library without checking for Windows File Protection.
-
-file			Location of the library
-
-Options:
-
-LIBRARY_SHELL_EXTENSION
-
-		Define this before inserting UninstallLib macro to call SHChangeNotify with SHCNE_ASSOCCHANGED after unregistration. Use this to refresh the shell when uninstalling a shell extension or when changing file associations.
-
-LIBRARY_COM
-
-		Define this before inserting UninstallLib macro to call CoFreeUnusedLibraries after unregistration. Use this for unloading all unnecessary libraries from memory when uninstalling COM libraries.
-
-------------------------
-
-Example:
-
-!insertmacro UnInstallLib REGDLL SHARED REBOOT_NOTPROTECTED $SYSDIR\dllname.dll
-
-*/
+!verbose push
+!verbose 3
 
 !ifndef LIB_INCLUDED
 
@@ -160,6 +31,149 @@ Example:
   !define SHCNF_IDLIST 0x0000
 !endif
 
+!define REGTOOL_VERSION v3
+!define REGTOOL_KEY NSIS.Library.RegTool.${REGTOOL_VERSION}
+
+!include LogicLib.nsh
+!include x64.nsh
+
+### GetParent macro, don't pass $1 or $2 as INTPUT or OUTPUT
+!macro __InstallLib_Helper_GetParent INPUT OUTPUT
+
+  # Copied from FileFunc.nsh
+
+  StrCpy ${OUTPUT} ${INPUT}
+
+  Push $1
+  Push $2
+
+  StrCpy $2 ${OUTPUT} 1 -1
+  StrCmp $2 '\' 0 +3
+  StrCpy ${OUTPUT} ${OUTPUT} -1
+  goto -3
+
+  StrCpy $1 0
+  IntOp $1 $1 - 1
+  StrCpy $2 ${OUTPUT} 1 $1
+  StrCmp $2 '\' +2
+  StrCmp $2 '' 0 -3
+  StrCpy ${OUTPUT} ${OUTPUT} $1
+
+  Pop $2
+  Pop $1
+
+!macroend
+
+### Initialize session id (GUID)
+!macro __InstallLib_Helper_InitSession
+
+  !ifndef __InstallLib_SessionGUID_Defined
+
+    !define __InstallLib_SessionGUID_Defined
+
+    Var /GLOBAL __INSTALLLLIB_SESSIONGUID
+
+  !endif
+
+  !define __InstallLib_Helper_InitSession_Label "Library_${__FILE__}${__LINE__}"
+
+  StrCmp $__INSTALLLLIB_SESSIONGUID '' 0 "${__InstallLib_Helper_InitSession_Label}"
+
+    System::Call 'ole32::CoCreateGuid(g .s)'
+    Pop $__INSTALLLLIB_SESSIONGUID
+
+  "${__InstallLib_Helper_InitSession_Label}:"
+
+  !undef __InstallLib_Helper_InitSession_Label
+
+!macroend
+
+### Add a RegTool entry to register after reboot
+!macro __InstallLib_Helper_AddRegToolEntry mode filename tempdir
+
+  Push $R0
+  Push $R1
+  Push $R2
+  Push $R3
+
+  ;------------------------
+  ;Copy the parameters
+
+  Push "${filename}"
+  Push "${tempdir}"
+
+  Pop $R2 ; temporary directory
+  Pop $R1 ; file name to register
+
+  ;------------------------
+  ;Initialize session id
+
+  !insertmacro __InstallLib_Helper_InitSession
+
+  ;------------------------
+  ;Advance counter
+
+  StrCpy $R0 0
+  ReadRegDWORD $R0 HKLM "Software\${REGTOOL_KEY}\$__INSTALLLLIB_SESSIONGUID" "count"
+  IntOp $R0 $R0 + 1
+  WriteRegDWORD HKLM "Software\${REGTOOL_KEY}\$__INSTALLLLIB_SESSIONGUID" "count" "$R0"
+
+  ;------------------------
+  ;Setup RegTool
+
+  !if ! /FileExists "${NSISDIR}\Bin\RegTool-${NSIS_CPU}.bin"
+    !error "Missing RegTool for ${NSIS_CPU}!"
+  !endif
+
+  ReadRegStr $R3 HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" "${REGTOOL_KEY}"
+  StrCpy $R3 $R3 -4 1
+  IfFileExists $R3 +3
+
+    File /oname=$R2\${REGTOOL_KEY}.$__INSTALLLLIB_SESSIONGUID.exe "${NSISDIR}\Bin\RegTool-${NSIS_CPU}.bin"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" \
+      "${REGTOOL_KEY}" '"$R2\${REGTOOL_KEY}.$__INSTALLLLIB_SESSIONGUID.exe" /S'
+
+  ;------------------------
+  ;Add RegTool entry
+
+  WriteRegStr HKLM "Software\${REGTOOL_KEY}\$__INSTALLLLIB_SESSIONGUID" "$R0.file" "$R1"
+  WriteRegStr HKLM "Software\${REGTOOL_KEY}\$__INSTALLLLIB_SESSIONGUID" "$R0.mode" "${mode}"
+
+  Pop $R3
+  Pop $R2
+  Pop $R1
+  Pop $R0
+
+!macroend
+
+!macro __InstallLib_Helper_CmpPackedVer64 oldhi oldlo newhi newlo jeq jle jgt
+
+  IntCmpU ${oldhi} ${newhi} "0"      "${jle}" "${jgt}"
+  IntCmpU ${oldlo} ${newlo} "${jeq}" "${jle}" "${jgt}"
+
+!macroend
+
+### Get library version
+!macro __InstallLib_Helper_GetVersion TYPE FILE
+
+  !if "${TYPE}" == "D"
+   !getdllversion /NoErrors /Packed "${FILE}" LIBRARY_VERSION_
+  !else if "${TYPE}" == "T"
+    !gettlbversion /NoErrors /Packed "${FILE}" LIBRARY_VERSION_
+  !endif
+
+  ; Emulate the old LibraryLocal defines
+  !ifndef LIBRARY_VERSION_HIGH
+    !define LIBRARY_VERSION_FILENOTFOUND
+  !else if "${LIBRARY_VERSION_HIGH}" == ""
+    !define LIBRARY_VERSION_NONE
+    !undef LIBRARY_VERSION_HIGH
+    !undef LIBRARY_VERSION_LOW
+  !endif
+
+!macroend
+
+### Install library
 !macro InstallLib libtype shared install localfile destfile tempbasedir
 
   !verbose push
@@ -175,7 +189,7 @@ Example:
   ;------------------------
   ;Define
 
-  !define INSTALLLIB_UNIQUE ${__LINE__}
+  !define INSTALLLIB_UNIQUE "${__FILE__}${__LINE__}"
 
   !define INSTALLLIB_LIBTYPE_${libtype}
   !define INSTALLLIB_LIBTYPE_SET INSTALLLIB_LIBTYPE_${libtype}
@@ -188,13 +202,22 @@ Example:
   ;Validate
 
   !ifndef INSTALLLIB_LIBTYPE_DLL & INSTALLLIB_LIBTYPE_REGDLL & INSTALLLIB_LIBTYPE_TLB & \
-    INSTALLLIB_LIBTYPE_REGDLLTLB
+    INSTALLLIB_LIBTYPE_REGDLLTLB & INSTALLLIB_LIBTYPE_REGEXE
     !error "InstallLib: Incorrect setting for parameter: libtype"
   !endif
 
   !ifndef INSTALLLIB_INSTALL_REBOOT_PROTECTED & INSTALLLIB_INSTALL_REBOOT_NOTPROTECTED & \
     INSTALLLIB_INSTALL_NOREBOOT_PROTECTED & INSTALLLIB_INSTALL_NOREBOOT_NOTPROTECTED
     !error "InstallLib: Incorrect setting for parameter: install"
+  !endif
+
+  ;------------------------
+  ;x64 settings
+
+  !ifdef LIBRARY_X64
+
+    ${DisableX64FSRedirection}
+
   !endif
 
   ;------------------------
@@ -209,13 +232,26 @@ Example:
 
   !ifndef INSTALLLIB_SHARED_NOTSHARED
 
-    StrCmp ${shared} "" 0 installlib.noshareddllincrease_${INSTALLLIB_UNIQUE}
+    StrCmp ${shared} "" 0 "installlib.noshareddllincrease_${INSTALLLIB_UNIQUE}"
+
+      !ifdef LIBRARY_X64
+
+        SetRegView 64
+
+      !endif
 
       ReadRegDword $R0 HKLM Software\Microsoft\Windows\CurrentVersion\SharedDLLs $R4
+      ClearErrors
       IntOp $R0 $R0 + 1
       WriteRegDWORD HKLM Software\Microsoft\Windows\CurrentVersion\SharedDLLs $R4 $R0
 
-    installlib.noshareddllincrease_${INSTALLLIB_UNIQUE}:
+      !ifdef LIBRARY_X64
+
+        SetRegView lastused
+
+      !endif
+
+    "installlib.noshareddllincrease_${INSTALLLIB_UNIQUE}:"
 
   !endif
 
@@ -228,124 +264,136 @@ Example:
 
     System::Call "sfc::SfcIsFileProtected(i 0, w R4) i.R0"
 
-      StrCmp $R0 "error" installlib.notprotected_${INSTALLLIB_UNIQUE}
-      StrCmp $R0 "0" installlib.notprotected_${INSTALLLIB_UNIQUE}
+      StrCmp $R0 "error" "installlib.notprotected_${INSTALLLIB_UNIQUE}"
+      StrCmp $R0 "0" "installlib.notprotected_${INSTALLLIB_UNIQUE}"
 
-    Goto installlib.done_${INSTALLLIB_UNIQUE}
+    Goto "installlib.done_${INSTALLLIB_UNIQUE}"
 
-    installlib.notprotected_${INSTALLLIB_UNIQUE}:
+    "installlib.notprotected_${INSTALLLIB_UNIQUE}:"
 
   !endif
 
   ;------------------------
   ;Check file
 
-  IfFileExists $R4 0 installlib.copy_${INSTALLLIB_UNIQUE}
+  IfFileExists $R4 0 "installlib.copy_${INSTALLLIB_UNIQUE}"
 
   ;------------------------
   ;Get version information
 
-  !execute '"${NSISDIR}\Contrib\Library\LibraryLocal\LibraryLocal.exe" D ${LOCALFILE}'
-  !include "${NSISDIR}\Contrib\Library\LibraryLocal\LibraryLocal.nsh"
+  !ifndef LIBRARY_IGNORE_VERSION
 
-  !ifdef LIBRARY_VERSION_FILENOTFOUND
-    !error "InstallLib: The library ${LOCALFILE} could not be found."
-  !endif
+    !insertmacro __InstallLib_Helper_GetVersion D "${LOCALFILE}"
 
-  !ifndef LIBRARY_VERSION_NONE
-
-    !define LIBRARY_DEFINE_UPGRADE_LABEL
-    !define LIBRARY_DEFINE_REGISTER_LABEL
-
-    StrCpy $R0 ${LIBRARY_VERSION_HIGH}
-    StrCpy $R1 ${LIBRARY_VERSION_LOW}
-
-    GetDLLVersion $R4 $R2 $R3
-
-    !undef LIBRARY_VERSION_HIGH
-    !undef LIBRARY_VERSION_LOW
-
-    !ifndef INSTALLLIB_LIBTYPE_TLB & INSTALLLIB_LIBTYPE_REGDLLTLB
-
-      IntCmpU $R0 $R2 0 installlib.register_${INSTALLLIB_UNIQUE} installlib.upgrade_${INSTALLLIB_UNIQUE}
-      IntCmpU $R1 $R3 installlib.register_${INSTALLLIB_UNIQUE} installlib.register_${INSTALLLIB_UNIQUE} \
-        installlib.upgrade_${INSTALLLIB_UNIQUE}
-
-    !else
-
-      !execute '"${NSISDIR}\Contrib\LIBRARY\LIBRARYLocal\LibraryLocal.exe" T ${LOCALFILE}'
-      !include "${NSISDIR}\Contrib\LIBRARY\LIBRARYLocal\LibraryLocal.nsh"
-
-      !ifdef LIBRARY_VERSION_FILENOTFOUND
-        !error "InstallLib: The library ${LOCALFILE} could not be found."
-      !endif
-
-      !ifndef LIBRARY_VERSION_NONE
-
-        IntCmpU $R0 $R2 0 installlib.register_${INSTALLLIB_UNIQUE} installlib.upgrade_${INSTALLLIB_UNIQUE}
-        IntCmpU $R1 $R3 0 installlib.register_${INSTALLLIB_UNIQUE} \
-          installlib.upgrade_${INSTALLLIB_UNIQUE}
-
-      !else
-
-        IntCmpU $R0 $R2 0 installlib.register_${INSTALLLIB_UNIQUE} installlib.upgrade_${INSTALLLIB_UNIQUE}
-        IntCmpU $R1 $R3 installlib.register_${INSTALLLIB_UNIQUE} installlib.register_${INSTALLLIB_UNIQUE} \
-          installlib.upgrade_${INSTALLLIB_UNIQUE}
-
-      !endif
-
+    !ifdef LIBRARY_VERSION_FILENOTFOUND
+      !error "InstallLib: The library ${LOCALFILE} could not be found."
     !endif
-
-  !else
-
-    !undef LIBRARY_VERSION_NONE
-
-    !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
-
-      !execute '"${NSISDIR}\Contrib\LIBRARY\LIBRARYLocal\LibraryLocal.exe" T ${LOCALFILE}'
-      !include "${NSISDIR}\Contrib\LIBRARY\LIBRARYLocal\LibraryLocal.nsh"
-
-    !endif
-
-  !endif
-
-  !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
 
     !ifndef LIBRARY_VERSION_NONE
 
-      !ifndef LIBRARY_DEFINE_UPGRADE_LABEL
-
-        !define LIBRARY_DEFINE_UPGRADE_LABEL
-
-      !endif
-
-      !ifndef LIBRARY_DEFINE_REGISTER_LABEL
-
-        !define LIBRARY_DEFINE_REGISTER_LABEL
-
-      !endif
+      !define LIBRARY_DEFINE_UPGRADE_LABEL
+      !define LIBRARY_DEFINE_REGISTER_LABEL
 
       StrCpy $R0 ${LIBRARY_VERSION_HIGH}
       StrCpy $R1 ${LIBRARY_VERSION_LOW}
 
-      TypeLib::GetLibVersion $R4
-      Pop $R2
-      Pop $R3
-
-      IntCmpU $R0 $R2 0 installlib.register_${INSTALLLIB_UNIQUE} installlib.upgrade_${INSTALLLIB_UNIQUE}
-      IntCmpU $R1 $R3 installlib.register_${INSTALLLIB_UNIQUE} installlib.register_${INSTALLLIB_UNIQUE} \
-        installlib.upgrade_${INSTALLLIB_UNIQUE}
+      GetDLLVersion $R4 $R2 $R3
 
       !undef LIBRARY_VERSION_HIGH
       !undef LIBRARY_VERSION_LOW
+
+      !ifndef INSTALLLIB_LIBTYPE_TLB & INSTALLLIB_LIBTYPE_REGDLLTLB
+
+        !ifdef LIBRARY_INSTALL_EQUAL_VERSION
+          !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.upgrade_${INSTALLLIB_UNIQUE}" \
+            "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+        !else
+          !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.register_${INSTALLLIB_UNIQUE}" \
+            "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+        !endif
+
+      !else
+
+        !insertmacro __InstallLib_Helper_GetVersion T "${LOCALFILE}"
+
+        !ifdef LIBRARY_VERSION_FILENOTFOUND
+          !error "InstallLib: The library ${LOCALFILE} could not be found."
+        !endif
+
+        !ifndef LIBRARY_VERSION_NONE
+
+          !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 0 \
+            "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+
+        !else
+
+          !ifdef LIBRARY_INSTALL_EQUAL_VERSION
+            !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.upgrade_${INSTALLLIB_UNIQUE}" \
+              "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+          !else
+            !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.register_${INSTALLLIB_UNIQUE}" \
+              "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+          !endif
+
+        !endif
+
+      !endif
 
     !else
 
       !undef LIBRARY_VERSION_NONE
 
+      !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+
+        !insertmacro __InstallLib_Helper_GetVersion T "${LOCALFILE}"
+
+      !endif
+
     !endif
 
-  !endif
+    !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+
+      !ifndef LIBRARY_VERSION_NONE
+
+        !ifndef LIBRARY_DEFINE_UPGRADE_LABEL
+
+          !define LIBRARY_DEFINE_UPGRADE_LABEL
+
+        !endif
+
+        !ifndef LIBRARY_DEFINE_REGISTER_LABEL
+
+          !define LIBRARY_DEFINE_REGISTER_LABEL
+
+        !endif
+
+        StrCpy $R0 ${LIBRARY_VERSION_HIGH}
+        StrCpy $R1 ${LIBRARY_VERSION_LOW}
+
+        TypeLib::GetLibVersion $R4
+        Pop $R3
+        Pop $R2
+
+        !ifdef LIBRARY_INSTALL_EQUAL_VERSION
+          !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.upgrade_${INSTALLLIB_UNIQUE}" \
+            "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+        !else
+          !insertmacro __InstallLib_Helper_CmpPackedVer64 $R0 $R1 $R2 $R3 "installlib.register_${INSTALLLIB_UNIQUE}" \
+            "installlib.register_${INSTALLLIB_UNIQUE}" "installlib.upgrade_${INSTALLLIB_UNIQUE}"
+        !endif
+
+        !undef LIBRARY_VERSION_HIGH
+        !undef LIBRARY_VERSION_LOW
+
+      !else
+
+        !undef LIBRARY_VERSION_NONE
+
+      !endif
+
+    !endif
+
+  !endif ;~LIBRARY_IGNORE_VERSION
 
   ;------------------------
   ;Upgrade
@@ -354,7 +402,7 @@ Example:
 
     !undef LIBRARY_DEFINE_UPGRADE_LABEL
 
-    installlib.upgrade_${INSTALLLIB_UNIQUE}:
+    "installlib.upgrade_${INSTALLLIB_UNIQUE}:"
 
   !endif
 
@@ -363,10 +411,10 @@ Example:
 
   !ifdef INSTALLLIB_INSTALL_NOREBOOT_PROTECTED | INSTALLLIB_INSTALL_NOREBOOT_NOTPROTECTED
 
-    installlib.copy_${INSTALLLIB_UNIQUE}:
+    "installlib.copy_${INSTALLLIB_UNIQUE}:"
 
     StrCpy $R0 $R4
-    Call :installlib.file_${INSTALLLIB_UNIQUE}
+    Call ":installlib.file_${INSTALLLIB_UNIQUE}"
 
   !else
 
@@ -385,9 +433,9 @@ Example:
     ClearErrors
 
     StrCpy $R0 $R4
-    Call :installlib.file_${INSTALLLIB_UNIQUE}
+    Call ":installlib.file_${INSTALLLIB_UNIQUE}"
 
-    IfErrors 0 installlib.register_${INSTALLLIB_UNIQUE}
+    IfErrors 0 "installlib.register_${INSTALLLIB_UNIQUE}"
 
     SetOverwrite lastused
 
@@ -395,48 +443,19 @@ Example:
     ;Copy on reboot
 
     GetTempFileName $R0 $R5
-    Call :installlib.file_${INSTALLLIB_UNIQUE}
+    Call ":installlib.file_${INSTALLLIB_UNIQUE}"
     Rename /REBOOTOK $R0 $R4
 
     ;------------------------
     ;Register on reboot
 
-    !ifdef INSTALLLIB_LIBTYPE_REGDLL | INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+    Call ":installlib.regonreboot_${INSTALLLIB_UNIQUE}"
 
-      ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" "NSIS.Library.RegTool"
-      IfFileExists $R0 installlib.rebootreg_${INSTALLLIB_UNIQUE}
+    Goto "installlib.done_${INSTALLLIB_UNIQUE}"
 
-        File /oname=$R5\NSIS.Library.RegTool.exe "${NSISDIR}\Contrib\Library\RegTool\RegTool.bin"
-        WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" \
-          "NSIS.Library.RegTool" '"$R5\NSIS.Library.RegTool.exe"'
-
-      installlib.rebootreg_${INSTALLLIB_UNIQUE}:
-
-    !endif
-
-    !ifdef INSTALLLIB_LIBTYPE_REGDLL
-
-      WriteRegStr HKLM "Software\NSIS.Library.RegTool" "$R4" 'D'
-
-    !endif
-
-    !ifdef INSTALLLIB_LIBTYPE_TLB
-
-      WriteRegStr HKLM "Software\NSIS.Library.RegTool" "$R4" 'T'
-
-    !endif
-
-    !ifdef INSTALLLIB_LIBTYPE_REGDLLTLB
-
-      WriteRegStr HKLM "Software\NSIS.Library.RegTool" "$R4" 'DT'
-
-    !endif
-
-    Goto installlib.done_${INSTALLLIB_UNIQUE}
-
-    installlib.copy_${INSTALLLIB_UNIQUE}:
+    "installlib.copy_${INSTALLLIB_UNIQUE}:"
       StrCpy $R0 $R4
-      Call :installlib.file_${INSTALLLIB_UNIQUE}
+      Call ":installlib.file_${INSTALLLIB_UNIQUE}"
 
   !endif
 
@@ -447,19 +466,55 @@ Example:
 
     !undef LIBRARY_DEFINE_REGISTER_LABEL
 
-    installlib.register_${INSTALLLIB_UNIQUE}:
+    "installlib.register_${INSTALLLIB_UNIQUE}:"
 
   !endif
 
-  !ifdef INSTALLLIB_LIBTYPE_REGDLL | INSTALLLIB_LIBTYPE_REGDLLTLB
+  !ifdef INSTALLLIB_LIBTYPE_REGDLL | INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB | INSTALLLIB_LIBTYPE_REGEXE
 
-    RegDLL $R4
+    !ifdef INSTALLLIB_INSTALL_REBOOT_PROTECTED | INSTALLLIB_INSTALL_REBOOT_NOTPROTECTED
 
-  !endif
+      IfRebootFlag 0 "installlib.regnoreboot_${INSTALLLIB_UNIQUE}"
 
-  !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+        Call ":installlib.regonreboot_${INSTALLLIB_UNIQUE}"
 
-    TypeLib::Register $R4
+        Goto "installlib.registerfinish_${INSTALLLIB_UNIQUE}"
+
+      "installlib.regnoreboot_${INSTALLLIB_UNIQUE}:"
+
+    !endif
+
+    !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+
+      TypeLib::Register $R4
+
+    !endif
+
+    !ifdef INSTALLLIB_LIBTYPE_REGDLL | INSTALLLIB_LIBTYPE_REGDLLTLB
+
+      !ifndef LIBRARY_X64
+
+        RegDll $R4
+
+      !else
+
+        ExecWait '"$SYSDIR\regsvr32.exe" /s "$R4"'
+
+      !endif
+
+    !endif
+
+    !ifdef INSTALLLIB_LIBTYPE_REGEXE
+
+      ExecWait '"$R4" /regserver'
+
+    !endif
+
+    !ifdef INSTALLLIB_INSTALL_REBOOT_PROTECTED | INSTALLLIB_INSTALL_REBOOT_NOTPROTECTED
+
+      "installlib.registerfinish_${INSTALLLIB_UNIQUE}:"
+
+    !endif
 
   !endif
 
@@ -482,7 +537,7 @@ Example:
 
     !undef LIBRARY_DEFINE_DONE_LABEL
 
-    installlib.done_${INSTALLLIB_UNIQUE}:
+  "installlib.done_${INSTALLLIB_UNIQUE}:"
 
   !endif
 
@@ -496,7 +551,7 @@ Example:
   ;------------------------
   ;End
 
-  Goto installlib.end_${INSTALLLIB_UNIQUE}
+  Goto "installlib.end_${INSTALLLIB_UNIQUE}"
 
   ;------------------------
   ;Extract
@@ -505,25 +560,55 @@ Example:
 
     SetOverwrite try
 
-    installlib.file_${INSTALLLIB_UNIQUE}:
-      File /oname=$R0 "${LOCALFILE}"
-      Return
-
-    installlib.end_${INSTALLLIB_UNIQUE}:
-
-    SetOverwrite lastused
-
   !else
 
     SetOverwrite on
 
-    installlib.file_${INSTALLLIB_UNIQUE}:
-      File /oname=$R0 "${LOCALFILE}"
+  !endif
+
+  "installlib.file_${INSTALLLIB_UNIQUE}:"
+    SetFileAttributes $R0 FILE_ATTRIBUTE_NORMAL
+    ClearErrors
+    File /oname=$R0 "${LOCALFILE}"
+    Return
+
+  SetOverwrite lastused
+
+  ;------------------------
+  ;Register on reboot
+
+  !ifdef INSTALLLIB_INSTALL_REBOOT_PROTECTED | INSTALLLIB_INSTALL_REBOOT_NOTPROTECTED
+
+    "installlib.regonreboot_${INSTALLLIB_UNIQUE}:"
+
+      !ifdef INSTALLLIB_LIBTYPE_REGDLL | INSTALLLIB_LIBTYPE_REGDLLTLB
+        !ifndef LIBRARY_X64
+          !insertmacro __InstallLib_Helper_AddRegToolEntry 'D' "$R4" "$R5"
+        !else
+          !insertmacro __InstallLib_Helper_AddRegToolEntry 'DX' "$R4" "$R5"
+        !endif
+      !endif
+
+      !ifdef INSTALLLIB_LIBTYPE_TLB | INSTALLLIB_LIBTYPE_REGDLLTLB
+        !insertmacro __InstallLib_Helper_AddRegToolEntry 'T' "$R4" "$R5"
+      !endif
+
+      !ifdef INSTALLLIB_LIBTYPE_REGEXE
+        !insertmacro __InstallLib_Helper_AddRegToolEntry 'E' "$R4" "$R5"
+      !endif
+
       Return
 
-    installlib.end_${INSTALLLIB_UNIQUE}:
+  !endif
 
-    SetOverwrite lastused
+  ;------------------------
+  ;End label
+
+  "installlib.end_${INSTALLLIB_UNIQUE}:"
+
+  !ifdef LIBRARY_X64
+
+    ${EnableX64FSRedirection}
 
   !endif
 
@@ -543,6 +628,7 @@ Example:
 
 !macroend
 
+### Uninstall library
 !macro UnInstallLib libtype shared uninstall file
 
   !verbose push
@@ -554,7 +640,7 @@ Example:
   ;------------------------
   ;Define
 
-  !define UNINSTALLLIB_UNIQUE ${__LINE__}
+  !define UNINSTALLLIB_UNIQUE "${__FILE__}${__LINE__}"
 
   !define UNINSTALLLIB_LIBTYPE_${libtype}
   !define UNINSTALLLIB_LIBTYPE_SET UNINSTALLLIB_LIBTYPE_${libtype}
@@ -567,7 +653,7 @@ Example:
   ;Validate
 
   !ifndef UNINSTALLLIB_LIBTYPE_DLL & UNINSTALLLIB_LIBTYPE_REGDLL & UNINSTALLLIB_LIBTYPE_TLB & \
-    UNINSTALLLIB_LIBTYPE_REGDLLTLB
+    UNINSTALLLIB_LIBTYPE_REGDLLTLB & UNINSTALLLIB_LIBTYPE_REGEXE
     !error "UnInstallLib: Incorrect setting for parameter: libtype"
   !endif
 
@@ -582,6 +668,15 @@ Example:
   !endif
 
   ;------------------------
+  ;x64 settings
+
+  !ifdef LIBRARY_X64
+
+    ${DisableX64FSRedirection}
+
+  !endif
+
+  ;------------------------
   ;Copy the parameters used on run-time to a variable
   ;This allows the usage of variables as parameter
 
@@ -592,24 +687,45 @@ Example:
 
   !ifdef UNINSTALLLIB_SHARED_SHARED
 
+    !define UNINSTALLLIB_DONE_LABEL
+
+    !ifdef LIBRARY_X64
+
+      SetRegView 64
+
+    !endif
+
     ReadRegDword $R0 HKLM Software\Microsoft\Windows\CurrentVersion\SharedDLLs $R1
-    StrCmp $R0 "" uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}
+    StrCmp $R0 "" "uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}"
 
     IntOp $R0 $R0 - 1
-    IntCmp $R0 0 uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE} \
-      uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE} uninstalllib.shareddllinuse_${UNINSTALLLIB_UNIQUE}
+    IntCmp $R0 0 "uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE}" \
+      "uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE}" "uninstalllib.shareddllinuse_${UNINSTALLLIB_UNIQUE}"
 
-    uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE}:
+    "uninstalllib.shareddllremove_${UNINSTALLLIB_UNIQUE}:"
       DeleteRegValue HKLM Software\Microsoft\Windows\CurrentVersion\SharedDLLs $R1
       !ifndef UNINSTALLLIB_SHARED_SHAREDNOREMOVE
-        Goto uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}
+        Goto "uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}"
       !endif
 
-    uninstalllib.shareddllinuse_${UNINSTALLLIB_UNIQUE}:
+    "uninstalllib.shareddllinuse_${UNINSTALLLIB_UNIQUE}:"
       WriteRegDWORD HKLM Software\Microsoft\Windows\CurrentVersion\SharedDLLs $R1 $R0
-      Goto uninstalllib.done_${UNINSTALLLIB_UNIQUE}
 
-  uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}:
+        !ifdef LIBRARY_X64
+
+          SetRegView lastused
+
+        !endif
+
+      Goto "uninstalllib.done_${UNINSTALLLIB_UNIQUE}"
+
+    "uninstalllib.shareddlldone_${UNINSTALLLIB_UNIQUE}:"
+
+    !ifdef LIBRARY_X64
+
+      SetRegView lastused
+
+    !endif
 
   !endif
 
@@ -623,14 +739,20 @@ Example:
 
     !ifdef UNINSTALLLIB_UNINSTALL_REBOOT_PROTECTED | UNINSTALLLIB_UNINSTALL_NOREBOOT_PROTECTED
 
+      !ifndef UNINSTALLLIB_DONE_LABEL
+
+        !define UNINSTALLLIB_DONE_LABEL
+
+      !endif
+
       System::Call "sfc::SfcIsFileProtected(i 0, w $R1) i.R0"
 
-        StrCmp $R0 "error" uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}
-        StrCmp $R0 "0" uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}
+        StrCmp $R0 "error" "uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}"
+        StrCmp $R0 "0" "uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}"
 
-      Goto uninstalllib.done_${UNINSTALLLIB_UNIQUE}
+      Goto "uninstalllib.done_${UNINSTALLLIB_UNIQUE}"
 
-      uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}:
+      "uninstalllib.notprotected_${UNINSTALLLIB_UNIQUE}:"
 
     !endif
 
@@ -639,7 +761,21 @@ Example:
 
     !ifdef UNINSTALLLIB_LIBTYPE_REGDLL | UNINSTALLLIB_LIBTYPE_REGDLLTLB
 
-      UnRegDLL $R1
+      !ifndef LIBRARY_X64
+
+        UnRegDLL $R1
+
+      !else
+
+        ExecWait '"$SYSDIR\regsvr32.exe" /s /u "$R1"'
+
+      !endif
+
+    !endif
+
+    !ifdef UNINSTALLLIB_LIBTYPE_REGEXE
+
+      ExecWait '"$R1" /unregserver'
 
     !endif
 
@@ -664,13 +800,45 @@ Example:
     ;------------------------
     ;Delete
 
+    Delete $R1
+
     !ifdef UNINSTALLLIB_UNINSTALL_REBOOT_PROTECTED | UNINSTALLLIB_UNINSTALL_REBOOT_NOTPROTECTED
 
-      Delete /REBOOTOK $R1
+      ${If} ${FileExists} $R1
+        # File is in use, can't just delete.
+        # Move file to another location before using Delete /REBOOTOK. This way, if
+        #  the user installs a new version of the DLL, it won't be deleted after
+        #  reboot. See bug #1097642 for more information on this.
 
-    !else
+        # Try moving to $TEMP.
+        GetTempFileName $R0
+        Delete $R0
+        Rename $R1 $R0
 
-      Delete $R1
+        ${If} ${FileExists} $R1
+          # Still here, delete temporary file, in case the file was copied
+          #  and not deleted. This happens when moving from network drives,
+          #  for example.
+          Delete $R0
+
+          # Try moving to directory containing the file.
+          !insertmacro __InstallLib_Helper_GetParent $R1 $R0
+          GetTempFileName $R0 $R0
+          Delete $R0
+          Rename $R1 $R0
+
+          ${If} ${FileExists} $R1
+            # Still here, delete temporary file.
+            Delete $R0
+
+            # Give up moving, simply Delete /REBOOTOK the file.
+            StrCpy $R0 $R1
+          ${EndIf}
+        ${EndIf}
+
+        # Delete the moved file.
+        Delete /REBOOTOK $R0
+      ${EndIf}
 
     !endif
 
@@ -679,7 +847,19 @@ Example:
   ;------------------------
   ;Done
 
-  uninstalllib.done_${UNINSTALLLIB_UNIQUE}:
+  !ifdef UNINSTALLLIB_DONE_LABEL
+
+    !undef UNINSTALLLIB_DONE_LABEL
+
+    "uninstalllib.done_${UNINSTALLLIB_UNIQUE}:"
+
+  !endif
+
+  !ifdef LIBRARY_X64
+
+    ${EnableX64FSRedirection}
+
+  !endif
 
   Pop $R1
   Pop $R0
@@ -701,3 +881,5 @@ Example:
 !macroend
 
 !endif
+
+!verbose pop

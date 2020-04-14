@@ -40,6 +40,58 @@ Example:
 
 !define UPGRADEDLL_INCLUDED
 
+!macro __UpgradeDLL_Helper_AddRegToolEntry mode filename tempdir
+
+  Push $R0
+  Push $R1
+  Push $R2
+  Push $R3
+
+  ;------------------------
+  ;Copy the parameters
+
+  Push "${filename}"
+  Push "${tempdir}"
+
+  Pop $R2 ; temporary directory
+  Pop $R1 ; file name to register
+
+  ;------------------------
+  ;Advance counter
+
+  StrCpy $R0 0
+  ReadRegDWORD $R0 HKLM "Software\NSIS.Library.RegTool.v3\UpgradeDLLSession" "count"
+  IntOp $R0 $R0 + 1
+  WriteRegDWORD HKLM "Software\NSIS.Library.RegTool.v3\UpgradeDLLSession" "count" "$R0"
+
+  ;------------------------
+  ;Setup RegTool
+
+  !if ! /FileExists "${NSISDIR}\Bin\RegTool-${NSIS_CPU}.bin"
+    !error "Missing RegTool for ${NSIS_CPU}!"
+  !endif
+
+  ReadRegStr $R3 HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" "NSIS.Library.RegTool.v3"
+  StrCpy $R3 $R3 -4 1
+  IfFileExists $R3 +3
+
+    File /oname=$R2\NSIS.Library.RegTool.v3.$HWNDPARENT.exe "${NSISDIR}\Bin\RegTool-${NSIS_CPU}.bin"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" \
+      "NSIS.Library.RegTool.v3" '"$R2\NSIS.Library.RegTool.v3.$HWNDPARENT.exe" /S'
+
+  ;------------------------
+  ;Add RegTool entry
+
+  WriteRegStr HKLM "Software\NSIS.Library.RegTool.v3\UpgradeDLLSession" "$R0.file" "$R1"
+  WriteRegStr HKLM "Software\NSIS.Library.RegTool.v3\UpgradeDLLSession" "$R0.mode" "${mode}"
+
+  Pop $R3
+  Pop $R2
+  Pop $R1
+  Pop $R0
+
+!macroend
+
 !macro UpgradeDLL LOCALFILE DESTFILE TEMPBASEDIR
 
   Push $R0
@@ -49,13 +101,13 @@ Example:
   Push $R4
   Push $R5
 
-  !define UPGRADEDLL_UNIQUE ${__LINE__}
+  !define UPGRADEDLL_UNIQUE "${__FILE__}${__LINE__}"
 
   SetOverwrite try
 
   ;------------------------
-  ;Copy the parameters used on run-time to a variable
-  ;This allows the usage of variables as paramter
+  ;Copy the macro parameters to a run-time to a variable, 
+  ;this allows the usage of variables as parameter
 
   StrCpy $R4 "${DESTFILE}"
   StrCpy $R5 "${TEMPBASEDIR}"
@@ -63,21 +115,21 @@ Example:
   ;------------------------
   ;Get version information
 
-  IfFileExists $R4 0 upgradedll.copy_${UPGRADEDLL_UNIQUE}
+  IfFileExists $R4 0 "upgradedll.copy_${UPGRADEDLL_UNIQUE}"
 
   ClearErrors
     GetDLLVersionLocal "${LOCALFILE}" $R0 $R1
     GetDLLVersion $R4 $R2 $R3
-  IfErrors upgradedll.upgrade_${UPGRADEDLL_UNIQUE}
+  IfErrors "upgradedll.upgrade_${UPGRADEDLL_UNIQUE}"
 
-  IntCmpU $R0 $R2 0 upgradedll.done_${UPGRADEDLL_UNIQUE} upgradedll.upgrade_${UPGRADEDLL_UNIQUE}
-  IntCmpU $R1 $R3 upgradedll.done_${UPGRADEDLL_UNIQUE} upgradedll.done_${UPGRADEDLL_UNIQUE} \
-    upgradedll.upgrade_${UPGRADEDLL_UNIQUE}
+  IntCmpU $R0 $R2 0 "upgradedll.done_${UPGRADEDLL_UNIQUE}" "upgradedll.upgrade_${UPGRADEDLL_UNIQUE}"
+  IntCmpU $R1 $R3 "upgradedll.done_${UPGRADEDLL_UNIQUE}" "upgradedll.done_${UPGRADEDLL_UNIQUE}" \
+    "upgradedll.upgrade_${UPGRADEDLL_UNIQUE}"
 
   ;------------------------
   ;Upgrade
 
-  upgradedll.upgrade_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.upgrade_${UPGRADEDLL_UNIQUE}:"
     !ifndef UPGRADEDLL_NOREGISTER
       ;Unregister the DLL
       UnRegDLL $R4
@@ -88,38 +140,34 @@ Example:
 
   ClearErrors
     StrCpy $R0 $R4
-    Call :upgradedll.file_${UPGRADEDLL_UNIQUE}
-  IfErrors 0 upgradedll.noreboot_${UPGRADEDLL_UNIQUE}
+    Call ":upgradedll.file_${UPGRADEDLL_UNIQUE}"
+  IfErrors 0 "upgradedll.noreboot_${UPGRADEDLL_UNIQUE}"
 
   ;------------------------
   ;Copy on reboot
 
   GetTempFileName $R0 $R5
-    Call :upgradedll.file_${UPGRADEDLL_UNIQUE}
+    Call ":upgradedll.file_${UPGRADEDLL_UNIQUE}"
   Rename /REBOOTOK $R0 $R4
 
   ;------------------------
   ;Register on reboot
 
-  GetTempFileName $R0 $R5
-  File /oname=$R0 "${NSISDIR}\Contrib\Library\RegTool\RegTool.bin"
-   
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\RunOnce" \
-    "$R4" '"$R0" D $R4'
+  !insertmacro __UpgradeDLL_Helper_AddRegToolEntry 'D' $R4 $R5
 
-  Goto upgradedll.done_${UPGRADEDLL_UNIQUE}
+  Goto "upgradedll.done_${UPGRADEDLL_UNIQUE}"
 
   ;------------------------
   ;DLL does not exist
 
-  upgradedll.copy_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.copy_${UPGRADEDLL_UNIQUE}:"
     StrCpy $R0 $R4
-    Call :upgradedll.file_${UPGRADEDLL_UNIQUE}
+    Call ":upgradedll.file_${UPGRADEDLL_UNIQUE}"
 
   ;------------------------
   ;Register
 
-  upgradedll.noreboot_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.noreboot_${UPGRADEDLL_UNIQUE}:"
     !ifndef UPGRADEDLL_NOREGISTER
       RegDLL $R4
     !endif
@@ -127,7 +175,7 @@ Example:
   ;------------------------
   ;Done
 
-  upgradedll.done_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.done_${UPGRADEDLL_UNIQUE}:"
 
   Pop $R5
   Pop $R4
@@ -139,16 +187,16 @@ Example:
   ;------------------------
   ;End
 
-  Goto upgradedll.end_${UPGRADEDLL_UNIQUE}
+  Goto "upgradedll.end_${UPGRADEDLL_UNIQUE}"
 
   ;------------------------
   ;Extract
 
-  upgradedll.file_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.file_${UPGRADEDLL_UNIQUE}:"
     File /oname=$R0 "${LOCALFILE}"
     Return
 
-  upgradedll.end_${UPGRADEDLL_UNIQUE}:
+  "upgradedll.end_${UPGRADEDLL_UNIQUE}:"
 
   SetOverwrite lastused
   
