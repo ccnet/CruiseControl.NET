@@ -480,10 +480,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private ProcessInfo NewProcessInfo(string args, IIntegrationResult result, ProcessPriorityClass priority, int[] successExitCodes)
         {
             Log.Info(string.Concat("[Git] Calling git ", args));
-            var processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result), priority,
-                                                      successExitCodes);
-            //processInfo.StreamEncoding = Encoding.UTF8;
-            processInfo.StandardInputContent = "";
+            var processInfo = new ProcessInfo(Executable, args,
+                                                BaseWorkingDirectory(result),
+                                                priority,
+                                                successExitCodes)
+            {
+                StreamEncoding = System.Text.Encoding.UTF8,
+                StandardInputContent = string.Empty
+            };
+
             return processInfo;
         }
 
