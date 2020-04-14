@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Service
         {
             get
             {
-                string configFilename = ConfigurationManager.AppSettings["ccnet.config"];
+                string configFilename = Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["ccnet.config"]);
                 return string.IsNullOrEmpty(configFilename) ? DefaultConfigFilePath() : configFilename;
             }
         }
