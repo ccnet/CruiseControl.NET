@@ -55,6 +55,10 @@ The packaged distribution can be found in the "Publish" folder.
 
 This builds and packages the project WebDashboards.
 
+7. ```ps build.ps1 --target=clean```
+
+This cleans the Build, Dist and Publish folders of previous artifacts.
+
 If running powershell scripts are disabled on your machine, you can run powershell with ExecutionPolicy disabled for the CruiseControl.NET build file:
 
 ```powershell -ExecutionPolicy ByPass -File ./build.ps1 -target=build```
@@ -79,6 +83,10 @@ Cleanup -> Init -> Build -> Unit Tests -> code Analysis -> Packaging
 
 This will call only the runUnitTests target in ccnet.build script.
 Cleanup -> Init -> Build -> Unit Tests
+
+7. ```./build.sh --target=clean```
+
+This cleans the Build, Dist and Publish folders of previous artifacts.
 
 
 **_Building CruiseControl.NET installers and documentation is currently unavailable on linux since it requires NSIS and Sandcastle Help Builder.
