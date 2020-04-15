@@ -6,6 +6,9 @@ image: Visual Studio 2019
 init:
   - git config --global core.autocrlf true
 
+install:
+  - cinst -y nsis
+
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#

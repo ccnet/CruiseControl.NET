@@ -63,6 +63,7 @@ Task("default")
   .Does(() =>
 {
   Information("Available targets");
+  Information("  clean          : Removes artifacts created by a previous build");
   Information("  build          : Builds the project by running the clean and build targets from ccnet.build script");
   Information("  build-all      : Builds the project, runs tests and packages artifacts by running the all target from ccnet.build script");
   Information("  run-tests      : Run projects tests by executing the runTests target from ccnet.build script");
@@ -70,12 +71,33 @@ Task("default")
   Information("  web-packages   : Packages the project webdashboards by running build.packages from ccnet.build script");
 });
 
+Task("clean")
+  .Does(()=> {
+    //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
+    using(var process = StartAndReturnProcess(nantExe, 
+                                              new ProcessSettings{ 
+                                                Arguments = " clean -buildfile:ccnet.build -nologo -logfile:nant-clean.log" ,
+                                                RedirectStandardError = false,
+                                                RedirectStandardOutput = false,
+                                                Silent = false
+                                              }))
+    {
+        process.WaitForExit();
+        Information("Nant: build target exit code: {0}", process.GetExitCode());
+
+        if(process.GetExitCode() > 0)
+        {
+          throw new Exception("Cake: build target failed");
+        }
+    }
+  });
+
 Task("build")
   .Does(()=> {
     //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build.log.txt" ,
+                                                Arguments = " clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build.log" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                                 Silent = false
@@ -96,7 +118,7 @@ Task("build-all")
     //Tools\NAnt\NAnt.exe clean build -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-all.log.txt" ,
+                                                Arguments = " all -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-all.log" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                                 Silent = false
@@ -117,7 +139,7 @@ Task("run-tests")
     //Tools\NAnt\NAnt.exe runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -nologo -logfile:nant-build-tests.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-tests.log.txt" ,
+                                                Arguments = " runTests -buildfile:ccnet.build -D:codemetrics.output.type=HtmlFile -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-tests.log" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))
@@ -134,10 +156,16 @@ Task("run-tests")
 
 Task("package")
   .Does(()=>{
+    if (IsRunningOnUnix())
+    {
+        Information("CruiseControl.NET packages cannot be created on Linux");
+        return;
+    }
+
     //Tools\NAnt\NAnt.exe package -buildfile:ccnet.build -D:CCNetLabel=1.5.0.0 -nologo -logfile:nant-build-package.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " package -buildfile:ccnet.build -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-package.log.txt" ,
+                                                Arguments = " package -buildfile:ccnet.build -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-package.log" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))
@@ -154,10 +182,16 @@ Task("package")
 
 Task("web-packages")
   .Does(()=>{
+    if (IsRunningOnUnix())
+    {
+        Information("CruiseControl.NET web packages cannot be created on Linux");
+        return;
+    }
+
     //Tools\NAnt\NAnt.exe build.packages -buildfile:ccnet.build -nologo -logfile:nant-build-web-packages.log.txt %*
     using(var process = StartAndReturnProcess(nantExe, 
                                               new ProcessSettings{ 
-                                                Arguments = " build.packages -buildfile:ccnet.build -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-web-packages.log.txt" ,
+                                                Arguments = " build.packages -buildfile:ccnet.build -D:version=" + assemblySemVer + " -D:fversion=" + assemblySemFileVer + " -D:iversion=\"" + informationalVersion + "\" -nologo -logfile:nant-build-web-packages.log" ,
                                                 RedirectStandardError = false,
                                                 RedirectStandardOutput = false,
                                               }))

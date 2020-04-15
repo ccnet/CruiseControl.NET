@@ -8,15 +8,13 @@
 	<!-- packaging and publishing targets -->
 	<target name="package" depends="clean, build" description="Create and copy the CruiseControl.NET distribution to the publish dictionary">
 
-		<call target="packageSource" cascade="false" />
-
 		<call target="prepackageDistribution" cascade="false" />
 
 		<call target="packageCCTray" cascade="false" if="${platform::is-windows()}" />
 
-    <call target="packageCCTools" cascade="false" if="${platform::is-windows()}" />
+		<call target="packageCCTools" cascade="false" if="${platform::is-windows()}" />
 
-    <call target="compressJavaScript" cascade="false" />
+		<call target="compressJavaScript" cascade="false" />
 		
 		<!-- FIXME: find a better solution as adding so much targets -->
 		<call target="build.packages" cascade="false" />
@@ -24,32 +22,6 @@
 		<call target="packageCCNET" cascade="false" if="${platform::is-windows()}" />
 
 		<call target="packageZipDistribution" cascade="false" />
-	</target>
-
-	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
-		<property name="source.zip.file" value="CruiseControl.NET-${assembly.fileversion}.source.zip" />
-		
-		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
-			<fileset defaultexcludes="true">
-				<include name="*/**" />				
-				<exclude name="nant*.log*" />
-				<exclude name="*.nsi" />
-				<exclude name="${build.dir}/**" />
-				<exclude name="${build.metrics.dir}/**" />
-				<exclude name="${publish.dir}/**" />
-				<exclude name="${dist.dir}/**" />
-				<exclude name="${tools.dir}/ncover*/**" />
-				<exclude name="${path::get-directory-name(ndepend.executable)}/**" />
-				<exclude name="${src.dir}/*/bin/**"/>
-				<exclude name="${src.dir}/*/obj/**"/>
-				<exclude name="${src.dir}/_Resharper*/**"/>
-				<exclude name="${src.dir}/**/*.user"/>
-				<exclude name="${src.dir}/**/*.suo"/>
-				<exclude name="${src.dir}/*.sln.cache"/>
-				<exclude name="${src.dir}/*.sln.proj"/>
-				<exclude name="**/.git/**"/> 
-			</fileset>
-		</zip>
 	</target>
 
 	<target name="prepackageDistribution" depends="clean, build" description="Prepackage the CruiseControl.NET distribution to the dist dictionary">
@@ -169,17 +141,11 @@
 	</target>
 
 	<target name="packageCCTray" depends="prepackageDistribution" description="Create CCTray installer an copy to publish dictionary and WebDashboard distribution">
-		
-		<!-- Copy installer template into project root and replace installer version -->
-		<copy file="${path::combine(path::get-full-path('install'), 'cctray.nsi.template')}" tofile="cctray.nsi" overwrite="true" verbose="${nant.verbosity}">
-			<filterchain>
-				<replacetokens>
-					<token key="VERSION" value="${assembly.fileversion}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<exec program="${nsis.executable}" commandline="cctray.nsi" verbose="${nant.verbosity}" />
+		<exec program="${nsis.executable}" workingdir="${install.dir}" verbose="${nant.verbosity}">
+			<arg value="/DVERSION=${assembly.fileversion}" />
+			<arg value="/V2" />
+			<arg file="${path::combine(install.dir, 'cctray.nsi')}" />
+		</exec>
 		
 		<!-- Copy CCTray setup into WebDashboard distribution -->
 		<mkdir dir="${path::combine(webdashboard.dist.dir, 'cctray')}" unless="${directory::exists(path::combine(webdashboard.dist.dir, 'cctray'))}" verbose="${nant.verbosity}" />
@@ -192,31 +158,19 @@
 
   <!-- Generate the tools distribution -->
   <target name="packageCCTools" depends="prepackageDistribution" description="Create CCCmd installer an copy to publish dictionary">
-
-    <!-- Copy installer template into project root and replace installer version -->
-    <copy file="${path::combine(path::get-full-path('install'), 'cctools.nsi.template')}" tofile="cctools.nsi" overwrite="true" verbose="${nant.verbosity}">
-      <filterchain>
-        <replacetokens>
-          <token key="VERSION" value="${assembly.fileversion}" />
-        </replacetokens>
-      </filterchain>
-    </copy>
-
-    <exec program="${nsis.executable}" commandline="cctools.nsi" verbose="${nant.verbosity}" />
+	<exec program="${nsis.executable}" workingdir="${install.dir}" verbose="${nant.verbosity}">
+		<arg value="/DVERSION=${assembly.fileversion}" />
+		<arg value="/V2" />
+		<arg file="${path::combine(install.dir, 'cctools.nsi')}" />
+	</exec>
   </target>
 
   <target name="packageCCNET" depends="prepackageDistribution" description="Create CruiseControl.NET installer an copy to publish dictionary">
-
-		<!-- Copy installer template into project root and replace installer version -->
-		<copy file="${path::combine(path::get-full-path('install'), 'ccnet.nsi.template')}" tofile="ccnet.nsi" overwrite="true" verbose="${nant.verbosity}">
-			<filterchain>
-				<replacetokens>
-					<token key="VERSION" value="${assembly.fileversion}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<exec program="${nsis.executable}" commandline="ccnet.nsi" verbose="${nant.verbosity}" />
+		<exec program="${nsis.executable}" workingdir="${install.dir}" verbose="${nant.verbosity}">
+			<arg value="/DVERSION=${assembly.fileversion}" />
+			<arg value="/V2" />
+			<arg file="${path::combine(install.dir, 'ccnet.nsi')}" />
+		</exec>
 	</target>
 
 	<target name="compressJavaScript" depends="prepackageDistribution" description="Compresses the JavaScript files of the WebDashboard distribution">

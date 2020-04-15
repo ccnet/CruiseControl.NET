@@ -1,7 +1,7 @@
 @ECHO OFF
 
 ECHO Compiling docGenerator
-Tools\NAnt\NAnt.exe -buildfile:docPrep.build all -nologo -logfile:nant-docs.log.txt %*
+Tools\NAnt\NAnt.exe -buildfile:docPrep.build all -nologo -logfile:nant-docs.log %*
 
 ECHO Create .\docgen folder
 SET "outputfolder=.\docgen"

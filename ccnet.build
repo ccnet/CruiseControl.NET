@@ -20,6 +20,7 @@
     <property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
     <property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
     <property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
+    <property name="install.dir"    		readonly="true"		value="${path::get-full-path('install')}" />
     <property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
     <property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
     <property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
@@ -30,7 +31,7 @@
     <property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
     <property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
     <property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
-    <property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
+    <property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(environment::get-variable('ProgramFiles(x86)'), 'NSIS'), 'makensis.exe')}" />
     <!-- If NUGET_EXE env. variable does not exist, fallback to the one provided by Cake -->
     <property name="nuget.executable"		            		value="${environment::get-variable('NUGET_EXE')}" if="${environment::variable-exists('NUGET_EXE')}" />
     <property name="nuget.executable"		            	    value="${path::combine( path::combine(tools.dir, 'Cake'), 'nuget.exe')}" if="${not environment::variable-exists('NUGET_EXE')}"  />
@@ -88,6 +89,7 @@
         <delete verbose="${nant.verbosity}">
             <fileset basedir="." failonempty="false">
                 <include name="*.nsi"/>
+                <include name="nant-*.log.txt"/>
             </fileset>
         </delete>
     </target>
