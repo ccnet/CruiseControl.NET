@@ -18,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private readonly FileInfo dataSource;
         private bool deleteAfterMerge = true;
         private readonly IFileSystem fileSystem;
+        
+        private IExecutionEnvironment currentExecutionEnvironment;
         #endregion
 
         #region Constructors
@@ -156,6 +158,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Private methods
+
+        /// <summary>
+        /// Gets or sets the current execution environment.
+        /// </summary>
+        /// <value>The current execution environment.</value>
+        public IExecutionEnvironment CurrentExecutionEnvironment
+        {
+            get
+            {
+                if (this.currentExecutionEnvironment == null)
+                {
+                    this.currentExecutionEnvironment = new ExecutionEnvironment();
+                }
+                return this.currentExecutionEnvironment;
+            }
+            set { this.currentExecutionEnvironment = value; }
+        }
+
         #region ReadFileContents()
         /// <summary>
         /// Reads the contents of the file.
@@ -165,24 +185,28 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             try
             {
-                if (this.dataSource.Length > 1048576)
+                // Only run this check in a windows environment as MemoryFailPoint has not been implemented in Mono
+                if (this.CurrentExecutionEnvironment.IsRunningOnWindows)
                 {
-                    // Since the file is over one Mb, check if there is enough free memory to load the data
-                    // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
-                    // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
-                    // GC will clean up if it is needed more than twice)
-                    var fileSizeInMB = Convert.ToInt32(this.dataSource.Length / 524288);
-                    try
+                    if (this.dataSource.Length > 1048576)
                     {
-                        using (new MemoryFailPoint(fileSizeInMB))
+                        // Since the file is over one Mb, check if there is enough free memory to load the data
+                        // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
+                        // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
+                        // GC wiFor street cleaning?ll clean up if it is needed more than twice)
+                        var fileSizeInMB = Convert.ToInt32(this.dataSource.Length / 524288);
+                        try
                         {
+                            using (new MemoryFailPoint(fileSizeInMB))
+                            {
+                            }
                         }
-                    }
-                    catch (InsufficientMemoryException error)
-                    {
-                        // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
-                        // things!
-                        throw new CruiseControlException("Insufficient memory to import file results: " + error.Message, error);
+                        catch (InsufficientMemoryException error)
+                        {
+                            // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
+                            // things!
+                            throw new CruiseControlException("Insufficient memory to import file results: " + error.Message, error);
+                        }
                     }
                 }
 
