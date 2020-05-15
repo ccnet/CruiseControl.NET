@@ -154,11 +154,21 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
         #region DataType
         /// <summary>
-        /// The type of the parameter.
+        /// The data type of the parameter.
         /// </summary>
         public override Type DataType
         {
             get { return typeof(DateTime); }
+        }
+        #endregion
+
+        #region ParameterType
+        /// <summary>
+        /// The type of the parameter.
+        /// </summary>
+        public override string ParameterType
+        {
+            get { return "Date"; }
         }
         #endregion
 

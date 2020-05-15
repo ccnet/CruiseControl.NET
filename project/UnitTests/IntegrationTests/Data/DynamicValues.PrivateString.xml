@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <cruisecontrol xmlns="http://thoughtworks.org/ccnet/1/6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <project name="Test Project">
     <webURL>xxx</webURL>
@@ -17,9 +17,9 @@
       <textParameter name="Username">
         <description>Username</description>
       </textParameter>
-      <textParameter name="Password">
+      <passwordParameter name="Password">
         <description>Password</description>
-      </textParameter>
+      </passwordParameter>
     </parameters>
   </project>
 </cruisecontrol>
