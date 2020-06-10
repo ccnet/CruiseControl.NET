@@ -839,75 +839,75 @@
     <Content Include="Themes\Obsess\Manifest.xml" />
     <Content Include="xsl\MsTestCover2010.xsl" />
     <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
-    <None Include="dashboard.config">
+    <Content Include="dashboard.config">
       <SubType>Designer</SubType>
-    </None>
+    </Content>
     <EmbeddedResource Include="Resources\Languages.es.resx" />
     <EmbeddedResource Include="Resources\Languages.fr.resx">
       <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="templates\ActionException.vm" />
-    <None Include="templates\AddProject.vm" />
-    <None Include="templates\AdministerDashboard.vm">
+    <Content Include="templates\ActionException.vm" />
+    <Content Include="templates\AddProject.vm" />
+    <Content Include="templates\AdministerDashboard.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\AdminLogin.vm" />
-    <None Include="templates\AllBuilds.vm" />
-    <None Include="templates\AuditHistory.vm" />
-    <None Include="templates\BuildLog.vm" />
-    <None Include="templates\BuildRows.vm" />
-    <None Include="templates\BuildSideBar.vm" />
-    <None Include="templates\CategorizedFarmReport.vm" />
-    <None Include="templates\ChangePasswordAction.vm" />
-    <None Include="templates\EditProjectCommandLineBuilder.vm" />
-    <None Include="templates\EditProjectCVS.vm" />
-    <None Include="templates\EditProjectFileSourceControl.vm" />
-    <None Include="templates\EditProjectNantBuilder.vm" />
-    <None Include="templates\EditProjectP4.vm" />
-    <None Include="templates\FarmSideBar.vm" />
-    <None Include="templates\FinalBuildStatus.vm" />
-    <None Include="templates\HtmlReport.vm" />
-    <None Include="templates\LoggedIn.vm" />
-    <None Include="templates\LoggedOut.vm" />
-    <None Include="templates\LoginAction.vm" />
-    <None Include="templates\OhlohStats.vm" />
-    <None Include="templates\PackageList.vm">
+    </Content>
+    <Content Include="templates\AdminLogin.vm" />
+    <Content Include="templates\AllBuilds.vm" />
+    <Content Include="templates\AuditHistory.vm" />
+    <Content Include="templates\BuildLog.vm" />
+    <Content Include="templates\BuildRows.vm" />
+    <Content Include="templates\BuildSideBar.vm" />
+    <Content Include="templates\CategorizedFarmReport.vm" />
+    <Content Include="templates\ChangePasswordAction.vm" />
+    <Content Include="templates\EditProjectCommandLineBuilder.vm" />
+    <Content Include="templates\EditProjectCVS.vm" />
+    <Content Include="templates\EditProjectFileSourceControl.vm" />
+    <Content Include="templates\EditProjectNantBuilder.vm" />
+    <Content Include="templates\EditProjectP4.vm" />
+    <Content Include="templates\FarmSideBar.vm" />
+    <Content Include="templates\FinalBuildStatus.vm" />
+    <Content Include="templates\HtmlReport.vm" />
+    <Content Include="templates\LoggedIn.vm" />
+    <Content Include="templates\LoggedOut.vm" />
+    <Content Include="templates\LoginAction.vm" />
+    <Content Include="templates\OhlohStats.vm" />
+    <Content Include="templates\PackageList.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\ProjectGrid.vm" />
-    <None Include="templates\ProjectParameters.vm">
+    </Content>
+    <Content Include="templates\ProjectGrid.vm" />
+    <Content Include="templates\ProjectParameters.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\ProjectReport.vm" />
-    <None Include="templates\ProjectServerConfiguration.vm">
+    </Content>
+    <Content Include="templates\ProjectReport.vm" />
+    <Content Include="templates\ProjectServerConfiguration.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\ProjectSideBar.vm" />
-    <None Include="templates\ProjectStatusReport.vm" />
-    <None Include="templates\ProjectTimeline.vm" />
-    <None Include="templates\RecentBuilds.vm" />
-    <None Include="templates\SecurityConfiguration.vm">
+    </Content>
+    <Content Include="templates\ProjectSideBar.vm" />
+    <Content Include="templates\ProjectStatusReport.vm" />
+    <Content Include="templates\ProjectTimeline.vm" />
+    <Content Include="templates\RecentBuilds.vm" />
+    <Content Include="templates\SecurityConfiguration.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\ServerInfo.vm" />
-    <None Include="templates\ServerLog.vm">
+    </Content>
+    <Content Include="templates\ServerInfo.vm" />
+    <Content Include="templates\ServerLog.vm">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="templates\ServerQueueStatus.vm" />
-    <None Include="templates\ServerSideBar.vm" />
-    <None Include="templates\SiteTemplate.vm" />
-    <None Include="templates\TopMenu.vm" />
-    <None Include="templates\UserDiagnostics.vm" />
-    <None Include="templates\UserList.vm" />
-    <None Include="templates\UserNameLogin.vm" />
+    </Content>
+    <Content Include="templates\ServerQueueStatus.vm" />
+    <Content Include="templates\ServerSideBar.vm" />
+    <Content Include="templates\SiteTemplate.vm" />
+    <Content Include="templates\TopMenu.vm" />
+    <Content Include="templates\UserDiagnostics.vm" />
+    <Content Include="templates\UserList.vm" />
+    <Content Include="templates\UserNameLogin.vm" />
     <None Include="Themes\liquidBlue\templates\SiteTemplate.vm" />
     <None Include="Themes\liquidBlue\templates\TopMenu.vm" />
     <None Include="Themes\noteWorthy\templates\SiteTemplate.vm" />
     <None Include="Themes\noteWorthy\templates\TopMenu.vm" />
     <None Include="Themes\Obsess\templates\SiteTemplate.vm" />
-    <None Include="Web.config" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Languages.de.resx" />
