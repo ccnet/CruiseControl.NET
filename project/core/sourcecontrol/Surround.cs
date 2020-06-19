@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc {0} -d{1}:{2} {3} -b{4} -p{5} {6} -z{7} -y{8}",
+			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc '{0}' -d{1}:{2} {3} -b'{4}' -p'{5}' {6} -z'{7}' -y'{8}'",
 			                               File,
 			                               from.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
 			                               to.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Log.Info("Getting source from Surround SCM");
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Surround SCM");
 
-			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get * -q -tcheckin -wreplace {0} -d{1} -b{2} -p{3} -z{4} -y{5}",
+			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get * -q -tcheckin -wreplace {0} -d'{1}' -b'{2}' -p'{3}' -z'{4}' -y'{5}'",
 			                               (Recursive == 0) ?string.Empty : "-r",
 			                               WorkingDirectory,
 										   Branch,
