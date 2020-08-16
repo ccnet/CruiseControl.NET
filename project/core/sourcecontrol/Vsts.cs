@@ -180,6 +180,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("force", Required = false)]
         public bool Force { get; set; }
 
+        /// <summary>
+        /// Whether to overwrite or not.
+        /// </summary>
+        /// <default>false</default>
+        [ReflectorProperty("overwrite", Required = false)]
+        public bool Overwrite { get; set; }
+
+        /// <summary>
+        /// Whether to get all or not.
+        /// </summary>
+        [ReflectorProperty("all", Required = false)]
+        public bool All { get; set; }
+
         private string workspaceName;
         /// <summary>
         /// Name of the workspace to create.  This will revert to the DEFAULT_WORKSPACE_NAME if not passed.
@@ -441,6 +454,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 "get",
                 "/recursive",
                 "/noprompt");
+
+            if (All)
+            {
+                buffer.Add("/all");
+            }
+
+            if (Overwrite)
+            {
+                buffer.Add("/overwrite");
+            }
 
             if (Force)
             {
