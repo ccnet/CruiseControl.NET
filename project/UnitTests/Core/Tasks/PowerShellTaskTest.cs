@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 @"SOFTWARE\Microsoft\PowerShell\2\PowerShellEngine",
                 @"ApplicationBase")).Returns(@"C:\Windows\System32\WindowsPowerShell\v1.0").Verifiable();
 
-            Assert.AreEqual(@"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", task.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(@"C:\Windows\System32\WindowsPowerShell\v1.0", "powershell.exe"), task.Executable);
             Assert.AreEqual(@"myScript.ps1", task.Script);
             Assert.AreEqual(PowerShellTask.DefaultScriptsDirectory, task.ConfiguredScriptsDirectory);
             Assert.AreEqual(PowerShellTask.DefaultBuildTimeOut, task.BuildTimeoutSeconds);
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder)).Returns(POWERSHELL1_PATH).Verifiable();
-            Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(POWERSHELL1_PATH, "powershell.exe"), task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder)).Returns(() => null).Verifiable();
-            Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(POWERSHELL1_PATH, "powershell.exe"), task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }  
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.Object, (ProcessExecutor)mockProcessExecutor.Object);
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(PowerShellTask.regkeypowershell2,PowerShellTask.regkeyholder)).Returns(POWERSHELL2_PATH).Verifiable();
-            Assert.AreEqual(POWERSHELL2_PATH + "\\powershell.exe", task.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(POWERSHELL2_PATH, "powershell.exe"), task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }           
@@ -193,14 +193,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockProcessExecutor.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).
                 Callback<ProcessInfo>(processInfo => info = processInfo).Returns(processResult).Verifiable();
 
+            string path = Platform.IsWindows ? @"D:\CruiseControl" : @"/CruiseControl";
+            
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
-            mytask.ConfiguredScriptsDirectory = @"D:\CruiseControl";
+            mytask.ConfiguredScriptsDirectory = path;
 
-            IIntegrationResult result = Integration("myProject", @"D:\CruiseControl", "myArtifactDirectory");
+            IIntegrationResult result = Integration("myProject", path, "myArtifactDirectory");
             mytask.Run(result);
 
-            Assert.AreEqual(@"D:\CruiseControl", info.WorkingDirectory);
+            Assert.AreEqual(path, info.WorkingDirectory);
 
             Assert.AreEqual(IntegrationStatus.Failure, result.Status);
             CustomAssertion.AssertMatches(@"(\.|\n)*is not recognized as a cmdlet", result.TaskOutput);

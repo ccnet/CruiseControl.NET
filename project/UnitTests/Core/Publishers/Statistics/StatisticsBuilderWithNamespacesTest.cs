@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
         public void ShowOutputOfStatisticsInConsole()
         {
             StringBuilder buffer = new StringBuilder();
-            System.IO.StreamReader reader = System.IO.File.OpenText(@"resources\UnitTestResults2.xml");
+            System.IO.StreamReader reader = System.IO.File.OpenText(System.IO.Path.Combine(@"resources", @"UnitTestResults2.xml"));
             var buildlog= reader.ReadToEnd();
             reader.Close();
 

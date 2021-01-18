@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 			Assert.That(modifications.Length, Is.EqualTo(1));
 
 			var mod = modifications[0];
-			Assert.That(mod.FolderName, Is.EqualTo(@"these\are\the\parent\folders\to\this"));
+			Assert.That(mod.FolderName, Is.EqualTo(System.IO.Path.Combine(new string[] {"these", "are", "the", "parent", "folders", "to", "this"})));
 			Assert.That(mod.FileName, Is.EqualTo("file.txt"));
 		}
 

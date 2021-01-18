@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(DEVENV_2010_PATH).Verifiable();
 
-            Assert.AreEqual(DEVENV_2010_PATH + "devenv.com", task2.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(DEVENV_2010_PATH, "devenv.com"), task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2012_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(DEVENV_2008_PATH).Verifiable();
-            Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(DEVENV_2008_PATH, "devenv.com"), task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             task2.Version = "10.0";
 
-            Assert.AreEqual(DEVENV_2010_PATH + "devenv.com", task2.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(DEVENV_2010_PATH, "devenv.com"), task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "9.0";
 
-			Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2008_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             task2.Version = "VS2010";
 
-            Assert.AreEqual(DEVENV_2010_PATH + "devenv.com", task2.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(DEVENV_2010_PATH, "devenv.com"), task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             task2.Version = "VS2008";
 
-            Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
+            Assert.AreEqual(System.IO.Path.Combine(DEVENV_2008_PATH, "devenv.com"), task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -187,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2010_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
 			mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(DEVENV_2005_PATH).Verifiable();
-			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2005_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "8.0";
 
-			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2005_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "VS2005";
 
-			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2005_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -234,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
 			mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(DEVENV_2003_PATH).Verifiable();
-			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2003_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -249,7 +249,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "7.1";
 
-			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2003_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -264,7 +264,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "VS2003";
 
-			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2003_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -283,7 +283,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(() => null).Verifiable();
             mockRegistry2.Setup(registry => registry.GetLocalMachineSubKeyValue(DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY)).Returns(DEVENV_2002_PATH).Verifiable();
 
-			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2002_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
@@ -298,7 +298,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "7.0";
 
-			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2002_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}
@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task2.Version = "VS2002";
 
-			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			Assert.AreEqual(System.IO.Path.Combine(DEVENV_2002_PATH, "devenv.com"), task2.Executable);
 			mockRegistry2.Verify();
 			mockProcessExecutor.Verify();
 		}

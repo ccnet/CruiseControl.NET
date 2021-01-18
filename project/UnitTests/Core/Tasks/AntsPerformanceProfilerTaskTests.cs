@@ -362,19 +362,21 @@
         [Test]
         public void XmlArgsFilesExcludesWorkingDirectoryWhenRooted()
         {
+            string filename = Platform.IsWindows ? @"c:\args.xml" : "/args.xml";
+        
             var appName = "testApp.exe";
             var result = GenerateResultMock();
             var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
                 executablePath,
-                this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) + " /argfile:c:\\args.xml",
+                this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) + " /argfile:" + filename,
                 defaultWorkingDir,
                 600000);
             var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.Create<ILogger>().Object;
             var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
-            task.XmlArgsFile = "c:\\args.xml";
+            task.XmlArgsFile = filename;
 
             Mock.Get(result).SetupProperty(_result => _result.Status);
             result.Status = IntegrationStatus.Unknown;
@@ -450,7 +452,7 @@
             Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
             Mock.Get(result).SetupGet(_result => _result.Label).Returns("1");
             Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ITaskResult>())).Verifiable();
-            Mock.Get(result).Setup(_result => _result.BaseFromArtifactsDirectory("1")).Returns(string.Concat(artefactDir, "\\1"));
+            Mock.Get(result).Setup(_result => _result.BaseFromArtifactsDirectory("1")).Returns(System.IO.Path.Combine(artefactDir, "1"));
             return result;
         }
 

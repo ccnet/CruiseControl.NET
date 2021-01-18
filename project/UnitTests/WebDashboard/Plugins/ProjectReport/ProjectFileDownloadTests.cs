@@ -42,7 +42,7 @@
             Mock.Get(cruiseRequest).Setup(_cruiseRequest => _cruiseRequest.RetrieveSessionToken()).Returns((string)null);
             Mock.Get(request).Setup(_request => _request.GetText("file")).Returns(fileName);
             Mock.Get(request).Setup(_request => _request.GetText("label")).Returns(label);
-            Mock.Get(farmService).Setup(_farmService => _farmService.RetrieveFileTransfer(projectSpec, label + "\\" + fileName, null)).Returns(transfer);
+            Mock.Get(farmService).Setup(_farmService => _farmService.RetrieveFileTransfer(projectSpec, System.IO.Path.Combine(label, fileName), null)).Returns(transfer);
 
             var response = action.Execute(cruiseRequest);
 

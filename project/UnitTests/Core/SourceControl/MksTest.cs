@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 						  <checkpointOnSuccess>true</checkpointOnSuccess>
 						  <autoDisconnect>true</autoDisconnect>
 					  </sourceControl>
-				 ", sandboxRoot);
+				 ", sandboxRoot).Replace('\\', System.IO.Path.DirectorySeparatorChar);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mks = CreateMks(CreateSourceControlXml(), null, null);
 
-			Assert.AreEqual(@"..\bin\si.exe", mks.Executable);
+			Assert.AreEqual(System.IO.Path.Combine("..", "bin", "si.exe"), mks.Executable);
 			Assert.AreEqual(@"hostname", mks.Hostname);
 			Assert.AreEqual(8722, mks.Port);
 			Assert.AreEqual(@"CCNetUser", mks.User);
@@ -104,10 +104,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void GetSource()
 		{
             string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
-                GeneratePath(@"{0}\myproject.pj", sandboxRoot));
+                GeneratePath(@"{0}\myproject.pj".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot));
 			mockExecutorWrapper.Setup(executor => executor.Execute(ExpectedProcessInfo(expectedResyncCommand))).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 			string expectedAttribCommand = string.Format(@"-R /s {0}", 
-                GeneratePath(@"{0}\*", sandboxRoot));
+                GeneratePath(@"{0}\*".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot));
 			mockExecutorWrapper.Setup(executor => executor.Execute(ExpectedProcessInfo("attrib", expectedAttribCommand))).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 
 			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
@@ -122,10 +122,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void GetSourceWithSpacesInSandbox()
 		{
 			sandboxRoot = TempFileUtil.GetTempPath("Mks Sand Box");
-            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot);
 			mockExecutorWrapper.Setup(executor => executor.Execute(ExpectedProcessInfo(expectedResyncCommand))).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 			
-			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
+			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot);
 			mockExecutorWrapper.Setup(executor => executor.Execute(ExpectedProcessInfo("attrib", expectedAttribCommand))).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 			
 			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CheckpointSourceOnSuccessfulBuild()
 		{
-            string path = GeneratePath(@"{0}\myproject.pj", sandboxRoot);
+            string path = GeneratePath(@"{0}\myproject.pj".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot);
 			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", path);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.Setup(executor => executor.Execute(expectedProcessInfo)).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.Setup(parser => parser.Parse(It.IsAny<TextReader>(), FROM, TO)).Returns(new Modification[0]).Verifiable();
 			
             ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"viewsandbox --nopersist --filter=changed:all --xmlapi -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
-                GeneratePath(@"{0}\myproject.pj", sandboxRoot)));
+                GeneratePath(@"{0}\myproject.pj".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot)));
 			mockExecutorWrapper.Setup(executor => executor.Execute(expectedProcessInfo)).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 			
 			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockExecutorWrapper.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("", null, 0, false)).Verifiable();
 
             string expectedCommand = string.Format(@"memberinfo --xmlapi --user=CCNetUser --password=CCNetPassword --quiet {0}", 
-                GeneratePath(@"{0}\MyFolder\myFile.file", sandboxRoot));
+                GeneratePath(@"{0}\MyFolder\myFile.file".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot));
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.Setup(executor => executor.Execute(expectedProcessInfo)).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 			
@@ -229,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockExecutorWrapper.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("", null, 0, false)).Verifiable();
 
 			string expectedCommand = string.Format(@"memberinfo --xmlapi --user=CCNetUser --password=CCNetPassword --quiet {0}", 
-                GeneratePath(@"{0}\myFile.file", sandboxRoot));
+                GeneratePath(@"{0}\myFile.file".Replace('\\', System.IO.Path.DirectorySeparatorChar), sandboxRoot));
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.Setup(executor => executor.Execute(expectedProcessInfo)).Returns(new ProcessResult(null, null, 0, false)).Verifiable();
 
@@ -294,7 +294,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private static ProcessInfo ExpectedProcessInfo(string arguments)
 		{
-			return ExpectedProcessInfo(@"..\bin\si.exe", arguments);
+			return ExpectedProcessInfo(System.IO.Path.Combine("..", "bin", "si.exe"), arguments);
 		}
 
 		private static ProcessInfo ExpectedProcessInfo(string executable, string arguments)
@@ -319,7 +319,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         {
             string basePath = string.Format(path, args);
             if (basePath.Contains(" ")) basePath = "\"" + basePath + "\"";
-            return basePath;
+            return basePath;                                                                      
         }
 	}
 }
