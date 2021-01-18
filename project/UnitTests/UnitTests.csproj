@@ -1060,6 +1060,9 @@
     <Compile Include="UnitTestUtils\Mockery.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnitTestUtils\Platform.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UnitTestUtils\ResourceUtil.cs">
       <SubType>Code</SubType>
     </Compile>
