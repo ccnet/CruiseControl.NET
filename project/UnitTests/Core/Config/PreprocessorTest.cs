@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "JScript not available")]
         public void TestBigFor()
         {
             XmlDocument doc = _Preprocess("TestBigFor.xml");
@@ -78,6 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "computername is unknown in mono, maybe fix the test file?")]
         public void TestEnvironmentVariableExpansion()
         {
             var doc = _Preprocess("TestEnvironmentVariableExpansion.xml");
@@ -89,6 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "JScript not available")]
         public void TestEvals()
         {
             XmlDocument doc = _Preprocess("TestEval.xml");
@@ -133,6 +136,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "JScript not available")]
         public void TestFor()
         {
             XmlDocument doc = _Preprocess("TestFor.xml");
@@ -143,6 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "JScript not available")]
         public void TestForEach()
         {
             XmlDocument doc = _Preprocess("TestForEach.xml");
@@ -156,6 +161,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "JScript not available")]
         public void TestIf()
         {
             XmlDocument doc = _Preprocess("TestIf.xml");
@@ -406,12 +412,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "path is unknown")]
         public void TestSample()
         {            
             _Preprocess( "Sample.xml" );            
         }
 
         [Test]
+        [Platform(Exclude = "Mono", Reason = "computername is unknown")]
         public void TestSampleProject()
         {            
             _Preprocess( "SampleProject.xml" );
