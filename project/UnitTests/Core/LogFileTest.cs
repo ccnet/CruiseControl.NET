@@ -69,6 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			{
 				CreateTempFiles(tempPath, testFilenames);
 				string[] fileNames = LogFileUtil.GetLogFileNames(tempPath.ToString());
+                Array.Sort(fileNames);
 				Assert.AreEqual(3,fileNames.Length);
 				Assert.AreEqual(testFilenames[0],fileNames[0]);
 				Assert.AreEqual(testFilenames[1],fileNames[1]);
