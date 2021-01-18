@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	public class CCTrayMultiSettingsFormTest
 	{
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void ShouldCloneConfigurationAndOnlyBindToTheClone()
 		{
 			var existingConfiguration = new Mock<ICCTrayMultiConfiguration>(MockBehavior.Strict);

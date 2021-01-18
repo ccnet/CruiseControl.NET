@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		}
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void SetsTheLightStatusCorrectlyBasedOnTheIntegrationStatus()
 		{
 			// for each set of conditions (Integration Status + Project State),
@@ -98,6 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		}
 		
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void WhenTheCurrentTimeIsOutsideTheAvailableHoursAllLightsAreSwitchedOff()
 		{
 			stubCurrentTimeProvider.SetNow(new DateTime(2005, 11, 05, 12, 00, 00));
