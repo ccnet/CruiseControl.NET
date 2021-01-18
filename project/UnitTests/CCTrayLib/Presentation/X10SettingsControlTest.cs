@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
     public class X10SettingsControlTest
     {
         [Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
         public void CanBindToDefaultConfiguration()
         {
             X10SettingsControl control = new X10SettingsControl();

@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		}
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void TheServerListBoxIsPopulatedWithAListOfAllServersCurrentlyConfigured()
 		{
 			CCTrayProject[] projects = {
@@ -30,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		}
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void TheServerListBoxIsPopulatedInAlphabeticalOrder()
 		{
 			CCTrayProject[] projects = {
@@ -41,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		}
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void DuplicateServersAreIgnoredWhenAddingToTheServerList()
 		{
 			CCTrayProject[] projects = {
@@ -52,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		}
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No X display available")]
 		public void CurrentlyAddedProjectsAreIgnoredWhenServerIsSelected()
 		{
 			CCTrayProject[] allProjects = {
