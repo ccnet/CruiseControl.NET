@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class VssTest : ProcessExecutorTestFixtureBase
 	{
-		public const string DEFAULT_SS_EXE_PATH = @"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe";
+		public string DEFAULT_SS_EXE_PATH = Platform.IsWindows ? @"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe" : @"/Program Files/Microsoft Visual Studio/VSS/win32/ss.exe";
 
 		private Mock<IRegistry> mockRegistry;
 		private VssHistoryParser historyParser;
@@ -100,8 +100,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ReadDefaultExecutableFromRegistry()
 		{
-			mockRegistry.Setup(registry => registry.GetExpectedLocalMachineSubKeyValue(Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY)).Returns(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL").Verifiable();
-			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.Executable);
+			mockRegistry.Setup(registry => registry.GetExpectedLocalMachineSubKeyValue(Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY)).
+                Returns(Platform.IsWindows ? @"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL" : "/Program Files/Microsoft Visual Studio/VSS/win32/SSSCC.DLL").
+                Verifiable();
+			Assert.AreEqual(DEFAULT_SS_EXE_PATH, vss.Executable);
 		}
 
 		[Test]

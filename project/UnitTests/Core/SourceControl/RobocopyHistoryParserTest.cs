@@ -16,6 +16,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private RobocopyHistoryParser parser = new RobocopyHistoryParser();
 
+        private static string windowsPath = @"E:\copytest";
+        private string path = Platform.IsWindows ? windowsPath : @"/copytest";
+
 		[Test]
 		public void ParseNoChange()
 		{
@@ -33,28 +36,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			Modification mod0 = new Modification();
 			mod0.Type = "deleted";
-			mod0.FolderName = @"E:\copytest\dst\dir2";
+			mod0.FolderName = Path.Combine(path, "dst", "dir2");
 
 			Assert.AreEqual(modifications[0], mod0);
 
 			Modification mod1 = new Modification();
 			mod1.Type = "deleted";
 			mod1.FileName = "deleted.txt";
-			mod1.FolderName = @"E:\copytest\dst\dir2";
+			mod1.FolderName = Path.Combine(path, "dst", "dir2");
 
 			Assert.AreEqual(modifications[1], mod1);
 
 			Modification mod2 = new Modification();
 			mod2.Type = "deleted";
 			mod2.FileName = "delete.txt";
-			mod2.FolderName = @"E:\copytest\dst";
+			mod2.FolderName = Path.Combine(path, "dst");
 
 			Assert.AreEqual(modifications[2], mod2);
 
 			Modification mod3 = new Modification();
 			mod3.Type = "added";
 			mod3.FileName = "file2.txt";
-			mod3.FolderName = @"E:\copytest\src";
+			mod3.FolderName = Path.Combine(path, "src");
 			mod3.ModifiedTime = CreateDate("2008/02/06 09:16:49");
 
 			Assert.AreEqual(modifications[3], mod3);
@@ -62,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod4 = new Modification();
 			mod4.Type = "modified";
 			mod4.FileName = "file3.txt";
-			mod4.FolderName = @"E:\copytest\src";
+			mod4.FolderName = Path.Combine(path, "src");
 			mod4.ModifiedTime = CreateDate("2008/02/06 09:35:50");
 
 			Assert.AreEqual(modifications[4], mod4);
@@ -70,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod5 = new Modification();
 			mod5.Type = "added";
 			mod5.FileName = "file";
-			mod5.FolderName = @"E:\copytest\src\dir with a space";
+			mod5.FolderName = Path.Combine(path, "src", "dir with a space");
 			mod5.ModifiedTime = CreateDate("2008/02/07 07:55:32");
 
 			Assert.AreEqual(modifications[5], mod5);
@@ -78,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod6 = new Modification();
 			mod6.Type = "added";
 			mod6.FileName = "file with a space.txt";
-			mod6.FolderName = @"E:\copytest\src\dir with a space";
+			mod6.FolderName = Path.Combine(path, "src", "dir with a space");
 			mod6.ModifiedTime = CreateDate("2008/02/07 07:55:38");
 
 			Assert.AreEqual(modifications[6], mod6);
@@ -86,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod7 = new Modification();
 			mod7.Type = "added";
 			mod7.FileName = "file1.txt";
-			mod7.FolderName = @"E:\copytest\src\dir1";
+			mod7.FolderName = Path.Combine(path, "src", "dir1");
 			mod7.ModifiedTime = CreateDate("2008/02/06 09:31:26");
 
 			Assert.AreEqual(modifications[7], mod7);
@@ -102,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		// We require these switches...
 		// /V /L /MIR /X /TS /FP /NDL /NP /NS /NJH /NJS
 
-		public static string LOG_CONTENT =
+		public string LOG_CONTENT { get { return
 @"
 	*EXTRA Dir  	E:\copytest\dst\dir2\
 	  *EXTRA File 		 2008/02/06 09:31:37	E:\copytest\dst\dir2\deleted.txt
@@ -113,7 +116,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	    New File  		 2008/02/07 07:55:32	E:\copytest\src\dir with a space\file
 	    New File  		 2008/02/07 07:55:38	E:\copytest\src\dir with a space\file with a space.txt
 	    New File  		 2008/02/06 09:31:26	E:\copytest\src\dir1\file1.txt
-";
+".Replace(windowsPath, path).Replace('\\', Path.DirectorySeparatorChar);
+            }
+        }
 	}
 }
 

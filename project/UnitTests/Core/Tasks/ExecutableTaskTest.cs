@@ -197,8 +197,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			task.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
+            string path = Platform.IsWindows ? @"c:\my\base\directory" : @"/my/base/directory";
+        
+			task.ConfiguredBaseDirectory = path;
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), path);
 		}
 
 		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)

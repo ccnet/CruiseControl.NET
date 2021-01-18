@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOut()
 		{
-			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @echo Hello World"));
+			ProcessResult result = executor.Execute(Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World") : new ProcessInfo("echo", "Hello World"));
 			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
 			AssertProcessExitsSuccessfully(result);
 		}
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
-			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory));
+			ProcessResult result = executor.Execute(Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory) :  new ProcessInfo("ls", Environment.SystemDirectory));
 			Assert.IsTrue(! result.TimedOut);
 			AssertProcessExitsSuccessfully(result);
 		}
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ShouldNotUseATimeoutIfTimeoutSetToInfiniteOnProcessInfo()
 		{
-			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
+			ProcessInfo processInfo = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World") : new ProcessInfo("bash", "-c \"echo Hello World\"");
 			processInfo.TimeOut = ProcessInfo.InfiniteTimeout;
 			ProcessResult result = executor.Execute(processInfo);
 			AssertProcessExitsSuccessfully(result);
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void StartProcessRunningCmdExeCallingNonExistentFile()
 		{
-			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
+			ProcessResult result = executor.Execute(Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @zerk.exe foo") : new ProcessInfo("bash", "-c \"zerk.exe foo\""));
 
 			AssertProcessExitsWithFailure(result);
 			AssertContains("zerk.exe", result.StandardError);
@@ -68,12 +68,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void SetEnvironmentVariables()
 		{
-			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C set foo", null);
+			ProcessInfo processInfo = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C set foo", null) : new ProcessInfo("bash", "-c \"echo foo=$foo\"", null);
 			processInfo.EnvironmentVariables["foo"] = "bar";
 			ProcessResult result = executor.Execute(processInfo);
 
 			AssertProcessExitsSuccessfully(result);
-			Assert.AreEqual("foo=bar\r\n", result.StandardOutput);
+			Assert.AreEqual("foo=bar" + Environment.NewLine, result.StandardOutput);
 		}
 
 		[Test]
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			{
 				const string content = "yooo ез";
 				SystemPath tempFile = tempDirectory.CreateTextFile("test.txt", content);
-				ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"");
+				ProcessInfo processInfo = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"") : new ProcessInfo("cat", "\"" + tempFile + "\"");
 				processInfo.StreamEncoding = Encoding.UTF8;
 				ProcessResult result = executor.Execute(processInfo);
 				Assert.IsTrue(!result.Failed);
@@ -184,28 +184,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			int[] successExitCodes = { 1, 3, 5 };
 
-			ProcessInfo processInfo1 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 1", null, ProcessPriorityClass.AboveNormal, successExitCodes);
+			ProcessInfo processInfo1 = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 1", null, ProcessPriorityClass.AboveNormal, successExitCodes) : new ProcessInfo("bash", "-c \"echo Hello World ; exit 1\"", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result1 = executor.Execute(processInfo1);
 			Assert.AreEqual("Hello World", result1.StandardOutput.Trim());
 			Assert.AreEqual(1, result1.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result1.Failed);
 
-            ProcessInfo processInfo2 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 3", null, ProcessPriorityClass.AboveNormal, successExitCodes);
+            ProcessInfo processInfo2 = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 3", null, ProcessPriorityClass.AboveNormal, successExitCodes) : new ProcessInfo("bash", "-c \"echo Hello World ; exit 3\"", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result2 = executor.Execute(processInfo2);
 			Assert.AreEqual("Hello World", result2.StandardOutput.Trim());
 			Assert.AreEqual(3, result2.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result2.Failed);
 
-            ProcessInfo processInfo3 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 5", null, ProcessPriorityClass.AboveNormal, successExitCodes);
+            ProcessInfo processInfo3 = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 5", null, ProcessPriorityClass.AboveNormal, successExitCodes) : new ProcessInfo("bash", "-c \"echo Hello World ; exit 5\"", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result3 = executor.Execute(processInfo3);
 			Assert.AreEqual("Hello World", result3.StandardOutput.Trim());
 			Assert.AreEqual(5, result3.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result3.Failed);
 
-            ProcessInfo processInfo4 = new ProcessInfo("cmd.exe", "/C @echo Hello World", null, ProcessPriorityClass.AboveNormal, successExitCodes);
+            ProcessInfo processInfo4 = Platform.IsWindows ? new ProcessInfo("cmd.exe", "/C @echo Hello World", null, ProcessPriorityClass.AboveNormal, successExitCodes) : new ProcessInfo("bash", "-c \"echo Hello World\"", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result4 = executor.Execute(processInfo4);
 			Assert.AreEqual("Hello World", result4.StandardOutput.Trim());
@@ -224,11 +224,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreNotEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
 			Assert.IsTrue(result.Failed, "process should return an error");
 		}
+        
+        private static bool SleeperProcessExists()
+        {
+            if (Platform.IsMono)
+            {
+                using (Process process = new Process())
+                {
+                    process.StartInfo.FileName = "bash";
+                    process.StartInfo.Arguments = "-c \"ps -Aef\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
+        
+                    StreamReader reader = process.StandardOutput;
+                    string output = reader.ReadToEnd();
+                    
+                    process.WaitForExit();
+                    
+                    return output.Contains("sleeper");
+                }
+            }
+            else
+            {
+                return Process.GetProcessesByName("sleeper").Length != 0;
+            }
+        }
 
 		private static void WaitForProcessToStart()
 		{
 			int count = 0;
-			while (Process.GetProcessesByName("sleeper").Length == 0 && count < 1000)
+            
+			while (!SleeperProcessExists() && count < 1000)
 			{
 				Thread.Sleep(50);
 				count++;
