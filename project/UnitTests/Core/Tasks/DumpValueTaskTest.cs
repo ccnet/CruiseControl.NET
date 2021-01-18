@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void WithCarriageReturnRun()
         {
-            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue\r\nWith carriage returns") });
+            BaseTest(new DumpValueItem[] { new DumpValueItem("TestName", "TestValue" + System.Environment.NewLine + "With carriage returns") });
         }
 
         [Test]
@@ -186,17 +186,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
         private string GetExpectedXMLContent(DumpValueItem[] Items)
         {
-            StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-                                                      "<ValueDumper>\r\n");
+            StringBuilder builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>" + Environment.NewLine +
+                                                      "<ValueDumper>" + Environment.NewLine);
             foreach (DumpValueItem item in Items)
             {
-                builder.Append("  <ValueDumperItem>\r\n");
-                builder.Append("    <Name>" + item.Name + "</Name>\r\n");
+                builder.Append("  <ValueDumperItem>" + Environment.NewLine);
+                builder.Append("    <Name>" + item.Name + "</Name>" + Environment.NewLine);
                 if (item.ValueInCDATA)
-                    builder.Append("    <Value><![CDATA[" + item.Value + "]]></Value>\r\n");
+                    builder.Append("    <Value><![CDATA[" + item.Value + "]]></Value>" + Environment.NewLine);
                 else
-                    builder.Append("    <Value>" + item.Value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;") + "</Value>\r\n");
-                builder.Append("  </ValueDumperItem>\r\n");
+                    builder.Append("    <Value>" + item.Value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;") + "</Value>" + Environment.NewLine);
+                builder.Append("  </ValueDumperItem>" + Environment.NewLine);
             }
             builder.Append("</ValueDumper>");
 

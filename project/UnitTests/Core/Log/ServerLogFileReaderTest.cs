@@ -147,10 +147,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 			SystemPath tempFile = tempDir.CreateTextFile("MultiProject.log", content);
 			
 			ServerLogFileReader reader = new ServerLogFileReader(tempFile.ToString(), 10);
-			Assert.AreEqual(@"2006-11-24 20:09:53,000 [foo:INFO] Starting integrator for project: foo
-2006-11-24 20:09:55,000 [foo:INFO] No modifications detected", reader.Read("foo"));
-			Assert.AreEqual(@"2006-11-24 20:09:54,000 [bar:INFO] Starting integrator for project: bar
-2006-11-24 20:09:56,000 [bar:INFO] No modifications detected.", reader.Read("bar"));
+			Assert.AreEqual(@"2006-11-24 20:09:53,000 [foo:INFO] Starting integrator for project: foo" + Environment.NewLine + "2006-11-24 20:09:55,000 [foo:INFO] No modifications detected", reader.Read("foo"));
+			Assert.AreEqual(@"2006-11-24 20:09:54,000 [bar:INFO] Starting integrator for project: bar" + Environment.NewLine + "2006-11-24 20:09:56,000 [bar:INFO] No modifications detected.", reader.Read("bar"));
 		}
 		
 		private static string[] GenerateContentLines(int lines)
@@ -171,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 
 		private static string[] StringToLines(string content)
 		{
-			Regex regexLines = new Regex(@"\r\n");
+			Regex regexLines = new Regex(Environment.NewLine);
 			return regexLines.Split(content);
 		}
 	}

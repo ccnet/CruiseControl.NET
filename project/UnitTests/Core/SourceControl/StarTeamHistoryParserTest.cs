@@ -219,7 +219,7 @@ for Star team
 			mod[2].UserName = "Ahsanul Zaki";
 
 			mod[3] = new Modification();
-			mod[3].Comment = "fake test file\r\nfor Star team\n";
+			mod[3].Comment = "fake test file" + Environment.NewLine + "for Star team\n";
 			mod[3].EmailAddress = @"N/A";
 			mod[3].FileName = @"akz last.gif";
 			mod[3].FolderName = @"D:\Projects\DD.NET";
