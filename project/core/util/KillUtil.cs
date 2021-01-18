@@ -74,8 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     }
                     else
                     {
-                        process.StartInfo.FileName = "/usr/bin/pkill";
-                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"-9 -g {0}", pid);
+                        process.StartInfo.FileName = "/usr/bin/kill";
+                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"-9 {0}", pid);
                         platform = "Unix";
                     }
 
