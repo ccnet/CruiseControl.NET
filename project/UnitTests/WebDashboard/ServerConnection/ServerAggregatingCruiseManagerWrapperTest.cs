@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		[Test]
 		public void ReturnsCorrectLogFromCorrectProjectOnCorrectServer()
 		{
-            string buildLog = "content\r\nlogdata";
+            string buildLog = "content" + Environment.NewLine + "logdata";
             MockRepository mocks = new MockRepository(MockBehavior.Default);
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
                 delegate(CruiseServerClientBase manager)

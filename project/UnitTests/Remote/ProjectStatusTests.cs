@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 
             serializer.Serialize(writer, projectStatus, nmsp);
 
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine +
                             "<projectStatus " +
                             "showForceBuildButton=\"true\" " +
                             "showStartStopButton=\"true\" " +
@@ -128,9 +128,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "queuePriority=\"0\" " +
                             "lastBuildDate=\"0001-01-01T00:00:00\" " +
                             "nextBuildTime=\"0001-01-01T00:00:00\"" +
-                            ">\r\n" +
-                            "  <activity type=\"Sleeping\" />\r\n" +
-                            "  <parameters />\r\n" +
+                            ">" + Environment.NewLine +
+                            "  <activity type=\"Sleeping\" />" + Environment.NewLine +
+                            "  <parameters />" + Environment.NewLine +
                             "</projectStatus>",
                             writer.ToString());
         }
@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 
             serializer.Serialize(writer, projectStatus, nmsp);
 
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine +
                             "<projectStatus " +
                             "showForceBuildButton=\"true\" " +
                             "showStartStopButton=\"true\" " +
@@ -161,9 +161,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "queuePriority=\"0\" " +
                             "lastBuildDate=\"" + lastBuildDate.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\" " +
                             "nextBuildTime=\"0001-01-01T00:00:00\"" +
-                            ">\r\n" +
-                            "  <activity type=\"Sleeping\" />\r\n" +
-                            "  <parameters />\r\n" +
+                            ">" + Environment.NewLine +
+                            "  <activity type=\"Sleeping\" />" + Environment.NewLine +
+                            "  <parameters />" + Environment.NewLine +
                             "</projectStatus>",
                             writer.ToString());
         }
@@ -198,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 
             serializer.Serialize(writer, projectStatus, nmsp);
 
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine +
                             "<projectStatus " +
                             "stage=\"" + buildStage + "\" " +
                             "showForceBuildButton=\"true\" " +
@@ -215,9 +215,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "lastBuildLabel=\"" + lastBuildLabel + "\" " +
                             "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
                             "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\"" +
-                            ">\r\n" +
-                            "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
-                            "  <parameters />\r\n" +
+                            ">" + Environment.NewLine +
+                            "  <activity type=\"" + activity.ToString() + "\" />" + Environment.NewLine +
+                            "  <parameters />" + Environment.NewLine +
                             "</projectStatus>",
                             writer.ToString());
         }
@@ -263,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                 string streamedParameter = parameterWriter.ToString();
                 streamedParameter = Regex.Replace(streamedParameter, parameter.GetType().Name, "parameter d3p1:type=\"" + parameter.GetType().Name + "\"", RegexOptions.IgnoreCase);
                 streamedParameter = Regex.Replace(streamedParameter, "/>", "xmlns:d3p1=\"http://www.w3.org/2001/XMLSchema-instance\" />", RegexOptions.IgnoreCase);
-                streamedParameters += "    " + streamedParameter + "\r\n";
+                streamedParameters += "    " + streamedParameter + "" + Environment.NewLine;
             }
 
             XmlSerializerNamespaces nmsp = new XmlSerializerNamespaces();
@@ -274,7 +274,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 
             serializer.Serialize(writer, projectStatus, nmsp);
 
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine +
                             "<projectStatus " +
                             "stage=\"" + buildStage + "\" " +
                             "showForceBuildButton=\"true\" " +
@@ -291,11 +291,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                             "lastBuildLabel=\"" + lastBuildLabel + "\" " +
                             "lastSuccessfulBuildLabel=\"" + lastSuccessfulBuildLabel + "\" " +
                             "nextBuildTime=\"" + nextBuildTime.ToString("yyyy-MM-ddTHH:mm:ss.FFFFFFF") + "\"" +
-                            ">\r\n" +
-                            "  <activity type=\"" + activity.ToString() + "\" />\r\n" +
-                            "  <parameters>\r\n" + 
+                            ">" + Environment.NewLine +
+                            "  <activity type=\"" + activity.ToString() + "\" />" + Environment.NewLine +
+                            "  <parameters>" + Environment.NewLine + 
                             streamedParameters +
-                            "  </parameters>\r\n" +
+                            "  </parameters>" + Environment.NewLine +
                             "</projectStatus>",
                             writer.ToString());
         }

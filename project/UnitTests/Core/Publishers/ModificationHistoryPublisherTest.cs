@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
             result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
             string PublishedModifications;
-            string ExpectedLoggedModifications = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<History><Build BuildDate=\"{0}\" Success=\"True\" Label=\"{1}\" />\r\n</History>",
+            string ExpectedLoggedModifications = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<History><Build BuildDate=\"{0}\" Success=\"True\" Label=\"{1}\" />" + Environment.NewLine + "</History>",
                                                     DateUtil.FormatDate(result.StartTime), result.Label);
 
             // Execute

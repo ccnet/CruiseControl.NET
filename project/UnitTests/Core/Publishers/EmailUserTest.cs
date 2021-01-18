@@ -1,3 +1,4 @@
+using System;
 using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         {
             Assert.That(delegate { NetReflector.Read(@"<user address=""UserName@example.com""/>"); },
                         Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
-                            "Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name).\r\nXml: <user address=\"UserName@example.com\" />"));
+                            "Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name)." + Environment.NewLine + "Xml: <user address=\"UserName@example.com\" />"));
         }
 
         [Test]
