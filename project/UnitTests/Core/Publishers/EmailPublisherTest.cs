@@ -272,10 +272,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			publisher.IncludeDetails = true;
 			string message = publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assert.IsTrue(message.StartsWith("<html>"));
-			Assert.IsTrue(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
-			Assert.IsTrue(message.IndexOf("Modifications since last build") > 0);
-			Assert.IsTrue(message.EndsWith("</html>"));
+			Assert.IsTrue(message.StartsWith("<html>"), "message does not start with html: " + message);
+			Assert.IsTrue(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0, "message does not contain header: " + message);
+			Assert.IsTrue(message.IndexOf("Modifications since last build") > 0, "message does not contain modifications: " + message);
+			Assert.IsTrue(message.EndsWith("</html>"), "message does not end with html: " + message);
 		}
 
 		[Test]
@@ -311,7 +311,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher.IncludeDetails = true;
 
 			string message = publisher.CreateMessage(result);
-			Assert.IsTrue(message.IndexOf("Tests run") >= 0);
+			Assert.IsTrue(message.IndexOf("Tests run") >= 0, "message does not contain 'Tests run': " + message);
 		}
 
         [Test]
@@ -449,9 +449,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 			publisher.IncludeDetails = true;
 			string actual = publisher.CreateMessage(result);
-			Assert.IsTrue(actual.IndexOf(result.ExceptionResult.Message) > 0);
-			Assert.IsTrue(actual.IndexOf(result.ExceptionResult.GetType().Name) > 0);
-			Assert.IsTrue(actual.IndexOf("BUILD COMPLETE") == -1); // verify build complete message is not output
+			Assert.IsTrue(actual.IndexOf(result.ExceptionResult.Message) > 0, "message does not contain exception result message: " + actual);
+			Assert.IsTrue(actual.IndexOf(result.ExceptionResult.GetType().Name) > 0, "message does not contain exception result type name: " + actual);
+			Assert.IsTrue(actual.IndexOf("BUILD COMPLETE") == -1, "message does not contain 'BUILD COMPLETE': " + actual); // verify build complete message is not output
 		}
 	}
 }
