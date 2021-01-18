@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The location of the MSBuild.exe executable.
         /// </summary>
         /// <version>1.0</version>
-        /// <default>MSBuild with .NET Framework, xbuild on Unix with Mono.</default>
+        /// <default>MSBuild.exe with full path to .NET Framework</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
         #endregion
@@ -370,25 +370,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		/// <summary>
-		/// Gets the default msbuild/xbuild executable.
+		/// Gets the default msbuild executable.
 		/// 
-		/// On Windows/.NET:
 		///		Return the path of the msbuild.exe of the current .NET framework CCNet is running on.
 		/// 
-		/// On Unix/Mono:
-		///		Return xbuild.
 		/// </summary>
 		/// <returns></returns>
 		private string GetDefaultExecutable()
 		{
-			if(executionEnvironment.IsRunningOnWindows)
-			{
-				return Path.Combine(executionEnvironment.RuntimeDirectory, "MSBuild.exe");
-			}
-			else
-			{
-				return "xbuild";
-			}
+    		return Path.Combine(executionEnvironment.RuntimeDirectory, "MSBuild.exe");
 		}
 	}
 }
