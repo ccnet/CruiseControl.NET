@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			registry.Setup(r => r.GetExpectedLocalMachineSubKeyValue(Alienbrain.AB_REGISTRY_PATH, Alienbrain.AB_REGISTRY_KEY)).Returns(INSTALLDIR).Verifiable();
 			alienbrain.Executable = string.Empty;
 
-			Assert.AreEqual(INSTALLDIR + "\\" + Alienbrain.AB_COMMMAND_PATH + "\\" + Alienbrain.AB_EXE, alienbrain.Executable);
+			Assert.AreEqual(INSTALLDIR + System.IO.Path.DirectorySeparatorChar + Alienbrain.AB_COMMMAND_PATH + "\\" + Alienbrain.AB_EXE, alienbrain.Executable);
 			Assert.AreEqual(SERVER, alienbrain.Server);
 			Assert.AreEqual(DATABASE, alienbrain.Database);
 			Assert.AreEqual(USER, alienbrain.Username);

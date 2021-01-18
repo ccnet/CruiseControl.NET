@@ -89,10 +89,10 @@ Warning: CM Synergy startup failed.
 		{
 			// test non-default configured values
 			SynergyConnectionInfo info = new SynergyConnectionInfo();
-			info.Database = @"\\myserver\share\mydatabase";
+			info.Database = System.IO.Path.DirectorySeparatorChar + System.IO.Path.Combine("myserver", "share", "mydatabase");
 			Assert.AreEqual(@"mydatabase", info.DatabaseName);
 
-			info.Database = @"\\myserver\share\mydatabase\";
+			info.Database = System.IO.Path.DirectorySeparatorChar + System.IO.Path.Combine("myserver", "share", "mydatabase") + System.IO.Path.DirectorySeparatorChar;
 			Assert.AreEqual(@"mydatabase", info.DatabaseName);
 		}
 
