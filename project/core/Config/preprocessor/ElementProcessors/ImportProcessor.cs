@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         {
             XElement element = _AssumeElement( node );
             Validation.RequireAttributes( element, AttrName.Type );
-            string type_ref = element.GetAttributeValue( AttrName.Type );
+            string type_ref = element.GetAttributeValue( AttrName.Type ).TrimEnd();
             string assembly_loc = element.GetAttributeValue( AttrName.AssemblyLocation );
             Assembly assembly = null;
             if ( !String.IsNullOrEmpty( assembly_loc ) )
