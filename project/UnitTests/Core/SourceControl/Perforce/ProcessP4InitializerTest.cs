@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		private Mock<ProcessExecutor> processExecutorMock;
 		private Mock<IP4ProcessInfoCreator> processInfoCreatorMock;
 		private ProcessP4Initializer p4Initializer;
+        private string path = Platform.IsWindows ? @"c:\my\working\dir" : @"/my/working/dir";
 
 		[SetUp]
 		public void Setup()
@@ -38,13 +39,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
-			processInfoWithStdInContent.StandardInputContent = "Client: myClient\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //myClient/mydepot/...\n //myotherdepot/... //myClient/myotherdepot/...\n";
+			processInfoWithStdInContent.StandardInputContent = "Client: myClient\n\nRoot:   " + path + "\n\nView:\n //mydepot/... //myClient/mydepot/...\n //myotherdepot/... //myClient/myotherdepot/...\n";
 
 			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
 			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
-			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
+			p4Initializer.Initialize(p4, "myProject", path);
 
 			// Verify
 			VerifyAll();
@@ -62,13 +63,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
-			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
+			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   " + path + "\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
 			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
 			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
 			// Execute
-			p4Initializer.Initialize(p4, projectName, @"c:\my\working\dir");
+			p4Initializer.Initialize(p4, projectName, path);
 
 			// Verify
 			Assert.AreEqual(expectedClientName, p4.Client);
@@ -99,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			p4.View = "ThisIsNotAValidView";
 			try
 			{
-				p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
+				p4Initializer.Initialize(p4, "myProject", path);
 				Assert.Fail("Should check for a valid view");
 			}
 			catch (CruiseControlException e)
@@ -118,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(It.IsAny<P4>(), It.IsAny<string>())).Returns(new ProcessInfo("")).Verifiable();
 			processExecutorMock.Setup(executor => executor.Execute(It.IsAny<ProcessInfo>())).Returns(new ProcessResult("", "", 0, false)).Verifiable();
 
-			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
+			p4Initializer.Initialize(p4, "myProject", path);
 			VerifyAll();
 		}
 
@@ -134,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
-			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
+			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   " + path + "\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
 			processInfoCreatorMock.Setup(creator => creator.CreateProcessInfo(p4, "client -i")).Returns(processInfo).Verifiable();
 			processExecutorMock.Setup(executor => executor.Execute(processInfoWithStdInContent)).Returns(new ProcessResult("This is standard out", "This is standard error", 1, false)).Verifiable();
@@ -142,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			// Execute
 			try
 			{
-				p4Initializer.Initialize(p4, projectName, @"c:\my\working\dir");
+				p4Initializer.Initialize(p4, projectName, path);
 				Assert.Fail("Should throw an exception since process result has a non zero exit code");
 			}
 			catch (CruiseControlException e)

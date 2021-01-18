@@ -13,6 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	{
 	    private string TEST_DATA = String.Empty;
         private string MEMBER_INFO = String.Empty;
+        private static string windowsPath = @"c:\Sandboxes\Personal2";
+        private string path = Platform.IsWindows ? windowsPath : @"/Sandboxes/Personal2";
 
         [OneTimeSetUp]
         public void SetUp()
@@ -29,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                     if (s != null)
                     {
                         StreamReader rdr = new StreamReader(s);
-                        TEST_DATA = rdr.ReadToEnd();
+                        TEST_DATA = rdr.ReadToEnd().Replace(windowsPath.Replace('\\', '/'), path);
                     }
                     else
                     {
@@ -72,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		        {
 		            changeCount++;
                     Assert.AreEqual("TestFile1.txt", modification.FileName);
-                    Assert.AreEqual(@"c:\Sandboxes\Personal2", modification.FolderName);
+                    Assert.AreEqual(path, modification.FolderName);
                     Assert.AreEqual("1.3", modification.Version);
 		        }
 		    }
@@ -94,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 {
                     changeCount++;
                     Assert.AreEqual("TestNew.txt", modification.FileName);
-                    Assert.AreEqual(@"c:\Sandboxes\Personal2", modification.FolderName);
+                    Assert.AreEqual(path, modification.FolderName);
                     Assert.AreEqual("1.1", modification.Version);
                 }
             }
@@ -117,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 {
                     changeCount++;
                     Assert.AreEqual("TestFile2.txt", modification.FileName);
-                    Assert.AreEqual(@"c:\Sandboxes\Personal2", modification.FolderName);
+                    Assert.AreEqual(path, modification.FolderName);
                     Assert.AreEqual("NA", modification.Version);
                 }
             }

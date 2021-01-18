@@ -357,7 +357,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Setup(sourceControl => sourceControl.LabelSourceControl(It.IsAny<IIntegrationResult>())).Verifiable();
 			mockPublisher.Setup(publisher => publisher.Run(It.IsAny<IIntegrationResult>())).Verifiable();
 			mockTask.Setup(task => task.Run(It.IsAny<IntegrationResult>())).Callback<IIntegrationResult>(r => r.AddTaskResult("success")).Verifiable();
-			project.ConfiguredWorkingDirectory = @"c:\temp";
+			project.ConfiguredWorkingDirectory = Platform.IsWindows ? @"c:\temp" : @"/tmp";
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
@@ -367,7 +367,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
-			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
+			Assert.AreEqual(Platform.IsWindows ? @"c:\temp" : @"/tmp", result.WorkingDirectory);
 			Assert.AreEqual(result, project.CurrentResult);
 			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());

@@ -13,6 +13,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public static DateTime OLDEST_ENTRY = DateTime.Parse("2000-Jan-01 13:34:52");
         public static DateTime NEWEST_ENTRY = DateTime.Parse("2005-Sep-13 13:34:52");
 
+        private static string windowsPath = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+        private string path = Platform.IsWindows ? windowsPath : @"/root/PVCS/vm/common/SampleDB/archives/chess/client";
+
         private PvcsHistoryParser parser;
         private DateTimeFormatInfo dfi;
 
@@ -43,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             expected[0].EmailAddress = null;
             expected[0].Version = "1.4";
             expected[0].FileName = @"ChessViewer.java-arc";
-            expected[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            expected[0].FolderName = path;
             expected[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             expected[0].Type = "Checked in";
             expected[0].UserName = "kerstinb";
@@ -55,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         #region Pvcs Version Information
 
-        private static TextReader ContentReader
+        private TextReader ContentReader
         {
             get { return new StringReader(PVCS_VERSION_INFO); }
         }
@@ -68,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[0].EmailAddress = null;
             mod[0].Version = "1.2";
             mod[0].FileName = @"ChessViewer.java-arc";
-            mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[0].FolderName = path;
             mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             mod[0].Type = "Checked in";
             mod[0].UserName = "kerstinb";
@@ -78,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[1].EmailAddress = null;
             mod[1].Version = "1.1";
             mod[1].FileName = @"ChessViewer.java-arc";
-            mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[1].FolderName = path;
             mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             mod[1].Type = "Checked in";
             mod[1].UserName = "kerstinb";
@@ -88,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[2].EmailAddress = null;
             mod[2].Version = "1.4";
             mod[2].FileName = @"ChessViewer.java-arc";
-            mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[2].FolderName = path;
             mod[2].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             mod[2].Type = "Checked in";
             mod[2].UserName = "kerstinb";
@@ -98,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[3].EmailAddress = null;
             mod[3].Version = "1.3";
             mod[3].FileName = @"ChessViewer.java-arc";
-            mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[3].FolderName = path;
             mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             mod[3].Type = "Checked in";
             mod[3].UserName = "kerstinb";
@@ -115,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[0].EmailAddress = null;
             mod[0].Version = "1.3";
             mod[0].FileName = @"BoardOptions.java-arc";
-            mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[0].FolderName = path;
             mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:22:36 PM", dfi);
             mod[0].Type = "Checked in";
             mod[0].UserName = "kerstinb";
@@ -125,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[1].EmailAddress = null;
             mod[1].Version = "1.2";
             mod[1].FileName = @"ChessRules.java-arc";
-            mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[1].FolderName = path;
             mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:26:14 PM", dfi);
             mod[1].Type = "Checked in";
             mod[1].UserName = "kerstinb";
@@ -135,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[2].EmailAddress = null;
             mod[2].Version = "1.1";
             mod[2].FileName = @"chessviewer.html-arc";
-            mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[2].FolderName = path;
             mod[2].ModifiedTime = DateTime.Parse("5/18/98 4:46:38 AM", dfi);
             mod[2].Type = "Checked in";
             mod[2].UserName = "kerstinb";
@@ -145,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mod[3].EmailAddress = null;
             mod[3].Version = "1.2";
             mod[3].FileName = @"ChessViewer.java-arc";
-            mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[3].FolderName = path;
             mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
             mod[3].Type = "Checked in";
             mod[3].UserName = "kerstinb";
@@ -153,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             return mod;
         }
 
-        private static string PVCS_VERSION_INFO =
+        private string PVCS_VERSION_INFO { get { return
             @"
 Change History  
 
@@ -347,7 +350,9 @@ Author id: Admin     lines deleted/added/moved: 0/0/0
 Initial revision.
 ===================================
 --------------------------------------------------------------------------------
-				";
+				".Replace(windowsPath, path);
+            } 
+        }
 
         #endregion
     }

@@ -23,7 +23,7 @@
         [Test]
         public void HandlesShortDirectoryName()
         {
-            var testFile = @"C:\Somewhere.txt";
+            var testFile = Platform.IsWindows ? @"C:\Somewhere.txt" : @"/Somewhere.txt";
             var result = mocks.Create<IIntegrationResult>(MockBehavior.Strict).Object;
             Mock.Get(result).SetupGet(_result => _result.WorkingDirectory).Returns(@"C:\OnceUponATime\InALandFarFarWayFromHere\ThereLivedABeautifulPrincess");
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;

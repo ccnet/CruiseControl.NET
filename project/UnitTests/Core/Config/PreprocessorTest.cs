@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
     [TestFixture]
     public class PreprocessorTest
     {
-    	private static readonly string FAKE_ROOT = Path.DirectorySeparatorChar == '\\' ? "c:\\temp folder\\" : "/tmp/";
+    	private static readonly string FAKE_ROOT = Platform.IsWindows ? "c:\\temp folder\\" : "/tmp/";
 
         private readonly XmlUrlResolver _resolver = new XmlUrlResolver();
 
