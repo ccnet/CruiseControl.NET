@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
             viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.Object,
                 (IDashboardConfiguration)configurationMock.Object);
 
-			Assert.AreEqual("foo is bar", viewTransformer.Transform("testTransform.vm", contextContents));
+			Assert.AreEqual("foo is bar", viewTransformer.Transform("TestTransform.vm", contextContents));
 		}
 	}
 }
