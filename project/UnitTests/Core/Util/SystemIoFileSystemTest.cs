@@ -165,6 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
                     File.WriteAllText(file, "Some data");
                 }
                 var results = new SystemIoFileSystem().GetFilesInDirectory(tempPath);
+                Array.Sort(results);
                 CollectionAssert.AreEqual(files, results);
             }
             finally
@@ -201,6 +202,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
                 File.WriteAllText(Path.Combine(subDir, "file4.txt"), "Some data");
 
                 var results = new SystemIoFileSystem().GetFilesInDirectory(tempPath, false);
+                Array.Sort(results);
                 CollectionAssert.AreEqual(files, results);
             }
             finally
@@ -237,6 +239,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
                 File.WriteAllText(subFile, "Some data");
 
                 var results = new SystemIoFileSystem().GetFilesInDirectory(tempPath, true);
+                Array.Sort(results);
                 CollectionAssert.AreEqual(files.Concat(new[] { subFile}), results);
             }
             finally
