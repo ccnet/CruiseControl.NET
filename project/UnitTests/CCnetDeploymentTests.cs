@@ -19,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests
         public void TestForAdminPackageOfWebDashboardIsEmpty()
         {
 #if DEBUG
-            string configFile = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\Webdashboard\dashboard.config");
+            string configFile = System.IO.Path.Combine(new string[] {Directory.GetCurrentDirectory(), "..", "..", "..", "WebDashboard", "dashboard.config"});
 #else
-            string configFile = System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"..\..\Project\Webdashboard\dashboard.config");
+            string configFile = System.IO.Path.Combine(new string[] {Directory.GetCurrentDirectory(), "..", "..", "project", "WebDashboard", "dashboard.config"});
 #endif
             Assert.IsTrue(System.IO.File.Exists(configFile), "Dashboard.config not found at {0}", configFile);
 

@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class ClearCaseHistoryParserTest 
 	{
 		ClearCaseHistoryParser parser;
+        string path = Platform.IsWindows ? @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common" : @"/CCase/ppunjani_view/RefArch/tutorial/wwhdata/common";
 
 		[SetUp]
 		protected void Setup()
@@ -20,11 +21,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanTokenizeWithNoComment()
 		{
-			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#mkelem#~#!#~#!#~#" );
+			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#" + System.IO.Path.Combine(path, "context.js") + @"#~#\main\0#~#mkelem#~#!#~#!#~#" );
 			Assert.AreEqual( 8, tokens.Length );
 			Assert.AreEqual( "ppunjani", tokens[ 0 ] );
 			Assert.AreEqual( "Friday, September 27, 2002 06:31:36 PM", tokens[ 1 ] );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js", tokens[ 2 ] );
+			Assert.AreEqual( System.IO.Path.Combine(path, "context.js"), tokens[ 2 ] );
 			Assert.AreEqual( @"\main\0", tokens[ 3 ] );
 			Assert.AreEqual("mkelem", tokens[ 4 ] );
 			Assert.AreEqual( "!", tokens[ 5 ] );
@@ -38,9 +39,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string userName = "gsmith";
 			const string timeStamp = "Wednesday, March 10, 2004 08:52:05 AM";
 			DateTime expectedTime = new DateTime( 2004, 03, 10, 08, 52, 05 );
-			const string path = @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common";
 			const string file = "context.js";
-			const string elementName = path + "\\" + file;
+			string elementName = System.IO.Path.Combine(path, file);
 			const string modificationType = "checkin";
 			const string comment = "implemented dwim";
 			const string change = @"\main\17";
@@ -65,15 +65,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanAssignFileInfo()
 		{
-			const string path = @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common";
 			const string file = "context.js";
-			const string fullPath = path + "\\" + file;
+			string fullPath = System.IO.Path.Combine(path, file);
 			Modification modification = new Modification();
 
 			parser.AssignFileInfo( modification, fullPath );
 
-			Assert.AreEqual( path, modification.FolderName );
-			Assert.AreEqual( file, modification.FileName );
+			Assert.AreEqual( path, modification.FolderName, "FolderName" );
+			Assert.AreEqual( file, modification.FileName, "FileName" );
 		}
 
 		
@@ -114,21 +113,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void IgnoresMkBranchEvent()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#" + System.IO.Path.Combine(path, "context.js") + @"#~#\main\0#~#mkbranch#~#!#~#!#~#" );
 			Assert.IsNull( modification );
 		}
 
 		[Test]
 		public void IgnoresRmBranchEvent()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#rmbranch#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#" + System.IO.Path.Combine(path, "context.js") + @"#~#\main\0#~#rmbranch#~#!#~#!#~#" );
 			Assert.IsNull( modification );
 		}
 
 		[Test]
 		public void CanParseBadEntry()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Tuesday, February 18, 2003 05:09:14 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\wwhpagef.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Tuesday, February 18, 2003 05:09:14 PM#~#" + System.IO.Path.Combine(path, "wwhpagef.js") + @"#~#\main\0#~#mkbranch#~#!#~#!#~#" );
 			Assert.IsNull( modification );
 		}
 
@@ -143,10 +142,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntry()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#" + System.IO.Path.Combine(path, "towwhdir.js") + @"#~#\main#~#mkelem#~#!#~#!#~#" );
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( path, modification.FolderName );
 			Assert.AreEqual( "towwhdir.js", modification.FileName );
 			Assert.AreEqual( "mkelem", modification.Type );
 			Assert.AreEqual( "!", modification.ChangeNumber );
@@ -156,10 +155,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntryWithNoComment()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, February 25, 2004 01:09:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\topics.js#~##~#**null operation kind**#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, February 25, 2004 01:09:36 PM#~#" + System.IO.Path.Combine(path, "topics.js") + @"#~##~#**null operation kind**#~#!#~#!#~#" );
 			Assert.AreEqual( "ppunjani", modification.UserName);
 			Assert.AreEqual( new DateTime( 2004, 02, 25, 13, 09, 36 ), modification.ModifiedTime);
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName);
+			Assert.AreEqual( path, modification.FolderName);
 			Assert.AreEqual( "topics.js", modification.FileName);
 			Assert.AreEqual( "**null operation kind**", modification.Type );
 			Assert.AreEqual( "!", modification.ChangeNumber );
@@ -169,11 +168,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanTokenize()
 		{
-			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, March 21, 2003 03:32:24 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\files.js#~##~#mkelem#~#!#~#!#~#made from flat file" );
+			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, March 21, 2003 03:32:24 PM#~#" + System.IO.Path.Combine(path, "files.js") + @"#~##~#mkelem#~#!#~#!#~#made from flat file" );
 			Assert.AreEqual( 8, tokens.Length );
 			Assert.AreEqual( "ppunjani", tokens[0] );
 			Assert.AreEqual( "Friday, March 21, 2003 03:32:24 PM", tokens[1] );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\files.js", tokens[2] );
+			Assert.AreEqual( System.IO.Path.Combine(path, "files.js"), tokens[2] );
 			Assert.AreEqual( string.Empty, tokens[3] );
 			Assert.AreEqual( "mkelem", tokens[4] );
 			Assert.AreEqual( "!", tokens[5] );
@@ -184,10 +183,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntryWithNoLineBreakInComment()
 		{
-			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#" + System.IO.Path.Combine(path, "towwhdir.js") + @"#~#\main#~#mkelem#~#!#~#!#~#simple comment" );
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( path, modification.FolderName );
 			Assert.AreEqual( "towwhdir.js", modification.FileName );
 			Assert.AreEqual( "mkelem", modification.Type );
 			Assert.AreEqual( "!", modification.ChangeNumber );
@@ -197,12 +196,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseStreamWithNoLineBreakInComment()
 		{
-			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment@#@#@#@#@#@#@#@#@#@#@#@";
+			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#" + System.IO.Path.Combine(path, "towwhdir.js") + @"#~#\main#~#mkelem#~#!#~#!#~#simple comment@#@#@#@#@#@#@#@#@#@#@#@";
 
 			Modification modification = parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( path, modification.FolderName );
 			Assert.AreEqual( "towwhdir.js", modification.FileName );
 			Assert.AreEqual( "mkelem", modification.Type );
 			Assert.AreEqual( "!", modification.ChangeNumber );
@@ -212,13 +211,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseStreamWithLineBreakInComment()
 		{
-			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment 
+			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#" + System.IO.Path.Combine(path, "towwhdir.js") + @"#~#\main#~#mkelem#~#!#~#!#~#simple comment 
 with linebreak@#@#@#@#@#@#@#@#@#@#@#@";
 
 			Modification modification = parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
-			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( path, modification.FolderName );
 			Assert.AreEqual( "towwhdir.js", modification.FileName );
 			Assert.AreEqual( "mkelem", modification.Type );
 			Assert.AreEqual( "!", modification.ChangeNumber );

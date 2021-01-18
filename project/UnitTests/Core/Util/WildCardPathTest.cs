@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void StringWithWildcardsInPathShouldReturnOneTxtFileInsideRootLevel()
         {
-            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, @"RootLevel\**\FileA.txt"));
+            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, "RootLevel", "**", "FileA.txt"));
 
             FileInfo[] fileMatches = wildCard.GetFiles();
 
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void StringWithWildcardsInPathShouldGetAllTxtFilesInsideRootLevel()
         {
-            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, @"RootLevel\**\*.txt"));
+            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, "RootLevel", "**", "*.txt"));
 
             FileInfo[] fileMatches = wildCard.GetFiles();
 
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void StringWithWildcardsInPathShouldUseWildcardsFollowedByFolderNameSegment()
         {
-            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, @"RootLevel\**\ThirdLevelA\*.txt"));
+            WildCardPath wildCard = new WildCardPath(Path.Combine(new string [] {tempFolderFullPath, "RootLevel", "**", "ThirdLevelA", "*.txt"}));
             FileInfo[] fileMatches = wildCard.GetFiles();
 
             Assert.AreEqual(3, fileMatches.Length);
@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void StringWithWildcardsInPathShouldUseWildcardsInTwoFolderSegments()
         {
-            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, @"RootLevel\**\SecondLevelA\**\*.txt"));
+            WildCardPath wildCard = new WildCardPath(Path.Combine(new string [] {tempFolderFullPath, "RootLevel", "**", "SecondLevelA", "**", "*.txt"}));
 
             FileInfo[] fileMatches = wildCard.GetFiles();
 
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void StringWithWildcardsInPathShouldUseFolderWildcardsAndSimpleWildcardForAFolderName()
         {
-            WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, @"RootLevel\**\SecondLevelA\Thir*\*.txt"));
+            WildCardPath wildCard = new WildCardPath(Path.Combine(new string [] {tempFolderFullPath, "RootLevel", "**", "SecondLevelA", "Thir*", "*.txt"}));
 
             FileInfo[] fileMatches = wildCard.GetFiles();
 

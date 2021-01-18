@@ -29,25 +29,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteRunsNDependWithDefaults()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\NDependResults\\file1.txt",
-                "workingDir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
 
@@ -60,26 +60,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteWillCreateANewDirectory()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\NDependResults\\file1.txt",
-                "workingDir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(false).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory("artefactDir\\1\\NDepend")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
 
@@ -92,24 +92,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteLoadsContentsFileIfItExists()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(true).Verifiable();
             using (var reader = new StringReader("<ReportResources><File>file1.txt</File><File>file2.xml</File></ReportResources>"))
             {
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Returns(reader).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(false).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory("artefactDir\\1\\NDepend")).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(reader).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(false).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
                 var logger = mocks.Create<ILogger>().Object;
                 var task = new NDependTask(executor, fileSystem, logger);
 
@@ -123,17 +123,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteFailsIfContentFileHasInvalidRootNode()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(true).Verifiable();
             using (var reader = new StringReader("<garbage/>"))
             {
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Returns(reader).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(reader).Verifiable();
                 var logger = mocks.Create<ILogger>().Object;
                 var task = new NDependTask(executor, fileSystem, logger);
 
@@ -147,17 +147,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteFailsIfContentFileIsInvalid()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(true).Verifiable();
             using (var reader = new StringReader("garbage"))
             {
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Returns(reader).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(reader).Verifiable();
                 var logger = mocks.Create<ILogger>().Object;
                 var task = new NDependTask(executor, fileSystem, logger);
 
@@ -171,21 +171,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteLoadsContentsFileIfItExistsAndSkipsFilesIfMissing()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(true).Verifiable();
             using (var reader = new StringReader("<ReportResources><File>file1.txt</File><File>file2.xml</File></ReportResources>"))
             {
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Returns(reader).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(false).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory("artefactDir\\1\\NDepend")).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(false).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file2.xml")).Returns(false).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(reader).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(false).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(false).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(false).Verifiable();
                 var logger = mocks.Create<ILogger>().Object;
                 var task = new NDependTask(executor, fileSystem, logger);
 
@@ -199,22 +199,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void ExecuteLoadsContentsFileIfItExistsAndImportsDirectory()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(true).Verifiable();
             using (var reader = new StringReader("<ReportResources><Directory>images</Directory></ReportResources>"))
             {
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Returns(reader).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory("workingDir\\NDependResults\\images", true)).Returns(new[] { "workingDir\\NDependResults\\images\\test.png" }).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend\\images")).Returns(false).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory("artefactDir\\1\\NDepend\\images")).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\images\\test.png")).Returns(true).Verifiable();
-                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\images\\test.png", "artefactDir\\1\\NDepend\\images\\test.png")).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Load(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(reader).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(System.IO.Path.Combine("workingDir", "NDependResults", "images"), true)).Returns(new[] { System.IO.Path.Combine("workingDir", "NDependResults", "images", "test.png") }).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend", "images"))).Returns(false).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.CreateDirectory(System.IO.Path.Combine("artefactDir", "1", "NDepend", "images"))).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "images", "test.png"))).Returns(true).Verifiable();
+                Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "images", "test.png"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "images", "test.png"))).Verifiable();
                 var logger = mocks.Create<ILogger>().Object;
                 var task = new NDependTask(executor, fileSystem, logger);
 
@@ -228,25 +228,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void CanOverrideExecutable()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\ndepend-app.exe", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "ndepend-app.exe"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\NDependResults\\file1.txt",
-                "workingDir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
             task.Executable = "ndepend-app.exe";
@@ -260,25 +260,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void CanUsePathsWithSpaces()
         {
-            var workingDir = "working Dir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("working Dir", "NDependResults");
             var result = GenerateResultMock("working Dir", "artefact Dir");
-            var executor = GenerateExecutorMock("working Dir\\ndepend-app.exe", "\"working Dir\\NDependResults\" /OutDir \"working Dir\\NDependResults\"", "working Dir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("working Dir", "ndepend-app.exe"), "\"" + workingDir + "\" /OutDir \"" + workingDir + "\"", "working Dir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("working Dir\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("working Dir", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "working Dir\\NDependResults\\file1.txt",
-                "working Dir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("working Dir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("working Dir", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefact Dir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("working Dir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("working Dir\\NDependResults\\file1.txt", "artefact Dir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("working Dir\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("working Dir\\NDependResults\\file2.xml", "artefact Dir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("working Dir\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefact Dir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("working Dir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("working Dir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefact Dir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("working Dir", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("working Dir", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefact Dir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("working Dir", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
             task.Executable = "ndepend-app.exe";
@@ -292,25 +292,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void CanOverrideBaseDirectory()
         {
-            var workingDir = "somewhere-else\\NDependResults";
+            var workingDir = System.IO.Path.Combine("somewhere-else", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("somewhere-else\\NDepend.Console", "somewhere-else\\NDependResults /OutDir somewhere-else\\NDependResults", "somewhere-else", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("somewhere-else", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "somewhere-else", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("somewhere-else\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("somewhere-else", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "somewhere-else\\NDependResults\\file1.txt",
-                "somewhere-else\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("somewhere-else", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("somewhere-else", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("somewhere-else\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("somewhere-else\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("somewhere-else\\NDependResults\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("somewhere-else\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("somewhere-else\\NDependResults\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("somewhere-else", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("somewhere-else", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("somewhere-else", "NDependResults", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("somewhere-else", "NDependResults", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("somewhere-else", "NDependResults", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
             task.BaseDirectory = "somewhere-else";
@@ -324,27 +324,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void AllApplicationArgsAreSet()
         {
-            var workingDir = "workingDir\\out-dir";
+            var workingDir = System.IO.Path.Combine("workingDir", "out-dir");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console",
-                "workingDir\\test.project /Silent /EmitVisualNDependBinXml  /InDirs workingDir\\dir1 workingDir\\dir2 /OutDir workingDir\\out-dir /XslForReport  workingDir\\report.xslt", 
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"),
+                System.IO.Path.Combine("workingDir", "test.project") + " /Silent /EmitVisualNDependBinXml  /InDirs " + System.IO.Path.Combine("workingDir", "dir1") + " " + System.IO.Path.Combine("workingDir", "dir2") + 
+                " /OutDir " + workingDir + " /XslForReport  " + System.IO.Path.Combine("workingDir", "report.xslt"), 
                 "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[0]).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\out-dir\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "out-dir", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\out-dir\\file1.txt",
-                "workingDir\\out-dir\\file2.xml"
+                System.IO.Path.Combine("workingDir", "out-dir", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "out-dir", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\out-dir\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\out-dir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\out-dir\\file2.xml")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\out-dir\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml")).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile("workingDir\\out-dir\\file2.xml")).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "out-dir", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "out-dir", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "out-dir", "file2.xml"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "out-dir", "file2.xml"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file2.xml"))).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GenerateTaskResultFromFile(System.IO.Path.Combine("workingDir", "out-dir", "file2.xml"))).Returns(mocks.Create<ITaskResult>().Object).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
             task.ProjectFile = "test.project";
@@ -367,30 +368,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void RunningOnExistingDirectoryChecksFilesAndCopiesWhenNewer()
         {
-            var workingDir = "workingDir\\NDependResults";
+            var workingDir = System.IO.Path.Combine("workingDir", "NDependResults");
             var result = GenerateResultMock();
-            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var executor = GenerateExecutorMock(System.IO.Path.Combine("workingDir", "NDepend.Console"), workingDir + " /OutDir " + workingDir, "workingDir", 600000);
             var fileSystem = mocks.Create<IFileSystem>(MockBehavior.Strict).Object;
             MockSequence sequence = new MockSequence();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\NDependResults\\file1.txt",
-                "workingDir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml")
             }).Verifiable();
             var baseTime = DateTime.Now;
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file1.txt")).Returns(baseTime).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file2.xml")).Returns(baseTime).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Returns(false).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(baseTime).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(baseTime).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "ReportResources.xml"))).Returns(false).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(workingDir)).Returns(true).Verifiable();
             Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetFilesInDirectory(workingDir)).Returns(new string[] {
-                "workingDir\\NDependResults\\file1.txt",
-                "workingDir\\NDependResults\\file2.xml"
+                System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"),
+                System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml")
             }).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file1.txt")).Returns(baseTime.AddMinutes(1)).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file2.xml")).Returns(baseTime).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists("workingDir\\NDependResults\\file1.txt")).Returns(true).Verifiable();
-            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt")).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(baseTime.AddMinutes(1)).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.GetLastWriteTime(System.IO.Path.Combine("workingDir", "NDependResults", "file2.xml"))).Returns(baseTime).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.DirectoryExists(System.IO.Path.Combine("artefactDir", "1", "NDepend"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.FileExists(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"))).Returns(true).Verifiable();
+            Mock.Get(fileSystem).InSequence(sequence).Setup(_fileSystem => _fileSystem.Copy(System.IO.Path.Combine("workingDir", "NDependResults", "file1.txt"), System.IO.Path.Combine("artefactDir", "1", "NDepend", "file1.txt"))).Verifiable();
             var logger = mocks.Create<ILogger>().Object;
             var task = new NDependTask(executor, fileSystem, logger);
 
@@ -425,7 +426,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Mock.Get(result).SetupGet(_result => _result.IntegrationProperties).Returns(new Dictionary<string, string>());
             Mock.Get(result).SetupGet(_result => _result.Label).Returns("1");
             Mock.Get(result).Setup(_result => _result.AddTaskResult(It.IsAny<ITaskResult>())).Verifiable();
-            Mock.Get(result).Setup(_result => _result.BaseFromArtifactsDirectory("1")).Returns(string.Concat(artefactDir, "\\1"));
+            Mock.Get(result).Setup(_result => _result.BaseFromArtifactsDirectory("1")).Returns(System.IO.Path.Combine(artefactDir, "1"));
             return result;
         }
 

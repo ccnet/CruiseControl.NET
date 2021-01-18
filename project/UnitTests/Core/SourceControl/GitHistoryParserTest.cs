@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			var mod = modifications[0];
 			var combinedPath = Path.Combine(mod.FolderName, mod.FileName);
-			Assert.That(combinedPath, Is.EqualTo("/site/assets/pdfs\\BWMF Politique de gestion des conflits d'int\\303\\203\\302\\251r\\303\\203\\302\\252ts.pdf"));
+			Assert.That(combinedPath, Is.EqualTo(Path.Combine("/site/assets/pdfs", "BWMF Politique de gestion des conflits d'int\\303\\203\\302\\251r\\303\\203\\302\\252ts.pdf")));
 		}
 	}
 }

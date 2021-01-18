@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void SetUp()
         {
 
-            CreateProcessExecutorMock("mockPath\\TF.exe");
+            CreateProcessExecutorMock(System.IO.Path.Combine("mockPath", "TF.exe"));
             mockRegistry = new RegistryStub();
             historyParser = new VstsHistoryParser();
 
