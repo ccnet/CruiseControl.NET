@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 
 		public static void AssertEqualArrays(Array expected, Array actual)
 		{
-			Assert.AreEqual(actual.Length, expected.Length, "Arrays should have same length");
+			Assert.AreEqual(expected.Length, actual.Length, "Arrays should have same length");
 
 			for (int i = 0; i < expected.Length; i++)
 			{
