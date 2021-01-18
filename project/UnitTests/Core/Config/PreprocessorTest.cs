@@ -558,7 +558,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			System.IO.Stream result = Assembly.GetExecutingAssembly().
 				GetManifestResourceStream(
 				"ThoughtWorks.CruiseControl.UnitTests.Core.Config.TestAssets." +
-				filename);
+				filename.Replace("/", "."));
             if (assertResourceFound)
             {
                 Assert.IsNotNull(result, "Unable to load data from assembly : " + filename);
