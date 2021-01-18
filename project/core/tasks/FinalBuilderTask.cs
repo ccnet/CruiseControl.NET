@@ -229,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
             ProcessInfo info = new ProcessInfo(GetFBPath(), GetFBArgs());
 			info.TimeOut = Timeout*1000;
-            int idx = ProjectFile.LastIndexOf('\\');
+            int idx = ProjectFile.LastIndexOf(Path.DirectorySeparatorChar);
             if (idx > -1)
               info.WorkingDirectory = ProjectFile.Remove(idx, ProjectFile.Length - idx); // Trim down proj. file to get working dir.
 
@@ -334,10 +334,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
             {
-                return Path.GetDirectoryName(executableDir) + @"\FB3Cmd.exe";
+                return Path.Combine(Path.GetDirectoryName(executableDir), @"FB3Cmd.exe");
             }
 
-			return Path.GetDirectoryName(executableDir) + @"\FBCmd.exe";
+			return Path.Combine(Path.GetDirectoryName(executableDir), @"FBCmd.exe");
 		}
 	
 		#endregion

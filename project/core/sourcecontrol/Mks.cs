@@ -346,7 +346,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("-R");
-			buffer.AddArgument("/s", SandboxRoot + "\\*");
+			buffer.AddArgument("/s", System.IO.Path.Combine(SandboxRoot, "*"));
 			Execute(new ProcessInfo("attrib", buffer.ToString()));
 		}
 
