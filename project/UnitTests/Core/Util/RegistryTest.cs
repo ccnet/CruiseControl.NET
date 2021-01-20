@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		private const string VALID_REGISTRY_PATH = @"SOFTWARE\Microsoft\Windows\CurrentVersion";
 
 		[Test]
+        [Platform(Exclude = "Mono", Reason = "No real registry under Linux")]
 		public void GetLocalMachineSubKeyValue()
 		{
 			string programFilesPath = new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "ProgramFilesPath");
