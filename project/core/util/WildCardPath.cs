@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
                     baseDirectories.Add(baseDirectory);
 
-                    int position = baseDirectory.Length + "\\**\\".Length - 1;
+                    int position = baseDirectory.Length + (Path.DirectorySeparatorChar + "**" + Path.DirectorySeparatorChar).Length - 1;
 
                     if (!this.IsNextLevelAFile(position))
                     {
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                             if (this.IsNextLevelAFolderWildcard(position))
                             {
                                 folderWildcardsMode = true;
-                                position = position + "\\**\\".Length - 1;
+                                position = position + (Path.DirectorySeparatorChar + "**" + Path.DirectorySeparatorChar).Length - 1;
                             }
                             else
                             {
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public bool IsNextLevelAFile(int position)
         {
-            string[] dashs = this.PathPattern.Substring(position).Split('\\');
+            string[] dashs = this.PathPattern.Substring(position).Split(Path.DirectorySeparatorChar);
 
             if (dashs.Length == 1)
             {
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public string GetNextDirectoryName(int position)
         {
-            return this.PathPattern.Substring(position, this.PathPattern.IndexOf("\\", position, StringComparison.OrdinalIgnoreCase) - position);
+            return this.PathPattern.Substring(position, this.PathPattern.IndexOf(Path.DirectorySeparatorChar.ToString(), position, StringComparison.OrdinalIgnoreCase) - position);
         }
 
         public bool HasFolderWildcards()
