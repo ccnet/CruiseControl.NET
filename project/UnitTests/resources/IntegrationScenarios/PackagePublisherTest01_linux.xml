@@ -1,0 +1,22 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+  
+  <project name="PackageTest01" workingDirectory="Packaging01">
+    <triggers />
+    
+    <tasks>
+      <package name="TestPackage" always="true">
+        <packageList>
+          <packageFile sourceFile="Info/Sub1/*.txt" flatten="true"/>
+        </packageList>
+      </package>
+
+    </tasks>
+    
+    <publishers>
+      <xmllogger />
+    </publishers>
+  </project>
+  
+  
+</cruisecontrol>
