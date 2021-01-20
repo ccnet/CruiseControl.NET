@@ -1,0 +1,28 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+
+
+  <project name="PackageTest03"
+           workingDirectory="Packaging03">
+    <triggers />
+
+    <tasks>
+      <package always="true" >
+        <name>Project-package.zip</name>
+        <packageList>
+          <packageFolder includeSubFolders="true" >
+            <sourceFolder>some/directories/deeper/_PublishedWebsites/MyProject</sourceFolder>
+            <flatten>false</flatten>
+            <targetFolder>MegaWebSite</targetFolder> 
+            <fileFilter>*.*</fileFilter>
+          </packageFolder>
+        </packageList>
+      </package>
+    </tasks>
+
+    <publishers>
+      <xmllogger />
+    </publishers>
+  </project>
+
+
+</cruisecontrol>

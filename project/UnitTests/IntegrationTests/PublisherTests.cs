@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             const string ProjectName1 = "PackageTest01";
 
             string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
-            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest01.xml");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest01" + (Platform.IsWindows ? "" : "_linux") + ".xml");
             string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
 
             IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             const string ProjectName1 = "PackageTest02";
 
             string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
-            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest02.xml");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest02" + (Platform.IsWindows ? "" : "_linux") + ".xml");
             string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
 
             IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
@@ -230,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             const string ProjectName1 = "PackageTest03";
 
             string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
-            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest03.xml");
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "PackagePublisherTest03" + (Platform.IsWindows ? "" : "_linux") + ".xml");
             string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
 
             IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
