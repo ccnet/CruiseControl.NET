@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using CCNet = ThoughtWorks.CruiseControl;
@@ -106,15 +107,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             Assert.IsTrue(System.IO.File.Exists(ExpectedZipFile),"zip package not found at expected location");
 
             ICSharpCode.SharpZipLib.Zip.ZipFile zf = new ICSharpCode.SharpZipLib.Zip.ZipFile(ExpectedZipFile);
-            string expectedFiles = string.Empty;
+            List<string> actualFiles = new List<string>();
 
             foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry ze in zf)
             {
                 System.Diagnostics.Debug.WriteLine(ze.Name);
-                expectedFiles += ze.Name;
+                actualFiles.Add(ze.Name);
             }
+            actualFiles.Sort();
 
-            Assert.AreEqual("a.txtb.txt", expectedFiles);
+            Assert.AreEqual("a.txtb.txt", String.Join("", actualFiles));
 
         }
 
@@ -208,15 +210,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             Assert.IsTrue(System.IO.File.Exists(ExpectedZipFile), "zip package not found at expected location");
 
             ICSharpCode.SharpZipLib.Zip.ZipFile zf = new ICSharpCode.SharpZipLib.Zip.ZipFile(ExpectedZipFile);
-            string expectedFiles = string.Empty;
+            List<string> actualFiles = new List<string>();
 
             foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry ze in zf)
             {
                 System.Diagnostics.Debug.WriteLine(ze.Name);
-                expectedFiles += ze.Name;
+                actualFiles.Add(ze.Name);
             }
+            actualFiles.Sort();
 
-            Assert.AreEqual(@"Info/Sub1/a.txtInfo/Sub1/b.txt", expectedFiles);
+            Assert.AreEqual(@"Info/Sub1/a.txtInfo/Sub1/b.txt", String.Join("", actualFiles));
 
         }
 
