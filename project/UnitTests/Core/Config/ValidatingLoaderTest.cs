@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			tempfile = TempFileUtil.CreateTempFile("config", "project1.xml", @"<project name=""p1"" />");
 			string xml = 
 @"<!DOCTYPE cruisecontrol [ 
-	<!ENTITY project1 SYSTEM ""file:" + tempfile + @""">
+	<!ENTITY project1 SYSTEM ""file://" + tempfile + @""">
 ]> 
 <cruisecontrol>&project1;</cruisecontrol>";
 			XmlTextReader xr = new XmlTextReader(new StringReader(xml));
