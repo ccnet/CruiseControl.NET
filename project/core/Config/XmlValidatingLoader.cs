@@ -20,16 +20,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         public XmlValidatingLoader(XmlReader innerReader)
         {
             this.innerReader = innerReader;
+
+            var resolver = new XmlUrlResolver();
+
             // This is a bit of a hack - Turn on DTD entity resolution if it is not already on.
+            // Also set a resolver, this is required under Mono
             var dummy = innerReader as XmlTextReader;
             if ( dummy != null )
             {
                 dummy.EntityHandling = EntityHandling.ExpandEntities;
+                dummy.XmlResolver = resolver;
             }
             xmlReaderSettings = new XmlReaderSettings();
             xmlReaderSettings.ValidationType = ValidationType.None;
             xmlReaderSettings.ProhibitDtd = false;
-            xmlReaderSettings.XmlResolver = new XmlUrlResolver();
+            xmlReaderSettings.XmlResolver = resolver;
             xmlReaderSettings.ConformanceLevel = ConformanceLevel.Auto;
             xmlReaderSettings.ValidationEventHandler += ValidationHandler;
         }
