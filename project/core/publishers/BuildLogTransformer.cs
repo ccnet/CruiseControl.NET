@@ -22,6 +22,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		public string TransformResultsWithAllStyleSheets(XPathDocument document)
 		{
 			var section = ConfigurationManager.GetSection("xslFiles") as XslFilesSectionHandler;
+            if (section == null)
+                section = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).GetSection("xslFiles") as XslFilesSectionHandler;
+            
 			return TransformResults(section?.FileNames, document);
 		}
 
