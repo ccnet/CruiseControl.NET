@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Xml;
 
@@ -7,29 +9,78 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     /// <summary>
     /// 	
     /// </summary>
-	public class XslFilesSectionHandler : IConfigurationSectionHandler
+	public class XslFilesSectionHandler : ConfigurationSection
 	{
-        /// <summary>
-        /// Creates the specified parent.	
-        /// </summary>
-        /// <param name="parent">The parent.</param>
-        /// <param name="configContext">The config context.</param>
-        /// <param name="section">The section.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-		public object Create(object parent, object configContext, XmlNode section)
-		{
-			ArrayList files = new ArrayList();
-
-			foreach (XmlNode node in section.ChildNodes) 
-			{
-				if (node.NodeType == System.Xml.XmlNodeType.Element) 
-				{
-					files.Add(node.Attributes["name"].Value);
-				}
-			}
-
-			return files;
-		}
+        [ConfigurationProperty("", IsDefaultCollection = true)]
+        [ConfigurationCollection(typeof(XslFilesCollection), AddItemName = "file")]
+        public XslFilesCollection XslFiles
+        {
+            get
+            {
+                return  (XslFilesCollection)base[""];
+            }
+        }
+        
+        public List<string> FileNames 
+        {
+            get
+            {
+                var result = new List<string>();
+    			foreach (var file in XslFiles) 
+            		result.Add(((XslFileElement)file).Name);
+                    
+                return result;
+            }
+        }
 	}
+
+    public class XslFilesCollection : ConfigurationElementCollection
+    {
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new XslFileElement();
+        }
+    
+        protected override Object GetElementKey(ConfigurationElement element)
+        {
+            return ((XslFileElement)element).Name;
+        }
+    
+        public XslFileElement this[int index]
+        {
+            get
+            {
+                return (XslFileElement)BaseGet(index);
+            }
+            set
+            {
+                if (BaseGet(index) != null)
+                    BaseRemoveAt(index);
+
+                BaseAdd(index, value);
+            }
+        }
+
+        protected override void BaseAdd(ConfigurationElement element)
+        {
+            BaseAdd(element, false);
+        }
+    }
+    
+    public class XslFileElement : ConfigurationElement
+    {
+        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
+        public string Name
+        {
+            get
+            {
+                return (string)this["name"];
+            }
+            set
+            {
+                this["name"] = value;
+            }
+        }
+    }
 }
+
