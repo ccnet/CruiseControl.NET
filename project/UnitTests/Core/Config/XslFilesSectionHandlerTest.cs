@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
     [TestFixture]
-    public class XslFilesSectionHandler : CustomAssertion
+    public class XslFilesSectionHandlerTest : CustomAssertion
     {
         [Test]
         public void GetConfig()
