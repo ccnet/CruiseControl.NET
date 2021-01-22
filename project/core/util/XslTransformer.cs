@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
@@ -94,6 +94,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			catch (FileNotFoundException)
 			{
 				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"XSL stylesheet file not found: {0}", xslFileName));
+			}
+            catch (ArgumentNullException ex)     
+			{
+                if (Type.GetType ("Mono.Runtime") != null)  // Workaround Mono library issue: https://github.com/mono/mono/issues/20771
+				    throw new CruiseControlException("Unable to load transform: " + xslFileName, ex);
+                    
+                throw;
 			}
             catch (XsltException ex)
 			{
