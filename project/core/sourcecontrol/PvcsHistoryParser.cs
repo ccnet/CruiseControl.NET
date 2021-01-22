@@ -12,9 +12,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </summary>
 	public class PvcsHistoryParser : IHistoryParser
 	{
-		private static Regex _searchRegEx = new Regex(@"(?<Archive>Archive:\s+.*?\r\n(.|\s)*?(={35}(\r\n|$)))", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
-		private static Regex _archiveRegEx = new Regex(@"Archive:\s+(?<ArchiveName>.*?)\nWorkfile:\s+(?<Filename>.*?)\nArchive\screated:\s+(?<CreatedDate>.*?)\r\n(.|\s)*?-{35}\r\n(?<Revision>Rev\s\d+(\.\d+)*\r\n(.*\r\n)*?Author\sid:.*?\r\n((?!(={35}|-{35}))(.|\s)*?\r\n)?(-{35}|={35})(\r\n|$))+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
-		private static Regex _revisionRegEx = new Regex(@"Rev\s(?<Version>\d(\.\d+)*)\r\n(.*?\r\n)?Checked\sin:\s+(?<CheckIn>.*?)\r\n(.*?\r\n)?Last\smodified:\s+(?<PreviousModification>.*?)\r\n(.*?\r\n)?Author\sid:\s+(?<Author>.*?)\s.*?\r\n(Branches:\s+.*?\r\n)?(?<Comment>(((?!(={35}|-{35}))(.|\s)*?)\r\n)?)(={35}|-{35})(\r\n|$)", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+        private static string RegexNewLine = Regex.Escape(Environment.NewLine); 
+    
+		private static Regex _searchRegEx = new Regex(@"(?<Archive>Archive:\s+.*?" + RegexNewLine + @"(.|\s)*?(={35}(" + RegexNewLine + @"|$)))", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+		private static Regex _archiveRegEx = new Regex(@"Archive:\s+(?<ArchiveName>.*?)\nWorkfile:\s+(?<Filename>.*?)\nArchive\screated:\s+(?<CreatedDate>.*?)" + RegexNewLine + @"(.|\s)*?-{35}" + RegexNewLine + @"(?<Revision>Rev\s\d+(\.\d+)*" + RegexNewLine + @"(.*" + RegexNewLine + @")*?Author\sid:.*?" + RegexNewLine + @"((?!(={35}|-{35}))(.|\s)*?" + RegexNewLine + @")?(-{35}|={35})(" + RegexNewLine + @"|$))+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+		private static Regex _revisionRegEx = new Regex(@"Rev\s(?<Version>\d(\.\d+)*)" + RegexNewLine + @"(.*?" + RegexNewLine + @")?Checked\sin:\s+(?<CheckIn>.*?)" + RegexNewLine + @"(.*?" + RegexNewLine + @")?Last\smodified:\s+(?<PreviousModification>.*?)" + RegexNewLine + @"(.*?" + RegexNewLine + @")?Author\sid:\s+(?<Author>.*?)\s.*?" + RegexNewLine + @"(Branches:\s+.*?" + RegexNewLine + @")?(?<Comment>(((?!(={35}|-{35}))(.|\s)*?)" + RegexNewLine + @")?)(={35}|-{35})(" + RegexNewLine + @"|$)", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Parses the specified reader.	
