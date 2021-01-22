@@ -358,7 +358,9 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             // the state was set to 'Stopping', so set it to 'Stopped'
             state = ProjectIntegratorState.Stopped;
-            thread = null;
+            lock(this)
+              thread = null;
+
             // Ensure that any queued integrations are cleared for this project.
             integrationQueue.RemoveProject(project);
             Log.Info("Integrator for project: " + project.Name + " is now stopped.");
@@ -393,10 +395,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public void Abort()
         {
-            if (thread != null)
+            lock(this)
             {
-                Log.Info("Aborting integrator for project: " + project.Name);
-                thread.Abort();
+              if (thread != null)
+              {
+                  Log.Info("Aborting integrator for project: " + project.Name);
+                  thread.Abort();
+              }
             }
         }
 
