@@ -350,7 +350,7 @@ Author id: Admin     lines deleted/added/moved: 0/0/0
 Initial revision.
 ===================================
 --------------------------------------------------------------------------------
-				".Replace(windowsPath, path);
+				".Replace(windowsPath, path).Replace("\\", System.IO.Path.DirectorySeparatorChar.ToString());
             } 
         }
 
