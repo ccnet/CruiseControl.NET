@@ -167,18 +167,19 @@
     <target name="build" depends="init, restore, createAssemblyInfo" description="Compilation of the build project">
         <loadtasks assembly="${nauckit.nant.assembly}" />
 
-        <echo message="Build configuration: ${build.configuration}" />
-        <echo message="Source Directory: ${src.dir}" />
-        <echo message="Build Directory: ${build.dir}" />
-        <echo message="MSBuild path: ${build.dir}" />
-
         <property name="msbuild.file" value="${framework::get-msbuild-path(vswhere.executable)}" />
         <property name="msbuild.exe" value="${msbuild.file}" if="${platform::is-windows()}" />
         <property name="msbuild.exe" value="mono" if="${platform::is-unix()}" />
 
+        <echo message="vswhere located at: ${vswhere.executable}" />
+        <echo message="Build configuration: ${build.configuration}" />
+        <echo message="Source Directory: ${src.dir}" />
+        <echo message="Build Directory: ${build.dir}" />
+        <echo message="MSBuild file: ${msbuild.file}, MSbuild exe: ${msbuild.exe}" />
+
         <!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
-        <exec program="${msbuild.exe}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
-            <arg value="msbuild.file" if="${platform::is-unix()}"/>
+        <exec program="${msbuild.exe}" workingdir="${src.dir}" verbose="${nant.verbosity}">
+            <arg value="${msbuild.file}" if="${platform::is-unix()}"/>
             <arg value="${path::combine(src.dir, build.project)}" />
             <arg value="/t:${build.target}" />
             <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
@@ -241,7 +242,7 @@
                 </fileset>
             </copy>
             <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
+                <fileset basedir="${path::combine(src.dir, 'packages/NUnit.3.12.0/lib/net45')}" failonempty="true">
                     <include name="nunit.framework.dll" />
                 </fileset>
             </copy>
