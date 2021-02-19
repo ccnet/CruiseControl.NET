@@ -167,18 +167,19 @@
     <target name="build" depends="init, restore, createAssemblyInfo" description="Compilation of the build project">
         <loadtasks assembly="${nauckit.nant.assembly}" />
 
-        <echo message="Build configuration: ${build.configuration}" />
-        <echo message="Source Directory: ${src.dir}" />
-        <echo message="Build Directory: ${build.dir}" />
-        <echo message="MSBuild path: ${build.dir}" />
-
         <property name="msbuild.file" value="${framework::get-msbuild-path(vswhere.executable)}" />
         <property name="msbuild.exe" value="${msbuild.file}" if="${platform::is-windows()}" />
         <property name="msbuild.exe" value="mono" if="${platform::is-unix()}" />
 
+        <echo message="vswhere located at: ${vswhere.executable}" />
+        <echo message="Build configuration: ${build.configuration}" />
+        <echo message="Source Directory: ${src.dir}" />
+        <echo message="Build Directory: ${build.dir}" />
+        <echo message="MSBuild file: ${msbuild.file}, MSbuild exe: ${msbuild.exe}" />
+
         <!-- build for Linux - msbuild task still uses xbuild that was deprecated starting with mono 5.0 -->
-        <exec program="${msbuild.exe}" basedir="${src.dir}" workingdir="${src.dir}" verbose="${nant.verbosity}">
-            <arg value="msbuild.file" if="${platform::is-unix()}"/>
+        <exec program="${msbuild.exe}" workingdir="${src.dir}" verbose="${nant.verbosity}">
+            <arg value="${msbuild.file}" if="${platform::is-unix()}"/>
             <arg value="${path::combine(src.dir, build.project)}" />
             <arg value="/t:${build.target}" />
             <arg value="/p:TargetFrameworkVersion=${build.target.framework};Configuration=${build.configuration}"/>
@@ -208,66 +209,10 @@
     <target name="runNUnitTests" depends="build" description="Run the NUnit tests">
         <loadtasks assembly="${nauckit.nant.assembly}" />
 
-        <!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
-        <if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
-                    <include name="nunit.framework.dll" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${tools.dir}" failonempty="true">
-                    <include name="sleeper.exe" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${src.dir}" failonempty="true">
-                    <include name="xsl/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
-        </if>
-
         <exec program="${nunit.executable}" >
                         <arg value="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
                         <arg value="--result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
-                        <arg value="--where &quot;cat != Integration&quot;" />
-                        
+                        <arg value="--where &quot;cat != Integration&quot;" />                        
         </exec>
     </target>
 
