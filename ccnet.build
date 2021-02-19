@@ -209,66 +209,10 @@
     <target name="runNUnitTests" depends="build" description="Run the NUnit tests">
         <loadtasks assembly="${nauckit.nant.assembly}" />
 
-        <!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
-        <if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine(src.dir, 'packages/NUnit.3.12.0/lib/net45')}" failonempty="true">
-                    <include name="nunit.framework.dll" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${tools.dir}" failonempty="true">
-                    <include name="sleeper.exe" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${src.dir}" failonempty="true">
-                    <include name="xsl/**" />
-                </fileset>
-            </copy>
-            <copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-                <fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
-                    <include name="*/**" />
-                </fileset>
-            </copy>
-            <copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
-        </if>
-
         <exec program="${nunit.executable}" >
                         <arg value="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
                         <arg value="--result=${path::combine(build.metrics.dir, 'nunit-result.xml')}" />
-                        <arg value="--where &quot;cat != Integration&quot;" />
-                        
+                        <arg value="--where &quot;cat != Integration&quot;" />                        
         </exec>
     </target>
 
