@@ -7,6 +7,7 @@
         AbortBuild,
         StartProject,
         StopProject,
+        Volunteer,
         Help
     }
 }
