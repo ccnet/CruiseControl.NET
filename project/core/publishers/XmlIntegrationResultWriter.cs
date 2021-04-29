@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             // hide the milliseconds
             TimeSpan time = result.TotalIntegrationTime;
-            writer.WriteAttributeString("buildtime", string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
+            writer.WriteAttributeString("buildtime", string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:d2}:{1:d2}:{2:d2}:{3:d2}", time.Days, time.Hours, time.Minutes, time.Seconds));
             if (result.Failed)
             {
                 writer.WriteAttributeString("error", "true");
