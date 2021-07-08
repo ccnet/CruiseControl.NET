@@ -232,6 +232,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public bool CommitUntrackedFiles { get; set; }
 
         /// <summary>
+        /// Indicates that files committed during the build process should be pushed to remmote repository after tagging. This requires 'commitBuildModifications'
+        /// and 'pushCommitedOnSuccess' to be set to 'true'.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>false</default>
+        [ReflectorProperty("pushCommitedOnSuccess", Required = false)]
+        public bool PushCommitedOnSuccess { get; set; }
+
+        /// <summary>
         /// Used to set the "user.name" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature. 
         /// </summary>
         /// <version>1.5</version>
@@ -366,6 +375,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // create a tag and push it.
             GitCreateTag(tagName, commitMessage, result);
             GitPushTag(tagName, result);
+
+            if (CommitBuildModifications && PushCommitedOnSuccess)
+            {
+                GitPushAll(result);
+            }
         }
 
         #region private methods
@@ -745,6 +759,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("origin");
             buffer.AddArgument("tag");
             buffer.AddArgument(tagName);
+
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
+            Execute(NewProcessInfo(buffer.ToString(), result));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
+
+        /// <summary>
+        /// Push commited content with "git push origin HEAD:'branch name'".
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitPushAll(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("push");
+            buffer.AddArgument("origin");
+            buffer.AddArgument("HEAD:"+ Branch);
 
             // initialize progress information
             var bpi = GetBuildProgressInformation(result);
