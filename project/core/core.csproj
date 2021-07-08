@@ -334,6 +334,7 @@
     <Compile Include="label\DateLabeller.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="label\CustomLabeller.cs" />
     <Compile Include="label\DefaultLabeller.cs">
       <SubType>Code</SubType>
     </Compile>

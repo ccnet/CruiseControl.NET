@@ -358,6 +358,7 @@
     <Compile Include="Core\Extensions\IntegrationPerformanceCountersExtensionTests.cs" />
     <Compile Include="Core\Extensions\DiskSpaceMonitorExtensionTests.cs" />
     <Compile Include="Core\Extensions\IntegrationRequestThrottleExtensionTests.cs" />
+    <Compile Include="Core\Label\CustomLabellerTest.cs" />
     <Compile Include="Core\Publishers\ConditionalPublisherTests.cs" />
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
