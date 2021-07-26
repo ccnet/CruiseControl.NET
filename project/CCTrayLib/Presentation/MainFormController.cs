@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Web;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Growl;
@@ -383,13 +384,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		}
 
 	    private static void DisplayWebPageForProject(ISingleProjectDetail project)
-		{
-			if (project.IsConnected)
-			{
-				string url = project.WebURL;
-				Process.Start(url);
-			}
-		}
+	    {
+	        if (project.IsConnected)
+	        {
+	            string dashboardUrl = project.WebURL.Replace("/ViewFarmReport.aspx", string.Empty);
+	            string url = string.Format("{0}/server/local/project/{1}/ViewLatestBuildReport.aspx", dashboardUrl,
+	                                       HttpUtility.UrlPathEncode(project.ProjectName));
+	            Process.Start(url);
+	        }
+	    }
 
 	    private readonly ProjectState[] stateIconOrder = new ProjectState[]
 	                                                         {
