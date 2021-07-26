@@ -27,60 +27,67 @@ namespace ThoughtWorks.CruiseControl.Console
         /// <returns></returns>
         public int Run(string[] args, bool usesShadowCopying)
         {
-        	ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
-        	List<string> extra = new List<string>();
-        
-        	OptionSet opts = new OptionSet();
-        	opts.Add("h|?|help", "display this help screen", delegate(string v) { consoleArgs.ShowHelp = v != null; })
-        		.Add("c|config=", "the configuration file to use (defaults to ccnet.conf)", delegate(string v) { consoleArgs.ConfigFile = v; })
-        		.Add("r|remoting=", "turn remoting on/off (defaults to on)", delegate(string v) { consoleArgs.UseRemoting = v == "on"; })
-        		.Add("p|project=", "the project to integrate (???)", delegate(string v) { consoleArgs.Project = v; })
-        		.Add("v|validate", "validate the configuration file and exit", delegate(string v) { consoleArgs.ValidateConfigOnly = v != null; })
-        		.Add("l|logging=", "turn logging on/off (defaults to on)", delegate(string v) { consoleArgs.Logging = v == "on"; })
-        		.Add("e|errorpause=", "turn pause on error on/off (defaults to on)", delegate(string v) {consoleArgs.PauseOnError = v == "on"; });
-        	
-        	try
-        	{
-        		extra = opts.Parse(args);
-        	}
-        	catch (OptionException e)
-        	{
-				System.Console.WriteLine(e.Message);
-				System.Console.WriteLine(e.StackTrace);
-				return 1;
-			}
-        	
-        	if(consoleArgs.ShowHelp)
-        	{
-        		DisplayHelp(opts);
-        		return 0;
-        	}
-        
+            ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
+
+            if (consoleArgs.ShowHelp)
+            {
+                DisplayHelp(GetPopulatedOptionSet(consoleArgs));
+                return 0;
+            }
+
+            return SetUpConsoleRunner(usesShadowCopying, consoleArgs);
+        }
+
+        private int SetUpConsoleRunner(bool usesShadowCopying, ConsoleRunnerArguments consoleArgs)
+        {
             try
             {
-                runner = new ConsoleRunner(consoleArgs, new CruiseServerFactory());
-                if (!usesShadowCopying)
-                {
-                    Log.Warning("Shadow-copying has been turned off - hot-swapping will not work!");
-                }
-
-                runner.Run();
+                StartConsoleRunner(usesShadowCopying, consoleArgs);
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Error(ex);
-                if (consoleArgs.PauseOnError)
-                {
-                    System.Console.WriteLine("An unexpected error has caused the console to crash, please press any key to continue...");
-                    System.Console.ReadKey();
-                }
+                HandleAppRunnerException(consoleArgs.PauseOnError, ex);
                 return 1;
             }
             finally
             {
                 runner = null;
             }
+        }
+
+        private void HandleAppRunnerException(bool pauseOnError, Exception ex)
+        {
+            Log.Error(ex);
+            if (pauseOnError)
+            {
+                System.Console.WriteLine("An unexpected error has caused the console to crash, please press any key to continue...");
+                System.Console.ReadKey();
+            }
+        }
+
+        private void StartConsoleRunner(bool usesShadowCopying, ConsoleRunnerArguments consoleArgs)
+        {
+            runner = new ConsoleRunner(consoleArgs, new CruiseServerFactory());
+            if (!usesShadowCopying)
+            {
+                Log.Warning("Shadow-copying has been turned off - hot-swapping will not work!");
+            }
+
+            runner.Run();
+        }
+
+        private OptionSet GetPopulatedOptionSet(ConsoleRunnerArguments consoleArgs)
+        {
+            OptionSet opts = new OptionSet();
+            opts.Add("h|?|help", "display this help screen", delegate (string v) { consoleArgs.ShowHelp = v != null; })
+                .Add("c|config=", "the configuration file to use (defaults to ccnet.conf)", delegate (string v) { consoleArgs.ConfigFile = v; })
+                .Add("r|remoting=", "turn remoting on/off (defaults to on)", delegate (string v) { consoleArgs.UseRemoting = v == "on"; })
+                .Add("p|project=", "the project to integrate (???)", delegate (string v) { consoleArgs.Project = v; })
+                .Add("v|validate", "validate the configuration file and exit", delegate (string v) { consoleArgs.ValidateConfigOnly = v != null; })
+                .Add("l|logging=", "turn logging on/off (defaults to on)", delegate (string v) { consoleArgs.Logging = v == "on"; })
+                .Add("e|errorpause=", "turn pause on error on/off (defaults to on)", delegate (string v) { consoleArgs.PauseOnError = v == "on"; });
+            return opts;
         }
 
         #region InitializeLifetimeService()
@@ -113,35 +120,43 @@ namespace ThoughtWorks.CruiseControl.Console
             }
             if (stopRunner)
             {
-                // Perform the actual stop
-                Log.Info("Stopping console: " + reason);
-                try
-                {
-                    runner.Stop();
-                }
-                catch (RemotingException)
-                {
-                    // Sometimes this exception gets thrown and not sure why. 
-                }
+                StopAppRunner(reason);
             }
         }
-        
-        private static void DisplayHelp(OptionSet opts)
+        private void StopAppRunner(string reason)
+        {
+            try
+            {
+                Log.Info("Stopping console: " + reason);
+                runner.Stop();
+            }
+            catch (RemotingException)
+            {
+                // Sometimes this exception gets thrown and not sure why. 
+            }
+        }
+
+        private void DisplayHelp(OptionSet opts)
         {
             Assembly thisApp = Assembly.GetExecutingAssembly();
             Stream helpStream = thisApp.GetManifestResourceStream("ThoughtWorks.CruiseControl.Console.Help.txt");
             try
             {
-                StreamReader reader = new StreamReader(helpStream);
-                string data = reader.ReadToEnd();
-                reader.Close();
-                System.Console.Write(data);
+                WriteHelpToConsole(helpStream);
             }
             finally
-            {            	
+            {
                 helpStream.Close();
             }
-            opts.WriteOptionDescriptions (System.Console.Out);
+            opts.WriteOptionDescriptions(System.Console.Out);
+        }
+
+        private void WriteHelpToConsole(Stream helpStream)
+        {
+            StreamReader reader = new StreamReader(helpStream);
+            string data = reader.ReadToEnd();
+            reader.Close();
+            System.Console.Write(data);
         }
     }
 }
