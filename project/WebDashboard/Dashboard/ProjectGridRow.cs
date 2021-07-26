@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,6 +14,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly IServerSpecifier serverSpecifier;
         private readonly string url;
         private readonly string parametersUrl;
+        private readonly string statistics;
+        private readonly List<DataGridRow> lastFiveData;
+        private readonly int queuePosition;
+        private Translations translations;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
             string url, string parametersUrl, Translations translations)
@@ -21,6 +26,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             this.serverSpecifier = serverSpecifier;
             this.url = url;
             this.parametersUrl = parametersUrl;
+        }
+
+        public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
+            string url, string parametersUrl, string statistics, List<DataGridRow> lastFiveData, int queuePosition, Translations translations)
+            : this(status, serverSpecifier, url, parametersUrl, translations)
+        {
+            this.statistics = statistics;
+            this.lastFiveData = lastFiveData;
+            this.queuePosition = queuePosition;
         }
 
         public string Name
@@ -54,6 +68,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             get { return status.BuildStatus.ToString(); }
         }
 
+        public List<DataGridRow> LastFiveData
+        {
+            get { return lastFiveData; }
+        }
+ 
         public string BuildStatusHtmlColor
         {
             get { return CalculateHtmlColor(status.BuildStatus); }
@@ -140,6 +159,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             get { return status.QueuePriority; }
         }
 
+        public int QueuePosition
+        {
+            get { return queuePosition; }
+        }
 
         public string StartStopButtonName
         {
@@ -169,6 +192,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public bool AllowStartStopBuild
         {
             get { return serverSpecifier.AllowStartStopBuild && status.ShowStartStopButton; }
+        }
+
+        public string Statistics {
+            get { return this.statistics; }
         }
 
         private string CalculateHtmlColor(IntegrationStatus integrationStatus)
@@ -220,7 +247,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
             }
             return string.Empty;
-
         }
     }
 }
