@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			typeTable = new NetReflectorTypeTable();
 			typeTable.Add(AppDomain.CurrentDomain);
-            string pluginLocation = ConfigurationManager.AppSettings["PluginLocation"];
+            string pluginLocation = Environment.ExpandEnvironmentVariables(ConfigurationManager.AppSettings["PluginLocation"]);
             if (!string.IsNullOrEmpty(pluginLocation))
             {
                 if (Directory.Exists(pluginLocation))
