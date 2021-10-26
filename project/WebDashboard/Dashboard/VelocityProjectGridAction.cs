@@ -79,31 +79,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             string actionName, ICruiseRequest request, IServerSpecifier serverSpecifier)
 		{
             this.translations = Translations.RetrieveCurrent();
+            bool sortReverse = SortAscending(request.Request);
+            string category = request.Request.GetText("Category");
             cruiseUrlBuilder = request.UrlBuilder;
             urlBuilder = request.UrlBuilder.InnerBuilder;
+            ProjectGridSortColumn sortColumn = GetSortColumn(request.Request);
 			Hashtable velocityContext = new Hashtable();
             velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request.Request);
             velocityContext["parametersCall"] = new ServerLink(cruiseUrlBuilder, new DefaultServerSpecifier("null"), string.Empty, ProjectParametersAction.ActionName).Url;
-
 			velocityContext["wholeFarm"] = serverSpecifier == null ?  true : false;
-
-			string category = request.Request.GetText("Category");
 			velocityContext["showCategoryColumn"] = string.IsNullOrEmpty(category) ? true : false;
-
-			ProjectGridSortColumn sortColumn = GetSortColumn(request.Request);
-			bool sortReverse = SortAscending(request.Request);
-
 			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Name, sortColumn, sortReverse);
 			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
 			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
 			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
+            velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
 
-            ProjectGridRow[] projectGridRows = projectGrid.GenerateProjectGridRows(projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category, cruiseUrlBuilder, this.translations);
-
+            var parameters = new ProjectGridParameters(projectStatusListAndExceptions.StatusAndServerList, sortColumn, sortReverse, category, cruiseUrlBuilder, farmService, this.translations);
+            ProjectGridRow[] projectGridRows = projectGrid.GenerateProjectGridRows(parameters);
             velocityContext["projectGrid"] = projectGridRows;
-			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-
+			
             Array categoryList = this.GenerateCategoryList(projectGridRows);
             velocityContext["categoryList"] = categoryList;
             velocityContext["barAtTop"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Top) ||
