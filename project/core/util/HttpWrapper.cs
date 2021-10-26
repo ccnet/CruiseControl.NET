@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
 			request.ProtocolVersion = HttpVersion.Version11;
 			request.IfModifiedSince = previousModifiedTime;
+            request.Credentials = CredentialCache.DefaultCredentials;
 
 			try
 			{
